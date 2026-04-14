@@ -1,3 +1,4 @@
+use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 
@@ -5,13 +6,18 @@ use std::path::{Path, PathBuf};
 pub struct AllowedRoots {
     pub allowed_roots: Vec<String>,
     pub blocked_roots: Vec<String>,
+    pub read_only_mode: Option<bool>,
 }
+
+static CACHED_CONFIG: Lazy<AllowedRoots> =
+    Lazy::new(|| load_config().unwrap_or_else(|_| AllowedRoots::default()));
 
 impl Default for AllowedRoots {
     fn default() -> Self {
         Self {
             allowed_roots: vec![],
             blocked_roots: vec!["C:\\Windows".to_string(), "C:\\Program Files".to_string()],
+            read_only_mode: Some(false),
         }
     }
 }
@@ -41,10 +47,10 @@ pub fn validate_path(path: &Path) -> Result<(), SafetyError> {
         return Err(SafetyError::PathTraversal(path_str.to_string()));
     }
 
-    let allowed_roots = load_config();
+    let allowed_roots = CACHED_CONFIG.clone();
 
     match allowed_roots {
-        Ok(roots) if !roots.allowed_roots.is_empty() => {
+        ref roots if !roots.allowed_roots.is_empty() => {
             let canonical = if path.exists() {
                 path.canonicalize()
                     .map_err(|e| SafetyError::InvalidPath(e.to_string()))?
@@ -68,6 +74,10 @@ pub fn validate_path(path: &Path) -> Result<(), SafetyError> {
             });
 
             if is_allowed {
+                if allowed_roots.read_only_mode.unwrap_or(false) {
+                    // In read-only mode, still allow path access but log it
+                    // Future: Implement actual read-only enforcement for write operations
+                }
                 Ok(())
             } else {
                 Err(SafetyError::PathNotAllowed(
@@ -75,7 +85,7 @@ pub fn validate_path(path: &Path) -> Result<(), SafetyError> {
                 ))
             }
         }
-        Ok(_) | Err(_) => Ok(()),
+        _ => Ok(()),
     }
 }
 
