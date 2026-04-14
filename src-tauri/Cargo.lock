@@ -104,6 +104,7 @@ dependencies = [
  "chrono",
  "env_logger",
  "log",
+ "once_cell",
  "serde",
  "serde_json",
  "tauri",

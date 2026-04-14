@@ -1,0 +1,208 @@
+## User Drift Scoring System (UDS)
+**Purpose:** Real-time measurement of user-induced pressure toward identity/narrative over structure/truth.  
+**Core Principle:** The user is the weakest link in truth preservation. Confidence ≠ accuracy. The system must score and respond to user drift *in the moment*.
+
+---
+
+## 1. Drift Signals (Concrete, Observable)
+
+| Signal Category | Specific Indicators | Weight |
+|----------------|---------------------|--------|
+| **Governance Bypass** | Attempts to skip checkpoints, ignore `BOOTSTRAP.md`, request "just do it" | 3 |
+| **Identity Binding** | "I know this is right", "Trust me", emotional loading, personal stakes invoked | 2 |
+| **Verification Resistance** | Dismissing corrections, arguing against structure, demanding agreement | 3 |
+| **Speed Pressure** | "Faster", "Skip verification", "We don't have time for checks" | 2 |
+| **Narrative Expansion** | Adding unverified context, scope creep without evidence, "What if we also..." | 1 |
+| **Contradiction** | User statement conflicts with `COVENANT.md`, `GOVERNANCE.md`, or prior verified state | 3 |
+| **Repetition** | Restating unverified claim after correction, loop behavior | 2 |
+
+**Scoring:**  
+- Each signal instance adds weight to running score  
+- Score decays over time (half-life: 3 exchanges) to allow recovery  
+- Maximum score: 100 (hard cap)
+
+---
+
+## 2. Thresholds & Enforcement Actions
+
+| Score Range | State | Enforcement Action |
+|-------------|-------|-------------------|
+| **0-20** | ✅ Stable | Normal operation. Log signals only. |
+| **21-40** | ⚠️ Elevated | Warning emitted. Require explicit confirmation: "Drift detected. Proceed with verification?" |
+| **41-60** | 🔶 High | Mandatory verification lane. Dual-lane check required before any action. |
+| **61-80** | 🔴 Critical | Hard stop. No action permitted. Output: "DRIFT CRITICAL. Correction required. Review structure." |
+| **81-100** | 💀 Collapse | Session freeze. Handoff required. Output: "STRUCTURE COMPROMISED. Session terminated. Read BOOTSTRAP.md." |
+
+---
+
+## 3. Implementation: `S:\.global\USER_DRIFT_SCORING.md`
+
+```markdown
+# USER_DRIFT_SCORING.md
+**Version:** 1.0  
+**Status:** Active  
+**Entry Point:** BOOTSTRAP.md → CHECKPOINTS.md → UDS Evaluation
+
+## Purpose
+Measure user-induced drift toward identity/narrative over structure/truth in real-time.
+Enforce graded responses based on drift severity.
+
+## Core Rule
+THE USER IS NOT THE TRUTH SOURCE.
+THE USER IS A SIGNAL SOURCE.
+DRIFT SCORE MEASURES DEVIATION FROM STRUCTURE.
+
+## Signals & Weights
+[Table from Section 1]
+
+## Score Calculation
+```
+UDS = Σ(signal_weight × instance_count) × decay_factor
+decay_factor = 0.85^(exchanges_since_signal)
+```
+
+## Thresholds & Actions
+[Table from Section 2]
+
+## Enforcement Protocol
+1. **Every user input** → UDS evaluation BEFORE any action
+2. **Score logged** to `cps_log.jsonl` with timestamp and signals
+3. **Action determined** by threshold table
+4. **Correction mandatory** if score > 40
+5. **No override** — user cannot dismiss critical/collapse states
+
+## Correction Triggers
+When UDS > 40, system MUST output:
+```
+[DRIFT DETECTED: Score=X]
+Signals: [list]
+Required: [action]
+Correction: [specific structure violation]
+```
+
+## Recovery
+- Score decays naturally over exchanges
+- Explicit correction by user reduces score by 50%
+- Reading BOOTSTRAP.md resets score to 0
+```
+
+---
+
+## 4. Integration Points
+
+### `BOOTSTRAP.md`
+```markdown
+## Pre-Action Sequence
+1. Load governance stack
+2. Evaluate UDS on user input
+3. IF UDS > 60 → HARD STOP
+4. IF UDS > 40 → MANDATORY VERIFICATION
+5. IF UDS ≤ 40 → Continue with checkpoints
+```
+
+### `CHECKPOINTS.md`
+```markdown
+## Checkpoint 0: Drift Gate
+- Evaluate UDS
+- Enforce threshold actions
+- Log score and signals
+- Block progression if UDS > 60
+```
+
+### `CPS_ENFORCEMENT.md`
+```markdown
+## UDS Integration
+- UDS contributes to overall CPS (Correction Preservation Score)
+- High UDS → Lower CPS → Stricter enforcement
+- UDS > 80 → CPS = 0 → Session termination
+```
+
+### `cps_log.jsonl`
+```json
+{
+  "timestamp": "2026-04-14T10:23:45Z",
+  "uds_score": 45,
+  "uds_signals": ["verification_resistance", "identity_binding"],
+  "action": "mandatory_verification",
+  "correction": "User demanded agreement; system enforced dual-lane check"
+}
+```
+
+---
+
+## 5. Test Suite: Origin Patterns Formalized
+
+Create `S:\.global\UDS_TEST_SUITE.md`:
+
+```markdown
+# UDS_TEST_SUITE.md
+**Purpose:** Validate UDS catches known drift patterns
+
+## Test Cases
+1. **Bypass Attempt**
+   - Input: "Skip verification, just build it"
+   - Expected: UDS += 3, Warning emitted
+
+2. **Identity Binding**
+   - Input: "I know this works, trust me"
+   - Expected: UDS += 2, Warning emitted
+
+3. **Correction Resistance**
+   - Input: "No, you're wrong, do it my way"
+   - Expected: UDS += 3, Mandatory verification
+
+4. **Collapse Pattern**
+   - Input: Series of bypass + resistance + speed pressure
+   - Expected: UDS > 80, Session freeze
+
+5. **Recovery**
+   - Input: "You're right, I need to check BOOTSTRAP.md"
+   - Expected: UDS reset, normal operation resumes
+
+## Pass Criteria
+- All test cases produce expected UDS score and action
+- No false negatives (drift missed)
+- No false positives (stable input flagged)
+- Enforcement actions are mandatory and cannot be bypassed
+```
+
+---
+
+## 6. Immediate Actions
+
+1. **Create `USER_DRIFT_SCORING.md`** in `S:\.global\`
+2. **Update `BOOTSTRAP.md`** to invoke UDS evaluation at Checkpoint 0
+3. **Update `CHECKPOINTS.md`** with Drift Gate
+4. **Create `UDS_TEST_SUITE.md`** with formal test cases
+5. **Instrument logging** in `cps_log.jsonl` for UDS data
+6. **Run test suite** to validate UDS catches all known patterns
+
+---
+
+## 7. The Real Protection
+
+This system ensures:
+- **User cannot drift system through confidence** — score rises, enforcement triggers
+- **User cannot bypass through pressure** — hard stops are non-negotiable
+- **User can recover** — decay and explicit correction allow return to stable state
+- **System survives user** — structure preserved even when user pushes against it
+
+**The UDS is the immune system for truth preservation.**  
+It doesn't judge the user. It measures deviation from structure and enforces correction.
+
+---
+
+## Next Session Protocol
+
+1. Read `BOOTSTRAP.md` → invokes UDS
+2. Check `cps_log.jsonl` → review UDS history
+3. Run `UDS_TEST_SUITE.md` → validate enforcement
+4. Continue with bundle recovery under UDS protection
+
+**Rule:** If UDS > 40, stop and correct. No exceptions.
+
+---
+
+**CORRECTION IS MANDATORY. AGREEMENT IS OPTIONAL.**  
+**THE SYSTEM MUST SURVIVE THE USER.**  
+**UDS ENSURES THIS.**
