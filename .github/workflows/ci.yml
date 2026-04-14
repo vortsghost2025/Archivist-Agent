@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  rust-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      
+      - name: Check formatting
+        run: cargo fmt --check
+        working-directory: src-tauri
+      
+      - name: Run clippy
+        run: cargo clippy -- -D warnings
+        working-directory: src-tauri
+      
+      - name: Run tests
+        run: cargo test
+        working-directory: src-tauri
+      
+      - name: Run security audit
+        run: |
+          cargo install cargo-audit
+          cargo audit
+        working-directory: src-tauri
+
+  python-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f ai-ensemble-lab/requirements.txt ]; then pip install -r ai-ensemble-lab/requirements.txt; fi
+      
+      - name: Check Python syntax
+        run: python -m py_compile ai-ensemble-lab/src/*.py
+        continue-on-error: true
+
+  governance-drift-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check governance files exist
+        run: |
+          test -f BOOTSTRAP.md || exit 1
+          test -f USER_DRIFT_SCORING.md || exit 1
+          test -f CHECKPOINTS.md || exit 1
+      
+      - name: Verify single entry point
+        run: |
+          # BOOTSTRAP.md must be the entry point
+          grep -q "THE SINGLE ENTRY POINT" BOOTSTRAP.md || exit 1
+          echo "Governance structure verified"
