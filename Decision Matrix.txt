@@ -1,0 +1,95 @@
+Decision Matrix 
+(Error class → strategy → budgets)
+Classification fields (required)
+error_domain: execution | contract | performance | constitution | integrity
+
+
+retryable: boolean
+
+
+scope: local_agent | shared_tool | global_run
+
+
+risk_level: low | medium | high | critical
+
+
+containment_required: boolean
+
+
+Strategy set (exactly one primary)
+RETRY | FAILOVER | DEGRADE | SKIP | QUARANTINE | ABORT
+
+Matrix (default policy)
+
+Domain
+Typical signals
+Retryable?
+Primary strategy
+Secondary
+Budgets / gates
+execution
+timeout, DNS, TCP reset, HTTP 5xx, 429
+✅ often
+RETRY
+QUARANTINE
+max_attempts=5; backoff exp+jitter; respect Retry-After; idempotency required
+contract
+schema mismatch, missing fields, invalid types
+❌
+QUARANTINE
+ABORT
+no retry; capture payload+schema; alert if rate spike
+performance
+latency SLO breach, budget exhausted
+⚠
+DEGRADE
+ABORT
+enforce budgets; degrade must be constraint-safe + labeled
+constitution
+constraint violation, prohibited action/tool, unsafe output form, lattice inconsistency
+❌
+ABORT
+QUARANTINE
+stop-the-line; quarantine trace; escalate if high/critical
+integrity
+duplicate write risk, partial commit, checksum mismatch, inconsistent multi-agent state
+❌ (default)
+QUARANTINE
+ABORT
+require rollback/compensation; no blind retries
+
+
+Additional deterministic gates (apply everywhere)
+Retry allowed only if ALL true
+transient indicator (timeout/429/5xx/network)
+
+
+action is idempotent OR has idempotency_key
+
+
+retry budget available (attempts + total time)
+
+
+circuit breaker not open
+
+
+repeating does not increase constitutional risk
+
+
+Failover allowed only if
+alternate dependency/tool is marked equivalent_under_constraints=true
+
+
+equivalence suite passed in the current version (policy-as-code)
+
+
+Skip allowed only if
+step has optional=true
+
+
+invariants remain satisfied
+
+
+output is labeled “partial”
+
+

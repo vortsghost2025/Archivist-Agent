@@ -1,0 +1,17 @@
+Sharp edges Clarifications 
+Equivalence of failover: how do you prove alternate tools/models preserve constraints?
+
+
+Determinism under retries: are you pinning model versions, prompts, tool configs?
+
+
+Partial success semantics: what is “commit” vs “abort” in multi-agent runs?
+
+
+State hashing/checkpoints: can you detect divergence across agents?
+
+
+Constraint evaluation ordering: pre-action, post-action, pre-output (mandatory)
+
+
+

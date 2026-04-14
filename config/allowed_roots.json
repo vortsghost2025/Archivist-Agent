@@ -1,0 +1,12 @@
+{
+  "allowed_roots": [
+    "S:\\workspace",
+    "S:\\projects"
+  ],
+  "blocked_roots": [
+    "C:\\Windows",
+    "C:\\Program Files",
+    "C:\\Users\\Sean\\AppData"
+  ],
+  "read_only_mode": true
+}

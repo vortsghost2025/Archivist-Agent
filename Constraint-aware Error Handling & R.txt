@@ -1,0 +1,61 @@
+Constraint-aware Error Handling & Resilience Workflow Standard
+
+Constitution-Preserving Resilience Principle
+
+Collaborative AI runs must preserve constitutional invariants under failure: detect and classify faults, apply deterministic constraint-safe decisions, contain blast radius, enable replayable recovery, and maintain full auditability.
+
+Purpose
+
+This standard defines the deterministic resilience workflow required for all WE4FREE collaborative AI runs. The objective is to preserve constitutional constraints, maintain system integrity, ensure containment of failures, and enable deterministic replay.
+Core Principles
+
+Constitution First: No recovery strategy may violate constitutional constraints.
+Integrity Over Availability: Avoid corruption or drift even at the cost of aborting.
+Deterministic Decisions: Error classification must map to a single defined strategy.
+Containment by Default: Unknown failures default to quarantine.
+Replayability: Every failed run must be reproducible with pinned versions and logs.
+Detection Requirements
+
+Timeouts enforced on all tool and external calls.
+Schema validation at every tool boundary.
+Constraint checks at pre-action, post-action, and pre-output stages.
+Performance threshold monitoring (latency, budget, quotas).
+Near-miss detection for prevented constraint violations.
+Error Classification Model
+
+All errors must be tagged with:
+error_domain (execution | contract | performance | constitution | integrity)
+retryable (true/false)
+scope (local_agent | shared_tool | global_run)
+risk_level (low | medium | high | critical)
+containment_required (true/false)
+Constitutional and Integrity errors are never retryable by default and require containment.
+Decision Strategy Matrix
+
+Execution (transient) → RETRY (bounded attempts + backoff).
+Contract failure → QUARANTINE (no retry).
+Performance threshold breach → DEGRADE (if constraint-safe).
+Constitution violation → ABORT (stop-the-line).
+Integrity risk → QUARANTINE or ABORT.
+Retry is allowed only when the action is idempotent, within budget, and does not introduce constitutional risk.
+Containment Controls
+
+Circuit breakers for all external dependencies.
+Rate limiting and bulkheads to prevent cascading failures.
+Retry budgets (max attempts + total time).
+Run-level budget guards (time, cost, token usage).
+Stop-the-line enforcement for constitutional violations.
+Recovery & Replay Requirements
+
+Checkpointing at critical execution boundaries.
+Quarantine record must store trace_id, tool logs, constraint logs, decisions.
+Pinned model versions, prompt hashes, and tool versions.
+Deterministic replay capability with state hash verification.
+Explicit partial success semantics (commit, abort, compensate).
+Observability & Auditability
+
+Structured logging with trace_id and decision_path.
+Dashboards for constraint violations, DLQ depth, retry rates.
+Alerting for constitutional violations and replay failures.
+Post-incident loop updating tests, monitors, and decision matrix.
+

@@ -1,0 +1,2 @@
+cargo:rustc-link-search=native=S:\Archivist-Agent\target\release\build\webview2-com-sys-f89273539d136af7\out\x64
+cargo:rustc-link-lib=advapi32

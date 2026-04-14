@@ -1,0 +1,92 @@
+Architecture Review Checklist 
+(yes/no gates)
+
+
+A. Detection
+Every external/tool call has timeouts (connect + read) and bounded concurrency.
+
+
+Every tool boundary enforces schema/contract validation (reject on mismatch).
+
+
+The system enforces constraint checks at:
+
+
+pre-action (before executing any tool/action)
+
+
+post-action (after tool returns)
+
+
+pre-output (before emitting final response)
+
+
+Abnormal performance signals exist (latency, budget, queue depth, breaker state).
+
+
+“Near-miss” detection exists (risk detected → prevented) and is logged.
+
+
+B. Classification (mandatory)
+All failures are tagged with: error_domain, retryable, scope, risk_level, containment_required.
+
+
+Constitution and Integrity domains default to: retryable=false, containment_required=true.
+
+
+Unknown errors default to safe containment (quarantine + abort path), not retries.
+
+
+C. Decision Logic (deterministic)
+There is a single decision matrix used by all agents/services (no bespoke per-team logic).
+
+
+Retries require: transient + idempotent + budget available + no constitutional risk.
+
+
+Failover requires declared equivalence (tested) or is disallowed.
+
+
+Degraded mode is explicitly constraint-preserving and labeled “degraded”.
+
+
+Skip is allowed only for steps marked optional with defined invariants.
+
+
+D. Containment
+Circuit breakers exist for each dependency/tool (with open/half-open behavior).
+
+
+Rate limits/bulkheads prevent retry storms and cascading failures.
+
+
+Budgets exist and are enforced: time, attempts, cost/tokens, tool quotas.
+
+
+E. Recovery & Replay
+Checkpointing exists (at least: start, after critical tool calls, pre-output).
+
+
+Quarantine/DLQ exists and stores sufficient context for replay.
+
+
+Replay is deterministic: pinned model/tool versions + configs + prompts + seeds (where applicable).
+
+
+Partial success semantics are defined (commit/abort/compensate).
+
+
+F. Observability & Auditability
+Structured logs include trace_id, run_id, agent_id, decision_path, constraint_eval.
+
+
+Dashboards exist for: constraint violations, near-misses, DLQ depth/age, breaker opens, retry rates.
+
+
+Alerts exist for S0/S1 patterns (constraint violations, DLQ age, breaker open too long).
+
+
+Post-incident loop updates tests + monitors + decision matrix (not just docs).
+
+
+
