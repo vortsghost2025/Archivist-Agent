@@ -41,6 +41,10 @@ impl std::fmt::Display for SafetyError {
     }
 }
 
+pub fn is_read_only() -> bool {
+    CACHED_CONFIG.read_only_mode.unwrap_or(false)
+}
+
 pub fn validate_path(path: &Path) -> Result<(), SafetyError> {
     let path_str = path.to_string_lossy();
     if path_str.contains("..") {
@@ -74,10 +78,6 @@ pub fn validate_path(path: &Path) -> Result<(), SafetyError> {
             });
 
             if is_allowed {
-                if allowed_roots.read_only_mode.unwrap_or(false) {
-                    // In read-only mode, still allow path access but log it
-                    // Future: Implement actual read-only enforcement for write operations
-                }
                 Ok(())
             } else {
                 Err(SafetyError::PathNotAllowed(
