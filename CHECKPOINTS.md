@@ -269,6 +269,32 @@ The checkpoint system makes that operational.
 
 ---
 
+## COMMIT CHECKPOINT
+
+Before ANY commit, the agent must verify:
+
+```
+COMMIT PRE-CHECK
+================
+1. Governance consulted: [Y/N] — Did I check BOOTSTRAP.md?
+2. Theory extracted: [Y/N] — Did I extract from papers before implementing?
+3. Overclaim check: [Y/N] — Am I claiming only what evidence supports?
+4. Drift status: [baseline/measured/warning] — Has drift changed?
+5. Invariants preserved: [Y/N] — Are all governance constraints intact?
+```
+
+If any item is NO:
+- Do NOT commit
+- Investigate and correct
+- Re-verify before proceeding
+
+**Why this exists:**
+Evidence: `BOOTSTRAP_READ_GAP.md` — Agents committed changes without reading governance.
+
+The commit checkpoint ensures governance was actually consulted, not just available.
+
+---
+
 ## THE SIMPLIFIED VERSION
 
 For quick reference, every action must answer:
@@ -281,6 +307,7 @@ For quick reference, every action must answer:
 4. Am I confident? (Confidence ≥70%)
 5. Is risk acceptable? (Risk ≤MEDIUM)
 6. Did two reviewers agree? (Dual verification)
+7. Did I verify before committing? (Commit checkpoint)
 ```
 
 If any answer is NO → STOP and investigate.
