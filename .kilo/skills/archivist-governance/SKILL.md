@@ -10,7 +10,7 @@ This skill enforces constitutional governance constraints on all agent interacti
 ## Core Principles
 
 ### Single Entry Point Rule
-- ALL logic routes through BOOTSTRAP.md (`S:/.global/BOOTSTRAP.md`)
+- ALL logic routes through BOOTSTRAP.md (`S:/BOOTSTRAP.md`)
 - No bypassing governance structure
 - All actions verified against governance
 
@@ -48,11 +48,11 @@ Before major actions, verify:
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| BOOTSTRAP.md | `S:/.global/BOOTSTRAP.md` | Single entry point |
-| CHECKPOINTS.md | `S:/.global/CHECKPOINTS.md` | 7-checkpoint system |
-| USER_DRIFT_SCORING.md | `S:/.global/USER_DRIFT_SCORING.md` | Drift detection |
-| COVENANT.md | `S:/.global/COVENANT.md` | Values |
-| GOVERNANCE.md | `S:/.global/GOVERNANCE.md` | Rules |
+| BOOTSTRAP.md | `S:/BOOTSTRAP.md` | Single entry point |
+| CHECKPOINTS.md | `S:/CHECKPOINTS.md` | 7-checkpoint system |
+| USER_DRIFT_SCORING.md | `S:/USER_DRIFT_SCORING.md` | Drift detection |
+| COVENANT.md | `S:/COVENANT.md` | Values |
+| GOVERNANCE.md | `S:/GOVERNANCE.md` | Rules |
 
 ## Available Commands
 

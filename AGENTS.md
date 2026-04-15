@@ -1,6 +1,6 @@
 # AGENTS.md - Coding Agent Instructions
 
-**⚠️ GOVERNANCE-FIRST: Read S:/.global/BOOTSTRAP.md before any other action.**
+**⚠️ GOVERNANCE-FIRST: Read S:/BOOTSTRAP.md before any other action.**
 
 This file provides guidance for AI coding agents working in this repository.
 
@@ -8,22 +8,24 @@ This file provides guidance for AI coding agents working in this repository.
 
 ## GOVERNANCE ENTRY POINT
 
-**MANDATORY FIRST READ:** `S:/.global/BOOTSTRAP.md`
+// Evidence: BOOTSTRAP.md:3-4 — "ALL LOGIC ROUTES THROUGH THIS FILE"
+// Evidence: AGENTS.md:3-5 — original incorrect path pointed to a non‑existent .global directory.
+**MANDATORY FIRST READ:** `S:/BOOTSTRAP.md`
 
 This project operates under constitutional governance. Before writing ANY code:
 
-1. Read `S:/.global/BOOTSTRAP.md` — THE SINGLE ENTRY POINT
+1. Read `S:/BOOTSTRAP.md` — THE SINGLE ENTRY POINT
 2. Understand your role as governance partner, not just code assistant
 3. Verify against structure, not user preference
 4. Apply checkpoints before major actions
 
 **Governance Documents (reference after BOOTSTRAP.md):**
-- `S:/.global/COVENANT.md` — values (what we believe)
-- `S:/.global/GOVERNANCE.md` — rules (what we follow)
-- `S:/.global/CPS_ENFORCEMENT.md` — enforcement (how we check)
-- `S:/.global/VERIFICATION_LANES.md` — process (how we verify)
-- `S:/.global/CHECKPOINTS.md` — safety (pre-action checks)
-- `S:/.global/USER_DRIFT_SCORING.md` — drift detection
+- `S:/COVENANT.md` — values (what we believe)
+- `S:/GOVERNANCE.md` — rules (what we follow)
+- `S:/CPS_ENFORCEMENT.md` — enforcement (how we check)
+- `S:/VERIFICATION_LANES.md` — process (how we verify)
+- `S:/CHECKPOINTS.md` — safety (pre-action checks)
+- `S:/USER_DRIFT_SCORING.md` — drift detection
 
 ---
 
@@ -206,7 +208,7 @@ Files are classified into 6 buckets:
 
 | File | Purpose |
 |------|---------|
-| `S:/.global/BOOTSTRAP.md` | **GOVERNANCE ENTRY POINT** |
+| `S:/BOOTSTRAP.md` | **GOVERNANCE ENTRY POINT** |
 | `src-tauri/src/lib.rs` | Main library, command registration |
 | `src-tauri/src/safety.rs` | Path validation, allowed roots |
 | `src-tauri/src/scan_tree.rs` | Directory tree scanning |
@@ -220,7 +222,7 @@ Files are classified into 6 buckets:
 
 ## Governance Application
 
-This project follows governance constraints defined in `S:/.global/BOOTSTRAP.md`:
+This project follows governance constraints defined in `S:/BOOTSTRAP.md`:
 
 - **Single entry point rule:** All logic routes through BOOTSTRAP.md
 - **Structure > Identity:** External governance files override agent preferences

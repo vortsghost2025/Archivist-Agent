@@ -2,8 +2,7 @@
 //!
 //! This module provides common classification functions used across
 //! multiple commands to reduce code duplication.
-
-#![allow(dead_code)] // Module is for future use
+#![allow(dead_code, unused_imports)]
 
 use crate::constants;
 use serde::{Deserialize, Serialize};
