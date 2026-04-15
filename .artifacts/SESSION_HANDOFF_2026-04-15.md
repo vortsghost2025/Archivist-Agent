@@ -3,15 +3,18 @@
 
 ---
 
-## ⚠️ NEW BASELINE: LATTICE ISOMORPHISM ESTABLISHED
+## ⚠️ BASELINE: LATTICE FORMALIZATION IN PROGRESS
 
-**The governance stack IS the operational constraint lattice (Paper B).**
+**The governance stack operationalizes Paper B's constraint-lattice model.**
 
-This is not metaphor. It is isomorphism.
+This is **not** a proof of isomorphism. It is an executable formalization.
+
+Status: 5/9 lattice alignment tests passing. Formal tests added. True join and deformation metric pending.
 
 Key files:
-- `S:/.global/LATTICE_IMPLEMENTATION.md` - Formal mapping
+- `S:/.global/LATTICE_IMPLEMENTATION.md` - Careful operational mapping
 - `S:/Archivist-Agent/src/bridge/constraint-lattice.js` - Code formalization
+- `S:/Archivist-Agent/src/bridge/__tests__/constraint-lattice.test.js` - Test suite
 
 ---
 
