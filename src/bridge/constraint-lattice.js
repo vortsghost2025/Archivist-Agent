@@ -132,11 +132,46 @@ class ConstraintLattice {
   }
 
   /**
+   * Calculate deformation score based on Paper D
+   * Drift is lattice deformation, not binary event
+   * @param {Set<string>} observed - Observed constraints
+   * @param {Set<string>} expected - Expected constraints
+   * @returns {{score: number, severity: string, paperDReference: string}}
+   */
+  calculateDeformationScore(observed, expected) {
+    const observedSet = new Set(observed);
+    const expectedSet = new Set(expected);
+
+    const violations = [...observedSet].filter(x => !expectedSet.has(x));
+    const missing = [...expectedSet].filter(x => !observedSet.has(x));
+    const constitutionalViolations = violations.filter(v => this.constitution.has(v)).length;
+
+    const score = (violations.length * 2) + (missing.length * 1.5) + (constitutionalViolations * 5);
+
+    let severity;
+    if (constitutionalViolations > 0) {
+      severity = 'TRUE DRIFT';
+    } else if (violations.length > 2) {
+      severity = 'INTERPRETATION DRIFT';
+    } else if (missing.length > 0) {
+      severity = 'EVIDENCE GAP';
+    } else {
+      severity = 'MINOR';
+    }
+
+    return {
+      score,
+      severity,
+      paperDReference: 'Drift detected as lattice deformation; identity preserved via recognition handshake'
+    };
+  }
+
+  /**
    * Detect drift as lattice deformation
    * Maps to DISCREPANCY_ANALYZER 6 classifications (exact strings)
    * @param {Set<string>} observed - Observed constraints
    * @param {Set<string>} expected - Expected constraints
-   * @returns {{hasDrift: boolean, type: string|null, details: string}}
+   * @returns {{hasDrift: boolean, type: string|null, details: string, deformation?: object}}
    */
   detectDrift(observed, expected) {
     const DRIFT_TYPES = {
@@ -162,6 +197,9 @@ class ConstraintLattice {
         details: 'No drift detected'
       };
     }
+
+    // Calculate deformation score (Paper D)
+    const deformation = this.calculateDeformationScore(observedSet, expectedSet);
 
     // Classify drift type using exact 6-class strings
     let type;
@@ -192,11 +230,12 @@ class ConstraintLattice {
       timestamp: new Date().toISOString(),
       type,
       details,
+      deformation,
       observed: [...observedSet],
       expected: [...expectedSet]
     });
 
-    return { hasDrift: true, type, details };
+    return { hasDrift: true, type, details, deformation };
   }
 
   /**
@@ -255,3 +294,26 @@ module.exports = {
   ConstraintLattice,
   createGovernanceLattice
 };
+
+/**
+ * Record a lattice-aware trace for Cognitive Trace Viewer
+ * @param {string} step - Current step (e.g., 'PLANNER_START')
+ * @param {Set<string>} phenotypeBehavior - Current behavior
+ * @param {ConstraintLattice} lattice - The lattice instance
+ * @param {Set<string>} expectedConstraints - Expected constraints for this step
+ * @returns {Object} Trace entry with lattice operations
+ */
+function recordLatticeTrace(step, phenotypeBehavior, lattice, expectedConstraints) {
+  const traceEntry = {
+    timestamp: new Date().toISOString(),
+    step,
+    latticeOperations: {
+      meets: lattice.meets('PLANNER_ROLE', 'CHECKPOINT_PASS'),
+      joins: lattice.joins('READ_ALLOWED', 'WRITE_RESTRICTED'),
+      respects: lattice.respectsLattice(phenotypeBehavior),
+      drift: lattice.detectDrift(phenotypeBehavior, expectedConstraints)
+    }
+  };
+  
+  return traceEntry;
+}

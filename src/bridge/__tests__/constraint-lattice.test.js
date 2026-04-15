@@ -145,6 +145,37 @@ function runTests() {
     console.log('  ✓ PASS: deformation logged'); 
   } else { failed++; console.log('  ✗ FAIL: should log deformation'); }
 
+  // Test 11: Deformation score (Paper D)
+  console.log('\nTest 11: calculateDeformationScore() provides Paper D metrics');
+  const lattice11 = new ConstraintLattice();
+  lattice11.addToConstitution('CONSTITUTIONAL');
+  
+  const score11 = lattice11.calculateDeformationScore(
+    new Set(['CONSTITUTIONAL', 'OTHER']),
+    new Set(['EXPECTED'])
+  );
+  console.assert(score11.score > 0, 'Should have positive score');
+  console.assert(score11.severity === 'TRUE DRIFT', `Expected 'TRUE DRIFT', got '${score11.severity}'`);
+  console.assert(score11.paperDReference.includes('lattice deformation'), 'Should reference Paper D');
+  if (score11.severity === 'TRUE DRIFT' && score11.paperDReference) { 
+    passed++; 
+    console.log('  ✓ PASS: deformation score with Paper D reference'); 
+  } else { failed++; console.log('  ✗ FAIL: expected Paper D deformation metrics'); }
+
+  // Test 12: Deformation score for minor drift
+  console.log('\nTest 12: calculateDeformationScore() classifies minor drift');
+  const lattice12 = new ConstraintLattice();
+  
+  const score12 = lattice12.calculateDeformationScore(
+    new Set(['A']),
+    new Set(['A', 'B'])
+  );
+  console.assert(score12.severity === 'EVIDENCE GAP' || score12.severity === 'MINOR', `Got '${score12.severity}'`);
+  if (score12.score > 0) { 
+    passed++; 
+    console.log('  ✓ PASS: minor drift scored correctly'); 
+  } else { failed++; console.log('  ✗ FAIL: should score minor drift'); }
+
   // Summary
   console.log('\n========================================');
   console.log(`Results: ${passed} passed, ${failed} failed`);
@@ -158,5 +189,11 @@ module.exports = { runTests };
 // Run if called directly
 if (require.main === module) {
   const { passed, failed } = runTests();
-  process.exit(failed > 0 ? 1 : 0);
+  if (failed > 0) {
+    console.log(`\n${failed} tests failed. Fix before claiming lattice alignment.`);
+    process.exit(1);
+  } else {
+    console.log(`\nAll ${passed} tests passed. Formalization progressing.`);
+    process.exit(0);
+  }
 }
