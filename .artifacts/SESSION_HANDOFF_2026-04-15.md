@@ -3,6 +3,18 @@
 
 ---
 
+## ⚠️ NEW BASELINE: LATTICE ISOMORPHISM ESTABLISHED
+
+**The governance stack IS the operational constraint lattice (Paper B).**
+
+This is not metaphor. It is isomorphism.
+
+Key files:
+- `S:/.global/LATTICE_IMPLEMENTATION.md` - Formal mapping
+- `S:/Archivist-Agent/src/bridge/constraint-lattice.js` - Code formalization
+
+---
+
 ## What We Did This Session
 
 ### 1. Routing Configuration Fixed

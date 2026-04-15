@@ -133,12 +133,21 @@ class ConstraintLattice {
 
   /**
    * Detect drift as lattice deformation
-   * Maps to DISCREPANCY_ANALYZER 6 classifications
+   * Maps to DISCREPANCY_ANALYZER 6 classifications (exact strings)
    * @param {Set<string>} observed - Observed constraints
    * @param {Set<string>} expected - Expected constraints
-   * @returns {{hasDrift: boolean, type: string, details: string}}
+   * @returns {{hasDrift: boolean, type: string|null, details: string}}
    */
   detectDrift(observed, expected) {
+    const DRIFT_TYPES = {
+      DIMENSION_MISMATCH: 'DIMENSION MISMATCH',
+      EVIDENCE_GAP: 'EVIDENCE GAP',
+      INTERPRETATION_DRIFT: 'INTERPRETATION DRIFT',
+      CHECK_FAILURE: 'CHECK FAILURE',
+      TRUE_DRIFT: 'TRUE DRIFT',
+      UNKNOWN: 'UNKNOWN'
+    };
+
     const observedSet = new Set(observed);
     const expectedSet = new Set(expected);
 
@@ -154,25 +163,28 @@ class ConstraintLattice {
       };
     }
 
-    // Classify drift type
+    // Classify drift type using exact 6-class strings
     let type;
     let details;
 
     if (violations.some(v => this.constitution.has(v))) {
-      type = 'TRUE DRIFT';
+      type = DRIFT_TYPES.TRUE_DRIFT;
       details = `Constitutional constraint violated: ${violations.find(v => this.constitution.has(v))}`;
     } else if (missing.some(m => this.constitution.has(m))) {
-      type = 'EVIDENCE GAP';
+      type = DRIFT_TYPES.EVIDENCE_GAP;
       details = `Missing constitutional evidence: ${missing.find(m => this.constitution.has(m))}`;
     } else if (violations.length > 2) {
-      type = 'INTERPRETATION DRIFT';
+      type = DRIFT_TYPES.INTERPRETATION_DRIFT;
       details = `Multiple constraint deviations: ${violations.join(', ')}`;
     } else if (violations.length === 1) {
-      type = 'DIMENSION MISMATCH';
+      type = DRIFT_TYPES.DIMENSION_MISMATCH;
       details = `Unexpected constraint: ${violations[0]}`;
-    } else {
-      type = 'CHECK FAILURE';
+    } else if (missing.length > 0) {
+      type = DRIFT_TYPES.CHECK_FAILURE;
       details = `Expected constraints not observed: ${missing.join(', ')}`;
+    } else {
+      type = DRIFT_TYPES.UNKNOWN;
+      details = 'Cannot classify deformation type';
     }
 
     // Log deformation
