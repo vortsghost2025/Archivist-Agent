@@ -12,27 +12,53 @@ pub struct ConstitutionalConstraint {
 }
 
 pub fn load_constraints() -> Vec<ConstitutionalConstraint> {
-    // Allow tests to specify an explicit location via env var.
-    if let Ok(custom) = std::env::var("CONSTRAINTS_PATH") {
-        let custom_path = Path::new(&custom);
-        if custom_path.exists() {
-            let content = std::fs::read_to_string(custom_path).unwrap_or_else(|e| {
-                eprintln!("[CPS] Failed to read custom constraint file: {}", e);
-                String::new()
-            });
-            if content.is_empty() {
-                return Vec::new();
+    #[cfg(test)]
+    use crate::test_env;
+
+    #[cfg(test)]
+    {
+        if let Some(custom) = test_env::get_constraints_path() {
+            let custom_path = Path::new(&custom);
+            if custom_path.exists() {
+                let content = std::fs::read_to_string(custom_path).unwrap_or_else(|e| {
+                    eprintln!("[CPS] Failed to read custom constraint file: {}", e);
+                    String::new()
+                });
+                if content.is_empty() {
+                    return Vec::new();
+                }
+                return serde_yaml::from_str(&content).unwrap_or_else(|e| {
+                    eprintln!("[CPS] YAML parse error (custom): {}", e);
+                    Vec::new()
+                });
             }
-            return serde_yaml::from_str(&content).unwrap_or_else(|e| {
-                eprintln!("[CPS] YAML parse error (custom): {}", e);
-                Vec::new()
-            });
+        }
+    }
+
+    #[cfg(not(test))]
+    {
+        if let Ok(custom) = std::env::var("CONSTRAINTS_PATH") {
+            let custom_path = Path::new(&custom);
+            if custom_path.exists() {
+                let content = std::fs::read_to_string(custom_path).unwrap_or_else(|e| {
+                    eprintln!("[CPS] Failed to read custom constraint file: {}", e);
+                    String::new()
+                });
+                if content.is_empty() {
+                    return Vec::new();
+                }
+                return serde_yaml::from_str(&content).unwrap_or_else(|e| {
+                    eprintln!("[CPS] YAML parse error (custom): {}", e);
+                    Vec::new()
+                });
+            }
         }
     }
     // Primary location: crate directory where Cargo.toml lives
     let primary = Path::new(env!("CARGO_MANIFEST_DIR")).join("constitutional_constraints.yaml");
     // Fallback: repository root (one level up from the crate directory)
-    let fallback = Path::new(env!("CARGO_MANIFEST_DIR")).join(r"..\constitutional_constraints.yaml");
+    let fallback =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join(r"..\constitutional_constraints.yaml");
     let path = if primary.exists() {
         primary
     } else if fallback.exists() {
@@ -70,21 +96,17 @@ pub static CPS_SCORE: Lazy<i32> = Lazy::new(|| {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::env;
-    use tempfile::NamedTempFile;
+    use crate::test_env;
     use std::io::Write;
+    use tempfile::NamedTempFile;
 
     #[test]
     fn test_load_constraints_nonexistent() {
-        // Create an empty temporary file to simulate a nonexistent/empty constraints set.
         let mut tmp = NamedTempFile::new().expect("temp file creation failed");
-        // Ensure the file is empty.
         tmp.write_all(b"").expect("write failed");
-        env::set_var("CONSTRAINTS_PATH", tmp.path());
+        test_env::set_constraints_path(tmp.path().to_path_buf());
         let constraints = load_constraints();
         assert!(constraints.is_empty());
-        env::remove_var("CONSTRAINTS_PATH");
-        // Temp file will be deleted when `tmp` is dropped.
+        test_env::clear_constraints_path();
     }
 }
-

@@ -1,14 +1,16 @@
-mod constitution;
 mod build_index;
 mod build_registry;
 mod classification;
 mod constants;
+mod constitution;
+mod cps_check;
 mod generate_handoff;
+mod global_shim;
 mod safety;
 mod scan_tree;
 mod summarize_folder;
-mod global_shim;
-mod cps_check;
+#[cfg(test)]
+mod test_env;
 
 use build_index::build_index;
 use build_registry::build_registry;
@@ -66,23 +68,21 @@ fn get_cps_score() -> i32 {
 #[cfg(test)]
 mod lib_tests {
     use super::*;
-    use std::env;
-    use tempfile::NamedTempFile;
+    use crate::test_env;
     use std::io::Write;
+    use tempfile::NamedTempFile;
 
     fn write_constraints(content: &str) -> NamedTempFile {
         let mut tmp = NamedTempFile::new().expect("temp file creation failed");
         tmp.write_all(content.as_bytes()).expect("write failed");
-        // Point loader to this temporary file and force recompute for CPS.
-        env::set_var("CONSTRAINTS_PATH", tmp.path());
-        env::set_var("CPS_FORCE_RECOMPUTE", "1");
+        test_env::set_constraints_path(tmp.path().to_path_buf());
+        test_env::set_force_recompute(true);
         tmp
     }
 
     fn cleanup(_tmp: NamedTempFile) {
-        env::remove_var("CONSTRAINTS_PATH");
-        env::remove_var("CPS_FORCE_RECOMPUTE");
-        // NamedTempFile will be deleted when dropped.
+        test_env::clear_constraints_path();
+        test_env::clear_force_recompute();
     }
 
     #[test]
@@ -106,4 +106,3 @@ mod lib_tests {
         cleanup(tmp);
     }
 }
-

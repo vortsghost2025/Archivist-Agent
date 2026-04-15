@@ -140,6 +140,51 @@ The gap is closed when:
 
 ---
 
+## UPDATE: 2026-04-15
+
+**Original framing was incorrect.**
+
+The gap was NOT "agents cannot detect each other."
+The gap WAS "tests violate independence assumption."
+
+**Paper D states (lines 260-264):**
+> "Independent operation:
+> - No direct communication between instances
+> - File-based coordination only
+> - Each instance runs CPS independently
+> - No centralized controller"
+
+The race condition was caused by tests modifying global state (`env::set_var`),
+which violates "each instance runs CPS independently."
+
+**Fix implemented:** Thread-local test environment
+- Created `test_env.rs` module with thread-local state
+- Tests now use thread-local variables instead of global env vars
+- Each test thread has isolated CPS computation
+- Production code unchanged
+
+**Verification:**
+```
+cargo test -- --test-threads=4
+running 39 tests
+test result: ok. 39 passed; 0 failed
+```
+
+**What stays unchanged:**
+- Single entry point rule ✓
+- Constitutional constraints ✓
+- CPS verification ✓
+- Lattice structure ✓
+- Paper D's model ✓
+
+**The coordination gap is closed.**
+
+Paper D's model does NOT require agent-to-agent coordination. Agents converge
+through shared structure, not communication. The test isolation fix restores
+the independence assumption, closing the gap.
+
+---
+
 ## Notes
 
 This work extends the governance framework from single-agent to multi-agent coordination while preserving:
