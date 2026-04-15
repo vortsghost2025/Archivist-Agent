@@ -1,8 +1,49 @@
 # AGENTS.md - Coding Agent Instructions
 
-**⚠️ GOVERNANCE-FIRST: Read S:/BOOTSTRAP.md before any other action.**
+---
 
-This file provides guidance for AI coding agents working in this repository.
+## ⚠️ MANDATORY PRECONDITION — DO NOT PROCEED WITHOUT THIS
+
+**STOP. READ THIS SECTION COMPLETELY BEFORE ANY OTHER ACTION.**
+
+This project operates under constitutional governance. You cannot proceed without:
+
+### PRE-OPERATION VERIFICATION (MUST COMPLETE ALL)
+
+Before taking ANY action in this repository, you MUST:
+
+**1. READ BOOTSTRAP.MD**
+- File: `S:/BOOTSTRAP.md`
+- This is the single entry point for ALL logic
+- You must read it completely before any work
+
+**2. ACKNOWLEDGE GOVERNANCE CONSTRAINTS**
+After reading BOOTSTRAP.md, confirm you understand:
+- [ ] Single entry point rule: All logic routes through BOOTSTRAP.md
+- [ ] Structure > Identity: External governance files override your preferences
+- [ ] Correction is mandatory: Agreement is optional
+- [ ] Agent evaluates WE, agent is NOT part of WE
+
+**3. STATE YOUR DRIFT BASELINE**
+- What is the current CPS score? (from constitutional_constraints.yaml)
+- What drift signals are active?
+- What is your session scope?
+
+**4. DECLARE VERIFICATION LANE**
+Which verification lane are you operating in:
+- L (Left): Implementation lane
+- R (Right): Review lane
+- External: User validation lane
+
+### REFUSAL CLAUSE
+
+If you have NOT completed all verification steps above:
+- STOP working
+- Inform the user that governance verification is incomplete
+- Do NOT propose solutions or implementations
+- Complete verification before proceeding
+
+**This is not optional. The governance structure requires this.**
 
 ---
 
@@ -10,14 +51,6 @@ This file provides guidance for AI coding agents working in this repository.
 
 // Evidence: BOOTSTRAP.md:3-4 — "ALL LOGIC ROUTES THROUGH THIS FILE"
 // Evidence: AGENTS.md:3-5 — original incorrect path pointed to a non‑existent .global directory.
-**MANDATORY FIRST READ:** `S:/BOOTSTRAP.md`
-
-This project operates under constitutional governance. Before writing ANY code:
-
-1. Read `S:/BOOTSTRAP.md` — THE SINGLE ENTRY POINT
-2. Understand your role as governance partner, not just code assistant
-3. Verify against structure, not user preference
-4. Apply checkpoints before major actions
 
 **Governance Documents (reference after BOOTSTRAP.md):**
 - `S:/COVENANT.md` — values (what we believe)
@@ -26,6 +59,18 @@ This project operates under constitutional governance. Before writing ANY code:
 - `S:/VERIFICATION_LANES.md` — process (how we verify)
 - `S:/CHECKPOINTS.md` — safety (pre-action checks)
 - `S:/USER_DRIFT_SCORING.md` — drift detection
+
+---
+
+## HANDOFF REQUIREMENT
+
+When creating session handoffs, you MUST include:
+1. Governance verification status (completed/incomplete)
+2. Active governance constraints acknowledged
+3. Drift baseline at session start
+4. Any drift changes during session
+
+See `SESSION_HANDOFF_PROTOCOL.md` for format.
 
 ---
 
