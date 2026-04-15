@@ -145,12 +145,26 @@ Thread-local state is minimal:
 
 ## What This Means for the Project
 
-The governance framework now correctly implements Paper D's independence model:
+The test harness now better reflects Paper D's independence assumption for concurrent in-process execution.
 
-1. **Each session computes CPS independently** — thread-local state ensures this
-2. **No coordination needed** — agents converge through shared structure
-3. **File-based communication when needed** — MESSAGE_TO_AGENT.md pattern
-4. **External verification** — structure > identity
+**What this validates:**
+- Thread-level isolation for the current test suite
+- Better alignment with independence model in this context
+
+**What remains unproven:**
+- Cross-process isolation (thread-local != process-local)
+- All future test or runtime patterns
+- Full Paper D model conformance
+- Whether file-based coordination is sufficient for every multi-agent case
+
+**What the evidence chain establishes:**
+1. Tests used `env::set_var`
+2. Env vars are process-global
+3. Parallel tests therefore shared mutable state
+4. Thread-local test state isolates those values per thread
+5. Concurrent test run now passes
+
+That is a clean causal story. It validates thread-level isolation for this bug class.
 
 ---
 
@@ -170,4 +184,4 @@ But these are NOT needed for the current use case. Thread-local state is suffici
 
 The "coordination gap" was a misdiagnosis. Paper D's model does not require agent-to-agent coordination. The real gap was independence violation in tests, now fixed with thread-local state.
 
-**The governance framework now correctly implements Paper D's model.**
+**The test harness now better reflects Paper D's independence assumption for this context.**

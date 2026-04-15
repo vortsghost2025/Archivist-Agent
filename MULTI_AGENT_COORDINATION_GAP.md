@@ -177,11 +177,22 @@ test result: ok. 39 passed; 0 failed
 - Lattice structure ✓
 - Paper D's model ✓
 
-**The coordination gap is closed.**
+**The originally identified coordination gap was misframed.**
 
-Paper D's model does NOT require agent-to-agent coordination. Agents converge
-through shared structure, not communication. The test isolation fix restores
-the independence assumption, closing the gap.
+The actual test-isolation violation has been mitigated for concurrent in-process tests.
+
+**What this demonstrates:**
+- Thread-level isolation works for the current test suite
+- The fix better respects Paper D's independence assumption in this context
+
+**What remains unproven:**
+- Cross-process isolation (this fix is thread-local, not process-local)
+- All future test or runtime patterns
+- Whether file-based coordination is sufficient for every multi-agent case
+- Full Paper D model conformance (this addresses one class of interference)
+
+Paper D's model does NOT require agent-to-agent coordination for this bug class.
+Agents converge through shared structure, not communication.
 
 ---
 
