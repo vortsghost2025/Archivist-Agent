@@ -136,7 +136,7 @@ pub fn generate_handoff(path: String) -> Result<String, String> {
     );
     fs::write(&handoff_filename, &md).map_err(|e| format!("Failed to write handoff: {}", e))?;
 
-    let result = HandoffResult {
+    let _result = HandoffResult {
         project_name,
         path,
         classification,

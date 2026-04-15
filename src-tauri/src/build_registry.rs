@@ -30,16 +30,15 @@ fn classify_path(path: &Path) -> (String, String) {
     if let Ok(entries) = fs::read_dir(path) {
         for entry in entries.filter_map(|e| e.ok()).take(20) {
             let name = entry.file_name().to_string_lossy().to_lowercase();
-            if entry.path().is_file() {
-                if name.ends_with(".js")
+            if entry.path().is_file()
+                && (name.ends_with(".js")
                     || name.ends_with(".ts")
                     || name.ends_with(".rs")
                     || name.ends_with(".py")
                     || name.ends_with(".go")
-                    || name.ends_with(".html")
-                {
-                    has_code = true;
-                }
+                    || name.ends_with(".html"))
+            {
+                has_code = true;
             }
         }
     }

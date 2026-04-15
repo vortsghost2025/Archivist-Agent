@@ -87,7 +87,7 @@ pub fn build_index(root: String) -> Result<IndexResult, String> {
         for e in &runtime_entries {
             md.push_str(&format!(
                 "- **{}** — {}\n",
-                e.path.split(['\\', '/']).last().unwrap_or(&e.path),
+                e.path.split(['\\', '/']).next_back().unwrap_or(&e.path),
                 e.summary
             ));
         }
@@ -101,7 +101,7 @@ pub fn build_index(root: String) -> Result<IndexResult, String> {
         for e in &interface_entries {
             md.push_str(&format!(
                 "- **{}** — {}\n",
-                e.path.split(['\\', '/']).last().unwrap_or(&e.path),
+                e.path.split(['\\', '/']).next_back().unwrap_or(&e.path),
                 e.summary
             ));
         }
@@ -115,7 +115,7 @@ pub fn build_index(root: String) -> Result<IndexResult, String> {
         for e in &memory_entries {
             md.push_str(&format!(
                 "- **{}** — {}\n",
-                e.path.split(['\\', '/']).last().unwrap_or(&e.path),
+                e.path.split(['\\', '/']).next_back().unwrap_or(&e.path),
                 e.summary
             ));
         }
@@ -129,7 +129,7 @@ pub fn build_index(root: String) -> Result<IndexResult, String> {
         for e in &verification_entries {
             md.push_str(&format!(
                 "- **{}** — {}\n",
-                e.path.split(['\\', '/']).last().unwrap_or(&e.path),
+                e.path.split(['\\', '/']).next_back().unwrap_or(&e.path),
                 e.summary
             ));
         }
@@ -143,7 +143,7 @@ pub fn build_index(root: String) -> Result<IndexResult, String> {
         for e in &research_entries {
             md.push_str(&format!(
                 "- **{}** — {}\n",
-                e.path.split(['\\', '/']).last().unwrap_or(&e.path),
+                e.path.split(['\\', '/']).next_back().unwrap_or(&e.path),
                 e.summary
             ));
         }
@@ -157,7 +157,7 @@ pub fn build_index(root: String) -> Result<IndexResult, String> {
         for e in &unknown_entries {
             md.push_str(&format!(
                 "- **{}** — {}\n",
-                e.path.split(['\\', '/']).last().unwrap_or(&e.path),
+                e.path.split(['\\', '/']).next_back().unwrap_or(&e.path),
                 e.summary
             ));
         }
@@ -194,7 +194,7 @@ pub fn build_index(root: String) -> Result<IndexResult, String> {
 
 fn classify_path_simple(path: &Path) -> (String, String, Vec<String>) {
     let path_str = path.to_string_lossy().to_lowercase();
-    let name = path
+    let _name = path
         .file_name()
         .map(|n| n.to_string_lossy().to_string())
         .unwrap_or_default();

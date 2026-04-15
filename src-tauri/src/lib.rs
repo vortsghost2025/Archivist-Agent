@@ -1,5 +1,7 @@
 mod build_index;
 mod build_registry;
+mod classification;
+mod constants;
 mod generate_handoff;
 mod safety;
 mod scan_tree;
