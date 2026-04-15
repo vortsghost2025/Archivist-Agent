@@ -102,24 +102,34 @@ If agents don't share constitutional constraints (because they didn't read them)
 
 ## Implementation Plan
 
-### Phase 1: AGENTS.md Modification
-Add enforcement language at the top:
-- Explicit "READ THIS FIRST" section
-- Verification checklist before proceeding
-- Refusal clause if not complete
+### Layer 1: Instruction Hardening (DONE)
+- AGENTS.md modified with mandatory precondition section
+- Refusal clause added
+- Governance constraints explicitly listed
 
-### Phase 2: SESSION_INIT.md Creation
-Protocol file that must be completed:
-- Bootstrap read confirmation
-- Governance constraints list
-- Drift status
-- Session scope
+### Layer 2: Session-Init Ritual (DONE)
+- SESSION_INIT.md created
+- Checklist must be completed before work
+- Verification output required
 
-### Phase 3: Verification Checkpoint
-Add to commit process:
-- Governance consultation confirmation
-- Theory extraction before implementation
-- Overclaim check
+### Layer 3: Checkpoint Before Commit (DONE)
+- Commit checkpoint added to CHECKPOINTS.md
+- Governance consultation verified before commit
+- Theory extraction confirmed
+
+### Layer 4: Runtime Enforcement (NOT IMPLEMENTED)
+**This is the missing piece.**
+
+Layer 1-3 make governance "checked" at the instruction layer.
+Layer 4 would make governance "blocking" at the runtime layer.
+
+**What Layer 4 would require:**
+- Host/runtime explicitly loads SESSION_INIT.md
+- Command/workflow requires completion before proceeding
+- Human/operator rejects work that skips verification
+- Or: automated check that detects bypass and blocks operation
+
+**Current status:** Layer 1-3 implemented. Layer 4 outside current scope (requires tooling changes beyond documentation).
 
 ---
 
@@ -133,9 +143,24 @@ Add to commit process:
 4. Handoffs include governance verification state
 5. The structure is mandatory, not voluntary
 
+**Current status:**
+
+Layers 1-3 substantially reduce the gap:
+- Governance initialization is now explicit (SESSION_INIT.md)
+- Governance initialization is now visible (verification output)
+- Governance initialization is now procedural (checkpoints)
+
+But Layer 4 (runtime enforcement) is not yet implemented:
+- Full closure depends on host/runtime or operator enforcement
+- Without Layer 4, the system is "stronger, but still partly voluntary"
+
+**Accurate claim:**
+The gap is reduced at the instruction/workflow layer. Full closure requires runtime-level enforcement that detects and rejects operation without verified governance initialization.
+
 ---
 
 ## Current State
 
-**Stopped at:** Gap documented
-**Next action:** Implement AGENTS.md modification
+**Stopped at:** Layer 1-3 implemented, Layer 4 not yet designed
+**Layer 4 = runtime enforcement that detects and rejects operation without verified governance initialization**
+**Next action:** Define what Layer 4 would look like, or acknowledge this is outside current scope

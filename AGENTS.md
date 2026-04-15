@@ -6,7 +6,9 @@
 
 **STOP. READ THIS SECTION COMPLETELY BEFORE ANY OTHER ACTION.**
 
-This project operates under constitutional governance. You cannot proceed without:
+This project operates under constitutional governance. Before taking any action, you are expected to complete governance verification.
+
+**Status:** This section documents mandatory preconditions. Full enforcement depends on host/runtime or operator compliance.
 
 ### PRE-OPERATION VERIFICATION (MUST COMPLETE ALL)
 
