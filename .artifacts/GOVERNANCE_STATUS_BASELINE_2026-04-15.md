@@ -110,16 +110,20 @@ To move from "documented" to "enforced":
 
 ## Why This Document Exists
 
-This is the artifact that says:
+This document records what was verified and what was not.
 
-> **This is where truth stopped and aspiration began.**
+**What it does:**
+- Establishes a reference point for future sessions
+- Separates verified claims from aspirational goals
+- Documents the gap between "documented" and "enforced"
 
-Later, when momentum returns, this file prevents drift by establishing:
-- What was actually verified
-- What was only documented
-- What remains unproven
+**What it does not do:**
+- Enforce itself
+- Prevent agents from overclaiming
+- Guarantee future behavior
 
-This protects the work from claiming more than evidence supports.
+**Why that matters:**
+Future agents (or humans) may still overclaim. This document cannot stop them. It can only provide a reference point for verification. If someone claims more than this baseline supports, the claim itself is the drift signal — not this document's protection.
 
 ---
 
@@ -144,5 +148,5 @@ This document acknowledges that gap honestly.
 ---
 
 **Version:** 1.0
-**Status:** Baseline established, Layer 4 outside current scope
-**Next action:** When momentum returns, start from this baseline
+**Status:** Baseline recorded, Layer 4 outside current scope
+**Next action:** When momentum returns, verify against this baseline
