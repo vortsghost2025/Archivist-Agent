@@ -110,20 +110,22 @@ To move from "documented" to "enforced":
 
 ## Why This Document Exists
 
-This document records what was verified and what was not.
+This document records the current evidence boundary.
 
 **What it does:**
-- Establishes a reference point for future sessions
-- Separates verified claims from aspirational goals
-- Documents the gap between "documented" and "enforced"
+- Records what was verified
+- Records what was only documented
+- Records what remains unproven
+- Provides a reference point for later drift detection
 
 **What it does not do:**
 - Enforce itself
-- Prevent agents from overclaiming
+- Prevent drift
 - Guarantee future behavior
+- Stop agents or humans from overclaiming
 
-**Why that matters:**
-Future agents (or humans) may still overclaim. This document cannot stop them. It can only provide a reference point for verification. If someone claims more than this baseline supports, the claim itself is the drift signal — not this document's protection.
+**How it functions:**
+Later claims can be checked against this baseline. If a claim exceeds what's recorded here, that's a drift signal. The document doesn't prevent the drift — it makes the drift detectable when someone checks against it.
 
 ---
 
