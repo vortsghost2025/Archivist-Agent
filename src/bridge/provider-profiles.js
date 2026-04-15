@@ -30,6 +30,7 @@ const PROVIDER_PROFILES = {
     name: 'Cloud Reasoning',
     provider: 'z-ai',
     models: ['glm5'],
+    baseURL: 'https://open.bigmodel.cn/api/paas/v4',
     priority: 2,
     limits: {
       requestsPerMinute: 60,
@@ -46,6 +47,7 @@ const PROVIDER_PROFILES = {
     name: 'Cloud Cheap',
     provider: 'openrouter',
     models: ['openrouter/auto'],
+    baseURL: 'https://openrouter.ai/api/v1',
     priority: 3,
     limits: {
       requestsPerMinute: 200,
