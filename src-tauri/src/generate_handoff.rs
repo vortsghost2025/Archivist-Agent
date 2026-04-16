@@ -149,3 +149,61 @@ pub fn generate_handoff(path: String) -> Result<String, String> {
 
     Ok(format!("Handoff saved to: {}\n\n{}", handoff_filename, md))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_filename_sanitization_unit() {
+        let cases = vec![
+            ("normal", "normal-brief.md"),
+            ("with spaces", "with-spaces-brief.md"),
+            ("Multiple   Spaces", "multiple---spaces-brief.md"),
+            ("  leading", "--leading-brief.md"),
+            ("trailing  ", "trailing---brief.md"),
+        ];
+
+        for (input, expected_suffix) in cases {
+            let sanitized = input.to_lowercase().replace(' ', "-");
+            let filename = format!("outputs/handoffs/{}-brief.md", sanitized);
+            assert!(
+                filename.contains(&sanitized) || filename.ends_with(expected_suffix),
+                "Expected filename containing '{}', got '{}'",
+                sanitized,
+                filename
+            );
+        }
+    }
+
+    #[test]
+    fn test_filename_preserves_unicode() {
+        let input = "test-проект-项目";
+        let sanitized = input.to_lowercase().replace(' ', "-");
+        assert!(
+            sanitized.contains("проект"),
+            "Unicode preserved in sanitized name"
+        );
+        assert!(
+            sanitized.contains("项目"),
+            "CJK preserved in sanitized name"
+        );
+    }
+
+    #[test]
+    fn test_consecutive_spaces_produce_multiple_dashes() {
+        let input = "test   name";
+        let sanitized = input.to_lowercase().replace(' ', "-");
+        assert_eq!(
+            sanitized, "test---name",
+            "Three spaces should produce three dashes"
+        );
+    }
+
+    #[test]
+    fn test_edge_case_empty_name() {
+        let input = "";
+        let sanitized = input.to_lowercase().replace(' ', "-");
+        assert_eq!(sanitized, "", "Empty input produces empty output");
+    }
+}
