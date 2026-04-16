@@ -1,4 +1,4 @@
-use crate::safety::validate_path;
+use crate::safety::{check_read_only, validate_path};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
@@ -17,6 +17,8 @@ pub struct HandoffResult {
 
 #[tauri::command]
 pub fn generate_handoff(path: String) -> Result<String, String> {
+    check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
+
     let path_ref = Path::new(&path);
 
     validate_path(path_ref).map_err(|e| format!("Path validation failed: {}", e))?;

@@ -68,6 +68,7 @@ fn get_cps_score() -> i32 {
 #[cfg(test)]
 mod lib_tests {
     use super::*;
+    use crate::safety::{load_config, AllowedRoots};
     use crate::test_env;
     use std::io::Write;
     use tempfile::NamedTempFile;
@@ -104,5 +105,30 @@ mod lib_tests {
         let tmp = write_constraints("- name: TEST\n  description: test\n  weight: 15\n");
         assert_eq!(get_cps_score(), 15);
         cleanup(tmp);
+    }
+
+    #[test]
+    fn test_read_only_mode_is_active() {
+        let config = load_config().unwrap_or_else(|_| AllowedRoots::default());
+        assert!(
+            config.read_only_mode.unwrap_or(false),
+            "read_only_mode should be true in config"
+        );
+    }
+
+    #[test]
+    fn test_read_only_guard_blocks_mutations() {
+        use crate::safety::check_read_only;
+        let result = check_read_only();
+        assert!(
+            result.is_err(),
+            "check_read_only should return error when read_only_mode is true"
+        );
+        let err_msg = result.unwrap_err().to_string();
+        assert!(
+            err_msg.contains("read-only") || err_msg.contains("blocked"),
+            "Error message should mention read-only: got '{}'",
+            err_msg
+        );
     }
 }

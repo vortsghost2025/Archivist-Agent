@@ -158,6 +158,17 @@ If you stop correcting Sean, you are failing
 - **Rust** — Core logic (src-tauri/)
 - **Safety Module** — Path validation, allowed roots
 - **Commands** — build_index, build_registry, summarize_folder, generate_handoff
+- **CPS Gating** — Constitutional Policy Score enforcement for command execution
+
+### Governance Enforcement
+
+The application enforces two governance constraints:
+
+1. **Read-Only Mode Guard** — Mutating commands (`build_index`, `generate_handoff`, `build_registry`) check `read_only_mode` before execution. If enabled, mutations are blocked immediately with no UI prompts.
+
+2. **CPS Gating** — Commands like `ping` and `get_cps_score` require a minimum Constitutional Policy Score threshold to execute.
+
+See [`docs/CPS_GATING.md`](docs/CPS_GATING.md) for implementation details.
 
 ---
 

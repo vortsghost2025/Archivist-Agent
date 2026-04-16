@@ -1,3 +1,4 @@
+use crate::constants::{bucket, confidence};
 use crate::safety::validate_path;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -16,12 +17,12 @@ pub enum FileBucket {
 impl FileBucket {
     pub fn as_str(&self) -> &'static str {
         match self {
-            FileBucket::Runtime => "Runtime",
-            FileBucket::Interface => "Interface",
-            FileBucket::Memory => "Memory",
-            FileBucket::Verification => "Verification",
-            FileBucket::Research => "Research",
-            FileBucket::Unknown => "Unknown",
+            FileBucket::Runtime => bucket::RUNTIME,
+            FileBucket::Interface => bucket::INTERFACE,
+            FileBucket::Memory => bucket::MEMORY,
+            FileBucket::Verification => bucket::VERIFICATION,
+            FileBucket::Research => bucket::RESEARCH,
+            FileBucket::Unknown => bucket::UNKNOWN,
         }
     }
 }
@@ -65,15 +66,15 @@ pub fn summarize_folder(root_path: String) -> Result<FolderSummary, String> {
     let total_files = all_files.len();
     let mut buckets: HashMap<String, Vec<ClassifiedFile>> = HashMap::new();
 
-    for bucket in &[
-        "Runtime",
-        "Interface",
-        "Memory",
-        "Verification",
-        "Research",
-        "Unknown",
+    for bucket_name in &[
+        bucket::RUNTIME,
+        bucket::INTERFACE,
+        bucket::MEMORY,
+        bucket::VERIFICATION,
+        bucket::RESEARCH,
+        bucket::UNKNOWN,
     ] {
-        buckets.insert(bucket.to_string(), Vec::new());
+        buckets.insert(bucket_name.to_string(), Vec::new());
     }
 
     for file_path in all_files {
@@ -88,7 +89,7 @@ pub fn summarize_folder(root_path: String) -> Result<FolderSummary, String> {
     for (name, files) in &buckets {
         let count = files.len();
         bucket_counts.insert(name.clone(), count);
-        if name == "Unknown" {
+        if name == bucket::UNKNOWN {
             unclassified_count = count;
         }
     }
@@ -147,40 +148,40 @@ fn classify_file(path: &PathBuf) -> ClassifiedFile {
 
     let name_lower = name.to_lowercase();
 
-    let (bucket, confidence, reason) = if is_verification_file(&name_lower, &extension) {
+    let (bucket, conf, reason) = if is_verification_file(&name_lower, &extension) {
         (
             FileBucket::Verification,
-            0.9,
+            confidence::MEDIUM,
             "Filename or path contains test/spec indicators".to_string(),
         )
     } else if is_interface_file(&extension) {
         (
             FileBucket::Interface,
-            0.95,
+            confidence::HIGH,
             format!(".{} is a UI/frontend file type", extension),
         )
     } else if is_research_file(&extension, &name_lower) {
         (
             FileBucket::Research,
-            0.9,
+            confidence::MEDIUM,
             format!(".{} is a research/document file type", extension),
         )
     } else if is_memory_file(&extension, &name_lower) {
         (
             FileBucket::Memory,
-            0.85,
+            confidence::LOW,
             format!("{} is a project memory/config file", name),
         )
     } else if is_runtime_file(&extension) {
         (
             FileBucket::Runtime,
-            0.9,
+            confidence::MEDIUM,
             format!(".{} is a runtime/executable file type", extension),
         )
     } else {
         (
             FileBucket::Unknown,
-            0.5,
+            confidence::DEFAULT,
             format!("No classification rule matched .{}", extension),
         )
     };
@@ -189,7 +190,7 @@ fn classify_file(path: &PathBuf) -> ClassifiedFile {
         path: path.to_string_lossy().to_string(),
         name,
         bucket: bucket.as_str().to_string(),
-        confidence,
+        confidence: conf,
         reason,
         size_bytes,
         extension,

@@ -1,4 +1,4 @@
-use crate::safety::{is_path_allowed, load_config};
+use crate::safety::{check_read_only, is_path_allowed, load_config};
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -72,6 +72,8 @@ fn classify_path(path: &Path) -> (String, String) {
 
 #[tauri::command]
 pub fn build_registry() -> Result<String, String> {
+    check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
+
     let config = load_config().unwrap_or_default();
     let mut projects: Vec<ProjectInfo> = Vec::new();
 
