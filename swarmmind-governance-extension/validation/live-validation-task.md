@@ -81,24 +81,19 @@ An external lane could review this and understand what happened without reading 
 
 ## Verdict
 
-**Schema passes live bounded validation.**
+**Both retroactive and live bounded validation passed.**
 
-The trace captured the key decision points:
-- Proposal (human)
-- Implementation (agent)
-- Challenge #1: test design flaw (human)
-- Challenge #2: config blocking tests (human)
-- Correction (agent)
-
-Both retroactive and live passes show the trace adds real value, not just more logging.
+The governance-trace schema demonstrated real value in capturing challenges, corrections, and branch changes. This is sufficient to justify designing and piloting Mode 2 embedded capture, but not yet to claim that embedded capture is broadly validated.
 
 ---
 
 ## Next Step
 
-**Mode 2 earns the right to exist.**
+**Mode 2 earns the right to be designed and attempted.**
 
-Proceed to implement embedded capture in SwarmMind (optional, future work).
+This validation does NOT prove that embedded Mode 2 capture will stay low-friction, non-noisy, and worth its maintenance cost across repeated sessions. That requires broader validation at scale.
+
+Trace schema validated ≠ embedded workflow layer validated at scale.
 
 ---
 
