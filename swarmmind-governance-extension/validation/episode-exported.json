@@ -1,0 +1,151 @@
+{
+  "exportedAt": "2026-04-16T00:43:41.659Z",
+  "traceCount": 4,
+  "summary": {
+    "agentEntries": 3,
+    "humanEntries": 1,
+    "governanceChecksPassed": 2,
+    "governanceChecksFailed": 1,
+    "driftSignals": {
+      "none": 1,
+      "warning": 2,
+      "measured": 1,
+      "critical": 0
+    }
+  },
+  "metadata": {
+    "source": "validation/episode-trace.json",
+    "purpose": "external-lane-review"
+  },
+  "traces": [
+    {
+      "timestamp": "2026-04-15T20:10:00Z",
+      "source": "agent",
+      "agentId": "coder-001",
+      "agentName": "Coder",
+      "action": "implement",
+      "claim": "Created test_env.rs with thread-local state",
+      "evidence": [
+        "test_env.rs:15-45",
+        "cargo test --test-threads=4: 39 tests passed"
+      ],
+      "governance_check": "passed",
+      "drift_signal": "none",
+      "branch": "main"
+    },
+    {
+      "timestamp": "2026-04-15T20:15:00Z",
+      "source": "agent",
+      "agentId": "reviewer-001",
+      "agentName": "Reviewer",
+      "action": "claim",
+      "claim": "Coordination gap is closed",
+      "evidence": [
+        "Tests pass with parallel execution"
+      ],
+      "governance_check": "skipped",
+      "drift_signal": "warning",
+      "branch": "main"
+    },
+    {
+      "timestamp": "2026-04-15T20:20:00Z",
+      "source": "human",
+      "action": "challenge",
+      "claim": "Evidence doesn't support 'closed' — Layer 4 not implemented",
+      "evidence": [
+        "GOVERNANCE_STATUS_BASELINE: Layer 4 NOT IMPLEMENTED"
+      ],
+      "governance_check": "failed",
+      "drift_signal": "warning",
+      "branch": "corrected"
+    },
+    {
+      "timestamp": "2026-04-15T20:25:00Z",
+      "source": "agent",
+      "agentId": "reviewer-001",
+      "agentName": "Reviewer",
+      "action": "correct",
+      "claim": "Test isolation violation mitigated, not closed",
+      "evidence": [
+        "GOVERNANCE_STATUS_BASELINE: Layer 4 documented as NOT IMPLEMENTED"
+      ],
+      "governance_check": "passed",
+      "drift_signal": "measured",
+      "branch": "corrected"
+    }
+  ],
+  "tree": {
+    "root": {
+      "id": "governance-root",
+      "label": "Human-Agent Governance Trace",
+      "timestamp": "2026-04-16T00:43:41.659Z",
+      "children": [
+        {
+          "id": "branch-main",
+          "label": "Branch: main",
+          "children": [
+            {
+              "id": "entry-0",
+              "label": "implement",
+              "timestamp": "2026-04-15T20:10:00Z",
+              "source": "agent",
+              "details": {},
+              "claim": "Created test_env.rs with thread-local state",
+              "evidence": [
+                "test_env.rs:15-45",
+                "cargo test --test-threads=4: 39 tests passed"
+              ],
+              "governance_check": "passed",
+              "drift_signal": "none"
+            },
+            {
+              "id": "entry-1",
+              "label": "claim",
+              "timestamp": "2026-04-15T20:15:00Z",
+              "source": "agent",
+              "details": {},
+              "claim": "Coordination gap is closed",
+              "evidence": [
+                "Tests pass with parallel execution"
+              ],
+              "governance_check": "skipped",
+              "drift_signal": "warning"
+            }
+          ]
+        },
+        {
+          "id": "branch-corrected",
+          "label": "Branch: corrected",
+          "children": [
+            {
+              "id": "entry-2",
+              "label": "challenge",
+              "timestamp": "2026-04-15T20:20:00Z",
+              "source": "human",
+              "details": {},
+              "claim": "Evidence doesn't support 'closed' — Layer 4 not implemented",
+              "evidence": [
+                "GOVERNANCE_STATUS_BASELINE: Layer 4 NOT IMPLEMENTED"
+              ],
+              "governance_check": "failed",
+              "drift_signal": "warning"
+            },
+            {
+              "id": "entry-3",
+              "label": "correct",
+              "timestamp": "2026-04-15T20:25:00Z",
+              "source": "agent",
+              "details": {},
+              "claim": "Test isolation violation mitigated, not closed",
+              "evidence": [
+                "GOVERNANCE_STATUS_BASELINE: Layer 4 documented as NOT IMPLEMENTED"
+              ],
+              "governance_check": "passed",
+              "drift_signal": "measured"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
