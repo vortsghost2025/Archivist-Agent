@@ -1,7 +1,7 @@
 # SWARMIND_GOVERNANCE_EXTENSION_STATUS.md
 
 **Created:** 2026-04-16
-**Status:** Mode 1 (Manual Capture) — Implementation Complete
+**Status:** Mode 1 governance-trace extension implemented and tested; real-session validation still pending
 
 ---
 
@@ -171,10 +171,28 @@ From `SWARMIND_INTEGRATION_SPEC.md`:
 
 ## Next Steps
 
-1. **Test with real session** — Use extension during actual human-agent collaboration
-2. **Create SwarmMind bridge** — Script to export SwarmMind traces in governance format
-3. **External lane validation** — Send exported traces to GPT/other AI for review
-4. **Decide Mode 2 vs Mode 3** — Based on real-world usage feedback
+**Blocking:** Extension must prove itself in real use before Mode 2 earns the right to exist.
+
+### Validation Protocol
+
+Run one actual human-agent interaction:
+
+1. **Capture raw SwarmMind trace** — from live session
+2. **Add human challenge entries** — via CLI during real collaboration
+3. **Produce merged trace** — combine agent + human
+4. **Export review artifact** — for external lane
+
+### Validation Questions
+
+After real-session use, answer:
+
+1. Did it expose anything useful that would have otherwise been missed?
+2. Did the fields feel natural or forced?
+3. Was `branch` enough to capture decision flow?
+4. Did `governance_check` and `drift_signal` stay meaningful?
+5. Did the trace help exterior-lane review?
+
+**Only if yes to all:** Mode 2 embedding earns the right to exist.
 
 ---
 
