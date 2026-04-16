@@ -24,7 +24,15 @@ pub fn ensure_shim() {
                 std::fs::copy(src, dst).ok();
             }
         }
-        let files = ["BOOTSTRAP.md", "CHECKPOINTS.md", "CPS_ENFORCEMENT.md", "USER_DRIFT_SCORING.md", "COVENANT.md", "GOVERNANCE.md", "VERIFICATION_LANES.md"];
+        let files = [
+            "BOOTSTRAP.md",
+            "CHECKPOINTS.md",
+            "CPS_ENFORCEMENT.md",
+            "USER_DRIFT_SCORING.md",
+            "COVENANT.md",
+            "GOVERNANCE.md",
+            "VERIFICATION_LANES.md",
+        ];
         for name in &files {
             let src = repo_root.join(name);
             let dst = global_path.join(name);

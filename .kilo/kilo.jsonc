@@ -12,7 +12,8 @@
   ],
   "agent": {
     "orchestrator": {
-      "model": "z-ai/glm5"
+      "model": "z-ai/glm5",
+      "url": "http://127.0.0.1:11434/v1"
     },
     "plan": {
       "model": "ollama/qwen2.5-coder:7b"
@@ -67,7 +68,7 @@
       "description": "Check for drift in current conversation"
     },
     "/code-review": {
-      "template": "Read S:/.global/BOOTSTRAP.md first. Then perform a read-only code review of the Tauri application. Do NOT make changes. Focus on: security, code quality, performance, maintainability. Report findings in a structured format.",
+      "template": "Read S:/.global/BOOTSTRAP.md first. Then perform a read‑only code review of the Tauri application. Do NOT make changes. Focus on: security, code quality, performance, maintainability. Report findings in a structured format.",
       "description": "Governance-aware code review"
     },
     "/verify": {

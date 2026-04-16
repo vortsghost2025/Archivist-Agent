@@ -1,4 +1,6 @@
-use crate::safety::validate_path;
+// Evidence: CPS_ENFORCEMENT.md:70 — read‑only check before indexing
+// Evidence: BOOTSTRAP.md:50 — ensure anchor before any major action
+use crate::safety::{check_read_only, validate_path};
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
@@ -22,6 +24,9 @@ pub struct IndexResult {
 #[tauri::command]
 pub fn build_index(root: String) -> Result<IndexResult, String> {
     let path = Path::new(&root);
+
+    // Check read-only mode first (governance constraint)
+    check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
 
     validate_path(path).map_err(|e| format!("Path validation failed: {}", e))?;
 

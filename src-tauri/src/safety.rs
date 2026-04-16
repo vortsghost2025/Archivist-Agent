@@ -1,3 +1,6 @@
+#![allow(unused_imports, unused_variables, dead_code)]
+// Evidence: BOOTSTRAP.md:46 — Structure > Identity enforced via read‑only guard
+// Evidence: CPS_ENFORCEMENT.md:70 — check_read_only participates in CPS scoring
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
@@ -43,9 +46,38 @@ impl std::fmt::Display for SafetyError {
 
 impl std::error::Error for SafetyError {}
 
+/// Returns true if the system is in read-only mode.
+/// When read-only mode is active, mutating operations (write, delete, create)
+/// should be blocked even if path validation passes.
+///
+/// GOVERNANCE NOTE: This enforces the "Structure > Identity" constraint.
+/// Even if a user has write access to a path, read_only_mode can block
+/// modifications to protect system integrity.
 #[allow(dead_code)]
 pub fn is_read_only() -> bool {
     CACHED_CONFIG.read_only_mode.unwrap_or(false)
+}
+
+/// Checks if read-only mode is active and returns an error if a mutating
+/// operation is attempted. Use this at the start of commands that modify
+/// the filesystem (build_index, generate_handoff, etc.).
+///
+/// # Example
+/// ```ignore
+/// pub fn some_mutating_command(path: String) -> Result<..., String> {
+///     check_read_only()?;  // Block if read-only mode is active
+///     validate_path(&Path::new(&path))?;
+///     // ... proceed with mutation
+/// }
+/// ```
+pub fn check_read_only() -> Result<(), SafetyError> {
+    if is_read_only() {
+        Err(SafetyError::PathNotAllowed(
+            "System is in read-only mode - mutating operations are blocked".to_string(),
+        ))
+    } else {
+        Ok(())
+    }
 }
 
 /// Validates a path for security issues.

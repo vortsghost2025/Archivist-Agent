@@ -1,3 +1,5 @@
+// Evidence: PAPER_B.md:13-20 — formal lattice definition
+// Evidence: CPS_ENFORCEMENT.md:116-124 — drift detection via lattice deformation
 /**
  * Constraint Lattice Implementation
  * 

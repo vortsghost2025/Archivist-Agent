@@ -1,0 +1,162 @@
+## What is real right now
+
+Based on the current docs, the strongest **“constitutional governance” pattern** in agent systems is a **4-layer stack**:
+
+1. an auto-loaded instruction layer,
+2. an on-demand procedure layer,
+3. a memory layer, and
+4. a hard enforcement layer.
+   That is the clearest convergence I found across Codex, Claude Code, GitHub Copilot, and Cursor. ([OpenAI Developers][1])
+
+### 1) Auto-loaded constitutional file: **yes, this is now a real pattern**
+
+`AGENTS.md` is now an open, cross-tool instruction format rather than just a one-off convention. The official AGENTS.md site says it is an open format used across many agent tools, and OpenAI Codex officially auto-loads `AGENTS.md` at session start with layered precedence, global and repo scopes, and configurable fallback filenames like `TEAM_GUIDE.md` or `.agents.md`. ([Agents][2])
+
+GitHub Copilot CLI also officially supports `AGENTS.md`: root `AGENTS.md` is treated as **primary instructions**, while other `AGENTS.md` files are treated as additional instructions. GitHub also supports `.github/copilot-instructions.md` and path-scoped `.instructions.md` files, which gives you a second and third governance layer without abandoning `AGENTS.md`. ([GitHub Docs][3])
+
+Claude Code uses `CLAUDE.md` rather than `AGENTS.md`, but it explicitly documents a bridge pattern: put `@AGENTS.md` inside `CLAUDE.md` so both agents share the same governance source without duplication. Claude loads `CLAUDE.md` files at session start, with more specific files taking precedence. ([Claude API Docs][4])
+
+Cursor’s current docs also position **Rules + AGENTS.md** as persistent instruction surfaces, so the same governance ideas are clearly portable there too. ([Cursor][5])
+
+---
+
+## 2) Governance transfer via variants: **this is broader than AGENTS.md now**
+
+The big up-to-date shift is that governance transfer is no longer just “copy rules into another markdown file.” There are now **two interoperable transfer channels**:
+
+### A. Shared instruction files
+
+You can transfer governance across systems using `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, and path-scoped instruction files. GitHub explicitly supports `AGENTS.md`, and on some surfaces it also supports `CLAUDE.md` and `GEMINI.md`. Claude explicitly supports importing `AGENTS.md` into `CLAUDE.md`. ([GitHub Docs][6])
+
+### B. Shared **skills** / reusable procedural packs
+
+This is the more important development. OpenAI says Codex skills are built on the **open agent skills standard**. Claude says its skills also follow that open standard. GitHub says Copilot agent skills are folders of instructions, scripts, and resources, and that the same standard works across Copilot cloud agent, Copilot CLI, and agent mode in VS Code; GitHub even supports skill locations like `.github/skills`, `.claude/skills`, and `.agents/skills`. That means governance procedures can now transfer not just as static policy text, but as reusable operational playbooks. ([OpenAI Developers][7])
+
+That is a major upgrade for your idea: **constitution in AGENTS.md, procedures in skills** is now a much cleaner architecture than trying to cram everything into one file. ([OpenAI Developers][8])
+
+---
+
+## 3) “Agents can recall governance from memory without re-reading”: **supported, but unevenly**
+
+### Claude Code
+
+Claude has the clearest first-party model for this. It documents **two complementary memory systems**: `CLAUDE.md` and **auto memory**. Both are loaded at the start of every conversation. Auto memory stores learnings and patterns Claude discovers, and `/memory` lets you inspect what was loaded. Claude also says **subagents can maintain their own auto memory**. ([Claude API Docs][4])
+
+### GitHub Copilot
+
+GitHub now has **Copilot Memory** in public preview. GitHub says Copilot can learn about a repository and use that knowledge in **Copilot cloud agent, Copilot code review, and Copilot CLI**. Individual Pro/Pro+ users have it enabled by default; org/enterprise setups have more policy control. GitHub also documents that memories can be reviewed and deleted, and that they are automatically deleted after 28 days. ([GitHub Docs][9])
+
+### Codex
+
+In the Codex docs I checked, the persistence story is centered on **AGENTS.md, skills, rules, config, and hooks**. The notable part is that Codex hooks explicitly support **summarizing conversations to create persistent memories automatically**, which means memory can be built as a governance mechanism even though Codex’s docs emphasize hooks and instruction files more than a first-party “memory dashboard” concept. ([OpenAI Developers][10])
+
+So your claim is now **partly native, partly engineered**:
+
+* native in Claude,
+* native and previewed in GitHub Copilot,
+* more “assemble it from hooks + instructions + skills” in Codex. ([Claude API Docs][4])
+
+---
+
+## 4) “Commands provide user-triggered governance access”: **strongly supported**
+
+This part is very real now.
+
+### Codex
+
+Codex exposes governance-relevant control through slash commands such as `/init`, `/plan`, `/permissions`, `/status`, `/mcp`, `/debug-config`, `/review`, and `/agent`. `/init` scaffolds `AGENTS.md`; `/permissions` changes execution policy; `/status` and `/debug-config` expose active config/policy state. ([OpenAI Developers][11])
+
+### Claude Code
+
+Claude exposes governance through `/memory` and `/hooks`, and it says skills can be invoked directly with `/skill-name`. Claude’s `/init` can generate a starter `CLAUDE.md`, and its skills system replaced older custom commands so governance procedures can become explicit slash-invoked routines. ([Claude API Docs][4])
+
+### GitHub Copilot CLI
+
+Copilot CLI has an especially strong command surface for this: `/init`, `/instructions`, `/skills`, `/tasks`, `/fleet`, and `/chronicle` are all documented. `/instructions` exposes instruction files directly; `/chronicle` uses session history for insights and instruction improvement suggestions; `/fleet` runs parallel subagents. ([GitHub Docs][12])
+
+### Cursor
+
+Cursor’s CLI docs expose `/rules`, `/commands`, and `/mcp` commands, while Cursor’s docs also position Rules and AGENTS.md as persistent instruction channels. ([Cursor][13])
+
+So your “user-triggered governance access” idea is no longer speculative. It maps very cleanly to current slash-command ecosystems. ([OpenAI Developers][11])
+
+---
+
+## 5) The most important distinction: **soft governance vs hard governance**
+
+This is the part most people blur.
+
+**Soft governance** is guidance that shapes the model but does not guarantee obedience. Claude says this explicitly: `CLAUDE.md` and auto memory are context, not enforced configuration. OpenAI positions `AGENTS.md` as reusable guidance. GitHub positions custom instructions similarly. ([Claude API Docs][4])
+
+**Hard governance** is deterministic enforcement.
+
+* Claude has **managed settings** and says client-enforced settings are the right layer for tool blocking, sandboxing, auth, and environment control. It also has hooks for deterministic lifecycle actions. ([Claude API Docs][4])
+* Codex has **requirements.toml**, managed configuration, rules, and hooks. Requirements are admin-enforced and not user-overridable; rules control command execution; hooks can validate, block, or post-process. ([OpenAI Developers][14])
+* GitHub Copilot CLI also has hooks that can inspect prompts/tool calls and block risky command patterns, and GitHub’s cloud agent docs emphasize enterprise guardrails and policy layers. ([GitHub Docs][15])
+
+For a real constitutional governance framework, **the constitution cannot live only in AGENTS.md**. The constitution should be **declared** in AGENTS/CLAUDE/instruction files, **remembered** in memory, and **enforced** by hooks/rules/managed policy. ([Claude API Docs][4])
+
+---
+
+## 6) Best current architecture for your idea
+
+The cleanest 2026 pattern is:
+
+### Constitutional layer
+
+Put the durable principles in `AGENTS.md` or `CLAUDE.md`: non-negotiables, allowed actions, escalation rules, verification requirements, memory hygiene, and subagent obligations. Keep it short and specific. ([OpenAI Developers][8])
+
+### Procedural layer
+
+Move repeatable governance workflows into **skills** rather than bloating the base file. That gives you commands like `/safety-review`, `/constitutional-check`, `/escalate`, or `/release-guardrail`. This is exactly what the open skills model is good at. ([OpenAI Developers][16])
+
+### Memory layer
+
+Let the system retain precedents and corrections in memory, but curate it. Claude and Copilot now expose this directly; Codex can approximate it through hooks and summaries. ([Claude API Docs][4])
+
+### Enforcement layer
+
+Use hooks, rules, permissions, and managed settings for anything you actually need guaranteed: secret handling, destructive command blocks, verification-before-commit, model routing constraints, and MCP/tool allowlists. ([Claude][17])
+
+### Agent layer
+
+Use subagents for role separation, but give them the same constitution or a scoped derivative. Claude and Codex both document subagent flows; GitHub and Cursor also support specialized agents/subagents. ([OpenAI Developers][18])
+
+---
+
+## Bottom line
+
+Your core ideas are now **directly aligned with where agent tooling has moved**:
+
+* **Governance concepts transfer via AGENTS.md or variants**: yes. ([OpenAI Developers][1])
+* **Agents can recall governance from memory without re-reading**: yes in Claude and Copilot, and partially engineerable in Codex. ([Claude API Docs][4])
+* **Commands provide user-triggered governance access**: yes, strongly. ([OpenAI Developers][11])
+* **Hard constitutional enforcement needs more than prompt files**: absolutely. It needs hooks, rules, permissions, and managed policy. ([Claude API Docs][4])
+
+The most mature fit for your exact model today looks like this:
+
+**Claude Code** for the cleanest built-in memory + command introspection,
+**GitHub Copilot CLI** for broad instruction surfaces + memory + command access,
+**Codex** for strong AGENTS.md support plus serious policy/rules/hooks infrastructure,
+with **Cursor** clearly participating in the same Rules/AGENTS/skills/hooks/subagent direction. ([Claude API Docs][4])
+
+I can turn this into a **concrete constitutional governance blueprint** for your stack next.
+
+[1]: https://developers.openai.com/codex/guides/agents-md "Custom instructions with AGENTS.md – Codex | OpenAI Developers"
+[2]: https://agents.md/ "AGENTS.md"
+[3]: https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-custom-instructions "Adding custom instructions for GitHub Copilot CLI - GitHub Docs"
+[4]: https://docs.anthropic.com/en/docs/claude-code/memory "How Claude remembers your project - Claude Code Docs"
+[5]: https://cursor.com/docs/rules?utm_source=chatgpt.com "Rules | Cursor Docs"
+[6]: https://docs.github.com/en/copilot/reference/custom-instructions-support "Support for different types of custom instructions - GitHub Docs"
+[7]: https://developers.openai.com/codex/skills "Agent Skills – Codex | OpenAI Developers"
+[8]: https://developers.openai.com/codex/learn/best-practices "Best practices – Codex | OpenAI Developers"
+[9]: https://docs.github.com/en/copilot/how-tos/use-copilot-agents/copilot-memory "Managing and curating Copilot Memory - GitHub Docs"
+[10]: https://developers.openai.com/codex/hooks "Hooks – Codex | OpenAI Developers"
+[11]: https://developers.openai.com/codex/cli/slash-commands "Slash commands in Codex CLI | OpenAI Developers"
+[12]: https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference "GitHub Copilot CLI command reference - GitHub Docs"
+[13]: https://cursor.com/docs/cli/reference/slash-commands.md?utm_source=chatgpt.com "https://cursor.com/docs/cli/reference/slash-comman..."
+[14]: https://developers.openai.com/codex/enterprise/managed-configuration "Managed configuration – Codex | OpenAI Developers"
+[15]: https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/use-hooks?utm_source=chatgpt.com "Using hooks with GitHub Copilot CLI"
+[16]: https://developers.openai.com/codex/skills?utm_source=chatgpt.com "Agent Skills – Codex | OpenAI Developers"
+[17]: https://code.claude.com/docs/en/hooks-guide "Automate workflows with hooks - Claude Code Docs"
+[18]: https://developers.openai.com/codex/subagents "Subagents – Codex | OpenAI Developers"

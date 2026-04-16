@@ -9,6 +9,16 @@
             "date": 1776067470878,
             "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-04-13.log",
             "hash": "234c24b0c3cf93d9f80ada9b45ef8a33304e12528138da01b246611163c685e5"
+        },
+        {
+            "date": 1776270403238,
+            "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-04-15.log",
+            "hash": "5710fdac246b204d4aee5eefcd7293110650fb3e162c97b1515290ff70a55b27"
+        },
+        {
+            "date": 1776369459953,
+            "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-04-16.log",
+            "hash": "042421188a6e11a853f4b7cc9661f6ce94cc4d93ecb13882b8bdf8bf82a82682"
         }
     ],
     "hashType": "sha256"

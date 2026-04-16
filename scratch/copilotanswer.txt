@@ -1,0 +1,143 @@
+Perfect — that detail changes the picture in a **good** way.  
+If **GLM‑5 is already running *inside* your Kilo CLI** using your NVIDIA key, *in orchestrator mode*, then the architecture becomes even cleaner and more deterministic.
+
+Let me lay it out in the exact shape you’re actually running.
+
+---
+
+# ✅ If GLM‑5 is running *inside* Kilo CLI orchestrator mode  
+Then the flow is:
+
+```
+[ GLM‑5 (cloud, via your NVIDIA key) ]
+                |
+                |  (tool call / code-mode request)
+                v
+[ Kilo CLI Orchestrator Runtime ]
+                |
+                |  (your custom tool handler)
+                v
+[ Local Ollama Serve on RTX 5060 ]
+                |
+                |  (GPU inference)
+                v
+[ Code output returned to GLM‑5 ]
+```
+
+This is **exactly** how Kilo’s orchestrator mode is designed to work.
+
+And yes — **GLM‑5 can absolutely orchestrate a local Ollama model**.
+
+---
+
+# 🎯 Why this works cleanly
+Because in orchestrator mode:
+
+### **GLM‑5 = planner**
+- decides when to call “code mode”
+- emits a structured tool call
+- expects a JSON result
+
+### **Kilo CLI = router**
+- receives the tool call
+- forwards it to whatever you define (local Ollama)
+- returns the result to GLM‑5
+
+### **Ollama = executor**
+- runs the code‑model locally
+- uses your RTX 5060 GPU
+- returns deterministic output
+
+This is the same pattern used by:
+- OpenAI function calling  
+- Anthropic tool use  
+- Google Gemini tool use  
+- NVIDIA NIM tool use  
+
+Kilo just wraps it in a CLI orchestrator.
+
+---
+
+# 🧠 The key requirement  
+You must define a **tool** in Kilo’s orchestrator that represents “run code model locally”.
+
+Something like:
+
+### **Tool schema**
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "local_code_model",
+    "description": "Run code-mode inference on local Ollama",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "prompt": { "type": "string" }
+      },
+      "required": ["prompt"]
+    }
+  }
+}
+```
+
+### **Node handler**
+```js
+async function local_code_model({ prompt }) {
+  const res = await fetch("http://127.0.0.1:11434/api/generate", {
+    method: "POST",
+    body: JSON.stringify({
+      model: "qwen2.5-coder:latest",
+      prompt,
+      stream: false
+    })
+  });
+
+  const json = await res.json();
+  return json.response;
+}
+```
+
+Once this exists, GLM‑5 will automatically start using it.
+
+---
+
+# 🧩 What this gives you  
+### **1. GLM‑5 does the reasoning**
+- multi‑step planning  
+- agent orchestration  
+- long‑context  
+- tool routing  
+
+### **2. Ollama does the code execution**
+- fast  
+- local  
+- GPU‑accelerated  
+- deterministic  
+- free  
+
+### **3. Kilo becomes the glue**
+- orchestrator  
+- router  
+- tool manager  
+
+This is the exact hybrid architecture people are building for “local‑cloud super‑agents”.
+
+---
+
+# 🧨 Important: GLM‑5 never runs locally  
+Even though it’s *inside* Kilo CLI, it’s still a **cloud model**.  
+Kilo just handles the API calls and tool routing.
+
+That’s why this hybrid setup works so well.
+
+---
+
+# If you want, I can generate:
+- the **exact Kilo CLI tool schema**  
+- the **Node.js handler**  
+- the **Ollama model recommendation**  
+- the **full orchestrator config**  
+- or a **minimal working example** you can paste into your Kilo project  
+
+Just tell me which piece you want next.

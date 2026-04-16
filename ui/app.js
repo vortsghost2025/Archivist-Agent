@@ -1,19 +1,51 @@
 'use strict';
 
-// Tauri invoke helper with fallback for browser mode
+// Tauri invoke helper with explicit safety-mode fallback for browser mode
+// SECURITY: Browser mode MUST NOT silently bypass safety validation
+// In browser mode, we explicitly deny all mutating operations to prevent
+// accidental use of mock fallback that bypasses Rust safety layer.
 const invoke = (() => {
-    if (window.__TAURI__?.core?.invoke) {
-        return window.__TAURI__.core.invoke;
+  if (window.__TAURI__?.core?.invoke) {
+    return window.__TAURI__.core.invoke;
+  }
+  if (window.__TAURI__?.invoke) {
+    return window.__TAURI__.invoke;
+  }
+  // BROWSER MODE: No Tauri API available
+  // This is a SAFETY ESCAPE HATCH - log prominently
+  console.error('[SECURITY] No Tauri API found - running in browser mode');
+  console.error('[SECURITY] All mutating operations are BLOCKED');
+  console.error('[SECURITY] Safety validation layer is NOT active');
+  
+  return async (cmd, args = {}) => {
+    // Read-only commands are allowed in browser mode (safe)
+    const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder'];
+    
+    if (readOnlyCommands.includes(cmd)) {
+      console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
+      if (cmd === 'ping') return 'pong';
+      // For scan/summarize, return minimal mock to allow UI testing
+      if (cmd === 'scan_tree') {
+        return { tree: { name: 'mock', is_dir: true, children: [] }, total_files: 0, total_dirs: 0 };
+      }
+      if (cmd === 'summarize_folder') {
+        return { bucket_counts: {}, total_files: 0 };
+      }
+      return null;
     }
-    if (window.__TAURI__?.invoke) {
-        return window.__TAURI__.invoke;
+    
+    // MUTATING COMMANDS: Explicitly blocked in browser mode
+    // This prevents accidental use of mock that bypasses safety.rs validation
+    const mutatingCommands = ['build_index', 'generate_handoff', 'build_registry'];
+    if (mutatingCommands.includes(cmd)) {
+      const msg = `[BLOCKED] ${cmd} requires Tauri runtime. Safety validation is NOT available in browser mode. Refusing to execute without safety layer.`;
+      console.error(msg);
+      throw new Error(msg);
     }
-    console.warn('[IPC] No Tauri API found');
-    return async (cmd) => {
-        console.log(`[MOCK] ${cmd}`);
-        if (cmd === 'ping') return 'pong';
-        throw new Error('Not in Tauri');
-    };
+    
+    // Unknown command - be conservative
+    throw new Error(`[BLOCKED] Unknown command '${cmd}' blocked in browser mode`);
+  };
 })();
 
 // Application state
