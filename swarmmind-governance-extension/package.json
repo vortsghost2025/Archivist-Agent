@@ -1,0 +1,19 @@
+{
+  "name": "swarmmind-governance-extension",
+  "version": "0.1.0",
+  "description": "Governance trace extension for SwarmMind human-agent collaboration",
+  "main": "lib/trace-schema.js",
+  "bin": {
+    "governance-trace": "./bin/governance-trace.js"
+  },
+  "scripts": {
+    "test": "node tests/run-tests.js"
+  },
+  "keywords": [
+    "governance",
+    "trace",
+    "human-agent",
+    "verification"
+  ],
+  "license": "MIT"
+}

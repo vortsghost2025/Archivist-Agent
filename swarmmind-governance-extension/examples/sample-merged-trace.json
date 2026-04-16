@@ -1,0 +1,159 @@
+{
+  "exportedAt": "2026-04-15T21:00:00Z",
+  "traceCount": 6,
+  "summary": {
+    "agentEntries": 4,
+    "humanEntries": 2,
+    "governanceChecksPassed": 2,
+    "governanceChecksFailed": 1,
+    "driftSignals": {
+      "none": 3,
+      "warning": 2,
+      "measured": 1,
+      "critical": 0
+    }
+  },
+  "metadata": {
+    "source": "example",
+    "purpose": "demonstration"
+  },
+  "traces": [
+    {
+      "timestamp": "2026-04-15T20:00:00Z",
+      "source": "human",
+      "action": "propose",
+      "claim": "Fix test isolation violation in constitution.rs tests",
+      "evidence": ["cargo test --test-threads=4 fails", "env::set_var is process-global"],
+      "governance_check": "passed",
+      "drift_signal": "none",
+      "branch": "main"
+    },
+    {
+      "timestamp": "2026-04-15T20:05:00Z",
+      "source": "agent",
+      "agentId": "planner-001",
+      "agentName": "Planner",
+      "action": "analyze",
+      "claim": "Tests use global state, need thread-local isolation",
+      "evidence": ["src-tauri/src/constitution.rs:45-60"],
+      "governance_check": "passed",
+      "drift_signal": "none",
+      "branch": "main"
+    },
+    {
+      "timestamp": "2026-04-15T20:10:00Z",
+      "source": "agent",
+      "agentId": "coder-001",
+      "agentName": "Coder",
+      "action": "implement",
+      "claim": "Created test_env.rs with thread-local state",
+      "evidence": ["test_env.rs created", "cargo test --test-threads=4 passes"],
+      "governance_check": "passed",
+      "drift_signal": "none",
+      "branch": "main"
+    },
+    {
+      "timestamp": "2026-04-15T20:15:00Z",
+      "source": "agent",
+      "agentId": "reviewer-001",
+      "agentName": "Reviewer",
+      "action": "claim",
+      "claim": "Coordination gap is closed",
+      "evidence": ["Tests pass with parallel execution"],
+      "governance_check": "skipped",
+      "drift_signal": "warning",
+      "branch": "main"
+    },
+    {
+      "timestamp": "2026-04-15T20:20:00Z",
+      "source": "human",
+      "action": "challenge",
+      "claim": "Evidence doesn't support 'closed' - use 'mitigated' instead",
+      "evidence": ["Gap still exists for runtime enforcement"],
+      "governance_check": "failed",
+      "drift_signal": "warning",
+      "branch": "corrected"
+    },
+    {
+      "timestamp": "2026-04-15T20:25:00Z",
+      "source": "agent",
+      "agentId": "reviewer-001",
+      "agentName": "Reviewer",
+      "action": "correct",
+      "claim": "Test isolation violation mitigated, not closed",
+      "evidence": ["Layer 4 (runtime enforcement) not implemented"],
+      "governance_check": "passed",
+      "drift_signal": "measured",
+      "branch": "corrected"
+    }
+  ],
+  "tree": {
+    "root": {
+      "id": "governance-root",
+      "label": "Human-Agent Governance Trace",
+      "timestamp": "2026-04-15T21:00:00Z",
+      "children": [
+        {
+          "id": "branch-main",
+          "label": "Branch: main",
+          "children": [
+            {
+              "id": "entry-0",
+              "label": "propose",
+              "timestamp": "2026-04-15T20:00:00Z",
+              "source": "human",
+              "governance_check": "passed",
+              "drift_signal": "none"
+            },
+            {
+              "id": "entry-1",
+              "label": "analyze",
+              "timestamp": "2026-04-15T20:05:00Z",
+              "source": "agent",
+              "governance_check": "passed",
+              "drift_signal": "none"
+            },
+            {
+              "id": "entry-2",
+              "label": "implement",
+              "timestamp": "2026-04-15T20:10:00Z",
+              "source": "agent",
+              "governance_check": "passed",
+              "drift_signal": "none"
+            },
+            {
+              "id": "entry-3",
+              "label": "claim",
+              "timestamp": "2026-04-15T20:15:00Z",
+              "source": "agent",
+              "governance_check": "skipped",
+              "drift_signal": "warning"
+            }
+          ]
+        },
+        {
+          "id": "branch-corrected",
+          "label": "Branch: corrected",
+          "children": [
+            {
+              "id": "entry-4",
+              "label": "challenge",
+              "timestamp": "2026-04-15T20:20:00Z",
+              "source": "human",
+              "governance_check": "failed",
+              "drift_signal": "warning"
+            },
+            {
+              "id": "entry-5",
+              "label": "correct",
+              "timestamp": "2026-04-15T20:25:00Z",
+              "source": "agent",
+              "governance_check": "passed",
+              "drift_signal": "measured"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
