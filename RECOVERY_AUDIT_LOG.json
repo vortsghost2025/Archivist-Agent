@@ -31,27 +31,50 @@
         "CRASH_RECOVERY_TEST_PROTOCOL.md",
         "LAST_KNOWN_STATE_2026-04-17.json"
       ],
-      "success": true
-    }
-  ],
-  "statistics": {
-    "total_recoveries": 2,
-    "successful_recoveries": 2,
-    "failed_recoveries": 0,
-    "avg_alignment_score": 100,
-    "avg_token_efficiency": 98,
-    "recovery_count_by_lane": {
-      "archivist-agent": 2,
-      "swarmmind": 0,
-      "self-organizing-library": 0
-    },
-    "recovery_count_by_trigger": {
-      "auto-compact": 1,
-      "manual-compact": 0,
-      "cold-start": 0,
-      "crash-recovery": 1
-    }
-  },
+        "success": true
+        },
+        {
+          "event_id": "RECOVERY-003",
+          "timestamp": "2026-04-17T11:30:00.000Z",
+          "trigger": "divergence-reconciliation",
+          "lane_id": "archivist-agent",
+          "tokens_lost": 0,
+          "packet_id": "SESSION_REGISTRY.json",
+          "conflicting_artifact": ".runtime/active_agents.json",
+          "restored_at": "2026-04-17T11:30:00.000Z",
+          "alignment_score": 100,
+          "source_lane": "archivist-agent",
+          "recovery_method": "authority_hierarchy_resolution",
+          "divergence_type": "temporal-desynchronization",
+          "files_updated": [
+            ".runtime/active_agents.json"
+          ],
+          "evidence": [
+            "DIVERGENCE_INCIDENT_2026-04-17.md",
+            "SESSION_HANDOFF_2026-04-17.md"
+          ],
+          "success": true
+        }
+      ],
+      "statistics": {
+        "total_recoveries": 3,
+        "successful_recoveries": 3,
+        "failed_recoveries": 0,
+        "avg_alignment_score": 100,
+        "avg_token_efficiency": 98,
+        "recovery_count_by_lane": {
+          "archivist-agent": 3,
+          "swarmmind": 0,
+          "self-organizing-library": 0
+        },
+        "recovery_count_by_trigger": {
+          "auto-compact": 1,
+          "manual-compact": 0,
+          "cold-start": 0,
+          "crash-recovery": 1,
+          "divergence-reconciliation": 1
+        }
+      },
   "guardrails": {
     "adaptive_triggers": {
       "description": "Recovery only triggered when needed, not constant churn",
@@ -84,17 +107,29 @@
         "Governance constraint restoration"
       ]
     },
-    "crash_recovery": {
-      "description": "Recover from unexpected agent termination",
-      "status": "validated",
-      "validated_date": "2026-04-17",
-      "validation_event": "RECOVERY-002",
-      "required_components": [
-        "Last-known-state persistence",
-        "Automatic state detection",
-        "Recovery packet generation",
-        "Session resumption"
-      ]
+        "crash_recovery": {
+          "description": "Recover from unexpected agent termination",
+          "status": "validated",
+          "validated_date": "2026-04-17",
+          "validation_event": "RECOVERY-002",
+          "required_components": [
+            "Last-known-state persistence",
+            "Automatic state detection",
+            "Recovery packet generation",
+            "Session resumption"
+          ]
+        },
+        "divergence_reconciliation": {
+          "description": "Resolve conflicting system artifact states",
+          "status": "validated",
+          "validated_date": "2026-04-17",
+          "validation_event": "RECOVERY-003",
+          "required_components": [
+            "State reconstruction from both artifacts",
+            "Timeline analysis",
+            "Authority hierarchy resolution",
+            "Artifact synchronization"
+          ]
+        }
+      }
     }
-  }
-}
