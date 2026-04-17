@@ -1,0 +1,59 @@
+{
+  "$schema": "https://archivist.dev/schemas/last-known-state.json",
+  "version": "1.0.0",
+  "packet_type": "crash_recovery_baseline",
+  "timestamp": "2026-04-17T07:15:00.000Z",
+  
+  "lane": {
+    "id": "archivist-agent",
+    "session_id": "1776403587854-50060",
+    "status": "active"
+  },
+  
+  "work_in_progress": {
+    "task": "crash_recovery_test",
+    "phase": "baseline_established",
+    "started": "2026-04-17T07:15:00.000Z",
+    "files_modified": [
+      "CRASH_RECOVERY_TEST_PROTOCOL.md",
+      "LAST_KNOWN_STATE_2026-04-17.json"
+    ],
+    "files_pending_commit": [
+      "CRASH_RECOVERY_TEST_PROTOCOL.md",
+      "LAST_KNOWN_STATE_2026-04-17.json"
+    ],
+    "next_action": "simulate_crash"
+  },
+  
+  "crash_simulation": {
+    "method": "leave_incomplete_state",
+    "marker_file": "CRASH_IN_PROGRESS.marker",
+    "expected_recovery_action": "detect_marker_and_recover"
+  },
+  
+  "recovery_requirements": {
+    "must_detect": [
+      "CRASH_IN_PROGRESS.marker file exists",
+      "Session was active before crash",
+      "Work marked as in_progress"
+    ],
+    "must_recover": [
+      "Read LAST_KNOWN_STATE packet",
+      "Complete pending work if recoverable",
+      "Clear crash marker",
+      "Update recovery audit log"
+    ],
+    "must_preserve": [
+      "All files written before crash",
+      "Session state",
+      "Coordination agreements"
+    ]
+  },
+  
+  "trust_baseline": {
+    "overall": 93,
+    "operational": 90,
+    "configuration": 85,
+    "coordination": 100
+  }
+}
