@@ -1,0 +1,47 @@
+{
+  "$schema": "https://archivist.dev/schemas/session-mode.json",
+  "title": "Session Mode Declaration",
+  "description": "Declares session intent for timeout enforcement behavior",
+  "type": "object",
+  "required": ["mode", "purpose"],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["governing", "observer", "ephemeral", "shadow"],
+      "description": "Session mode determines timeout behavior"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Why this session exists"
+    },
+    "can_write": {
+      "type": "boolean",
+      "default": false
+    },
+    "heartbeat_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "timeout_exempt": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, never enforce timeout"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "How session was started"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "For ephemeral mode, auto-remove after this time"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

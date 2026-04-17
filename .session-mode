@@ -1,0 +1,9 @@
+{
+  "mode": "governing",
+  "purpose": "governance-root-primary",
+  "can_write": true,
+  "heartbeat_required": true,
+  "created_by": "opencode-desktop",
+  "created_at": "2026-04-17T12:00:00.000Z",
+  "notes": "Default governing session for Archivist-Agent primary lane"
+}

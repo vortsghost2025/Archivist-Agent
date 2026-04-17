@@ -1,0 +1,204 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://archivist.dev/schemas/session-registry.json",
+  "title": "Session Registry Schema",
+  "description": "Registry for tracking concurrent agent sessions across lanes",
+  "type": "object",
+  "required": ["version", "last_updated", "purpose", "active_sessions"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "active_sessions": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/session"
+      }
+    },
+    "terminated_sessions": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/terminated_session"
+      }
+    },
+    "inactive_sessions": {
+      "type": "object",
+      "description": "Observer sessions that timed out (not terminated)",
+      "additionalProperties": {
+        "$ref": "#/definitions/inactive_session"
+      }
+    },
+    "communication_protocol": {
+      "$ref": "#/definitions/communication_protocol"
+    },
+    "rules": {
+      "$ref": "#/definitions/rules"
+    }
+  },
+  "definitions": {
+    "session": {
+      "type": "object",
+      "required": ["lane_id", "session_id", "status"],
+      "properties": {
+        "lane_id": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "agent_model": {
+          "type": "string"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["governing", "observer", "ephemeral", "shadow"],
+          "default": "governing",
+          "description": "governing=enforce heartbeat, observer=read-only no enforcement, ephemeral=auto-expire, shadow=mirror primary"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "paused", "handoff_pending"]
+        },
+        "started": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "last_heartbeat": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "Required for governing mode, optional for observer"
+        },
+        "lock_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "working_on": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "created_by": {
+          "type": "string",
+          "description": "How session was started (manual, auto, test)"
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Intended use case (stress-test, verification, production)"
+        }
+      }
+    },
+    "terminated_session": {
+      "type": "object",
+      "allOf": [
+        {"$ref": "#/definitions/session"},
+        {
+          "properties": {
+            "terminated": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "termination_reason": {
+              "type": "string"
+            },
+            "handoff_document": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "inactive_session": {
+      "type": "object",
+      "description": "Observer sessions that timed out without termination",
+      "allOf": [
+        {"$ref": "#/definitions/session"},
+        {
+          "properties": {
+            "inactive_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "inactive_reason": {
+              "type": "string",
+              "enum": ["observer_timeout", "manual_pause", "system_idle"]
+            },
+            "cleanup_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Auto-remove after this time (default 24h)"
+            }
+          }
+        }
+      ]
+    },
+    "communication_protocol": {
+      "type": "object",
+      "properties": {
+        "heartbeat_interval_ms": {
+          "type": "integer",
+          "minimum": 10000
+        },
+        "lock_timeout_ms": {
+          "type": "integer",
+          "minimum": 60000
+        },
+        "conflict_resolution": {
+          "type": "string",
+          "enum": ["first-writer-wins", "highest-authority-wins", "last-writer-wins"]
+        },
+        "notification_method": {
+          "type": "string",
+          "enum": ["file-based", "event-based", "polling"]
+        },
+        "notification_path": {
+          "type": "string"
+        }
+      }
+    },
+    "rules": {
+      "type": "object",
+      "properties": {
+        "session_start": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "session_end": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "file_modification": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "conflict_handling": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "heartbeat_timeout": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "observer_timeout": {
+          "type": "array",
+          "description": "Rules for observer mode timeout behavior",
+          "items": {"type": "string"}
+        }
+      }
+    }
+  }
+}

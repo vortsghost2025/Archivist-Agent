@@ -1,23 +1,24 @@
 {
   "$schema": "https://archivist.dev/schemas/session-registry.json",
-  "version": "1.0.0",
-  "last_updated": "2026-04-17T07:00:00.000Z",
+  "version": "1.1.0",
+  "last_updated": "2026-04-17T12:00:00.000Z",
   "purpose": "Enable bidirectional communication between concurrent agent lanes",
   "active_sessions": {
     "archivist-agent": {
       "lane_id": "archivist-agent",
       "session_id": "1776403587854-50060",
       "agent_model": "z-ai/glm5",
+      "mode": "governing",
       "started": "2026-04-17T05:26:27.854Z",
       "status": "active",
-      "lock_files": [
-        "S:\\Archivist-Agent\\.session-lock"
-      ],
+      "lock_files": [],
       "working_on": [
-        "Cold-start drill execution",
-        "Cross-lane sync verification"
+        "Multi-window testing protocol",
+        "Session mode implementation"
       ],
-      "last_heartbeat": "2026-04-17T07:00:00.000Z"
+      "last_heartbeat": "2026-04-17T12:00:00.000Z",
+      "created_by": "opencode-desktop",
+      "purpose": "governance-root-primary"
     }
   },
   "terminated_sessions": {
@@ -25,6 +26,7 @@
       "lane_id": "swarmmind",
       "session_id": "1776399805802-28240",
       "agent_model": "z-ai/glm5",
+      "mode": "governing",
       "started": "2026-04-17T04:23:25.801Z",
       "terminated": "2026-04-17T07:00:00.000Z",
       "termination_reason": "Heartbeat timeout exceeded (lock stale >5 minutes)",
@@ -36,9 +38,11 @@
       "handoff_document": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System\\SESSION_HANDOFF_2026-04-17.md"
     }
   },
+  "inactive_sessions": {},
   "communication_protocol": {
     "heartbeat_interval_ms": 60000,
     "lock_timeout_ms": 300000,
+    "observer_idle_timeout_ms": 86400000,
     "conflict_resolution": "first-writer-wins",
     "notification_method": "file-based",
     "notification_path": "S:\\Archivist-Agent\\SESSION_NOTIFICATIONS"
@@ -46,32 +50,80 @@
   "rules": {
     "session_start": [
       "Read SESSION_REGISTRY.json",
+      "Read .session-mode file if present",
+      "If .session-mode exists, use declared mode",
+      "Otherwise default to mode: governing",
       "Check for active sessions on target lanes",
-      "Acquire lock file in own lane",
-      "Register session in registry",
-      "Begin heartbeat"
+      "If mode == governing: Acquire lock file in own lane",
+      "Register session in registry with mode",
+      "If mode == governing: Begin heartbeat (60s interval)"
     ],
     "session_end": [
       "Remove session from registry",
-      "Release lock file",
-      "Write session handoff document"
+      "If mode == governing: Release lock file",
+      "If mode == governing: Write session handoff document",
+      "If mode == observer: No handoff required"
     ],
     "file_modification": [
       "Check SESSION_REGISTRY.json for concurrent sessions",
       "If other session active on same lane, queue notification",
-      "Acquire file lock before write",
+      "If mode == observer: READ ONLY - reject write attempts",
+      "If mode == governing: Acquire file lock before write",
       "Write modification log to SESSION_NOTIFICATIONS"
     ],
     "conflict_handling": [
       "If two sessions modify same file, last-writer-wins",
       "Loser session receives notification of conflict",
-      "Manual resolution required for critical files"
+      "Manual resolution required for critical files",
+      "Observer sessions cannot cause conflicts (read-only)"
     ],
     "heartbeat_timeout": [
-      "If last_heartbeat > lock_timeout_ms, mark session terminated",
-      "Clear stale lock file",
-      "Update SESSION_REGISTRY.json",
-      "Create session handoff document if work incomplete"
+      "If last_heartbeat > lock_timeout_ms:",
+      "  IF mode == governing:",
+      "    Mark session terminated",
+      "    Clear stale lock file",
+      "    Update SESSION_REGISTRY.json",
+      "    Create session handoff document if work incomplete",
+      "  ELIF mode == observer:",
+      "    Mark session inactive (not terminated)",
+      "    No handoff document",
+      "    Schedule cleanup after 24h idle"
+    ],
+    "observer_timeout": [
+      "Observer sessions do not require heartbeat",
+      "After 24h idle, move to inactive_sessions",
+      "Inactive sessions auto-cleanup after 7 days",
+      "Manual cleanup: Remove from inactive_sessions"
     ]
+  },
+  "mode_definitions": {
+    "governing": {
+      "description": "Primary agent with write access and heartbeat requirement",
+      "heartbeat_required": true,
+      "can_write": true,
+      "timeout_behavior": "terminate",
+      "use_case": "Production agent lanes"
+    },
+    "observer": {
+      "description": "Read-only test session, no heartbeat enforcement",
+      "heartbeat_required": false,
+      "can_write": false,
+      "timeout_behavior": "inactive",
+      "use_case": "Stress testing, parallel verification"
+    },
+    "ephemeral": {
+      "description": "Short-lived session, auto-expires after 5 min idle",
+      "heartbeat_required": false,
+      "can_write": false,
+      "timeout_behavior": "auto_remove",
+      "use_case": "Quick queries, one-shot tasks"
+    },
+    "shadow": {
+      "description": "Mirrors primary session, never terminates independently",
+      "heartbeat_required": false,
+      "can_write": false,
+      "timeout_behavior": "follow_primary",
+      "use_case": "Parallel read-only observers"
+    }
   }
 }
