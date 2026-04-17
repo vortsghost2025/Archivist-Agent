@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archivist.dev/schemas/recovery-audit-log.json",
+  "title": "Recovery Audit Log",
+  "description": "Audit trail for all context recovery events across lanes",
+  "type": "object",
+  "required": ["$schema", "version", "purpose", "recovery_events", "statistics"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://archivist.dev/schemas/recovery-audit-log.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "recovery_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event_id", "timestamp", "trigger", "lane_id", "tokens_lost", "packet_id", "alignment_score", "success"],
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "pattern": "^RECOVERY-\\d+$"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "trigger": {
+            "type": "string",
+            "enum": ["auto-compact", "manual-compact", "cold-start", "crash-recovery"]
+          },
+          "lane_id": {
+            "type": "string"
+          },
+          "tokens_lost": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "packet_id": {
+            "type": "string"
+          },
+          "restored_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "alignment_score": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "source_lane": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "required": ["total_recoveries", "successful_recoveries", "failed_recoveries", "avg_alignment_score"],
+      "properties": {
+        "total_recoveries": { "type": "integer" },
+        "successful_recoveries": { "type": "integer" },
+        "failed_recoveries": { "type": "integer" },
+        "avg_alignment_score": { "type": "number" },
+        "avg_token_efficiency": { "type": "number" },
+        "recovery_count_by_lane": {
+          "type": "object"
+        },
+        "recovery_count_by_trigger": {
+          "type": "object"
+        }
+      }
+    },
+    "guardrails": {
+      "type": "object",
+      "properties": {
+        "adaptive_triggers": {
+          "type": "object",
+          "properties": {
+            "description": { "type": "string" },
+            "thresholds": {
+              "type": "object",
+              "properties": {
+                "context_remaining_percent": { "type": "number" },
+                "min_tokens_lost": { "type": "integer" },
+                "cooldown_period_ms": { "type": "integer" }
+              }
+            }
+          }
+        },
+        "degradation_monitoring": {
+          "type": "object",
+          "properties": {
+            "description": { "type": "string" },
+            "alert_threshold": { "type": "integer" },
+            "critical_threshold": { "type": "integer" }
+          }
+        },
+        "cross_lane_comparison": {
+          "type": "object",
+          "properties": {
+            "description": { "type": "string" },
+            "metrics_tracked": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

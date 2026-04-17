@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archivist.dev/schemas/sync-request.json",
+  "title": "Sync Request",
+  "description": "Request for context from another lane",
+  "type": "object",
+  "required": ["$schema", "version", "timestamp", "requester", "request"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://archivist.dev/schemas/sync-request.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "requester": {
+      "type": "object",
+      "required": ["lane_id", "context_remaining", "context_lost"],
+      "properties": {
+        "lane_id": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "context_remaining": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Tokens remaining after compact"
+        },
+        "context_lost": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Tokens lost in compact"
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "required": ["type", "target_lane", "scope"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "restore_context"
+        },
+        "target_lane": {
+          "type": "string",
+          "description": "Lane to request from"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["governance_constraints", "active_checkpoints", "drift_baseline", "session_state"]
+          },
+          "description": "What context to restore"
+        },
+        "max_tokens": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 50000,
+          "description": "Maximum tokens acceptable in response"
+        }
+      }
+    },
+    "filters": {
+      "type": "object",
+      "properties": {
+        "since": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "exclude_artifacts": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

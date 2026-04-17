@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archivist.dev/schemas/sync-response.json",
+  "title": "Sync Response",
+  "description": "Response to a sync request with context payload",
+  "type": "object",
+  "required": ["$schema", "version", "timestamp", "responder", "response", "payload", "authority"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://archivist.dev/schemas/sync-response.json"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "responder": {
+      "type": "object",
+      "required": ["lane_id", "session_id", "runtime_state_path"],
+      "properties": {
+        "lane_id": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "runtime_state_path": {
+          "type": "string",
+          "description": "Path to responder's RUNTIME_STATE.json"
+        }
+      }
+    },
+    "response": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["success", "denied", "error"]
+        },
+        "tokens_provided": {
+          "type": "integer"
+        },
+        "context_restored": {
+          "type": "boolean"
+        },
+        "error_message": {
+          "type": "string"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "governance_constraints": {
+          "type": "object",
+          "properties": {
+            "single_entry_point": { "type": "boolean" },
+            "structure_over_identity": { "type": "boolean" },
+            "correction_mandatory": { "type": "boolean" },
+            "agent_evaluates_WE": { "type": "boolean" },
+            "agent_not_part_of_WE": { "type": "boolean" }
+          }
+        },
+        "active_checkpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "trigger": { "type": "string" },
+              "required": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "drift_baseline": {
+          "type": "object",
+          "properties": {
+            "cps_score": { "type": "integer" },
+            "uds_score": { "type": "integer" },
+            "signals": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "last_check": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "session_state": {
+          "type": "object",
+          "properties": {
+            "verification_lane": { "type": "string" },
+            "branch": { "type": "string" },
+            "artifacts_modified": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "corrections_received": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "required": ["fields_authoritative", "fields_advisory"],
+      "properties": {
+        "fields_authoritative": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields that MUST be treated as truth"
+        },
+        "fields_advisory": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fields that MAY be overridden"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]+$"
+        },
+        "verified": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -21,11 +21,11 @@
 
 ### CORE
 
-| Directory | Purpose | Notes |
-|-----------|---------|-------|
-| `S:\Archivist-Agent` | Governance framework, canonical registry, truth layer | PRIMARY — all other projects indexed here |
-| `S:\SwarmMind Self-Optimizing Multi-Agent AI System` | Core system runtime, multi-agent coordination | Integration target for governance extension |
-| `S:\self-organizing-library` | Pattern observatory, Rosetta Stone cross-references | Library for navigating between projects |
+| Directory | Purpose | Relationship | Governance Status |
+|-----------|---------|--------------|-------------------|
+| `S:\\Archivist-Agent` | Governance framework, canonical registry, truth layer | PRIMARY (root) | Active — single entry point (BOOTSTRAP.md) |
+| `S:\\SwarmMind Self-Optimizing Multi-Agent AI System` | Core system runtime, multi-agent coordination | integration-target | Inherited from Archivist-Agent (GOVERNANCE_MANIFEST.json) |
+| `S:\\self-organizing-library` | Pattern observatory, Rosetta Stone cross-references | downstream | Independent (governance_active: false) |
 
 ### ACTIVE_EXTENSIONS
 

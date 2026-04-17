@@ -1,0 +1,21 @@
+# Cross-Lane Commit Message Template
+# Copy this template for coordinated commits
+
+[LANE-X] [SYNC-YYYY-MM-DD] Brief description (50 chars max)
+
+Cross-lane: Yes/No
+Depends-on: repo/sha or None
+Required-by: repo/sha or None
+Session: SESSION_ID
+Coordination: TRUST_SCORE
+
+Detailed description of changes:
+- What was changed
+- Why it was changed
+- How it affects other lanes
+
+Artifacts:
+- file1.md
+- file2.json
+
+Related: owner/repo#issue-number

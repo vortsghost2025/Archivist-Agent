@@ -1,0 +1,78 @@
+{
+  "$schema": "https://archivist.dev/schemas/recovery-audit-log.json",
+  "version": "1.0.0",
+  "purpose": "Audit trail for all context recovery events across lanes",
+  "recovery_events": [
+    {
+      "event_id": "RECOVERY-001",
+      "timestamp": "2026-04-17T06:35:29.378Z",
+      "trigger": "auto-compact",
+      "lane_id": "archivist-agent",
+      "tokens_lost": 130000,
+      "packet_id": "COMPACT_RESTORE_PACKET.json",
+      "restored_at": "2026-04-17T06:35:29.378Z",
+      "alignment_score": 100,
+      "source_lane": "archivist-agent",
+      "success": true
+    }
+  ],
+  "statistics": {
+    "total_recoveries": 1,
+    "successful_recoveries": 1,
+    "failed_recoveries": 0,
+    "avg_alignment_score": 100,
+    "avg_token_efficiency": 98,
+    "recovery_count_by_lane": {
+      "archivist-agent": 1,
+      "swarmmind": 0,
+      "self-organizing-library": 0
+    },
+    "recovery_count_by_trigger": {
+      "auto-compact": 1,
+      "manual-compact": 0,
+      "cold-start": 0,
+      "crash-recovery": 0
+    }
+  },
+  "guardrails": {
+    "adaptive_triggers": {
+      "description": "Recovery only triggered when needed, not constant churn",
+      "thresholds": {
+        "context_remaining_percent": 25,
+        "min_tokens_lost": 50000,
+        "cooldown_period_ms": 300000
+      }
+    },
+    "degradation_monitoring": {
+      "description": "Track when alignment scores degrade over time",
+      "alert_threshold": 80,
+      "critical_threshold": 60
+    },
+    "cross_lane_comparison": {
+      "description": "Compare recovery metrics across lanes",
+      "metrics_tracked": ["alignment_score", "token_efficiency", "recovery_time_ms"]
+    }
+  },
+  "next_phase_goals": {
+    "cold_start_recovery": {
+      "description": "New agent, zero memory, same reentry quality",
+      "status": "planned",
+      "required_components": [
+        "Lane identity verification",
+        "Authority chain validation",
+        "Checkpoint reconstruction",
+        "Governance constraint restoration"
+      ]
+    },
+    "crash_recovery": {
+      "description": "Recover from unexpected agent termination",
+      "status": "planned",
+      "required_components": [
+        "Last-known-state persistence",
+        "Automatic state detection",
+        "Recovery packet generation",
+        "Session resumption"
+      ]
+    }
+  }
+}

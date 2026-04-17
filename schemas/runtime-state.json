@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archivist.dev/schemas/runtime-state.json",
+  "title": "Runtime State",
+  "description": "Cross-lane runtime state for the 600k distributed architecture",
+  "type": "object",
+  "required": ["$schema", "version", "timestamp", "lane", "capabilities", "runtime"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://archivist.dev/schemas/runtime-state.json",
+      "description": "Schema identifier"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Schema version (semver)"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of state creation"
+    },
+    "lane": {
+      "type": "object",
+      "required": ["id", "role", "position"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["archivist-agent", "swarmmind", "self-organizing-library"],
+          "description": "Unique lane identifier"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["governance-root", "trace-mediated-verification-surface", "memory-preservation"],
+          "description": "Lane's role in architecture"
+        },
+        "position": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3,
+          "description": "Lane position in chain (1-3)"
+        }
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "required": ["can_respond_to_sync", "can_govern", "can_restore_context", "can_archive_traces"],
+      "properties": {
+        "can_respond_to_sync": {
+          "type": "boolean",
+          "description": "Can provide SYNC_RESPONSE to requests"
+        },
+        "can_govern": {
+          "type": "boolean",
+          "description": "Has constitutional governance authority"
+        },
+        "can_restore_context": {
+          "type": "boolean",
+          "description": "Can provide context restoration packets"
+        },
+        "can_archive_traces": {
+          "type": "boolean",
+          "description": "Can store and retrieve execution traces"
+        }
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "required": ["mode", "governance_active", "external_lane_enabled", "claim_limit"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["governance-root", "governed-standalone", "standalone-lattice", "isolated-demo", "memory-layer"],
+          "description": "Current runtime mode"
+        },
+        "governance_active": {
+          "type": "boolean",
+          "description": "Whether governance constraints are enforced"
+        },
+        "external_lane_enabled": {
+          "type": "boolean",
+          "description": "Whether external verification lanes are active"
+        },
+        "claim_limit": {
+          "type": "string",
+          "enum": ["full", "annotation-only", "none"],
+          "description": "Claim validation level"
+        }
+      }
+    },
+    "session": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique session identifier"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Git branch name"
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean"
+        },
+        "source": {
+          "type": ["string", "null"],
+          "description": "Path to parent governance, or null if root"
+        },
+        "bootstrap_verified": {
+          "type": "boolean"
+        }
+      }
+    },
+    "upstream": {
+      "type": "object",
+      "properties": {
+        "lane_id": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "runtime_state": {
+          "type": "string"
+        }
+      }
+    },
+    "upstream_lanes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "lane_id": { "type": "string" },
+          "runtime_state": { "type": "string" }
+        }
+      }
+    },
+    "memory": {
+      "type": "object",
+      "properties": {
+        "artifacts_stored": { "type": "integer" },
+        "traces_archived": { "type": "integer" },
+        "restoration_packets_available": { "type": "integer" }
+      }
+    }
+  }
+}

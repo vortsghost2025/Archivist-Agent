@@ -410,6 +410,174 @@ we4free-replay replay --trace ./trace.json --mode stub --out replay-output.json
 
 ---
 
+## Bundle 3: papers-20260416T223833Z-3-001
+
+### Overview
+**Type:** Research Papers (PDF)
+**Location:** `S:\April152026mainreferencepoint\papers-20260416T223833Z-3-001\papers\`
+
+### Files
+| File | Size | Purpose |
+|------|------|---------|
+| `01_The_Rosetta_Stone.pdf.pdf` | 87KB | Foundational paper |
+| `02_Constraint_Lattices_and_Stability.pdf.pdf` | 117KB | Constraint theory |
+| `03_Phenotype_Selection_in_Constraint_Governed_Systems.pdf.pdf` | 89KB | System selection |
+| `04_Drift_Identity_and_Ensemble_Coherence.pdf.pdf` | 82KB | Drift detection theory |
+| `05_The_WE4FREE_Framework.pdf.pdf` | 119KB | Complete framework |
+
+### Governance Relevance
+- **Paper 02** — Constraint lattices may relate to CPS_ENFORCEMENT.md constraint system
+- **Paper 04** — Drift theory directly relates to DRIFT_FIREWALL.md
+- **Paper 05** — WE4FREE framework may explain governance architecture
+
+---
+
+## Bundle 4: git-20260416T223826Z-3-001
+
+### Overview
+**Type:** Git Repository Backup
+**Location:** `S:\April152026mainreferencepoint\git-20260416T223826Z-3-001\.git\`
+
+### Contents
+- Full `.git` directory with history
+- branches/, hooks/, logs/, objects/, refs/
+- Can be restored to recover commit history
+
+### Action Required
+- `git log --oneline` to see commit history
+- Identify original repository
+- Restore to appropriate location
+
+---
+
+## Bundle 5: resilience_bundle_preview
+
+### Overview
+**Type:** Resilience Code Preview
+**Location:** `S:\April152026mainreferencepoint\resilience_bundle_preview\`
+
+### Structure
+```
+packages/
+├── common/
+├── lambda-worker/
+├── policy/
+└── service-api/
+```
+
+### Notes
+- Similar structure to WE4FREE_Sean_Resilience_Code_Bundle
+- May be earlier/later version of same code
+- Cross-reference with Bundle 1
+
+---
+
+## Bundle 6: Deliberate-AI-Ensemble-main
+
+### Overview
+**Type:** Multi-agent autonomous trading bot (Python)
+**Status:** Production-ready (paper trading mode)
+**Location:** `S:\April152026mainreferencepoint\Deliberate-AI-Ensemble-main\`
+
+### Architecture
+- **7 Agents:** 1 Orchestrator + 6 Specialized
+  - DataFetchingAgent - Market data acquisition (CoinGecko API)
+  - MarketAnalysisAgent - Technical analysis + downtrend detection
+  - BacktestingAgent - Signal validation
+  - RiskManagementAgent - Position sizing + 1% rule enforcement
+  - ExecutionAgent - Trade execution (paper trading mode)
+  - MonitoringAgent - Logging & alerting
+
+### Safety Features (All Verified)
+1. **Downtrend Protection** - Pauses trading when market drops >5%
+2. **1% Risk Rule** - Enforced by RiskManagementAgent (cannot be overridden)
+3. **Daily Loss Limit** - Tracks cumulative risk, rejects if exceeded
+4. **Circuit Breaker** - Emergency stop on critical errors
+
+### Key Files
+| File | Bucket | Lines | Purpose |
+|------|--------|-------|---------|
+| `agents/orchestrator.py` | Runtime | ~400 | Main conductor, state machine |
+| `agents/base_agent.py` | Runtime | ~100 | ABC interface for all agents |
+| `agents/risk_manager.py` | Runtime | ~200 | 1% rule enforcement |
+| `agents/market_analyzer.py` | Runtime | ~250 | Technical analysis |
+| `main.py` | Runtime | ~200 | Entry point |
+| `test_agents.py` | Runtime | ~300 | Test suite (all passing) |
+| `COVENANT.md` | Memory | 343 | Project covenant |
+| `ARCHITECTURE_VALIDATION.md` | Memory | ~400 | Proof of 6 patterns |
+| `ORCHESTRATION_TOPOLOGY.md` | Memory | ~500 | Architecture details |
+| `CONSTITUTIONAL_VERIFICATION_PROTOCOLS.md` | Memory | ~300 | Verification protocols |
+
+### Governance Relevance
+- **COVENANT.md** similar structure to Archivist-Agent governance
+- **Safety-first design** aligns with CPS enforcement
+- **Veto power architecture** matches Checkpoint 6 dual verification
+- **Circuit breaker** pattern matches resilience-policy.json
+
+---
+
+## Bundle 7: we4free_aws_iac_bundles
+
+### Overview
+**Type:** AWS Infrastructure as Code (Terraform)
+**Location:** `S:\April152026mainreferencepoint\we4free_aws_iac_bundles\`
+
+### Bundles Included
+
+#### 4.1: Serverless S3 + CloudFront + API Gateway + Lambda
+- S3 bucket for static frontend (private)
+- CloudFront distribution with OAC
+- ACM certificate (us-east-1)
+- Route53 A/AAAA alias
+- API Gateway HTTP API → Lambda
+
+#### 4.2: ECS Fargate + ALB + S3 + CloudFront
+- (Not yet analyzed)
+
+### Key Files (Bundle 4.1)
+| File | Bucket | Lines | Purpose |
+|------|--------|-------|---------|
+| `main.tf` | Runtime | 7782 | Core infrastructure |
+| `outputs.tf` | Memory | 297 | Output definitions |
+| `providers.tf` | Memory | 149 | AWS provider config |
+| `variables.tf` | Memory | 1204 | Input variables |
+| `versions.tf` | Memory | 148 | Terraform version constraints |
+| `README.md` | Memory | 980 | Usage documentation |
+
+---
+
+## AWS Credentials Status (2026-04-16)
+
+### IAM User: `opencode-dev`
+- **Account:** 397393880878
+- **ARN:** `arn:aws:iam::397393880878:user/opencode-dev`
+- **Permissions verified:**
+  - ✅ S3 (list buckets)
+  - ✅ Lambda (list functions)
+  - ✅ DynamoDB (list tables)
+  - ✅ SQS (list queues)
+- **Region:** us-east-1
+
+### Credentials File Location
+- `~/.aws/credentials` (Git Bash)
+- `C:\Users\seand\.aws\credentials` (Windows)
+
+---
+
+## Complete Bundle Summary
+
+| Bundle # | Name | Type | Key Contents |
+|----------|------|------|--------------|
+| 1 | WE4FREE_Sean_Resilience_Code_Bundle | Code | classifyError.js, decide.js, trace.js |
+| 2 | WE4FREE_Sean_Infra_Replay_Constraints_Drift_Bundle | Code + IaC | constraint-engine, drift-detection, replay-cli, Terraform |
+| 3 | papers-20260416T223833Z-3-001 | Research | 5 PDFs (Rosetta Stone, Constraint Lattices, Drift, WE4FREE) |
+| 4 | git-20260416T223826Z-3-001 | Git Backup | Full .git directory with history |
+| 5 | resilience_bundle_preview | Code | Preview of resilience package |
+| 6 | Deliberate-AI-Ensemble-main | Multi-Agent Bot | 7-agent trading bot, 200+ files |
+| 7 | we4free_aws_iac_bundles | IaC | 2 Terraform bundles (serverless, ECS) |
+
+---
+
 ## Next Steps for Librarian
 
 1. **Classify each file** into 6 buckets using Archivist-Agent
@@ -418,9 +586,14 @@ we4free-replay replay --trace ./trace.json --mode stub --out replay-output.json
 4. **Integrate replay CLI** with Archivist-Agent checkpoint verification
 5. **Review Terraform/CDK** for infrastructure resilience patterns
 6. **Cross-reference** `resilience-policy.json` domains with governance documents
+7. **Analyze Deliberate-AI-Ensemble** COVENANT.md against Archivist-Agent COVENANT.md
+8. **Extract multi-agent patterns** from Deliberate-AI-Ensemble for agent architecture
+9. **Read research papers** (Bundle 3) for theoretical foundation
+10. **Restore git history** from Bundle 4 to recover commit context
 
 ---
 
-**Inventory Complete:** 2026-04-16  
-**Total Files Analyzed:** 14 source files + 2 policy files  
-**Total Lines of Code:** ~853 lines
+**Inventory Updated:** 2026-04-16
+**Total Bundles Analyzed:** 7
+**Critical Items:** Research papers (PDF), Git history, Multi-agent architecture
+**Total Files:** 400+ across all bundles

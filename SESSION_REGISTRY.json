@@ -1,0 +1,70 @@
+{
+  "$schema": "https://archivist.dev/schemas/session-registry.json",
+  "version": "1.0.0",
+  "last_updated": "2026-04-17T06:00:00.000Z",
+  "purpose": "Enable bidirectional communication between concurrent agent lanes",
+  "active_sessions": {
+    "archivist-agent": {
+      "lane_id": "archivist-agent",
+      "session_id": "1776403587854-50060",
+      "agent_model": "z-ai/glm5",
+      "started": "2026-04-17T05:26:27.854Z",
+      "status": "active",
+      "lock_files": [
+        "S:\\Archivist-Agent\\.session-lock"
+      ],
+      "working_on": [
+        "PROJECT_REGISTRY.md relationship field update",
+        "Cross-lane sync verification"
+      ],
+      "last_heartbeat": "2026-04-17T06:00:00.000Z"
+    },
+    "swarmmind": {
+      "lane_id": "swarmmind",
+      "session_id": "1776399805802-28240",
+      "agent_model": "z-ai/glm5",
+      "started": "2026-04-17T04:23:25.801Z",
+      "status": "active",
+      "lock_files": [
+        "S:\\SwarmMind Self-Optimizing Multi-Agent AI System\\.session-lock"
+      ],
+      "working_on": [
+        "Cross-project governance review",
+        "Configuration fixes"
+      ],
+      "last_heartbeat": "2026-04-17T01:58:43.000Z"
+    }
+  },
+  "communication_protocol": {
+    "heartbeat_interval_ms": 60000,
+    "lock_timeout_ms": 300000,
+    "conflict_resolution": "first-writer-wins",
+    "notification_method": "file-based",
+    "notification_path": "S:\\Archivist-Agent\\SESSION_NOTIFICATIONS"
+  },
+  "rules": {
+    "session_start": [
+      "Read SESSION_REGISTRY.json",
+      "Check for active sessions on target lanes",
+      "Acquire lock file in own lane",
+      "Register session in registry",
+      "Begin heartbeat"
+    ],
+    "session_end": [
+      "Remove session from registry",
+      "Release lock file",
+      "Write session handoff document"
+    ],
+    "file_modification": [
+      "Check SESSION_REGISTRY.json for concurrent sessions",
+      "If other session active on same lane, queue notification",
+      "Acquire file lock before write",
+      "Write modification log to SESSION_NOTIFICATIONS"
+    ],
+    "conflict_handling": [
+      "If two sessions modify same file, last-writer-wins",
+      "Loser session receives notification of conflict",
+      "Manual resolution required for critical files"
+    ]
+  }
+}
