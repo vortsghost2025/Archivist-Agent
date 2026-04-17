@@ -35,8 +35,10 @@ This is a fundamentally different level of system resilience.
 | Lane | Role | Status | Governance | External Lane | Trust |
 |------|------|--------|------------|---------------|-------|
 | **Archivist-Agent** | Governance root | ✅ Active | Yes (root) | Enabled | 100% |
-| **SwarmMind** | Trace layer | ✅ Active | Inherited | Enabled | 93% |
-| **self-organizing-library** | Memory layer | ✅ Active | Independent | Disabled | N/A |
+| **SwarmMind** | Trace layer | ⚠️ Terminated (handoff created) | Inherited | Enabled | 93% |
+| **self-organizing-library** | Memory layer | ✅ Idle | Independent | Disabled | N/A |
+
+**Note:** SwarmMind status updated by cold-start drill (2026-04-17). This table reflects status at milestone achievement time. Current operational status maintained in SESSION_REGISTRY.json.
 
 ### Cross-Lane Coordination
 
