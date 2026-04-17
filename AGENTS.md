@@ -319,6 +319,101 @@ mod tests {
 
 ---
 
+## Git Protocol (MANDATORY FOR ALL THREE LANES)
+
+**Applies to:** Archivist-Agent, SwarmMind, self-organizing-library
+
+### The Problem This Solves
+
+Local-only commits are **NOT safe checkpoints**. If the system wipes, local commits are lost. All work must be pushed to GitHub immediately to ensure:
+- Zero data loss from system failure
+- Portable work across machines
+- Recovery from any catastrophic event
+
+### Git Protocol Rules
+
+**Rule 1: COMMIT + PUSH AS ONE ACTION**
+```
+After every commit, IMMEDIATELY push to origin.
+NEVER leave commits local-only.
+NEVER wait for user instruction to push.
+```
+
+**Rule 2: CHECK FOR SECRETS BEFORE PUSH**
+```
+Before pushing, scan commit for:
+- API keys (openai, anthropic, nvidia, etc.)
+- Passwords or tokens
+- .env files with real values
+- Private keys or certificates
+
+If ANY secrets found:
+1. STOP
+2. Inform user
+3. Do NOT push until secrets removed
+```
+
+**Rule 3: VERIFY PUSH SUCCESS**
+```
+After push, run: git status
+Confirm: "Your branch is up to date with 'origin/...'"
+If push fails: Retry, then inform user if still failing
+```
+
+**Rule 4: NEVER MARK WORK "SAFE" UNTIL PUSHED**
+```
+A commit is NOT safe until it exists on GitHub.
+Local commits = zero recovery if system wipes.
+Pushed commits = full recovery from any machine.
+```
+
+### Exception: Draft/WIP Commits
+
+If commit message contains:
+- `[draft]` or `[wip]` — Work in progress
+- `[checkpoint]` — Temporary save point
+- `[local-only]` — Explicit local-only intent
+
+Then:
+- Still push immediately (backup)
+- Mark with tag if needed for later cleanup
+
+### Cross-Lane Git Coordination
+
+All three lanes share the same GitHub origin:
+- Archivist-Agent: `github.com/vortsghost2025/Archivist-Agent`
+- SwarmMind: `github.com/vortsghost2025/SwarmMind`
+- Library: `github.com/vortsghost2025/self-organizing-library`
+
+**When working across lanes:**
+1. Push your lane's changes
+2. Update coordination files (SESSION_REGISTRY.json)
+3. Push coordination updates
+4. Other lanes pull before continuing
+
+### Recovery Guarantee
+
+If this protocol is followed:
+- System wipe → Clone repos, continue work
+- Agent crash → Pull latest, resume from last commit
+- Machine loss → Work exists on GitHub
+- Concurrent edits → GitHub as source of truth
+
+**If protocol is NOT followed:**
+- Work is at risk
+- User could lose 600GB+ of progress
+- No recovery possible
+
+### Git Protocol Checklist
+
+Before ending any session:
+- [ ] All commits pushed to origin
+- [ ] `git status` shows no local-only commits
+- [ ] GitHub reflects current state
+- [ ] Session handoff (if any) pushed
+
+---
+
 ## Governance Testing
 
 When testing governance transfer to new agents:
