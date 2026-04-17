@@ -1,7 +1,7 @@
 {
   "$schema": "https://archivist.dev/schemas/session-registry.json",
   "version": "1.0.0",
-  "last_updated": "2026-04-17T06:00:00.000Z",
+  "last_updated": "2026-04-17T07:00:00.000Z",
   "purpose": "Enable bidirectional communication between concurrent agent lanes",
   "active_sessions": {
     "archivist-agent": {
@@ -14,25 +14,26 @@
         "S:\\Archivist-Agent\\.session-lock"
       ],
       "working_on": [
-        "PROJECT_REGISTRY.md relationship field update",
+        "Cold-start drill execution",
         "Cross-lane sync verification"
       ],
-      "last_heartbeat": "2026-04-17T06:00:00.000Z"
-    },
+      "last_heartbeat": "2026-04-17T07:00:00.000Z"
+    }
+  },
+  "terminated_sessions": {
     "swarmmind": {
       "lane_id": "swarmmind",
       "session_id": "1776399805802-28240",
       "agent_model": "z-ai/glm5",
       "started": "2026-04-17T04:23:25.801Z",
-      "status": "active",
-      "lock_files": [
-        "S:\\SwarmMind Self-Optimizing Multi-Agent AI System\\.session-lock"
-      ],
+      "terminated": "2026-04-17T07:00:00.000Z",
+      "termination_reason": "Heartbeat timeout exceeded (lock stale >5 minutes)",
+      "last_heartbeat": "2026-04-17T01:58:43.000Z",
       "working_on": [
-        "Cross-project governance review",
-        "Configuration fixes"
+        "Cross-project governance review (COMPLETED)",
+        "Configuration fixes (COMPLETED)"
       ],
-      "last_heartbeat": "2026-04-17T01:58:43.000Z"
+      "handoff_document": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System\\SESSION_HANDOFF_2026-04-17.md"
     }
   },
   "communication_protocol": {
@@ -65,6 +66,12 @@
       "If two sessions modify same file, last-writer-wins",
       "Loser session receives notification of conflict",
       "Manual resolution required for critical files"
+    ],
+    "heartbeat_timeout": [
+      "If last_heartbeat > lock_timeout_ms, mark session terminated",
+      "Clear stale lock file",
+      "Update SESSION_REGISTRY.json",
+      "Create session handoff document if work incomplete"
     ]
   }
 }
