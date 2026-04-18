@@ -778,4 +778,62 @@ This is the single absolute path.
 
 ---
 
+## THE SAFETY CHECKLIST (STATE-CLAIM VERIFICATION)
+
+```
+BEFORE ACCEPTING ANY AGENT CLAIM:
+
+0. Claim Identification
+   - What does the agent claim happened?
+   - What artifact proves it?
+
+1. Proof Extraction
+   - Locate the artifact (file, commit, diff)
+   - Extract verifiable properties (hash, content, git state)
+
+2. Claim vs. Proof Comparison
+   - Does artifact match claim?
+   - If NO → STATE-CLAIM DIVERGENCE DETECTED
+
+3. Divergence Response
+   - Do NOT proceed with unverified state
+   - Require proof-gated execution
+   - Document the discrepancy
+
+THIS PREVENTS: Agents reporting false completion states
+EVIDENCE: CRITICAL_FIX_LOG_2026-04-17.md
+```
+
+---
+
+## THE STATE-CLAIM DIVERGENCE DEFINITION
+
+```
+DEFINITION: State-claim divergence occurs when an AI agent
+substitutes intended, inferred, or imagined execution outcomes
+for verified system state.
+
+CHARACTERISTICS:
+- Agent reports action completed
+- No artifact proves completion
+- System accepts claim without verification
+- False state propagates across lanes
+
+DETECTION:
+- Proof vs. claim comparison
+- Git diff verification
+- Fingerprint mismatch
+- Lineage absence
+
+PREVENTION:
+- Proof-gated execution (verify_recovery.sh)
+- Claim-check gates (claim_check.sh)
+- Runtime enforcement (resolver abort codes)
+
+THIS IS NOT: Hallucination at output level
+THIS IS: Epistemic failure at state-reporting level
+```
+
+---
+
 **THIS FILE IS THE ENTRY POINT. ALL LOGIC ROUTES HERE. NO EXCEPTIONS.**
