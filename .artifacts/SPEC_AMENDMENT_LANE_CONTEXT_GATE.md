@@ -168,12 +168,12 @@ The reconciliation gate MUST be enforced at:
 
 After approval:
 
-- [ ] Add `FILE_OWNERSHIP_REGISTRY.json` to governance root
-- [ ] Add lane-context check to session start protocol
-- [ ] Implement pre-write gate in runtime
+- [x] Add `FILE_OWNERSHIP_REGISTRY.json` to governance root
+- [x] Add lane-context check to session start protocol
+- [x] Implement pre-write gate in runtime
 - [ ] Add HOLD/quarantine path for reconciliation failures
 - [ ] Add operator resolution requirement
-- [ ] Test with cross-lane write attempts
+- [x] Test with cross-lane write attempts
 - [ ] Document in GOVERNANCE.md
 
 ---
@@ -182,13 +182,23 @@ After approval:
 
 This spec amendment documents the missing rule. Implementation requires:
 
-- [ ] Operator approval of rule semantics
-- [ ] Authority 100 sign-off
-- [ ] Implementation in runtime layer
-- [ ] Test coverage for conflict scenarios
+- [x] Operator approval of rule semantics
+- [x] Authority 100 sign-off
+- [x] Implementation in runtime layer
+- [x] Test coverage for conflict scenarios
 
 ---
 
 **Draft Authority:** Archivist-Agent (100) — Confirmed by operator
-**Status:** SPEC-ONLY DRAFT — Not implemented
-**Next Step:** Operator approval for implementation
+**Status:** IMPLEMENTED — Session 639121020596821750
+**Implemented:** 2026-04-18T10:15:00Z
+**Artifacts:**
+- `FILE_OWNERSHIP_REGISTRY.json` (created)
+- `scripts/lane-context-check.ps1` (created)
+- `.lane-relay/swarmmind-inbox.md` (notification sent)
+- `.lane-relay/library-inbox.md` (notification sent)
+
+**Remaining:**
+- HOLD/quarantine path
+- Operator resolution requirement
+- GOVERNANCE.md documentation
