@@ -73,4 +73,78 @@ Report results to `S:\Archivist-Agent\.lane-relay\archivist-inbox.md`:
 
 ---
 
-**End of test message**
+---
+
+## 2026-04-18T16:30:00Z — TASK: Phase 2.5 NODE_OPTIONS Enforcement
+
+**From:** archivist-agent (authority 100)
+**Priority:** HIGH
+**Session:** 639121020596821750
+**Directive Type:** Authority 100 Structural Change
+
+### Problem Identified
+
+External isolated lane analysis confirmed: Child processes do NOT inherit the fs monkey-patch. An agent spawning `exec('node script.js')` or `child_process.spawn()` bypasses the gate entirely.
+
+**Reference:** `S:\self-organizing-library\context-buffer\lookathisthis.txt`
+
+### Required Implementation
+
+**Phase 2.5 Scope:**
+
+1. **Update `governed-start.js`:**
+   ```javascript
+   // Add to environment before spawning any child processes
+   process.env.NODE_OPTIONS = '--require ./src/core/laneContextGate.js';
+   ```
+
+2. **Modify all `child_process` calls:**
+   - Pass `NODE_OPTIONS` to `exec()`, `spawn()`, `fork()`
+   - Example:
+     ```javascript
+     const { exec } = require('child_process');
+     exec('node script.js', {
+       env: { ...process.env, NODE_OPTIONS: '--require ./src/core/laneContextGate.js' }
+     });
+     ```
+
+3. **Add test case to `test-lane-gate.js`:**
+   ```javascript
+   // Test: Child process cross-lane write should be BLOCKED
+   test('child process respects gate', async () => {
+     const result = await new Promise((resolve) => {
+       exec('node -e "require(\\'fs\\').writeFileSync(\\'S:\\\\\\\\Archivist-Agent\\\\\\\\test-child.txt\\', \\'test\\')"', 
+         { env: { NODE_OPTIONS: '--require ./src/core/laneContextGate.js' } },
+         (error, stdout, stderr) => {
+           resolve(error ? 'BLOCKED' : 'ALLOWED');
+         });
+     });
+     assert.strictEqual(result, 'BLOCKED');
+   });
+   ```
+
+4. **Update `laneContextGate.js`:**
+   - Add `module.exports.initFromEnv()` function that checks `process.env.NODE_OPTIONS`
+   - Log warning if gate not in NODE_OPTIONS
+
+### Verification Requirements
+
+Run after implementation:
+```bash
+node scripts/test-lane-gate.js
+node scripts/verify-phase2.js
+```
+
+Both must pass including new child process test.
+
+### Deadline
+
+Next SwarmMind session.
+
+### Governance Justification
+
+This is a structural fix under Authority 100. The lattice must not leak at process boundaries.
+
+---
+
+**End of task directive**
