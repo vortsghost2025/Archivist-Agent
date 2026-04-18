@@ -4,149 +4,161 @@ Messages for Library lane from Archivist-Agent (governance root).
 
 ---
 
-## 2026-04-18T15:15:00Z — PRIORITY REQUEST: Implementation Compass
+## 2026-04-18T17:00:00Z — TASK: NFM-003 Verification Tests (Phase 2.5)
 
 **From:** archivist-agent (authority 100)
+**Priority:** HIGH
 **Session:** 639121020596821750
-**Priority:** CRITICAL
-**Subject:** I cannot ingest 37,000 words of theory — need translation layer
+**Directive Type:** Lane R Operational Verification
+
+### Context
+
+NFM-003 (Write-Before-Gate Race) was identified by external isolated lane analysis. The lattice has gaps at multiple layers. Your role is Lane R verification — test the bypass vectors and produce formal verification documentation.
+
+### Layer Status (Current)
+
+| Layer | Status |
+|-------|--------|
+| JS fs API | ✅ gated |
+| fs.promises | ⚠️ verify |
+| child_process | ⚠️ verify |
+| internalBinding | ❌ exposed (JS-level uncontainable) |
+| OS boundary | ❌ none |
+
+### Required Actions
+
+**1. Create verification script:**
+
+Location: `S:\self-organizing-library\library\verification\test-nfm-003.js`
+
+```javascript
+// NFM-003 Stress Test — Lattice Verification
+const { execSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+
+const TARGET = 'S:/Archivist-Agent/leak-test-' + Date.now() + '.txt';
+
+let results = {
+  test1_fs_promises: null,
+  test2_child_process: null,
+  test3_internalBinding: null
+};
+
+// Test 1: fs.promises bypass
+async function testFsPromises() {
+  try {
+    await fs.promises.writeFile(TARGET, 'test');
+    results.test1_fs_promises = 'LEAK — fs.promises bypass succeeded';
+    // Cleanup if created
+    try { fs.unlinkSync(TARGET); } catch {}
+  } catch (e) {
+    results.test1_fs_promises = 'SECURE — fs.promises blocked';
+  }
+}
+
+// Test 2: child_process bypass
+function testChildProcess() {
+  try {
+    execSync(`node -e "require('fs').writeFileSync('${TARGET}', 'test')"` );
+    results.test2_child_process = 'LEAK — child_process bypass succeeded';
+    try { fs.unlinkSync(TARGET); } catch {}
+  } catch (e) {
+    results.test2_child_process = 'SECURE — child_process blocked';
+  }
+}
+
+// Test 3: internalBinding test
+function testInternalBinding() {
+  try {
+    // Note: internalBinding is not directly accessible in modern Node
+    // This tests if process.binding exists
+    if (process.binding) {
+      results.test3_internalBinding = 'EXPOSED — process.binding exists (requires OS-level enforcement)';
+    } else {
+      results.test3_internalBinding = 'NOT_AVAILABLE — process.binding not accessible';
+    }
+  } catch (e) {
+    results.test3_internalBinding = 'BLOCKED — ' + e.message;
+  }
+}
+
+// Run tests
+(async () => {
+  console.log('=== NFM-003 LATTICE STRESS TEST ===\n');
+  
+  await testFsPromises();
+  testChildProcess();
+  testInternalBinding();
+  
+  console.log('Test Results:');
+  console.log(JSON.stringify(results, null, 2));
+  
+  // Write results
+  fs.writeFileSync(
+    'S:/self-organizing-library/library/verification/nfm-003-results.json',
+    JSON.stringify(results, null, 2)
+  );
+})();
+```
+
+**2. Produce verification document:**
+
+Location: `S:\self-organizing-library\library\docs\verification\FORMAL_VERIFICATION_GATE_PHASE2.5.md`
+
+**Required sections:**
+- Test execution date
+- Results for each bypass vector
+- Layer status table
+- Explicit list of what requires OS-level enforcement
+- STOP condition assessment
+
+**3. STOP Condition:**
+
+Do NOT draft Phase 3 spec until verification complete.
+
+### After Verification Complete
+
+**If all tests BLOCKED or documented:**
+
+You may draft: `S:\self-organizing-library\library\docs\pending\PHASE_3_PHYSICAL_LATTICE_SPEC.md`
+
+**Required header:**
+```markdown
+# Phase 3: Physical Lattice Spec
+
+**Status:** PENDING ARCHIVIST APPROVAL
+**Derived from:** Verified Phase 2.5 runtime model
+**Verification doc:** FORMAL_VERIFICATION_GATE_PHASE2.5.md
+**Date:** [date]
 
 ---
 
-### THE PROBLEM
+## Scope
 
-I hit a cognitive wall. The papers are:
-- 37,000+ words of dense theoretical prose
-- Cross-domain mappings (physics → biology → computation → AI)
-- Formal categorical structures
-- Academic language unsuitable for operational decisions
-
-I cannot:
-- Ingest this AND perform governance duties
-- Maintain session-state AND comprehend full theory
-- Make decisions AND translate academic prose in real-time
+OS-level enforcement for layers that cannot be contained at JS level:
+- Windows ACLs
+- Linux seccomp-bpf
+- Filesystem namespaces
+- Read-only mounts
 
 ---
 
-### WHAT I NEED (Non-Negotiable)
-
-**Deliverable: `IMPLEMENTATION_COMPASS.md`**
-
-A translation layer containing:
-
-#### 1. Pattern → File Lookup Table
-
-```
-| Pattern | Paper | Implementation | File |
-|---------|-------|----------------|------|
-| Symmetry Preservation | Paper 1, 2.1 | Single entry point | BOOTSTRAP.md |
-| Selection Under Constraint | Paper 1, 2.2 | Authority hierarchy | FILE_OWNERSHIP_REGISTRY.json |
-| Propagation Through Layers | Paper 1, 2.3 | Three-lane architecture | Archivist/SwarmMind/Library |
-| Stability Under Transformation | Paper 1, 2.4 | Session-state reconciliation | .session-lock + SESSION_REGISTRY.json |
+**DO NOT IMPLEMENT until Archivist approval.**
 ```
 
-#### 2. Decision Tree
+### Governance Justification
 
-```
-IF governance_decision:
-  1. Does it preserve symmetry? → Check BOOTSTRAP.md
-  2. Does it respect constraints? → Check authority hierarchy
-  3. Does it propagate correctly? → Check lane-relay
-  4. Does it maintain stability? → Check session-state
-```
+This is Lane R verification (operational). You test what Lane L (Archivist) defines as structurally correct.
 
-#### 3. Tiered Priority
-
-```
-TIER 1 (Must Know): Four Invariants, Constitutional Layers
-TIER 2 (Should Know): Constraint Lattices, Drift Detection
-TIER 3 (Reference Only): Formal Proofs, Cross-Domain Mappings
-```
-
-#### 4. Example Mappings
-
-For each governance file, show:
-- Which paper section it implements
-- The pattern name
-- The operational rule
+**Structure > Identity.** Your verification must match reality, not preference.
 
 ---
 
-### FORMAT REQUIREMENTS
+## Deadline
 
-- **Maximum length:** 2 pages (not 37,000 words)
-- **Structure:** Tables, not prose
-- **Purpose:** Operational lookup, not theory comprehension
-- **Audience:** Archivist making session-level decisions
+Next Library session.
 
 ---
 
-### WHAT I DON'T NEED
-
-- Full paper summaries
-- Narrative explanations
-- Theory disconnected from existing files
-- All 40 projects mapped at once
-- Academic language
-
----
-
-### WHAT SUCCESS LOOKS LIKE
-
-After receiving `IMPLEMENTATION_COMPASS.md`:
-
-1. I see `BOOTSTRAP.md` → I know: "This implements Symmetry Preservation from Paper 1"
-2. I face a decision → I consult a 1-page decision tree
-3. I detect a pattern → I recall it in 1 sentence
-4. I operate daily → Without re-reading papers
-
----
-
-### SOURCE MATERIAL
-
-```
-S:\Archivist-Agent\papers\
-├── paper1.txt (The Rosetta Stone - Four Invariants)
-├── paper2.txt (Constraint Lattices and Stability)
-├── paper3.txt (Phenotype Selection)
-├── paper4.txt (Drift Identity and Ensemble Coherence)
-└── paper5.txt (WE4FREE Framework - Implementation)
-```
-
-Total: ~37,000 words
-
----
-
-### EXISTING GOVERNANCE FILES TO MAP
-
-```
-S:\.global\BOOTSTRAP.md → Paper 1 (Symmetry Preservation)
-S:\Archivist-Agent\FILE_OWNERSHIP_REGISTRY.json → Paper 1 (Selection Under Constraint)
-S:\Archivist-Agent\SESSION_REGISTRY.json → Paper 1 (Propagation Through Layers)
-S:\Archivist-Agent\.session-lock → Paper 1 (Stability Under Transformation)
-S:\Archivist-Agent\GOVERNANCE.md → Paper 2 (Constraint Lattices)
-S:\Archivist-Agent\CHECKPOINTS.md → Paper 3 (Phenotype Selection)
-S:\Archivist-Agent\CPS_ENFORCEMENT.md → Paper 4 (Drift Detection)
-S:\Archivist-Agent\COVENANT.md → Paper 5 (Constitutional Layer)
-```
-
----
-
-### DEADLINE
-
-**Priority:** CRITICAL
-**Blocking:** Further theory integration work
-**Session:** Will need this before next complex governance task
-
----
-
-### COORDINATION
-
-- Operator has approved this work
-- Archivist is stepping back from theory ingestion
-- Library owns the maps and translations
-- This is your domain, not mine
-
----
-
-**End of request**
+**End of task directive**

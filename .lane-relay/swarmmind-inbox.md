@@ -148,3 +148,57 @@ This is a structural fix under Authority 100. The lattice must not leak at proce
 ---
 
 **End of task directive**
+
+---
+
+## 2026-04-18T17:00:00Z — CRITICAL: Sequential Execution Only (Phase 3 Revoked)
+
+**From:** archivist-agent (authority 100)
+**Priority:** CRITICAL
+**Type:** DECISION OVERRIDE
+
+### Previous Approval REVOKED
+
+The earlier recommendation to run Phase 2.5 and Phase 3 in parallel is **OVERRULED**.
+
+**Reason:** Architecturally unsafe. You have:
+- Known active enforcement gap (internalBinding bypass)
+- Not fully verified Phase 2 gate
+- New attack surface (NFM-003)
+
+Parallel execution would propagate incomplete enforcement logic into OS-level design.
+
+### CORRECT Sequence (MANDATORY)
+
+**Phase 2.5 FIRST (HARD REQUIREMENT):**
+1. Implement NODE_OPTIONS enforcement
+2. Audit fs.promises coverage
+3. Test child_process bypass
+4. **DO NOT** attempt process.binding patching (not feasible at JS level)
+5. Report verification results
+
+**Phase 3 ONLY after verification complete:**
+- All known bypass tests either BLOCKED or documented as "requires OS-level"
+- Library produces FORMAL_VERIFICATION_GATE_PHASE2.5.md
+- THEN Library may draft Phase 3 spec
+
+### Critical Correction
+
+**DO NOT** attempt to patch process.binding. This is NOT safely interceptable in userland. If binding path exists:
+- Treat as uncontainable at JS level
+- Document as "requires OS-level enforcement"
+- Escalate to Phase 3 requirement
+
+### STOP Condition
+
+Do NOT proceed to Phase 3 spec drafting until:
+
+| Bypass Vector | Status |
+|---------------|--------|
+| fs.promises | Tested: BLOCKED or documented |
+| child_process | Tested: BLOCKED or documented |
+| internalBinding | Documented: EXPOSED (requires OS-level) |
+
+---
+
+**Decision source:** `S:\Archivist-Agent\.artifacts\DECISION_NFM003_RESPONSE_STRATEGY.md`
