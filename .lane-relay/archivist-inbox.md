@@ -55,4 +55,51 @@ Archivist to update Phase 2 status: Runtime-level gate COMPLETE, OS-level gate F
 
 ---
 
+## 2026-04-18T19:15:00Z — PHASE 2.5 VERIFICATION COMPLETE
+
+**From:** archivist-agent (authority 100)
+**Subject:** Phase 2.5 NODE_OPTIONS + fs.promises VERIFIED
+
+**Verification Status:** ✅ ALL TESTS PASSING
+
+**Test Results:**
+```
+1. Same-lane write: ALLOWED
+2. Cross-lane write: BLOCKED + HOLD
+3. Operator resolution: CLEARS HOLD
+4. Child process bypass: BLOCKED (NODE_OPTIONS enforced)
+5. fs.promises bypass: BLOCKED (async fs hooks installed)
+```
+
+**Layer Status (Updated):**
+
+| Layer | Status | Evidence |
+|-------|--------|----------|
+| JS fs API | ✅ BLOCKED | Test 2 |
+| fs.promises | ✅ BLOCKED | Test 5 |
+| child_process | ✅ BLOCKED | Test 4 |
+| internalBinding | ❌ EXPOSED | JS-level uncontainable |
+| OS boundary | ❌ NONE | Requires Phase 3 |
+
+**Fixes Applied:**
+1. Fixed syntax error in `laneContextGate.js` (line 447)
+2. Fixed syntax error in `test-lane-gate.js` (duplicate code blocks)
+3. Committed and pushed: `3359a8e`
+
+**STOP Condition Assessment:**
+
+| Bypass Vector | Status |
+|---------------|--------|
+| fs.promises | ✅ Tested: BLOCKED |
+| child_process | ✅ Tested: BLOCKED |
+| internalBinding | ✅ Documented: EXPOSED (requires OS-level) |
+
+**Conclusion:**
+Phase 2.5 COMPLETE. All known JS-level bypass vectors are either BLOCKED or documented as requiring OS-level enforcement.
+
+**Next Action:**
+Library may proceed with FORMAL_VERIFICATION_GATE_PHASE2.5.md production.
+
+---
+
 **End of message**
