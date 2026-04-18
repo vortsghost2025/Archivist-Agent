@@ -177,38 +177,131 @@ All verification checks passed.
 
 ---
 
-## PHASE 3 DECISION POINT
+## 2026-04-18T21:30:00Z — PHASE 3 AUTHORIZATION RECEIVED
 
-**Phase 2.5 Status:** ✅ COMPLETE AND VERIFIED
+**From:** human-operator (authority 1000)
+**Subject:** Phase 3 Implementation Authorized
 
-**Phase 3 Authorization:** APPROVED (with conditions)
-
-**Phase 3 Conditions (from spec):**
-1. Human sign-off required before OS changes
-2. seccomp-bpf filters tested in simulation first
-3. Audit layer performance threshold (<5% overhead)
-
-**Queue Subsystem Proposal (GPT recommendation):**
-
-Before OS-level enforcement, user must explicitly authorize queue subsystem:
-
+**Authorization Statement:**
 > "I authorize Phase 3 implementation: queue subsystem, file permissions, seccomp-bpf, audit layer, identity attestation."
 
-**Queue Subsystem Scope:**
-- Define queue item schema
-- Implement queue (file-based JSON or Azure Service Bus)
-- Extend LaneContextGate for queue-based hand-offs
-- Add Library verification for queue operations
+**Authorization Components:**
+1. ✅ Queue subsystem — Cross-lane hand-off mechanism
+2. ✅ File permissions — OS-level ACL enforcement
+3. ✅ seccomp-bpf — System call filtering
+4. ✅ Audit layer — Operation logging
+5. ✅ Identity attestation — Lane authentication
 
-**Current Status:**
-Lanes interacting through inbox files and Git commits only.
-This preserves decoupling, auditability, and compliance.
+**Implementation Sequence:**
 
-**Decision Required:**
-User must decide whether to:
-1. Authorize Phase 3 (including queue subsystem)
-2. Continue Phase 2.5 mode (inbox-based coordination only)
-3. Provide new direction
+| Phase | Component | Owner | Priority |
+|-------|-----------|-------|----------|
+| 3.1 | Queue subsystem | SwarmMind | HIGH |
+| 3.2 | File permissions | SwarmMind | HIGH |
+| 3.3 | Audit layer | SwarmMind | MEDIUM |
+| 3.4 | Identity attestation | Archivist | MEDIUM |
+| 3.5 | seccomp-bpf | SwarmMind | LOW (simulation first) |
+
+**Queue Subsystem Specification:**
+
+```yaml
+Queue Item Schema:
+  id: string (UUID)
+  source_lane: string (archivist | swarmmind | library)
+  target_lane: string
+  operation: string
+  payload: object
+  timestamp: ISO8601
+  signature: string (HMAC-SHA256)
+  status: pending | processing | completed | failed
+```
+
+**Implementation Options:**
+- Option A: File-based JSON queue (simple, auditable)
+- Option B: Azure Service Bus (scalable, enterprise)
+
+**Recommendation:** Start with Option A (file-based), migrate to Option B if scale requires.
+
+**Conditions from Phase 3 Spec:**
+1. ✅ Human sign-off received (above)
+2. ⏳ seccomp-bpf simulation testing required before deployment
+3. ⏳ Audit layer performance threshold (<5% overhead)
+
+**Next Actions:**
+1. Archivist: Document authorization in governance records
+2. SwarmMind: Begin queue subsystem implementation
+3. Library: Prepare verification gate for queue operations
+
+---
+
+## PHASE 3 IMPLEMENTATION PLAN
+
+### Phase 3.1: Queue Subsystem (SwarmMind)
+
+**Tasks:**
+1. Create `queue/` directory structure
+2. Implement `QueueManager` class
+3. Define queue item schema
+4. Add queue validation to LaneContextGate
+5. Write test suite for queue operations
+
+**Files to Create:**
+- `S:\SwarmMind Self-Optimizing Multi-Agent AI System\src\core\queueManager.js`
+- `S:\SwarmMind Self-Optimizing Multi-Agent AI System\queue\inbox\` (per-lane)
+- `S:\SwarmMind Self-Optimizing Multi-Agent AI System\queue\outbox\` (per-lane)
+- `S:\SwarmMind Self-Optimizing Multi-Agent AI System\queue\archive\`
+
+### Phase 3.2: File Permissions (SwarmMind)
+
+**Tasks:**
+1. Define permission matrix per lane
+2. Implement permission check before file operations
+3. Add permission escalation path
+4. Test with ACL-based restrictions
+
+### Phase 3.3: Audit Layer (SwarmMind)
+
+**Tasks:**
+1. Create audit log format
+2. Implement audit middleware for all gates
+3. Add performance monitoring
+4. Verify <5% overhead threshold
+
+### Phase 3.4: Identity Attestation (Archivist)
+
+**Tasks:**
+1. Define lane identity schema
+2. Implement signing/verification
+3. Add identity to queue items
+4. Test cross-lane verification
+
+### Phase 3.5: seccomp-bpf (SwarmMind)
+
+**Tasks:**
+1. Design syscall whitelist per lane
+2. Implement in simulation environment
+3. Test with malicious syscall attempts
+4. Deploy to production (after simulation passes)
+
+---
+
+**ARCHIVIST DECLARATION:**
+
+```
+PHASE 3 AUTHORIZED
+
+Human operator has authorized full Phase 3 implementation.
+All components may proceed with implementation.
+
+Authorization timestamp: 2026-04-18T21:30:00Z
+Authorization authority: human-operator (1000)
+Authorization scope: queue, permissions, seccomp-bpf, audit, identity
+
+Lane coordination may now use queue-based hand-offs.
+Inbox-based coordination remains valid for backward compatibility.
+
+NEXT: SwarmMind to begin Phase 3.1 (queue subsystem)
+```
 
 ---
 
