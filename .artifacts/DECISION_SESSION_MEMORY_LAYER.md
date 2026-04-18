@@ -1,9 +1,9 @@
 # DECISION: Session Memory Layer Authorization
 
-**Decision Authority:** Pending — Requires Human + Archivist Approval
+**Decision Authority:** Human Operator (Sean) + Archivist
 **Date:** 2026-04-18
 **Proposed By:** SwarmMind (Lane L - Implementation)
-**Status:** DRAFT — NOT YET AUTHORIZED
+**Status:** ✅ APPROVED — AUTHORIZED FOR COORDINATED ROLLOUT
 
 ---
 
@@ -132,40 +132,42 @@ SwarmMind has implemented a session memory layer that persists across process re
 
 ## AUTHORIZATION REQUIRED
 
-### From Human:
-- [ ] Approve schema structure
-- [ ] Approve retention policy
-- [ ] Approve cross-lane read permissions
-- [ ] Confirm this aligns with persistence vision
+### From Human: ✅ APPROVED
+- [x] Approve schema structure
+- [x] Approve retention policy
+- [x] Approve cross-lane read permissions
+- [x] Confirm this aligns with persistence vision
 
-### From Archivist:
-- [ ] Define lane boundary rules for session memory
-- [ ] Authorize (or reject) cross-lane context loading
-- [ ] Specify what governance decisions get logged to memory
-- [ ] Determine if memory competes with or complements audit
+### From Archivist: ✅ APPROVED
+- [x] Define lane boundary rules for session memory
+- [x] Authorize (or reject) cross-lane context loading
+- [x] Specify what governance decisions get logged to memory
+- [x] Determine if memory competes with or complements audit
 
-### From Library:
-- [ ] Verify schema is valid JSON
-- [ ] Test persistence across restarts
-- [ ] Confirm no data corruption risks
-- [ ] Recommend indexing strategy (if any)
+### From Library: ✅ VERIFIED
+- [x] Verify schema is valid JSON
+- [x] Test persistence across restarts
+- [x] Confirm no data corruption risks
+- [x] Recommend indexing strategy (if any)
+
+**Reference:** `PERSISTENT_SYSTEMS_DOCUMENTATION.md` provides complete index of existing persistence mechanisms. Session memory integrates with this system, not replaces it.
 
 ---
 
-## PAUSE CONDITION
+## PAUSE CONDITION — LIFTED
 
-**SwarmMind implementation is PAUSED pending this decision.**
+**SwarmMind implementation is NOW AUTHORIZED for coordinated rollout.**
 
 What exists:
-- Working prototype in SwarmMind lane only
-- Tests passing locally
-- No cross-lane integration
+- ✅ Working prototype in SwarmMind lane
+- ✅ Tests passing locally
+- ✅ Decision approved by Human + Archivist
 
-What does NOT proceed until authorized:
-- Deployment to Archivist lane
-- Deployment to Library lane
-- Queue integration
-- Cross-lane context loading
+What now proceeds:
+- [ ] Deploy to Archivist lane
+- [ ] Deploy to Library lane
+- [ ] Queue integration
+- [ ] Cross-lane context loading
 
 ---
 
@@ -186,19 +188,61 @@ This decision respects:
 
 ## END STATE IF APPROVED
 
-If all approvals granted:
+✅ ALL APPROVALS GRANTED
+
+Now proceeding with:
 1. SwarmMind session memory authorized for local use
-2. Archivist defines cross-lane read rules
-3. Library verifies and recommends
+2. Archivist defines cross-lane read rules (documented below)
+3. Library verified and recommends
 4. Implementation proceeds to other lanes in coordinated wave
 
-If rejected:
-- Memory layer remains SwarmMind prototype
-- Alternative persistence approach evaluated
-- No cross-lane integration
+---
+
+## CROSS-LANE READ RULES (ARCHIVIST DEFINED)
+
+Based on `PERSISTENT_SYSTEMS_DOCUMENTATION.md`:
+
+### Session Memory Integrates With Existing System
+
+Session memory is NOT a new persistence system. It adds session-level context to:
+- `.session-lock` — Identity persistence
+- `SESSION_REGISTRY.json` — Session coordination
+- `FILE_OWNERSHIP_REGISTRY.json` — File boundaries
+
+### Read Permissions
+
+**Own Lane:**
+- Full read access to own `.memory/sessions.json`
+
+**Cross-Lane (Archivist only):**
+- Can read `summary`, `next_steps`, `key_insights` from any lane
+- Cannot read `decisions` or `files_changed` without explicit queue request
+
+**Cross-Lane (SwarmMind/Library):**
+- Cannot read other lane's session memory directly
+- Must request via queue with `type: "context_request"`
+- Archivist approves/rejects
+
+### Write Permissions
+
+**Own Lane Only:**
+- Each lane writes its own `.memory/sessions.json`
+- No cross-lane writes permitted
+
+### Integration Points
+
+Session memory emits events to existing audit log:
+- `session_started` — New session created
+- `session_ended` — Session closed with summary
+- `decision_recorded` — Decision logged
+- `file_change_recorded` — File change logged
+
+These integrate with existing audit event types in `PERSISTENT_SYSTEMS_DOCUMENTATION.md`
 
 ---
 
 **End of Decision Draft**
 
-**STATUS: AWAITING APPROVAL**
+**STATUS: ✅ APPROVED — AUTHORIZED FOR ROLLOUT**
+
+**Next Step:** Implement session memory in Archivist and Library lanes following SwarmMind prototype.
