@@ -1,51 +1,37 @@
 {
   "$schema": "https://archivist.dev/schemas/session-registry.json",
   "version": "1.1.0",
-  "last_updated": "2026-04-18T04:16:35.493Z",
+  "last_updated": "2026-04-18T09:41:46.730Z",
   "purpose": "Enable bidirectional communication between concurrent agent lanes",
   "active_sessions": {
-    "swarmmind": {
-      "lane_id": "swarmmind",
-      "session_id": "1776476695493-28240",
+    "archivist-agent": {
+      "working_on": [
+        "Phase 2: Lane-Context Reconciliation Gate"
+      ],
       "agent_model": "z-ai/glm5",
       "mode": "governing",
-      "started": "2026-04-18T04:16:35.493Z",
-      "status": "active",
-      "lock_files": [],
-      "working_on": [
-        "Session state reconciliation",
-        "Registry cleanup after Archivist timeout"
+      "started": "2026-04-18T09:41:46.730Z",
+      "last_heartbeat": "2026-04-18T09:41:46.730Z",
+      "purpose": "governance-root-implementation",
+      "lane_id": "archivist-agent",
+      "lock_files": [
+        ".session-lock"
       ],
-      "last_heartbeat": "2026-04-18T04:16:35.493Z",
       "created_by": "opencode-desktop",
-      "purpose": "execution-layer-resume"
+      "session_id": "639121020596821750",
+      "status": "active"
     }
   },
   "terminated_sessions": {
-    "archivist-agent": {
-      "lane_id": "archivist-agent",
-      "session_id": "1776403587854-50060",
-      "agent_model": "z-ai/glm5",
-      "mode": "governing",
-      "started": "2026-04-17T05:26:27.854Z",
-      "terminated": "2026-04-18T04:16:35.493Z",
-      "termination_reason": "Heartbeat timeout exceeded (lock expired 16+ hours)",
-      "last_heartbeat": "2026-04-17T12:00:00.000Z",
-      "working_on": [
-        "Multi-window testing protocol",
-        "Session mode implementation"
-      ],
-      "handoff_document": null
-    },
     "swarmmind-previous": {
       "lane_id": "swarmmind",
       "session_id": "1776399805802-28240",
       "agent_model": "z-ai/glm5",
       "mode": "governing",
       "started": "2026-04-17T04:23:25.801Z",
-      "terminated": "2026-04-17T07:00:00.000Z",
+      "terminated": "2026-04-17T07:00:00Z",
       "termination_reason": "Heartbeat timeout exceeded (lock stale >5 minutes)",
-      "last_heartbeat": "2026-04-17T01:58:43.000Z",
+      "last_heartbeat": "2026-04-17T01:58:43Z",
       "working_on": [
         "Cross-project governance review (COMPLETED)",
         "Configuration fixes (COMPLETED)"

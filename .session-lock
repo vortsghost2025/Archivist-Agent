@@ -1,7 +1,7 @@
 {
-  "lane_id": "archivist-agent",
-  "session_id": "1776403587854-50060",
-  "acquired": "2026-04-17T05:26:27.854Z",
-  "pid": null,
-  "expires": "2026-04-17T12:00:00.000Z"
+  "expires": "2026-04-19T09:40:59.688Z",
+  "pid": 43652,
+  "acquired": "2026-04-18T09:40:59.681Z",
+  "session_id": "639121020596821750",
+  "lane_id": "archivist-agent"
 }

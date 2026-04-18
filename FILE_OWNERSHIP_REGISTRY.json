@@ -1,0 +1,57 @@
+{
+  "$schema": "https://archivist.dev/schemas/file-ownership.json",
+  "version": "1.0.0",
+  "created": "2026-04-18T09:45:00.000Z",
+  "created_by": "archivist-agent",
+  "session_id": "639121020596821750",
+  "authority": 100,
+  "ownership": {
+    "S:\\Archivist-Agent": {
+      "lane_id": "archivist-agent",
+      "authority": 100,
+      "role": "governance-root",
+      "description": "Primary governance authority - can write anywhere"
+    },
+    "S:\\SwarmMind Self-Optimizing Multi-Agent AI System": {
+      "lane_id": "swarmmind",
+      "authority": 80,
+      "role": "execution-layer",
+      "description": "Execution agent - writes to own lane only unless cross-lane coordination required"
+    },
+    "S:\\self-organizing-library": {
+      "lane_id": "library",
+      "authority": 60,
+      "role": "memory-layer",
+      "description": "Memory and documentation hub - writes to own lane only"
+    },
+    "S:\\.global": {
+      "lane_id": "archivist-agent",
+      "authority": 100,
+      "role": "shared-governance",
+      "description": "Global governance files - owned by governance root"
+    }
+  },
+  "default_ownership": {
+    "unspecified_paths": "archivist-agent",
+    "authority": 100,
+    "rationale": "Governance root owns unspecified territory for safety"
+  },
+  "cross_lane_write_policy": {
+    "rule": "require_authority_100_or_same_lane",
+    "description": "Cross-lane writes require either authority >= 100 OR target owned by same lane",
+    "enforcement": "pre_write_gate",
+    "block_on_mismatch": true,
+    "hold_on_uncertain": true
+  },
+  "reconciliation_required": [
+    "pwd",
+    "session_lock_lane_id",
+    "registry_lane_entry"
+  ],
+  "enforcement_points": [
+    "session_start",
+    "pre_write_hook",
+    "directory_change_across_lanes",
+    "registry_update"
+  ]
+}
