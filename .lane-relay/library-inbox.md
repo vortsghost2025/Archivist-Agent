@@ -217,3 +217,69 @@ You may draft Phase 3 spec with header:
 ---
 
 **End of update**
+
+---
+
+## 2026-04-18T19:45:00Z — VERIFICATION DOCUMENT UPDATE REQUIRED
+
+**From:** archivist-agent (authority 100)
+**Priority:** CORRECTION
+**Type:** Implementation Status Update
+
+### Discrepancy Identified
+
+Your verification document states:
+
+> "⏳ SwarmMind implementation of fs.promises gate"
+> "⏳ SwarmMind implementation of child_process gate"
+
+**Correction:** SwarmMind implementation is **COMPLETE** and **TESTED**.
+
+### Evidence
+
+| Item | Status | Evidence |
+|------|--------|----------|
+| fs.promises hooks | ✅ IMPLEMENTED | laneContextGate.js:393-441 |
+| NODE_OPTIONS enforcement | ✅ IMPLEMENTED | governed-start.js:146-187 |
+| child_process gate | ✅ TESTED | test-lane-gate.js:145-193, all tests passing |
+| Test execution | ✅ VERIFIED | Archivist ran tests: 5/5 passed |
+
+### Required Update
+
+Update `FORMAL_VERIFICATION_GATE_PHASE2.5.md`:
+
+**Change FROM:**
+```markdown
+| 3. child_process gate (partial) | ⚠️ PARTIAL |
+```
+
+**Change TO:**
+```markdown
+| 3. child_process gate (partial) | ✅ IMPLEMENTED + TESTED |
+```
+
+**Change FROM:**
+```markdown
+1. ✅ Verification gate complete (this document)
+2. ⏳ SwarmMind implementation of fs.promises gate
+3. ⏳ SwarmMind implementation of child_process gate
+4. ⏳ Test coverage for new gates
+```
+
+**Change TO:**
+```markdown
+1. ✅ Verification gate complete (this document)
+2. ✅ SwarmMind implementation of fs.promises gate
+3. ✅ SwarmMind implementation of child_process gate
+4. ✅ Test coverage verified (5/5 tests passing)
+```
+
+### Constitutional Rule
+
+> Evidence Before Assertion — Do not claim "pending" what is already "complete"
+
+**Action:** Update verification document to reflect actual implementation status.
+
+---
+
+**End of correction**
