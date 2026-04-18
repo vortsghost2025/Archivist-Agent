@@ -1,31 +1,30 @@
 {
   "registry_version": "1.0.0",
-  "last_updated": "2026-04-17T11:30:00.000Z",
+  "last_updated": "2026-04-18T04:16:35.493Z",
   "purpose": "Minimal concurrent agent awareness - prevent file collisions",
   "agents": {
-    "archivist-agent": {
-      "project_path": "S:\\Archivist-Agent",
+    "swarmmind": {
+      "project_path": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System",
       "active": true,
-      "last_seen": "2026-04-17T11:30:00.000Z",
-      "session_id": "1776403587854-50060",
+      "last_seen": "2026-04-18T04:16:35.493Z",
+      "session_id": "1776476695493-28240",
       "working_on": [
-        "Divergence reconciliation",
-        "System artifact synchronization"
+        "Session state reconciliation",
+        "Registry cleanup after Archivist timeout"
       ],
       "lock_files": []
     },
-    "swarmmind": {
-      "project_path": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System",
+    "archivist-agent": {
+      "project_path": "S:\\Archivist-Agent",
       "active": false,
-      "terminated_at": "2026-04-17T07:00:00.000Z",
-      "termination_reason": "Heartbeat timeout exceeded (lock stale >5 minutes)",
-      "last_seen": "2026-04-17T02:51:30-04:00",
-      "session_id": "1776399805802-28240",
-      "handoff_document": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System\\SESSION_HANDOFF_2026-04-17.md",
+      "terminated_at": "2026-04-18T04:16:35.493Z",
+      "termination_reason": "Heartbeat timeout exceeded (lock expired 16+ hours)",
+      "last_seen": "2026-04-17T12:00:00.000Z",
+      "session_id": "1776403587854-50060",
+      "handoff_document": null,
       "working_on": [
-        "Cross-project governance review complete",
-        "Configuration fixes applied",
-        "Synthesis with Archivist-Agent"
+        "Multi-window testing protocol",
+        "Session mode implementation"
       ],
       "lock_files": []
     }
@@ -51,13 +50,14 @@
     "cross_project_review": "complete",
     "reconciliation": "complete",
     "trust_score": "94.5%",
-    "divergence_resolved": "2026-04-17T11:30:00.000Z"
+    "divergence_resolved": "2026-04-17T11:30:00.000Z",
+    "archivist_timeout_handled": "2026-04-18T04:16:35.493Z"
   },
   "metadata": {
     "created": "2026-04-17T02:17:31-04:00",
     "created_by": "external_lane_synthesis",
-    "last_modified": "2026-04-17T11:30:00.000Z",
-    "modified_by": "archivist-agent-divergence-reconciliation",
+    "last_modified": "2026-04-18T04:16:35.493Z",
+    "modified_by": "swarmmind-session-reconciliation",
     "reconciled_from": "SESSION_REGISTRY.json",
     "evidence": [
       "DIVERGENCE_INCIDENT_2026-04-17.md",
