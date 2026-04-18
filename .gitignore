@@ -7,3 +7,6 @@ target/
 *.key
 *.pem
 keys.json
+
+# Session memory (persists locally)
+.memory/
