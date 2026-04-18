@@ -1,3 +1,9 @@
 target/
 *.rmeta
 *.log
+
+# Identity keys (NEVER commit)
+.identity/
+*.key
+*.pem
+keys.json
