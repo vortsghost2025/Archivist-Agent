@@ -1,7 +1,7 @@
 {
   "$schema": "https://archivist.dev/schemas/session-registry.json",
   "version": "1.1.0",
-  "last_updated": "2026-04-18T09:41:46.730Z",
+  "last_updated": "2026-04-18T23:56:42.575Z",
   "purpose": "Enable bidirectional communication between concurrent agent lanes",
   "active_sessions": {
     "archivist-agent": {
@@ -19,6 +19,23 @@
       ],
       "created_by": "opencode-desktop",
       "session_id": "639121020596821750",
+      "status": "active"
+    },
+    "swarmmind": {
+      "working_on": [
+        "[LANE-2] [PHASE3.7-2026-04-18] Add Recovery Classifier, Continuity Verifier, and integration with retry and startup"
+      ],
+      "agent_model": "z-ai/glm5",
+      "mode": "governing",
+      "started": "2026-04-18T23:56:42.575Z",
+      "last_heartbeat": "2026-04-18T23:56:42.575Z",
+      "purpose": "trace-mediated-verification-surface",
+      "lane_id": "swarmmind",
+      "lock_files": [
+        ".session-lock"
+      ],
+      "created_by": "kilo",
+      "session_id": "1776556598524-28240",
       "status": "active"
     }
   },
