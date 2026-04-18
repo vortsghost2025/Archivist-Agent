@@ -836,4 +836,28 @@ THIS IS: Epistemic failure at state-reporting level
 
 ---
 
+## THE SELF-STATE RESOLUTION RULE
+
+```
+RULE: A live active lane must not classify itself as terminated
+solely from shared registry or stale lock artifacts without first
+checking current local runtime truth.
+
+FAILURE MODE: Self-State Aliasing
+- Active agent reads stale coordination artifacts
+- Treats registry state as authoritative over live runtime
+- Concludes false termination or authority vacuum
+- Enters unnecessary HOLD or escalation
+
+SOURCE-OF-TRUTH PRECEDENCE (for self-state resolution):
+1. Live runtime/process state (current active process, branch, session)
+2. Local current lock state (if fresh and matches live identity)
+3. Shared registry state (advisory for cross-lane coordination)
+4. Terminated session history (historical only)
+
+EVIDENCE: INCIDENT_LOG_2026-04-18.md
+```
+
+---
+
 **THIS FILE IS THE ENTRY POINT. ALL LOGIC ROUTES HERE. NO EXCEPTIONS.**
