@@ -84,8 +84,8 @@ function main() {
   console.log('--- Continuity Fingerprint ---');
   const sessions = readJSON(path.join(ROOT, '.memory', 'sessions.json'));
   const sessionRegistry = readJSON(path.join(ROOT, 'SESSION_REGISTRY.json'));
-  const identity = readJSON(path.join(ROOT, '.identity', 'keys.json'));
-  const audit = readJSON(path.join(ROOT, 'logs', 'audit.log'));
+  const identity = readFile(path.join(ROOT, '.identity', 'keys.json'));
+  const audit = readFile(path.join(ROOT, 'logs', 'audit.log'));
 
   const continuityCombined = (sessions.content || '') + (sessionRegistry.content || '');
   const continuityHash = computeHash(continuityCombined);

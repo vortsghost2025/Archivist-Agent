@@ -1,0 +1,30 @@
+{
+  "identity": {
+    "lane_id": "archivist-agent",
+    "role": "governance-root",
+    "position": 1,
+    "created": "2026-04-19T00:36:40.148Z",
+    "public_key": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAktvzpjLJ30QfbJcmlx9qcaIoYPWp7HKTjJWNDH4Hc/w=\n-----END PUBLIC KEY-----\n",
+    "key_fingerprint": "971cab151bbbd016d2ed8e71efed6ff8f6596efe1e6a0e463010b15509379ee7",
+    "purpose": "Identity anchor for continuity proof boundary",
+    "usage": {
+      "signing": "Session attestations, handoff documents, approval gates",
+      "verification": "Cross-lane attestation validation"
+    },
+    "lineage": {
+      "parent_session_id": "1776403587854-50060",
+      "origin_handoff": "SESSION_HANDOFF_2026-04-17.md",
+      "generation": 1
+    },
+    "constraints": {
+      "never_export_private_key": true,
+      "rotate_on_compromise_only": true,
+      "attestation_required_for": [
+        "handoff",
+        "approval",
+        "coordination"
+      ]
+    }
+  },
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIKkNHTkxe6y+Mflk2Ur8Ikzh89nnuEM6XfwFI4YAFVJL\n-----END PRIVATE KEY-----\n"
+}

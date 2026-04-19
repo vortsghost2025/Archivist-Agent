@@ -2,7 +2,7 @@
   "$schema": "https://archivist.dev/schemas/continuity-registry.json",
   "version": "1.0.0",
   "lane_id": "archivist-agent",
-  "generated_at": "2026-04-19T00:10:00Z",
+  "generated_at": "2026-04-19T00:38:00Z",
   "parent_session_id": "1776403587854-50060",
   "origin_handoff": "SESSION_HANDOFF_2026-04-17.md",
   "constitutional_fingerprint": {
@@ -13,40 +13,38 @@
     "combined_hash": "72d60ca4606222c8f9d39f708ebb506728195e6c267990d8f2fdb463f0ebf130"
   },
   "continuity_fingerprint": {
-    "identity_hash": "FILE_NOT_FOUND",
+    "identity_hash": "fe9b283e5dae3aeb760c05750e41fcd702272ccd5892585643b4049a117f33b7",
     "session_memory_hash": "a2daf68f8f016934a38225d9a65d1048c9822aa917b167384d91e834407fb622",
     "session_registry_hash": "4f84c21415f6a30fd87dc8d85f45750664a01b240b05fe8dfd33f755d98ce8cd",
-    "audit_log_hash": "FILE_NOT_FOUND",
+    "audit_log_hash": "85ac58b8576f22cf2961510a244f074bda9f9f2944e2a25bc27a9b2c8d8552c3",
     "combined_hash": "d3d5d71bb5b227630416d57db906a6670fe80bade449c0e43d15009c4df420bf"
   },
-  "recovery_status": "partial",
-  "recovery_timestamp": "2026-04-19T00:08:23.163Z",
+  "recovery_status": "verified",
+  "recovery_timestamp": "2026-04-19T00:45:11.904Z",
   "verification_result": {
     "constitutional": "MATCH",
-    "continuity": "PARTIAL",
-    "missing_inputs": [
-      ".identity/keys.json",
-      "logs/audit.log"
-    ],
-    "timestamp": "2026-04-19T00:08:23.160Z"
+    "continuity": "MATCH",
+    "timestamp": "2026-04-19T00:45:11.904Z"
   },
   "inputs": {
-    "identity": ".identity/keys.json (MISSING)",
+    "identity": ".identity/keys.json",
     "session_memory": ".memory/sessions.json",
     "session_registry": "SESSION_REGISTRY.json",
-    "audit_log": "logs/audit.log (MISSING)"
+    "audit_log": "logs/audit.log"
   },
-  "missing_inputs": [
-    ".identity/keys.json — identity anchor not yet created",
-    "logs/audit.log — audit logging not yet implemented"
-  ],
+  "identity_anchor": {
+    "key_fingerprint": "971cab151bbbd016d2ed8e71efed6ff8f6596efe1e6a0e463010b15509379ee7",
+    "created": "2026-04-19T00:36:40.148Z",
+    "algorithm": "Ed25519",
+    "purpose": "Identity attestation for governance-root lane"
+  },
   "notes": [
     "This registry is the proof boundary layer",
     "It turns persistent system into self-recognizing organism",
     "On startup: load context, recompute fingerprints, compare to prior",
     "Recovery status: unverified | partial | verified | mismatch | corrupted",
-    "Fingerprints computed 2026-04-19T00:10:00Z",
-    "Constitutional hashes match current state.",
-    "Continuity hashes match available inputs, but proof remains partial due to missing identity and audit artifacts."
+    "Fingerprints computed 2026-04-19T00:38:00Z",
+    "All required inputs now present. Constitutional and continuity proofs match.",
+    "Status upgraded from 'partial' to 'verified' after identity and audit creation."
   ]
 }
