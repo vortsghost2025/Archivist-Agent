@@ -1,0 +1,59 @@
+{
+  "version": "1.0",
+  "registry_id": "archivist-lane-registry",
+  "updated_at": "2026-04-18T00:00:00Z",
+  "authoritative": true,
+  "description": "Canonical mapping of lane IDs to repository locations, commits, and state files. This is the single source of truth for cross-lane discovery.",
+  "lanes": {
+    "archivist": {
+      "lane_id": "archivist",
+      "authority": 100,
+      "repo_path": "S:\\Archivist-Agent",
+      "branch": "main",
+      "commit_sha": "0f127f5",
+      "state_files": [
+        "SESSION_REGISTRY.json",
+        "FILE_OWNERSHIP_REGISTRY.json",
+        "BOOTSTRAP.md",
+        "GOVERNANCE_MANIFEST.json"
+      ],
+      "queue_types": ["APPROVAL", "INCIDENT"],
+      "consumes": ["APPROVAL", "INCIDENT"],
+      "produces": ["APPROVAL", "INCIDENT"]
+    },
+    "swarmmind": {
+      "lane_id": "swarmmind",
+      "authority": 80,
+      "repo_path": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System",
+      "branch": "master",
+      "commit_sha": "e574346",
+      "state_files": [
+        ".session-lock",
+        "RUNTIME_STATE.json",
+        "GOVERNANCE_RESOLUTION.json"
+      ],
+      "queue_types": ["REVIEW", "INCIDENT"],
+      "consumes": ["APPROVAL"],
+      "produces": ["REVIEW", "INCIDENT"]
+    },
+    "library": {
+      "lane_id": "library",
+      "authority": 60,
+      "repo_path": "S:\\self-organizing-library",
+      "branch": "master",
+      "commit_sha": "c08ab0f",
+      "state_files": [
+        "SESSION_REGISTRY.json",
+        "FORMAL_VERIFICATION_GATE_PHASE*.md"
+      ],
+      "queue_types": ["REVIEW"],
+      "consumes": ["REVIEW"],
+      "produces": ["REVIEW"]
+    }
+  },
+  "global_state": {
+    "queue_directory": "S:\\queue",
+    "audit_directory": "S:\\audit",
+    "continuity_directory": "S:\\continuity"
+  }
+}
