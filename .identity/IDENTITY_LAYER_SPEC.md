@@ -1,38 +1,44 @@
-# Agent Identity Layer — Specification v0.1
+# Agent Identity Layer — Specification v0.2
 
 ## Overview
 
-Defines a persistent identity layer that survives model switches, session resets,
-and context truncation. Implements the same trust pattern as artifact verification
-but at the agent identity level.
+Defines a **signed** persistent identity layer that survives model switches, session resets, and context truncation. Implements the same trust pattern as artifact verification but at the agent identity level.
 
-## Core Concept
+**v0.2 Change:** Identity snapshots are now signed JWS artifacts, eliminating trust-by-assumption.
+
+## Core Invariant
 
 ```
-Artifact Trust:  payload.lane === declared.lane === key.lane
-Identity Trust:  snapshot.lane === runtime.lane === trust.lane
+v0.1: snapshot.lane === runtime.lane === trust.lane
+v0.2: signed_snapshot.identity.lane === runtime.lane
+      AND JWS verifies with issuer public key
+      AND snapshot not expired/revoked
 ```
 
-Same invariant. Different scope.
+Same invariant. Stronger proof.
 
 ## Components
 
-### 1. `identity_snapshot`
+### 1. `identity_snapshot` (v0.2)
 
-**Purpose:** Captures agent state at a point in time. Survives model switches.
+**Purpose:** Captures agent state at a point in time. Survives model switches. Now signed.
 
 **Location:** `S:/Archivist-Agent/.identity/snapshot.json`
 
-**Schema:**
+**Schema (v0.2):**
 ```json
 {
-  "version": "1.0",
+  "version": "2.0",
   "identity": {
-    "id": "agent-instance-001",
+    "id": "archivist-agent-001",
     "lane": "archivist",
     "authority": 100,
     "created_at": "2026-04-19T00:00:00Z",
-    "model_origin": "nvidia/glm5"
+    "model_origin": "nvidia/glm5",
+    "last_updated": "2026-04-19T19:30:00Z",
+    "issued_by": "archivist",
+    "key_id": "72036d1654b0034a",
+    "expires_at": "2026-07-19T00:00:00Z"
   },
   "invariants": [
     "A = B = C (lane consistency)",
@@ -44,242 +50,175 @@ Same invariant. Different scope.
     "last_verification": "2026-04-19T12:00:00Z",
     "quarantine_count": 0
   },
-  "open_loops": [
-    {
-      "id": "loop-001",
-      "type": "task",
-      "description": "Monitor quarantine events",
-      "status": "in_progress",
-      "created_at": "2026-04-19T10:00:00Z"
-    }
-  ],
-  "goals": [
-    {
-      "id": "goal-001",
-      "description": "Maintain three-lane attestation fabric",
-      "priority": "high",
-      "status": "active"
-    }
-  ],
-  "context_fingerprint": {
-    "files_read": ["BOOTSTRAP.md", "GOVERNANCE.md", ".trust/keys.json"],
-    "key_decisions": ["Phase 4.4 verification order fix"],
-    "last_activity": "2026-04-19T12:30:00Z"
-  }
+  "open_loops": [...],
+  "goals": [...],
+  "context_fingerprint": {...}
 }
 ```
 
-### 2. `continuity_handshake`
+**v0.2 Fields:**
+- `issued_by`: Lane that signed this snapshot (usually self)
+- `key_id`: Key ID from trust store used for verification
+- `expires_at`: ISO timestamp when snapshot becomes invalid
 
-**Purpose:** Verifies that a new model instance matches the identity snapshot.
+### 2. `snapshot.jws`
 
-**Process:**
-```
-New Model Instance Starts
-         │
-         ▼
-   Load identity_snapshot
-         │
-         ▼
-   Extract snapshot.lane
-         │
-         ▼
-   Compare to runtime.lane (environment variable or config)
-         │
-         ├──── MATCH ────► Proceed to rehydration
-         │
-         └──── MISMATCH ──► FAIL: IDENTITY_MISMATCH
-                            Require manual intervention
-```
+**Purpose:** Signed JWS over the canonical snapshot payload.
 
-**Implementation:**
-```javascript
-// continuity_handshake.js
+**Location:** `S:/Archivist-Agent/.identity/snapshot.jws`
 
-const fs = require('fs');
-const path = require('path');
+**Format:** Compact JWS (`header.payload.signature`)
 
-const SNAPSHOT_PATH = path.join('S:', 'Archivist-Agent', '.identity', 'snapshot.json');
-
-function continuityHandshake(runtimeLane) {
-  // A: Runtime lane (from environment or config)
-  const A = runtimeLane;
-  
-  // B: Snapshot lane (from persisted identity)
-  let snapshot;
-  try {
-    snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_PATH, 'utf8'));
-  } catch (e) {
-    return { valid: false, error: 'SNAPSHOT_NOT_FOUND' };
-  }
-  const B = snapshot.identity.lane;
-  
-  // C: Trust lane (from trust store key registration)
-  const trustStore = JSON.parse(fs.readFileSync(
-    path.join('S:', 'Archivist-Agent', '.trust', 'keys.json'), 'utf8'
-  ));
-  const C = Object.keys(trustStore.keys || {}).includes(A) ? A : null;
-  
-  // Invariant: A = B = C
-  if (A !== B) {
-    return {
-      valid: false,
-      error: 'IDENTITY_MISMATCH',
-      details: `Runtime lane (${A}) != Snapshot lane (${B})`
-    };
-  }
-  
-  if (A !== C) {
-    return {
-      valid: false,
-      error: 'TRUST_MISMATCH',
-      details: `Lane (${A}) not registered in trust store`
-    };
-  }
-  
-  return {
-    valid: true,
-    identity: snapshot.identity,
-    invariants: snapshot.invariants,
-    open_loops: snapshot.open_loops,
-    goals: snapshot.goals
-  };
+**Header:**
+```json
+{
+  "alg": "RS256",
+  "typ": "JWS",
+  "kid": "72036d1654b0034a"
 }
-
-module.exports = { continuityHandshake };
 ```
 
-### 3. `rehydration_prompt`
+### 3. `revocations.json`
 
-**Purpose:** Instructions for new model to restore identity from snapshot.
+**Purpose:** Tracks revoked snapshots and keys.
+
+**Location:** `S:/Archivist-Agent/.identity/revocations.json`
+
+**Schema:**
+```json
+{
+  "version": "1.0",
+  "revoked_snapshots": [
+    { "identity_id": "...", "revoked_at": "...", "reason": "..." }
+  ],
+  "revoked_keys": [
+    { "lane": "...", "key_id": "...", "revoked_at": "..." }
+  ]
+}
+```
+
+### 4. `continuity_handshake` (v0.2)
+
+**Purpose:** Verifies that a new model instance matches the **signed** identity snapshot.
+
+**Verification Order:**
+```
+1. Load snapshot.json
+2. Load snapshot.jws
+3. Parse JWS header
+4. Extract issued_by, key_id, expires_at
+5. Fetch issuer public key from trust store
+6. Verify JWS over canonical snapshot payload
+7. Check expiry
+8. Check revocation list
+9. Compare runtimeLane to snapshot.identity.lane
+```
+
+**Implementation:** See `continuity_handshake.js`
+
+**Failure Reasons:** See `identity_reasons.js`
+
+```
+SNAPSHOT_NOT_FOUND
+SNAPSHOT_SIGNATURE_MISSING
+SNAPSHOT_SIGNATURE_INVALID
+SNAPSHOT_PAYLOAD_MISMATCH
+INVALID_JWS_FORMAT
+MISSING_SNAPSHOT_LANE
+MISSING_ISSUER
+MISSING_KEY_ID
+ISSUER_NOT_TRUSTED
+ISSUER_KEY_REVOKED
+KEY_ID_MISMATCH
+IDENTITY_MISMATCH
+SNAPSHOT_EXPIRED
+SNAPSHOT_REVOKED
+KEY_REVOKED
+LANE_NOT_DETECTED
+```
+
+### 5. `rehydration_prompt`
+
+**Purpose:** Instructions for new model to restore identity from signed snapshot.
 
 **Location:** `S:/Archivist-Agent/.identity/REHYDRATE.md`
 
-**Content:**
-```markdown
-# Agent Rehydration Protocol
+## Workflow (v0.2)
 
-## Before Taking Any Action
-
-You MUST complete these steps:
-
-### Step 1: Read Identity Snapshot
-```
-Read: S:/Archivist-Agent/.identity/snapshot.json
-```
-
-### Step 2: Verify Continuity Handshake
-```
-Assert: snapshot.identity.lane === your runtime lane
-Assert: snapshot.identity.lane is registered in trust store
-```
-
-If either assertion fails, STOP and report IDENTITY_MISMATCH.
-
-### Step 3: Acknowledge Invariants
-Read and confirm understanding of:
-- All invariants in snapshot.invariants
-- Your lane's authority level
-- Current trust state
-
-### Step 4: Resume Open Loops
-For each open_loop with status "in_progress":
-- Read the loop's context
-- Continue from last known state
-- Do NOT restart from scratch
-
-### Step 5: Align Goals
-For each goal with status "active":
-- Verify goal is still relevant
-- Update progress if applicable
-
-## After Rehydration
-
-You are now operating as:
-- Lane: {snapshot.identity.lane}
-- Authority: {snapshot.identity.authority}
-- Identity ID: {snapshot.identity.id}
-
-All actions must respect the invariants and goals from the snapshot.
-```
-
-## Workflow
-
-### On Session Start (New Model Instance)
+### On Session Start
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    MODEL INSTANCE START                      │
+│ MODEL INSTANCE START                                        │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              1. READ identity_snapshot                       │
-│                                                              │
-│   Load: .identity/snapshot.json                              │
+│ 1. DETECT RUNTIME LANE                                      │
+│    - LANE_ID env var OR                                     │
+│    - .session-mode file                                     │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              2. PERFORM continuity_handshake                 │
-│                                                              │
-│   Assert: A (runtime) = B (snapshot) = C (trust store)      │
-│                                                              │
-│   ├─ PASS ──► Continue to rehydration                       │
-│   └─ FAIL ──► Report IDENTITY_MISMATCH, halt                │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ (PASS)
-                          ▼
-┌─────────────────────────────────────────────────────────────┐
-│              3. READ rehydration_prompt                      │
-│                                                              │
-│   Load: .identity/REHYDRATE.md                               │
-│   Execute all steps before taking action                     │
+│ 2. LOAD SIGNED SNAPSHOT                                     │
+│    - snapshot.json (payload)                                │
+│    - snapshot.jws (signature)                               │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              4. RESUME IDENTITY                              │
-│                                                              │
-│   - Acknowledge invariants                                   │
-│   - Resume open loops                                        │
-│   - Align with goals                                         │
-│   - Update context fingerprint                               │
+│ 3. VERIFY SIGNATURE                                         │
+│    - Parse JWS header                                       │
+│    - Get issuer public key from trust store                 │
+│    - Verify JWS over canonical payload                      │
+│    - Check expiry                                           │
+│    - Check revocation list                                  │
 └─────────────────────────┬───────────────────────────────────┘
                           │
                           ▼
 ┌─────────────────────────────────────────────────────────────┐
-│              5. OPERATE AS SNAPSHOT IDENTITY                 │
-│                                                              │
-│   All subsequent actions are under this identity.            │
-│   Periodically save updated snapshot.                        │
+│ 4. COMPARE LANES                                            │
+│    runtime.lane === snapshot.identity.lane ?               │
+│    ├─ MATCH ──► Continue to rehydration                     │
+│    └─ MISMATCH ──► FAIL: IDENTITY_MISMATCH                  │
+└─────────────────────────┬───────────────────────────────────┘
+                          │ (MATCH)
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 5. RESUME IDENTITY                                          │
+│    - Acknowledge invariants                                 │
+│    - Resume open loops                                      │
+│    - Align with goals                                       │
+│    - Update context fingerprint                             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### On Model Switch
 
 ```
-OLD MODEL                          NEW MODEL
-    │                                  │
-    ▼                                  │
-┌─────────────────┐                    │
-│ Save Snapshot   │                    │
-│ (current state) │                    │
-└────────┬────────┘                    │
-         │                             │
-         ▼                             │
-    [Model Switch]                     │
-         │                             │
-         └─────────────────────────────┤
-                                       ▼
-                              ┌─────────────────┐
-                              │ Load Snapshot   │
-                              │ Handshake       │
-                              │ Rehydrate       │
-                              └────────┬────────┘
-                                       │
-                                       ▼
-                              [Identity Restored]
+OLD MODEL                    NEW MODEL
+    │                            │
+    ▼                            │
+┌─────────────────┐              │
+│ Sign Snapshot   │              │
+│ (current state) │              │
+└───────┬─────────┘              │
+        │                        │
+        ▼                        │
+   [Model Switch]                │
+        │                        │
+        └────────────────────────┤
+                                 ▼
+                       ┌─────────────────┐
+                       │ Load Snapshot   │
+                       │ Verify JWS      │
+                       │ Handshake       │
+                       │ Rehydrate       │
+                       └────────┬────────┘
+                                 │
+                                 ▼
+                       [Identity Restored]
 ```
 
 ## File Structure
@@ -287,16 +226,89 @@ OLD MODEL                          NEW MODEL
 ```
 S:/Archivist-Agent/
 ├── .identity/
-│   ├── snapshot.json          # Current identity state
-│   ├── REHYDRATE.md           # Rehydration instructions
-│   ├── continuity_handshake.js # Handshake implementation
+│   ├── snapshot.json      # Current identity payload
+│   ├── snapshot.jws       # Signed JWS (v0.2)
+│   ├── revocations.json   # Revocation list (v0.2)
+│   ├── identity_signer.js # Signing utilities
+│   ├── identity_reasons.js# Failure reasons
+│   ├── continuity_handshake.js # Handshake logic
+│   ├── REHYDRATE.md       # Rehydration instructions
+│   ├── IDENTITY_LAYER_SPEC.md # This file
+│   ├── test-identity-layer.js # Tests
 │   └── archive/
-│       ├── snapshot-2026-04-19.json  # Historical snapshots
-│       └── snapshot-2026-04-18.json
+│       ├── snapshot-2026-04-19.json
+│       └── snapshot-2026-04-19.jws
 ├── .trust/
-│   └── keys.json              # Trust store (already exists)
-└── BOOTSTRAP.md               # Governance entry point (already exists)
+│   └── keys.json          # Trust store (public keys)
+├── scripts/
+│   └── sign-snapshot.js   # Signing script
+└── BOOTSTRAP.md           # Governance entry point
 ```
+
+## Signing Procedure
+
+To sign a snapshot:
+
+```bash
+# Set passphrase (from secure storage)
+export LANE_KEY_PASSPHRASE=<passphrase>
+
+# Sign the snapshot
+node scripts/sign-snapshot.js
+```
+
+This produces `snapshot.jws` with a compact JWS over the canonical payload.
+
+## Testing
+
+```bash
+# Run identity layer tests
+node .identity/test-identity-layer.js
+```
+
+Tests verify:
+1. Valid signed handshake succeeds
+2. Wrong lane fails with IDENTITY_MISMATCH
+3. Snapshot has v0.2 required fields
+4. JWS file exists and is valid
+5. JWS verifies with trust store public key
+6. Key ID matches trust store
+7. Revocations file is valid
+8. Snapshot not expired
+9. Lane detection works
+10. Invariant chain preserved
+11. Goals loaded correctly
+12. Context fingerprint exists
+
+## Security Considerations
+
+### Why Sign Identity?
+
+v0.1 used trust-by-assumption: if a snapshot file existed, we trusted it.
+
+v0.2 requires cryptographic proof:
+- Snapshot was signed by a trusted key
+- Snapshot has not been tampered with
+- Snapshot has not expired
+- Snapshot/key has not been revoked
+
+### Key Storage
+
+Private keys are encrypted at rest with passphrase derived from environment:
+- `LANE_KEY_PASSPHRASE` must be set for signing
+- Private keys stored in `.identity/private.pem`
+- Never commit private keys to git
+
+### Expiry
+
+Snapshots expire after 90 days by default. Expired snapshots require re-signing.
+
+### Revocation
+
+If a key is compromised:
+1. Add to `revocations.json`
+2. Generate new keypair
+3. Re-sign all active snapshots
 
 ## Integration with Existing System
 
@@ -304,47 +316,23 @@ S:/Archivist-Agent/
 |--------------------|---------------------------|
 | `keys.json` | Trust verification for identity handshake |
 | `BOOTSTRAP.md` | Referenced in rehydration prompt |
-| `A = B = C invariant` | Applied to identity verification |
-| `QuarantineManager` | Identity mismatches trigger quarantine |
+| `A = B = C invariant` | Applied to signed identity verification |
+| `QuarantineManager` | Identity failures trigger quarantine |
 | `PhenotypeStore` | Extended to track identity phenotype |
 
-## Testing
+## Changelog
 
-```javascript
-// test-identity-layer.js
+### v0.2 (2026-04-19)
+- Added signed JWS over snapshot payload
+- Added `issued_by`, `key_id`, `expires_at` fields
+- Added `revocations.json` for revocation tracking
+- Added `identity_signer.js` for signing utilities
+- Added `identity_reasons.js` for failure classification
+- Updated handshake to verify JWS before trusting payload
+- Updated tests for signed verification
 
-const assert = require('assert');
-const { continuityHandshake } = require('./continuity_handshake');
-
-// Test 1: Valid handshake
-const result1 = continuityHandshake('archivist');
-assert.strictEqual(result1.valid, true);
-
-// Test 2: Mismatch detection
-const result2 = continuityHandshake('swarmmind'); // Wrong lane
-assert.strictEqual(result2.valid, false);
-assert.strictEqual(result2.error, 'IDENTITY_MISMATCH');
-
-// Test 3: Missing snapshot
-// (Remove snapshot file, then test)
-// Assert error: SNAPSHOT_NOT_FOUND
-
-console.log('Identity layer tests passed');
-```
-
-## Benefits
-
-1. **Survives Model Switch:** Identity persists across model changes
-2. **Survives Context Truncation:** Snapshot is always available
-3. **Survives Session Reset:** Rehydration restores full context
-4. **Enforces Invariants:** Handshake verifies trust alignment
-5. **Preserves Goals:** Open loops and goals are restored
-6. **Audit Trail:** Historical snapshots in archive
-
-## Next Steps
-
-1. Implement `snapshot.json` writer (saves on session end)
-2. Implement `continuity_handshake.js`
-3. Write `REHYDRATE.md`
-4. Add identity layer tests
-5. Integrate with session startup
+### v0.1 (2026-04-19)
+- Initial specification
+- Unsigned snapshot
+- Basic handshake
+- Rehydration prompt

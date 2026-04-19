@@ -6,7 +6,7 @@
     "authority": 100,
     "created_at": "2026-04-19T00:00:00Z",
     "model_origin": "nvidia/glm5",
-    "last_updated": "2026-04-19T18:46:56.078Z"
+    "last_updated": "2026-04-19T19:02:56.650Z"
   },
   "invariants": [
     "A = B = C (lane consistency)",
@@ -65,8 +65,9 @@
       "Phase 4.4 verification order: identity before crypto",
       "Normalized RecoveryResult.status enum",
       "Added nextRetryIn for retry scheduling",
+      "Test decision",
       "Test decision"
     ],
-    "last_activity": "2026-04-19T18:46:56.077Z"
+    "last_activity": "2026-04-19T19:02:56.650Z"
   }
 }

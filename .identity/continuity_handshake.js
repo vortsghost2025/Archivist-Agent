@@ -1,155 +1,210 @@
 /**
- * continuity_handshake.js - Agent Identity Layer Handshake
+ * continuity_handshake.js v0.2 - Signed Identity Layer Handshake
  * 
- * Verifies that a new model instance matches the persisted identity snapshot.
- * Implements the invariant: A (runtime) = B (snapshot) = C (trust store)
+ * Verifies that a new model instance matches the persisted, SIGNED identity snapshot.
+ * 
+ * Invariant:
+ *   runtime.lane === snapshot.identity.lane
+ *   AND trust_store[issued_by].key_id === snapshot.identity.key_id
+ *   AND snapshot.jws verifies with issuer public key
  */
 
 const fs = require('fs');
 const path = require('path');
+const { IDENTITY_REASON } = require('./identity_reasons');
+const { stableStringify, base64UrlDecode } = require('./identity_signer');
 
 const DEFAULT_REPO_ROOT = 'S:/Archivist-Agent';
 const SNAPSHOT_PATH = process.env.IDENTITY_SNAPSHOT_PATH || 'S:/Archivist-Agent/.identity/snapshot.json';
+const SNAPSHOT_JWS_PATH = process.env.IDENTITY_JWS_PATH || 'S:/Archivist-Agent/.identity/snapshot.jws';
 const TRUST_STORE_PATH = process.env.TRUST_STORE_PATH || 'S:/Archivist-Agent/.trust/keys.json';
+const REVOCATIONS_PATH = process.env.REVOCATIONS_PATH || 'S:/Archivist-Agent/.identity/revocations.json';
 const SESSION_MODE_FILE = '.session-mode';
 
 /**
  * Detects runtime lane from environment or session file.
- * Priority: LANE_ID env var > .session-mode file > error
- * 
- * @param {string} repoRoot - Repository root path
- * @returns {string|null} Detected lane or null
  */
 function detectLane(repoRoot = DEFAULT_REPO_ROOT) {
-  // Priority 1: Environment variable
-  if (process.env.LANE_ID) {
-    return process.env.LANE_ID;
-  }
+  if (process.env.LANE_ID) return process.env.LANE_ID;
   
-  // Priority 2: Session mode file
   const sessionModePath = path.join(repoRoot, SESSION_MODE_FILE);
   try {
     if (fs.existsSync(sessionModePath)) {
       const content = fs.readFileSync(sessionModePath, 'utf8').trim();
-      if (content && ['archivist', 'swarmmind', 'library'].includes(content)) {
-        return content;
+      if (content) {
+        // Try to parse as JSON first (new format)
+        try {
+          const parsed = JSON.parse(content);
+          // For Archivist-Agent repository, the lane is archivist
+          // regardless of what's in the mode/purpose fields
+          if (repoRoot.endsWith('Archivist-Agent')) {
+            return 'archivist';
+          }
+          // Fallback: check if mode or purpose contains lane name
+          if (parsed.mode && ['archivist', 'swarmmind', 'library'].includes(parsed.mode)) {
+            return parsed.mode;
+          }
+          if (parsed.purpose) {
+            const purposeParts = parsed.purpose.split('-');
+            if (purposeParts[0] && ['archivist', 'swarmmind', 'library'].includes(purposeParts[0])) {
+              return purposeParts[0];
+            }
+          }
+        } catch (e) {
+          // If not JSON, treat as plain text (legacy format)
+          if (content && ['archivist', 'swarmmind', 'library'].includes(content)) {
+            return content;
+          }
+        }
       }
     }
-  } catch (e) {
-    // Ignore read errors
-  }
+  } catch (e) {}
   
   return null;
 }
 
-/**
- * Gets runtime lane with fallback to detection.
- * 
- * @param {string} explicitLane - Explicitly provided lane
- * @param {string} repoRoot - Repository root for detection
- * @returns {string} Runtime lane
- */
 function getRuntimeLane(explicitLane, repoRoot = DEFAULT_REPO_ROOT) {
   if (explicitLane) return explicitLane;
-  
   const detected = detectLane(repoRoot);
   if (!detected) {
     throw new Error('LANE_NOT_DETECTED: Set LANE_ID env var or create .session-mode file');
   }
-  
   return detected;
 }
 
+function loadJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+}
+
 /**
- * Performs continuity handshake between runtime, snapshot, and trust store.
+ * Performs signed continuity handshake.
  * 
- * @param {string} runtimeLane - Lane declared by current model instance
- * @returns {object} Handshake result
+ * Order:
+ * 1. Load snapshot.json
+ * 2. Load snapshot.jws
+ * 3. Parse JWS header
+ * 4. Get issued_by and key_id
+ * 5. Fetch issuer public key from trust store
+ * 6. Verify JWS over canonical snapshot payload
+ * 7. Check expiry
+ * 8. Check revocation list
+ * 9. Compare runtimeLane to snapshot.identity.lane
  */
 function continuityHandshake(runtimeLane) {
-  // A: Runtime lane (from environment or config)
-  const A = runtimeLane;
-  
-  // B: Snapshot lane (from persisted identity)
-  let snapshot;
-  try {
-    if (!fs.existsSync(SNAPSHOT_PATH)) {
-      return { 
-        valid: false, 
-        error: 'SNAPSHOT_NOT_FOUND',
-        message: 'No identity snapshot found. Create one to establish identity.',
-        recovery: 'Run: node scripts/create-identity-snapshot.js --lane ' + runtimeLane
-      };
-    }
-    snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_PATH, 'utf8'));
-  } catch (e) {
-    return { 
-      valid: false, 
-      error: 'INVALID_SNAPSHOT',
-      message: 'Snapshot file is corrupted or invalid JSON.',
-      recovery: 'Restore from archive: .identity/archive/'
-    };
+  // Step 1: Load snapshot
+  if (!fs.existsSync(SNAPSHOT_PATH)) {
+    return { valid: false, error: IDENTITY_REASON.SNAPSHOT_NOT_FOUND };
   }
   
-  const B = snapshot?.identity?.lane;
-  if (!B) {
-    return { 
-      valid: false, 
-      error: 'INVALID_SNAPSHOT',
-      message: 'Snapshot missing identity.lane field.'
-    };
+  // Step 2: Load signature
+  if (!fs.existsSync(SNAPSHOT_JWS_PATH)) {
+    return { valid: false, error: IDENTITY_REASON.SNAPSHOT_SIGNATURE_MISSING };
   }
   
-  // C: Trust store lane (from key registration)
-  let trustStore;
-  try {
-    if (!fs.existsSync(TRUST_STORE_PATH)) {
-      return { 
-        valid: false, 
-        error: 'TRUST_STORE_NOT_FOUND',
-        message: 'Trust store not found.'
-      };
-    }
-    trustStore = JSON.parse(fs.readFileSync(TRUST_STORE_PATH, 'utf8'));
-  } catch (e) {
-    return { 
-      valid: false, 
-      error: 'INVALID_TRUST_STORE',
-      message: 'Trust store file is corrupted.'
-    };
+  const snapshot = loadJson(SNAPSHOT_PATH);
+  const jws = fs.readFileSync(SNAPSHOT_JWS_PATH, 'utf8').trim();
+  
+  // Step 3: Parse JWS
+  const parts = jws.split('.');
+  if (parts.length !== 3) {
+    return { valid: false, error: IDENTITY_REASON.INVALID_JWS_FORMAT };
   }
   
-  const registeredLanes = Object.keys(trustStore.keys || {});
-  const C = registeredLanes.includes(A) ? A : null;
+  const [headerB64, payloadB64, signatureB64] = parts;
+  const header = JSON.parse(base64UrlDecode(headerB64).toString('utf8'));
+  const payloadRaw = base64UrlDecode(payloadB64).toString('utf8');
+  const signingInput = `${headerB64}.${payloadB64}`;
+  const signature = base64UrlDecode(signatureB64);
   
-  // Invariant: A = B = C
-  if (A !== B) {
+  // Step 4: Extract identity fields
+  const snapshotLane = snapshot?.identity?.lane;
+  const issuedBy = snapshot?.identity?.issued_by;
+  const keyId = snapshot?.identity?.key_id;
+  const identityId = snapshot?.identity?.id;
+  const expiresAt = snapshot?.identity?.expires_at;
+  
+  if (!snapshotLane) return { valid: false, error: IDENTITY_REASON.MISSING_SNAPSHOT_LANE };
+  if (!issuedBy) return { valid: false, error: IDENTITY_REASON.MISSING_ISSUER };
+  if (!keyId) return { valid: false, error: IDENTITY_REASON.MISSING_KEY_ID };
+  
+  // Step 5: Load trust store
+  if (!fs.existsSync(TRUST_STORE_PATH)) {
+    return { valid: false, error: 'TRUST_STORE_NOT_FOUND' };
+  }
+  const trustStore = loadJson(TRUST_STORE_PATH);
+  
+  // Load revocations
+  let revocations = { revoked_snapshots: [], revoked_keys: [] };
+  if (fs.existsSync(REVOCATIONS_PATH)) {
+    revocations = loadJson(REVOCATIONS_PATH);
+  }
+  
+  // Step 5 (continued): Get issuer key
+  const issuerEntry = trustStore.keys?.[issuedBy];
+  if (!issuerEntry) {
+    return { valid: false, error: IDENTITY_REASON.ISSUER_NOT_TRUSTED };
+  }
+  
+  if (issuerEntry.revoked_at) {
+    return { valid: false, error: IDENTITY_REASON.ISSUER_KEY_REVOKED };
+  }
+  
+  if (issuerEntry.key_id !== keyId) {
+    return { valid: false, error: IDENTITY_REASON.KEY_ID_MISMATCH };
+  }
+  
+  // Step 6: Verify JWS signature
+  const crypto = require('crypto');
+  const verified = crypto.verify(
+    'RSA-SHA256',
+    Buffer.from(signingInput),
+    { key: issuerEntry.public_key_pem, format: 'pem' },
+    signature
+  );
+  
+  if (!verified) {
+    return { valid: false, error: IDENTITY_REASON.SNAPSHOT_SIGNATURE_INVALID };
+  }
+  
+  // Verify payload matches canonical form
+  const expectedPayload = stableStringify(snapshot);
+  if (payloadRaw !== expectedPayload) {
+    return { valid: false, error: IDENTITY_REASON.SNAPSHOT_PAYLOAD_MISMATCH };
+  }
+  
+  // Step 7: Check expiry
+  if (expiresAt && new Date(expiresAt) < new Date()) {
+    return { valid: false, error: IDENTITY_REASON.SNAPSHOT_EXPIRED };
+  }
+  
+  // Step 8: Check revocation
+  const snapshotRevoked = revocations.revoked_snapshots?.some(
+    r => r.identity_id === identityId
+  );
+  if (snapshotRevoked) {
+    return { valid: false, error: IDENTITY_REASON.SNAPSHOT_REVOKED };
+  }
+  
+  const keyRevoked = revocations.revoked_keys?.some(
+    r => r.lane === issuedBy && r.key_id === keyId
+  );
+  if (keyRevoked) {
+    return { valid: false, error: IDENTITY_REASON.KEY_REVOKED };
+  }
+  
+  // Step 9: Compare lanes
+  if (runtimeLane !== snapshotLane) {
     return {
       valid: false,
-      error: 'IDENTITY_MISMATCH',
+      error: IDENTITY_REASON.IDENTITY_MISMATCH,
       details: {
-        runtime_lane: A,
-        snapshot_lane: B,
-        message: `Runtime lane (${A}) does not match snapshot lane (${B})`
-      },
-      recovery: 'Either: (1) Update snapshot with new lane, or (2) Switch to correct lane'
+        runtime_lane: runtimeLane,
+        snapshot_lane: snapshotLane
+      }
     };
   }
   
-  if (!C) {
-    return {
-      valid: false,
-      error: 'TRUST_MISMATCH',
-      details: {
-        lane: A,
-        registered_lanes: registeredLanes,
-        message: `Lane (${A}) is not registered in trust store`
-      },
-      recovery: 'Register lane in trust store or switch to registered lane'
-    };
-  }
-  
-  // Success: A = B = C
+  // Success
   return {
     valid: true,
     identity: snapshot.identity,
@@ -159,86 +214,23 @@ function continuityHandshake(runtimeLane) {
     trust_state: snapshot.trust_state,
     context_fingerprint: snapshot.context_fingerprint,
     handshake: {
-      runtime_lane: A,
-      snapshot_lane: B,
-      trust_lane: C,
+      runtime_lane: runtimeLane,
+      snapshot_lane: snapshotLane,
+      issued_by: issuedBy,
+      key_id: keyId,
       verified_at: new Date().toISOString()
     }
   };
 }
 
-/**
- * Saves current state to identity snapshot.
- * 
- * @param {object} updates - Partial snapshot updates
- * @returns {object} Save result
- */
-function saveSnapshot(updates = {}) {
-  let snapshot;
-  
-  try {
-    if (fs.existsSync(SNAPSHOT_PATH)) {
-      snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_PATH, 'utf8'));
-    } else {
-      snapshot = { version: '1.0', identity: {}, invariants: [], open_loops: [], goals: [], trust_state: {}, context_fingerprint: {} };
-    }
-  } catch (e) {
-    snapshot = { version: '1.0', identity: {}, invariants: [], open_loops: [], goals: [], trust_state: {}, context_fingerprint: {} };
-  }
-  
-  // Merge updates
-  if (updates.identity) snapshot.identity = { ...snapshot.identity, ...updates.identity };
-  if (updates.invariants) snapshot.invariants = updates.invariants;
-  if (updates.open_loops) snapshot.open_loops = updates.open_loops;
-  if (updates.goals) snapshot.goals = updates.goals;
-  if (updates.trust_state) snapshot.trust_state = { ...snapshot.trust_state, ...updates.trust_state };
-  if (updates.context_fingerprint) {
-    snapshot.context_fingerprint = {
-      files_read: [...new Set([...(snapshot.context_fingerprint.files_read || []), ...(updates.context_fingerprint.files_read || [])])],
-      key_decisions: [...(snapshot.context_fingerprint.key_decisions || []), ...(updates.context_fingerprint.key_decisions || [])],
-      last_activity: updates.context_fingerprint.last_activity || new Date().toISOString()
-    };
-  }
-  
-  // Update timestamp
-  snapshot.identity.last_updated = new Date().toISOString();
-  
-  try {
-    fs.writeFileSync(SNAPSHOT_PATH, JSON.stringify(snapshot, null, 2));
-    return { success: true, snapshot };
-  } catch (e) {
-    return { success: false, error: e.message };
-  }
-}
-
-/**
- * Archives current snapshot with timestamp.
- */
-function archiveSnapshot() {
-  const timestamp = new Date().toISOString().split('T')[0];
-  const archiveDir = path.join(path.dirname(SNAPSHOT_PATH), 'archive');
-  const archivePath = path.join(archiveDir, `snapshot-${timestamp}.json`);
-  
-  if (!fs.existsSync(archiveDir)) {
-    fs.mkdirSync(archiveDir, { recursive: true });
-  }
-  
-  if (fs.existsSync(SNAPSHOT_PATH)) {
-    fs.copyFileSync(SNAPSHOT_PATH, archivePath);
-    return { success: true, archivePath };
-  }
-  
-  return { success: false, error: 'No snapshot to archive' };
-}
-
 module.exports = {
   continuityHandshake,
-  saveSnapshot,
-  archiveSnapshot,
   detectLane,
   getRuntimeLane,
   SNAPSHOT_PATH,
+  SNAPSHOT_JWS_PATH,
   TRUST_STORE_PATH,
+  REVOCATIONS_PATH,
   DEFAULT_REPO_ROOT,
   SESSION_MODE_FILE
 };

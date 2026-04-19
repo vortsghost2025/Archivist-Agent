@@ -2,8 +2,10 @@
   "version": "1.0",
   "keys": {
     "archivist": {
-      "key_id": "72036d1654b0034a",
-      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAr4ZHgQI6N9QN2N5cXdGa\n-----END PUBLIC KEY-----"
+      "key_id": "d5faddfa2ab2ff3f",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsC4eMADSarDvjX3JbdI6\nTrkVeE6M4gzeDW8O9PV9lJ5fS4KIGiDwXhKoJf8rsS1oeCy+5VO/VJQUuiNvIt9Q\nVJiNFT9RsV+UORL0dTxtOGCnpzy7he1u+2d/Qq9eumTmmNFBwHIKTOYEdmvSCXPq\n2casOWnhkpan91RIOO5KXSv44M5Pu5jJyIeoPUlgQRMRyj0TgIVpw0r+R5PKrblG\nLBakczYK5OuSN2TWQXI8mYwW+lgliXtlX7g3inKrgFRthB2zyYPiEdkji6PCvjfb\nn5vk74rJVYOq8Fdm/rw6WzSZItdVFvctIo3WHn9YiEH1K0pTW8+FmZnd8TfWbh9w\nFwIDAQAB\n-----END PUBLIC KEY-----\n",
+      "registered_at": "2026-04-19T20:14:46.548Z",
+      "revoked_at": null
     },
     "swarmmind": {
       "key_id": "69d22f8a1192cf45",
@@ -17,5 +19,6 @@
   "phenotypes": {},
   "migration": {
     "jws_only_start": "2026-05-19T00:00:00Z"
-  }
+  },
+  "updated_at": "2026-04-19T20:14:46.548Z"
 }
