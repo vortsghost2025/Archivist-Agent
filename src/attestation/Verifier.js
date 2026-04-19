@@ -1,0 +1,175 @@
+/**
+ * Verifier.js - Phase 4.3 JWS Verification
+ *
+ * Verifies JSON Web Signatures against public keys from trust store.
+ * Supports HMAC→JWS migration during dual-mode period.
+ */
+
+const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+
+class Verifier {
+	constructor(options = {}) {
+		this.trustStorePath = options.trustStorePath || this._defaultTrustStorePath();
+		this.hmacCutoffDate = options.hmacCutoffDate || new Date('2026-05-19T00:00:00Z');
+		this.trustStore = null;
+		this._loadTrustStore();
+	}
+
+	_defaultTrustStorePath() {
+		const envPath = process.env.TRUST_STORE_PATH;
+		if (envPath) return envPath;
+		return path.join('S:', 'Archivist-Agent', '.trust', 'keys.json');
+	}
+
+	_loadTrustStore() {
+		if (!fs.existsSync(this.trustStorePath)) {
+			this.trustStore = { keys: {}, migration: {} };
+			return;
+		}
+		try {
+			const raw = fs.readFileSync(this.trustStorePath, 'utf8');
+			this.trustStore = JSON.parse(raw);
+		} catch (e) {
+			this.trustStore = { keys: {}, migration: {} };
+		}
+	}
+
+	reloadTrustStore() {
+		this._loadTrustStore();
+	}
+
+	_base64UrlDecode(str) {
+		let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+		while (base64.length % 4) {
+			base64 += '=';
+		}
+		return Buffer.from(base64, 'base64');
+	}
+
+	_parseJWS(jws) {
+		const parts = jws.split('.');
+		if (parts.length !== 3) {
+			return null;
+		}
+		return {
+			header: JSON.parse(this._base64UrlDecode(parts[0]).toString('utf8')),
+			payload: JSON.parse(this._base64UrlDecode(parts[1]).toString('utf8')),
+			signature: parts[2],
+			signingInput: `${parts[0]}.${parts[1]}`
+		};
+	}
+
+	getPublicKey(laneId) {
+		const keyEntry = this.trustStore.keys?.[laneId];
+		if (!keyEntry) return null;
+		if (keyEntry.revoked_at) return null;
+		return keyEntry.public_key_pem;
+	}
+
+	verify(jws, publicKey) {
+		try {
+			const parsed = this._parseJWS(jws);
+			if (!parsed) return { valid: false, error: 'INVALID_JWS_FORMAT' };
+
+			if (parsed.header.alg !== 'RS256') {
+				return { valid: false, error: 'UNSUPPORTED_ALGORITHM' };
+			}
+
+			if (parsed.payload.exp && parsed.payload.exp < Math.floor(Date.now() / 1000)) {
+				return { valid: false, error: 'SIGNATURE_EXPIRED' };
+			}
+
+			const signature = this._base64UrlDecode(parsed.signature);
+			const verified = crypto.verify(
+				'RSA-SHA256',
+				Buffer.from(parsed.signingInput),
+				{ key: publicKey, format: 'pem' },
+				signature
+			);
+
+			if (!verified) {
+				return { valid: false, error: 'SIGNATURE_INVALID' };
+			}
+
+			return { valid: true, payload: parsed.payload, header: parsed.header };
+		} catch (e) {
+			return { valid: false, error: e.message };
+		}
+	}
+
+	verifyAgainstTrustStore(jws, laneId) {
+		const publicKey = this.getPublicKey(laneId);
+		if (!publicKey) {
+			return { valid: false, error: 'LANE_NOT_IN_TRUST_STORE' };
+		}
+
+		return this.verify(jws, publicKey);
+	}
+
+	verifyQueueItem(item) {
+		if (!item.signature) {
+			const cutoff = new Date(this.trustStore.migration?.jws_only_start || this.hmacCutoffDate);
+			if (new Date() < cutoff) {
+				return { valid: true, mode: 'HMAC_ACCEPTED_DUAL_MODE', warning: 'Signature missing but dual-mode active' };
+			}
+			return { valid: false, error: 'SIGNATURE_REQUIRED' };
+		}
+
+		const laneId = item.origin_lane;
+		const result = this.verifyAgainstTrustStore(item.signature, laneId);
+
+		if (result.valid) {
+			return { ...result, mode: 'JWS_VERIFIED' };
+		}
+
+		return result;
+	}
+
+	verifyAuditEvent(event) {
+		if (!event.signature) {
+			return { valid: true, mode: 'UNSIGNED', warning: 'Legacy audit event' };
+		}
+
+		const laneId = event.lane;
+		return this.verifyAgainstTrustStore(event.signature, laneId);
+	}
+
+	isHMACAccepted() {
+		const cutoff = new Date(this.trustStore.migration?.jws_only_start || this.hmacCutoffDate);
+		return new Date() < cutoff;
+	}
+
+	getMigrationStatus() {
+		const now = new Date();
+		const cutoff = new Date(this.trustStore.migration?.jws_only_start || this.hmacCutoffDate);
+		const dualModeStart = new Date(this.trustStore.migration?.dual_mode_start || now);
+
+		return {
+			dual_mode_active: now < cutoff,
+			hmac_accepted: now < cutoff,
+			jws_required: now >= cutoff,
+			cutoff_date: cutoff.toISOString(),
+			days_remaining: Math.max(0, Math.ceil((cutoff - now) / 86400000))
+		};
+	}
+
+	getTrustStoreStats() {
+		const lanes = Object.keys(this.trustStore.keys || {});
+		const registered = lanes.filter(l => this.trustStore.keys[l]?.public_key_pem?.startsWith('-----BEGIN'));
+		const pending = lanes.filter(l => this.trustStore.keys[l]?.public_key_pem === 'PENDING_GENERATION');
+		const revoked = lanes.filter(l => this.trustStore.keys[l]?.revoked_at);
+
+		return {
+			total_lanes: lanes.length,
+			registered: registered.length,
+			pending: pending.length,
+			revoked: revoked.length,
+			registered_lanes: registered,
+			pending_lanes: pending
+		};
+	}
+}
+
+module.exports = { Verifier };
