@@ -9,16 +9,18 @@
     },
     "swarmmind": {
       "key_id": "69d22f8a1192cf45",
-      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqFZWP32Qf2qX7T1E5wEJ\n-----END PUBLIC KEY-----"
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk7UIqTkz9/LJuRRYyKh9\nWO/bRFtVStRlQeDDtD5LkhpXAeMx4hbW+/0BhcvUqLJ7k9tW+HKwkUf7KJC+Aat+\n9bxhcTIbiMoV+9rs0LU5wBEguN10wIjTXQPYM0TQONgVbYhRR8fmOhZ7mVRfPg0m\nHisNHDF/dNLGl7wAYe1YnLBfDISMvGg7KkkIzerupTQeL1ch5Njmx0wxGqXUK0n2\n6++Kv/95Ct4qbMs0hW0B8ojKEQiMD8+Fiv2gYaQ0BYE8IlQENNNPLJxj0j63/wDs\njonCgmoF/iQwRrJWzlDrUsSnq+yWKrRMt7e3bbdNDf7KZPCAQ8MnsE8pHsqpdSIO\n0wIDAQAB\n-----END PUBLIC KEY-----\n",
+      "registered_at": "2026-04-19T21:00:00.000Z"
     },
     "library": {
-      "key_id": "abcd1234ef567890",
-      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs9J6e8L2dMXYHq3H1GYz\n-----END PUBLIC KEY-----"
+      "key_id": "713485afdb41c35a",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmDO/j7DCXtah9VgUw8sI\nWAlUakNaExC/kbGFnV77nkghZyKumIylvCk3DhxVEm5vH36MH/kbEmNUt3sWvB//\ncsGdSmBH3Hfv+hW6vxdRpG36h5P6kU0k/W1dGOAbc0NZa0L9ErQLHCa/I3V7AqSQ\nVJf7ry6+2Jymal3WHCj4cMvqqyRJD37D8VP1ebP/zOIvZtpQS6ckZnJxX/c9GeVV\nTjIAPonyIxNBZeCaD+J78WkAOvwLGn5KbuFQPniZTcNl5d7DOhJfROkISfMUx4LC\nYNWWbX/iw79safM1hIBubOdKoEv2hcVJkN4NZKNMez0qbSwKtdABJlR5CSZ+OzKq\n3QIDAQAB\n-----END PUBLIC KEY-----\n",
+      "registered_at": "2026-04-19T22:27:36.180Z"
     }
   },
   "phenotypes": {},
   "migration": {
     "jws_only_start": "2026-05-19T00:00:00Z"
   },
-  "updated_at": "2026-04-19T20:14:46.548Z"
+  "updated_at": "2026-04-19T21:11:26.553Z"
 }

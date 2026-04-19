@@ -1,0 +1,8 @@
+{
+  "lane_id": "library",
+  "key_id": "713485afdb41c35a",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmDO/j7DCXtah9VgUw8sI\nWAlUakNaExC/kbGFnV77nkghZyKumIylvCk3DhxVEm5vH36MH/kbEmNUt3sWvB//\ncsGdSmBH3Hfv+hW6vxdRpG36h5P6kU0k/W1dGOAbc0NZa0L9ErQLHCa/I3V7AqSQ\nVJf7ry6+2Jymal3WHCj4cMvqqyRJD37D8VP1ebP/zOIvZtpQS6ckZnJxX/c9GeVV\nTjIAPonyIxNBZeCaD+J78WkAOvwLGn5KbuFQPniZTcNl5d7DOhJfROkISfMUx4LC\nYNWWbX/iw79safM1hIBubOdKoEv2hcVJkN4NZKNMez0qbSwKtdABJlR5CSZ+OzKq\n3QIDAQAB\n-----END PUBLIC KEY-----\n",
+  "registered_at": "2026-04-19T22:27:36.180Z",
+  "algorithm": "RS256",
+  "key_size": 2048
+}
