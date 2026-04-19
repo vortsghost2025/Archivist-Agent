@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-04-19T13:32:07.587Z",
+  "updated_at": "2026-04-19T13:45:00Z",
   "description": "Canonical public key registry for cross-lane attestation verification",
   "keys": {
     "archivist": {
@@ -16,10 +16,10 @@
     "swarmmind": {
       "lane_id": "swarmmind",
       "authority": 80,
-      "public_key_pem": "PENDING_GENERATION",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk7UIqTkz9/LJuRRYyKh9\nWO/bRFtVStRlQeDDtD5LkhpXAeMx4hbW+/0BhcvUqLJ7k9tW+HKwkUf7KJC+Aat+\n9bxhcTIbiMoV+9rs0LU5wBEguN10wIjTXQPYM0TQONgVbYhRR8fmOhZ7mVRfPg0m\nHisNHDF/dNLGl7wAYe1YnLBfDISMvGg7KkkIzerupTQeL1ch5Njmx0wxGqXUK0n2\n6++Kv/95Ct4qbMs0hW0B8ojKEQiMD8+Fiv2gYaQ0BYE8IlQENNNPLJxj0j63/wDs\njonCgmoF/iQwRrJWzlDrUsSnq+yWKrRMt7e3bbdNDf7KZPCAQ8MnsE8pHsqpdSIO\n0wIDAQAB\n-----END PUBLIC KEY-----\n",
       "algorithm": "RS256",
-      "key_id": null,
-      "registered_at": null,
+      "key_id": "69d22f8a1192cf45",
+      "registered_at": "2026-04-19T13:45:00Z",
       "expires_at": null,
       "revoked_at": null
     },
