@@ -121,24 +121,57 @@ class Verifier {
 		return this.verify(jws, publicKey);
 	}
 
-	verifyQueueItem(item) {
-		if (!item.signature) {
-			const cutoff = new Date(this.trustStore.migration?.jws_only_start || this.hmacCutoffDate);
-			if (new Date() < cutoff) {
-				return { valid: true, mode: 'HMAC_ACCEPTED_DUAL_MODE', warning: 'Signature missing but dual-mode active' };
-			}
-			return { valid: false, error: 'SIGNATURE_REQUIRED' };
-		}
+  verifyQueueItem(item) {
+    if (!item.signature) {
+      const cutoff = new Date(this.trustStore.migration?.jws_only_start || this.hmacCutoffDate);
+      if (new Date() < cutoff) {
+        return { valid: true, mode: 'HMAC_ACCEPTED_DUAL_MODE', warning: 'Signature missing but dual-mode active' };
+      }
+      return { valid: false, reason: VERIFY_REASON.MISSING_SIGNATURE, error: 'SIGNATURE_REQUIRED' };
+    }
 
-		const laneId = item.origin_lane;
-		const result = this.verifyAgainstTrustStore(item.signature, laneId);
+    // Step 1: Parse JWS WITHOUT trusting it yet
+    const parsed = this._parseJWS(item.signature);
+    if (!parsed) {
+      return { valid: false, reason: VERIFY_REASON.MISSING_SIGNATURE, error: 'INVALID_JWS_FORMAT' };
+    }
 
-		if (result.valid) {
-			return { ...result, mode: 'JWS_VERIFIED' };
-		}
+    // Step 2: Extract signedPayloadLane from parsed JWS
+    const signedPayloadLane = parsed.payload?.lane;
 
-		return result;
-	}
+    // Step 3: Require signed lane exists
+    if (!signedPayloadLane) {
+      return { valid: false, reason: VERIFY_REASON.MISSING_LANE, error: 'Signed payload missing lane field' };
+    }
+
+    // Step 4: Get outer lane from envelope
+    const outerLane = item.origin_lane || item.lane;
+
+    // Step 5: Compare signed lane to outer lane (Invariant: A = B)
+    if (outerLane !== signedPayloadLane) {
+      return {
+        valid: false,
+        reason: VERIFY_REASON.LANE_MISMATCH,
+        note: `Outer lane (${outerLane}) differs from signed payload lane (${signedPayloadLane})`
+      };
+    }
+
+    // Step 6: Only NOW fetch key for the agreed lane (Invariant: A = B = C)
+    const laneId = signedPayloadLane;
+    const publicKey = this.getPublicKey(laneId);
+    if (!publicKey) {
+      return { valid: false, reason: VERIFY_REASON.KEY_NOT_FOUND, error: 'LANE_NOT_IN_TRUST_STORE' };
+    }
+
+    // Step 7: Verify crypto signature
+    const result = this.verify(item.signature, publicKey);
+
+    if (!result.valid) {
+      return { ...result, reason: VERIFY_REASON.SIGNATURE_MISMATCH };
+    }
+
+    return { ...result, mode: 'JWS_VERIFIED' };
+  }
 
 	verifyAuditEvent(event) {
 		if (!event.signature) {

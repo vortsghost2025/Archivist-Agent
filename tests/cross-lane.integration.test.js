@@ -198,6 +198,7 @@ async function runCrossLaneTests() {
     };
 
     const result2_1 = await verifierWrapper.verify(swarmmindItem);
+    console.log(`    Result: valid=${result2_1.valid}, reason=${result2_1.reason}, mode=${result2_1.mode}`);
     assert.strictEqual(result2_1.valid, true, 'Valid SwarmMind artifact should verify');
     assert.strictEqual(result2_1.mode, 'JWS_VERIFIED');
     console.log('    ✓ PASSED\n');
@@ -214,7 +215,7 @@ async function runCrossLaneTests() {
 
     const result2_2 = await verifierWrapper.verify(mismatchItem);
     assert.strictEqual(result2_2.valid, false, 'Lane mismatch should fail');
-    assert.strictEqual(result2_2.reason, 'QUARANTINED');
+    assert.strictEqual(result2_2.reason, 'LANE_MISMATCH', 'Should be LANE_MISMATCH (identity failure)');
     console.log('    ✓ PASSED\n');
     passed++;
 
@@ -254,7 +255,7 @@ async function runCrossLaneTests() {
       type: 'knowledge_index',
       data: { topic: 'test' }
     };
-    const noLaneSignature = signPayload(noLanePayload, keys.library.privateKey);
+    const noLaneSignature = createJWS(noLanePayload, keys.library.privateKey);
 
     const noLaneItem = {
       id: 'library-nolane-item-001',
@@ -264,6 +265,7 @@ async function runCrossLaneTests() {
     };
 
     const result3_2 = await verifierWrapper.verify(noLaneItem);
+    console.log(`    Result: ${JSON.stringify(result3_2)}`);
     assert.strictEqual(result3_2.valid, false, 'Missing lane should fail');
     assert.strictEqual(result3_2.reason, 'MISSING_LANE');
     console.log('    ✓ PASSED\n');

@@ -37,40 +37,42 @@ class VerifierWrapper {
       };
     }
 
-    const outerLane = item.origin_lane;
-    const payloadLane = item.payload?.lane;
-
-    if (!payloadLane) {
-      return { 
-        valid: false, 
-        reason: VERIFY_REASON.MISSING_LANE, 
-        error: 'Payload missing lane field' 
-      };
-    }
-
-    if (outerLane !== payloadLane) {
-      return this._handleFailure(item, VERIFY_REASON.LANE_MISMATCH, 
-        `Outer lane (${outerLane}) differs from payload lane (${payloadLane})`);
-    }
-
-    const laneId = outerLane;
-    const result = this.verifier.verifyAgainstTrustStore(item.signature, laneId);
+    // Delegate to Verifier.verifyQueueItem which now implements:
+    // 1. Parse JWS (without trusting)
+    // 2. Extract signedPayloadLane from parsed JWS
+    // 3. Require signedPayloadLane exists
+    // 4. Compare signedPayloadLane to outerLane
+    // 5. Fetch key for agreed lane
+    // 6. Verify crypto
+    const result = this.verifier.verifyQueueItem(item);
 
     if (!result.valid) {
-      return this._handleFailure(item, result.error, result.error);
+      // Identity failures (MISSING_LANE, LANE_MISMATCH) should NOT go through quarantine
+      // They are deterministic policy violations, not crypto failures
+      const identityReasons = [VERIFY_REASON.MISSING_LANE, VERIFY_REASON.LANE_MISMATCH];
+      if (identityReasons.includes(result.reason)) {
+        return {
+          valid: false,
+          reason: result.reason,
+          note: result.note,
+          lane: item.origin_lane || item.lane
+        };
+      }
+      // Crypto failures go through quarantine loop
+      return this._handleFailure(item, result.reason || result.error, result.note);
     }
 
-    if (result.payload?.lane && result.payload.lane !== laneId) {
-      return this._handleFailure(item, VERIFY_REASON.LANE_MISMATCH,
-        `Signed payload lane (${result.payload.lane}) differs from claimed lane (${laneId})`);
+    // Success: update phenotype
+    const laneId = result.payload?.lane || item.origin_lane || item.lane;
+    if (laneId) {
+      this.phenotypeStore.setLastSync(laneId, { 
+        lane: laneId, 
+        verified_at: new Date().toISOString(),
+        key_id: result.header?.kid || 'unknown'
+      });
     }
 
-    this.phenotypeStore.setLastSync(laneId, { 
-      lane: laneId, 
-      verified_at: new Date().toISOString(),
-      key_id: result.header?.kid || 'unknown'
-    });
-
+    // Release from quarantine if previously quarantined
     const quarantinedId = item.id || item.signature?.slice(0, 16);
     if (quarantinedId && this.quarantineManager.isQuarantined(quarantinedId)) {
       this.quarantineManager.release(quarantinedId);

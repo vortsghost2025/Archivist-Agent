@@ -51,24 +51,25 @@ class Signer {
 		};
 	}
 
-	signQueueItem(item, privateKey, keyId) {
-		const signablePayload = {
-			id: item.id,
-			timestamp: item.timestamp,
-			origin_lane: item.origin_lane,
-			target_lane: item.target_lane,
-			type: item.type,
-			payload: item.payload
-		};
+  signQueueItem(item, privateKey, keyId) {
+    // Signed payload MUST include lane field for A=B=C invariant
+    const signablePayload = {
+      id: item.id,
+      timestamp: item.timestamp,
+      lane: item.origin_lane,  // Lane identity in signed payload
+      target_lane: item.target_lane,
+      type: item.type,
+      payload: item.payload
+    };
 
-		const result = this.sign(signablePayload, privateKey, keyId);
-		return {
-			...item,
-			signature: result.jws,
-			signature_alg: this.algorithm,
-			key_id: keyId
-		};
-	}
+    const result = this.sign(signablePayload, privateKey, keyId);
+    return {
+      ...item,
+      signature: result.jws,
+      signature_alg: this.algorithm,
+      key_id: keyId
+    };
+  }
 
 	signAuditEvent(event, privateKey, keyId) {
 		const signablePayload = {
