@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "updated_at": "2026-04-19T13:32:07.587Z",
+  "description": "Canonical public key registry for cross-lane attestation verification",
+  "keys": {
+    "archivist": {
+      "lane_id": "archivist",
+      "authority": 100,
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0ScP8q1gLYSetxKTVfbK\nH42el7Inlle/a91cQ0Wnlg4U1W3M/PUt+uuy0VtPhc1U1g++RheLHl0WnOHA1YRe\nDp3BboAlMXcWgFR8yHtlQdr3BqRPi1aUaKWuAzTs4wEc18lKbF4PTJ9jHVAxUDlz\nJIuxxqwUih8s21hYatHTqkQExc0f5wMADx8HujSiniVfkzY+LVp18B1ocDCGdXjA\n/6qzDyqx1k8ZSR/jqftGn09NZZOgb+wUHeRY54PTUOI/IDe5sB8bSNMZaj7oeCjs\nmTn4yt92yNhPDODmkVNSfBgnKBw3f/iIIJIvAUt/IAlHHRWqLv/iYA68ddncRsph\nlQIDAQAB\n-----END PUBLIC KEY-----\n",
+      "algorithm": "RS256",
+      "key_id": "72036d1654b0034a",
+      "registered_at": "2026-04-19T13:32:07.587Z",
+      "expires_at": null,
+      "revoked_at": null
+    },
+    "swarmmind": {
+      "lane_id": "swarmmind",
+      "authority": 80,
+      "public_key_pem": "PENDING_GENERATION",
+      "algorithm": "RS256",
+      "key_id": null,
+      "registered_at": null,
+      "expires_at": null,
+      "revoked_at": null
+    },
+    "library": {
+      "lane_id": "library",
+      "authority": 60,
+      "public_key_pem": "PENDING_GENERATION",
+      "algorithm": "RS256",
+      "key_id": null,
+      "registered_at": null,
+      "expires_at": null,
+      "revoked_at": null
+    }
+  },
+  "migration": {
+    "hmac_cutoff": "2026-05-19T00:00:00Z",
+    "dual_mode_start": "2026-04-19T00:00:00Z",
+    "jws_only_start": "2026-05-19T00:00:00Z"
+  },
+  "retention": {
+    "revoked_key_days": 90,
+    "historical_verification": true
+  }
+}
