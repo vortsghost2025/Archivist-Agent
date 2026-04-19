@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { addToQuarantine, QuarantineEntry } from './quarantineStore';
 import { loadPhenotype, savePhenotype, Phenotype } from './phenotypeStore';
+import { auditLog } from "./logger";
 
 const TRUST_STORE_PATH = path.resolve('S:/Archivist-Agent/.trust/keys.json');
 const HANDOFF_SIGNAL_FILE = path.resolve('S:/Archivist-Agent/AGENT_HANDOFF_REQUIRED.md');
@@ -22,10 +23,11 @@ interface RecoveryRequest {
 }
 
 interface RecoveryResult {
-  status: 'OK' | 'QUARANTINED' | 'SIGNATURE_MISMATCH' | 'LANE_MISMATCH' | 'MISSING_LANE' | 'QUARANTINE_MAX_RETRIES';
+  status: 'OK' | 'QUARANTINED' | 'SIGNATURE_MISMATCH' | 'QUARANTINE_MAX_RETRIES';
   reason?: string;
   quarantineId?: string;
   retryCount?: number;
+  nextRetryIn?: number;
   handoffRequired?: boolean;
 }
 
@@ -116,7 +118,8 @@ export async function handleRecovery(request: RecoveryRequest): Promise<Recovery
       debugContext: { ...debugContext, expectedLane: outerLane }
     };
     addToQuarantine(entry);
-    return { status: 'MISSING_LANE', reason: 'Payload missing lane field', quarantineId: entry.id };
+    // Normalize to QUARANTINED for public API
+    return { status: 'QUARANTINED', reason: 'MISSING_LANE', quarantineId: entry.id };
   }
 
   // Step 2: Check lane consistency (Invariant: A = B)
@@ -130,7 +133,7 @@ export async function handleRecovery(request: RecoveryRequest): Promise<Recovery
       debugContext: { ...debugContext, payloadLane, outerLane }
     };
     addToQuarantine(entry);
-    return { status: 'LANE_MISMATCH', reason: `Payload lane (${payloadLane}) differs from outer lane (${outerLane})`, quarantineId: entry.id };
+    return { status: 'QUARANTINED', reason: `LANE_MISMATCH: ${payloadLane} != ${outerLane}`, quarantineId: entry.id };
   }
 
   // Step 3: Load trust store and get public key
@@ -206,26 +209,27 @@ export async function handleRecovery(request: RecoveryRequest): Promise<Recovery
       };
     }
 
-    const entry: QuarantineEntry = {
-      id: crypto.randomUUID(),
-      timestamp: new Date().toISOString(),
-      artifact,
-      outerLane,
-      failureReason: 'SIGNATURE_MISMATCH',
-      debugContext: { ...debugContext, retryCount: retryState.count }
-    };
-    addToQuarantine(entry);
-    
-    // Schedule retry with backoff
-    const backoffMs = QUARANTINE_BACKOFF_MS * retryState.count;
-    
-    return { 
-      status: 'SIGNATURE_MISMATCH', 
-      reason: 'Signature verification failed', 
-      quarantineId: entry.id,
-      retryCount: retryState.count
-    };
-  }
+  const entry: QuarantineEntry = {
+    id: crypto.randomUUID(),
+    timestamp: new Date().toISOString(),
+    artifact,
+    outerLane,
+    failureReason: 'SIGNATURE_MISMATCH',
+    debugContext: { ...debugContext, retryCount: retryState.count }
+  };
+  addToQuarantine(entry);
+
+  // Calculate backoff for next retry
+  const backoffMs = QUARANTINE_BACKOFF_MS * retryState.count;
+
+  return {
+    status: 'SIGNATURE_MISMATCH',
+    reason: 'Signature verification failed',
+    quarantineId: entry.id,
+    retryCount: retryState.count,
+    nextRetryIn: backoffMs
+  };
+}
 
   // Step 5: Success - update phenotype
   const currentPhenotype: Phenotype = {
