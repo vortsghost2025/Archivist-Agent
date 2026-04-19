@@ -1,0 +1,218 @@
+openapi: 3.0.3
+info:
+  title: Archivist Recovery Orchestrator API
+  description: |
+    Deterministic lane-consistency verification and quarantine orchestration
+    for the three-lane attestation fabric (Archivist, SwarmMind, Library).
+    
+    ## Invariant Enforcement
+    
+    All artifacts must pass: `outerLane === signedPayloadLane === keyFetchedForLane`
+    
+    ## Status Codes
+    
+    - `OK` — Artifact verified successfully
+    - `QUARANTINED` — Identity failure (MISSING_LANE, LANE_MISMATCH, etc.)
+    - `SIGNATURE_MISMATCH` — Crypto verification failed, retry available
+    - `QUARANTINE_MAX_RETRIES` — Max retries exceeded, handoff required
+  version: 1.0.0
+  contact:
+    name: Archivist Team
+
+servers:
+  - url: http://localhost:3000
+    description: Local development
+  - url: https://archivist.example.com
+    description: Production
+
+paths:
+  /orchestrate/recovery:
+    post:
+      summary: Submit artifact for recovery processing
+      description: |
+        Verifies lane consistency and signature, handles quarantine cycle.
+        Returns nextRetryIn for caller to schedule retry timer.
+      operationId: handleRecovery
+      tags:
+        - Recovery
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryRequest'
+            examples:
+              library_failure:
+                summary: Library reports verification failure
+                value:
+                  artifact:
+                    id: "lib-msg-001"
+                    lane: "library"
+                    type: "knowledge_index"
+                    signature: "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  outerLane: "library"
+                  failureReason: "SIGNATURE_MISMATCH"
+                  debugContext:
+                    source: "AttestationSupport.verifyQueueItem"
+      responses:
+        '200':
+          description: Recovery processing complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryResult'
+              examples:
+                success:
+                  summary: Artifact verified
+                  value:
+                    status: "OK"
+                quarantined_lane_mismatch:
+                  summary: Lane mismatch detected
+                  value:
+                    status: "QUARANTINED"
+                    reason: "LANE_MISMATCH: swarmmind != library"
+                    quarantineId: "550e8400-e29b-41d4-a716-446655440000"
+                signature_mismatch:
+                  summary: Signature failed, retry available
+                  value:
+                    status: "SIGNATURE_MISMATCH"
+                    reason: "Signature verification failed"
+                    quarantineId: "550e8400-e29b-41d4-a716-446655440001"
+                    retryCount: 2
+                    nextRetryIn: 10000
+                max_retries:
+                  summary: Max retries exceeded
+                  value:
+                    status: "QUARANTINE_MAX_RETRIES"
+                    reason: "Signature verification failed after max retries"
+                    quarantineId: "550e8400-e29b-41d4-a716-446655440002"
+                    retryCount: 3
+                    handoffRequired: true
+
+  /orchestrate/health:
+    get:
+      summary: Health check
+      description: Returns orchestrator health status
+      operationId: healthCheck
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy]
+                  service:
+                    type: string
+                    example: "orchestrator"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT signed with shared secret (ARCHIVIST_ORCH_TOKEN).
+        
+        Header:
+        ```
+        Authorization: Bearer <jwt>
+        ```
+        
+        JWT payload must include:
+        - `sub`: Lane identifier (archivist, swarmmind, library)
+        - `iat`: Issued at timestamp
+        - `exp`: Expiration (max 5 minutes)
+
+  schemas:
+    RecoveryRequest:
+      type: object
+      required:
+        - artifact
+        - outerLane
+        - failureReason
+      properties:
+        artifact:
+          type: object
+          description: The artifact that failed verification
+          required:
+            - lane
+          properties:
+            id:
+              type: string
+              description: Unique artifact identifier
+            lane:
+              type: string
+              enum: [archivist, swarmmind, library]
+              description: Lane identity embedded in signed payload
+            type:
+              type: string
+              description: Artifact type
+            signature:
+              type: string
+              description: JWS signature (header.payload.signature format)
+            data:
+              type: object
+              description: Artifact payload data
+        outerLane:
+          type: string
+          enum: [archivist, swarmmind, library]
+          description: Lane declared in outer envelope
+        failureReason:
+          type: string
+          enum:
+            - SIGNATURE_MISMATCH
+            - LANE_MISMATCH
+            - MISSING_LANE
+            - KEY_NOT_FOUND
+            - TRUST_STORE_MISSING
+          description: Reason for verification failure
+        debugContext:
+          type: object
+          description: Optional debugging information
+
+    RecoveryResult:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - OK
+            - QUARANTINED
+            - SIGNATURE_MISMATCH
+            - QUARANTINE_MAX_RETRIES
+          description: |
+            Recovery result status:
+            - `OK`: Artifact verified successfully
+            - `QUARANTINED`: Identity failure (no retry available)
+            - `SIGNATURE_MISMATCH`: Crypto failure, retry available
+            - `QUARANTINE_MAX_RETRIES`: Max retries exceeded, handoff required
+        reason:
+          type: string
+          description: Detailed reason (e.g., "LANE_MISMATCH: swarmmind != library")
+        quarantineId:
+          type: string
+          format: uuid
+          description: Unique quarantine entry ID
+        retryCount:
+          type: integer
+          minimum: 1
+          maximum: 3
+          description: Current retry count for this artifact
+        nextRetryIn:
+          type: integer
+          description: Milliseconds to wait before next retry
+          example: 10000
+        handoffRequired:
+          type: boolean
+          description: True if human intervention required
