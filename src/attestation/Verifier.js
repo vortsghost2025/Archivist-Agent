@@ -8,6 +8,8 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
+const { ALG_MAP, VERIFY_REASON, TRUST_STORE_VERSION } = require('./constants');
+const { stableStringify } = require('./stableStringify');
 
 class Verifier {
 	constructor(options = {}) {
@@ -31,6 +33,17 @@ class Verifier {
 		try {
 			const raw = fs.readFileSync(this.trustStorePath, 'utf8');
 			this.trustStore = JSON.parse(raw);
+			
+			// Schema version check
+			if (this.trustStore.version && this.trustStore.version !== TRUST_STORE_VERSION) {
+				console.warn(`[Verifier] Trust store version mismatch: expected ${TRUST_STORE_VERSION}, got ${this.trustStore.version}`);
+			}
+			
+			// Ensure keys map exists
+			if (!this.trustStore.keys) {
+				console.warn('[Verifier] Trust store missing keys map, initializing empty');
+				this.trustStore.keys = {};
+			}
 		} catch (e) {
 			this.trustStore = { keys: {}, migration: {} };
 		}

@@ -6,6 +6,7 @@
  */
 
 const crypto = require('crypto');
+const { stableStringify } = require('./stableStringify');
 
 class Signer {
 	constructor(options = {}) {
@@ -29,14 +30,14 @@ class Signer {
 
 	sign(payload, privateKey, keyId) {
 		const header = this._createHeader(keyId);
-		const headerB64 = this._base64UrlEncode(JSON.stringify(header));
+		const headerB64 = this._base64UrlEncode(stableStringify(header));
 
 		const payloadWithTimestamp = {
 			...payload,
 			iat: Math.floor(Date.now() / 1000),
 			exp: Math.floor((Date.now() + this.expiresInMs) / 1000)
 		};
-		const payloadB64 = this._base64UrlEncode(JSON.stringify(payloadWithTimestamp));
+		const payloadB64 = this._base64UrlEncode(stableStringify(payloadWithTimestamp));
 
 		const signingInput = `${headerB64}.${payloadB64}`;
 		const signature = crypto.sign('RSA-SHA256', Buffer.from(signingInput), privateKey);
