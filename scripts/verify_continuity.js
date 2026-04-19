@@ -105,16 +105,12 @@ function main() {
   let recoveryStatus;
   let verificationResult;
 
-  if (constitutionalMatch && continuityMatch) {
-    recoveryStatus = 'verified';
-    verificationResult = {
-      constitutional: 'MATCH',
-      continuity: 'MATCH',
-      timestamp: new Date().toISOString()
-    };
-    console.log('Status: VERIFIED');
-    console.log('All fingerprints match. System is self-consistent.');
-  } else if (!constitutionalMatch && !continuityMatch) {
+  // Check for missing required inputs
+  const missingInputs = [];
+  if (identity.hash === 'FILE_NOT_FOUND') missingInputs.push('.identity/keys.json');
+  if (audit.hash === 'FILE_NOT_FOUND') missingInputs.push('logs/audit.log');
+
+  if (!constitutionalMatch && !continuityMatch) {
     recoveryStatus = 'corrupted';
     verificationResult = {
       constitutional: 'MISMATCH',
@@ -123,7 +119,18 @@ function main() {
     };
     console.log('Status: CORRUPTED');
     console.log('Both fingerprints mismatch. Manual intervention required.');
-  } else {
+  } else if (missingInputs.length > 0 && constitutionalMatch) {
+    recoveryStatus = 'partial';
+    verificationResult = {
+      constitutional: constitutionalMatch ? 'MATCH' : 'MISMATCH',
+      continuity: 'PARTIAL',
+      missing_inputs: missingInputs,
+      timestamp: new Date().toISOString()
+    };
+    console.log('Status: PARTIAL');
+    console.log('Constitutional proof valid. Continuity proof incomplete.');
+    console.log('Missing inputs:', missingInputs.join(', '));
+  } else if (!constitutionalMatch || !continuityMatch) {
     recoveryStatus = 'mismatch';
     verificationResult = {
       constitutional: constitutionalMatch ? 'MATCH' : 'MISMATCH',
@@ -132,6 +139,15 @@ function main() {
     };
     console.log('Status: MISMATCH');
     console.log('Partial fingerprint mismatch. Investigation required.');
+  } else {
+    recoveryStatus = 'verified';
+    verificationResult = {
+      constitutional: 'MATCH',
+      continuity: 'MATCH',
+      timestamp: new Date().toISOString()
+    };
+    console.log('Status: VERIFIED');
+    console.log('All fingerprints match. System is self-consistent.');
   }
 
   // Update registry
@@ -148,6 +164,9 @@ function main() {
   if (recoveryStatus === 'verified') {
     console.log('\n=== VERIFICATION PASSED ===');
     process.exit(0);
+  } else if (recoveryStatus === 'partial') {
+    console.log('\n=== VERIFICATION PARTIAL ===');
+    process.exit(0); // Partial is acceptable - system can continue
   } else if (recoveryStatus === 'mismatch') {
     console.log('\n=== VERIFICATION WARNING ===');
     process.exit(1);

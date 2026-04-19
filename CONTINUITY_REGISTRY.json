@@ -19,12 +19,16 @@
     "audit_log_hash": "FILE_NOT_FOUND",
     "combined_hash": "d3d5d71bb5b227630416d57db906a6670fe80bade449c0e43d15009c4df420bf"
   },
-  "recovery_status": "verified",
-  "recovery_timestamp": "2026-04-19T00:01:25.418Z",
+  "recovery_status": "partial",
+  "recovery_timestamp": "2026-04-19T00:08:23.163Z",
   "verification_result": {
     "constitutional": "MATCH",
-    "continuity": "MATCH",
-    "timestamp": "2026-04-19T00:01:25.418Z"
+    "continuity": "PARTIAL",
+    "missing_inputs": [
+      ".identity/keys.json",
+      "logs/audit.log"
+    ],
+    "timestamp": "2026-04-19T00:08:23.160Z"
   },
   "inputs": {
     "identity": ".identity/keys.json (MISSING)",
@@ -40,8 +44,9 @@
     "This registry is the proof boundary layer",
     "It turns persistent system into self-recognizing organism",
     "On startup: load context, recompute fingerprints, compare to prior",
-    "Recovery status: unverified | verified | mismatch | corrupted",
+    "Recovery status: unverified | partial | verified | mismatch | corrupted",
     "Fingerprints computed 2026-04-19T00:10:00Z",
-    "Verified at generation time - hashes match current state"
+    "Constitutional hashes match current state.",
+    "Continuity hashes match available inputs, but proof remains partial due to missing identity and audit artifacts."
   ]
 }
