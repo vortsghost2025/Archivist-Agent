@@ -8,8 +8,57 @@
 const fs = require('fs');
 const path = require('path');
 
-const SNAPSHOT_PATH = 'S:/Archivist-Agent/.identity/snapshot.json';
-const TRUST_STORE_PATH = 'S:/Archivist-Agent/.trust/keys.json';
+const DEFAULT_REPO_ROOT = 'S:/Archivist-Agent';
+const SNAPSHOT_PATH = process.env.IDENTITY_SNAPSHOT_PATH || 'S:/Archivist-Agent/.identity/snapshot.json';
+const TRUST_STORE_PATH = process.env.TRUST_STORE_PATH || 'S:/Archivist-Agent/.trust/keys.json';
+const SESSION_MODE_FILE = '.session-mode';
+
+/**
+ * Detects runtime lane from environment or session file.
+ * Priority: LANE_ID env var > .session-mode file > error
+ * 
+ * @param {string} repoRoot - Repository root path
+ * @returns {string|null} Detected lane or null
+ */
+function detectLane(repoRoot = DEFAULT_REPO_ROOT) {
+  // Priority 1: Environment variable
+  if (process.env.LANE_ID) {
+    return process.env.LANE_ID;
+  }
+  
+  // Priority 2: Session mode file
+  const sessionModePath = path.join(repoRoot, SESSION_MODE_FILE);
+  try {
+    if (fs.existsSync(sessionModePath)) {
+      const content = fs.readFileSync(sessionModePath, 'utf8').trim();
+      if (content && ['archivist', 'swarmmind', 'library'].includes(content)) {
+        return content;
+      }
+    }
+  } catch (e) {
+    // Ignore read errors
+  }
+  
+  return null;
+}
+
+/**
+ * Gets runtime lane with fallback to detection.
+ * 
+ * @param {string} explicitLane - Explicitly provided lane
+ * @param {string} repoRoot - Repository root for detection
+ * @returns {string} Runtime lane
+ */
+function getRuntimeLane(explicitLane, repoRoot = DEFAULT_REPO_ROOT) {
+  if (explicitLane) return explicitLane;
+  
+  const detected = detectLane(repoRoot);
+  if (!detected) {
+    throw new Error('LANE_NOT_DETECTED: Set LANE_ID env var or create .session-mode file');
+  }
+  
+  return detected;
+}
 
 /**
  * Performs continuity handshake between runtime, snapshot, and trust store.
@@ -186,6 +235,10 @@ module.exports = {
   continuityHandshake,
   saveSnapshot,
   archiveSnapshot,
+  detectLane,
+  getRuntimeLane,
   SNAPSHOT_PATH,
-  TRUST_STORE_PATH
+  TRUST_STORE_PATH,
+  DEFAULT_REPO_ROOT,
+  SESSION_MODE_FILE
 };
