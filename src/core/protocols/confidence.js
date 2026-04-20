@@ -99,11 +99,11 @@ function generateConfidenceBreakdown(factors) {
     confidence,
     label,
     factors: {
-      signature_valid: factors.signature_valid || false,
-      lane_match: factors.lane_match || false,
-      key_trusted: factors.key_trusted || false,
-      key_not_revoked: factors.key_not_revoked !== false,
-      payload_integrity: factors.payload_integrity !== false
+      signature_valid: factors.signature_valid === true,
+      lane_match: factors.lane_match === true,
+      key_trusted: factors.key_trusted === true,
+      key_not_revoked: factors.key_not_revoked === true,
+      payload_integrity: factors.payload_integrity === true
     },
     sufficient_for: {
       proceed: isConfidenceSufficient(confidence, 'proceed'),

@@ -122,11 +122,9 @@ class Verifier {
 	}
 
   verifyQueueItem(item) {
+    // ANCHOR ENFORCEMENT: missing_signature_mode = "REJECT"
+    // No HMAC acceptance regardless of cutoff date
     if (!item.signature) {
-      const cutoff = new Date(this.trustStore.migration?.jws_only_start || this.hmacCutoffDate);
-      if (new Date() < cutoff) {
-        return { valid: true, mode: 'HMAC_ACCEPTED_DUAL_MODE', warning: 'Signature missing but dual-mode active' };
-      }
       return { valid: false, reason: VERIFY_REASON.MISSING_SIGNATURE, error: 'SIGNATURE_REQUIRED' };
     }
 

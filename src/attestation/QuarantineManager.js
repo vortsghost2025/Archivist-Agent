@@ -99,7 +99,9 @@ class QuarantineManager {
 
     this._emitMetric('quarantine', lane);
 
-    if (entry.retryCount >= this.maxRetries) {
+    // POLICY: 1-3 retries allowed, 4+ triggers handoff
+  // MAX_RETRIES = 3 means: retryCount 1,2,3 → continue; retryCount 4 → handoff
+  if (entry.retryCount > this.maxRetries) {
       this._emitMetric('max_exceeded', lane);
       this._signalHumanIntervention(itemId, lane, reason, entry.retryCount);
       return {

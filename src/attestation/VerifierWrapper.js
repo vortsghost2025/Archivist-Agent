@@ -10,6 +10,7 @@ const { Verifier } = require('./Verifier');
 const { QuarantineManager } = require('./QuarantineManager');
 const { PhenotypeStore } = require('./PhenotypeStore');
 const { VERIFY_REASON } = require('./constants');
+const Outcome = require('../core/protocols/outcome');
 
 class VerifierWrapper {
   constructor(options = {}) {
@@ -20,21 +21,16 @@ class VerifierWrapper {
   }
 
   async verify(item) {
+    // ANCHOR ENFORCEMENT: missing_signature_mode = "REJECT"
+    // No HMAC acceptance, no dual-mode bypass
     if (!item.signature) {
-      const cutoff = this.verifier.hmacCutoffDate;
-      const now = new Date();
-      if (now < cutoff) {
-        return { 
-          valid: true, 
-          mode: 'HMAC_ACCEPTED_DUAL_MODE', 
-          warning: 'Signature missing but dual-mode active' 
-        };
-      }
-      return { 
-        valid: false, 
-        reason: VERIFY_REASON.MISSING_SIGNATURE, 
-        error: 'SIGNATURE_REQUIRED' 
-      };
+      return Outcome.quarantine({
+        lane: item.origin_lane || item.lane || 'unknown',
+        task_id: item.id || 'unknown',
+        summary: 'Missing signature - rejected per anchor policy',
+        reason: VERIFY_REASON.MISSING_SIGNATURE,
+        evidence: [{ type: 'memory', value: `item:${item.id}` }]
+      });
     }
 
     // Delegate to Verifier.verifyQueueItem which now implements:
@@ -51,12 +47,13 @@ class VerifierWrapper {
       // They are deterministic policy violations, not crypto failures
       const identityReasons = [VERIFY_REASON.MISSING_LANE, VERIFY_REASON.LANE_MISMATCH];
       if (identityReasons.includes(result.reason)) {
-        return {
-          valid: false,
+        return Outcome.quarantine({
+          lane: item.origin_lane || item.lane || 'unknown',
+          task_id: item.id || 'unknown',
+          summary: result.note || `Identity verification failed: ${result.reason}`,
           reason: result.reason,
-          note: result.note,
-          lane: item.origin_lane || item.lane
-        };
+          evidence: [{ type: 'log', value: `verify.log#${result.reason}` }]
+        });
       }
       // Crypto failures go through quarantine loop
       return this._handleFailure(item, result.reason || result.error, result.note);
@@ -65,8 +62,8 @@ class VerifierWrapper {
     // Success: update phenotype
     const laneId = result.payload?.lane || item.origin_lane || item.lane;
     if (laneId) {
-      this.phenotypeStore.setLastSync(laneId, { 
-        lane: laneId, 
+      this.phenotypeStore.setLastSync(laneId, {
+        lane: laneId,
         verified_at: new Date().toISOString(),
         key_id: result.header?.kid || 'unknown'
       });
@@ -78,7 +75,14 @@ class VerifierWrapper {
       this.quarantineManager.release(quarantinedId);
     }
 
-    return { ...result, mode: 'JWS_VERIFIED' };
+    // Return SUCCESS outcome
+    return Outcome.success({
+      lane: laneId,
+      task_id: item.id || 'unknown',
+      summary: 'JWS verification successful',
+      confidence: 1.0,
+      result: { ...result, mode: 'JWS_VERIFIED' }
+    });
   }
 
   _handleFailure(item, reason, note) {
@@ -88,15 +92,16 @@ class VerifierWrapper {
     const quarantineResult = this.quarantineManager.quarantine(item, reason);
 
     if (quarantineResult.handoffRequired) {
-      return {
-        valid: false,
-        reason: VERIFY_REASON.QUARANTINE_MAX_RETRIES,
-        note,
-        itemId,
+      return Outcome.quarantine({
         lane,
-        handoffRequired: true,
-        handoffFile: this.quarantineManager.handoffFile
-      };
+        task_id: itemId,
+        summary: note || 'Max retries exceeded, handoff required',
+        reason: VERIFY_REASON.QUARANTINE_MAX_RETRIES,
+        quarantine_id: quarantineResult.quarantineId,
+        evidence: [
+          { type: 'log', value: `quarantine.log#${quarantineResult.quarantineId}` }
+        ]
+      });
     }
 
     if (this.onQuarantineRetry) {
@@ -105,15 +110,15 @@ class VerifierWrapper {
       });
     }
 
-    return {
-      valid: false,
-      reason: VERIFY_REASON.QUARANTINED,
-      note,
-      itemId,
+    // DEFER outcome for retry
+    return Outcome.defer({
       lane,
-      retryCount: quarantineResult.retryCount,
-      nextRetryIn: quarantineResult.nextRetryIn
-    };
+      task_id: itemId,
+      summary: note || 'Quarantined for retry',
+      confidence: 0.0,
+      reason: VERIFY_REASON.QUARANTINED,
+      requires: [{ kind: 'verification_needed', detail: reason }]
+    });
   }
 
   async compareAndSync(laneId, currentState) {

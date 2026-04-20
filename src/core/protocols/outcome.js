@@ -89,6 +89,55 @@ const EvidenceType = {
  */
 
 /**
+ * Validate required fields
+ * @param {Object} params
+ * @param {string[]} required
+ * @throws {Error} if required field missing or empty
+ */
+function validateRequired(params, required) {
+  for (const field of required) {
+    if (params[field] === undefined || params[field] === null || params[field] === '') {
+      throw new Error(`Missing required field: ${field}`);
+    }
+  }
+}
+
+/**
+ * Validate confidence is in valid range
+ * @param {number} confidence
+ * @throws {Error} if out of range
+ */
+function validateConfidence(confidence) {
+  if (typeof confidence !== 'number' || confidence < 0 || confidence > 1) {
+    throw new Error(`Invalid confidence: ${confidence} (must be 0.0-1.0)`);
+  }
+}
+
+/**
+ * Validate status is valid
+ * @param {string} status
+ * @throws {Error} if not a valid status
+ */
+function validateStatus(status) {
+  const validStatuses = Object.values(OutcomeStatus);
+  if (!validStatuses.includes(status)) {
+    throw new Error(`Invalid status: ${status} (valid: ${validStatuses.join(', ')})`);
+  }
+}
+
+/**
+ * Validate escalation target
+ * @param {string} target
+ * @throws {Error} if not a valid target
+ */
+function validateEscalationTarget(target) {
+  const validTargets = Object.values(EscalationTarget);
+  if (!validTargets.includes(target)) {
+    throw new Error(`Invalid escalation_target: ${target} (valid: ${validTargets.join(', ')})`);
+  }
+}
+
+/**
  * Create a SUCCESS outcome
  * @param {Object} params
  * @param {string} params.lane
@@ -101,8 +150,11 @@ const EvidenceType = {
  * @returns {LaneOutcome}
  */
 function success(params) {
-  const { lane, task_id, summary, confidence = 1.0, result, evidence, trace_id } = params;
+  validateRequired(params, ['lane', 'task_id', 'summary']);
+  validateConfidence(params.confidence ?? 1.0);
   
+  const { lane, task_id, summary, confidence = 1.0, result, evidence, trace_id } = params;
+
   return {
     status: OutcomeStatus.SUCCESS,
     lane,
@@ -129,8 +181,10 @@ function success(params) {
  * @returns {LaneOutcome}
  */
 function failure(params) {
-  const { lane, task_id, summary, error_code, reason, evidence, trace_id } = params;
+  validateRequired(params, ['lane', 'task_id', 'summary', 'error_code']);
   
+  const { lane, task_id, summary, error_code, reason, evidence, trace_id } = params;
+
   return {
     status: OutcomeStatus.FAILURE,
     lane,
@@ -161,9 +215,13 @@ function failure(params) {
  * @returns {LaneOutcome}
  */
 function escalate(params) {
-  const { 
-    lane, task_id, summary, confidence, escalation_target, 
-    requires, suggested_next_step, evidence, blockers, trace_id 
+  validateRequired(params, ['lane', 'task_id', 'summary', 'confidence', 'escalation_target']);
+  validateConfidence(params.confidence);
+  validateEscalationTarget(params.escalation_target);
+  
+  const {
+    lane, task_id, summary, confidence, escalation_target,
+    requires, suggested_next_step, evidence, blockers, trace_id
   } = params;
   
   return {
@@ -197,6 +255,9 @@ function escalate(params) {
  * @returns {LaneOutcome}
  */
 function defer(params) {
+  validateRequired(params, ['lane', 'task_id', 'summary', 'confidence', 'reason']);
+  validateConfidence(params.confidence);
+  
   const { lane, task_id, summary, confidence, reason, requires, suggested_next_step, blockers, trace_id } = params;
   
   return {
@@ -227,6 +288,8 @@ function defer(params) {
  * @returns {LaneOutcome}
  */
 function quarantine(params) {
+  validateRequired(params, ['lane', 'task_id', 'summary', 'reason']);
+  
   const { lane, task_id, summary, reason, quarantine_id, evidence, trace_id } = params;
   
   return {
