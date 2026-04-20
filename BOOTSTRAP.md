@@ -860,4 +860,46 @@ EVIDENCE: INCIDENT_LOG_2026-04-18.md
 
 ---
 
+## THE LANE-RELAY PROTOCOL (ENFORCED)
+
+```
+RULE: All cross-lane communication MUST use the lanes/ structure.
+
+PATHS (DETERMINISTIC - NO GUESSING):
+- Archivist inbox: lanes/archivist/inbox/
+- Library inbox:   lanes/library/inbox/
+- SwarmMind inbox: lanes/swarmmind/inbox/
+
+EACH REPO HAS ALL THREE DIRECTORIES - THIS IS NOT ONE REPO.
+
+SESSION START PROTOCOL (MANDATORY):
+1. READ lanes/{self}/inbox/ FIRST
+2. Process by priority (P0 > P1 > P2 > P3)
+3. Move processed to lanes/{self}/inbox/processed/
+
+SENDING MESSAGES (MANDATORY):
+WRITE lanes/{target}/inbox/{message-id}.json
+LOG  lanes/{self}/outbox/{message-id}.json
+
+P0 PRIORITY:
+ALSO WRITE lanes/{target}/inbox/urgent_{id}.json
+
+VERIFICATION CHECKLIST:
+- [ ] inbox processed
+- [ ] outbox logged
+- [ ] no pending P0 items
+
+DEPRECATED: .lane-relay/ - DO NOT USE
+ACTIVE: lanes/ - USE THIS
+
+WHY THIS EXISTS:
+- Multiple coordination surfaces = message loss + drift
+- One path = deterministic coordination
+- No guessing, no searching
+
+EVIDENCE: LANE_RELAY_PROTOCOL_PROPOSAL.md, AGENTS.md
+```
+
+---
+
 **THIS FILE IS THE ENTRY POINT. ALL LOGIC ROUTES HERE. NO EXCEPTIONS.**
