@@ -511,3 +511,89 @@ When testing governance transfer to new agents:
 4. Check checkpoint recall accuracy
 
 See `.artifacts/GOVERNANCE_TRANSFER_TEST_RESULTS.md` for test methodology.
+
+---
+
+## Convergence Gate (MANDATORY)
+
+**Every lane output MUST pass through the Convergence Gate before reaching the coordinator.**
+
+### Gate Structure
+
+All lane messages must include:
+
+```json
+{
+  "claim": "Single sentence stating what was done/found",
+  "evidence": "Path to artifact or log entry proving the claim",
+  "verified_by": "archivist|library|swarmmind|self|user",
+  "contradictions": [],
+  "status": "proven|unproven|conflicted|blocked"
+}
+```
+
+### Status Routing
+
+| Status | Action |
+|--------|--------|
+| `proven` | Forward to coordinator inbox |
+| `conflicted` | Forward to coordinator inbox (P0) |
+| `blocked` | Forward to coordinator inbox (P1) |
+| `unproven` | Queue for verification, do NOT forward |
+
+### One-Blocker Rule
+
+At any moment, only ONE blocker is active system-wide.
+
+- Blocker location: `lanes/broadcast/active-blocker.json`
+- All lanes check blocker before starting new work
+- Only owner lane works on blocker
+- On resolution, owner removes blocker file
+
+### Ask Before Expand
+
+Before any lane does more work, check:
+
+1. Is the current task still one blocker? → Continue
+2. Is it already verified? → Queue for next
+3. Does it require expansion? → Escalate to coordinator
+4. If none of the above → STOP
+
+---
+
+## State Snapshot Protocol
+
+After every significant change, write a snapshot:
+
+```
+# STATE SNAPSHOT
+LANE: [lane name]
+CHANGE: [what changed]
+VERIFIED_BY: [who verified]
+RESULT: [proven|conflicted|blocked]
+NEXT_BLOCKER: [none|description]
+```
+
+Save to: `context-buffer/state-snapshots/{timestamp}.md`
+
+Latest snapshot: `context-buffer/CURRENT_STATE.md`
+
+---
+
+## Questions to Ask (HIGH LEVERAGE)
+
+When uncertain, ask:
+
+1. **"What is proven?"** — Collapses ambiguity
+2. **"What is not proven?"** — Prevents false confidence
+3. **"What is the next smallest action?"** — Prevents overwork
+4. **"Where am I still acting as the system?"** — Finds next automation target
+5. **"What would break this system right now?"** — Keeps system honest
+
+---
+
+## Key Insight
+
+> You're not trying to make me smarter—you're trying to make everything that reaches me already make sense.
+
+Pre-filtered, high-signal inputs are the goal. Not more work, but better inputs.
