@@ -1,9 +1,9 @@
 /**
- * Verifier.js - Phase 4.3 JWS Verification
- *
- * Verifies JSON Web Signatures against public keys from trust store.
- * Supports HMAC→JWS migration during dual-mode period.
- */
+* Verifier.js - JWS Verification
+*
+* Verifies JSON Web Signatures against public keys from trust store.
+* HMAC mode removed per anchor policy (hmac_accepted: false).
+*/
 
 const crypto = require('crypto');
 const fs = require('fs');
@@ -12,12 +12,11 @@ const { ALG_MAP, VERIFY_REASON, TRUST_STORE_VERSION } = require('./constants');
 const { stableStringify } = require('./stableStringify');
 
 class Verifier {
-	constructor(options = {}) {
-		this.trustStorePath = options.trustStorePath || this._defaultTrustStorePath();
-		this.hmacCutoffDate = options.hmacCutoffDate || new Date('2026-05-19T00:00:00Z');
-		this.trustStore = null;
-		this._loadTrustStore();
-	}
+  constructor(options = {}) {
+    this.trustStorePath = options.trustStorePath || this._defaultTrustStorePath();
+    this.trustStore = null;
+    this._loadTrustStore();
+  }
 
 	_defaultTrustStorePath() {
 		const envPath = process.env.TRUST_STORE_PATH;
@@ -171,35 +170,22 @@ class Verifier {
     return { ...result, mode: 'JWS_VERIFIED' };
   }
 
-	verifyAuditEvent(event) {
-		if (!event.signature) {
-			return { valid: true, mode: 'UNSIGNED', warning: 'Legacy audit event' };
-		}
+  verifyAuditEvent(event) {
+    if (!event.signature) {
+      // ANCHOR ENFORCEMENT: All events require signature
+      // Legacy unsigned events no longer accepted
+      return { valid: false, error: 'UNSIGNED_AUDIT_EVENT_REJECTED' };
+    }
 
-		const laneId = event.lane;
-		return this.verifyAgainstTrustStore(event.signature, laneId);
-	}
+    const laneId = event.lane;
+    return this.verifyAgainstTrustStore(event.signature, laneId);
+  }
 
-	isHMACAccepted() {
-		const cutoff = new Date(this.trustStore.migration?.jws_only_start || this.hmacCutoffDate);
-		return new Date() < cutoff;
-	}
+  // HMAC-related methods removed per anchor policy (hmac_accepted: false)
+  // isHMACAccepted() and getMigrationStatus() removed to eliminate
+  // contradictory bypass surfaces
 
-	getMigrationStatus() {
-		const now = new Date();
-		const cutoff = new Date(this.trustStore.migration?.jws_only_start || this.hmacCutoffDate);
-		const dualModeStart = new Date(this.trustStore.migration?.dual_mode_start || now);
-
-		return {
-			dual_mode_active: now < cutoff,
-			hmac_accepted: now < cutoff,
-			jws_required: now >= cutoff,
-			cutoff_date: cutoff.toISOString(),
-			days_remaining: Math.max(0, Math.ceil((cutoff - now) / 86400000))
-		};
-	}
-
-	getTrustStoreStats() {
+  getTrustStoreStats() {
 		const lanes = Object.keys(this.trustStore.keys || {});
 		const registered = lanes.filter(l => this.trustStore.keys[l]?.public_key_pem?.startsWith('-----BEGIN'));
 		const pending = lanes.filter(l => this.trustStore.keys[l]?.public_key_pem === 'PENDING_GENERATION');
