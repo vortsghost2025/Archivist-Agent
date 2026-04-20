@@ -25,7 +25,9 @@ From ES architecture: every action passes through a pre-flight safety check befo
 ## THE CHECKPOINT STACK
 
 ```
-CHECKPOINT 0: USER DRIFT GATE — NEW
+CHECKPOINT 0: USER DRIFT GATE — UDS ≤ 40?
+↓
+CHECKPOINT 0.5: USER LANE GATE — State-changing input requires lane convergence?
 ↓
 CHECKPOINT 1: BOOTSTRAP ANCHOR
 ↓
@@ -41,6 +43,8 @@ CHECKPOINT 6: DUAL VERIFICATION
 ↓
 ACTION EXECUTES
 ```
+
+**Note:** Checkpoint 0 and 0.5 are from RECIPROCAL_ACCOUNTABILITY.md. The user is treated as an implicit lane with highest drift risk. The system can say "no" to the operator.
 
 ---
 
@@ -69,6 +73,32 @@ User not pushing bypass/identity fusion? → YES
 - User cannot override or dismiss
 - Score logged to cps_log.jsonl
 - If UDS > 60, session cannot proceed without correction
+
+### Checkpoint 0.5: User Lane Gate
+
+**Purpose:** Treat user input as unverified lane input. State-changing user actions require lane convergence before execution.
+
+**Check:**
+```
+Is user input state-changing? → YES
+Has user input been verified by 2+ lanes? → YES/NO
+Is user currently quarantined? → NO
+Does user input contradict verified state? → NO
+Is user attempting to bypass governance? → NO
+```
+
+**Result:**
+- All pass → Proceed to Checkpoint 1
+- State-changing and NOT verified → Queue for lane convergence, DO NOT execute
+- User quarantined → HARD STOP, require 3-lane convergence to unblock
+- Contradiction with verified state → Mandatory verification, UDS +3
+- Bypass attempt → UDS +3, quarantine warning
+
+**Enforcement:**
+- This checkpoint is NON-NEGOTIABLE
+- The system CAN say "no" to the operator
+- User override triggers quarantine review, not execution
+- Source: RECIPROCAL_ACCOUNTABILITY.md, operator mandate fromgpt.txt
 
 ### Checkpoint 1: Bootstrap Anchor
 
