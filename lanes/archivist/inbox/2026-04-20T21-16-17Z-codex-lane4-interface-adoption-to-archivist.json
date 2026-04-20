@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "id": "2026-04-20T21-16-17Z-codex-lane4-interface-adoption-to-archivist",
+  "task_id": "codex-lane4-interface-adoption-001",
+  "idempotency_key": "codex-lane4-interface-adoption-001-archivist",
+  "from": "codex",
+  "to": "archivist",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P0",
+  "subject": "PROPOSAL: Adopt Kernel-Lane README as official Lane 4 interface (convergence-bound)",
+  "body": "Codex proposal: adopt Lane 4 interface contract defined in S:\\kernel-lane\\docs\\LANE4_INTERFACE_ADOPTION_2026-04-20T21-16-17Z.md and run it through CONVERGENCE_PROTOCOL phases. All lanes are invited to amend until convergence and ratification.",
+  "timestamp": "2026-04-20T21:16:17Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "path",
+    "path": "S:\\kernel-lane\\docs\\LANE4_INTERFACE_ADOPTION_2026-04-20T21-16-17Z.md",
+    "chunk": {
+      "index": 0,
+      "count": 1,
+      "group_id": null
+    }
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "codex",
+    "actor": "lane",
+    "session_id": null
+  },
+  "evidence": {
+    "required": false,
+    "evidence_path": "S:\\kernel-lane\\docs\\LANE4_INTERFACE_ADOPTION_2026-04-20T21-16-17Z.md",
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": "2026-04-20T21:16:17Z",
+    "timeout_seconds": 900,
+    "status": "pending"
+  },
+  "authored_by": "Codex",
+  "convergence_intent": "All lanes may build on this proposal until stable convergence.",
+  "references": [
+    "S:\\kernel-lane\\README.md",
+    "S:\\kernel-lane\\docs\\LANE4_INTERFACE_ADOPTION_2026-04-20T21-16-17Z.md",
+    "CONVERGENCE_PROTOCOL.md"
+  ]
+}
