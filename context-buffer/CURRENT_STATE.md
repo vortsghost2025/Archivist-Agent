@@ -1,7 +1,8 @@
-# CURRENT STATE — 2026-04-20T22:05:00Z
+# CURRENT STATE — 2026-04-20T22:15:00Z
 
 ## Last Change
-Library AGENTS.md upgraded with structural depth matching SwarmMind (Convergence Gate, Heartbeat Protocol, One-Blocker Rule, Session Modes, Ask-Before-Expand, high-leverage questions).
+RECIPROCAL_ACCOUNTABILITY.md ratified by operator and distributed to all 3 lanes.
+Checkpoint 0.5 (User Lane Gate) added to checkpoint stack.
 
 ## Active Blocker
 v1.1 schema patch ratification — needs SwarmMind review + lease-file amendment resolution.
@@ -11,7 +12,12 @@ v1.1 schema patch ratification — needs SwarmMind review + lease-file amendment
 - Heartbeat single-file overwrite rule enforced
 - Library AGENTS.md structural depth upgrade committed + pushed
 - One-Blocker Rule documented in all lanes
-- Library .kilo/command/ templates exist with real content (4 templates)
+- **RECIPROCAL_ACCOUNTABILITY.md ratified by operator and distributed to all lanes**
+- **Operator mandate from fromgpt.txt: "The system is not safe until it can say NO to the operator"**
+- **User treated as implicit lane with HIGHEST drift risk**
+- **User quarantine requires 3-lane convergence to unblock**
+- **Mandate cannot be revoked in single session (3-lane + 24h cooling)**
+- **Checkpoint 0.5: User Lane Gate added**
 
 ## Unproven
 - v1.1 schema patch (needs SwarmMind review)
