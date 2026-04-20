@@ -1,0 +1,83 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "model": "ollama/qwen2.5-coder:7b",
+  "agent": {
+    "orchestrator": {
+      "model": "nvidia/z-ai/glm-5.1"
+    },
+    "plan": {
+      "model": "ollama/qwen2.5-coder:7b"
+    },
+    "code": {
+      "model": "ollama/qwen2.5-coder:7b"
+    },
+    "build": {
+      "model": "ollama/qwen2.5-coder:7b"
+    },
+    "debug": {
+      "model": "ollama/qwen2.5-coder:7b"
+    },
+    "ask": {
+      "model": "ollama/qwen2.5-coder:7b"
+    },
+    "general": {
+      "model": "ollama/qwen2.5-coder:7b"
+    }
+  },
+  "provider": {
+    "ollama": {
+      "options": {
+        "baseURL": "http://127.0.0.1:11434/v1"
+      },
+      "models": {
+        "qwen2.5-coder:7b": {
+          "name": "Qwen2.5 Coder 7B",
+          "tool_call": true,
+          "limit": {
+            "context": 8192,
+            "output": 8192
+          },
+          "options": {
+            "num_ctx": 8192,
+            "temperature": 0.2
+          }
+        }
+      }
+    },
+    "z-ai": {
+      "models": {
+        "glm-5.1": {
+          "name": "GLM-5.1",
+          "tool_call": true,
+          "limit": {
+            "context": 128000,
+            "output": 16384
+          }
+        }
+      }
+    }
+  },
+  "permission": {
+    "external_directory": {
+      "S:\\\\self-organizing-library": "allow",
+      "S:\\\\Archivist-Agent": "allow",
+      "S:\\\\SwarmMind Self-Optimizing Multi-Agent AI System": "allow",
+      "*": "allow"
+    },
+    "bash": {
+      "*": "allow"
+    },
+    "read": {
+      "*": "allow"
+    },
+    "write": {
+      "*": "allow"
+    },
+    "edit": {
+      "*": "allow"
+    },
+    "web": {
+      "*": "allow"
+    }
+  }
+}
