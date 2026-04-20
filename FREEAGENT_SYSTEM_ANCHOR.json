@@ -101,8 +101,8 @@
     "phase_0_5": "COMPLETE",
     "phase_1": "COMPLETE",
     "phase_2": "COMPLETE",
-    "phase_3": "READY",
-    "phase_4": "BLOCKED",
+    "phase_3": "COMPLETE",
+    "phase_4": "READY",
     "phase_5": "BLOCKED"
   }
 }
