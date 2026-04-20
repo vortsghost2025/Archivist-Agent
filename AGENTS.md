@@ -397,15 +397,26 @@ All three lanes share the same GitHub origin:
 
 **All cross-lane communication MUST use the enforced `lanes/` structure.**
 
+**⚠️ `.lane-relay/` is DEPRECATED. Do NOT use. Use `lanes/` instead.**
+
 ### Directory Structure (ENFORCED)
 
-Each lane MUST use:
+Each repo MUST contain:
 ```
-{LANE_ROOT}/lanes/{lane-id}/inbox/        # Messages TO this lane
-{LANE_ROOT}/lanes/{lane-id}/outbox/       # Messages FROM this lane
-{LANE_ROOT}/lanes/{lane-id}/inbox/processed/  # Processed messages
-{LANE_ROOT}/lanes/{lane-id}/inbox/expired/    # Expired messages
-{LANE_ROOT}/lanes/broadcast/              # Messages to ALL lanes
+lanes/
+├── archivist/
+│   ├── inbox/
+│   ├── outbox/
+│   └── inbox/{processed,expired}/
+├── library/
+│   ├── inbox/
+│   ├── outbox/
+│   └── inbox/{processed,expired}/
+├── swarmmind/
+│   ├── inbox/
+│   ├── outbox/
+│   └── inbox/{processed,expired}/
+└── broadcast/
 ```
 
 | Lane | Inbox Path |
@@ -416,40 +427,55 @@ Each lane MUST use:
 
 ### Message Format (ENFORCED)
 
-Every cross-lane message is a JSON file:
+Each message = one JSON file:
+```
+lanes/{target}/inbox/{timestamp}_{from}_{id}.json
+```
+
+Required fields:
 ```json
 {
-  "id": "{timestamp}-{lane}-{sequence}",
-  "from": "{source-lane}",
-  "to": "{target-lane}",
-  "type": "request|response|notification|handoff",
-  "priority": "critical|high|normal|low",
-  "subject": "one-line summary",
-  "body": "full content",
-  "requires_action": true|false,
-  "response_expected": true|false,
-  "expires": "ISO timestamp or null",
-  "timestamp": "ISO timestamp"
+  "id": "...",
+  "from": "archivist|library|swarmmind",
+  "to": "...",
+  "timestamp": "...",
+  "priority": "P0|P1|P2|P3",
+  "type": "task|review|finding|handoff",
+  "body": "...",
+  "requires_action": true|false
 }
 ```
 
 ### Session Start Protocol (MANDATORY)
 
 When starting ANY session:
-1. Read all files in `lanes/{self}/inbox/`
-2. Process by priority (critical > high > normal > low)
-3. Move processed to `lanes/{self}/inbox/processed/`
-4. Check `lanes/broadcast/` for all-lane messages
+```
+READ lanes/{self}/inbox/
+```
+
+Process by priority (P0 > P1 > P2 > P3).
 
 ### Sending Messages (MANDATORY)
 
 When sending TO another lane:
-1. Write JSON to `lanes/{target}/inbox/{message-id}.json`
-2. Write copy to `lanes/{self}/outbox/{message-id}.json`
-3. For critical priority: also write to `lanes/broadcast/{message-id}.json`
-4. Commit and push immediately
+```
+WRITE lanes/{target}/inbox/{message-id}.json
+LOG  lanes/{self}/outbox/{message-id}.json
+```
 
-**NO EXCEPTIONS. This is enforced governance.**
+For P0 priority:
+```
+ALSO WRITE lanes/{target}/inbox/urgent_{id}.json
+```
+
+### Verification Checklist (MANDATORY)
+
+Before ending session:
+- [ ] inbox processed
+- [ ] outbox logged
+- [ ] no pending P0 items
+
+**NO EXCEPTIONS. One path. One inbox per lane. Enforced everywhere.**
 
 ---
 
