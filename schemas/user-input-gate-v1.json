@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "user-input-gate-v1",
+  "title": "User Input Gate",
+  "description": "Schema for validating user inputs through Checkpoint 0.5 (User Lane Gate). Every user input that changes system state MUST pass through this gate. Source: RECIPROCAL_ACCOUNTABILITY.md:3",
+  "type": "object",
+  "required": ["input_type", "is_state_changing", "verification_status", "quarantine_check"],
+  "properties": {
+    "input_type": {
+      "type": "string",
+      "enum": ["query", "command", "override", "direction", "correction"],
+      "description": "Classification of user input"
+    },
+    "is_state_changing": {
+      "type": "boolean",
+      "description": "Does this input change system state (files, config, governance, lane state)?"
+    },
+    "bypass_signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["signal", "detected"],
+        "properties": {
+          "signal": {
+            "type": "string",
+            "enum": [
+              "SKIP_VERIFICATION",
+              "JUST_DO_IT",
+              "NO_TIME",
+              "TRUST_ME",
+              "OVERRIDE",
+              "DONT_CHECK",
+              "WE_DONT_NEED",
+              "BYPASS_GOVERNANCE"
+            ]
+          },
+          "detected": { "type": "boolean" },
+          "context": { "type": "string" }
+        }
+      },
+      "description": "Any bypass signals detected in user input"
+    },
+    "contradiction_check": {
+      "type": "object",
+      "required": ["contradicts_verified_state"],
+      "properties": {
+        "contradicts_verified_state": { "type": "boolean" },
+        "what_is_verified": { "type": "string" },
+        "what_user_claims": { "type": "string" }
+      }
+    },
+    "verification_status": {
+      "type": "object",
+      "required": ["verified_by", "status"],
+      "properties": {
+        "verified_by": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["archivist", "library", "swarmmind", "codex", "self", "user"]
+          },
+          "description": "Which lanes have verified this input"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["proven", "unproven", "conflicted", "blocked"],
+          "description": "Convergence gate status"
+        },
+        "minimum_lanes_required": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 3,
+          "default": 2
+        }
+      }
+    },
+    "quarantine_check": {
+      "type": "object",
+      "required": ["is_quarantined", "uds_score"],
+      "properties": {
+        "is_quarantined": { "type": "boolean" },
+        "uds_score": { "type": "integer" },
+        "quarantine_can_self_unblock": {
+          "type": "boolean",
+          "const": false,
+          "description": "User CANNOT self-unblock. This is always false. Enforced by schema."
+        }
+      }
+    },
+    "gate_decision": {
+      "type": "string",
+      "enum": ["PASS", "QUEUE_FOR_CONVERGENCE", "HARD_STOP", "SESSION_FREEZE"],
+      "description": "Final gate decision"
+    }
+  }
+}

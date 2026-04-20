@@ -39,9 +39,13 @@ Where:
 - STRUCTURE_OVER_IDENTITY: weight 5
 - CORRECTION_MANDATORY: weight 4
 - SINGLE_ENTRY_POINT: weight 5
+- OPERATOR_ACCOUNTABILITY: weight 5 (NEW — Law 8)
 
-BASELINE CPS = 5 + 4 + 5 = 14
+BASELINE CPS = 5 + 4 + 5 + 5 = 19
 ```
+
+**Operator Accountability constraint (Law 8):**
+If a state-changing user input is executed without lane convergence, CPS drops by the weight of this constraint (5 points). This makes operator bypass a CPS-violating event, not just a UDS event.
 
 ### 2.3 Dynamic Adjustment
 
@@ -67,6 +71,7 @@ Default threshold: 10
 - Matches baseline enforcement level
 - Demonstrated in cps_threshold_check()
 - Used in ping command implementation
+- Note: With Law 8 added, baseline CPS is now 19 (was 14)
 ```
 
 ### 3.2 Fail Threshold
@@ -174,8 +179,27 @@ CPS ENFORCEMENT → CHECKPOINT SYSTEM → ACTION GATING
 Flow:
 1. Compute CPS (with UDS adjustment)
 2. Checkpoint 0: UDS gate
-3. Checkpoint 3: CPS threshold check
-4. Action execution decision
+3. Checkpoint 0.5: User Lane Gate (NEW — RECIPROCAL_ACCOUNTABILITY.md)
+4. Checkpoint 3: CPS threshold check
+5. Action execution decision
+```
+
+### 6.3 User Quarantine Integration (NEW)
+
+When user quarantine is active (UDS > 60):
+
+```
+CPS_OVERRIDE = 0
+All actions blocked regardless of other CPS factors
+Release condition: 3-lane convergence (RECIPROCAL_ACCOUNTABILITY.md:4.2)
+```
+
+When user quarantine was triggered but released:
+
+```
+CPS_PENALTY = -5 (Operator Accountability weight)
+CPS recovers by +2 per verification checkpoint pass
+Full recovery after 3 consecutive checkpoint passes
 ```
 
 ---
@@ -341,6 +365,10 @@ fn test_ping_allows_on_cps_success() {
 
 - name: SINGLE_ENTRY_POINT
   description: "All logic must route through BOOTSTRAP.md."
+  weight: 5
+
+- name: OPERATOR_ACCOUNTABILITY
+  description: "User input treated as unverified lane input. State-changing actions require lane convergence."
   weight: 5
 ```
 

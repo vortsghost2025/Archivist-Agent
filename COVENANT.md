@@ -123,6 +123,8 @@ The following are explicitly rejected:
 
 **Reference:** BOOTSTRAP.md:329-351 — "THE FORBIDDEN PATTERNS"
 
+**Runtime Enforcement:** These anti-values apply to ALL inputs including the operator. User inputs that trigger anti-value patterns are flagged by the schema validator and routed through quarantine (see RECIPROCAL_ACCOUNTABILITY.md:4).
+
 ---
 
 ## 5. Value Testing
@@ -144,6 +146,7 @@ Each value can be tested:
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0 | 2026-04-15 | Initial creation from BOOTSTRAP.md references |
+| 1.1 | 2026-04-20 | Added reciprocal accountability enforcement note to anti-values section |
 
 ---
 

@@ -13,11 +13,11 @@
       "type": "string",
       "description": "Path to artifact or log entry proving the claim"
     },
-    "verified_by": {
-      "type": "string",
-      "enum": ["archivist", "library", "swarmmind", "self", "user"],
-      "description": "Which lane or entity verified this claim"
-    },
+  "verified_by": {
+    "type": "string",
+    "enum": ["archivist", "library", "swarmmind", "codex", "self", "user"],
+    "description": "Which lane or entity verified this claim. NOTE: 'user' verification is treated as UNVERIFIED until 2+ lane convergence (RECIPROCAL_ACCOUNTABILITY.md:3)"
+  },
     "contradictions": {
       "type": "array",
       "items": {
@@ -51,5 +51,20 @@
       "Only owner lane works on blocker",
       "On resolution, owner removes blocker file"
     ]
+  },
+  "_user_lane_rules": {
+    "description": "User (operator) is treated as implicit lane with highest drift risk. Source: RECIPROCAL_ACCOUNTABILITY.md, operator mandate fromgpt.txt",
+    "rules": [
+      "User inputs that change system state require 2+ lane convergence before execution",
+      "User override attempts trigger quarantine review, not execution",
+      "User quarantine (UDS > 60) requires 3-lane convergence to unblock",
+      "User CANNOT self-unblock from quarantine",
+      "Operator mandate cannot be revoked in single session (3-lane + 24h cooling)",
+      "verified_by: 'user' is treated as UNVERIFIED until lanes confirm"
+    ],
+    "schemas": {
+      "user_quarantine": "schemas/user-quarantine-v1.json",
+      "user_input_gate": "schemas/user-input-gate-v1.json"
+    }
   }
 }

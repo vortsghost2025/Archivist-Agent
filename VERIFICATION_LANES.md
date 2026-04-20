@@ -22,6 +22,37 @@ DISAGREEMENT = INVESTIGATION
 ## 2. Dual Verification Architecture
 
 ```
+DECISION POINT
+│
+┌─────┴─────┐
+│           │
+┌───▼───┐ ┌───▼───┐
+│ LANE L│ │ LANE R│
+│(blind)│ │(blind)│
+└───┬───┘ └───┬───┘
+    │           │
+  PASS/FAIL   PASS/FAIL
+  + confidence + confidence
+    │           │
+    └─────┬─────┘
+          │
+   CONSENSUS CHECK
+          │
+   ┌──────┼──────┐
+   │      │      │
+ AGREE  DISAGREE  BOTH FAIL
+   │      │      │
+PROCEED INVESTIGATE ESCALATE
+```
+
+**Note:** If the decision point originates from USER input (operator), an additional gate applies:
+
+```
+USER INPUT → Checkpoint 0.5 (User Lane Gate)
+→ If state-changing: requires 2+ lane convergence before reaching DECISION POINT
+→ If quarantined (UDS > 60): hard stop, 3-lane convergence required
+→ See RECIPROCAL_ACCOUNTABILITY.md:3-4
+```
           DECISION POINT
                │
          ┌─────┴─────┐
@@ -265,8 +296,29 @@ IF LANE L evidence != LANE R evidence:
 
 ```
 IF consensus_confidence < 7:
-    Additional verification required
-    May spawn supplemental lane
+Additional verification required
+May spawn supplemental lane
+```
+
+### 10.4 User Quarantine Release Verification (NEW)
+
+```
+IF user quarantine active (UDS > 60):
+  Spawn verification in ALL 3 lanes independently:
+  
+  Lane 1 (Archivist): Review user drift signals vs governance
+  Lane 2 (Library): Verify against runtime evidence  
+  Lane 3 (SwarmMind): Trace where drift entered execution path
+  
+  Each lane outputs: UNBLOCK or MAINTAIN_QUARANTINE
+  
+  Consensus rules:
+  - 3/3 UNBLOCK → User restored to UDS 0
+  - 2/3 UNBLOCK → User restored to UDS 20 (elevated monitoring)
+  - 1/3 UNBLOCK → Quarantine maintained, review in 1 hour
+  - 0/3 UNBLOCK → Session freeze, require external review
+
+  Source: RECIPROCAL_ACCOUNTABILITY.md:4.2
 ```
 
 ---

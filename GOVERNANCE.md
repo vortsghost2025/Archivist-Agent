@@ -81,6 +81,19 @@ EVIDENCE: Test execution before documentation
 LAW 7 IS MOST CRITICAL.
 ```
 
+### Law 8: Operator Accountability (NEW)
+
+**Source:** RECIPROCAL_ACCOUNTABILITY.md, operator mandate fromgpt.txt
+
+```
+REQUIREMENT: User input is treated as unverified lane input
+FAILURE: Executing state-changing user input without lane convergence
+EVIDENCE: Convergence gate record showing 2+ lane approvals
+ENFORCEMENT: User override triggers quarantine, not execution
+```
+
+**The system is not safe until it can say NO to the operator.**
+
 ---
 
 ## 3. The Three Invariants (Always True)
@@ -291,19 +304,23 @@ Rules are enforced through:
 
 No agent verifies their own work as final authority.
 
-| Role | Responsibility |
-|------|----------------|
-| Archivist | Build + integrate |
-| Library | Map + verify structure |
-| Codex | Adversarial verification (break + trace execution) |
-| Operator | Resolve contradictions, arbitrate |
+| Role | Responsibility | Authority |
+|------|----------------|-----------|
+| User (Operator) | Direct, override, architect | 100 (highest risk) |
+| Archivist | Build + integrate | 90 |
+| Library | Map + verify structure | 90 |
+| Codex | Adversarial verification (break + trace execution) | 70 |
+| SwarmMind | Trace-mediated verification surface | 80 |
 
 **Rule:** Builder cannot mark phase complete without independent adversarial signoff.
+
+**Rule (NEW):** User state-changing inputs require 2+ lane convergence before execution. User is an implicit lane (position 0, highest drift risk). See RECIPROCAL_ACCOUNTABILITY.md:3.
 
 **Enforcement:** Phase completion requires:
 1. Builder self-checks (unit tests, integration)
 2. Independent adversarial review (Codex lane)
 3. Operator signoff on contradictions
+4. If operator overrides: convergence gate + quarantine review (RECIPROCAL_ACCOUNTABILITY.md:4)
 
 ---
 
@@ -350,6 +367,7 @@ Before marking any component complete, provide:
 | 1.1 | 2026-04-20 | Added Invariant 4 (Execution Path Reality) |
 | 1.1 | 2026-04-20 | Added Role Separation (Section 12) |
 | 1.1 | 2026-04-20 | Added Enforcement Proof Requirement (Section 13) |
+| 1.2 | 2026-04-20 | Added Law 8 (Operator Accountability), user-as-lane in Role Separation, reciprocal accountability enforcement |
 
 ---
 

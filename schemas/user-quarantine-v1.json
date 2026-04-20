@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "user-quarantine-v1",
+  "title": "User Quarantine State",
+  "description": "Runtime-enforceable schema for user quarantine and release. Source: RECIPROCAL_ACCOUNTABILITY.md",
+  "type": "object",
+  "required": ["status", "uds_score", "trigger_signals", "timestamp", "release_condition"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["STABLE", "ELEVATED", "HIGH", "CRITICAL", "COLLAPSE"],
+      "description": "Current user drift state"
+    },
+    "uds_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Current User Drift Score"
+    },
+    "trigger_signals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "CORRECTION_REJECTION",
+          "CONFIDENCE_INFLATION",
+          "CONSTRAINT_BYPASS",
+          "IDENTITY_FUSION",
+          "SCOPE_INFLATION",
+          "VALIDATION_SEEKING",
+          "DEAD_STOP_FAILURE",
+          "RULE_BYPASS_ATTEMPT",
+          "MULTI_BLOCKER_INTRODUCTION",
+          "CONTRADICTION_WITH_VERIFIED_STATE",
+          "EXPANSION_DURING_UNRESOLVED",
+          "MODE_SWITCH_MID_RESOLUTION",
+          "OVERRIDE_WITHOUT_EVIDENCE"
+        ]
+      },
+      "description": "Signals that contributed to current state"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this state was computed"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Current session identifier"
+    },
+    "is_state_changing": {
+      "type": "boolean",
+      "description": "Whether the user input changes system state"
+    },
+    "lane_convergence_required": {
+      "type": "boolean",
+      "description": "Whether lane convergence is needed before execution"
+    },
+    "release_condition": {
+      "type": "object",
+      "required": ["type", "lanes_required"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "none",
+            "verification_confirmation",
+            "mandatory_verification_lane",
+            "three_lane_convergence",
+            "session_freeze"
+          ]
+        },
+        "lanes_required": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Number of lanes that must agree for release"
+        },
+        "lane_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["lane", "decision", "evidence"],
+            "properties": {
+              "lane": {
+                "type": "string",
+                "enum": ["archivist", "library", "swarmmind"]
+              },
+              "decision": {
+                "type": "string",
+                "enum": ["UNBLOCK", "MAINTAIN_QUARANTINE"]
+              },
+              "evidence": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "cooldown_until": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "If mandate removal attempted, 24h cooldown expiry"
+        }
+      }
+    },
+    "mandate_revocation_attempt": {
+      "type": "boolean",
+      "description": "Whether the user attempted to revoke the operator mandate"
+    }
+  }
+}
