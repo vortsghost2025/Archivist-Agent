@@ -111,6 +111,22 @@ SCOPE: Applies to all decision points
 ENFORCEMENT: File check before preference application
 ```
 
+### Invariant 4: Execution Path Reality
+
+```
+RULE: If it is not in the live execution path, it does not exist.
+SCOPE: Applies to all components claiming completion
+ENFORCEMENT: Enforcement Proof required before phase passage
+
+DEFINITION: A component "exists" only when:
+- It is called in production runtime
+- Execution trace can be demonstrated
+- Failure cases are blocked by it
+- No bypass path circumvents it
+
+WITHOUT THIS: Code is dead regardless of tests passing
+```
+
 ---
 
 ## 4. The Enforcement Loop
@@ -269,11 +285,71 @@ Rules are enforced through:
 
 ---
 
-## 12. Version History
+## 12. Role Separation (Phase Completion)
+
+**Source:** Operational requirement from Phase 4 post-mortem
+
+No agent verifies their own work as final authority.
+
+| Role | Responsibility |
+|------|----------------|
+| Archivist | Build + integrate |
+| Library | Map + verify structure |
+| Codex | Adversarial verification (break + trace execution) |
+| Operator | Resolve contradictions, arbitrate |
+
+**Rule:** Builder cannot mark phase complete without independent adversarial signoff.
+
+**Enforcement:** Phase completion requires:
+1. Builder self-checks (unit tests, integration)
+2. Independent adversarial review (Codex lane)
+3. Operator signoff on contradictions
+
+---
+
+## 13. Enforcement Proof Requirement
+
+**Source:** Operational requirement from Phase 4 post-mortem
+
+Before marking any component complete, provide:
+
+### Required Evidence
+
+```
+1. RUNTIME CALL SITE
+   - File: function: line where component is invoked
+   - Example: VerifierWrapper.js: verify(): 45
+
+2. REAL EXECUTION TRACE
+   - Actual call chain from entry point to component
+   - Example: Queue.push() → VerifierWrapper.verify() → Verifier.verify()
+
+3. FAILURE CASE BLOCKED
+   - Specific case where component prevents wrong outcome
+   - Example: Invalid signature → component returns QUARANTINE, not ACCEPT
+
+4. BYPASS ANALYSIS
+   - All alternate paths checked
+   - Confirmation no path circumvents the component
+   - Example: No fallback branch exists that skips verification
+```
+
+### Without Enforcement Proof
+
+- Component is considered unimplemented
+- Tests in isolation prove nothing
+- Phase cannot be marked complete
+
+---
+
+## 14. Version History
 
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0 | 2026-04-15 | Initial creation from BOOTSTRAP.md references |
+| 1.1 | 2026-04-20 | Added Invariant 4 (Execution Path Reality) |
+| 1.1 | 2026-04-20 | Added Role Separation (Section 12) |
+| 1.1 | 2026-04-20 | Added Enforcement Proof Requirement (Section 13) |
 
 ---
 
