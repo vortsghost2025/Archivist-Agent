@@ -1,0 +1,108 @@
+{
+  "version": "1.0.0",
+  "created_at": "2026-04-19T21:30:00Z",
+  "primary_root": "S:/",
+  "architecture_mode": "lane_single_process",
+  "architecture_description": "Three-lane system with single-process Node.js applications per lane, file-based trust store hosted by Archivist",
+  "production_phenotype": {
+    "lanes": {
+      "archivist": {
+        "root": "S:/Archivist-Agent",
+        "role": "governance_root",
+        "components": [
+          "trust_store",
+          "governance_documents",
+          "orchestrator_interface"
+        ],
+        "key_file": ".trust/keys.json"
+      },
+      "library": {
+        "root": "S:/self-organizing-library",
+        "role": "mapping_documentation",
+        "components": [
+          "attestation",
+          "queue",
+          "identity",
+          "memory"
+        ],
+        "key_file": ".identity/snapshot.jws"
+      },
+      "swarmmind": {
+        "root": "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
+        "role": "execution_agent",
+        "components": [
+          "attestation",
+          "agents",
+          "queue",
+          "coordination",
+          "memory"
+        ],
+        "key_file": ".identity/snapshot.jws"
+      }
+    },
+    "verification_path": {
+      "archivist": [],
+      "library": [
+        "src/attestation/VerifierWrapper.js",
+        "src/attestation/Verifier.js",
+        "src/attestation/Signer.js",
+        "src/attestation/KeyManager.js",
+        "src/attestation/TrustStoreManager.js",
+        "src/queue/Queue.js"
+      ],
+      "swarmmind": [
+        "src/attestation/VerifierWrapper.js",
+        "src/attestation/Verifier.js",
+        "src/attestation/Signer.js",
+        "src/attestation/KeyManager.js",
+        "src/queue/Queue.js"
+      ]
+    },
+    "trust_store_path": "S:/Archivist-Agent/.trust/keys.json"
+  },
+  "forbidden_surfaces": [
+    "medical",
+    "DISTRIBUTED_MICROSERVICES_UNIVERSE",
+    "_root",
+    "_ARCHIVED",
+    ".continuity_test*",
+    "state/test_*"
+  ],
+  "allowed_extensions": [
+    ".js",
+    ".json",
+    ".md",
+    ".ts",
+    ".yaml",
+    ".pem"
+  ],
+  "verification_algorithm": "RSA-SHA256",
+  "strict_mode": true,
+  "fallback_policy": {
+    "hmac_accepted": false,
+    "recovery_override_allowed": false,
+    "missing_signature_mode": "REJECT",
+    "malformed_jws_mode": "QUARANTINE"
+  },
+  "env_required": [
+    "LANE_KEY_PASSPHRASE"
+  ],
+  "env_optional": [
+    "LANE_HMAC_SECRET",
+    "ARCHIVIST_ORCHESTRATOR_URL"
+  ],
+  "baseline_commits": {
+    "archivist": "5a9e2fab7dcfcd57f9cb47cdd2f6f5e2c8bf0d74",
+    "library": "c5cb640126a0f914c8099b73cd78b1fa5e7d984e",
+    "swarmmind": "2fa9e13ebf467d5c146c930af780e7e2da72a7d5"
+  },
+  "gates": {
+    "phase_0": "COMPLETE",
+    "phase_0_5": "IN_PROGRESS",
+    "phase_1": "BLOCKED",
+    "phase_2": "BLOCKED",
+    "phase_3": "BLOCKED",
+    "phase_4": "BLOCKED",
+    "phase_5": "BLOCKED"
+  }
+}
