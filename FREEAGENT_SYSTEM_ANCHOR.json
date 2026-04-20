@@ -96,13 +96,27 @@
     "library": "c5cb640126a0f914c8099b73cd78b1fa5e7d984e",
     "swarmmind": "2fa9e13ebf467d5c146c930af780e7e2da72a7d5"
   },
+  "outcome_policy": {
+    "statuses": ["SUCCESS", "FAILURE", "ESCALATE", "DEFER", "QUARANTINE"],
+    "core_rule": "Do not force completion. Force honesty. Allow help. Route uncertainty. Block fake success.",
+    "confidence_range": {"min": 0.0, "max": 1.0},
+    "confidence_thresholds": {
+      "high": 0.9,
+      "medium": 0.7,
+      "low": 0.5
+    },
+    "escalation_targets": ["ORCHESTRATOR", "ARCHIVIST", "LIBRARY", "SWARMMIND", "USER", "OTHER_LANE"],
+    "requirement_kinds": ["missing_context", "missing_dependency", "verification_needed", "human_approval", "resource_block", "conflict_resolution"],
+    "recovery_override_allowed": false
+  },
   "gates": {
     "phase_0": "COMPLETE",
     "phase_0_5": "COMPLETE",
     "phase_1": "COMPLETE",
     "phase_2": "COMPLETE",
     "phase_3": "COMPLETE",
-    "phase_4": "READY",
-    "phase_5": "BLOCKED"
+    "phase_4a": "COMPLETE",
+    "phase_4b": "COMPLETE",
+    "phase_5": "PENDING"
   }
 }
