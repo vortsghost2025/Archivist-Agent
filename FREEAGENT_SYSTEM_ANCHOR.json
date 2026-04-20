@@ -99,8 +99,8 @@
   "gates": {
     "phase_0": "COMPLETE",
     "phase_0_5": "COMPLETE",
-    "phase_1": "READY",
-    "phase_2": "BLOCKED",
+    "phase_1": "COMPLETE",
+    "phase_2": "READY",
     "phase_3": "BLOCKED",
     "phase_4": "BLOCKED",
     "phase_5": "BLOCKED"
