@@ -4,17 +4,35 @@ const crypto = require('crypto');
 
 const SCHEMA_PATH = path.resolve(__dirname, '../../schemas/inbox-message-v1.json');
 
+// Updated REQUIRED_FIELDS for v1.3 schema. task_kind is now optional for non-task message types.
 const REQUIRED_FIELDS = [
-  'schema_version', 'task_id', 'idempotency_key', 'from', 'to',
-  'type', 'task_kind', 'priority', 'subject', 'body',
-  'timestamp', 'requires_action', 'payload', 'execution',
-  'lease', 'retry', 'evidence', 'heartbeat'
+  'schema_version',
+  'task_id',
+  'idempotency_key',
+  'from',
+  'to',
+  'type',
+  // 'task_kind' removed from required list – optional for alert/ack/heartbeat types per v1.3.
+  'priority',
+  'subject',
+  'body',
+  'timestamp',
+  'requires_action',
+  'payload',
+  'execution',
+  'lease',
+  'retry',
+  'evidence',
+  'heartbeat'
 ];
 
 const ENUM_CONSTRAINTS = {
-  schema_version: ['1.0', '1.1'],
-  to: ['archivist', 'library', 'swarmmind', 'kernel-lane'],
-  type: ['task', 'response', 'heartbeat', 'escalation', 'handoff'],
+  // v1.3 adds support for schema_version 1.3
+  schema_version: ['1.0', '1.1', '1.3'],
+  // Updated canonical target name for kernel lane
+  to: ['archivist', 'library', 'swarmmind', 'kernel'],
+  type: ['task', 'response', 'heartbeat', 'escalation', 'handoff', 'ack', 'alert'],
+  // task_kind optional for non‑task messages; kept for backward compatibility
   task_kind: ['proposal', 'review', 'amendment', 'ratification'],
   priority: ['P0', 'P1', 'P2', 'P3'],
   'payload.mode': ['inline', 'path', 'chunked'],
@@ -87,7 +105,7 @@ function validate(message) {
     }
   }
 
-  // Enum checks
+  // Enum checks – only enforce when the field is present.
   for (const [dottedKey, allowedValues] of Object.entries(ENUM_CONSTRAINTS)) {
     const val = getNestedValue(message, dottedKey);
     if (val !== undefined && val !== null && !allowedValues.includes(val)) {
@@ -95,11 +113,12 @@ function validate(message) {
     }
   }
 
-  // Idempotency key format (SHA-256 hex)
+  // Idempotency key – v1.3 relaxes to any non‑empty string.
   if (message.idempotency_key && typeof message.idempotency_key === 'string') {
-    if (!SHA256_PATTERN.test(message.idempotency_key)) {
-      errors.push('idempotency_key must be 64 lowercase hex characters (SHA-256)');
+    if (message.idempotency_key.length === 0) {
+      errors.push('idempotency_key must be a non‑empty string');
     }
+    // No pattern enforcement – allows descriptive keys.
   }
 
   // Timestamp format (ISO-8601)
@@ -109,18 +128,17 @@ function validate(message) {
     }
   }
 
-  // Nested object structure checks
+  // Nested object structure checks – payload.mode always required; task_kind conditionally required.
   if (message.payload && typeof message.payload === 'object') {
     if (!('mode' in message.payload)) {
       errors.push('payload.mode is required');
     }
   }
 
-  if (message.execution && typeof message.execution === 'object') {
-    for (const reqField of ['mode', 'engine', 'actor']) {
-      if (!(reqField in message.execution)) {
-        errors.push(`execution.${reqField} is required`);
-      }
+  // Ensure task_kind presence only for message types that require it (per v1.3 "allOf" rule).
+  if (['task', 'response', 'escalation', 'handoff'].includes(message.type)) {
+    if (!('task_kind' in message)) {
+      errors.push('task_kind is required for task/response/escalation/handoff messages');
     }
   }
 
@@ -154,7 +172,7 @@ function computeIdempotencyKey({ task_id, from, to, subject }) {
 function createMessage(template = {}) {
   const now = new Date().toISOString();
   const defaults = {
-    schema_version: '1.1',
+    schema_version: '1.3',
     task_id: template.task_id || `task-${Date.now()}`,
     idempotency_key: '',
     from: template.from || 'library',

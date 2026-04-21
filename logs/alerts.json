@@ -1,0 +1,40 @@
+{
+  "history": [
+    {
+      "id": "ALERT-1776602289247-b7ab6866",
+      "timestamp": "2026-04-19T12:38:09.247Z",
+      "type": "p0_pending",
+      "severity": "CRITICAL",
+      "message": "P0 incidents pending > threshold: 4.00 > 0",
+      "metric_value": 4,
+      "threshold": 0,
+      "comparison": "above",
+      "acknowledged": false,
+      "resolved_at": null
+    },
+    {
+      "id": "ALERT-1776602289247-d7e9299b",
+      "timestamp": "2026-04-19T12:38:09.247Z",
+      "type": "p1_pending",
+      "severity": "HIGH",
+      "message": "P1 incidents pending > threshold: 9.00 > 3",
+      "metric_value": 9,
+      "threshold": 3,
+      "comparison": "above",
+      "acknowledged": false,
+      "resolved_at": null
+    },
+    {
+      "id": "ALERT-1776602289247-af4eee9d",
+      "timestamp": "2026-04-19T12:38:09.247Z",
+      "type": "auto_resolve_rate_drop",
+      "severity": "MEDIUM",
+      "message": "Auto-resolve rate < threshold: 0.00 < 50",
+      "metric_value": 0,
+      "threshold": 50,
+      "comparison": "below",
+      "acknowledged": false,
+      "resolved_at": null
+    }
+  ]
+}

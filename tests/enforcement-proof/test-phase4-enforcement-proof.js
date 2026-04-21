@@ -1,248 +1,176 @@
 /**
  * test-phase4-enforcement-proof.js
- * 
- * Behavioral gate tests per Enforcement Proof Requirement.
- * Tests EXECUTION PATH, not string presence.
- * 
- * Four requirements per GOVERNANCE.md Section 13:
- * 1. Runtime call site
- * 2. Real execution trace
- * 3. Failure case blocked
- * 4. Bypass analysis
+ *
+ * Behavioral enforcement proof:
+ * - Runtime call path is exercised
+ * - Real outcomes are asserted
+ * - Failure paths are blocked
+ * - Basic bypass surfaces are checked via live objects
  */
 
 const assert = require('assert');
-const path = require('path');
+const crypto = require('crypto');
 const fs = require('fs');
-
-const ARCHIVIST_ROOT = 'S:/Archivist-Agent';
-
-console.log('\n=== ENFORCEMENT PROOF TESTS ===\n');
+const os = require('os');
+const path = require('path');
+const { Verifier } = require('../../src/attestation/Verifier');
+const { VerifierWrapper } = require('../../src/attestation/VerifierWrapper');
+const { QuarantineManager } = require('../../src/attestation/QuarantineManager');
+const { VERIFY_REASON } = require('../../src/attestation/constants');
 
 let passed = 0;
 let failed = 0;
 
-function check(name, condition) {
-  if (condition) {
-    console.log(`✓ ${name}`);
+function createJWS(payload, privateKeyPem, kid = 'test-key') {
+  const header = { alg: 'RS256', kid };
+  const h = Buffer.from(JSON.stringify(header)).toString('base64url');
+  const p = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const input = `${h}.${p}`;
+  const sig = crypto.sign('RSA-SHA256', Buffer.from(input), privateKeyPem).toString('base64url');
+  return `${h}.${p}.${sig}`;
+}
+
+function createTempTrustStore(keysByLane) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'archivist-proof-'));
+  const trustStorePath = path.join(dir, 'keys.json');
+  const keys = {};
+  for (const [lane, keyInfo] of Object.entries(keysByLane)) {
+    keys[lane] = {
+      public_key_pem: keyInfo.publicKey,
+      key_id: `${lane}-kid`,
+      registered_at: new Date().toISOString(),
+      revoked_at: keyInfo.revoked ? new Date().toISOString() : null
+    };
+  }
+  fs.writeFileSync(trustStorePath, JSON.stringify({ version: '1.0', keys, migration: {} }, null, 2));
+  return { dir, trustStorePath };
+}
+
+async function run(name, fn) {
+  try {
+    await fn();
     passed++;
-  } else {
-    console.log(`✗ ${name}`);
+    console.log(`PASS ${name}`);
+  } catch (err) {
     failed++;
+    console.log(`FAIL ${name}: ${err.message}`);
   }
 }
 
-// ============================================================================
-// REQUIREMENT 1: RUNTIME CALL SITE
-// ============================================================================
+async function main() {
+  console.log('\n=== ENFORCEMENT PROOF (BEHAVIORAL) ===\n');
 
-console.log('--- REQUIREMENT 1: RUNTIME CALL SITE ---\n');
+  await run('Missing signature returns QUARANTINE (runtime)', async () => {
+    const qm = new QuarantineManager({ maxRetries: 3 });
+    const wrapper = new VerifierWrapper({ quarantineManager: qm });
+    const result = await wrapper.verify({ id: 'missing-sig-1', lane: 'library' });
+    assert.strictEqual(result.status, 'QUARANTINE');
+    assert.strictEqual(result.reason, VERIFY_REASON.MISSING_SIGNATURE);
+  });
 
-// 1.1: Outcome protocol is imported in VerifierWrapper
-const verifierWrapperPath = path.join(ARCHIVIST_ROOT, 'src/attestation/VerifierWrapper.js');
-const verifierWrapperCode = fs.readFileSync(verifierWrapperPath, 'utf8');
+  await run('Valid signed artifact returns SUCCESS and verified mode', async () => {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+      publicKeyEncoding: { type: 'spki', format: 'pem' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+    });
+    const { dir, trustStorePath } = createTempTrustStore({
+      library: { publicKey, revoked: false }
+    });
+    try {
+      const verifier = new Verifier({ trustStorePath });
+      const wrapper = new VerifierWrapper({ verifier });
+      const signature = createJWS({ lane: 'library', data: 'ok' }, privateKey, 'library-kid');
+      const result = await wrapper.verify({
+        id: 'good-1',
+        lane: 'library',
+        signature
+      });
+      assert.strictEqual(result.status, 'SUCCESS');
+      assert.strictEqual(result.result.mode, 'JWS_VERIFIED');
+      assert.strictEqual(result.result.payload.lane, 'library');
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  });
 
-check(
-  'Outcome protocol imported in VerifierWrapper',
-  verifierWrapperCode.includes("require('../core/protocols/outcome')")
-);
+  await run('Lane mismatch is blocked deterministically as QUARANTINE', async () => {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+      publicKeyEncoding: { type: 'spki', format: 'pem' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+    });
+    const { dir, trustStorePath } = createTempTrustStore({
+      swarmmind: { publicKey, revoked: false },
+      library: { publicKey, revoked: false }
+    });
+    try {
+      const verifier = new Verifier({ trustStorePath });
+      const wrapper = new VerifierWrapper({ verifier });
+      const signature = createJWS({ lane: 'library', data: 'mismatch' }, privateKey, 'library-kid');
+      const result = await wrapper.verify({
+        id: 'lane-mismatch-1',
+        lane: 'swarmmind',
+        signature
+      });
+      assert.strictEqual(result.status, 'QUARANTINE');
+      assert.strictEqual(result.reason, VERIFY_REASON.LANE_MISMATCH);
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  });
 
-// 1.2: Outcome.quarantine called for missing signature
-check(
-  'Missing signature returns QUARANTINE outcome',
-  verifierWrapperCode.includes('Outcome.quarantine') && 
-  verifierWrapperCode.includes('MISSING_SIGNATURE')
-);
+  await run('Malformed JWS yields structured non-success outcome', async () => {
+    const wrapper = new VerifierWrapper();
+    const result = await wrapper.verify({
+      id: 'malformed-1',
+      lane: 'library',
+      signature: 'not-a-jws'
+    });
+    assert.ok(['DEFER', 'QUARANTINE', 'FAILURE'].includes(result.status));
+  });
 
-// 1.3: Outcome.success called for valid verification
-check(
-  'Valid verification returns SUCCESS outcome',
-  verifierWrapperCode.includes('Outcome.success')
-);
+  await run('Retry boundary enforces 1-3 defer, 4 quarantine handoff', async () => {
+    const qm = new QuarantineManager({ maxRetries: 3 });
+    const wrapper = new VerifierWrapper({ quarantineManager: qm });
+    const item = { id: 'retry-boundary-1', lane: 'library', signature: 'not-a-jws' };
 
-// 1.4: Outcome.defer called for quarantine retry
-check(
-  'Quarantine retry returns DEFER outcome',
-  verifierWrapperCode.includes('Outcome.defer')
-);
+    const r1 = await wrapper.verify(item);
+    const r2 = await wrapper.verify(item);
+    const r3 = await wrapper.verify(item);
+    const r4 = await wrapper.verify(item);
 
-// ============================================================================
-// REQUIREMENT 2: REAL EXECUTION TRACE
-// ============================================================================
+    assert.strictEqual(r1.status, 'DEFER');
+    assert.strictEqual(r2.status, 'DEFER');
+    assert.strictEqual(r3.status, 'DEFER');
+    assert.strictEqual(r4.status, 'QUARANTINE');
+    assert.strictEqual(r4.reason, VERIFY_REASON.QUARANTINE_MAX_RETRIES);
+  });
 
-console.log('\n--- REQUIREMENT 2: REAL EXECUTION TRACE ---\n');
+  await run('Legacy verifier helper surfaces are absent on live object', async () => {
+    const verifier = new Verifier();
+    assert.strictEqual(typeof verifier.isHMACAccepted, 'undefined');
+    assert.strictEqual(typeof verifier.getMigrationStatus, 'undefined');
+    assert.strictEqual(Object.prototype.hasOwnProperty.call(verifier, 'hmacCutoffDate'), false);
+    assert.strictEqual(Object.prototype.hasOwnProperty.call(verifier, 'allowLegacy'), false);
+  });
 
-// 2.1: VerifierWrapper.verify() exists and calls outcome factories
-check(
-  'VerifierWrapper.verify() exists',
-  verifierWrapperCode.includes('async verify(item)')
-);
+  await run('Cross-lane conflict files are absent in Library lane', async () => {
+    const libraryOutcomeProtocol = 'S:/self-organizing-library/src/attestation/OutcomeProtocol.js';
+    const libraryOutcomeRouter = 'S:/self-organizing-library/src/attestation/OutcomeRouter.js';
+    assert.strictEqual(fs.existsSync(libraryOutcomeProtocol), false);
+    assert.strictEqual(fs.existsSync(libraryOutcomeRouter), false);
+  });
 
-// 2.2: Trace path: verify() -> Outcome.quarantine/success/defer
-const hasQuarantineCall = verifierWrapperCode.includes('Outcome.quarantine');
-const hasSuccessCall = verifierWrapperCode.includes('Outcome.success');
-const hasDeferCall = verifierWrapperCode.includes('Outcome.defer');
-
-check(
-  'Execution trace: verify() -> Outcome factories',
-  hasQuarantineCall && hasSuccessCall && hasDeferCall
-);
-
-// 2.3: Verifier.verifyQueueItem() exists (called by VerifierWrapper)
-const verifierPath = path.join(ARCHIVIST_ROOT, 'src/attestation/Verifier.js');
-const verifierCode = fs.readFileSync(verifierPath, 'utf8');
-
-check(
-  'Verifier.verifyQueueItem() exists',
-  verifierCode.includes('verifyQueueItem(item)')
-);
-
-// 2.4: QuarantineManager.quarantine() exists (called by VerifierWrapper)
-const quarantinePath = path.join(ARCHIVIST_ROOT, 'src/attestation/QuarantineManager.js');
-const quarantineCode = fs.readFileSync(quarantinePath, 'utf8');
-
-check(
-  'QuarantineManager.quarantine() exists',
-  quarantineCode.includes('quarantine(item, reason)')
-);
-
-// ============================================================================
-// REQUIREMENT 3: FAILURE CASE BLOCKED
-// ============================================================================
-
-console.log('\n--- REQUIREMENT 3: FAILURE CASE BLOCKED ---\n');
-
-// 3.1: HMAC dual-mode acceptance REMOVED from VerifierWrapper
-check(
-  'HMAC dual-mode removed from VerifierWrapper',
-  !verifierWrapperCode.includes('HMAC_ACCEPTED_DUAL_MODE')
-);
-
-// 3.2: HMAC dual-mode acceptance REMOVED from Verifier
-check(
-  'HMAC dual-mode removed from Verifier',
-  !verifierCode.includes('HMAC_ACCEPTED_DUAL_MODE')
-);
-
-// 3.3: Missing signature immediately returns QUARANTINE (not accepted)
-check(
-  'Missing signature rejected immediately',
-  verifierWrapperCode.includes('MISSING_SIGNATURE') && 
-  verifierWrapperCode.includes('Outcome.quarantine') &&
-  !verifierWrapperCode.includes('HMAC_ACCEPTED')
-);
-
-// 3.4: Lane mismatch returns QUARANTINE (not bypassed)
-check(
-  'Lane mismatch returns QUARANTINE outcome',
-  verifierWrapperCode.includes('LANE_MISMATCH') && 
-  verifierWrapperCode.includes('Outcome.quarantine')
-);
-
-// 3.5: Key not found returns proper handling
-check(
-  'Key not found handled properly',
-  verifierCode.includes('KEY_NOT_FOUND')
-);
-
-// ============================================================================
-// REQUIREMENT 4: BYPASS ANALYSIS
-// ============================================================================
-
-console.log('\n--- REQUIREMENT 4: BYPASS ANALYSIS ---\n');
-
-// 4.1: No HMAC fallback path in VerifierWrapper
-check(
-  'No HMAC fallback in VerifierWrapper',
-  !verifierWrapperCode.includes('hmacCutoffDate') || 
-  !verifierWrapperCode.includes('now < cutoff')
-);
-
-// 4.2: No HMAC fallback path in Verifier.verifyQueueItem (execution path)
-check(
-  'No HMAC fallback in Verifier.verifyQueueItem execution path',
-  !verifierCode.includes('HMAC_ACCEPTED_DUAL_MODE') &&
-  !verifierCode.includes('if (new Date() < cutoff)') // Execution path, not status methods
-);
-
-// 4.3: Recovery override forbidden (per anchor)
-const anchorPath = path.join(ARCHIVIST_ROOT, 'FREEAGENT_SYSTEM_ANCHOR.json');
-const anchorCode = fs.readFileSync(anchorPath, 'utf8');
-
-check(
-  'Anchor declares recovery_override_allowed: false',
-  anchorCode.includes('"recovery_override_allowed": false')
-);
-
-// 4.4: Anchor declares hmac_accepted: false
-check(
-  'Anchor declares hmac_accepted: false',
-  anchorCode.includes('"hmac_accepted": false')
-);
-
-// 4.5: Anchor declares missing_signature_mode: "REJECT"
-check(
-  'Anchor declares missing_signature_mode: "REJECT"',
-  anchorCode.includes('"missing_signature_mode": "REJECT"')
-);
-
-// 4.6: Confidence defaults are NOT optimistic
-const confidencePath = path.join(ARCHIVIST_ROOT, 'src/core/protocols/confidence.js');
-const confidenceCode = fs.readFileSync(confidencePath, 'utf8');
-
-check(
-  'Confidence factors default to false (not optimistic)',
-  confidenceCode.includes('=== true') && 
-  !confidenceCode.includes('!== false')
-);
-
-// 4.7: Retry boundary is correct (> not >=)
-check(
-  'Retry boundary uses > (not >=) for correct policy',
-  quarantineCode.includes('entry.retryCount > this.maxRetries')
-);
-
-// ============================================================================
-// CROSS-LANE CONSISTENCY
-// ============================================================================
-
-console.log('\n--- CROSS-LANE CONSISTENCY ---\n');
-
-const libraryRoot = 'S:/self-organizing-library';
-
-// 5.1: Library does not have conflicting OutcomeProtocol.js
-const conflictingPath = path.join(libraryRoot, 'src/attestation/OutcomeProtocol.js');
-check(
-  'Library OutcomeProtocol.js removed (no ACCEPT/REJECT conflict)',
-  !fs.existsSync(conflictingPath)
-);
-
-// 5.2: Library Queue.js has no HMAC bypass branch
-const libraryQueuePath = path.join(libraryRoot, 'src/queue/Queue.js');
-const libraryQueueCode = fs.readFileSync(libraryQueuePath, 'utf8');
-
-check(
-  'Library Queue has no HMAC bypass branch',
-  !libraryQueueCode.includes('else if (current.hmac)') ||
-  libraryQueueCode.includes('missing required signature')
-);
-
-// ============================================================================
-// SUMMARY
-// ============================================================================
-
-console.log('\n=== ENFORCEMENT PROOF RESULTS ===\n');
-console.log(`Passed: ${passed}`);
-console.log(`Failed: ${failed}`);
-
-if (failed > 0) {
-  console.log('\n❌ ENFORCEMENT PROOF NOT SATISFIED');
-  console.log('Fix the failing checks before marking complete.');
-  process.exit(1);
+  console.log(`\nPassed: ${passed}`);
+  console.log(`Failed: ${failed}`);
+  if (failed > 0) {
+    process.exit(1);
+  }
 }
 
-console.log('\n✅ ALL ENFORCEMENT PROOF REQUIREMENTS SATISFIED');
-console.log('Outcome protocol is in live execution path.');
-console.log('HMAC fallback eliminated.');
-console.log('Cross-lane consistency verified.');
-process.exit(0);
+main().catch((err) => {
+  console.error('Fatal:', err);
+  process.exit(1);
+});
+

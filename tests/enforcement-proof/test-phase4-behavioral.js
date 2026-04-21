@@ -18,6 +18,15 @@ const { QuarantineManager } = require('../../src/attestation/QuarantineManager')
 
 let passed = 0;
 let failed = 0;
+const asyncErrors = [];
+
+process.on('unhandledRejection', (reason) => {
+  asyncErrors.push(reason instanceof Error ? reason : new Error(String(reason)));
+});
+
+process.on('uncaughtException', (err) => {
+  asyncErrors.push(err);
+});
 
 async function runTests() {
   console.log('\n=== BEHAVIORAL EXECUTION TESTS ===\n');
@@ -412,6 +421,13 @@ async function runTests() {
   console.log('\n=== BEHAVIORAL TEST RESULTS ===\n');
   console.log(`Passed: ${passed}`);
   console.log(`Failed: ${failed}`);
+  if (asyncErrors.length > 0) {
+    failed += asyncErrors.length;
+    console.log(`Async errors: ${asyncErrors.length}`);
+    asyncErrors.forEach((err, index) => {
+      console.log(`  [${index + 1}] ${err.message}`);
+    });
+  }
 
   if (failed > 0) {
     console.log('\n❌ BEHAVIORAL TESTS FAILED');

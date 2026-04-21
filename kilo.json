@@ -1,50 +1,32 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
-  "model": "ollama/qwen2.5-coder:7b",
+  "model": "nvidia/z-ai/glm-5.1",
   "agent": {
     "orchestrator": {
       "model": "nvidia/z-ai/glm-5.1"
     },
     "plan": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "nvidia/z-ai/glm-5.1"
     },
     "code": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "nvidia/z-ai/glm-5.1"
     },
     "build": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "nvidia/z-ai/glm-5.1"
     },
     "debug": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "nvidia/z-ai/glm-5.1"
     },
     "ask": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "nvidia/z-ai/glm-5.1"
     },
     "general": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "nvidia/z-ai/glm-5.1"
     }
   },
   "provider": {
-    "ollama": {
-      "options": {
-        "baseURL": "http://127.0.0.1:11434/v1"
-      },
-      "models": {
-        "qwen2.5-coder:7b": {
-          "name": "Qwen2.5 Coder 7B",
-          "tool_call": true,
-          "limit": {
-            "context": 8192,
-            "output": 8192
-          },
-          "options": {
-            "num_ctx": 8192,
-            "temperature": 0.2
-          }
-        }
-      }
-    },
-    "z-ai": {
+    "nvidia": {
+      "api_key": "${NVIDIA_API_KEY}",
       "models": {
         "glm-5.1": {
           "name": "GLM-5.1",

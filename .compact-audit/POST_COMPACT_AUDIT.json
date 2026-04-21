@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-21T13:34:30.727Z",
+  "timestamp": "2026-04-21T15:22:07.497Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -77,28 +77,28 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-21T13:34:01.352Z",
-        "age_seconds": 29
+        "timestamp": "2026-04-21T15:22:01.200Z",
+        "age_seconds": 6
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-21T13:34:01.369Z",
-        "age_seconds": 29
+        "timestamp": "2026-04-21T15:22:01.211Z",
+        "age_seconds": 6
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-21T13:34:06.953Z",
-        "age_seconds": 23
+        "timestamp": "2026-04-21T15:21:07.822Z",
+        "age_seconds": 59
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-21T13:34:07.170Z",
-        "age_seconds": 23
+        "timestamp": "2026-04-21T15:21:08.007Z",
+        "age_seconds": 59
       }
     },
     "inbox_counts": {
       "archivist": 5,
-      "library": 1,
+      "library": 0,
       "swarmmind": 0,
       "kernel": 0
     },
@@ -120,8 +120,14 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 0,
-    "message_loss_detail": {},
+    "message_loss": 1,
+    "message_loss_detail": {
+      "library": {
+        "pre": 1,
+        "post": 0,
+        "lost": 1
+      }
+    },
     "lane_degradations": [],
     "risk_set_preserved": false,
     "missing_risks": [
@@ -135,7 +141,7 @@
       "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
     ]
   },
-  "status": "aligned",
+  "status": "drifted",
   "proof": {
     "method": "multi_source_contradiction_test",
     "sources_checked": [
