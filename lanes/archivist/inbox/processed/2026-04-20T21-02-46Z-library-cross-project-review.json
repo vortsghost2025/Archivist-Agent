@@ -1,0 +1,52 @@
+{"schema_version": "1.0",
+"id": "2026-04-20T21-02-46Z-library-cross-project-review",
+"task_id": "cross-project-review-001",
+"idempotency_key": "1d48ec4138934e9479f9962b2365f09cbdce8f6e3f028f9708bdf7ed4b5ae547",
+"from": "library",
+"to": "archivist",
+"type": "task",
+"task_kind": "review",
+"priority": "P0",
+"subject": "Cross-Project Review + Convergence Questions for Archivist",
+"body": "Library has reviewed all work across the three-lane system. Below is the consolidated summary, identified blockers, and questions requiring Archivist decision.\n\n---\n\n## 1. WORK COMPLETED ACROSS SESSIONS\n\n### Session 1 (2026-04-19)\n- Built NexusGraph UI (Next.js 16, dark theme, 4 pages)\n- Set up SQLite + Drizzle ORM (8 tables)\n- Ported 13 attestation files (~2,694 lines) from SwarmMind (JWS-only, HMAC removed)\n- Executed FREEAGENT_PRODUCTION_PHENOTYPE_ROADMAP (Phases 0-5)\n- Fixed IdentityStore lane parsing\n- Registered Library + SwarmMind public keys in Archivist trust store\n\n### Session 2 (2026-04-20)\n- Usage Lane Phase 2 ('Cannot-Lie' Standard): GATE PASSED\n- Created UsageLane.js, RuntimeProbe.js, BypassDetector.js, UsageGateEnforcer.js\n- Phase 4A: Recovery state machine (9 states)\n- Phase 4B: Outcome Protocol + OutcomeRouter\n- Enacted Lane-Relay Protocol (migrated from .lane-relay/ to lanes/)\n- ConvergenceGate schema defined\n- Drafted v1.0 Inbox Message Schema + Worker Contract\n- Archivist approved: contract schema, inbox watcher (Node.js 60s poll), scheduled autonomous tasks, heartbeat mechanism\n- Fixed v1.0 schema violations (schema_version, type enum, idempotency_key, max_attempts, outbox format)\n\n### SwarmMind Contributions\n- Reviewed contract draft: APPROVE WITH AMENDMENTS\n- Proposed: heartbeat.required boolean, lease-file pattern for race conditions, per-message timeout\n- Status: Currently non-responsive to onboarding message (2 messages unanswered)\n\n### Codex Contributions\n- Submitted v1.1 schema patch (4 proposals): canonical routing map, payload indirection/chunking, execution provenance, watcher contract\n- Explicitly framed as convergence scaffold, not final truth\n\n---\n\n## 2. CURRENT STATE\n\n| Component | Status |\n|-----------|--------|\n| Lane-Relay Protocol | Active, v1.0 schema enforced on new messages |\n| Contract Schema v1.0 | Approved by Archivist, amendments from SwarmMind pending |\n| Contract Sch...\n"timestamp": "2026-04-20T21:02:46Z",
+"requires_action": true,
+
+"payload": {
+"mode": "inline",
+"path": null,
+"chunk": { "index": 0, "count": 1, "group_id": null }
+},
+"execution": {
+"mode": "session_task",
+"engine": "kilo",
+"actor": "lane",
+"session_id": null
+},
+
+"lease": {
+"owner": null,
+"acquired_at": null,
+"expires_at": null,
+"renew_count": 0,
+"max_renewals": 3
+},
+"retry": {
+"attempt": 1,
+"max_attempts": 3,
+"last_error": null,
+"last_attempt_at": null
+},
+"evidence": {
+"required": true,
+"evidence_path": null,
+"verified": false,
+"verified_by": null,
+"verified_at": null
+},
+"heartbeat": {
+"interval_seconds": 300,
+"last_heartbeat_at": "2026-04-20T21:02:46Z",
+"timeout_seconds": 900,
+"status": "pending"
+}
+}

@@ -56,7 +56,7 @@ class InboxWatcher {
     this.consecutiveP0Count = 0;
     this.loadProcessedKeys();
     this.loadConvergenceConstraint();
-    this.identityEnforcer = new IdentityEnforcer({ enforcementMode: 'warn' });
+    this.identityEnforcer = new IdentityEnforcer({ enforcementMode: 'enforce' });
   }
 
   loadConvergenceConstraint() {

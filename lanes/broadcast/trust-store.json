@@ -19,10 +19,10 @@
   },
   "swarmmind": {
     "lane_id": "swarmmind",
-    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAozmACq+dK7NHz22tV+Yh\n6EYSl4rZqSl9bNCWZjg5/Hji5qgQ/Mt1wQg+ciSqe4FpDJCpCM0jWlX/Df4uV9tm\nPFMyY3WlGx4m1OOpmzJmQwABcUaULx6q8vFkSPApo5bEUpHWDIK4L4pnVjkrnZBX\nichIdlQ8WA0q0hXBbI3TgKkgIZfHWY3ULbS87hHbNU+ij27c41O/OLxUpVLpRm1l\ntRLpF7WYeK/jR070a4dv/MLdFCsGrrDEEX55dIS/0ir3n34Lfc8UFmgG9+2PhmNG\nt7r0NhnMs+DmLElJ1do/fsrB8XlJewln/LoVzNr7Xzip/7jPWrv9DhcrPTLRr+hc\nEQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAso/xAg1Gbfc+mwaxdL+N\ncnA5HqPvJBR6vKjg/I4R9Xy7aOjQFR6X0HghM9trBAnNOo2aFCVkNE5l5zycii6o\nPAv3lmHsQ9wAbRUdbvH2Dw3HUD3kpXjSr+cpIhTe2Ym0lpyYFMNgoM1jImUW1dUH\n3ArMPHQX+3qRjS4ZafGHMwjYGmwVbAnQdH+NgRITs2CeXSXpL8A9ImDhPGBRTsOo\n10cBgTai0eiS+vAmGJbpI4TPJfW7L1Q0YS9rWtHQEI7uzZmMzSoTmkatJ9qdeNQq\nGx75hiFI8XENkfeDlJXW3pI6rjwCFxfmHA6cxaZvEFSL86OfXDNPY2D8TSz95U2g\n0QIDAQAB\n-----END PUBLIC KEY-----\n",
     "algorithm": "RS256",
-    "key_id": "5245d4773997dadb",
-    "registered_at": "2026-04-21T12:28:18.844Z",
+    "key_id": "1caa44aed3366a86",
+    "registered_at": "2026-04-21T15:58:12.933Z",
     "expires_at": null,
     "revoked_at": null
   },
