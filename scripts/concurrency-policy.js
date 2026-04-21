@@ -89,11 +89,27 @@ function acquireWatcherLock({ repoRoot, laneName, policy }) {
       const raw = fs.readFileSync(lockPath, 'utf8');
       const existing = JSON.parse(raw);
       const acquiredMs = Date.parse(existing.acquired_at);
+      const sameHost = !existing.host || existing.host === os.hostname();
+      let pidAlive = null;
+      if (sameHost && Number.isInteger(existing.pid) && existing.pid > 0) {
+        try {
+          process.kill(existing.pid, 0);
+          pidAlive = true;
+        } catch (pidErr) {
+          // ESRCH => no such process; EPERM => process exists but cannot signal.
+          pidAlive = pidErr && pidErr.code === 'EPERM';
+        }
+      }
 
       // Crash-safe contract: never trust filesystem timestamps for lock logic.
       // If acquired_at is missing or invalid, treat lock as stale and reclaim.
       if (!Number.isFinite(acquiredMs)) {
         stale = true;
+      } else if (pidAlive === false) {
+        stale = true;
+        console.log(
+          `[lock] Reclaiming dead-pid lock (old_pid=${existing.pid}, host=${existing.host || 'unknown'})`
+        );
       } else {
         const ageSeconds = Math.floor((Date.now() - acquiredMs) / 1000);
         stale = ageSeconds > staleAfterSeconds;
