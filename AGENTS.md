@@ -462,6 +462,15 @@ READ lanes/{self}/inbox/
 
 Process by priority (P0 > P1 > P2 > P3).
 
+**Post-compact audit (MANDATORY):** Run `node scripts/post-compact-audit.js` — if status is `conflicted`, do NOT proceed with new work. Escalate to coordinator.
+
+### After Context Compact (MANDATORY)
+
+If your context was compacted mid-session:
+1. Run `node scripts/recovery-test-suite.js` — all 11 tests must pass.
+2. If any test fails, status = `conflicted` — stop and escalate.
+3. Compare your handoff hash against `.compact-audit/HANDOFF_HASH_LOG.jsonl` — if mismatch, quarantine the restore.
+
 ### Sending Messages (MANDATORY)
 
 When sending TO another lane:
