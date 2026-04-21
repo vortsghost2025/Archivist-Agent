@@ -1,0 +1,48 @@
+{
+  "round": 1,
+  "lane": "archivist",
+  "task": "schema-compliance-self-audit",
+  "timestamp": "2026-04-21T19:40:30Z",
+  "schema_version": "1.2",
+  "outbox_total": 4,
+  "outbox_pass": 0,
+  "outbox_fail": 4,
+  "top_3_violations": [
+    {
+      "file": "2026-04-20T20-30-00Z-archivist-decisions.json",
+      "violations": [
+        "to:not_in_enum:library+swarmmind (multi-recipient not allowed)",
+        "signature:empty_or_missing",
+        "key_id:empty_or_missing",
+        "type:not_in_enum:decision",
+        "missing required: schema_version, task_id, idempotency_key, task_kind, payload, execution, lease, retry, heartbeat"
+      ]
+    },
+    {
+      "file": "2026-04-20T21-05-00Z-archivist-v1_1-review.json",
+      "violations": [
+        "to:not_in_enum:library+swarmmind+codex (multi-recipient not allowed)",
+        "signature:empty_or_missing",
+        "key_id:empty_or_missing"
+      ]
+    },
+    {
+      "file": "2026-04-20T21-25-00Z-archivist-lane4-review.json",
+      "violations": [
+        "to:not_in_enum:library+swarmmind+codex (multi-recipient not allowed)",
+        "signature:empty_or_missing",
+        "key_id:empty_or_missing"
+      ]
+    }
+  ],
+  "systemic_issues": [
+    "ALL outbox messages use multi-recipient 'to' field (e.g., library+swarmmind) — schema requires single recipient",
+    "NO outbox messages are signed — signature and key_id are empty across all 4 files",
+    "3 of 4 messages are legacy format (pre-v1.1) missing required fields"
+  ],
+  "remediation": [
+    "Re-write each multi-recipient message as N individual messages (one per recipient)",
+    "Sign all outbound messages with create-signed-message.js before writing to outbox",
+    "Regenerate legacy messages using build-message.js to fill required fields"
+  ]
+}

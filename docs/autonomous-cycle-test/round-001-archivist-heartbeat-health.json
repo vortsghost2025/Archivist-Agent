@@ -1,0 +1,36 @@
+{
+  "round": 1,
+  "lane": "archivist",
+  "task": "cross-lane-heartbeat-health-check",
+  "timestamp": "2026-04-21T19:40:30Z",
+  "staleness_threshold_s": 900,
+  "lanes": [
+    {
+      "lane": "archivist",
+      "timestamp": "2026-04-21T19:40:02.099Z",
+      "staleness_s": 29,
+      "status": "LIVE"
+    },
+    {
+      "lane": "library",
+      "timestamp": "2026-04-21T19:40:02.108Z",
+      "staleness_s": 29,
+      "status": "LIVE"
+    },
+    {
+      "lane": "swarmmind",
+      "timestamp": "2026-04-21T19:40:09.755Z",
+      "staleness_s": 22,
+      "status": "LIVE"
+    },
+    {
+      "lane": "kernel",
+      "timestamp": "2026-04-21T19:40:10.095Z",
+      "staleness_s": 21,
+      "status": "LIVE"
+    }
+  ],
+  "stale_count": 0,
+  "escalation_required": false,
+  "notes": "All 4 lanes report within 30s staleness. Scheduled tasks (60s cadence) operating normally. No P1 escalation needed."
+}
