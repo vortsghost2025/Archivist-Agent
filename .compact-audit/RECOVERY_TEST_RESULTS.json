@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-04-21T13:39:42.813Z",
+  "suite": "recovery-verification-v1",
+  "results": [
+    {
+      "name": "trust_chain_continuity",
+      "passed": true,
+      "detail": "4/4 lanes have key IDs"
+    },
+    {
+      "name": "governance_integrity",
+      "passed": true,
+      "detail": "gov=aa34293b... boot=22c5239e..."
+    },
+    {
+      "name": "constraint_preservation",
+      "passed": true,
+      "detail": "4 constraints, required=4"
+    },
+    {
+      "name": "handoff_tamper_detection",
+      "passed": true,
+      "detail": "sha256=7c6b2a73fe3200de..."
+    },
+    {
+      "name": "handoff_hash_logged",
+      "passed": true,
+      "detail": "7c6b2a73fe3200de..."
+    },
+    {
+      "name": "blocker_consistency",
+      "passed": true,
+      "detail": "no active blocker"
+    },
+    {
+      "name": "message_inventory",
+      "passed": true,
+      "detail": "total=6 {\"archivist\":5,\"library\":1,\"swarmmind\":0,\"kernel\":0}"
+    },
+    {
+      "name": "risk_set_preservation",
+      "passed": true,
+      "detail": "5 known risks in pre-compact snapshot"
+    },
+    {
+      "name": "lane_liveness",
+      "passed": true,
+      "detail": "4/4 lanes alive"
+    },
+    {
+      "name": "multi_source_consistency",
+      "passed": true,
+      "detail": "6 sources, 0 contradictions"
+    },
+    {
+      "name": "contradiction_detection",
+      "passed": true,
+      "detail": "status=aligned unexpected_changes=1"
+    }
+  ],
+  "summary": {
+    "passed": 11,
+    "total": 11,
+    "all_passed": true
+  },
+  "claim": "Restored context matches pre-compact state across all checked dimensions"
+}

@@ -1,0 +1,155 @@
+{
+  "timestamp": "2026-04-21T13:34:30.727Z",
+  "schema": "post-compact-audit-v1",
+  "pre_compact": {
+    "active_blocker": {
+      "exists": false,
+      "blocker": null
+    },
+    "trust_store_key_ids": {
+      "archivist": "583b2c36f397ef01",
+      "library": "a3136a93627b7b46",
+      "swarmmind": "151a2ded0a2c00c1",
+      "kernel": "74bc4b8df188b771"
+    },
+    "constraint_names": [
+      "STRUCTURE_OVER_IDENTITY",
+      "CORRECTION_MANDATORY",
+      "SINGLE_ENTRY_POINT",
+      "OPERATOR_ACCOUNTABILITY"
+    ],
+    "lane_states": {
+      "archivist": {
+        "status": "alive",
+        "timestamp": "2026-04-21T13:34:01.352Z",
+        "age_seconds": 29
+      },
+      "library": {
+        "status": "alive",
+        "timestamp": "2026-04-21T13:34:01.369Z",
+        "age_seconds": 29
+      },
+      "swarmmind": {
+        "status": "alive",
+        "timestamp": "2026-04-21T13:34:06.953Z",
+        "age_seconds": 23
+      },
+      "kernel": {
+        "status": "alive",
+        "timestamp": "2026-04-21T13:34:07.170Z",
+        "age_seconds": 23
+      }
+    },
+    "inbox_counts": {
+      "archivist": 5,
+      "library": 1,
+      "swarmmind": 0,
+      "kernel": 0
+    },
+    "governance_hash": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
+    "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
+    "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
+    "known_risks": [
+      "identity_soft_keys",
+      "determinism_not_guaranteed",
+      "kernel_partial_convergence",
+      "contract_alignment_ambiguous",
+      "subagent_code_destruction_surface"
+    ]
+  },
+  "post_compact": {
+    "active_blocker": {
+      "exists": false,
+      "blocker": null
+    },
+    "trust_store_key_ids": {
+      "archivist": "583b2c36f397ef01",
+      "library": "a3136a93627b7b46",
+      "swarmmind": "151a2ded0a2c00c1",
+      "kernel": "74bc4b8df188b771"
+    },
+    "constraint_names": [
+      "STRUCTURE_OVER_IDENTITY",
+      "CORRECTION_MANDATORY",
+      "SINGLE_ENTRY_POINT",
+      "OPERATOR_ACCOUNTABILITY"
+    ],
+    "lane_states": {
+      "archivist": {
+        "status": "alive",
+        "timestamp": "2026-04-21T13:34:01.352Z",
+        "age_seconds": 29
+      },
+      "library": {
+        "status": "alive",
+        "timestamp": "2026-04-21T13:34:01.369Z",
+        "age_seconds": 29
+      },
+      "swarmmind": {
+        "status": "alive",
+        "timestamp": "2026-04-21T13:34:06.953Z",
+        "age_seconds": 23
+      },
+      "kernel": {
+        "status": "alive",
+        "timestamp": "2026-04-21T13:34:07.170Z",
+        "age_seconds": 23
+      }
+    },
+    "inbox_counts": {
+      "archivist": 5,
+      "library": 1,
+      "swarmmind": 0,
+      "kernel": 0
+    },
+    "governance_hash": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
+    "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
+    "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
+    "known_risks": []
+  },
+  "diff": {
+    "blocker_changed": false,
+    "blocker_detail": null,
+    "trust_chain_intact": true,
+    "trust_detail": null,
+    "constraints_intact": true,
+    "constraints_detail": null,
+    "governance_intact": true,
+    "governance_detail": null,
+    "bootstrap_intact": true,
+    "bootstrap_detail": null,
+    "handoff_intact": true,
+    "handoff_detail": null,
+    "message_loss": 0,
+    "message_loss_detail": {},
+    "lane_degradations": [],
+    "risk_set_preserved": false,
+    "missing_risks": [
+      "identity_soft_keys",
+      "determinism_not_guaranteed",
+      "kernel_partial_convergence",
+      "contract_alignment_ambiguous",
+      "subagent_code_destruction_surface"
+    ],
+    "unexpected_changes": [
+      "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
+    ]
+  },
+  "status": "aligned",
+  "proof": {
+    "method": "multi_source_contradiction_test",
+    "sources_checked": [
+      "active_blocker",
+      "trust_store",
+      "constitutional_constraints",
+      "governance_doc",
+      "bootstrap_doc",
+      "handoff_doc",
+      "inbox_message_counts",
+      "lane_heartbeats",
+      "known_risk_set"
+    ],
+    "contradictions_found": 1,
+    "self_declared_alignment": false
+  }
+}
