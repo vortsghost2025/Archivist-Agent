@@ -11,3 +11,5 @@ keys.json
 # Session memory (persists locally)
 .memory/
 .identity/*.pem
+
+.runtime/

@@ -8,6 +8,7 @@ const {
   assertWatcherConfig,
   acquireWatcherLock
 } = require('./concurrency-policy');
+const { IdentityEnforcer } = require('./identity-enforcer');
 
 const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
 const PREEMPTION_CYCLE_LIMIT = 2;
@@ -55,6 +56,7 @@ class InboxWatcher {
     this.consecutiveP0Count = 0;
     this.loadProcessedKeys();
     this.loadConvergenceConstraint();
+    this.identityEnforcer = new IdentityEnforcer({ enforcementMode: 'warn' });
   }
 
   loadConvergenceConstraint() {
@@ -118,11 +120,18 @@ class InboxWatcher {
 
       const filePath = path.join(this.config.inboxPath, filename);
       try {
-        const raw = fs.readFileSync(filePath, 'utf8');
-        const msg = JSON.parse(raw);
-        msg._sourceFile = filename;
-        msg._sourcePath = filePath;
-        if (!this.checkIdempotencyKey(msg)) {
+          const raw = fs.readFileSync(filePath, 'utf8');
+          const msg = JSON.parse(raw);
+          msg._sourceFile = filename;
+          msg._sourcePath = filePath;
+          const idResult = this.identityEnforcer.enforceMessage(msg);
+          msg._identity = idResult;
+          if (idResult.decision === 'reject') {
+            console.log(`[watcher] IDENTITY_REJECT: ${filename} from ${idResult.from} — ${idResult.reason}`);
+            this.moveToExpired(filename, filePath);
+            continue;
+          }
+          if (!this.checkIdempotencyKey(msg)) {
           this.moveToProcessed(filename, filePath);
           continue;
         }
@@ -188,6 +197,24 @@ class InboxWatcher {
       this.processedKeys.add(filename);
     } catch (e) {
       console.error(`[watcher] Cannot move ${filename}:`, e.message);
+    }
+  }
+
+  moveToExpired(filename, sourcePath) {
+    const dest = path.join(this.config.expiredPath, filename);
+    try {
+      if (!fs.existsSync(this.config.expiredPath)) {
+        fs.mkdirSync(this.config.expiredPath, { recursive: true });
+      }
+      if (fs.existsSync(dest)) {
+        fs.unlinkSync(sourcePath);
+      } else {
+        fs.renameSync(sourcePath, dest);
+      }
+      this.processedKeys.add(filename);
+      console.log(`[watcher] EXPIRED: ${filename} — identity check failed or invalid`);
+    } catch (e) {
+      console.error(`[watcher] Cannot expire ${filename}:`, e.message);
     }
   }
 
