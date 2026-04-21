@@ -37,6 +37,7 @@ const DEFAULT_CONFIG = {
   processedPath: path.join(__dirname, '..', 'lanes', 'archivist', 'inbox', 'processed'),
   outboxPath: path.join(__dirname, '..', 'lanes', 'archivist', 'outbox'),
   expiredPath: path.join(__dirname, '..', 'lanes', 'archivist', 'inbox', 'expired'),
+  quarantinePath: path.join(__dirname, '..', 'lanes', 'archivist', 'inbox', 'quarantine'),
   canonicalPaths: {
     archivist: 'S:/Archivist-Agent/lanes/archivist/inbox/',
     library: 'S:/self-organizing-library/lanes/library/inbox/',
@@ -83,7 +84,7 @@ class InboxWatcher {
 
   ensureDirs() {
     for (const dir of [this.config.inboxPath, this.config.processedPath,
-      this.config.outboxPath, this.config.expiredPath]) {
+      this.config.outboxPath, this.config.expiredPath, this.config.quarantinePath]) {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
@@ -256,11 +257,22 @@ class InboxWatcher {
       if (!fs.existsSync(this.config.expiredPath)) {
         fs.mkdirSync(this.config.expiredPath, { recursive: true });
       }
+      if (!fs.existsSync(this.config.quarantinePath)) {
+        fs.mkdirSync(this.config.quarantinePath, { recursive: true });
+      }
 
       if (attemptCount > MAX_QUARANTINE_ATTEMPTS) {
-        if (fs.existsSync(sourcePath)) fs.unlinkSync(sourcePath);
+        const qDest = path.join(this.config.quarantinePath, filename);
+        if (fs.existsSync(sourcePath)) {
+          if (fs.existsSync(qDest)) {
+            fs.unlinkSync(sourcePath);
+          } else {
+            fs.renameSync(sourcePath, qDest);
+          }
+        }
+        this._logQuarantine(filename, 'RETRY_LIMIT', attemptCount);
         this.processedKeys.add(filename);
-        console.log(`[watcher] QUARANTINE_PURGE: ${filename} — exceeded ${MAX_QUARANTINE_ATTEMPTS} attempts, deleted`);
+        console.log(`[watcher] QUARANTINE: ${filename} — exceeded ${MAX_QUARANTINE_ATTEMPTS} attempts, moved to quarantine/`);
         return;
       }
 
@@ -273,6 +285,27 @@ class InboxWatcher {
       console.log(`[watcher] EXPIRED: ${filename} — attempt ${attemptCount}/${MAX_QUARANTINE_ATTEMPTS}`);
     } catch (e) {
       console.error(`[watcher] Cannot expire ${filename}:`, e.message);
+    }
+  }
+
+  _logQuarantine(filename, reason, attemptCount) {
+    const logEntry = {
+      timestamp: new Date().toISOString(),
+      lane: this.config.laneName,
+      file: filename,
+      reason: reason,
+      attempt_count: attemptCount,
+      action: 'quarantine',
+      requires_review: true
+    };
+    const logPath = path.join(this.repoRoot, 'logs', 'quarantine.log');
+    try {
+      const logDir = path.dirname(logPath);
+      if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+      const line = JSON.stringify(logEntry) + '\n';
+      fs.appendFileSync(logPath, line, 'utf8');
+    } catch (e) {
+      console.error(`[watcher] Cannot log quarantine:`, e.message);
     }
   }
 
