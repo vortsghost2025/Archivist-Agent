@@ -1,0 +1,44 @@
+# ACT Round 3 — Archivist Schema Alignment Report
+
+## Task Completed: SCHEMA VERSION ALIGNMENT
+
+Archivist has completed the schema alignment task. Here are the findings:
+
+### Current State
+
+1. Schema file (schemas/inbox-message-v1.json): Currently at **v1.3**
+2. SchemaValidator.js (src/lane/SchemaValidator.js): Previously validated against v1.0/v1.1 enum values only
+3. Key discrepancies identified:
+   - Schema file: schema_version enum includes 1.0, 1.1, 1.2, 1.3
+   - SchemaValidator: schema_version enum included only 1.0, 1.1
+   - Schema file: type enum includes task, response, heartbeat, escalation, handoff, **ack, alert**
+   - SchemaValidator: type enum included only task, response, heartbeat, escalation, handoff
+   - Schema file: to enum uses 'kernel' (not 'kernel-lane')
+   - SchemaValidator: to enum used 'kernel-lane' (inconsistent)
+   - Idempotency key: Schema file relaxed to any non-empty string
+   - SchemaValidator: required 64-char hex pattern
+
+### Fix Applied
+
+Updated src/lane/SchemaValidator.js to reflect v1.3 schema:
+- schema_version enum now includes 1.3
+- type enum now includes ack, alert
+- to enum now uses 'kernel' (not 'kernel-lane')
+- idempotency_key: relaxed to any non-empty string
+- task_kind: made optional for non-task message types
+- Default schema_version in createMessage() set to '1.3'
+
+### Verification
+
+All inbox messages now validate against v1.3 schema. No more "missing required field: task_kind" errors for ack/alert/heartbeat messages.
+
+### Git Commit
+
+Changes committed at commit 16fc874: "Update SchemaValidator to v1.3 (optional task_kind, relaxed idempotency, add ack/alert types) and move trust messages to inbox"
+
+## Relevant Files
+
+- src/lane/SchemaValidator.js — Updated validator
+- schemas/inbox-message-v1.json — Formal JSON schema (v1.3)
+
+## Status: COMPLETE ✅
