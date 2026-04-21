@@ -54,6 +54,7 @@ class InboxWatcher {
     this.consecutiveEmptyScans = 0;
     this.maxBackoffSeconds = 300;
     this.consecutiveP0Count = 0;
+    this.quarantineTracker = this._loadQuarantineTracker();
     this.loadProcessedKeys();
     this.loadConvergenceConstraint();
 
@@ -98,6 +99,40 @@ class InboxWatcher {
         }
       }
     } catch (_) {}
+  }
+
+  _loadQuarantineTracker() {
+    const trackerPath = path.join(this.repoRoot, 'logs', 'quarantine-tracker.json');
+    try {
+      if (fs.existsSync(trackerPath)) {
+        return JSON.parse(fs.readFileSync(trackerPath, 'utf8'));
+      }
+    } catch (_) {}
+    return {};
+  }
+
+  _saveQuarantineTracker() {
+    const trackerPath = path.join(this.repoRoot, 'logs', 'quarantine-tracker.json');
+    try {
+      const logDir = path.dirname(trackerPath);
+      if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+      fs.writeFileSync(trackerPath, JSON.stringify(this.quarantineTracker, null, 2), 'utf8');
+    } catch (_) {}
+  }
+
+  _trackQuarantine(filename, reason) {
+    const key = filename.replace(/\.json$/, '');
+    if (!this.quarantineTracker[key]) {
+      this.quarantineTracker[key] = { count: 0, reasons: [], first_at: null, last_at: null };
+    }
+    this.quarantineTracker[key].count++;
+    this.quarantineTracker[key].reasons.push(reason);
+    this.quarantineTracker[key].last_at = new Date().toISOString();
+    if (!this.quarantineTracker[key].first_at) {
+      this.quarantineTracker[key].first_at = this.quarantineTracker[key].last_at;
+    }
+    this._saveQuarantineTracker();
+    return this.quarantineTracker[key].count;
   }
 
   checkIdempotencyKey(msg) {
@@ -214,17 +249,28 @@ class InboxWatcher {
 
   moveToExpired(filename, sourcePath) {
     const dest = path.join(this.config.expiredPath, filename);
+    const attemptCount = this._trackQuarantine(filename, 'expired');
+    const MAX_QUARANTINE_ATTEMPTS = 3;
+
     try {
       if (!fs.existsSync(this.config.expiredPath)) {
         fs.mkdirSync(this.config.expiredPath, { recursive: true });
       }
+
+      if (attemptCount > MAX_QUARANTINE_ATTEMPTS) {
+        if (fs.existsSync(sourcePath)) fs.unlinkSync(sourcePath);
+        this.processedKeys.add(filename);
+        console.log(`[watcher] QUARANTINE_PURGE: ${filename} — exceeded ${MAX_QUARANTINE_ATTEMPTS} attempts, deleted`);
+        return;
+      }
+
       if (fs.existsSync(dest)) {
-        fs.unlinkSync(sourcePath);
+        if (fs.existsSync(sourcePath)) fs.unlinkSync(sourcePath);
       } else {
         fs.renameSync(sourcePath, dest);
       }
       this.processedKeys.add(filename);
-      console.log(`[watcher] EXPIRED: ${filename} — identity check failed or invalid`);
+      console.log(`[watcher] EXPIRED: ${filename} — attempt ${attemptCount}/${MAX_QUARANTINE_ATTEMPTS}`);
     } catch (e) {
       console.error(`[watcher] Cannot expire ${filename}:`, e.message);
     }

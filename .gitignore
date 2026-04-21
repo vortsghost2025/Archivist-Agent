@@ -61,3 +61,6 @@ heartbeat-*.json
 # OpenCode config (user-specific)
 opencode_mcp_additions.json
 opencodeupgrades.txt
+
+lanes/*/outbox/unsigned/
+logs/quarantine-tracker.json
