@@ -56,6 +56,18 @@ class InboxWatcher {
     this.consecutiveP0Count = 0;
     this.loadProcessedKeys();
     this.loadConvergenceConstraint();
+
+    // Identity self-healing: detect and regenerate missing keys on startup
+    this._identityHealed = false;
+    try {
+      const { healLaneIdentity } = require('./identity-self-healing');
+      const healResult = healLaneIdentity(this.config.laneName || 'archivist');
+      this._identityHealed = healResult.keysRegenerated || false;
+      if (healResult.keysRegenerated) {
+        console.log(`[watcher] IDENTITY_SELF_HEAL: keys regenerated keyId=${healResult.keyId}`);
+      }
+    } catch (_) {}
+
     this.identityEnforcer = new IdentityEnforcer({ enforcementMode: 'enforce' });
   }
 
