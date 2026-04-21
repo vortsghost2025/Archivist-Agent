@@ -137,8 +137,8 @@ class InboxWatcher {
         }
         messages.push(msg);
       } catch (e) {
-        console.error(`[watcher] Cannot parse ${filename}:`, e.message);
-        this.moveToProcessed(filename, filePath);
+      console.error(`[watcher] Cannot parse ${filename}:`, e.message);
+      this.moveToExpired(filename, filePath);
       }
     }
 
