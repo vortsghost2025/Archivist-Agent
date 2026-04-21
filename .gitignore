@@ -13,3 +13,51 @@ keys.json
 .identity/*.pem
 
 .runtime/
+
+# Session artifacts (scratch files, not repo content)
+*.txt.bak
+*APR*.txt
+*codereview*.txt
+*assessment*.txt
+*review*.txt
+COMPACT_RESTORE_TEST_RESULTS.json
+SCHEMA_VALIDATION_RESULTS.json
+CROSS_LANE_TEST_RESULTS.json
+SESSION_PLAN_*.md
+SESSION_STATE_*.md
+AGENT_HANDOFF_REQUIRED.md
+nul
+*.log.gz
+
+# MCP logs
+logs/mcp-*
+
+# Scratch architecture docs (not canonical)
+*ARCHITECTURE*.md
+*COCKPIT*.md
+*CONTAINER*.md
+*INTERNAL_STRUCTURE*.md
+*ORCHESTRATOR_DESIGN*.md
+*IMPLEMENTATION_PLAN*.md
+*CONTINUITY_GAP*.md
+*PERSISTENT_SYSTEMS*.md
+
+# Review templates (generated, not source)
+review-ready-*.json
+
+# Config backups
+*.bak
+constitutional_constraints.yaml.bak
+
+# Sensitive
+sensitive/
+
+# Gate violations log
+gate-violations.jsonl
+
+# Heartbeat files (ephemeral)
+heartbeat-*.json
+
+# OpenCode config (user-specific)
+opencode_mcp_additions.json
+opencodeupgrades.txt
