@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T14:24:41.681Z",
+  "timestamp": "2026-04-22T15:34:12.422Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -65,7 +65,7 @@
     "trust_store_key_ids": {
       "archivist": "1a7741b8d353abee",
       "library": "612726c59e3f703a",
-      "swarmmind": "72d3a4889c919184",
+      "swarmmind": "3be48d8513f94301",
       "kernel": "74bc4b8df188b771"
     },
     "constraint_names": [
@@ -77,35 +77,41 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-22T14:24:01.429Z",
-        "age_seconds": 40
+        "timestamp": "2026-04-22T15:34:01.956Z",
+        "age_seconds": 10
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-22T14:24:01.640Z",
-        "age_seconds": 40
+        "timestamp": "2026-04-22T15:34:01.977Z",
+        "age_seconds": 10
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-22T14:24:19.939Z",
-        "age_seconds": 21
+        "timestamp": "2026-04-22T15:33:20.493Z",
+        "age_seconds": 51
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-22T14:24:38.164Z",
-        "age_seconds": 3
+        "timestamp": "2026-04-22T15:33:38.699Z",
+        "age_seconds": 33
       }
     },
     "inbox_counts": {
-      "archivist": 2,
-      "library": 0,
-      "swarmmind": 2,
-      "kernel": 1
+      "archivist": 3,
+      "library": 2,
+      "swarmmind": 1,
+      "kernel": 2
     },
     "governance_hash": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
     "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
     "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
-    "known_risks": []
+    "known_risks": [
+      "identity_soft_keys",
+      "determinism_not_guaranteed",
+      "kernel_partial_convergence",
+      "contract_alignment_ambiguous",
+      "subagent_code_destruction_surface"
+    ]
   },
   "diff": {
     "blocker_changed": false,
@@ -122,7 +128,7 @@
       },
       "swarmmind": {
         "pre": "151a2ded0a2c00c1",
-        "post": "72d3a4889c919184"
+        "post": "3be48d8513f94301"
       }
     },
     "constraints_intact": true,
@@ -133,33 +139,24 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 4,
+    "message_loss": 0,
     "message_loss_detail": {
       "archivist": {
         "pre": 5,
-        "post": 2,
-        "lost": 3
-      },
-      "library": {
-        "pre": 1,
-        "post": 0,
-        "lost": 1
+        "post": 3,
+        "lost": 2
       }
     },
     "lane_degradations": [],
-    "risk_set_preserved": false,
-    "missing_risks": [
-      "identity_soft_keys",
-      "determinism_not_guaranteed",
-      "kernel_partial_convergence",
-      "contract_alignment_ambiguous",
-      "subagent_code_destruction_surface"
-    ],
+    "risk_set_preserved": true,
+    "missing_risks": [],
     "unexpected_changes": [
-      "trust_store_archivist_key_changed",
-      "trust_store_library_key_changed",
-      "trust_store_swarmmind_key_changed",
-      "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
+      "trust_store_swarmmind_key_changed"
+    ],
+    "justifications": [
+      "trust_store_archivist_key_change_allowed: Round 5 key rotation and reconciliation",
+      "trust_store_library_key_change_allowed: Round 5 key rotation and reconciliation",
+      "message_loss_archivist_within_tolerance: High-volume lane, messages moved to processed/ by watcher"
     ]
   },
   "status": "conflicted",
@@ -176,7 +173,7 @@
       "lane_heartbeats",
       "known_risk_set"
     ],
-    "contradictions_found": 4,
+    "contradictions_found": 1,
     "self_declared_alignment": false
   }
 }
