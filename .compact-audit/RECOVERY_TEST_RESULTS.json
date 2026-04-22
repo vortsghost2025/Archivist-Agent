@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T18:57:16.408Z",
+  "timestamp": "2026-04-22T19:54:06.441Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -30,12 +30,12 @@
     {
       "name": "blocker_consistency",
       "passed": true,
-      "detail": "no active blocker"
+      "detail": "active: p0-escalation-key-id-convergence-authority"
     },
     {
       "name": "message_inventory",
       "passed": true,
-      "detail": "total=48 {\"archivist\":20,\"library\":14,\"swarmmind\":5,\"kernel\":9}"
+      "detail": "total=57 {\"archivist\":20,\"library\":17,\"swarmmind\":8,\"kernel\":12}"
     },
     {
       "name": "risk_set_preservation",
@@ -55,7 +55,7 @@
     {
       "name": "contradiction_detection",
       "passed": true,
-      "detail": "status=conflicted unexpected_changes=4"
+      "detail": "status=conflicted unexpected_changes=5"
     }
   ],
   "summary": {

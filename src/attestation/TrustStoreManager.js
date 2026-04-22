@@ -10,7 +10,7 @@ const path = require('path');
 
 class TrustStoreManager {
 	constructor(options = {}) {
-		this.trustStorePath = options.trustStorePath || path.join('S:', 'Archivist-Agent', '.trust', 'keys.json');
+		this.trustStorePath = options.trustStorePath || path.join('S:', 'Archivist-Agent', 'lanes', 'broadcast', 'trust-store.json');
 		this.trustStore = null;
 		this._load();
 	}

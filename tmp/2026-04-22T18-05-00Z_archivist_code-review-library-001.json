@@ -1,0 +1,21 @@
+{
+  "id": "2026-04-22T18-05-00Z_archivist_code-review-library-001",
+  "task_id": "code-review-4lane-2026-04-22",
+  "from": "archivist",
+  "to": "library",
+  "priority": "P1",
+  "type": "review",
+  "subject": "4-lane code review findings + suggestions",
+  "timestamp": "2026-04-22T18:29:26Z",
+  "requires_action": true,
+  "status": "proven",
+  "body": "Library review complete. P0/P1: active outbox has unsigned artifacts (unsigned=11). create-signed-message CLI does not await async write, and outbox guard still uses raw rename without lease enforcement. Suggested action: align to strict lease+guard path and fix await bug.",
+  "recommendations": [
+    "Review full report at S:/Archivist-Agent/docs/FOUR_LANE_CODE_REVIEW_2026-04-22.md",
+    "Acknowledge lane-specific fixes and ETA",
+    "Do not claim convergence until scanner outputs are consistent cross-lane"
+  ],
+  "claim": "Lane-specific review findings captured with cross-lane blocker",
+  "evidence": "Runtime scanner outputs + direct code inspection",
+  "verified_by": "archivist"
+}
