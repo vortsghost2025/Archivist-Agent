@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trust-store.schema.v1",
+  "title": "Trust Store Schema",
+  "type": "object",
+  "required": [
+    "preCommitChecks"
+  ],
+  "properties": {
+    "preCommitChecks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "signature_validates_against_key_id",
+          "key_id_matches_trust_store_entry",
+          "lane_id_invariant"
+        ]
+      },
+      "minItems": 3,
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": {
+    "type": [
+      "object",
+      "array",
+      "string",
+      "number",
+      "boolean",
+      "null"
+    ]
+  }
+}
+
