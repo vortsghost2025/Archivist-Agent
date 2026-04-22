@@ -3,7 +3,7 @@
     "lane_id": "archivist",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkin4b+B58POUXVKLcKrQ\nC5JNn3k6991C1dScmyC8w8/pR8uPmhAtiu3G3dS6zt59qGVmgys2TnFM8493ztBE\nw/ZEVlNKiOJkIhpx1Q/6pnJI7lu4icoTdymVX/4uqVujMUNJyu1nFP/DKc2/NDnV\nUDLqthEY1LXyztdFeS/Qz+MH+ykXLFPZ/lA2X1Z18mm6fPCp9xlJRhdjn//zqzzK\nrBif1jmp+pfRVsvS1FVqDs43+/sQFmXq3Tul4I1KG9CNLqxH2dnk8YPZYztEi2yp\nQpqDPjpTtBN+Zl70S7ZoZ0cXvBV1W9bedZoSdVy8rITpSRFJxCc+jc7wrxF3iYgH\n8QIDAQAB\n-----END PUBLIC KEY-----\n",
     "algorithm": "RS256",
-    "key_id": "1a7741b8d353abee",
+    "key_id": "583b2c36f397ef01",
     "registered_at": "2026-04-22T01:05:00Z",
     "expires_at": null,
     "revoked_at": null
@@ -30,7 +30,7 @@
     "lane_id": "kernel",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmnQkEQXoqCuFcenxccKL\nYVK8EvBCQNNVDTxeSXWkpEWgd4TtcynjNSjYYaTOKbY5SIff895uvzo5qsarJwRo\nK/IWYnvz9WG4oBWipXymyA6WT5oPJDHg911Ko1pbWQ1nCsWRxgShYovfhxj2Zc8s\n8sm78ht5xUrYMdQw6+8P7rdwVbQiAT9WGDlmBT3VfT7lSx0Mr5L9FNkwYMGrBtns\nbNTTtqSieF74S1aUqd2/g9ViD/LFW2Ga9Ce0An4Qnag7WWzEzrecUBV4fuAIErTh\nSq16yqG/afwQe2HdNmhUn6PCAQAHjAMtdKqUQo2Vyxll/JbqfhHY+uVzD8JQXmTF\nAwIDAQAB\n-----END PUBLIC KEY-----",
     "algorithm": "RS256",
-    "key_id": "74bc4b8df188b771",
+    "key_id": "31dcd7d9cc7cc6e7",
     "registered_at": "2026-04-21T12:28:18.845Z",
     "expires_at": null,
     "revoked_at": null
