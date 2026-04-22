@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T19:54:06.441Z",
+  "timestamp": "2026-04-22T20:13:39.252Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -10,7 +10,7 @@
     {
       "name": "governance_integrity",
       "passed": true,
-      "detail": "gov=aa34293b... boot=22c5239e..."
+      "detail": "gov=871b55a8... boot=22c5239e..."
     },
     {
       "name": "constraint_preservation",
@@ -35,7 +35,7 @@
     {
       "name": "message_inventory",
       "passed": true,
-      "detail": "total=57 {\"archivist\":20,\"library\":17,\"swarmmind\":8,\"kernel\":12}"
+      "detail": "total=60 {\"archivist\":20,\"library\":18,\"swarmmind\":9,\"kernel\":13}"
     },
     {
       "name": "risk_set_preservation",
@@ -55,7 +55,7 @@
     {
       "name": "contradiction_detection",
       "passed": true,
-      "detail": "status=conflicted unexpected_changes=5"
+      "detail": "status=conflicted unexpected_changes=6"
     }
   ],
   "summary": {
