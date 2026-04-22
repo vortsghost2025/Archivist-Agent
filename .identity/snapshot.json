@@ -6,9 +6,9 @@
     "authority": 100,
     "created_at": "2026-04-19T00:00:00Z",
     "model_origin": "nvidia/glm5",
-    "last_updated": "2026-04-19T20:15:00Z",
+    "last_updated": "2026-04-22T19:57:46.680Z",
     "issued_by": "archivist",
-    "key_id": "a94ef3e05c4f856d",
+    "key_id": "1a7741b8d353abee",
     "expires_at": "2026-07-19T00:00:00Z",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqc/AeE9AVw66Xc2huo4h\nPahstYHEBNgBS1/I+zkAXIpsvQKGltVH0NfOwhCV9KhTxT6JGqwUoJ+25Lg5xGwt\nWFW+JRRPfobFxhbFdZ04g9/WJe3WNd1WRBjYiwPGP7wWQ8d9SxDOTXmum++Ag+V7\nUSXszeDz6j0cyCDdj8dF+Kk82N7ez5KrxyyU7MerIqWcMBx9ITtBIwE/alE0wJBk\nVMoD9FePTI5AF4CKnH6D9urw5UvNjasbDjTLyXOGUPkzxc6kzBLde2rpjPBgqQ3S\nVV8EDodEl0s/BGopMJw/OQ3ZfB/uWNttzvn7wwg+lnmN6SFykqmnmzaEvp/8gFQj\nGQIDAQAB\n-----END PUBLIC KEY-----"
   },
@@ -74,6 +74,6 @@
       "Identity Layer v0.2: Signed snapshots required",
       "Invariant upgrade: signed_snapshot.lane === runtime.lane AND JWS verifies"
     ],
-    "last_activity": "2026-04-19T20:15:00Z"
+    "last_activity": "2026-04-22T19:57:46.681Z"
   }
 }

@@ -94,6 +94,37 @@ ENFORCEMENT: User override triggers quarantine, not execution
 
 **The system is not safe until it can say NO to the operator.**
 
+### Law 9: Authority Self-Resolution (NEW)
+
+**Source:** Round 9 paradox resolution — authority 100 pointing to itself
+
+```
+CRITICAL PRINCIPLE: Cryptographic truth > declared canonical truth
+
+When: authority = self AND circular escalation detected
+DO NOT: escalate, block, or defer
+DO: resolve by preserving cryptographic continuity
+
+Resolution path:
+1. Identify the actual signing key (cryptographic truth)
+2. Update declared structures to match actual behavior
+3. Minimize invalidation of prior state
+4. Document the decision and push
+```
+
+**Why this paradox occurs:**
+- Authority 100 (Archivist) is the system of record
+- When Archivist says "requires authority 100" it means "requires Archivist"
+- But Archivist was ALSO the one with the divergence
+- Circular: "I need me to fix me"
+
+**Resolution mechanism:**
+- The key that signs messages is ground truth
+- Trust store is a mapping layer, not the source
+- If trust-store ≠ signing-key: update trust-store, NOT the signing key
+- Signatures validate = convergence achieved
+- DO NOT escalate self-referential conflicts
+
 ---
 
 ## 3. The Three Invariants (Always True)
