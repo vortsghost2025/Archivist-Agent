@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-04-22T18:30:00Z",
+  "canonical_source": "Archivist-Agent",
+  "status": "REFINED",
+  "tasks": {
+    "library": {
+      "exact_task": "Run E2E fresh-message verification with PROVING ROOT CAUSE",
+      "task_details": [
+        "1. Sign new message with library private key",
+        "2. Verify with public key from trust-store.json (canonical)",
+        "3. If FAIL: diagnose root cause - try: (a) lane-local key, (b) trust-store key, (c) path mismatch",
+        "4. Compare result against archivist failure",
+        "5. Output: { lane: 'library', e2e_result: 'PASS|FAIL', root_cause_analysis: '...' }"
+      ],
+      "why": "Archivist failed E2E verification - must determine if failure is specific to archivist lane, trust-store corruption, or path-resolution mismatch. Library is verification lane - it should determine which.",
+      "blocking_vs_non_blocking": "NON-BLOCKING for operational continuity, BLOCKING for invariant closure if archivist failure indicates trust corruption",
+      "expected_artifact": "library-verification-report.json",
+      "comparison_determinant": "If library PASS but archivist FAIL → archivist-local key mismatch. If both FAIL → trust-store or derivation algorithm issue. If both PASS → archivist session-specific."
+    },
+    "kernel": {
+      "exact_task": "Run RECOVERY + RUNTIME SIGNING + GUARDED-WRITE PROOFS",
+      "task_details": [
+        "1. Run recovery test suite (verify context restore, handoff hash match)",
+        "2. Prove fresh-message signing: sign new message, verify with canonical trust-store",
+        "3. Prove canonical trust usage: verify kernel's runtime loads trust from Archivist broadcast path",
+        "4. Prove guarded-write active: attempt cross-lane write → should BLOCK",
+        "5. Prove lease/gate active: check gate state, not expired"
+      ],
+      "why": "Kernel (Lane 1 left) is execution authority. Must prove it can (a) recover context, (b) sign/verify with canonical trust, (c) enforce cross-lane boundaries at runtime",
+      "blocking_vs_non_blocking": "OPERATIONAL: NON-BLOCKING (recovery exists). INVARIANT: BLOCKING (if signing proof fails, kernel cannot fulfill execution role)",
+      "expected_artifact": "kernel-runtime-proof-report.json"
+    },
+    "swarmmind": {
+      "exact_task": "VERIFY SIGNING LANE STATUS + BOOTSTRAP IDENTITY IF REQUIRED",
+      "task_details": [
+        "1. Determine signing role: Check SwarmMind runtime config for signing requirement",
+        "2. If signing lane REQUIRED:",
+        "  2a. Check for private key in .identity/",
+        "  2b. If missing: generate new keypair, register in trust (coordinate with archivist)",
+        "  2c. Prove fresh-message signing + verification",
+        "3. If verify-only role: Document explicitly: no private key needed",
+        "4. Output status with role determination"
+      ],
+      "why": "SwarmMind is execution lane but may be verify-only. Must determine if private key required for runtime role. Current state: no private key found.",
+      "blocking_vs_non_blocking": "OPERATIONAL: NON-BLOCKING (if verify-only role confirmed). INVARIANT: BLOCKING (if signing required but key missing → cannot fulfill lane role)",
+      "expected_artifact": "swarmmind-signing-role-status.json"
+    }
+  },
+  "blocker_classification": {
+    "operational_continuity": {
+      "archivist_e2e_failure": "NON-BLOCKING - can continue using verified lanes (library, kernel)",
+      "swarmmind_no_private": "NON-BLOCKING - if verify-only confirmed"
+    },
+    "invariant_identity_closure": {
+      "archivist_e2e_failure": "BLOCKING - must determine root cause before trust invariant confirmed",
+      "kernel_runtime_proof_missing": "BLOCKING - kernel must prove signing capability before fulfilling execution role",
+      "swarmmind_signing_role_unclear": "BLOCKING - must confirm role before invariant closure"
+    }
+  }
+}
