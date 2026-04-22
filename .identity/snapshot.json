@@ -8,9 +8,9 @@
     "model_origin": "nvidia/glm5",
     "last_updated": "2026-04-19T20:15:00Z",
     "issued_by": "archivist",
-    "key_id": "1a7741b8d353abee",
+    "key_id": "a94ef3e05c4f856d",
     "expires_at": "2026-07-19T00:00:00Z",
-    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmnQkEQXoqCuFcenxccKL\nYVK8EvBCQNNVDTxeSXWkpEWgd4TtcynjNSjYYaTOKbY5SIff895uvzo5qsarJwRo\nK/IWYnvz9WG4oBWipXymyA6WT5oPJDHg911Ko1pbWQ1nCsWRxgShYovfhxj2Zc8s\n8sm78ht5xUrYMdQw6+8P7rdwVbQiAT9WGDlmBT3VfT7lSx0Mr5L9FNkwYMGrBtns\nbNTTtqSieF74S1aUqd2/g9ViD/LFW2Ga9Ce0An4Qnag7WWzEzrecUBV4fuAIErTh\nSq16yqG/afwQe2HdNmhUn6PCAQAHjAMtdKqUQo2Vyxll/JbqfhHY+uVzD8JQXmTF\nAwIDAQAB\n-----END PUBLIC KEY-----"
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqc/AeE9AVw66Xc2huo4h\nPahstYHEBNgBS1/I+zkAXIpsvQKGltVH0NfOwhCV9KhTxT6JGqwUoJ+25Lg5xGwt\nWFW+JRRPfobFxhbFdZ04g9/WJe3WNd1WRBjYiwPGP7wWQ8d9SxDOTXmum++Ag+V7\nUSXszeDz6j0cyCDdj8dF+Kk82N7ez5KrxyyU7MerIqWcMBx9ITtBIwE/alE0wJBk\nVMoD9FePTI5AF4CKnH6D9urw5UvNjasbDjTLyXOGUPkzxc6kzBLde2rpjPBgqQ3S\nVV8EDodEl0s/BGopMJw/OQ3ZfB/uWNttzvn7wwg+lnmN6SFykqmnmzaEvp/8gFQj\nGQIDAQAB\n-----END PUBLIC KEY-----"
   },
   "invariants": [
     "A = B = C (lane consistency)",
@@ -23,7 +23,8 @@
     "lanes_registered": [
       "archivist",
       "swarmmind",
-      "library"
+      "library",
+      "kernel"
     ],
     "last_verification": "2026-04-19T12:00:00Z",
     "quarantine_count": 0,

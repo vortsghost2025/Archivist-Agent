@@ -70,3 +70,6 @@ jobs:
           # BOOTSTRAP.md must be the entry point
           grep -q "THE SINGLE ENTRY POINT" BOOTSTRAP.md || exit 1
           echo "Governance structure verified"
+
+      - name: Evidence Artifact Validation
+        run: node scripts/evidence-exchange-check.js scan

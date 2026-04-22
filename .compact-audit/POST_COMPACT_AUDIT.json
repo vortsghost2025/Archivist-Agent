@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T15:34:12.422Z",
+  "timestamp": "2026-04-22T19:10:13.089Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -63,10 +63,10 @@
       "blocker": null
     },
     "trust_store_key_ids": {
-      "archivist": "1a7741b8d353abee",
-      "library": "612726c59e3f703a",
-      "swarmmind": "3be48d8513f94301",
-      "kernel": "74bc4b8df188b771"
+      "archivist": "a94ef3e05c4f856d",
+      "library": "cb3e57dd7818da3d",
+      "swarmmind": "959dc79dbaa38113",
+      "kernel": "bd553e7c2daac20d"
     },
     "constraint_names": [
       "STRUCTURE_OVER_IDENTITY",
@@ -77,41 +77,35 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-22T15:34:01.956Z",
-        "age_seconds": 10
+        "timestamp": "2026-04-22T19:10:01.653Z",
+        "age_seconds": 11
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-22T15:34:01.977Z",
-        "age_seconds": 10
+        "timestamp": "2026-04-22T19:10:01.664Z",
+        "age_seconds": 11
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-22T15:33:20.493Z",
-        "age_seconds": 51
+        "timestamp": "2026-04-22T19:09:22.486Z",
+        "age_seconds": 50
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-22T15:33:38.699Z",
-        "age_seconds": 33
+        "timestamp": "2026-04-22T19:09:40.466Z",
+        "age_seconds": 32
       }
     },
     "inbox_counts": {
-      "archivist": 3,
-      "library": 2,
-      "swarmmind": 1,
-      "kernel": 2
+      "archivist": 20,
+      "library": 16,
+      "swarmmind": 6,
+      "kernel": 11
     },
     "governance_hash": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
     "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
     "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
-    "known_risks": [
-      "identity_soft_keys",
-      "determinism_not_guaranteed",
-      "kernel_partial_convergence",
-      "contract_alignment_ambiguous",
-      "subagent_code_destruction_surface"
-    ]
+    "known_risks": []
   },
   "diff": {
     "blocker_changed": false,
@@ -120,15 +114,19 @@
     "trust_detail": {
       "archivist": {
         "pre": "583b2c36f397ef01",
-        "post": "1a7741b8d353abee"
+        "post": "a94ef3e05c4f856d"
       },
       "library": {
         "pre": "a3136a93627b7b46",
-        "post": "612726c59e3f703a"
+        "post": "cb3e57dd7818da3d"
       },
       "swarmmind": {
         "pre": "151a2ded0a2c00c1",
-        "post": "3be48d8513f94301"
+        "post": "959dc79dbaa38113"
+      },
+      "kernel": {
+        "pre": "74bc4b8df188b771",
+        "post": "bd553e7c2daac20d"
       }
     },
     "constraints_intact": true,
@@ -140,23 +138,22 @@
     "handoff_intact": true,
     "handoff_detail": null,
     "message_loss": 0,
-    "message_loss_detail": {
-      "archivist": {
-        "pre": 5,
-        "post": 3,
-        "lost": 2
-      }
-    },
+    "message_loss_detail": {},
     "lane_degradations": [],
-    "risk_set_preserved": true,
-    "missing_risks": [],
-    "unexpected_changes": [
-      "trust_store_swarmmind_key_changed"
+    "risk_set_preserved": false,
+    "missing_risks": [
+      "identity_soft_keys",
+      "determinism_not_guaranteed",
+      "kernel_partial_convergence",
+      "contract_alignment_ambiguous",
+      "subagent_code_destruction_surface"
     ],
-    "justifications": [
-      "trust_store_archivist_key_change_allowed: Round 5 key rotation and reconciliation",
-      "trust_store_library_key_change_allowed: Round 5 key rotation and reconciliation",
-      "message_loss_archivist_within_tolerance: High-volume lane, messages moved to processed/ by watcher"
+    "unexpected_changes": [
+      "trust_store_archivist_key_changed",
+      "trust_store_library_key_changed",
+      "trust_store_swarmmind_key_changed",
+      "trust_store_kernel_key_changed",
+      "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
     ]
   },
   "status": "conflicted",
@@ -173,7 +170,7 @@
       "lane_heartbeats",
       "known_risk_set"
     ],
-    "contradictions_found": 1,
+    "contradictions_found": 5,
     "self_declared_alignment": false
   }
 }

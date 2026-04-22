@@ -31,7 +31,7 @@
   },
   "evidence_exchange": {
     "artifact_path": "S:/kernel-lane/lanes/kernel/inbox/act-sync-enforcement-authority-001.json",
-    "artifact_type": "task",
+    "artifact_type": "log",
     "delivered_at": "2026-04-22T14:54:14.990Z"
   },
   "heartbeat": {

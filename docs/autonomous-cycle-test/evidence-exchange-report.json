@@ -1,0 +1,30 @@
+[
+  {
+    "lane": "archivist",
+    "total": 0,
+    "verified": 0,
+    "mismatches": [],
+    "missingEvidence": []
+  },
+  {
+    "lane": "library",
+    "total": 11,
+    "verified": 11,
+    "mismatches": [],
+    "missingEvidence": []
+  },
+  {
+    "lane": "swarmmind",
+    "total": 0,
+    "verified": 0,
+    "mismatches": [],
+    "missingEvidence": []
+  },
+  {
+    "lane": "kernel",
+    "total": 1,
+    "verified": 1,
+    "mismatches": [],
+    "missingEvidence": []
+  }
+]
