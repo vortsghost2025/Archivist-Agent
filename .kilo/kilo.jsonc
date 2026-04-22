@@ -1,6 +1,6 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
-  "model": "ollama/qwen2.5-coder:7b",
+  "model": "kilo/kilo-auto/free",
   "instructions": [
     "ENFORCED: Before performing any action in this project, read S:/.global/BOOTSTRAP.md",
     "ENFORCED: Follow the governance constraints from CHECKPOINTS.md - all 7 checkpoints must pass before major actions",
@@ -12,26 +12,28 @@
   ],
   "agent": {
     "orchestrator": {
-      "model": "z-ai/glm5",
-      "url": "http://127.0.0.1:11434/v1"
+      "model": "kilo/kilo-auto/free"
     },
     "plan": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "nvidia/openai/gpt-oss-120b"
     },
     "code": {
-      "model": "ollama/deepseek-coder:6.7b"
+      "model": "nvidia/z-ai/glm-5.1"
     },
     "build": {
-      "model": "ollama/deepseek-coder:6.7b"
+      "model": "kilo/kilo-auto/free"
     },
     "debug": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "nvidia/openai/gpt-oss-120b"
     },
     "ask": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "kilo/kilo-auto/free"
     },
     "general": {
-      "model": "ollama/qwen2.5-coder:7b"
+      "model": "kilo/kilo-auto/free"
+    },
+    "code-reviewer": {
+      "model": "nvidia/openai/gpt-oss-120b"
     }
   },
   "permission": {

@@ -8,8 +8,9 @@
     "model_origin": "nvidia/glm5",
     "last_updated": "2026-04-19T20:15:00Z",
     "issued_by": "archivist",
-    "key_id": "d5faddfa2ab2ff3f",
-    "expires_at": "2026-07-19T00:00:00Z"
+    "key_id": "1a7741b8d353abee",
+    "expires_at": "2026-07-19T00:00:00Z",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmnQkEQXoqCuFcenxccKL\nYVK8EvBCQNNVDTxeSXWkpEWgd4TtcynjNSjYYaTOKbY5SIff895uvzo5qsarJwRo\nK/IWYnvz9WG4oBWipXymyA6WT5oPJDHg911Ko1pbWQ1nCsWRxgShYovfhxj2Zc8s\n8sm78ht5xUrYMdQw6+8P7rdwVbQiAT9WGDlmBT3VfT7lSx0Mr5L9FNkwYMGrBtns\nbNTTtqSieF74S1aUqd2/g9ViD/LFW2Ga9Ce0An4Qnag7WWzEzrecUBV4fuAIErTh\nSq16yqG/afwQe2HdNmhUn6PCAQAHjAMtdKqUQo2Vyxll/JbqfhHY+uVzD8JQXmTF\nAwIDAQAB\n-----END PUBLIC KEY-----"
   },
   "invariants": [
     "A = B = C (lane consistency)",

@@ -28,6 +28,11 @@
   "evidence": {
     "required": false
   },
+  "evidence_exchange": {
+    "claim": "Trust store update - library key rotation confirmed",
+    "verified_by": "archivist",
+    "status": "proven"
+  },
   "heartbeat": {
     "status": "done"
   },

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T12:23:56.373Z",
+  "timestamp": "2026-04-22T14:24:48.706Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -35,7 +35,7 @@
     {
       "name": "message_inventory",
       "passed": true,
-      "detail": "total=2 {\"archivist\":1,\"library\":0,\"swarmmind\":1,\"kernel\":0}"
+      "detail": "total=5 {\"archivist\":2,\"library\":0,\"swarmmind\":2,\"kernel\":1}"
     },
     {
       "name": "risk_set_preservation",

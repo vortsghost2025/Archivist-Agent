@@ -5,6 +5,10 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+// LEASE + ATOMIC WRITE: Require kernel primitives for cross-lane mutation safety
+const KERNEL_ROOT = 'S:/kernel-lane';
+const { atomicWriteJson, atomicWriteWithLease } = require(path.join(KERNEL_ROOT, 'scripts', 'atomic-write-util'));
+
 const PASSFILE_CANDIDATES = [
   path.join(__dirname, '..', '.runtime', 'lane-passphrases.json'),
   'S:/Archivist-Agent/.runtime/lane-passphrases.json'
@@ -135,7 +139,7 @@ function signInboxShape(msg, lane, privateKey, keyId) {
   };
 }
 
-function signMessageFile(messagePath, lane, force) {
+async function signMessageFile(messagePath, lane, force) {
   const absolutePath = path.resolve(messagePath);
   if (!fs.existsSync(absolutePath)) {
     throw new Error(`MESSAGE_FILE_MISSING: ${absolutePath}`);
@@ -163,11 +167,12 @@ function signMessageFile(messagePath, lane, force) {
   const { privateKey, keyId } = loadKeyMaterial(identityDir, effectiveLane, passphrase);
   const signed = signInboxShape(msg, effectiveLane, privateKey, keyId);
 
-  fs.writeFileSync(absolutePath, JSON.stringify(signed, null, 2) + '\n', 'utf8');
+  // Atomic write with mandatory lease
+  await atomicWriteWithLease(absolutePath, signed, effectiveLane, 30000);
   console.log(`[sign-outbox] Signed ${absolutePath} with key_id=${keyId}`);
 }
 
-(function main() {
+(async function main() {
   const args = parseArgs(process.argv.slice(2));
   const message = args.message || args.path;
   if (!message) {
@@ -176,7 +181,7 @@ function signMessageFile(messagePath, lane, force) {
   }
 
   try {
-    signMessageFile(message, args.lane || null, args.force === 'true');
+    await signMessageFile(message, args.lane || null, args.force === 'true');
   } catch (err) {
     console.error(`[sign-outbox] ERROR: ${err.message}`);
     process.exit(1);

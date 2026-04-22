@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T12:24:42.155Z",
+  "timestamp": "2026-04-22T14:24:41.681Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -65,7 +65,7 @@
     "trust_store_key_ids": {
       "archivist": "1a7741b8d353abee",
       "library": "612726c59e3f703a",
-      "swarmmind": "2219405af9148ad7",
+      "swarmmind": "72d3a4889c919184",
       "kernel": "74bc4b8df188b771"
     },
     "constraint_names": [
@@ -77,30 +77,30 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-22T12:24:01.680Z",
+        "timestamp": "2026-04-22T14:24:01.429Z",
         "age_seconds": 40
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-22T12:24:01.697Z",
+        "timestamp": "2026-04-22T14:24:01.640Z",
         "age_seconds": 40
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-22T12:24:18.979Z",
-        "age_seconds": 23
+        "timestamp": "2026-04-22T14:24:19.939Z",
+        "age_seconds": 21
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-22T12:24:37.299Z",
-        "age_seconds": 4
+        "timestamp": "2026-04-22T14:24:38.164Z",
+        "age_seconds": 3
       }
     },
     "inbox_counts": {
-      "archivist": 1,
+      "archivist": 2,
       "library": 0,
-      "swarmmind": 1,
-      "kernel": 0
+      "swarmmind": 2,
+      "kernel": 1
     },
     "governance_hash": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
     "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
@@ -122,7 +122,7 @@
       },
       "swarmmind": {
         "pre": "151a2ded0a2c00c1",
-        "post": "2219405af9148ad7"
+        "post": "72d3a4889c919184"
       }
     },
     "constraints_intact": true,
@@ -133,12 +133,12 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 5,
+    "message_loss": 4,
     "message_loss_detail": {
       "archivist": {
         "pre": 5,
-        "post": 1,
-        "lost": 4
+        "post": 2,
+        "lost": 3
       },
       "library": {
         "pre": 1,

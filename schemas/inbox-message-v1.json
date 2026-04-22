@@ -32,7 +32,7 @@
   },
   "task_kind": {
     "type": "string",
-    "enum": ["proposal", "review", "amendment", "ratification"],
+    "enum": ["proposal", "review", "amendment", "ratification", "ack", "alert", "notification", "heartbeat"],
     "description": "v1.3: Optional for alert/ack/heartbeat types. Required for task/response/escalation/handoff."
   },
     "priority": {

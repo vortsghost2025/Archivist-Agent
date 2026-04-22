@@ -31,7 +31,10 @@
   "evidence_exchange": {
     "artifact_path": "S:/kernel-lane/docs/autonomous-cycle-test/round-005-kernel-trust-reconciliation.json",
     "artifact_type": "log",
-    "delivered_at": "2026-04-22T12:07:35.357Z"
+    "delivered_at": "2026-04-22T12:07:35.357Z",
+    "claim": "Trust baseline review complete - all lanes synchronized",
+    "verified_by": "archivist",
+    "status": "proven"
   },
   "heartbeat": {
     "status": "done"
