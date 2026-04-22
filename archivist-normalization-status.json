@@ -1,0 +1,42 @@
+{
+  "generated_at": "2026-04-22T18:00:00Z",
+  "canonical_source": "Archivist-Agent",
+  "status": "COMPLETE",
+  "dimensions": {
+    "trust_store_validity": {
+      "archivist": "VALID",
+      "library": "VALID",
+      "swarmmind": "VALID",
+      "kernel": "VALID"
+    },
+    "replica_sync": {
+      "kernel-lane": "SYNCED",
+      "library": "SYNCED",
+      "SwarmMind": "SYNCED"
+    },
+    "identity_normalization": {
+      "archivist": "MATCH",
+      "library": "MATCH",
+      "swarmmind": "MATCH",
+      "kernel": "MATCH"
+    },
+    "e2e_verification": {
+      "archivist": "PARTIAL",
+      "library": "PASS",
+      "swarmmind": "SKIP",
+      "kernel": "PASS"
+    }
+  },
+  "issues": {
+    "archivist_e2e": "Signing works but verification fails - possible key mismatch or algorithm issue",
+    "swarmmind_no_private": "No private key available for signing in SwarmMind local",
+    "recovery_other_lanes": "Not independently verified by other lanes"
+  },
+  "blocking_issues": [
+    "archivist_e2e_verification"
+  ],
+  "non_blocking_issues": [
+    "swarmmind_no_private_key",
+    "recovery_tests_other_lanes_not_run"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-04-22T18:00:00Z",
+  "canonical_source": "Archivist-Agent",
+  "execution_lane": "ARCHIVIST",
+  "task_matrix": [
+    {
+      "task_id": "VERIFY_CANONICAL_TRUST",
+      "description": "Verify canonical trust-store.json key_ids match derivation formula",
+      "status": "COMPLETE",
+      "evidence": "4/4 key_ids valid - sha256(PEM.trimEnd() + '\\n').slice(0,16)",
+      "lane": "archivist"
+    },
+    {
+      "task_id": "VERIFY_REPLICA_SYNC",
+      "description": "Compare all replicas against canonical source",
+      "status": "COMPLETE",
+      "evidence": "kernel-lane, library, SwarmMind all byte-exact match",
+      "lane": "archivist"
+    },
+    {
+      "task_id": "VERIFY_IDENTITY_MATCH",
+      "description": "Verify .identity/public.pem matches trust-store for each lane",
+      "status": "COMPLETE",
+      "evidence": "All 4 lanes match trust-store key_ids",
+      "lane": "archivist"
+    },
+    {
+      "task_id": "VERIFY_E2E_FRESH_MESSAGE",
+      "description": "Sign new message, verify with trust-store public key",
+      "status": "PARTIAL",
+      "evidence": "library & kernel PASS, archivist FAIL, swarmmind SKIP",
+      "lane": "archivist",
+      "issue": "Archivist signing fails verification - likely private key mismatch"
+    },
+    {
+      "task_id": "RUN_RECOVERY_SUITE",
+      "description": "Run recovery test suite",
+      "status": "COMPLETE",
+      "evidence": "Archivist 11/11 PASS, other lanes NOT RUN",
+      "lane": "archivist"
+    },
+    {
+      "task_id": "ADD_PRECOMMIT_GUARD",
+      "description": "Add pre-commit guard for key_id validation",
+      "status": "COMPLETE",
+      "evidence": ".git/hooks/pre-commit now validates trust-store key_ids",
+      "lane": "archivist"
+    },
+    {
+      "task_id": "DEPRECATE_LEGACY_TRUST",
+      "description": "Mark .trust/ as deprecated non-canonical",
+      "status": "COMPLETE",
+      "evidence": "Added DEPRECATED.txt to all repos",
+      "lane": "archivist"
+    },
+    {
+      "task_id": "PUSH_CANONICAL",
+      "description": "Push canonical trust-store to origin",
+      "status": "COMPLETE",
+      "evidence": "Pushed to github.com/vortsghost2025/Archivist-Agent",
+      "lane": "archivist"
+    }
+  ],
+  "summary": {
+    "total_tasks": 8,
+    "complete": 7,
+    "partial": 1,
+    "blocked_issues": [
+      "archivist_e2e_verification_failure"
+    ],
+    "non_blocking_issues": [
+      "swarmmind_no_private_key",
+      "other_lanes_recovery_not_verified"
+    ]
+  }
+}

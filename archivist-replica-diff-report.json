@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-04-22T18:00:00Z",
+  "canonical_source": "Archivist-Agent/lanes/broadcast/trust-store.json",
+  "replicas": [
+    {
+      "repo": "kernel-lane",
+      "path": "S:/kernel-lane/lanes/broadcast/trust-store.json",
+      "byte_exact_match": true,
+      "all_entries_match": true,
+      "status": "SYNCED"
+    },
+    {
+      "repo": "self-organizing-library",
+      "path": "S:/self-organizing-library/lanes/broadcast/trust-store.json",
+      "byte_exact_match": true,
+      "all_entries_match": true,
+      "status": "SYNCED"
+    },
+    {
+      "repo": "SwarmMind-Self-Optimizing-Multi-Agent-AI-System",
+      "path": "S:/SwarmMind/lanes/broadcast/trust-store.json",
+      "byte_exact_match": true,
+      "all_entries_match": true,
+      "status": "SYNCED"
+    }
+  ],
+  "diffs": [],
+  "summary": "All replicas byte-exact match canonical source. No differences found.",
+  "recommendation": "None required - all replicas are synchronized"
+}
