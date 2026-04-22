@@ -15,6 +15,7 @@
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const { atomicWriteWithLease } = require('S:/kernel-lane/scripts/atomic-write-util');
 
 const ROOT = path.join(__dirname, '..');
 const IDENTITY_DIR = path.join(ROOT, '.identity');
@@ -71,7 +72,7 @@ function getKeyIdFromTrustStore() {
   return archivistEntry.key_id;
 }
 
-function signSnapshot() {
+async function signSnapshot() {
   console.log('=== Identity Snapshot Signing v0.2 ===\n');
 
   if (!fs.existsSync(SNAPSHOT_PATH)) {
@@ -113,9 +114,7 @@ function signSnapshot() {
 
   const jws = `${headerB64}.${payloadB64}.${signatureB64}`;
 
-  const tmpPath = SNAPSHOT_JWS_PATH + '.tmp';
-  fs.writeFileSync(tmpPath, jws);
-  fs.renameSync(tmpPath, SNAPSHOT_JWS_PATH);
+  await atomicWriteWithLease(SNAPSHOT_JWS_PATH, jws, 'archivist', 30000);
 
   console.log('\nSigned snapshot written to:', SNAPSHOT_JWS_PATH);
   console.log('JWS length:', jws.length, 'characters');
@@ -124,9 +123,11 @@ function signSnapshot() {
   return { success: true, jwsPath: SNAPSHOT_JWS_PATH, keyId };
 }
 
-try {
-  signSnapshot();
-} catch (e) {
-  console.error('\nERROR:', e.message);
-  process.exit(1);
+if (require.main === module) {
+  (async () => {
+    await signSnapshot();
+  })().catch((e) => {
+    console.error('\nERROR:', e.message);
+    process.exit(1);
+  });
 }

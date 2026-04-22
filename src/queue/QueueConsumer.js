@@ -19,6 +19,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { atomicWriteWithLease } = require('S:/kernel-lane/scripts/atomic-write-util');
 
 const SEVERITY_LEVELS = {
 	P0: { label: 'CRITICAL', auto_resolve: false, requires_operator: true },
@@ -86,12 +87,10 @@ class QueueConsumer {
 		}).filter(item => item !== null);
 	}
 
-	_writeQueue(queueType, items) {
+	async _writeQueue(queueType, items) {
 		const filePath = path.join(this.queueDir, `${queueType.toLowerCase()}.log`);
 		const data = items.map(item => JSON.stringify(item)).join('\n') + '\n';
-		const tempPath = filePath + '.tmp';
-		fs.writeFileSync(tempPath, data, 'utf8');
-		fs.renameSync(tempPath, filePath);
+		await atomicWriteWithLease(filePath, data, this.laneId, 30000);
 	}
 
 	_audit(event) {
@@ -172,7 +171,7 @@ class QueueConsumer {
 		return resolution;
 	}
 
-	processQueue(queueType) {
+	async processQueue(queueType) {
 		const pending = this.getPending(queueType);
 		if (pending.length === 0) return { processed: 0, escalated: 0 };
 
@@ -198,7 +197,7 @@ class QueueConsumer {
 			}
 		}
 
-		this._writeQueue(queueType, allItems);
+		await this._writeQueue(queueType, allItems);
 		this._audit({ event: 'queue_processed', queueType, processed, escalated });
 		return { processed, escalated };
 	}
@@ -219,17 +218,21 @@ class QueueConsumer {
 		this._audit({ event: 'consumer_stopped', lane: this.laneId });
 	}
 
-	_poll() {
+	async _poll() {
 		if (!this.running) return;
 
 		try {
-			this.processQueue('INCIDENT');
-			this.processQueue('APPROVAL');
+			await this.processQueue('INCIDENT');
+			await this.processQueue('APPROVAL');
 		} catch (err) {
 			this._audit({ event: 'poll_error', error: err.message });
 		}
 
-		this.pollTimer = setTimeout(() => this._poll(), this.pollIntervalMs);
+		this.pollTimer = setTimeout(() => {
+			this._poll().catch((err) => {
+				this._audit({ event: 'poll_error', error: err.message });
+			});
+		}, this.pollIntervalMs);
 	}
 
 	getStats() {

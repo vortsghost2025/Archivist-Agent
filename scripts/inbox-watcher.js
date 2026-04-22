@@ -9,6 +9,7 @@ const {
   acquireWatcherLock
 } = require('./concurrency-policy');
 const { IdentityEnforcer } = require('./identity-enforcer');
+const { moveFileWithLease } = require('./lease-write');
 
 const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
 const PREEMPTION_CYCLE_LIMIT = 2;
@@ -71,6 +72,16 @@ class InboxWatcher {
     } catch (_) {}
 
     this.identityEnforcer = new IdentityEnforcer({ enforcementMode: 'enforce' });
+    this.assertNoRawRenameSync();
+  }
+
+  assertNoRawRenameSync() {
+    // Fail closed if this watcher ever regresses to raw rename operations.
+    const source = fs.readFileSync(__filename, 'utf8');
+    const forbidden = 'rename' + 'Sync(';
+    if (source.includes(forbidden)) {
+      throw new Error('WATCHER_INVARIANT_VIOLATION: raw renameSync operation detected in inbox-watcher.js');
+    }
   }
 
   loadConvergenceConstraint() {
@@ -149,7 +160,7 @@ class InboxWatcher {
     return true;
   }
 
-  scan() {
+  async scan() {
     this.ensureDirs();
 
     let files;
@@ -176,17 +187,17 @@ class InboxWatcher {
           msg._identity = idResult;
           if (idResult.decision === 'reject') {
             console.log(`[watcher] IDENTITY_REJECT: ${filename} from ${idResult.from} — ${idResult.reason}`);
-            this.moveToExpired(filename, filePath);
+            await this.moveToExpired(filename, filePath);
             continue;
           }
           if (!this.checkIdempotencyKey(msg)) {
-          this.moveToProcessed(filename, filePath);
+          await this.moveToProcessed(filename, filePath);
           continue;
         }
         messages.push(msg);
       } catch (e) {
       console.error(`[watcher] Cannot parse ${filename}:`, e.message);
-      this.moveToExpired(filename, filePath);
+      await this.moveToExpired(filename, filePath);
       }
     }
 
@@ -234,13 +245,13 @@ class InboxWatcher {
     return false;
   }
 
-  moveToProcessed(filename, sourcePath) {
+  async moveToProcessed(filename, sourcePath) {
     const dest = path.join(this.config.processedPath, filename);
     try {
       if (fs.existsSync(dest)) {
-        fs.unlinkSync(sourcePath);
+        if (fs.existsSync(sourcePath)) fs.unlinkSync(sourcePath);
       } else {
-        fs.renameSync(sourcePath, dest);
+        await moveFileWithLease(sourcePath, dest, this.config.laneName, 30000);
       }
       this.processedKeys.add(filename);
     } catch (e) {
@@ -248,7 +259,7 @@ class InboxWatcher {
     }
   }
 
-  moveToExpired(filename, sourcePath) {
+  async moveToExpired(filename, sourcePath) {
     const dest = path.join(this.config.expiredPath, filename);
     const attemptCount = this._trackQuarantine(filename, 'expired');
     const MAX_QUARANTINE_ATTEMPTS = 3;
@@ -267,7 +278,7 @@ class InboxWatcher {
           if (fs.existsSync(qDest)) {
             fs.unlinkSync(sourcePath);
           } else {
-            fs.renameSync(sourcePath, qDest);
+            await moveFileWithLease(sourcePath, qDest, this.config.laneName, 30000);
           }
         }
         this._logQuarantine(filename, 'RETRY_LIMIT', attemptCount);
@@ -279,7 +290,7 @@ class InboxWatcher {
       if (fs.existsSync(dest)) {
         if (fs.existsSync(sourcePath)) fs.unlinkSync(sourcePath);
       } else {
-        fs.renameSync(sourcePath, dest);
+        await moveFileWithLease(sourcePath, dest, this.config.laneName, 30000);
       }
       this.processedKeys.add(filename);
       console.log(`[watcher] EXPIRED: ${filename} — attempt ${attemptCount}/${MAX_QUARANTINE_ATTEMPTS}`);
@@ -309,7 +320,7 @@ class InboxWatcher {
     }
   }
 
-  processMessage(msg) {
+  async processMessage(msg) {
     const filename = msg._sourceFile;
     const sourcePath = msg._sourcePath;
     const priority = msg.priority || 'P3';
@@ -329,7 +340,7 @@ class InboxWatcher {
       console.log(`[watcher] ACTION REQUIRED: ${msg.id || filename}`);
     }
 
-    this.moveToProcessed(filename, sourcePath);
+    await this.moveToProcessed(filename, sourcePath);
     this.processedKeys.add(idempotencyKey);
 
     const p = PRIORITY_ORDER[priority] ?? 3;
@@ -384,7 +395,7 @@ class InboxWatcher {
     return results;
   }
 
-  run() {
+  async run() {
     const releaseLock = acquireWatcherLock({
       repoRoot: this.repoRoot,
       laneName: this.config.laneName,
@@ -393,7 +404,7 @@ class InboxWatcher {
 
     console.log(`[watcher] ${this.config.laneName} inbox scan starting`);
     try {
-      let messages = this.scan();
+      let messages = await this.scan();
       console.log(`[watcher] Found ${messages.length} messages`);
 
       if (messages.length === 0) {
@@ -417,7 +428,7 @@ class InboxWatcher {
 
       for (const msg of messages) {
         try {
-          this.processMessage(msg);
+          await this.processMessage(msg);
         } catch (e) {
           console.error(`[watcher] Error processing ${msg._sourceFile}:`, e.message);
         }
@@ -433,6 +444,7 @@ class InboxWatcher {
 module.exports = { InboxWatcher, DEFAULT_CONFIG, PRIORITY_ORDER };
 
 if (require.main === module) {
+  (async () => {
   const args = process.argv.slice(2);
   const watcher = new InboxWatcher();
 
@@ -440,7 +452,7 @@ if (require.main === module) {
     const health = watcher.checkLaneHealth();
     console.log(JSON.stringify(health, null, 2));
   } else if (args.includes('--scan')) {
-    const messages = watcher.scan();
+    const messages = await watcher.scan();
     console.log(JSON.stringify(messages.map(m => ({
       id: m.id, from: m.from, priority: m.priority, type: m.type
     })), null, 2));
@@ -483,7 +495,7 @@ if (require.main === module) {
       fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2));
       console.log(`[test] Wrote stale lock (PID 99999, age 1000s > stale_after=900s)`);
       try {
-        watcher.run();
+        await watcher.run();
         console.log(`[test] PASS: stale lock reclaimed, watcher ran successfully`);
       } catch (e) {
         console.log(`[test] FAIL: ${e.message}`);
@@ -492,7 +504,11 @@ if (require.main === module) {
       console.log(`[test] SKIP: no lock file to test against (run watcher once first)`);
     }
   } else {
-    const count = watcher.run();
+    const count = await watcher.run();
     console.log(`[watcher] Processed ${count} messages`);
   }
+  })().catch((err) => {
+    console.error(`[watcher] FATAL: ${err.message}`);
+    process.exit(1);
+  });
 }

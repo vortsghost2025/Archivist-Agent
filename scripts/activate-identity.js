@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { IdentityEnforcer } = require('./identity-enforcer');
 
 const LANES = [
   { id: 'archivist', dir: 'S:/Archivist-Agent' },
@@ -97,7 +98,7 @@ function main() {
   }
 
   const trustStorePath = 'S:/Archivist-Agent/lanes/broadcast/trust-store.json';
-  fs.writeFileSync(trustStorePath, JSON.stringify(trustStore, null, 2), 'utf8');
+  IdentityEnforcer.writeTrustStoreStrict(trustStorePath, trustStore, { actorLane: 'archivist' });
   console.log(`\nTrust store saved to: ${trustStorePath}`);
 
   const activeCount = Object.keys(trustStore).length;

@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { IdentityEnforcer } = require('./identity-enforcer');
 
 const KEY_SIZE = 2048;
 const PASSFILE_SEARCH = [
@@ -171,7 +172,7 @@ class IdentitySelfHealing {
           ts[this.laneId].public_key_pem = publicKey;
           ts[this.laneId].key_id = keyId;
           ts[this.laneId].registered_at = new Date().toISOString();
-          fs.writeFileSync(tsPath, JSON.stringify(ts, null, 2));
+          IdentityEnforcer.writeTrustStoreStrict(tsPath, ts, { actorLane: this.laneId });
           updated++;
         }
       } catch (_) {}
