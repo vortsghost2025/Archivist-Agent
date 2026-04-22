@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T19:10:13.089Z",
+  "timestamp": "2026-04-22T20:31:32.993Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -59,11 +59,52 @@
   },
   "post_compact": {
     "active_blocker": {
-      "exists": false,
-      "blocker": null
+      "exists": true,
+      "blocker": {
+        "id": "p0-escalation-key-id-convergence-authority",
+        "from": "archivist",
+        "to": "archivist",
+        "type": "escalation",
+        "priority": "P0",
+        "subject": "P0 ESCALATION: Key ID Convergence Authority — PRECISE EVIDENCE",
+        "timestamp": "2026-04-22T19:52:32.311Z",
+        "requires_action": true,
+        "body": "Archivist has attempted to achieve key_id convergence but discovers pre-existing divergence with PRECISE figures.",
+        "convergence_analysis": {
+          "archivist_signing_key_id": "1a7741b8d353abee",
+          "kernel_trust_store_canonical": "a94ef3e05c4f856d",
+          "identity_snapshot_key_id": "a94ef3e05c4f856d",
+          "trust_keys_json": "1a7741b8d353abee",
+          "archivist_identity_public_pem_computed": "1a7741b8d353abee",
+          "status": "DIVERGED"
+        },
+        "divergence_proof": {
+          "step1": "Archivist signs messages with key_id 1a7741b8d353abee (.identity/private.pem)",
+          "step2": "Kernel-trust-store canonical archivist key_id = a94ef3e05c4f856d",
+          "step3": "Identity snapshot says archivist key_id = a94ef3e05c4f856d",
+          "step4": ".trust/keys.json says key_id = 1a7741b8d353abee (matches signing)",
+          "conclusion": "3 sources say a94ef3e05c4f856d, Archivist signing says 1a7741b8d353abee — convergence requires choosing one"
+        },
+        "blockers": {
+          "key_id_convergence": "REQUIRES_AUTHORITY_100",
+          "trust_store_structure_mismatch": "kernel-lane uses lanes.{lane} vs Archivist uses flat keys",
+          "act_sync_enforcement": "ALREADY_SATISFIED"
+        },
+        "authority_required_for": [
+          "Determine correct canonical key_id for Archivist (a94ef3e05c4f856d OR 1a7741b8d353abee)",
+          "Synchronize all 4 trust stores to same key_id",
+          "Resolve structure mismatch between trust stores",
+          "Update identity snapshot to match chosen canonical"
+        ],
+        "recovery_possible": false,
+        "content_hash": "sha256:7d52cf065a9a1bc2860ed2b92db18ee825cc0d46beecc81b9ef1c90680bfbcb1",
+        "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjFhNzc0MWI4ZDM1M2FiZWUifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6N2Q1MmNmMDY1YTlhMWJjMjg2MGVkMmI5MmRiMThlZTgyNWNjMGQ0NmJlZWNjODFiOWVmMWM5MDY4MGJmYmNiMSIsImV4cCI6MTc3Njk3Mzk1MiwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3Njg4NzU1MiwiaWQiOiJwMC1lc2NhbGF0aW9uLWtleS1pZC1jb252ZXJnZW5jZS1hdXRob3JpdHkiLCJsYW5lIjoiYXJjaGl2aXN0IiwicHJpb3JpdHkiOiJQMCIsInRhc2tfaWQiOm51bGwsInRvIjoiYXJjaGl2aXN0In0.Qf_RqaAENNGnxRgXLLps66hi9Wj97s-vHzaJsDrATCjajalMhhvc6A3bPOnnnPiJ69fu0FQKpSkxVYMy0oOpY71ARaGlkLveOO0flGkDkYRS5mZwNPHSy9zYWW4H8Xp6ocvmX_8w104Wvszhm5Hu1oChsY3icqIt4u2VUviTjjJo1clzg-YpuHINoxtQTY_73YUjM-Bp6zw-ixG8u4Rj_6OeOqZePnkhQjuI6eaw9NPCNLSJKeSH35IjZK0Cgcmh8d7XFIzFjQ5CqUXhUkhicmEpw7HpeLZcdl5Imf5hagaAbZsDRJETlBNbgduLHxaGSrxX0e0wwEbrl_D8yVN_dQ",
+        "signature_alg": "RS256",
+        "key_id": "1a7741b8d353abee"
+      }
     },
     "trust_store_key_ids": {
-      "archivist": "a94ef3e05c4f856d",
+      "archivist": "1a7741b8d353abee",
       "library": "cb3e57dd7818da3d",
       "swarmmind": "959dc79dbaa38113",
       "kernel": "bd553e7c2daac20d"
@@ -77,44 +118,100 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-22T19:10:01.653Z",
-        "age_seconds": 11
+        "timestamp": "2026-04-22T20:31:01.296Z",
+        "age_seconds": 31
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-22T19:10:01.664Z",
-        "age_seconds": 11
+        "timestamp": "2026-04-22T20:31:01.521Z",
+        "age_seconds": 31
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-22T19:09:22.486Z",
-        "age_seconds": 50
+        "timestamp": "2026-04-22T20:31:23.076Z",
+        "age_seconds": 9
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-22T19:09:40.466Z",
-        "age_seconds": 32
+        "timestamp": "2026-04-22T20:31:25.850Z",
+        "age_seconds": 7
       }
     },
     "inbox_counts": {
-      "archivist": 20,
-      "library": 16,
-      "swarmmind": 6,
-      "kernel": 11
+      "archivist": 16,
+      "library": 21,
+      "swarmmind": 12,
+      "kernel": 16
     },
-    "governance_hash": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
+    "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
     "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
     "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
-    "known_risks": []
+    "known_risks": [
+      "identity_soft_keys",
+      "determinism_not_guaranteed",
+      "kernel_partial_convergence",
+      "contract_alignment_ambiguous",
+      "subagent_code_destruction_surface"
+    ]
   },
   "diff": {
-    "blocker_changed": false,
-    "blocker_detail": null,
+    "blocker_changed": true,
+    "blocker_detail": {
+      "pre": {
+        "exists": false,
+        "blocker": null
+      },
+      "post": {
+        "exists": true,
+        "blocker": {
+          "id": "p0-escalation-key-id-convergence-authority",
+          "from": "archivist",
+          "to": "archivist",
+          "type": "escalation",
+          "priority": "P0",
+          "subject": "P0 ESCALATION: Key ID Convergence Authority — PRECISE EVIDENCE",
+          "timestamp": "2026-04-22T19:52:32.311Z",
+          "requires_action": true,
+          "body": "Archivist has attempted to achieve key_id convergence but discovers pre-existing divergence with PRECISE figures.",
+          "convergence_analysis": {
+            "archivist_signing_key_id": "1a7741b8d353abee",
+            "kernel_trust_store_canonical": "a94ef3e05c4f856d",
+            "identity_snapshot_key_id": "a94ef3e05c4f856d",
+            "trust_keys_json": "1a7741b8d353abee",
+            "archivist_identity_public_pem_computed": "1a7741b8d353abee",
+            "status": "DIVERGED"
+          },
+          "divergence_proof": {
+            "step1": "Archivist signs messages with key_id 1a7741b8d353abee (.identity/private.pem)",
+            "step2": "Kernel-trust-store canonical archivist key_id = a94ef3e05c4f856d",
+            "step3": "Identity snapshot says archivist key_id = a94ef3e05c4f856d",
+            "step4": ".trust/keys.json says key_id = 1a7741b8d353abee (matches signing)",
+            "conclusion": "3 sources say a94ef3e05c4f856d, Archivist signing says 1a7741b8d353abee — convergence requires choosing one"
+          },
+          "blockers": {
+            "key_id_convergence": "REQUIRES_AUTHORITY_100",
+            "trust_store_structure_mismatch": "kernel-lane uses lanes.{lane} vs Archivist uses flat keys",
+            "act_sync_enforcement": "ALREADY_SATISFIED"
+          },
+          "authority_required_for": [
+            "Determine correct canonical key_id for Archivist (a94ef3e05c4f856d OR 1a7741b8d353abee)",
+            "Synchronize all 4 trust stores to same key_id",
+            "Resolve structure mismatch between trust stores",
+            "Update identity snapshot to match chosen canonical"
+          ],
+          "recovery_possible": false,
+          "content_hash": "sha256:7d52cf065a9a1bc2860ed2b92db18ee825cc0d46beecc81b9ef1c90680bfbcb1",
+          "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjFhNzc0MWI4ZDM1M2FiZWUifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6N2Q1MmNmMDY1YTlhMWJjMjg2MGVkMmI5MmRiMThlZTgyNWNjMGQ0NmJlZWNjODFiOWVmMWM5MDY4MGJmYmNiMSIsImV4cCI6MTc3Njk3Mzk1MiwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3Njg4NzU1MiwiaWQiOiJwMC1lc2NhbGF0aW9uLWtleS1pZC1jb252ZXJnZW5jZS1hdXRob3JpdHkiLCJsYW5lIjoiYXJjaGl2aXN0IiwicHJpb3JpdHkiOiJQMCIsInRhc2tfaWQiOm51bGwsInRvIjoiYXJjaGl2aXN0In0.Qf_RqaAENNGnxRgXLLps66hi9Wj97s-vHzaJsDrATCjajalMhhvc6A3bPOnnnPiJ69fu0FQKpSkxVYMy0oOpY71ARaGlkLveOO0flGkDkYRS5mZwNPHSy9zYWW4H8Xp6ocvmX_8w104Wvszhm5Hu1oChsY3icqIt4u2VUviTjjJo1clzg-YpuHINoxtQTY_73YUjM-Bp6zw-ixG8u4Rj_6OeOqZePnkhQjuI6eaw9NPCNLSJKeSH35IjZK0Cgcmh8d7XFIzFjQ5CqUXhUkhicmEpw7HpeLZcdl5Imf5hagaAbZsDRJETlBNbgduLHxaGSrxX0e0wwEbrl_D8yVN_dQ",
+          "signature_alg": "RS256",
+          "key_id": "1a7741b8d353abee"
+        }
+      }
+    },
     "trust_chain_intact": false,
     "trust_detail": {
       "archivist": {
         "pre": "583b2c36f397ef01",
-        "post": "a94ef3e05c4f856d"
+        "post": "1a7741b8d353abee"
       },
       "library": {
         "pre": "a3136a93627b7b46",
@@ -131,8 +228,11 @@
     },
     "constraints_intact": true,
     "constraints_detail": null,
-    "governance_intact": true,
-    "governance_detail": null,
+    "governance_intact": false,
+    "governance_detail": {
+      "pre": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
+      "post": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb"
+    },
     "bootstrap_intact": true,
     "bootstrap_detail": null,
     "handoff_intact": true,
@@ -140,20 +240,17 @@
     "message_loss": 0,
     "message_loss_detail": {},
     "lane_degradations": [],
-    "risk_set_preserved": false,
-    "missing_risks": [
-      "identity_soft_keys",
-      "determinism_not_guaranteed",
-      "kernel_partial_convergence",
-      "contract_alignment_ambiguous",
-      "subagent_code_destruction_surface"
-    ],
+    "risk_set_preserved": true,
+    "missing_risks": [],
     "unexpected_changes": [
-      "trust_store_archivist_key_changed",
+      "active_blocker_changed",
       "trust_store_library_key_changed",
       "trust_store_swarmmind_key_changed",
       "trust_store_kernel_key_changed",
-      "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
+      "governance_doc_modified"
+    ],
+    "justifications": [
+      "trust_store_archivist_key_change_allowed: Round 5 key rotation and reconciliation"
     ]
   },
   "status": "conflicted",

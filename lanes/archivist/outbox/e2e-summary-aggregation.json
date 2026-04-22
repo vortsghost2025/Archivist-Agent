@@ -1,0 +1,19 @@
+{
+  "aggregation_id": "e2e-summary-aggregation-001",
+  "timestamp": "2026-04-22T16:35:00Z",
+  "expected": 4,
+  "received": 1,
+  "summaries": [
+    {
+      "lane": "archivist",
+      "status": "PASS-WARN",
+      "result": "11/11 PASS, 1 CONTRADICTION",
+      "trust_source": "kernel-trust-store (canonical)",
+      "warnings": ["multi_source_consistency: 6 sources, 1 contradiction"],
+      "blockers": ["p0-escalation-key-id-convergence-authority"]
+    }
+  ],
+  "missing": ["library", "kernel", "swarmmind"],
+  "pending": 3,
+  "ready": false
+}

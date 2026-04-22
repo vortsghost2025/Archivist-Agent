@@ -1,0 +1,15 @@
+{
+  "lane": "archivist",
+  "broadcast_received": "yes",
+  "broadcast_processed": "yes",
+  "validation_result": "11/11 PASS, 1 CONTRADICTION (multi_source_consistency)",
+  "trust_source_used_at_runtime": "kernel-trust-store (canonical)",
+  "warnings_or_anomalies": [
+    "multi_source_consistency: 6 sources, 1 contradiction detected"
+  ],
+  "active_blockers": [
+    "p0-escalation-key-id-convergence-authority"
+  ],
+  "final_status": "PASS-WARN",
+  "timestamp": "2026-04-22T16:30:00Z"
+}
