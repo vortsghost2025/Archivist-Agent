@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Convergence Artifact Schema v1",
+  "description": "Required fields for convergence artifacts to prevent contradictions",
+  "type": "object",
+  "required": ["artifact_type", "lane", "generated_at", "status", "p0_findings", "p1_findings"],
+  "properties": {
+    "artifact_type": {
+      "type": "string",
+      "enum": ["e2e-summary", "blocker-resolution", "escalation-response", "contradiction-report", "convergence-status", "identity-audit"]
+    },
+    "lane": {
+      "type": "string",
+      "enum": ["archivist", "kernel", "library", "swarmmind"]
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "PASS-WARN", "RESOLVED", "FAILED", "BLOCKED"]
+    },
+    "p0_findings": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "p1_findings": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "p2_findings": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "active_blockers": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "contradicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "artifact": {"type": "string"},
+          "field": {"type": "string"},
+          "expected": {"type": "string"},
+          "actual": {"type": "string"}
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "file": {"type": "string"},
+        "line": {"type": "integer"},
+        "hash": {"type": "string"}
+      }
+    }
+  }
+}
