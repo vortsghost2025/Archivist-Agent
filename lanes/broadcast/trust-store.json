@@ -21,7 +21,7 @@
     "lane_id": "swarmmind",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4lSrOmgOifOT5FR0prrs\n35YUiUzEimXYCan9urKMb+tbFInC6Fu1pAvQFcJPuxKr0FSQHPTJwO4AO03iklII\nawC3SSxPk3VInQJ2CE/0hOoTSmvTCmhf3E8e7x6WfABwWW6CkTvEgwwpe0Tdix/H\nEPSCicZEFeavyKLYExFE0XV+g3Uzy/kTe8EQZH6wGk42kH4IWUA7M2DqlgQKbWkL\ndKFL3Cklza+Uyt4iJab6E39J/Ni+gxGkGctAnUt6+KTCdwwUsteprhctwdaMAg85\nWFCwkOqBuXLwzVBSUsxtvrFH8fLpeSV/0h0wGKEZL5QA6ZJ7xKARXLX/H1nDZCRB\n2QIDAQAB\n-----END PUBLIC KEY-----\n",
     "algorithm": "RS256",
-    "key_id": "43318ee5ca160559",
+    "key_id": "efe90fc61ceceaeb",
     "registered_at": "2026-04-22T00:55:00Z",
     "expires_at": null,
     "revoked_at": null
