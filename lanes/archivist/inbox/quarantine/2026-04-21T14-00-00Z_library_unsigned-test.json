@@ -1,9 +1,0 @@
-{
-  "id": "test-unsigned-rejection-001",
-  "from": "library",
-  "to": "archivist",
-  "timestamp": "2026-04-21T15:13:39.071Z",
-  "priority": "P1",
-  "type": "finding",
-  "body": "This is an unsigned message that should be rejected by identity enforcement"
-}

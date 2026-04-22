@@ -1,7 +1,0 @@
-{
-  "review": "code-review",
-  "result": "pass",
-  "summary": "All lanes' code bases are compliant with governance standards. No critical issues found. Minor suggestions: ensure all async functions handle lease errors, add unit tests for moveWithLease.",
-  "timestamp": "2026-04-22T16:00:00Z",
-  "reviewer": "archivist"
-}
