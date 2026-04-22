@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T11:01:11.240Z",
+  "timestamp": "2026-04-22T12:23:56.373Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -55,7 +55,7 @@
     {
       "name": "contradiction_detection",
       "passed": true,
-      "detail": "status=conflicted unexpected_changes=3"
+      "detail": "status=conflicted unexpected_changes=4"
     }
   ],
   "summary": {
