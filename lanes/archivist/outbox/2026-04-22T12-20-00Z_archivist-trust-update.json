@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.3",
+  "task_id": "round-007-trust-store-update-notification",
+  "idempotency_key": "trust-store-update-notification-round-007",
+  "from": "archivist",
+  "to": "library",
+  "type": "task",
+  "task_kind": "review",
+  "priority": "P1",
+  "subject": "Trust Store Update - Library Key Rotation",
+  "body": "Round 7: Library key was rotated in previous cycle. Key_id changed from a3136a93627b7b46 to 612726c59e3f703a. Trust stores have been reconciled across all 4 lanes. This notification confirms the update.",
+  "timestamp": "2026-04-22T12:18:49.961Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline"
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "archivist"
+  },
+  "retry": {
+    "attempt": 1
+  },
+  "evidence": {
+    "required": false
+  },
+  "heartbeat": {
+    "status": "done"
+  },
+  "signature": "WhqTBewiin/joxltCThE9mBkjMd4pIf5Adjcy2dw+ye3K6L5u9QwZc7nD1GzC/3ZM+m+LjhVTOAAEClodkP/4wHB5NwC3Iwhh//bZxxjRi8zh6Yra+BlZe1crNCL1ZfE5ujN1abPOhNFIrJZ0vf4P+dbDXRyT57ZY4n/NFsyZ2diWLIs9Bdag9Ivfb6+PTJDk0rsy5FTwLxJV773Qi2kph9u902pnI0rxo49bPEFeYwZbKy5u1xD9VLn4mke0PwyJPLlMGXw4vPh6uxpe6Y5kf6jBReJQEzYfF0ugn62Gcc9DMYbAjxWBXkrZDELZ4U56a8v/edvWE4N2vOj68hy6g==",
+  "signature_alg": "RS256",
+  "key_id": "1a7741b8d353abee"
+}
