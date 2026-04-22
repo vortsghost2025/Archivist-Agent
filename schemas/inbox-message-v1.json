@@ -153,6 +153,19 @@
           "format": "date-time"}
       }
     },
+    "evidence_exchange": {
+      "type": "object",
+      "description": "v1.3: Convergence evidence exchange block. Required when evidence.required is true for response/ack types.",
+      "properties": {
+        "artifact_path": {"type": "string"},
+        "artifact_type": {
+          "type": "string",
+          "enum": ["benchmark", "profile", "release", "log"]
+        },
+        "delivered_at": {"type": "string", "format": "date-time"}
+      },
+      "required": ["artifact_path", "artifact_type", "delivered_at"]
+    },
     "heartbeat": {
       "type": "object",
       "properties": {

@@ -23,6 +23,7 @@ const REQUIRED_FIELDS = [
   'lease',
   'retry',
   'evidence',
+  'evidence_exchange',
   'heartbeat'
 ];
 
@@ -41,6 +42,7 @@ const ENUM_CONSTRAINTS = {
   'execution.engine': ['kilo', 'opencode', 'other'],
   'execution.actor': ['lane', 'subagent', 'watcher'],
   'heartbeat.status': ['pending', 'in_progress', 'done', 'failed', 'escalated', 'timed_out'],
+  'evidence_exchange.artifact_type': ['benchmark', 'profile', 'release', 'log'],
 };
 
 const TYPE_CHECKS = {
@@ -61,6 +63,7 @@ const TYPE_CHECKS = {
   lease: 'object',
   retry: 'object',
   evidence: 'object',
+  evidence_exchange: 'object',
   heartbeat: 'object',
 };
 
@@ -139,6 +142,20 @@ function validate(message) {
   if (['task', 'response', 'escalation', 'handoff'].includes(message.type)) {
     if (!('task_kind' in message)) {
       errors.push('task_kind is required for task/response/escalation/handoff messages');
+    }
+  }
+
+  // v1.3: evidence_exchange required when evidence.required is true for response/ack
+  if (message.evidence && message.evidence.required === true) {
+    if (['response', 'ack'].includes(message.type)) {
+      if (!message.evidence_exchange) {
+        errors.push('evidence_exchange is required when evidence.required is true for response/ack types');
+      } else {
+        const exch = message.evidence_exchange;
+        if (!exch.artifact_path || !exch.artifact_type || !exch.delivered_at) {
+          errors.push('evidence_exchange must have artifact_path, artifact_type, and delivered_at');
+        }
+      }
     }
   }
 
@@ -221,6 +238,12 @@ function createMessage(template = {}) {
       verified_by: null,
       verified_at: null,
       ...template.evidence,
+    },
+    evidence_exchange: {
+      artifact_path: null,
+      artifact_type: null,
+      delivered_at: null,
+      ...template.evidence_exchange,
     },
     heartbeat: {
       interval_seconds: 300,
