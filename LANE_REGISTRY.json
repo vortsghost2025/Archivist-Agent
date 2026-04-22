@@ -24,9 +24,9 @@
     "swarmmind": {
       "lane_id": "swarmmind",
       "authority": 80,
-      "repo_path": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System",
+      "repo_path": "S:\\SwarmMind-Self-Optimizing-Multi-Agent-AI-System",
       "branch": "master",
-      "commit_sha": "e574346",
+      "commit_sha": "fc35199a61db5edbc3e9c3522af73b6d26443ae7",
       "state_files": [
         ".session-lock",
         "RUNTIME_STATE.json",

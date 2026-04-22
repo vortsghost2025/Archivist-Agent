@@ -3,7 +3,19 @@
   "title": "Convergence Artifact Schema v1",
   "description": "Required fields for convergence artifacts to prevent contradictions",
   "type": "object",
-  "required": ["artifact_type", "lane", "generated_at", "status", "p0_findings", "p1_findings"],
+  "additionalProperties": false,
+  "required": [
+    "artifact_type",
+    "lane",
+    "generated_at",
+    "status",
+    "p0_findings",
+    "p1_findings",
+    "p2_findings",
+    "active_blockers",
+    "contradicts",
+    "evidence"
+  ],
   "properties": {
     "artifact_type": {
       "type": "string",
@@ -41,6 +53,8 @@
       "type": "array",
       "items": {
         "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact", "field", "expected", "actual"],
         "properties": {
           "artifact": {"type": "string"},
           "field": {"type": "string"},
@@ -51,11 +65,45 @@
     },
     "evidence": {
       "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "line", "hash"],
       "properties": {
         "file": {"type": "string"},
-        "line": {"type": "integer"},
-        "hash": {"type": "string"}
+        "line": {"type": "integer", "minimum": 1},
+        "hash": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        }
       }
+    },
+    "findings": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "findings_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "scanned_artifacts": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "stale_threshold_hours": {
+      "type": "number",
+      "minimum": 0
+    },
+    "severity_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["P0", "P1", "P2"],
+      "properties": {
+        "P0": { "type": "integer", "minimum": 0 },
+        "P1": { "type": "integer", "minimum": 0 },
+        "P2": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "root": {
+      "type": "string"
     }
   }
 }

@@ -62,7 +62,9 @@ class KeyManager {
 	}
 
 	_generateKeyId(publicKey) {
-		return crypto.createHash('sha256').update(publicKey).digest('hex').substring(0, 16);
+		// Canonicalize PEM: trim trailing whitespace and ensure single trailing newline
+		const canonicalPem = publicKey.trimEnd() + '\n';
+		return crypto.createHash('sha256').update(canonicalPem).digest('hex').substring(0, 16);
 	}
 
 	loadPublicKey() {

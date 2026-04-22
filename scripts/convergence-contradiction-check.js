@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const DEFAULT_ROOT = 'S:/Archivist-Agent';
 const DEFAULT_STALE_HOURS = 6;
@@ -261,8 +262,58 @@ function runCheck(root, staleHours) {
     { P0: 0, P1: 0, P2: 0 }
   );
 
+  const contradicts = [];
+  const activeBlockers = new Set();
+
+  for (const f of findings) {
+    if (f.kind === 'unresolved_blocker_marked_resolved') {
+      const actualList = Array.isArray(f.active_blockers) ? f.active_blockers : [];
+      for (const b of actualList) activeBlockers.add(String(b));
+      contradicts.push({
+        artifact: f.file,
+        field: 'final_status_vs_active_blockers',
+        expected: 'PASS/PASS-WARN/RESOLVED requires no active blockers',
+        actual: `final_status=${f.final_status}; active_blockers=${actualList.join(' | ')}`
+      });
+    } else if (f.kind === 'contradictory_blocker_status') {
+      activeBlockers.add(String(f.blocker));
+      const actualStatuses = (f.claims || []).map(c => `${c.status}@${c.file}`).join(' | ');
+      contradicts.push({
+        artifact: f.blocker,
+        field: 'blocker_status',
+        expected: 'single consistent status',
+        actual: actualStatuses
+      });
+    }
+  }
+
+  const findingsDigest = crypto
+    .createHash('sha256')
+    .update(JSON.stringify(findings))
+    .digest('hex');
+
+  const status =
+    severityCounts.P0 > 0
+      ? 'BLOCKED'
+      : severityCounts.P1 > 0 || severityCounts.P2 > 0
+        ? 'PASS-WARN'
+        : 'PASS';
+
   return {
+    artifact_type: 'contradiction-report',
+    lane: 'archivist',
     generated_at: new Date().toISOString(),
+    status,
+    p0_findings: severityCounts.P0,
+    p1_findings: severityCounts.P1,
+    p2_findings: severityCounts.P2,
+    active_blockers: Array.from(activeBlockers).sort(),
+    contradicts,
+    evidence: {
+      file: __filename,
+      line: 1,
+      hash: `sha256:${findingsDigest}`
+    },
     root,
     stale_threshold_hours: staleHours,
     scanned_artifacts: artifacts.length,
