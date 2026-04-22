@@ -1,0 +1,23 @@
+# DEPRECATED - NON-CANONICAL
+
+This directory is no longer the authoritative source for lane trust data.
+
+## Current Authority
+
+The canonical trust store is located at:
+`lanes/broadcast/trust-store.json`
+
+All trust verification should resolve against this canonical source.
+
+## Why This Exists
+
+This directory contains legacy artifacts from an earlier system design.
+The key_ids in these files may be stale or invalid.
+
+## Migration
+
+- Use `.identity/public.pem` for lane-specific public keys
+- Use `lanes/broadcast/trust-store.json` for cross-lane trust verification
+- Do not use `.trust/keys.json` for any runtime verification
+
+Last updated: 2026-04-22
