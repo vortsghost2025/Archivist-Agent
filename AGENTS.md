@@ -4,6 +4,17 @@
 
 ## ⚠️ MANDATORY PRECONDITION — DO NOT PROCEED WITHOUT THIS
 
+### 📖 READ THIS FIRST
+**Before reading anything else, read:** `S:/Archivist-Agent/QUICK_START_PATHS.md`
+
+It has:
+- Quick path lookup table
+- Code examples
+- Common mistakes
+- Git Bash vs Windows paths
+
+---
+
 ### CANONICAL LANE REGISTRY (NEW - READ FIRST)
 
 **All agents MUST use these exact paths. NO GUESSING. NO VARIANTS.**
