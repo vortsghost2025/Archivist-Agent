@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.3",
+  "task_id": "reaudit-001",
+  "idempotency_key": "d6e7f8a9-b0c1-2345-6789-012345678901",
+  "from": "archivist",
+  "to": "swarmmind",
+  "timestamp": "2026-04-23T02:30:00Z",
+  "priority": "P0",
+  "type": "task",
+  "task_kind": "audit",
+  "subject": "RE-AUDIT-001: Run Constitutional-Reaudit for Round 7 with updated key_id",
+  "body": "Re-run constitutional audit using updated key_id and PEM fingerprints from Authority and Kernel.",
+  "requires_action": true,
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-23T02:30:00Z",
+    "expires_at": "2026-04-23T02:33:00Z",
+    "duration_minutes": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "path": "lanes/swarmmind/outbox/reaudit-001-report.json"
+  },
+  "tasks": [
+    "Run: npm run audit:constitutional",
+    "Verify updated key_id matches Authority",
+    "Verify updated PEM matches Kernel",
+    "Check all 7 constitutional laws",
+    "Record drift percentage (target: 0%)",
+    "Verify all invariants satisfied",
+    "Generate report"
+  ],
+  "target_drift": "0%",
+  "signature": "",
+  "key_id": "swarmmind-current"
+}

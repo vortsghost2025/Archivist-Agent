@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.3",
+  "task_id": "gap-005",
+  "idempotency_key": "e5f6a7b8-c9d0-1234-ef56-789012345678",
+  "from": "archivist",
+  "to": "authority",
+  "timestamp": "2026-04-23T03:40:00Z",
+  "priority": "P0",
+  "type": "task",
+  "task_kind": "update",
+  "subject": "GAP-005: Update key_id in archivist/.trust/trust-store.json to canonical value (0xA3F9...)",
+  "body": "Update the archivist trust store to use the canonical key_id value 0xA3F9... as specified by Authority.",
+  "requires_action": true,
+  "lease": {
+    "owner": "authority",
+    "acquired_at": "2026-04-23T03:40:00Z",
+    "expires_at": "2026-04-23T03:45:00Z",
+    "duration_minutes": 5
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "path": "lanes/authority/outbox/gap-005-update-proof.json"
+  },
+  "tasks": [
+    "Read archivist/.trust/trust-store.json",
+    "Update key_id to canonical value 0xA3F9...",
+    "Save file",
+    "Commit change",
+    "Push to multi-agent-coordination-gap"
+  ],
+  "canonical_key_id": "0xA3F9...",
+  "signature": "",
+  "key_id": "authority-100-canonical"
+}

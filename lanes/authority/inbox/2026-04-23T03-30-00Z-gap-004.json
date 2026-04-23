@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.3",
+  "task_id": "gap-004",
+  "idempotency_key": "d4e5f6a7-b8c9-0123-def4-567890123456",
+  "from": "archivist",
+  "to": "authority",
+  "timestamp": "2026-04-23T03:30:00Z",
+  "priority": "P0",
+  "type": "task",
+  "task_kind": "audit",
+  "subject": "GAP-004: Run Constitutional-Key-Audit and record JSON outcome",
+  "body": "Execute npm run audit:key and record the JSON outcome in lanes/authority/outbox/.",
+  "requires_action": true,
+  "lease": {
+    "owner": "authority",
+    "acquired_at": "2026-04-23T03:30:00Z",
+    "expires_at": "2026-04-23T03:35:00Z",
+    "duration_minutes": 5
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "path": "lanes/authority/outbox/gap-004-audit-report.json"
+  },
+  "tasks": [
+    "Run: npm run audit:key",
+    "Capture JSON output",
+    "Store in lanes/authority/outbox/gap-004-audit-report.json",
+    "Verify all keys have valid signatures"
+  ],
+  "signature": "",
+  "key_id": "authority-100-canonical"
+}

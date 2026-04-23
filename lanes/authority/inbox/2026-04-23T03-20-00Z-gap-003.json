@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.3",
+  "task_id": "gap-003",
+  "idempotency_key": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+  "from": "archivist",
+  "to": "authority",
+  "timestamp": "2026-04-23T03:20:00Z",
+  "priority": "P0",
+  "type": "task",
+  "task_kind": "publication",
+  "subject": "GAP-003: Publish Signed-Key-Change-Log (SHA-256) to public repository",
+  "body": "Generate SHA-256 hash of all key changes and publish to public repository for transparency.",
+  "requires_action": true,
+  "lease": {
+    "owner": "authority",
+    "acquired_at": "2026-04-23T03:20:00Z",
+    "expires_at": "2026-04-23T03:25:00Z",
+    "duration_minutes": 5
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "path": "lanes/authority/outbox/gap-003-change-log.json"
+  },
+  "tasks": [
+    "Compute SHA-256 of trust-store.json",
+    "Compute SHA-256 of key changes",
+    "Publish to github.com/vortsghost2025/key-change-log",
+    "Update reference in lanes/broadcast/key-change-log-hash.json"
+  ],
+  "signature": "",
+  "key_id": "authority-100-canonical"
+}
