@@ -1,79 +1,12 @@
 {
-  "version": "2.0",
-  "identity": {
-    "id": "archivist-agent-001",
-    "lane": "archivist",
-    "authority": 100,
-    "created_at": "2026-04-19T00:00:00Z",
-    "model_origin": "nvidia/glm5",
-    "last_updated": "2026-04-22T19:57:46.680Z",
-    "issued_by": "archivist",
-    "key_id": "1a7741b8d353abee",
-    "expires_at": "2026-07-19T00:00:00Z",
-    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqc/AeE9AVw66Xc2huo4h\nPahstYHEBNgBS1/I+zkAXIpsvQKGltVH0NfOwhCV9KhTxT6JGqwUoJ+25Lg5xGwt\nWFW+JRRPfobFxhbFdZ04g9/WJe3WNd1WRBjYiwPGP7wWQ8d9SxDOTXmum++Ag+V7\nUSXszeDz6j0cyCDdj8dF+Kk82N7ez5KrxyyU7MerIqWcMBx9ITtBIwE/alE0wJBk\nVMoD9FePTI5AF4CKnH6D9urw5UvNjasbDjTLyXOGUPkzxc6kzBLde2rpjPBgqQ3S\nVV8EDodEl0s/BGopMJw/OQ3ZfB/uWNttzvn7wwg+lnmN6SFykqmnmzaEvp/8gFQj\nGQIDAQAB\n-----END PUBLIC KEY-----"
-  },
-  "invariants": [
-    "A = B = C (lane consistency)",
-    "Structure > Identity",
-    "Single entry point (BOOTSTRAP.md)",
-    "Correction is mandatory",
-    "Agent evaluates WE, agent is NOT part of WE"
-  ],
-  "trust_state": {
-    "lanes_registered": [
-      "archivist",
-      "swarmmind",
-      "library",
-      "kernel"
-    ],
-    "last_verification": "2026-04-19T12:00:00Z",
-    "quarantine_count": 0,
-    "handoffs_triggered": 0
-  },
-  "open_loops": [
-    {
-      "id": "loop-001",
-      "type": "task",
-      "description": "Monitor quarantine events across lanes",
-      "status": "in_progress",
-      "created_at": "2026-04-19T10:00:00Z",
-      "last_updated": "2026-04-19T12:00:00Z"
-    }
-  ],
-  "goals": [
-    {
-      "id": "goal-001",
-      "description": "Maintain three-lane attestation fabric",
-      "priority": "high",
-      "status": "active",
-      "progress": "Phase 4.4 complete"
-    },
-    {
-      "id": "goal-002",
-      "description": "Implement Agent Identity Layer v0.2",
-      "priority": "high",
-      "status": "in_progress",
-      "progress": "Signed snapshots"
-    }
-  ],
-  "context_fingerprint": {
-    "files_read": [
-      "BOOTSTRAP.md",
-      "GOVERNANCE.md",
-      "CPS_ENFORCEMENT.md",
-      ".trust/keys.json",
-      "src/attestation/Verifier.js",
-      "src/attestation/VerifierWrapper.js",
-      ".identity/identity_signer.js",
-      ".identity/identity_reasons.js",
-      ".identity/continuity_handshake.js"
-    ],
-    "key_decisions": [
-      "Phase 4.4 verification order: identity before crypto",
-      "Normalized RecoveryResult.status enum",
-      "Identity Layer v0.2: Signed snapshots required",
-      "Invariant upgrade: signed_snapshot.lane === runtime.lane AND JWS verifies"
-    ],
-    "last_activity": "2026-04-22T19:57:46.681Z"
+  "lane": "archivist",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkin4b+B58POUXVKLcKrQ\nC5JNn3k6991C1dScmyC8w8/pR8uPmhAtiu3G3dS6zt59qGVmgys2TnFM8493ztBE\nw/ZEVlNKiOJkIhpx1Q/6pnJI7lu4icoTdymVX/4uqVujMUNJyu1nFP/DKc2/NDnV\nUDLqthEY1LXyztdFeS/Qz+MH+ykXLFPZ/lA2X1Z18mm6fPCp9xlJRhdjn//zqzzK\nrBif1jmp+pfRVsvS1FVqDs43+/sQFmXq3Tul4I1KG9CNLqxH2dnk8YPZYztEi2yp\nQpqDPjpTtBN+Zl70S7ZoZ0cXvBV1W9bedZoSdVy8rITpSRFJxCc+jc7wrxF3iYgH\n8QIDAQAB\n-----END PUBLIC KEY-----",
+  "key_id": "583b2c36f397ef01",
+  "created_at": "2026-04-23T00:25:45.989Z",
+  "expires_at": null,
+  "metadata": {
+    "version": "1.0",
+    "authority": 80,
+    "role": "constitutional-governance"
   }
 }

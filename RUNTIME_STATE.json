@@ -28,9 +28,10 @@
       "constitutional_fingerprint": "f8a188f9ae7b20914cf5c868c17120b7bcf8cd675d3278b1ff523e1dd60e970d",
       "continuity_fingerprint": "96166b8ce8617be32d0e113e2065f0539bd62cc84f20b28f5bab5227fb46f567"
     },
-"lineage": {
-    "parent_session_id": "1776403587854-50060",
-    "origin_handoff": "SESSION_HANDOFF_2026-04-17.md",
-    "generation_timestamp": "2026-04-18T00:35:00Z"
+    "lineage": {
+      "parent_session_id": "1776403587854-50060",
+      "origin_handoff": "SESSION_HANDOFF_2026-04-17.md",
+      "generation_timestamp": "2026-04-18T00:35:00Z"
+    }
   }
 }

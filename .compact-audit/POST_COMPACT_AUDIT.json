@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T20:49:21.312Z",
+  "timestamp": "2026-04-23T00:20:24.794Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -8,9 +8,9 @@
     },
     "trust_store_key_ids": {
       "archivist": "583b2c36f397ef01",
-      "library": "a3136a93627b7b46",
-      "swarmmind": "151a2ded0a2c00c1",
-      "kernel": "74bc4b8df188b771"
+      "library": "612726c59e3f703a",
+      "swarmmind": "7a91050f68a96f1f",
+      "kernel": "31dcd7d9cc7cc6e7"
     },
     "constraint_names": [
       "STRUCTURE_OVER_IDENTITY",
@@ -59,34 +59,14 @@
   },
   "post_compact": {
     "active_blocker": {
-      "exists": true,
-      "blocker": {
-        "id": "p0-escalation-key-id-convergence-authority",
-        "from": "archivist",
-        "to": "archivist",
-        "type": "escalation",
-        "priority": "P0",
-        "subject": "RESOLVED: Key ID Convergence — Trust Stores Now Correct",
-        "timestamp": "2026-04-22T19:45:00.000Z",
-        "requires_action": false,
-        "body": "Trust store convergence is RESOLVED. All 4 broadcast trust stores now have correct cryptographically-derived key_ids matching .identity/public.pem files. Archivist recovery tests 11/11. All 4 repos committed and pushed.",
-        "resolution": {
-          "archivist_key_id": "a94ef3e05c4f856d",
-          "library_key_id": "cb3e57dd7818da3d",
-          "swarmmind_key_id": "959dc79dbaa38113",
-          "kernel_key_id": "bd553e7c2daac20d",
-          "all_broadcast_stores_converged": true,
-          "archivist_recovery_tests": "11/11",
-          "all_repos_pushed": true
-        },
-        "status": "RESOLVED"
-      }
+      "exists": false,
+      "blocker": null
     },
     "trust_store_key_ids": {
-      "archivist": "1a7741b8d353abee",
-      "library": "cb3e57dd7818da3d",
-      "swarmmind": "959dc79dbaa38113",
-      "kernel": "bd553e7c2daac20d"
+      "archivist": "583b2c36f397ef01",
+      "library": "612726c59e3f703a",
+      "swarmmind": "7a91050f68a96f1f",
+      "kernel": "31dcd7d9cc7cc6e7"
     },
     "constraint_names": [
       "STRUCTURE_OVER_IDENTITY",
@@ -97,93 +77,41 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-22T20:49:01.454Z",
-        "age_seconds": 19
+        "timestamp": "2026-04-23T00:20:02.240Z",
+        "age_seconds": 22
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-22T20:49:01.462Z",
-        "age_seconds": 19
+        "timestamp": "2026-04-23T00:20:02.250Z",
+        "age_seconds": 22
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-22T20:48:23.222Z",
-        "age_seconds": 58
+        "timestamp": "2026-04-23T00:19:24.861Z",
+        "age_seconds": 59
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-22T20:48:41.202Z",
-        "age_seconds": 40
+        "timestamp": "2026-04-23T00:19:42.867Z",
+        "age_seconds": 41
       }
     },
     "inbox_counts": {
-      "archivist": 16,
-      "library": 21,
-      "swarmmind": 12,
-      "kernel": 16
+      "archivist": 24,
+      "library": 1,
+      "swarmmind": 1,
+      "kernel": 0
     },
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
     "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
     "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
-    "known_risks": [
-      "identity_soft_keys",
-      "determinism_not_guaranteed",
-      "kernel_partial_convergence",
-      "contract_alignment_ambiguous",
-      "subagent_code_destruction_surface"
-    ]
+    "known_risks": []
   },
   "diff": {
-    "blocker_changed": true,
-    "blocker_detail": {
-      "pre": {
-        "exists": false,
-        "blocker": null
-      },
-      "post": {
-        "exists": true,
-        "blocker": {
-          "id": "p0-escalation-key-id-convergence-authority",
-          "from": "archivist",
-          "to": "archivist",
-          "type": "escalation",
-          "priority": "P0",
-          "subject": "RESOLVED: Key ID Convergence — Trust Stores Now Correct",
-          "timestamp": "2026-04-22T19:45:00.000Z",
-          "requires_action": false,
-          "body": "Trust store convergence is RESOLVED. All 4 broadcast trust stores now have correct cryptographically-derived key_ids matching .identity/public.pem files. Archivist recovery tests 11/11. All 4 repos committed and pushed.",
-          "resolution": {
-            "archivist_key_id": "a94ef3e05c4f856d",
-            "library_key_id": "cb3e57dd7818da3d",
-            "swarmmind_key_id": "959dc79dbaa38113",
-            "kernel_key_id": "bd553e7c2daac20d",
-            "all_broadcast_stores_converged": true,
-            "archivist_recovery_tests": "11/11",
-            "all_repos_pushed": true
-          },
-          "status": "RESOLVED"
-        }
-      }
-    },
-    "trust_chain_intact": false,
-    "trust_detail": {
-      "archivist": {
-        "pre": "583b2c36f397ef01",
-        "post": "1a7741b8d353abee"
-      },
-      "library": {
-        "pre": "a3136a93627b7b46",
-        "post": "cb3e57dd7818da3d"
-      },
-      "swarmmind": {
-        "pre": "151a2ded0a2c00c1",
-        "post": "959dc79dbaa38113"
-      },
-      "kernel": {
-        "pre": "74bc4b8df188b771",
-        "post": "bd553e7c2daac20d"
-      }
-    },
+    "blocker_changed": false,
+    "blocker_detail": null,
+    "trust_chain_intact": true,
+    "trust_detail": null,
     "constraints_intact": true,
     "constraints_detail": null,
     "governance_intact": false,
@@ -198,17 +126,17 @@
     "message_loss": 0,
     "message_loss_detail": {},
     "lane_degradations": [],
-    "risk_set_preserved": true,
-    "missing_risks": [],
-    "unexpected_changes": [
-      "active_blocker_changed",
-      "trust_store_library_key_changed",
-      "trust_store_swarmmind_key_changed",
-      "trust_store_kernel_key_changed",
-      "governance_doc_modified"
+    "risk_set_preserved": false,
+    "missing_risks": [
+      "identity_soft_keys",
+      "determinism_not_guaranteed",
+      "kernel_partial_convergence",
+      "contract_alignment_ambiguous",
+      "subagent_code_destruction_surface"
     ],
-    "justifications": [
-      "trust_store_archivist_key_change_allowed: Round 5 key rotation and reconciliation"
+    "unexpected_changes": [
+      "governance_doc_modified",
+      "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
     ]
   },
   "status": "conflicted",
@@ -225,7 +153,7 @@
       "lane_heartbeats",
       "known_risk_set"
     ],
-    "contradictions_found": 5,
+    "contradictions_found": 2,
     "self_declared_alignment": false
   }
 }

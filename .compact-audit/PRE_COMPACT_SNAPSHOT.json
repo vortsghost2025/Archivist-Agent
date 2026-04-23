@@ -7,9 +7,9 @@
   },
   "trust_store_key_ids": {
     "archivist": "583b2c36f397ef01",
-    "library": "a3136a93627b7b46",
-    "swarmmind": "151a2ded0a2c00c1",
-    "kernel": "74bc4b8df188b771"
+    "library": "612726c59e3f703a",
+    "swarmmind": "7a91050f68a96f1f",
+    "kernel": "31dcd7d9cc7cc6e7"
   },
   "constraint_names": [
     "STRUCTURE_OVER_IDENTITY",
