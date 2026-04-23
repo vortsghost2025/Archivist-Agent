@@ -2,23 +2,27 @@
   {
     "id": "swarmmind_no_heartbeat",
     "priority": "P0",
-    "description": "SwarmMind heartbeat now updating (scheduled task created 22:02Z), but needs verification of stability over time",
+    "description": "SwarmMind heartbeat now updating via scheduled task (every 5 min). Needs 30+ min stability before resolution.",
     "detected_at": "2026-04-23T21:45:00.000Z",
     "source": "convergence-monitor-report-20260423.json",
     "status": "active",
     "resolution": null,
-    "last_heartbeat": "2026-04-23T22:02:38.853Z",
-    "scheduled_task": "SwarmMindHeartbeat (every 5 min)"
+    "last_heartbeat": "2026-04-23T22:03:40.241Z",
+    "scheduled_task": "SwarmMindHeartbeat (every 5 min, created 22:02Z)",
+    "consecutive_updates": 3,
+    "stability_check_needed_until": "2026-04-23T22:35:00.000Z"
   },
   {
     "id": "message_loss",
     "priority": "P1",
-    "description": "Recover script verified: 0 actionable messages in processed/ (moved 41 to action-required/)",
+    "description": "RESOVED: 42 actionable messages processed from action-required/ to processed/ (41 completed + 1 informational)",
     "detected_at": "2026-04-23T21:30:00.000Z",
-    "source": "post-compact-audit.js + recover-action-required-from-processed.js",
-    "status": "active",
-    "resolution": null,
-    "verified_at": "2026-04-23T22:01:53.241Z"
+    "source": "post-compact-audit.js + recover-action-required-from-processed.js + manual processing",
+    "status": "resolved",
+    "resolution": "All actionable messages in action-required/ processed and moved to processed/. 0 remaining.",
+    "verified_at": "2026-04-23T22:01:53.241Z",
+    "resolved_at": "2026-04-23T22:10:00.000Z",
+    "action-required_final_count": 0
   },
   {
     "id": "priority_P0_contradiction",

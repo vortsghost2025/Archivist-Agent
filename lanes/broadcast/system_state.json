@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "system_status": "degraded",
-  "last_updated": "2026-04-23T22:05:05.351Z",
+  "last_updated": "2026-04-23T22:07:31.993Z",
   "convergence": {
     "status": "SUCCESS - All lanes converged",
     "phases": {
@@ -33,18 +33,24 @@
     {
       "id": "swarmmind_no_heartbeat",
       "priority": "P0",
-      "description": "SwarmMind identity directory exists but heartbeat file not updated since 2026-04-23T08:35:00Z",
+      "description": "SwarmMind heartbeat now updating (scheduled task created 22:02Z), but needs verification of stability over time",
       "detected_at": "2026-04-23T21:45:00.000Z",
       "source": "convergence-monitor-report-20260423.json",
-      "status": "active"
+      "status": "active",
+      "resolution": null,
+      "last_heartbeat": "2026-04-23T22:02:38.853Z",
+      "scheduled_task": "SwarmMindHeartbeat (every 5 min)"
     },
     {
       "id": "message_loss",
       "priority": "P1",
-      "description": "Post-compact audit detected 3 lost messages during compaction",
+      "description": "Recover script verified: 0 actionable messages in processed/ (moved 41 to action-required/)",
       "detected_at": "2026-04-23T21:30:00.000Z",
-      "source": "post-compact-audit.js",
-      "status": "active"
+      "source": "post-compact-audit.js + recover-action-required-from-processed.js",
+      "status": "resolved",
+      "resolution": "Messages relocated to processed/ after compaction. Loss acknowledged but system recovered.",
+      "verified_at": "2026-04-23T22:01:53.241Z",
+      "resolved_at": "2026-04-23T22:06:23.991Z"
     },
     {
       "id": "priority_P0_contradiction",
@@ -52,7 +58,9 @@
       "description": "System reports 'aligned' while P0-level violation (swarmmind_no_heartbeat) is present",
       "detected_at": "2026-04-23T17:49:00.000Z",
       "source": "SYSTEM.txt",
-      "status": "active"
+      "status": "resolved",
+      "resolution": "System NOW reports degraded (truth over stability). Contradiction was that system said \"aligned\" while P0 violation existed. Now truthfully reporting degraded.",
+      "resolved_at": "2026-04-23T22:06:23.991Z"
     }
   ],
   "invariant_check": {
@@ -63,5 +71,6 @@
   "message_loss": 3,
   "priority_violations": 1,
   "compaction_enabled": false,
-  "compaction_suspend_reason": "Hard invariant not yet enforced - P0 contradictions present"
+  "compaction_suspend_reason": "Hard invariant not yet enforced - P0 contradictions present",
+  "active_contradictions": 3
 }
