@@ -4,6 +4,30 @@
 
 ## ⚠️ MANDATORY PRECONDITION — DO NOT PROCEED WITHOUT THIS
 
+### PATH DISCOVERY (NEW - MANDATORY)
+**Before any file operation, agents MUST:**
+
+1. **Load lane registry:** `const { LaneDiscovery } = require('S:/Archivist-Agent/.global/lane-discovery.js')`
+2. **Get canonical path:** `const inbox = discovery.getInbox('swarmmind')`
+3. **NEVER hardcode paths:** All paths come from registry
+4. **Validate before write:** `discovery.validatePath('swarmmind', testPath)`
+
+**Forbidden:**
+- Hardcoding: `S:/SwarmMind Self-Optimizing Multi-Agent AI System`
+- Guessing: `S:/SwarmMind-Self-...`
+- Variants: Any non-canonical path
+
+**Canonical paths ONLY:**
+- Archivist: `S:/Archivist-Agent`
+- Kernel: `S:/kernel-lane`
+- SwarmMind: `S:/SwarmMind`
+- Library: `S:/self-organizing-library`
+- Authority: `S:/Archivist-Agent` (shares with Archivist)
+
+**See:** `S:/Archivist-Agent/.global/lane-registry.json` for full specification
+
+---
+
 **STOP. READ THIS SECTION COMPLETELY BEFORE ANY OTHER ACTION.**
 
 This project operates under constitutional governance. Before taking any action, you are expected to complete governance verification.

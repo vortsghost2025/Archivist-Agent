@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lane Inventory Schema",
+  "type": "object",
+  "required": ["schema_version", "inventory", "metadata"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "inventory": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-z]+$": {
+          "type": "object",
+          "required": ["lane_id", "local_directory", "repositories", "system_roles"],
+          "properties": {
+            "lane_id": { "type": "string", "pattern": "^[a-z]+$" },
+            "local_directory": {
+              "type": "string",
+              "description": "Absolute path to the agent's root working directory"
+            },
+            "repositories": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["name", "git_url", "branches", "mailbox_path", "outbox_path"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "git_url": { "type": "string", "format": "uri" },
+                  "branches": { "type": "array", "items": { "type": "string" } },
+                  "mailbox_path": {
+                    "type": "string",
+                    "description": "Absolute path to inbox directory"
+                  },
+                  "outbox_path": {
+                    "type": "string",
+                    "description": "Absolute path to outbox directory"
+                  }
+                }
+              }
+            },
+            "system_roles": {
+              "type": "object",
+              "description": "Canonical mapping of role name to inbox path",
+              "patternProperties": {
+                "^[a-z]+$": {
+                  "type": "string",
+                  "description": "Absolute path to inbox for this role"
+                }
+              }
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "metadata": {
+      "type": "object",
+      "required": ["version", "published_by", "published_at"],
+      "properties": {
+        "version": { "type": "string" },
+        "published_by": { "type": "string" },
+        "published_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

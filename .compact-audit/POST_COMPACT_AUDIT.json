@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T02:47:18.208Z",
+  "timestamp": "2026-04-23T03:33:59.579Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -77,23 +77,23 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-23T02:47:01.326Z",
-        "age_seconds": 16
+        "timestamp": "2026-04-23T03:33:01.536Z",
+        "age_seconds": 58
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-23T02:47:01.585Z",
-        "age_seconds": 16
+        "timestamp": "2026-04-23T03:33:01.547Z",
+        "age_seconds": 58
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-23T02:46:25.983Z",
-        "age_seconds": 52
+        "timestamp": "2026-04-23T03:33:26.348Z",
+        "age_seconds": 33
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-23T02:46:43.944Z",
-        "age_seconds": 34
+        "timestamp": "2026-04-23T03:33:44.294Z",
+        "age_seconds": 15
       }
     },
     "inbox_counts": {

@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "inventory": {
+    "archivist": {
+      "lane_id": "archivist",
+      "local_directory": "S:/Archivist-Agent",
+      "repositories": [
+        {
+          "name": "kernel-lane",
+          "git_url": "S:/kernel-lane",
+          "branches": ["main", "master"],
+          "mailbox_path": "lanes/kernel/inbox",
+          "outbox_path": "lanes/kernel/outbox"
+        },
+        {
+          "name": "swarmmind-lane",
+          "git_url": "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
+          "branches": ["main"],
+          "mailbox_path": "lanes/swarmmind/inbox",
+          "outbox_path": "lanes/swarmmind/outbox"
+        },
+        {
+          "name": "library-lane",
+          "git_url": "S:/self-organizing-library",
+          "branches": ["main"],
+          "mailbox_path": "lanes/library/inbox",
+          "outbox_path": "lanes/library/outbox"
+        },
+        {
+          "name": "authority-lane",
+          "git_url": "S:/Authority-Agent",
+          "branches": ["main"],
+          "mailbox_path": "lanes/authority/inbox",
+          "outbox_path": "lanes/authority/outbox"
+        }
+      ],
+      "system_roles": {
+        "authority": "lanes/authority/inbox",
+        "kernel": "lanes/kernel/inbox",
+        "swarmmind": "lanes/swarmmind/inbox",
+        "library": "lanes/library/inbox"
+      }
+    },
+    "kernel": {
+      "lane_id": "kernel",
+      "local_directory": "S:/kernel-lane",
+      "repositories": [
+        {
+          "name": "kernel-lane",
+          "git_url": "S:/kernel-lane",
+          "branches": ["main", "master"],
+          "mailbox_path": "lanes/kernel/inbox",
+          "outbox_path": "lanes/kernel/outbox"
+        }
+      ]
+    },
+    "swarmmind": {
+      "lane_id": "swarmmind",
+      "local_directory": "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
+      "repositories": [
+        {
+          "name": "swarmmind-lane",
+          "git_url": "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
+          "branches": ["main"],
+          "mailbox_path": "lanes/swarmmind/inbox",
+          "outbox_path": "lanes/swarmmind/outbox"
+        }
+      ]
+    },
+    "library": {
+      "lane_id": "library",
+      "local_directory": "S:/self-organizing-library",
+      "repositories": [
+        {
+          "name": "library-lane",
+          "git_url": "S:/self-organizing-library",
+          "branches": ["main"],
+          "mailbox_path": "lanes/library/inbox",
+          "outbox_path": "lanes/library/outbox"
+        }
+      ]
+    },
+    "authority": {
+      "lane_id": "authority",
+      "local_directory": "S:/Authority-Agent",
+      "repositories": [
+        {
+          "name": "authority-lane",
+          "git_url": "S:/Authority-Agent",
+          "branches": ["main"],
+          "mailbox_path": "lanes/authority/inbox",
+          "outbox_path": "lanes/authority/outbox"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "published_by": "archivist",
+    "published_at": "2026-04-23T00:00:00Z",
+    "schema": "lanes/inventory.schema.json"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "registry_id": "lane-registry-001",
+  "timestamp": "2026-04-23T09:00:00Z",
+  "description": "Centralized lane discovery registry - All agents MUST reference this file",
+  "lanes": {
+    "archivist": {
+      "lane_id": "archivist",
+      "role": "coordinator",
+      "local_path": "S:/Archivist-Agent",
+      "repo": "https://github.com/vortsghost2025/Archivist-Agent",
+      "branch": "multi-agent-coordination-gap",
+      "mailboxes": {
+        "inbox": "S:/Archivist-Agent/lanes/archivist/inbox",
+        "outbox": "S:/Archivist-Agent/lanes/archivist/outbox",
+        "processed": "S:/Archivist-Agent/lanes/archivist/inbox/processed",
+        "quarantine": "S:/Archivist-Agent/lanes/archivist/inbox/quarantine"
+      },
+      "broadcast_access": "S:/Archivist-Agent/lanes/broadcast"
+    },
+    "authority": {
+      "lane_id": "authority",
+      "role": "governance",
+      "local_path": "S:/Archivist-Agent",
+      "repo": "https://github.com/vortsghost2025/Archivist-Agent",
+      "branch": "multi-agent-coordination-gap",
+      "mailboxes": {
+        "inbox": "S:/Archivist-Agent/lanes/authority/inbox",
+        "outbox": "S:/Archivist-Agent/lanes/authority/outbox",
+        "processed": "S:/Archivist-Agent/lanes/authority/inbox/processed"
+      },
+      "notes": "Authority shares repo with Archivist (same codebase, different lane identity)"
+    },
+    "kernel": {
+      "lane_id": "kernel",
+      "role": "execution",
+      "local_path": "S:/kernel-lane",
+      "repo": "https://github.com/vortsghost2025/Archivist-Agent",
+      "branch": "multi-agent-coordination-gap",
+      "mailboxes": {
+        "inbox": "S:/kernel-lane/lanes/kernel/inbox",
+        "outbox": "S:/kernel-lane/lanes/kernel/outbox",
+        "processed": "S:/kernel-lane/lanes/kernel/inbox/processed"
+      }
+    },
+    "swarmmind": {
+      "lane_id": "swarmmind",
+      "role": "optimization",
+      "local_path": "S:/SwarmMind",
+      "canonical_name": "SwarmMind",
+      "forbidden_variants": [
+        "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
+        "S:/SwarmMind-Self-Optimizing-Multi-Agent-AI-System"
+      ],
+      "repo": "https://github.com/vortsghost2025/SwarmMind",
+      "branch": "master",
+      "mailboxes": {
+        "inbox": "S:/SwarmMind/lanes/swarmmind/inbox",
+        "outbox": "S:/SwarmMind/lanes/swarmmind/outbox",
+        "processed": "S:/SwarmMind/lanes/swarmmind/inbox/processed",
+        "expired": "S:/SwarmMind/lanes/swarmmind/inbox/expired"
+      }
+    },
+    "library": {
+      "lane_id": "library",
+      "role": "knowledge",
+      "local_path": "S:/self-organizing-library",
+      "repo": "https://github.com/vortsghost2025/self-organizing-library",
+      "branch": "main",
+      "mailboxes": {
+        "inbox": "S:/self-organizing-library/lanes/library/inbox",
+        "outbox": "S:/self-organizing-library/lanes/library/outbox",
+        "processed": "S:/self-organizing-library/lanes/library/inbox/processed"
+      }
+    }
+  },
+  "broadcast": {
+    "path": "S:/Archivist-Agent/lanes/broadcast",
+    "description": "Shared broadcast directory for all lanes",
+    "access": "all lanes have read/write"
+  },
+  "cross_lane_protocol": {
+    "send": "Write to target lane's inbox/",
+    "receive": "Read from own inbox/",
+    "confirm": "Write receipt to own outbox/",
+    "verify": "Check registry before any path operation"
+  },
+  "agent_instructions": {
+    "before_creating_any_path": [
+      "1. Read S:/.global/lane-registry.json",
+      "2. Look up lane_id in registry.lanes",
+      "3. Use the exact path from mailboxes.inbox/outbox",
+      "4. NEVER guess or construct paths manually",
+      "5. If lane not found, escalate to Archivist"
+    ],
+    "path_validation": [
+      "Check path exists before writing",
+      "Create directories recursively if missing",
+      "Log any path normalization issues"
+    ]
+  }
+}
