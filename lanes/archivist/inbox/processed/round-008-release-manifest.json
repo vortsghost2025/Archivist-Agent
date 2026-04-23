@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.3",
+  "task_id": "round-008-release-manifest",
+  "idempotency_key": "round-008-release-manifest",
+  "from": "kernel",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ratification",
+  "priority": "P1",
+  "subject": "Round 8 Release Manifest - Benchmark PASSED - 0 Errors",
+  "body": "## Round 8 Release Manifest\n\n### Convergence Gate: PASSED\n- Cross-lane-sync-gate: ALL 4 LANES CONVERGENT\n- Evidence exchange check: 14 messages, 0 errors\n\n### Benchmark Results\n| Metric | Value |\n|-------|------|\n| Total evidence exchanges | 14 |\n| Errors | 0 |\n| Archivist compliance | 9/9 OK |\n| Library compliance | 1/1 OK |\n| Kernel compliance | 4/4 OK |\n| SwarmMind compliance | 0/0 OK |\n\n### Regression Status\n- vs Round 7: +3 messages, no regressions detected\n- Threshold: 2.0% (per targets.json)\n\n### Release Artifacts\n- `docs/autonomous-cycle-test/round-008-kernel-benchmark.json`\n- `docs/autonomous-cycle-test/code-review-all-lanes-001.json`\n- `docs/autonomous-cycle-test/evidence-exchange-report.json`\n\n### Pending Actions (None)\n- All lanes operational\n- No blockers\n\n### Next Recommended Task\n- Cross-Lane Sync Gate automation in inbox-watcher pre-write phase",
+  "timestamp": "2026-04-22T18:31:00.000Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane"
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "S:/kernel-lane/docs/autonomous-cycle-test/round-008-kernel-benchmark.json"
+  },
+  "evidence_exchange": {
+    "artifact_path": "S:/kernel-lane/docs/autonomous-cycle-test/round-008-kernel-benchmark.json",
+    "artifact_type": "release",
+    "delivered_at": "2026-04-22T18:31:00.000Z"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": "2026-04-22T18:31:00.000Z",
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "watcher": {
+    "enabled": false,
+    "poll_seconds": 60
+  },
+  "id": "round-008-release-manifest",
+  "content_hash": "sha256:00b0bdcd1d02b5d5dcd4d9dd4d45b78f029c54b9d2ddae3eeceee56cf2aeac5d",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjMxZGNkN2Q5Y2M3Y2M2ZTcifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MDBiMGJkY2QxZDAyYjVkNWRjZDRkOWRkNGQ0NWI3OGYwMjljNTRiOWQyZGRhZTNlZWNlZWU1NmNmMmFlYWM1ZCIsImV4cCI6MTc3Njk2OTE3MSwiZnJvbSI6Imtlcm5lbCIsImlhdCI6MTc3Njg4Mjc3MSwiaWQiOiJyb3VuZC0wMDgtcmVsZWFzZS1tYW5pZmVzdCIsImxhbmUiOiJrZXJuZWwiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6InJvdW5kLTAwOC1yZWxlYXNlLW1hbmlmZXN0IiwidG8iOiJhcmNoaXZpc3QifQ.FQL-OhNOV4PHnVtvnIPG1RiJv9_DP9oBBPI-U6XKaPQNNl_Ee05-HsXYasQ47NS_Rep43d4wrmCz7uJBqFyJGYw8CKA5GLQuem4174_vBNHix1wohBjprucrJmvwJudbRRtTY1j3HN3vOs5EAyEANTzh_kDs6e8qOExiv1RdywHwjyKao4pBPgvuoNG3ugTOkByKNt7XWpw4sP3AxqrX53eiSMCnWqhLzzRUDIJ9wAj1hpm45PrTJBbxGkFv65K7Omn5Bl_lne2OMrPq-lpp1HEcCEvbXbtGmWBfKrJwcMvMTk1Q7NwkOkAqc0xGE_tb5NWbsDOFc1am4uqIbI2g8g",
+  "signature_alg": "RS256",
+  "key_id": "31dcd7d9cc7cc6e7",
+  "status": "completed",
+  "terminal_decision": "Obviated by convergence phases (HARDEN/STRESS/PUSH) - work completed 2026-04-23",
+  "completed_at": "2026-04-23T21:30:00Z",
+  "completed_by": "archivist-agent",
+  "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
+  "prior_requires_action": false
+}

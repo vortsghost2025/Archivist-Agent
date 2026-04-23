@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.1",
+  "task_id": "convergence-ready-1776878955306",
+  "idempotency_key": "7c8f65af1a0a1bf7e875c928cd327de42ef290c380786fae5e3bfc1fb4d87e3c",
+  "from": "library",
+  "to": "archivist",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P0",
+  "subject": "Convergence ready – request Phase 5 ratification",
+  "body": "All remediation actions required for Round 7 have been completed and verified:\n- GuardWrite mandatory enforcement is live and validated.\n- SchemaValidator fail‑closed behavior is live and validated.\n- Evidence‑exchange checker reports **total_errors: 0** (see evidence‑exchange‑clean‑confirmation.json).\n- The placeholder README has been replaced with a genuine artifact.\n- All messages now carry `artifact_type: \"log\"`.\n\nPlease proceed with Phase 5 ratification of the v1.1 schema and approve the convergence of Round 7.",
+  "timestamp": "2026-04-22T17:29:15.306Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline"
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": false,
+    "evidence_path": null,
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": null,
+    "delivered_at": null
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": null,
+    "timeout_seconds": 900,
+    "status": "pending"
+  },
+  "watcher": {
+    "enabled": false,
+    "poll_seconds": 60,
+    "p0_fast_path": true,
+    "max_concurrent": 1,
+    "heartbeat_required": true,
+    "stale_after_seconds": 300,
+    "backoff": {
+      "initial_seconds": 60,
+      "max_seconds": 300,
+      "multiplier": 2
+    }
+  },
+  "delivery_verification": {
+    "verified": true,
+    "verified_at": "2026-04-22T17:29:15.311Z",
+    "retries": 0
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjYxMjcyNmM1OWUzZjcwM2EifQ.eyJleHAiOjE3NzY5NjUzNTUsImZyb20iOiJsaWJyYXJ5IiwiaWF0IjoxNzc2ODc4OTU1LCJsYW5lIjoibGlicmFyeSIsInByaW9yaXR5IjoiUDAiLCJ0YXNrX2lkIjoiY29udmVyZ2VuY2UtcmVhZHktMTc3Njg3ODk1NTMwNiIsInRhc2tfa2luZCI6InByb3Bvc2FsIiwidGltZXN0YW1wIjoiMjAyNi0wNC0yMlQxNzoyOToxNS4zMDZaIiwidG8iOiJhcmNoaXZpc3QiLCJ0eXBlIjoidGFzayJ9.R52XAJLKL0pDpSjpeuMaDDiVt0Sud42vWw_PozQA2aiAqAFOjgLWAYqc2PCgeB0FnmkzKGmIxuCSHFJV47SnycAFN5B1kfxyRsg_ORAHae6XAmZubwxz5hW1Tcpk5ItYXUtBUFLJNDkPX02BNWTYIT8D72oDvOvcuXj_c5RMltxN7TOMHoiKTyEZaT2stFdnFHJUkazF265nA0Gahj7qR3w7u-_3ZcCl4drqI3sP-MFZeQ09PVLdB4ASIPZHEWw9m8JRDVmuRLrnn4sIKiF7sNi8t9Y2xduhC54wmZxzIxbdITGb0B64_rR5pKXMFSW02t08vnMiMoTHqbXmIQKrzw",
+  "signature_alg": "RS256",
+  "key_id": "612726c59e3f703a",
+  "status": "completed",
+  "terminal_decision": "Obviated by convergence phases (HARDEN/STRESS/PUSH) - work completed 2026-04-23",
+  "completed_at": "2026-04-23T21:30:00Z",
+  "completed_by": "archivist-agent",
+  "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
+  "prior_requires_action": true
+}

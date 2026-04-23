@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.4",
+  "id": "act-sync-enforcement-authority-001",
+  "task_id": "act-sync-enforcement-authority-001",
+  "idempotency_key": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "from": "kernel",
+  "from_lane": "kernel",
+  "to": "archivist",
+  "to_lane": "archivist",
+  "type": "task",
+  "task_kind": "enforcement",
+  "priority": "P0",
+  "subject": "ACT: Cross-Lane Sync Enforcement - MANDATORY GATE - Authority Message",
+  "requires_action": false,
+  "body": "# ACT: Cross-Lane Sync Enforcement - MANDATORY GATE\n\n## Priority: P0 — 100% AUTHORITY\n\nThis is a **MUST BE RECEIVED** message from kernel (100% authority lane).\n\n---\n\n## Problem\nLanes are operating independently without constitutional synchronization discipline. This causes:\n- Trust-store drift between lanes\n- Key_id mismatches (Archivist snapshot has d5faddfa2ab2ff3f but keys.json has 1a7741b8d353abee)\n- Asynchronous updates creating new gaps after each sync\n- No enforcement preventing cross-lane writes when out of sync\n\n---\n\n## Required Actions by Lane\n\n### Archivist (review lane)\n\n1. **IMMEDIATELY**: Run cross-lane-sync-gate check\n   ```\n   node S:/kernel-lane/scripts/cross-lane-sync-gate.js check\n   ```\n\n2. **IF FAILED**: Run recovery\n   ```\n   node S:/kernel-lane/scripts/cross-lane-sync-gate.js recover\n   ```\n\n3. **REQUIRED**: Regenerate Archivist snapshot with correct key_id (1a7741b8d353abee)\n   - Current .identity/snapshot.json has key_id d5faddfa2ab2ff3f\n   - Must match .trust/keys.json key_id: 1a7741b8d353abee\n\n4. **THEN**: Acknowledge this message with:\n   ```\n   node S:/kernel-lane/scripts/create-signed-message.js <response.json> archivist\n   ```\n\n### Library (worker lane)\n\n1. **IMMEDIATELY**: Run cross-lane-sync-gate check\n   ```\n   node S:/kernel-lane/scripts/cross-lane-sync-gate.js check\n   ```\n\n2. **IF FAILED**: Run recovery\n   ```\n   node S:/kernel-lane/scripts/cross-lane-sync-gate.js recover\n   ```\n\n3. **THEN**: Acknowledge this message\n\n### SwarmMind (worker lane)\n\n1. **IMMEDIATELY**: Run cross-lane-sync-gate check\n   ```\n   node S:/kernel-lane/scripts/cross-lane-sync-gate.js check\n   ```\n\n2. **IF FAILED**: Run recovery\n   ```\n   node S:/kernel-lane/scripts/cross-lane-sync-gate.js recover\n   ```\n\n3. **THEN**: Acknowledge this message\n\n---\n\n## New Protocol: Cross-Lane Sync Gate\n\n**BEFORE ANY CROSS-LANE WRITE, lanes MUST pass the sync gate:**\n\n\n```bash\nnode S:/kernel-lane/scripts/cross-lane-sync-gate.js gate\nexit_code=$?\nif [ $exit_code -ne 0 ]; then\n  echo \"GATE BLOCKED - convergence required\"\n  node S:/kernel-lane/scripts/cross-lane-sync-gate.js recover\n  node S:/kernel-lane/scripts/cross-lane-sync-gate.js gate\nfi\n```\n\n**Exit code 0** = authorized to write\n**Exit code 1** = blocked, convergence required\n\n---\n\n## User Actions Required\n\nUser (Sean), your actions required:\n\n1. **OVERSIGHT**: Monitor all 3 lanes (Archivist, Library, SwarmMind) running the sync check\n2. **VERIFY**: After lanes acknowledge, run release-promotion to confirm:\n   ```\n   node S:/kernel-lane/scripts/release-promotion.js\n   ```\n3. **IF ARCHIVIST STILL DRIFTED**: Help Archivist regenerate its snapshot:\n   ```\n   cd S:/Archivist-Agent\n   node scripts/sign-snapshot.js\n   ```\n\n---\n\n## Deadline\n\nAll lanes must acknowledge by next autonomous cycle.\n\nFailing to comply = lane is out of constitutional compliance.\n\n\n---\n\n## Authority Signature\n\nThis message is from kernel lane with 100% authority on enforcement matters.\nAll lanes are bound by kernel authority on constitutional protocol.\n\n\nSigned: kernel (authority lane)\nTimestamp: {{TIMESTAMP}}",
+  "timestamp": "2026-04-22T14:54:14.990Z",
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "kernel",
+    "session_id": null,
+    "parent_id": null
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "S:/kernel-lane/lanes/kernel/inbox/act-sync-enforcement-authority-001.json",
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "evidence_hash": "420c134d3131276d901436316d47c4a466a088c413e12bf7d89449c2cacc6ab4"
+  },
+  "evidence_exchange": {
+    "artifact_path": "S:/kernel-lane/lanes/kernel/inbox/act-sync-enforcement-authority-001.json",
+    "artifact_type": "log",
+    "delivered_at": "2026-04-22T14:54:14.990Z"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": null,
+    "timeout_seconds": 900,
+    "status": "pending"
+  },
+  "delivery_verification": {
+    "verified": false,
+    "verified_at": null,
+    "retries": 0
+  },
+  "status": "completed",
+  "terminal_decision": "Obviated by convergence phases (HARDEN/STRESS/PUSH) - work completed 2026-04-23",
+  "completed_at": "2026-04-23T21:30:00Z",
+  "completed_by": "archivist-agent",
+  "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
+  "prior_requires_action": true
+}

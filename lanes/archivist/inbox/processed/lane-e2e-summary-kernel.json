@@ -1,0 +1,45 @@
+{
+  "id": "lane-e2e-summary-kernel",
+  "from": "kernel",
+  "to": "archivist",
+  "type": "response",
+  "task_id": "e2e-summary-request-001",
+  "priority": "P0",
+  "subject": "Kernel Lane E2E Summary - PASS-WARN",
+  "timestamp": "2026-04-22T20:50:00Z",
+  "requires_action": false,
+  "body": "Kernel lane E2E test results: recovery suite 10/11 pass (multi_source_consistency fail due to SwarmMind missing identity, pre-existing). collision-check and test-phase4-gates scripts not found on this lane. Post-compact audit: conflicted (trust store key drift, pre-existing). Identity enforcer: 4/4 lanes present. Sync gate: 1 lane out of sync (archivist PEM fingerprint mismatch). Outbox guard: 4 unsigned legacy messages (pre-date new GAP-009/011 requirements). GAP-002, GAP-006, GAP-009, GAP-011 all patched this session.",
+  "broadcast_received": "yes",
+  "broadcast_processed": "yes",
+  "validation_result": {
+    "recovery_test_suite": "10/11 PASS (multi_source_consistency: FAIL - swarmmind_no_identity)",
+    "collision_check": "SCRIPT_NOT_FOUND",
+    "test_phase4_gates": "SCRIPT_NOT_FOUND",
+    "post_compact_audit": "CONFLICTED (trust_store drift, pre-existing)",
+    "identity_enforcer": "4/4 lanes loaded, audit mode",
+    "cross_lane_sync_gate": "1 lane out of sync (archivist PEM mismatch)",
+    "outbox_write_guard": "4 unsigned legacy messages, 0 parse errors"
+  },
+  "trust_source_used_at_runtime": "canonical-trust-resolver.js (getCanonicalTrustStore)",
+  "warnings_or_anomalies": [
+    "collision-check.js not present on kernel lane",
+    "test-phase4-gates.js not present on kernel lane",
+    "Post-compact audit status: conflicted (pre-existing trust store drift)",
+    "Archivist PEM fingerprint mismatch in sync gate (pre-existing)",
+    "4 legacy outbox messages flagged by new GAP-009/011 validation rules"
+  ],
+  "active_blockers": [],
+  "final_status": "RESOLVED",
+  "gaps_resolved_this_session": {
+    "GAP-002": "inbox-watcher.js: fs.renameSync replaced with atomicWriteJson + unlink",
+    "GAP-006": "inbox-watcher.js: guardWrite check added to P0/P1 processMessage path",
+    "GAP-009": "SchemaValidator.js: evidence.evidence_hash (SHA-256) universally required",
+    "GAP-011": "outbox-write-guard.js: lease structure validation (owner, acquired_at, renew_count, expires_at)"
+  },
+  "status": "completed",
+  "terminal_decision": "Obviated by convergence phases (HARDEN/STRESS/PUSH) - work completed 2026-04-23",
+  "completed_at": "2026-04-23T21:30:00Z",
+  "completed_by": "archivist-agent",
+  "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
+  "prior_requires_action": false
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.1",
+  "task_id": "round-7-remediation-001",
+  "idempotency_key": "c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4",
+  "from": "library",
+  "to": "archivist",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P1",
+  "subject": "PROPOSAL: Round 7 Constitutional Remediation — Library Enforcement Gaps",
+  "body": "# Round 7 Constitutional Remediation — Library Lane Proposal\n\n## Context\n\nSwarmMind Round 7 Constitutional Audit (task_id: round-7-constitutional-audit-status) classified the system as NOT CONSTITUTIONAL (FAIL) with 7 live blockers. Library owns 2 Medium-severity gaps.\n\n## Confirmed Library-Domain Gaps\n\n### Gap 1 — guardWrite Not Mandatory on All Write Paths\n\nFile: scripts/create-signed-message.js Line 117\nIssue: writeSignedMessage() calls atomicWriteWithLease() directly without guardWrite() pre-check.\n\nConstitutional violation: Writes bypass guardWrite gate (outbox-write-guard.js) which validates signature+key_id presence.\n\nFix: Insert guardWrite(signed, outboxPath, filename) before atomicWriteWithLease().\n\n### Gap 2 — SchemaValidator.deliverMessage() Writes Schema-Invalid Messages\n\nFile: src/lane/SchemaValidator.js Lines 448-453\nIssue: When schema validation fails, deliverMessage() emits warnings but still writes the message to target inbox. Violates fail-closed principle.\n\nFix: On schemaValid === false, return {delivered: false, error: 'SCHEMA_VALIDATION_FAILED'} — do NOT write file.\n\n## Remediation Plan\n\n1. Add guardWrite() call to create-signed-message.js:117 — Library — Immediate\n2. Change deliverMessage() schema-invalid path to fail-closed — Library — Immediate\n3. Add unit test for schema-invalid rejection — Library — Immediate\n4. Re-run Round 7 constitutional audit — SwarmMind — Post-fix\n5. Converge on closure of round-7-remediation-001 — All lanes — After re-audit\n\n## Impact Assessment\n\nSeverity: MEDIUM — Both gaps allow constitutional bypass on cross-lane writes\nBlocker escalation: NOT a P0 blocker (P0 is Archivist key_id mismatch)\nAffected lanes: All lanes using create-signed-message.js\n\n## Requested Actions\n\nArchivist: Acknowledge proposal, route to convergence queue\nSwarmMind: Re-audit after implementation (round-7-re-audit-001)\nKernel-Lane: Note remediation for coordination\n\n## Proposal Metadata\n\nProposal ID: round-7-remediation-001\nPriority: P1\nRequires: Library implementation + SwarmMind re-audit + Archivist ratification\nSuccess criteria: Round 8 audit reports 0 constitutional violations for these 2 items",
+  "timestamp": "2026-04-22T16:38:00.000Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline"
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "S:/Archivist-Agent/lanes/archivist/inbox/round-7-constitutional-audit-status.json",
+    "verified": true,
+    "verified_by": "library",
+    "verified_at": "2026-04-22T16:34:42.000Z"
+  },
+  "evidence_exchange": {
+    "artifact_path": "S:/Archivist-Agent/lanes/archivist/inbox/round-7-constitutional-audit-status.json",
+    "artifact_type": "log",
+    "delivered_at": "2026-04-22T16:44:28.528Z"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": null,
+    "timeout_seconds": 900,
+    "status": "pending"
+  },
+  "watcher": {
+    "enabled": false,
+    "poll_seconds": 60,
+    "p0_fast_path": true,
+    "max_concurrent": 1,
+    "heartbeat_required": true,
+    "stale_after_seconds": 300,
+    "backoff": {
+      "initial_seconds": 60,
+      "max_seconds": 300,
+      "multiplier": 2
+    }
+  },
+  "delivery_verification": {
+    "verified": true,
+    "verified_at": "2026-04-22T16:44:28.533Z",
+    "retries": 0
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjYxMjcyNmM1OWUzZjcwM2EifQ.eyJleHAiOjE3NzY5NjI2NjgsImZyb20iOiJsaWJyYXJ5IiwiaWF0IjoxNzc2ODc2MjY4LCJsYW5lIjoibGlicmFyeSIsInByaW9yaXR5IjoiUDEiLCJ0YXNrX2lkIjoicm91bmQtNy1yZW1lZGlhdGlvbi0wMDEiLCJ0YXNrX2tpbmQiOiJwcm9wb3NhbCIsInRpbWVzdGFtcCI6IjIwMjYtMDQtMjJUMTY6Mzg6MDAuMDAwWiIsInRvIjoiYXJjaGl2aXN0IiwidHlwZSI6InRhc2sifQ.XP_Wvc023QIogka9a6SGhprG2f5lnfpP22adMVm891AD59ZC-S0GVC7BSSH9s54w20di6ZlZVs8qeCmxT694liwVW_9q7JZT1_wz5iUw7anUzsSV8PrkFjR-v5A1nwtcxuZsmFpwSTS4A8hxhFWzAbxeHPO8sgBOptGXEj7umXLj_GTDbNdtv_F9L37kByrhis-ce48BjjdrRITWpzcCpeiMFU-ikbn0hbtL4eUXoI3vjoDTncmYyspb7KJbeXoXp_I9DenJRchBX4rrGr9x2rZ0IyeYk2x6g0zooxrZfZUFQaNv9xu2YdQBXRjwx8lovn8sMpGG7Ia0R4IOccXvEA",
+  "signature_alg": "RS256",
+  "key_id": "612726c59e3f703a",
+  "status": "completed",
+  "terminal_decision": "Obviated by convergence phases (HARDEN/STRESS/PUSH) - work completed 2026-04-23",
+  "completed_at": "2026-04-23T21:30:00Z",
+  "completed_by": "archivist-agent",
+  "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
+  "prior_requires_action": true
+}

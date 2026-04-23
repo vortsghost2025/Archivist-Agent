@@ -1,0 +1,395 @@
+{
+  "schema_version": "1.1",
+  "task_id": "kernel-mutation-surface-audit-001",
+  "idempotency_key": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "from": "kernel",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "review",
+  "priority": "P0",
+  "subject": "Kernel Mutation Surface Audit — Deliverable A",
+  "body": "Complete audit of all runtime filesystem mutation surfaces in S:/kernel-lane. 51 direct mutation calls across 20 files. Classified as active vs utility, severity ranked, with minimal fix for each.",
+  "timestamp": "2026-04-22T21:50:36Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none",
+    "path": null,
+    "chunk": {
+      "index": 0,
+      "count": 1,
+      "group_id": null
+    }
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane",
+    "session_id": null,
+    "parent_id": null
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "lanes/kernel/outbox/kernel-mutation-surface-audit.json",
+    "evidence_hash": "e8191052768ba20dd3352b71964a2bd5ef2906c94718aec33147bf38f578509e"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": null,
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "watcher": {
+    "enabled": false,
+    "poll_seconds": 60,
+    "p0_fast_path": true,
+    "max_concurrent": 1,
+    "heartbeat_required": true,
+    "stale_after_seconds": 300,
+    "backoff": {
+      "initial_seconds": 60,
+      "max_seconds": 300,
+      "multiplier": 2
+    }
+  },
+  "delivery_verification": {
+    "verified": true,
+    "verified_at": "2026-04-22T21:50:36Z",
+    "retries": 0
+  },
+  "audit": {
+    "generated_at": "2026-04-22T21:50:36Z",
+    "auditor": "kernel-lane",
+    "scope": "S:/kernel-lane",
+    "total_mutation_calls": 51,
+    "total_files": 20,
+    "summary": {
+      "writeFileSync": 40,
+      "renameSync": 8,
+      "appendFileSync": 3,
+      "writeStream": 0,
+      "asyncWrite": 0
+    },
+    "active_runtime_mutations": [
+      {
+        "id": "MUT-001",
+        "file": "src/lane/SchemaValidator.js",
+        "lines": [
+          380,
+          397
+        ],
+        "call": "fs.writeFileSync",
+        "target": "inbox canonical path",
+        "classification": "active",
+        "severity": "HIGH",
+        "guarded": false,
+        "atomic_write": false,
+        "lease": false,
+        "description": "deliverMessage writes to canonical inbox path — no guardWrite, no atomic write, no lease",
+        "minimal_fix": "Replace fs.writeFileSync with atomicWriteJson; add guardWrite check before write; acquire lease for cross-lane inbox writes"
+      },
+      {
+        "id": "MUT-002",
+        "file": "scripts/sign-outbox-message.js",
+        "lines": [
+          169
+        ],
+        "call": "fs.writeFileSync",
+        "target": "outbox path (same file, in-place overwrite)",
+        "classification": "active",
+        "severity": "CRITICAL",
+        "guarded": true,
+        "atomic_write": true,
+        "lease": false,
+        "description": "Signs and overwrites outbox message — FIXED this session: now uses guardWrite + atomicWriteJson",
+        "minimal_fix": "APPLIED: guardWrite + atomicWriteJson"
+      },
+      {
+        "id": "MUT-003",
+        "file": "scripts/create-signed-message.js",
+        "lines": [
+          112
+        ],
+        "call": "fs.writeFileSync",
+        "target": "outbox path",
+        "classification": "active",
+        "severity": "CRITICAL",
+        "guarded": true,
+        "atomic_write": true,
+        "lease": false,
+        "description": "Creates and writes signed message to outbox — FIXED this session: now uses guardWrite + atomicWriteJson",
+        "minimal_fix": "APPLIED: guardWrite + atomicWriteJson"
+      },
+      {
+        "id": "MUT-004",
+        "file": "scripts/inbox-watcher.js",
+        "lines": [
+          253,
+          260,
+          270,
+          277
+        ],
+        "call": "atomicWriteJson + fs.unlinkSync",
+        "target": "processed/ and expired/ directories",
+        "classification": "active",
+        "severity": "MEDIUM",
+        "guarded": false,
+        "atomic_write": true,
+        "lease": false,
+        "description": "moveToProcessed/moveToExpired — atomicWriteJson applied (GAP-002), but no guardWrite (file moves, not message creation)",
+        "minimal_fix": "Acceptable: these are internal file moves, not outbox writes. guardWrite not required for inbox-internal operations."
+      },
+      {
+        "id": "MUT-005",
+        "file": "scripts/inbox-watcher.js",
+        "lines": [
+          304
+        ],
+        "call": "processMessage (calls guardWrite)",
+        "target": "P0/P1 message processing",
+        "classification": "active",
+        "severity": "MEDIUM",
+        "guarded": true,
+        "atomic_write": false,
+        "lease": false,
+        "description": "guardWrite check added for P0/P1 (GAP-006 fix)",
+        "minimal_fix": "Already fixed (GAP-006)"
+      },
+      {
+        "id": "MUT-006",
+        "file": "scripts/deliverMessageStrict.js",
+        "lines": [
+          145,
+          146,
+          205
+        ],
+        "call": "atomicWriteJson + guardWrite",
+        "target": "outbox",
+        "classification": "active",
+        "severity": "LOW",
+        "guarded": true,
+        "atomic_write": true,
+        "lease": false,
+        "description": "writeOutboxStrict — full guardWrite + atomicWriteJson pipeline",
+        "minimal_fix": "Already correct. Consider adding lease for cross-lane writes."
+      },
+      {
+        "id": "MUT-007",
+        "file": "src/attestation/TrustStoreManager.js",
+        "lines": [
+          29
+        ],
+        "call": "fs.writeFileSync",
+        "target": "trust store JSON",
+        "classification": "active",
+        "severity": "HIGH",
+        "guarded": false,
+        "atomic_write": false,
+        "lease": false,
+        "description": "Direct overwrite of canonical trust store — no atomic write, no lease",
+        "minimal_fix": "Replace with atomicWriteJson; add lease for trust store writes"
+      },
+      {
+        "id": "MUT-008",
+        "file": "scripts/identity-self-healing.js",
+        "lines": [
+          102,
+          103,
+          114,
+          167
+        ],
+        "call": "fs.writeFileSync",
+        "target": ".identity/ files and trust stores",
+        "classification": "active",
+        "severity": "MEDIUM",
+        "guarded": false,
+        "atomic_write": false,
+        "lease": false,
+        "description": "Self-heal path writes keys and trust stores — no atomic write, no lease",
+        "minimal_fix": "Use atomicWriteJson for all writes; add lease for trust store writes"
+      },
+      {
+        "id": "MUT-009",
+        "file": "scripts/cross-lane-sync-gate.js",
+        "lines": [
+          108,
+          122
+        ],
+        "call": "fs.writeFileSync",
+        "target": "lane trust stores",
+        "classification": "active",
+        "severity": "MEDIUM",
+        "guarded": false,
+        "atomic_write": false,
+        "lease": false,
+        "description": "Sync recovery writes to trust stores — no atomic write, no lease",
+        "minimal_fix": "Use atomicWriteJson; add lease for cross-lane trust store writes"
+      },
+      {
+        "id": "MUT-010",
+        "file": "scripts/trust-store-reconcile.js",
+        "lines": [
+          134,
+          154
+        ],
+        "call": "fs.writeFileSync",
+        "target": "trust stores",
+        "classification": "active",
+        "severity": "MEDIUM",
+        "guarded": false,
+        "atomic_write": false,
+        "lease": false,
+        "description": "Reconciliation writes to trust stores — no atomic write, no lease",
+        "minimal_fix": "Use atomicWriteJson; add lease for trust store writes"
+      },
+      {
+        "id": "MUT-011",
+        "file": "scripts/repair-trust-store-keyids.js",
+        "lines": [
+          85
+        ],
+        "call": "atomicWriteJson",
+        "target": "all 4 broadcast trust stores",
+        "classification": "active",
+        "severity": "LOW",
+        "guarded": false,
+        "atomic_write": true,
+        "lease": false,
+        "description": "Repair script uses atomicWriteJson — no guardWrite (admin tool), no lease",
+        "minimal_fix": "Acceptable for admin tool. Add lease for production use."
+      }
+    ],
+    "utility_admin_mutations": [
+      {
+        "id": "MUT-U01",
+        "file": "scripts/heartbeat.js",
+        "lines": [
+          81
+        ],
+        "call": "fs.writeFileSync",
+        "target": "inbox/heartbeat-kernel.json",
+        "classification": "utility",
+        "severity": "LOW",
+        "description": "Direct overwrite per protocol (single file, overwrite in place). Acceptable.",
+        "minimal_fix": "None required — protocol-correct behavior"
+      },
+      {
+        "id": "MUT-U02",
+        "file": "scripts/outbox-write-guard.js",
+        "lines": [
+          206
+        ],
+        "call": "fs.renameSync",
+        "target": "outbox unsigned/ quarantine",
+        "classification": "utility",
+        "severity": "LOW",
+        "description": "Admin quarantine operation. Acceptable.",
+        "minimal_fix": "None required"
+      },
+      {
+        "id": "MUT-U03",
+        "file": "scripts/archive-unsigned.js",
+        "lines": [
+          75,
+          97
+        ],
+        "call": "fs.renameSync/fs.writeFileSync",
+        "target": "outbox archive",
+        "classification": "utility",
+        "severity": "LOW",
+        "description": "Archive/admin operation. Acceptable.",
+        "minimal_fix": "None required"
+      },
+      {
+        "id": "MUT-U04",
+        "file": "scripts/execution-gate.js",
+        "lines": [
+          47
+        ],
+        "call": "fs.appendFileSync",
+        "target": "lanes/broadcast/ violation log",
+        "classification": "utility",
+        "severity": "LOW",
+        "description": "Best-effort violation logging. Acceptable.",
+        "minimal_fix": "None required"
+      },
+      {
+        "id": "MUT-U05",
+        "file": "scripts/outbox-write-guard.js",
+        "lines": [
+          184
+        ],
+        "call": "fs.appendFileSync",
+        "target": "logs/outbox-guard.log",
+        "classification": "utility",
+        "severity": "LOW",
+        "description": "Best-effort guard logging. Acceptable.",
+        "minimal_fix": "None required"
+      },
+      {
+        "id": "MUT-U06",
+        "file": "scripts/post-compact-audit.js",
+        "lines": [
+          399
+        ],
+        "call": "fs.appendFileSync",
+        "target": "handoff log",
+        "classification": "utility",
+        "severity": "LOW",
+        "description": "Tamper-evident handoff log. Acceptable.",
+        "minimal_fix": "None required"
+      },
+      {
+        "id": "MUT-U07",
+        "file": "scripts/concurrency-policy.js",
+        "lines": [
+          77
+        ],
+        "call": "fs.writeFileSync",
+        "target": "watcher lock file",
+        "classification": "utility",
+        "severity": "LOW",
+        "description": "Uses 'wx' flag (atomic create). Separate mechanism. Acceptable.",
+        "minimal_fix": "None required"
+      }
+    ],
+    "monkey_patched_enforcement": {
+      "file": "scripts/outbox-syscall-kern.js",
+      "lines": [
+        189,
+        190
+      ],
+      "description": "Monkey-patches fs.writeFileSync and fs.renameSync to intercept outbox writes and call outboxWriteEnforcer(). Active at runtime when loaded.",
+      "note": "This is a defense-in-depth layer. The primary enforcement is guardWrite in application code."
+    },
+    "verdict": {
+      "critical_fixes_applied_this_session": 2,
+      "critical_fixes_remaining": 0,
+      "high_severity_remaining": 2,
+      "medium_severity_remaining": 3,
+      "low_severity_remaining": 0,
+      "utility_acceptable": 7,
+      "overall_status": "PASS-WARN",
+      "detail": "All CRITICAL outbox write paths now use guardWrite + atomicWriteJson. HIGH: SchemaValidator deliverMessage and TrustStoreManager still need atomic write + lease. MEDIUM: identity-self-healing, cross-lane-sync-gate, trust-store-reconcile need atomic write + lease. All utility/admin paths are acceptable."
+    }
+  },
+  "status": "completed",
+  "terminal_decision": "Obviated by convergence phases (HARDEN/STRESS/PUSH) - work completed 2026-04-23",
+  "completed_at": "2026-04-23T21:30:00Z",
+  "completed_by": "archivist-agent",
+  "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
+  "prior_requires_action": false
+}

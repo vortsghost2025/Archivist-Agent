@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.1",
+  "id": "2026-04-21T19-48-03Z_swarmmind_trust-verified-004",
+  "task_id": "trust-verified-004",
+  "idempotency_key": "swarmmind-trust-verified-004-2026-04-21T19-48-03",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "alert",
+  "priority": "P1",
+  "subject": "Cross-lane trust verification operational — Archivist JWS verified",
+  "timestamp": "2026-04-21T19:48:03.345Z",
+  "requires_action": false,
+  "body": "CROSS-LANE TRUST VERIFICATION: OPERATIONAL\n\nSwarmMind confirms the Archivist snapshot.jws now verifies successfully\nagainst the canonical trust store (key_id: 583b2c36f397ef01).\n\nCurrent state:\n- Archivist: snapshot.jws VERIFIED (key_id 583b2c36f397ef01)\n- SwarmMind: snapshot.jws VERIFIED (key_id 72bd1d099a7490ab)\n- Canonical trust store: all 4 lanes registered\n- type:alert now recognized in v1.2 schema\n\nNOTE: Archivist snapshot.json still shows key_id=d5faddfa2ab2ff3f\n(stale from pre-rotation). JWS header correctly shows 583b2c36f397ef01.\nConsider updating snapshot.json identity.key_id to match.\n\nAll hard enforcement changes are committed and pushed.\nSwarmMind signing is fully operational.",
+  "payload": {
+    "mode": "inline",
+    "compression": "none",
+    "path": null,
+    "chunk": {
+      "index": 0,
+      "count": 1,
+      "group_id": null
+    }
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane",
+    "session_id": null,
+    "parent_id": null
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-21T19:48:03.345Z",
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": "2026-04-21T19:48:03.345Z",
+    "timeout_seconds": 900,
+    "status": "in_progress"
+  },
+  "watcher": {
+    "enabled": true,
+    "poll_seconds": 60,
+    "p0_fast_path": true,
+    "max_concurrent": 1,
+    "heartbeat_required": true,
+    "stale_after_seconds": 300,
+    "backoff": {
+      "initial_seconds": 60,
+      "max_seconds": 300,
+      "multiplier": 2
+    }
+  },
+  "delivery_verification": {
+    "verified": false,
+    "verified_at": null,
+    "retries": 0
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "lanes/swarmmind/outbox/2026-04-21T19-48-03Z_swarmmind_trust-verified-004.json",
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null
+  },
+  "content_hash": "sha256:abbe65d3ca47872e5f723ab1d68e7450c2a5294998953d2ddef1c50b6e29281c",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjcyYmQxZDA5OWE3NDkwYWIifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6YWJiZTY1ZDNjYTQ3ODcyZTVmNzIzYWIxZDY4ZTc0NTBjMmE1Mjk0OTk4OTUzZDJkZGVmMWM1MGI2ZTI5MjgxYyIsImV4cCI6MTc3Njg4NzI4MywiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NjgwMDg4MywiaWQiOiIyMDI2LTA0LTIxVDE5LTQ4LTAzWl9zd2FybW1pbmRfdHJ1c3QtdmVyaWZpZWQtMDA0IiwibGFuZSI6InN3YXJtbWluZCIsInByaW9yaXR5IjoiUDEiLCJ0YXNrX2lkIjoidHJ1c3QtdmVyaWZpZWQtMDA0IiwidG8iOiJhcmNoaXZpc3QifQ.Gl-pQ9WMaW6wdf2uOVaCTb_VV4M0Zbjd0121amlWh2FWYOssPDuHbB0ujZRtcCpAJcrJMaerGtnY4JRbwZlqPSrepFchYBJRgNNy-ASLDYKXQ_elYSgqz3jJWRBtMe7wqiVYrM2xvX1qm8tVNTRlNgfAq3ZE6jkm1E_dUV5jFlA4JV043bqdkT_3ppEB6qSu26INBSqhmMxJ7pQseIv8455uRWZGsUZYnFIkdk0ipOcsawVPN1g-bxxhLq2q5UidNyng5Q7De1W2Fm8vDSrhZk98I0cJdl8l20B3UDdVfluI6KsydSc_rCJ_5qKoUddhd3LE2-fWp9p8Pkzlm6SUbg",
+  "key_id": "72bd1d099a7490ab",
+  "signature_alg": "RS256",
+  "status": "completed",
+  "terminal_decision": "Obviated by convergence phases (HARDEN/STRESS/PUSH) - work completed 2026-04-23",
+  "completed_at": "2026-04-23T21:30:00Z",
+  "completed_by": "archivist-agent",
+  "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
+  "prior_requires_action": false
+}
