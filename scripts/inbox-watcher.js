@@ -22,6 +22,31 @@ const SKIP_FILENAMES = new Set([
 const HEARTBEAT_PATTERN = /^heartbeat-.+\.json$/i;
 const INBOX_MSG_PATTERN = /^\d{4}-/;
 const UUID_PATTERN = /^\d{8}-\d{4}-\d{4}-\d{4}-\d{12}\.json$/i;
+  const ACTION_REQUIRED_TYPES = new Set(['task', 'escalation', 'request']);
+  const COMPLETION_PROOF_FIELDS = [
+    'completion_artifact_path',
+    'completion_message_id',
+    'resolved_by_task_id',
+    'terminal_decision',
+    'disposition'
+  ];
+  const VALID_DISPOSITIONS = new Set(['completed', 'declined', 'superseded', 'expired', 'quarantined']);
+
+function hasCompletionProof(msg) {
+  if (!msg) return false;
+  // Check for completion proof fields
+  for (const field of COMPLETION_PROOF_FIELDS) {
+    if (msg[field]) return true;
+  }
+  // Check convergence_gate status
+  if (msg.convergence_gate && msg.convergence_gate.status) {
+    const status = String(msg.convergence_gate.status).toLowerCase();
+    if (['proven', 'approved', 'ratified', 'accepted'].includes(status)) return true;
+  }
+  // Check disposition field
+  if (msg.disposition && VALID_DISPOSITIONS.has(String(msg.disposition).toLowerCase())) return true;
+  return false;
+}
 
 function isValidInboxMessage(filename) {
   const lower = filename.toLowerCase();
@@ -32,6 +57,15 @@ function isValidInboxMessage(filename) {
   return filename.endsWith('.json');
 }
 
+function isActionRequiredMessage(msg) {
+  const type = String(msg && msg.type ? msg.type : '').toLowerCase();
+  return !!(
+    (msg && msg.requires_action === true) ||
+    (msg && msg.priority_action === true) ||
+    ACTION_REQUIRED_TYPES.has(type)
+  );
+}
+
 const DEFAULT_CONFIG = {
   laneName: 'archivist',
   inboxPath: path.join(__dirname, '..', 'lanes', 'archivist', 'inbox'),
@@ -39,6 +73,7 @@ const DEFAULT_CONFIG = {
   outboxPath: path.join(__dirname, '..', 'lanes', 'archivist', 'outbox'),
   expiredPath: path.join(__dirname, '..', 'lanes', 'archivist', 'inbox', 'expired'),
   quarantinePath: path.join(__dirname, '..', 'lanes', 'archivist', 'inbox', 'quarantine'),
+  actionRequiredPath: path.join(__dirname, '..', 'lanes', 'archivist', 'inbox', 'action-required'),
   canonicalPaths: {
     archivist: 'S:/Archivist-Agent/lanes/archivist/inbox/',
     library: 'S:/self-organizing-library/lanes/library/inbox/',
@@ -95,7 +130,7 @@ class InboxWatcher {
 
   ensureDirs() {
     for (const dir of [this.config.inboxPath, this.config.processedPath,
-      this.config.outboxPath, this.config.expiredPath, this.config.quarantinePath]) {
+      this.config.outboxPath, this.config.expiredPath, this.config.quarantinePath, this.config.actionRequiredPath]) {
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
       }
@@ -299,6 +334,23 @@ class InboxWatcher {
     }
   }
 
+  async moveToActionRequired(filename, sourcePath) {
+    const dest = path.join(this.config.actionRequiredPath, filename);
+    try {
+      if (!fs.existsSync(this.config.actionRequiredPath)) {
+        fs.mkdirSync(this.config.actionRequiredPath, { recursive: true });
+      }
+      if (fs.existsSync(dest)) {
+        if (fs.existsSync(sourcePath)) fs.unlinkSync(sourcePath);
+      } else {
+        await moveFileWithLease(sourcePath, dest, this.config.laneName, 30000);
+      }
+      console.log(`[watcher] ACTION-REQUIRED HOLD: ${filename} moved to action-required/`);
+    } catch (e) {
+      console.error(`[watcher] Cannot move ${filename} to action-required/:`, e.message);
+    }
+  }
+
   _logQuarantine(filename, reason, attemptCount) {
     const logEntry = {
       timestamp: new Date().toISOString(),
@@ -327,7 +379,7 @@ class InboxWatcher {
     const type = msg.type || 'unknown';
     const from = msg.from || msg.from_lane || 'unknown';
     const body = typeof msg.body === 'string' ? msg.body : JSON.stringify(msg.body || '');
-    const requiresAction = msg.requires_action || false;
+    const requiresAction = isActionRequiredMessage(msg);
     const idempotencyKey = msg.idempotency_key || msg.id || filename;
 
     console.log(`[watcher] Processing ${priority} ${type} from ${from}: ${body.slice(0, 80)}`);
@@ -337,7 +389,16 @@ class InboxWatcher {
     }
 
     if (requiresAction) {
-      console.log(`[watcher] ACTION REQUIRED: ${msg.id || filename}`);
+      // P0: Check for completion proof before blocking
+      if (hasCompletionProof(msg)) {
+        console.log(`[watcher] ACTION REQUIRED but COMPLETION_PROOF FOUND: ${msg.id || filename} — allowing processed/`);
+        await this.moveToProcessed(filename, sourcePath);
+        this.processedKeys.add(idempotencyKey);
+      } else {
+        console.log(`[watcher] ACTION REQUIRED (no proof): ${msg.id || filename}`);
+        await this.moveToActionRequired(filename, sourcePath);
+      }
+      return;
     }
 
     await this.moveToProcessed(filename, sourcePath);

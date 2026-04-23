@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "system_status": "degraded",
-  "last_updated": "2026-04-23T22:15:00.000Z",
+  "last_updated": "2026-04-23T22:05:05.351Z",
   "convergence": {
     "status": "SUCCESS - All lanes converged",
     "phases": {
@@ -11,10 +11,22 @@
       "LOCK": "ACTIVE"
     },
     "lanes": {
-      "archivist": { "key_id": "147c5c2bb7d8941f", "status": "verified" },
-      "library": { "key_id": "cb3e57dd7818da3d", "status": "verified" },
-      "kernel": { "key_id": "7f1a9fe931d1fbba", "status": "verified" },
-      "swarmmind": { "key_id": "60afaa026a3d969d", "status": "verified" }
+      "archivist": {
+        "key_id": "147c5c2bb7d8941f",
+        "status": "verified"
+      },
+      "library": {
+        "key_id": "cb3e57dd7818da3d",
+        "status": "verified"
+      },
+      "kernel": {
+        "key_id": "7f1a9fe931d1fbba",
+        "status": "verified"
+      },
+      "swarmmind": {
+        "key_id": "60afaa026a3d969d",
+        "status": "verified"
+      }
     }
   },
   "contradictions": [

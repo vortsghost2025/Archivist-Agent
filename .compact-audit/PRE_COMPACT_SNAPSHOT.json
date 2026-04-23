@@ -1,15 +1,15 @@
 {
-  "timestamp": "2026-04-21T13:34:30.723Z",
+  "timestamp": "2026-04-23T21:26:55.211Z",
   "phase": "pre_compact",
   "active_blocker": {
     "exists": false,
     "blocker": null
   },
   "trust_store_key_ids": {
-    "archivist": "583b2c36f397ef01",
-    "library": "612726c59e3f703a",
-    "swarmmind": "7a91050f68a96f1f",
-    "kernel": "31dcd7d9cc7cc6e7"
+    "archivist": "147c5c2bb7d8941f",
+    "library": "cb3e57dd7818da3d",
+    "swarmmind": "60afaa026a3d969d",
+    "kernel": "7f1a9fe931d1fbba"
   },
   "constraint_names": [
     "STRUCTURE_OVER_IDENTITY",
@@ -17,36 +17,36 @@
     "SINGLE_ENTRY_POINT",
     "OPERATOR_ACCOUNTABILITY"
   ],
-  "governance_hash": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
-  "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
+  "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
+  "bootstrap_hash": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
   "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
   "lane_states": {
     "archivist": {
       "status": "alive",
-      "timestamp": "2026-04-21T13:34:01.352Z",
-      "age_seconds": 29
+      "timestamp": "2026-04-23T21:26:02.138Z",
+      "age_seconds": 53
     },
     "library": {
       "status": "alive",
-      "timestamp": "2026-04-21T13:34:01.369Z",
-      "age_seconds": 29
+      "timestamp": "2026-04-23T21:22:12.266Z",
+      "age_seconds": 282
     },
     "swarmmind": {
       "status": "alive",
-      "timestamp": "2026-04-21T13:34:06.953Z",
-      "age_seconds": 23
+      "timestamp": "2026-04-23T21:26:33.657Z",
+      "age_seconds": 21
     },
     "kernel": {
       "status": "alive",
-      "timestamp": "2026-04-21T13:34:07.170Z",
-      "age_seconds": 23
+      "timestamp": "2026-04-23T21:26:51.132Z",
+      "age_seconds": 4
     }
   },
   "inbox_counts": {
-    "archivist": 5,
+    "archivist": 3,
     "library": 1,
-    "swarmmind": 0,
-    "kernel": 0
+    "swarmmind": 6,
+    "kernel": 2
   },
   "known_risks": [
     "identity_soft_keys",

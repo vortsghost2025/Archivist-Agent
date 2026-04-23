@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-04-23T22:00:30.967Z",
+  "overall_ok": true,
+  "lanes": {
+    "archivist": {
+      "lane": "archivist",
+      "ok": true,
+      "total": 98,
+      "violations": [],
+      "message": "All clear"
+    },
+    "kernel": {
+      "lane": "kernel",
+      "ok": true,
+      "total": 80,
+      "violations": [],
+      "message": "All clear"
+    },
+    "library": {
+      "lane": "library",
+      "ok": true,
+      "total": 70,
+      "violations": [],
+      "message": "All clear"
+    },
+    "swarmmind": {
+      "lane": "swarmmind",
+      "ok": true,
+      "total": 76,
+      "violations": [],
+      "message": "All clear"
+    }
+  }
+}
