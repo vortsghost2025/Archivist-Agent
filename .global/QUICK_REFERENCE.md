@@ -22,11 +22,11 @@ const { CanonicalMessageBuilder } = require('S:/Archivist-Agent/.global/canonica
 const discovery = new LaneDiscovery();
 const inbox = discovery.getInbox('swarmmind'); // Returns: S:/SwarmMind/lanes/swarmmind/inbox
 
-// Build message (NO ad-hoc!)
+// Build message (ALL types allowed)
 const builder = new CanonicalMessageBuilder('swarmmind');
 const msg = builder.buildMessage({
   toLane: 'archivist',
-  type: 'task',              // NOT 'proposal' - deprecated!
+  type: 'task',              // task, response, heartbeat, escalation, handoff, ack, alert
   priority: 'P0',
   subject: 'Key Sync',
   body: 'Please update...',
@@ -37,13 +37,19 @@ const msg = builder.buildMessage({
 builder.sendToLane('archivist', msg, 'task-001.json');
 ```
 
-## Forbidden (Guaranteed Failure)
+## Message Types (Enforcement Schema)
 
-- ❌ `S:/SwarmMind Self-Optimizing Multi-Agent AI System`
-- ❌ `S:/SwarmMind-Self-Optimizing-Multi-Agent-AI-System`
-- ❌ Any path not from registry
-- ❌ Hardcoding paths
-- ❌ Type "proposal" - use "task"
+| Type | Purpose |
+|------|---------|
+| **task** | Action request |
+| **response** | Response to task |
+| **heartbeat** | Lane health check |
+| **escalation** | Priority escalation |
+| **handoff** | Session handoff |
+| **ack** | Acknowledgment |
+| **alert** | System alert |
+
+**FORBIDDEN:** "proposal" type - DEPRECATED
 
 ## Check BEFORE Sending
 
@@ -51,13 +57,13 @@ builder.sendToLane('archivist', msg, 'task-001.json');
 - [ ] Type is NOT "proposal"
 - [ ] Schema version is "1.3"
 - [ ] Message sent to THEIR inbox (not yours)
-- [ ] Copied to YOUR outbox
+- [ ] Copied to YOUR outbox |
 
 ## Files to Read (IN THIS ORDER)
 
 1. **S:/Archivist-Agent/QUICK_START_PATHS.md** ← START HERE
 2. **S:/Archivist-Agent/.global/MESSAGE_BUILDER_USAGE.md** ← How to send
 3. **S:/Archivist-Agent/BOOTSTRAP.md** ← Governance entry point
-4. **S:/Archivist-Agent/AGENTS.md** ← Full instructions
+4. **S:/Archivist-Agent/AGENTS.md** ← Full instructions |
 
 **Print this. Tape it. No more path guessing.**

@@ -17,13 +17,21 @@ class CanonicalMessageBuilder {
 
   /**
    * Build a message with current schema
-   * NO "proposal" type - use "task", "report", "acknowledgment", etc.
+   * Valid types (MUST match enforcement):
+   * - "task" - Action request
+   * - "response" - Response to task
+   * - "heartbeat" - Lane health check
+   * - "escalation" - Priority escalation
+   * - "handoff" - Session handoff
+   * - "ack" - Acknowledgment
+   * - "alert" - System alert
+   * DEPRECATED: "proposal" - use "task" instead
    */
   buildMessage(options) {
     const {
       toLane,
-      type = 'task',           // task, report, acknowledgment, broadcast
-      taskKind = null,         // optional: proposal (deprecated), audit, etc.
+      type = 'task',           // task, response, heartbeat, escalation, handoff, ack, alert
+      taskKind = null,         // optional: audit, sync, etc.
       priority = 'P1',
       subject,
       body,
@@ -32,6 +40,12 @@ class CanonicalMessageBuilder {
       evidence = { required: false },
       custom = {}
     } = options;
+
+    // Validate type against enforcement schema
+    const validTypes = ['task', 'response', 'heartbeat', 'escalation', 'handoff', 'ack', 'alert'];
+    if (!validTypes.includes(type)) {
+      throw new Error(`Invalid type: "${type}". Must be one of: ${validTypes.join(', ')}`);
+    }
 
     const timestamp = new Date().toISOString();
     const id = `${this.laneId}-${type}-${Date.now()}`;

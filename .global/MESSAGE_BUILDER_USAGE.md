@@ -30,15 +30,17 @@ builder.markProcessed('lanes/swarmmind/inbox/task-001.json');
 
 ---
 
-## Message Types (NO "proposal")
+## Message Types (MUST match enforcement schema)
 
 | Type | Purpose | Required Fields |
 |------|---------|-----------------|
 | **task** | Action request | toLane, subject, body |
-| **report** | Status update | toLane, evidence_path |
-| **acknowledgment** | Receipt confirmation | toLane, reference_id |
-| **broadcast** | System-wide notice | subject, body |
-| **receipt** | Delivery confirmation | toLane, message_path |
+| **response** | Response to task | toLane, reference_id, body |
+| **heartbeat** | Lane health check | toLane, status, timestamp |
+| **escalation** | Priority escalation | toLane, subject, body, priority: P0 |
+| **handoff** | Session handoff | toLane, session_data, timestamp |
+| **ack** | Acknowledgment | toLane, reference_id, status |
+| **alert** | System alert | toLane, subject, body |
 
 **DEPRECATED:** "proposal" type - use "task" instead.
 
