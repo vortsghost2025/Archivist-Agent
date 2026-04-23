@@ -61,11 +61,11 @@ class KeyManager {
 		return { publicKeyPath, privateKeyPath, keyId };
 	}
 
-	_generateKeyId(publicKey) {
-		// Canonicalize PEM: trim trailing whitespace and ensure single trailing newline
-		const canonicalPem = publicKey.trimEnd() + '\n';
-		return crypto.createHash('sha256').update(canonicalPem).digest('hex').substring(0, 16);
-	}
+  _generateKeyId(publicKey) {
+    const keyObj = crypto.createPublicKey(publicKey);
+    const der = keyObj.export({ type: 'spki', format: 'der' });
+    return crypto.createHash('sha256').update(der).digest('hex').substring(0, 16);
+  }
 
 	loadPublicKey() {
 		const publicKeyPath = path.join(this.identityDir, PUBLIC_KEY_FILE);
