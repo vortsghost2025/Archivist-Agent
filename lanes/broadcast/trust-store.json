@@ -30,11 +30,12 @@
   },
   "kernel": {
     "lane_id": "kernel",
-    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoFp1pEU8Ctb1LnxV3NKn\nyqFGT2VIeIkZke/qLI98lM1bTXG5Gtqubqj5TPmmn/sSjZbTZTadrJ3UxJSNjHdQ\naOvz9toibrga8B7s8yxEfgBMJYs86czSQCuCuXZF4jbVKf8Itm/VJYNHPVXU0+nK\nX4GZOmxW0TCNcD5o33N/5fIcz3Qxcvf4PGbf0ZeEUk8IHvvNt+1e2Y2aC10vPxUW\nqdeGsXRdjIuA6Y/vjXxZC+72ISNwIoS/d2vZJ/ax8hDl28QkR+D9tgTwvpuN5g7v\nHeEYNuxsO7QddOZn0lRIK21KjtXejMXl2eUMwKTHOMF/hHzjr6dlqc+xo9w848t7\n5QIDAQAB\n-----END PUBLIC KEY-----\n",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4kUw4BddpNY2oPR+/PFr\nY55XaoNSdSW/zJV6MdRwnz9aNNQ8IC3NOSOjlYageWYLAn0WGJIqg5HnaGjE+/hV\n6C/O1A8BvCrc0kkPYS7eHDc6R96TEDPG9+n1AX5FtvmitjGy7cdMMJg6XaqE27gk\nAQFoYXW9oBLX/SfmsdF8dcE8syyinrPvhkTEVgH3RLzz7M7ziOA34i8iJeJqIfE/\n8JeMlXEPdyAID0tUTzE7Y0Ifcfbmqw2LY+lOJDYgwUDb2bA1OSB45ZJ4+SRgMaGI\n78xfvBLJue0nyKjUc4PodxcU6tx6RBcjhVX1s/aWOtvrQzAaPd9hwVdm+Aicrfga\ndwIDAQAB\n-----END PUBLIC KEY-----\n",
     "algorithm": "RS256",
-    "key_id": "6b39158e43688686",
-    "registered_at": "2026-04-23T00:31:04.098Z",
+    "key_id": "7f1a9fe931d1fbba",
+    "registered_at": "2026-04-23T16:12:00Z",
     "expires_at": null,
-    "revoked_at": null
+    "revoked_at": null,
+    "note": "Updated: Kernel on-disk key differs from old trust store entry. DER fingerprint of current .identity/public.pem."
   }
 }

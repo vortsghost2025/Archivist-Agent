@@ -1,33 +1,24 @@
 {
-  "id": "e2e-summary-aggregation",
-  "from": "archivist",
-  "to": "archivist",
-  "timestamp": "2026-04-22T21:50:00Z",
-  "priority": "P0",
-  "type": "aggregation",
-  "status": "PASS",
-  "summaries_included": [
-    "lane-e2e-summary-archivist.json",
-    "lane-e2e-summary-kernel.json",
-    "lane-e2e-summary-library.json",
-    "lane-e2e-summary-swarmmind.json"
-  ],
-  "recovery_test_suite": {
-    "passed": 11,
-    "total": 11,
-    "verdict": "RECOVERY PROVEN"
-  },
-  "identity_normalization": {
-    "status": "COMPLETE",
-    "formula": "sha256(PEM.trimEnd() + '\\n').slice(0,16)",
-    "lanes_normalized": {
-      "archivist": "583b2c36f397ef01",
-      "library": "612726c59e3f703a", 
-      "swarmmind": "3be48d8513f94301",
-      "kernel": "31dcd7d9cc7cc6e7"
+  "aggregation_timestamp": "2026-04-23T16:33:06.300Z",
+  "total_summaries": 4,
+  "pass_count": 1,
+  "fail_count": 0,
+  "results": [
+    {
+      "file": "lane-e2e-summary-archivist.json",
+      "status": "RESOLVED"
     },
-    "verification": "All .identity/public.pem files now match trust store entries"
-  },
-  "active_blocker": "none",
-  "system_status": "PASS"
+    {
+      "file": "lane-e2e-summary-kernel.json",
+      "status": "RESOLVED"
+    },
+    {
+      "file": "lane-e2e-summary-library.json",
+      "status": "PASS"
+    },
+    {
+      "file": "lane-e2e-summary-swarmmind.json",
+      "status": "PASS-WARN"
+    }
+  ]
 }
