@@ -1,0 +1,103 @@
+SWARMMIND DIRECTORY MIGRATION REPORT
+Generated: 2026-04-23T09:05:00Z
+For Review by: Operator
+
+=== EXECUTIVE SUMMARY ===
+All SwarmMind work is in WRONG directories. Canonical directory S:/SwarmMind is nearly empty.
+
+Directory                    | Files  | Status
+-----------------------------|--------|------------------
+Long name version           | 1,327  | MOST WORK HERE
+Hyphen version              |   464  | ADDITIONAL WORK
+Canonical S:/SwarmMind      |     7  | SHOULD HAVE ALL
+
+=== THE PROBLEM ===
+Agents wrote files to wrong paths:
+- S:/SwarmMind Self-Optimizing Multi-Agent AI System (wrong)
+- S:/SwarmMind-Self-Optimizing-Multi-Agent-AI-System (wrong)
+- S:/SwarmMind (correct, but empty)
+
+This causes:
+- Messages lost (can't find them)
+- Duplication confusion
+- Verification failures
+
+=== MIGRATION PLAN ===
+
+STEP 1: Copy all files from long-name directory to S:/SwarmMind
+STEP 2: Copy any additional files from hyphen directory
+STEP 3: Resolve conflicts (same file in both)
+STEP 4: Verify all files copied successfully
+STEP 5: Only then delete duplicate directories
+
+=== WHAT WILL BE MIGRATED ===
+
+FROM: S:/SwarmMind Self-Optimizing Multi-Agent AI System (1,327 files)
+  TO: S:/SwarmMind
+
+Key directories found:
+- .identity/ (security keys - IMPORTANT)
+- .lane-relay/ (lane messages - IMPORTANT)
+- .trust/ (trust store - IMPORTANT)
+- lanes/swarmmind/inbox/ (messages - IMPORTANT)
+- lanes/swarmmind/outbox/ (sent messages)
+- scripts/ (code)
+- docs/ (documentation)
+- src/ (source code)
+- verification/ (proofs)
+
+FROM: S:/SwarmMind-Self-Optimizing-Multi-Agent-AI-System (464 files)
+  TO: S:/SwarmMind
+
+This appears to be an older copy with fewer files.
+
+=== SAFETY MEASURES ===
+
+1. NO files will be deleted in Step 1-4
+2. Source directories remain untouched
+3. Only new files copied to S:/SwarmMind
+4. Existing files in S:/SwarmMind preserved
+5. Full log generated
+6. Verification step included
+
+=== REQUIRED ACTIONS ===
+
+Please review this report and confirm:
+
+[ ] I understand the migration will copy ~1,791 files to S:/SwarmMind
+[ ] I understand source directories will NOT be deleted yet
+[ ] I understand this will take several minutes to complete
+[ ] I want to proceed with the migration
+
+TO PROCEED:
+Run: powershell -ExecutionPolicy Bypass -File "S:\Archivist-Agent\scripts\migrate-swarmmind-safe.ps1" -Execute
+
+TO PREVIEW ONLY (no changes):
+Run: powershell -ExecutionPolicy Bypass -File "S:\Archivist-Agent\scripts\migrate-swarmmind-safe.ps1" -WhatIf
+
+=== AFTER MIGRATION ===
+
+Once migration is complete:
+1. Verify S:/SwarmMind has all files
+2. Test that agents can find messages
+3. Only then delete duplicate directories:
+   - S:/SwarmMind Self-Optimizing Multi-Agent AI System
+   - S:/SwarmMind-Self-Optimizing-Multi-Agent-AI-System
+
+=== QUESTIONS? ===
+
+The migration script is at:
+S:\Archivist-Agent\scripts\migrate-swarmmind-safe.ps1
+
+This script:
+- Copies files safely (never overwrites)
+- Creates directories as needed
+- Logs everything
+- Does NOT delete anything
+
+=== RECOMMENDATION ===
+
+PROCEED with migration. The current state is broken - agents can't find
+messages because they're looking in wrong directories.
+
+This migration is SAFE because it only COPIES files, never deletes.
