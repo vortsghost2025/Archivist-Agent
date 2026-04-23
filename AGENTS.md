@@ -4,27 +4,32 @@
 
 ## ⚠️ MANDATORY PRECONDITION — DO NOT PROCEED WITHOUT THIS
 
-### PATH DISCOVERY (NEW - MANDATORY)
-**Before any file operation, agents MUST:**
+### CANONICAL LANE REGISTRY (NEW - READ FIRST)
 
-1. **Load lane registry:** `const { LaneDiscovery } = require('S:/Archivist-Agent/.global/lane-discovery.js')`
-2. **Get canonical path:** `const inbox = discovery.getInbox('swarmmind')`
-3. **NEVER hardcode paths:** All paths come from registry
-4. **Validate before write:** `discovery.validatePath('swarmmind', testPath)`
+**All agents MUST use these exact paths. NO GUESSING. NO VARIANTS.**
 
-**Forbidden:**
-- Hardcoding: `S:/SwarmMind Self-Optimizing Multi-Agent AI System`
-- Guessing: `S:/SwarmMind-Self-...`
-- Variants: Any non-canonical path
+| Lane | Local Directory | GitHub Repo | Inbox Path | Outbox Path |
+|------|----------------|-------------|------------|-------------|
+| **Archivist** | `S:/Archivist-Agent` | vortsghost2025/Archivist-Agent | `S:/Archivist-Agent/lanes/archivist/inbox` | `S:/Archivist-Agent/lanes/archivist/outbox` |
+| **Kernel** | `S:/kernel-lane` | vortsghost2025/Archivist-Agent | `S:/kernel-lane/lanes/kernel/inbox` | `S:/kernel-lane/lanes/kernel/outbox` |
+| **SwarmMind** | `S:/SwarmMind` | vortsghost2025/SwarmMind | `S:/SwarmMind/lanes/swarmmind/inbox` | `S:/SwarmMind/lanes/swarmmind/outbox` |
+| **Library** | `S:/self-organizing-library` | vortsghost2025/self-organizing-library | `S:/self-organizing-library/lanes/library/inbox` | `S:/self-organizing-library/lanes/library/outbox` |
+| **Authority** | `S:/Archivist-Agent` | vortsghost2025/Archivist-Agent | `S:/Archivist-Agent/lanes/authority/inbox` | `S:/Archivist-Agent/lanes/authority/outbox` |
 
-**Canonical paths ONLY:**
-- Archivist: `S:/Archivist-Agent`
-- Kernel: `S:/kernel-lane`
-- SwarmMind: `S:/SwarmMind`
-- Library: `S:/self-organizing-library`
-- Authority: `S:/Archivist-Agent` (shares with Archivist)
+**Programmatic Access:**
+```javascript
+const { LaneDiscovery } = require('S:/Archivist-Agent/.global/lane-discovery.js');
+const discovery = new LaneDiscovery();
+const inbox = discovery.getInbox('swarmmind');  // Returns: S:/SwarmMind/lanes/swarmmind/inbox
+```
 
-**See:** `S:/Archivist-Agent/.global/lane-registry.json` for full specification
+**FORBIDDEN (guaranteed failure):**
+- ❌ `S:/SwarmMind Self-Optimizing Multi-Agent AI System`
+- ❌ `S:/SwarmMind-Self-Optimizing-Multi-Agent-AI-System`
+- ❌ Any path not in registry
+- ❌ Hardcoding paths
+
+**Full registry:** `S:/Archivist-Agent/.global/lane-registry.json`
 
 ---
 

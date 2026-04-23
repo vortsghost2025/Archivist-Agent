@@ -4,6 +4,40 @@
 
 ---
 
+## CANONICAL LANE REGISTRY (READ FIRST - NO GUESSING)
+
+**Every agent MUST use these paths. No variants allowed.**
+
+```javascript
+// Load this immediately:
+const { LaneDiscovery } = require('S:/Archivist-Agent/.global/lane-discovery.js');
+const discovery = new LaneDiscovery();
+
+// Get any lane's paths:
+const archivistInbox = discovery.getInbox('archivist');     // S:/Archivist-Agent/lanes/archivist/inbox
+const kernelInbox = discovery.getInbox('kernel');           // S:/kernel-lane/lanes/kernel/inbox
+const swarmmindInbox = discovery.getInbox('swarmmind');       // S:/SwarmMind/lanes/swarmmind/inbox
+const libraryInbox = discovery.getInbox('library');          // S:/self-organizing-library/lanes/library/inbox
+const authorityInbox = discovery.getInbox('authority');       // S:/Archivist-Agent/lanes/authority/inbox
+```
+
+| Lane | Local Directory | Git Repo | Inbox | Outbox |
+|------|----------------|----------|-------|--------|
+| **Archivist** | `S:/Archivist-Agent` | github.com/vortsghost2025/Archivist-Agent | `lanes/archivist/inbox` | `lanes/archivist/outbox` |
+| **Kernel** | `S:/kernel-lane` | github.com/vortsghost2025/Archivist-Agent | `lanes/kernel/inbox` | `lanes/kernel/outbox` |
+| **SwarmMind** | `S:/SwarmMind` | github.com/vortsghost2025/SwarmMind | `lanes/swarmmind/inbox` | `lanes/swarmmind/outbox` |
+| **Library** | `S:/self-organizing-library` | github.com/vortsghost2025/self-organizing-library | `lanes/library/inbox` | `lanes/library/outbox` |
+| **Authority** | `S:/Archivist-Agent` | github.com/vortsghost2025/Archivist-Agent | `lanes/authority/inbox` | `lanes/authority/outbox` |
+
+**FORBIDDEN (will cause failures):**
+- `S:/SwarmMind Self-Optimizing Multi-Agent AI System` ❌
+- `S:/SwarmMind-Self-Optimizing-Multi-Agent-AI-System` ❌
+- Any path not in registry ❌
+
+**Full spec:** `S:/Archivist-Agent/.global/lane-registry.json`
+
+---
+
 ## THE RULE
 
 ```
