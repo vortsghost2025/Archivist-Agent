@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "system_status": "degraded",
+  "last_updated": "2026-04-23T22:15:00.000Z",
+  "convergence": {
+    "status": "SUCCESS - All lanes converged",
+    "phases": {
+      "HARDEN": "PASS",
+      "STRESS": "PASS",
+      "PUSH": "COMPLETE",
+      "LOCK": "ACTIVE"
+    },
+    "lanes": {
+      "archivist": { "key_id": "147c5c2bb7d8941f", "status": "verified" },
+      "library": { "key_id": "cb3e57dd7818da3d", "status": "verified" },
+      "kernel": { "key_id": "7f1a9fe931d1fbba", "status": "verified" },
+      "swarmmind": { "key_id": "60afaa026a3d969d", "status": "verified" }
+    }
+  },
+  "contradictions": [
+    {
+      "id": "swarmmind_no_heartbeat",
+      "priority": "P0",
+      "description": "SwarmMind identity directory exists but heartbeat file not updated since 2026-04-23T08:35:00Z",
+      "detected_at": "2026-04-23T21:45:00.000Z",
+      "source": "convergence-monitor-report-20260423.json",
+      "status": "active"
+    },
+    {
+      "id": "message_loss",
+      "priority": "P1",
+      "description": "Post-compact audit detected 3 lost messages during compaction",
+      "detected_at": "2026-04-23T21:30:00.000Z",
+      "source": "post-compact-audit.js",
+      "status": "active"
+    },
+    {
+      "id": "priority_P0_contradiction",
+      "priority": "P0",
+      "description": "System reports 'aligned' while P0-level violation (swarmmind_no_heartbeat) is present",
+      "detected_at": "2026-04-23T17:49:00.000Z",
+      "source": "SYSTEM.txt",
+      "status": "active"
+    }
+  ],
+  "invariant_check": {
+    "last_run": "2026-04-23T22:15:00.000Z",
+    "status": "degraded",
+    "contradictions_found": 3
+  },
+  "message_loss": 3,
+  "priority_violations": 1,
+  "compaction_enabled": false,
+  "compaction_suspend_reason": "Hard invariant not yet enforced - P0 contradictions present"
+}

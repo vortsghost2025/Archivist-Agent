@@ -301,8 +301,30 @@ Each lane maintains a `RUNTIME_STATE.json` that other lanes can read.
 
 ---
 
-## Sync Protocol
+## Compaction Control
+ 
+**Field:** `COMPACTION_ENABLED`
+ 
+**Default:** `false` (suspended until hard invariant enforced)
+ 
+**Purpose:** Prevent silent message loss during compaction.
+ 
+```json
+{
+  "compaction": {
+    "enabled": false,
+    "reason": "Hard invariant not yet enforced - SYSTEM.txt action #1",
+    "resume_condition": "enforce-consistency-invariant.js passes on all lanes"
+  }
+}
+```
+ 
+**To Resume:** Set `enabled: true` after `enforce-consistency-invariant.js` passes on all lanes.
+ 
+---
 
+## Sync Protocol
+ 
 ### Step 1: Detection
 
 Agent detects context loss after compact:
