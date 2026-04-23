@@ -45,7 +45,7 @@
     "external_directory": {
       "S:\\\\self-organizing-library": "allow",
       "S:\\\\Archivist-Agent": "allow",
-      "S:\\\\SwarmMind Self-Optimizing Multi-Agent AI System": "allow",
+      "S:\\\\SwarmMind": "allow",
       "*": "allow"
     },
     "bash": {

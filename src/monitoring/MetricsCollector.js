@@ -22,13 +22,13 @@ class MetricsCollector {
 	_defaultAuditLog() {
 		const envPath = process.env.QUEUE_DIR;
 		if (envPath) return path.join(path.dirname(envPath), 'audit', 'queue-consumer.log');
-		return path.join('S:', 'SwarmMind Self-Optimizing Multi-Agent AI System', 'audit', 'queue-consumer.log');
+		return path.join('S:', 'SwarmMind', 'audit', 'queue-consumer.log');
 	}
 
 	_defaultQueueDir() {
 		const envPath = process.env.QUEUE_DIR;
 		if (envPath) return envPath;
-		return path.join('S:', 'SwarmMind Self-Optimizing Multi-Agent AI System', 'queue');
+		return path.join('S:', 'SwarmMind', 'queue');
 	}
 
 	_initMetrics() {

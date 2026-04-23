@@ -20,7 +20,7 @@ function log(message, level = 'info') {
 const SCHEMAS_DIR = path.join('S:', 'Archivist-Agent', 'schemas');
 const LANES = {
   'archivist-agent': 'S:\\Archivist-Agent',
-  'swarmmind': 'S:\\SwarmMind Self-Optimizing Multi-Agent AI System',
+  'swarmmind': 'S:\\SwarmMind',
   'library': 'S:\\self-organizing-library'
 };
 

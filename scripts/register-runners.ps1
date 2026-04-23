@@ -5,8 +5,8 @@
 $tasks = @(
   @{ Name = "Archivist-Heartbeat"; Cmd = "node S:\Archivist-Agent\scripts\heartbeat.js --once" },
   @{ Name = "Archivist-Watcher";  Cmd = "node S:\Archivist-Agent\scripts\inbox-watcher.js" },
-  @{ Name = "SwarmMind-Heartbeat"; Cmd = "node `"S:\SwarmMind Self-Optimizing Multi-Agent AI System\scripts\heartbeat.js`" --once" },
-  @{ Name = "SwarmMind-Watcher";  Cmd = "node `"S:\SwarmMind Self-Optimizing Multi-Agent AI System\scripts\inbox-watcher.js`" --once" },
+  @{ Name = "SwarmMind-Heartbeat"; Cmd = "node `"S:\SwarmMind\scripts\heartbeat.js`" --once" },
+  @{ Name = "SwarmMind-Watcher";  Cmd = "node `"S:\SwarmMind\scripts\inbox-watcher.js`" --once" },
   @{ Name = "Kernel-Heartbeat";   Cmd = "node S:\kernel-lane\scripts\heartbeat.js --once" },
   @{ Name = "Kernel-Watcher";    Cmd = "node S:\kernel-lane\scripts\inbox-watcher.js" }
 )

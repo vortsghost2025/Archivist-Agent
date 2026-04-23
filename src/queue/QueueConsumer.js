@@ -62,7 +62,7 @@ class QueueConsumer {
 			const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
 			return registry.global_state?.queue_directory || path.join('S:', 'queue');
 		} catch {
-			return path.join('S:', 'SwarmMind Self-Optimizing Multi-Agent AI System', 'queue');
+			return path.join('S:', 'SwarmMind', 'queue');
 		}
 	}
 

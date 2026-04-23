@@ -7,7 +7,7 @@ const path = require('path');
 
 const LANES = [
   { name: 'library', path: 'S:/self-organizing-library' },
-  { name: 'swarmmind', path: 'S:/SwarmMind Self-Optimizing Multi-Agent AI System' }
+  { name: 'swarmmind', path: 'S:/SwarmMind' }
 ];
 
 const THRESHOLDS = {

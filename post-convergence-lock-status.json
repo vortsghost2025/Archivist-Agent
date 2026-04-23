@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "lock_id": "post-convergence-lock-001",
+  "phase": "POST-CONVERGENCE",
+  "status": "ACTIVE",
+  "activated_at": "2026-04-23T20:50:00.000Z",
+  "activated_by": "archivist",
+  "authority_level": 100,
+
+  "rules": {
+    "rule_1": {
+      "name": "No trust-store writes without authority approval",
+      "condition": "authority approval artifact must be present",
+      "action": "BLOCK if no authority-approval message in inbox"
+    },
+    "rule_2": {
+      "name": "All attempted trust mutations must be logged",
+      "condition": "every write attempt logged to trust-store-mutations.log",
+      "action": "LOG all attempts, block if logging fails"
+    },
+    "rule_3": {
+      "name": "Any mutation without approval = blocked",
+      "condition": "trust-store write requires authority-approval message",
+      "action": "BLOCK + ALERT"
+    }
+  },
+
+  "enforcement": {
+    "mode": "enforce",
+    "blocking": true,
+    "logging": true,
+    "alert_on_violation": true
+  },
+
+  "allowed_operations": {
+    "read_trust_store": true,
+    "verify_signatures": true,
+    "process_messages": true,
+    "write_trust_store": "ONLY_WITH_AUTHORITY_APPROVAL"
+  },
+
+  "monitoring": {
+    "trust_store_mutations_log": "trust-store-mutations.log",
+    "violations_log": "lock-violations.log",
+    "monitoring_interval_seconds": 60
+  },
+
+  "evidence": {
+    "convergence_complete": "convergence-complete.json",
+    "authority_approval": "lanes/archivist/outbox/authority-approval-key-convergence-20260423.json",
+    "lock_rules_deployed": true,
+    "verified_by": "archivist"
+  },
+
+  "compliance_status": {
+    "archivist": "LOCKED - awaiting authority for any trust-store write",
+    "kernel": "LOCKED - key-sync-complete received, lock active",
+    "library": "LOCKED - trust-normalization complete, lock active", 
+    "swarmmind": "LOCKED - signing-role-status received, lock active"
+  },
+
+  "next_review": "2026-04-24T20:50:00.000Z"
+}

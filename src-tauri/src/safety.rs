@@ -122,10 +122,11 @@ pub fn validate_path(path: &Path) -> Result<(), SafetyError> {
     }
 
     // Check against allowed roots
-    let is_allowed = config.allowed_roots.iter().any(|root| {
-        let root_path = Path::new(root);
-        canonical.starts_with(root_path)
-    });
+    let canonical_str = canonical.to_string_lossy().to_lowercase();
+    let is_allowed = config
+        .allowed_roots
+        .iter()
+        .any(|root| canonical_str.starts_with(&root.to_lowercase()));
 
     if is_allowed {
         Ok(())

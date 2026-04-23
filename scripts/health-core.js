@@ -17,7 +17,7 @@ const path = require('path');
 
 const ARCHIVIST_ROOT = 'S:/Archivist-Agent';
 const LIBRARY_ROOT = 'S:/self-organizing-library';
-const SWARMIND_ROOT = 'S:/SwarmMind Self-Optimizing Multi-Agent AI System';
+const SWARMIND_ROOT = 'S:/SwarmMind';
 
 const checks = [
   // Trust Store

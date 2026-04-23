@@ -14,7 +14,7 @@
         },
         {
           "name": "swarmmind-lane",
-          "git_url": "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
+          "git_url": "S:/SwarmMind",
           "branches": ["main"],
           "mailbox_path": "lanes/swarmmind/inbox",
           "outbox_path": "lanes/swarmmind/outbox"
@@ -56,11 +56,11 @@
     },
     "swarmmind": {
       "lane_id": "swarmmind",
-      "local_directory": "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
+      "local_directory": "S:/SwarmMind",
       "repositories": [
         {
           "name": "swarmmind-lane",
-          "git_url": "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
+          "git_url": "S:/SwarmMind",
           "branches": ["main"],
           "mailbox_path": "lanes/swarmmind/inbox",
           "outbox_path": "lanes/swarmmind/outbox"

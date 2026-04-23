@@ -12,7 +12,7 @@
       "role": "governance-root",
       "description": "Primary governance authority - can write anywhere"
     },
-    "S:\\SwarmMind Self-Optimizing Multi-Agent AI System": {
+    "S:\\SwarmMind": {
       "lane_id": "swarmmind",
       "authority": 80,
       "role": "execution-layer",

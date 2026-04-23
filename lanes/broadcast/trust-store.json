@@ -19,14 +19,12 @@
   },
   "swarmmind": {
     "lane_id": "swarmmind",
-    "public_key_pem": null,
-    "algorithm": "HMAC-SHA256",
-    "key_id": "7a91050f68a96f1f",
-    "registered_at": "2026-04-23T00:31:04.098Z",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAm+Mkk1MdXnvQdqDufYSp\n9J/0wMBGQ3rILc1IZRPo6qmQidu1+YXOeCV3uWbcnyzYh7K8NntlPhUYIAjBfB2\ndy9VDzapo08SJYdnZ/QuPqYjcDHNG7OE50JDYcZj6Q8KLgmJ2mtXLc1CawQoV+8a\nmp0bAAZbDJXZKZa/g/HssSBAxuR0B8wkxVjXxyOBh+X523N1zsJ/hbLMPdy02/hv\nETPw8TyGhRnVfGuS34ikw36SHVGHlx+54fuPmgqNo1LbqJTOcJLpRxi07syWv8BE\nwTrL1BuyLyUWYeQ2aS7by+Qv+dqOmWOMuhiqgZb5Tmc2kkSYYX/+Al9uTEuieZQ4\nSwIDAQAB\n-----END PUBLIC KEY-----\n",
+    "algorithm": "RS256",
+    "key_id": "60afaa026a3d969d",
+    "registered_at": "2026-04-22T23:11:22.052Z",
     "expires_at": null,
-    "revoked_at": null,
-    "signing_key_hash": "ad3815addc420febb1fbe103a8523e111b84f5e8cf0352a37ebf746de7014090",
-    "note": "HMAC-SHA256 lane — no RSA public.pem; key_id derived from signing key hash"
+    "revoked_at": null
   },
   "kernel": {
     "lane_id": "kernel",
@@ -36,6 +34,6 @@
     "registered_at": "2026-04-23T16:12:00Z",
     "expires_at": null,
     "revoked_at": null,
-    "note": "Updated: Kernel on-disk key differs from old trust store entry. DER fingerprint of current .identity/public.pem."
+    "note": "DER fingerprint standard (Option A): sha256(SPKI DER of public key), first 16 hex chars"
   }
 }

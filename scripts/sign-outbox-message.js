@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+const { deriveKeyId } = require(path.join(__dirname, '..', '.global', 'deriveKeyId.js'));
+
 // LEASE + ATOMIC WRITE: Require kernel primitives for cross-lane mutation safety
 const KERNEL_ROOT = 'S:/kernel-lane';
 const { atomicWriteJson, atomicWriteWithLease } = require(path.join(KERNEL_ROOT, 'scripts', 'atomic-write-util'));
@@ -53,7 +55,7 @@ function base64UrlEncode(input) {
 const LANE_IDENTITY_DIRS = {
   archivist: 'S:/Archivist-Agent/.identity',
   library: 'S:/self-organizing-library/.identity',
-  swarmmind: 'S:/SwarmMind Self-Optimizing Multi-Agent AI System/.identity',
+  swarmmind: 'S:/SwarmMind/.identity',
   kernel: 'S:/kernel-lane/.identity',
 };
 
@@ -100,7 +102,7 @@ function loadKeyMaterial(identityDir, lane, passphrase) {
     throw new Error(`PRIVATE_KEY_DECRYPT_FAILED for lane ${lane}: ${err.message}`);
   }
 
-  const keyId = crypto.createHash('sha256').update(publicPem).digest('hex').slice(0, 16);
+  const keyId = deriveKeyId(publicPem);
   return { privateKey, keyId };
 }
 

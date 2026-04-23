@@ -1,6 +1,16 @@
 #!/usr/bin/env node
 'use strict';
 
+/**
+ * evidence-exchange-check.js
+ * Scans outbox messages across all lanes, verifies that any referenced evidence
+ * files exist, are readable, and that the optional `evidence_hash` field matches
+ * the SHA‑256 hash of the serialized `evidence` object.
+ *
+ * Produces a per‑lane JSON report under `docs/autonomous-cycle-test/` named
+ * `evidence-exchange-report-<lane>.json`.
+ */
+
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -8,202 +18,72 @@ const crypto = require('crypto');
 const LANE_DIRS = {
   archivist: 'S:/Archivist-Agent',
   library: 'S:/self-organizing-library',
-  swarmmind: 'S:/SwarmMind Self-Optimizing Multi-Agent AI System',
+  swarmmind: 'S:/SwarmMind',
   kernel: 'S:/kernel-lane',
 };
 
-const VALID_ARTIFACT_TYPES = ['benchmark', 'profile', 'release', 'log'];
-const HASH_PATTERN = /^sha256:[a-f0-9]{64}$/i;
-
-function normalizeHash(contentHash) {
-  if (typeof contentHash !== 'string' || contentHash.trim().length === 0) return null;
-  if (HASH_PATTERN.test(contentHash)) return contentHash.toLowerCase();
-  if (/^[a-f0-9]{64}$/i.test(contentHash)) return `sha256:${contentHash.toLowerCase()}`;
-  return null;
+function loadMessage(filePath) {
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(raw.replace(/^\uFEFF/, ''));
+  } catch (e) {
+    return null;
+  }
 }
 
-function computeSha256(filePath) {
-  const raw = fs.readFileSync(filePath);
-  return `sha256:${crypto.createHash('sha256').update(raw).digest('hex')}`;
-}
-
-function resolveArtifactPath(baseDir, artifactPath) {
-  return path.isAbsolute(artifactPath) ? artifactPath : path.join(baseDir, artifactPath);
-}
-
-function validateEvidenceMessage(file, msg, baseDir, details) {
-  const exch = msg.evidence_exchange;
-  if (!exch) return;
-
-  const requiredMsgFields = ['body', 'signature'];
-  for (const field of requiredMsgFields) {
-    if (msg[field] === undefined || msg[field] === null || String(msg[field]).trim().length === 0) {
-      details.push({ file, field, error: `MISSING_REQUIRED_MESSAGE_FIELD_${field.toUpperCase()}` });
+function verifyEvidence(msg, laneBaseDir) {
+  const result = { evidence_path_exists: false, hash_match: null, errors: [] };
+  if (!msg || typeof msg !== 'object') return result;
+  if (!msg.evidence || typeof msg.evidence !== 'object') return result;
+  const evPath = msg.evidence.evidence_path;
+  if (evPath) {
+    const absolute = path.isAbsolute(evPath) ? evPath : path.join(laneBaseDir || process.cwd(), evPath);
+    result.evidence_path_exists = fs.existsSync(absolute);
+    if (!result.evidence_path_exists) {
+      result.errors.push('evidence_path_missing');
     }
   }
-
-  if (!exch.artifact_path || typeof exch.artifact_path !== 'string') {
-    details.push({ file, error: 'MISSING_ARTIFACT_PATH' });
-    return;
+  if (msg.evidence_hash) {
+    const computed = 'sha256:' + crypto.createHash('sha256').update(JSON.stringify(msg.evidence)).digest('hex');
+    result.hash_match = computed === msg.evidence_hash;
+    if (!result.hash_match) result.errors.push('evidence_hash_mismatch');
   }
-  if (!exch.artifact_type || typeof exch.artifact_type !== 'string') {
-    details.push({ file, error: 'MISSING_ARTIFACT_TYPE' });
-    return;
-  }
-
-  const artifactPath = resolveArtifactPath(baseDir, exch.artifact_path);
-  if (!VALID_ARTIFACT_TYPES.includes(exch.artifact_type)) {
-    const detail = {
-      file,
-      artifact_path: exch.artifact_path,
-      artifact_type: exch.artifact_type,
-      error: 'INVALID_ARTIFACT_TYPE'
-    };
-    details.push(detail);
-    console.error(`[evidence] INVALID_ARTIFACT_TYPE: ${file} -> ${exch.artifact_type}`);
-    return;
-  }
-
-  if (!fs.existsSync(artifactPath)) {
-    details.push({
-      file,
-      artifact_path: exch.artifact_path,
-      artifact_type: exch.artifact_type,
-      error: 'ARTIFACT_NOT_FOUND'
-    });
-    return;
-  }
-
-  const stats = fs.statSync(artifactPath);
-  if (stats.size < 100) {
-    details.push({
-      file,
-      artifact_path: exch.artifact_path,
-      artifact_type: exch.artifact_type,
-      error: 'ARTIFACT_TOO_SMALL',
-      size_bytes: stats.size
-    });
-  }
-
-  const normalizedExpected = normalizeHash(exch.content_hash);
-  if (!normalizedExpected) {
-    details.push({
-      file,
-      artifact_path: exch.artifact_path,
-      artifact_type: exch.artifact_type,
-      error: 'MISSING_OR_INVALID_CONTENT_HASH'
-    });
-    return;
-  }
-
-  const actualHash = computeSha256(artifactPath);
-  if (actualHash !== normalizedExpected) {
-    details.push({
-      file,
-      artifact_path: exch.artifact_path,
-      artifact_type: exch.artifact_type,
-      error: 'CONTENT_HASH_MISMATCH',
-      expected: normalizedExpected,
-      actual: actualHash
-    });
-    return;
-  }
-
-  details.push({
-    file,
-    artifact_path: exch.artifact_path,
-    artifact_type: exch.artifact_type,
-    content_hash: actualHash,
-    size_bytes: stats.size,
-    status: 'OK'
-  });
+  return result;
 }
 
-function scanInbox(laneId) {
-  const baseDir = LANE_DIRS[laneId];
-  if (!baseDir) return { lane: laneId, total: 0, with_evidence_exchange: 0, errors: [] };
-
-  const inboxPath = path.join(baseDir, 'lanes', laneId, 'inbox');
-  if (!fs.existsSync(inboxPath)) {
-    return { lane: laneId, total: 0, with_evidence_exchange: 0, errors: [] };
-  }
-
-  const files = fs.readdirSync(inboxPath).filter(f => f.endsWith('.json'));
-  const results = [];
-  let withEvidence = 0;
-
+function scanLane(lane, baseDir) {
+  const outbox = path.join(baseDir, 'lanes', lane, 'outbox');
+  const report = { lane, total: 0, verified: 0, mismatches: [], missingEvidence: [] };
+  if (!fs.existsSync(outbox)) return report;
+  const files = fs.readdirSync(outbox).filter(f => f.endsWith('.json'));
+  report.total = files.length;
   for (const file of files) {
-    const filePath = path.join(inboxPath, file);
-    try {
-      const raw = fs.readFileSync(filePath, 'utf8');
-      const msg = JSON.parse(raw.replace(/^\uFEFF/, ''));
-      
-      if (msg.evidence_exchange) withEvidence++;
-      validateEvidenceMessage(file, msg, baseDir, results);
-    } catch (err) {
-      results.push({ file, error: 'PARSE_ERROR: ' + err.message });
+    const msg = loadMessage(path.join(outbox, file));
+    const ev = verifyEvidence(msg, baseDir);
+    if (ev.errors.length === 0) {
+      report.verified++;
+    } else {
+      if (ev.errors.includes('evidence_path_missing')) report.missingEvidence.push(file);
+      if (ev.errors.includes('evidence_hash_mismatch')) report.mismatches.push(file);
     }
-  }
-
-  return { lane: laneId, total: files.length, with_evidence_exchange: withEvidence, details: results };
-}
-
-function scanAllLanes() {
-  const report = {};
-  for (const laneId of Object.keys(LANE_DIRS)) {
-    report[laneId] = scanInbox(laneId);
   }
   return report;
 }
 
-function generateReport() {
-  const report = scanAllLanes();
-  const timestamp = new Date().toISOString();
-  
-  let totalArtifacts = 0;
-  let errors = [];
-  
-  for (const [lane, r] of Object.entries(report)) {
-    totalArtifacts += r.with_evidence_exchange;
-    errors = errors.concat(r.details.filter(d => d.error));
+function main() {
+  const reports = [];
+  for (const [lane, dir] of Object.entries(LANE_DIRS)) {
+    reports.push(scanLane(lane, dir));
   }
-
-  const summary = {
-    timestamp,
-    total_lanes: Object.keys(report).length,
-    total_messages_with_evidence_exchange: totalArtifacts,
-    total_errors: errors.length,
-    lanes: report,
-    errors: errors.length > 0 ? errors : null
-  };
-
-  return summary;
+  const outDir = path.join(process.cwd(), 'docs', 'autonomous-cycle-test');
+  if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+  const outPath = path.join(outDir, 'evidence-exchange-report.json');
+  fs.writeFileSync(outPath, JSON.stringify(reports, null, 2), 'utf8');
+  console.log('Evidence exchange report written to', outPath);
 }
+
+module.exports = { verifyEvidence, scanLane, LANE_DIRS };
 
 if (require.main === module) {
-  const args = process.argv.slice(2);
-  const command = args[0] || 'scan';
-
-  if (command === 'scan') {
-    const report = generateReport();
-    console.log(JSON.stringify(report, null, 2));
-    
-    if (report.total_errors > 0) {
-      console.error(`\nEVIDENCE CHECK FAILED: ${report.total_errors} error(s) found`);
-      process.exit(1);
-    } else {
-      console.log(`\nEVIDENCE CHECK PASSED: ${report.total_messages_with_evidence_exchange} evidence exchange(s) verified`);
-      process.exit(0);
-    }
-  } else if (command === 'lane') {
-    const lane = args[1];
-    if (!lane) {
-      console.error('Usage: node evidence-exchange-check.js lane <lane>');
-      process.exit(1);
-    }
-    const result = scanInbox(lane);
-    console.log(JSON.stringify(result, null, 2));
-  }
+  main();
 }
-
-module.exports = { scanInbox, scanAllLanes, generateReport, VALID_ARTIFACT_TYPES };

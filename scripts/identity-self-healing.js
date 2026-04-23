@@ -10,14 +10,14 @@ const KEY_SIZE = 2048;
 const PASSFILE_SEARCH = [
   'S:/Archivist-Agent/.runtime/lane-passphrases.json',
   'S:/self-organizing-library/.runtime/lane-passphrases.json',
-  'S:/SwarmMind Self-Optimizing Multi-Agent AI System/.runtime/lane-passphrases.json',
+  'S:/SwarmMind/.runtime/lane-passphrases.json',
   'S:/kernel-lane/.runtime/lane-passphrases.json',
 ];
 
 const LANE_IDENTITY_DIRS = {
   archivist: 'S:/Archivist-Agent/.identity',
   library: 'S:/self-organizing-library/.identity',
-  swarmmind: 'S:/SwarmMind Self-Optimizing Multi-Agent AI System/.identity',
+  swarmmind: 'S:/SwarmMind/.identity',
   kernel: 'S:/kernel-lane/.identity',
 };
 
@@ -159,7 +159,7 @@ class IdentitySelfHealing {
       'S:/kernel-lane/lanes/broadcast',
     ];
     if (this.identityDir.includes('SwarmMind')) {
-      trustStoreDirs.push('S:/SwarmMind Self-Optimizing Multi-Agent AI System/lanes/broadcast');
+      trustStoreDirs.push('S:/SwarmMind/lanes/broadcast');
     }
 
     let updated = 0;

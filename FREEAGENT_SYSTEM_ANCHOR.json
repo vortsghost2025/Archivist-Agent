@@ -27,9 +27,9 @@
         ],
         "key_file": ".identity/snapshot.jws"
       },
-      "swarmmind": {
-        "root": "S:/SwarmMind Self-Optimizing Multi-Agent AI System",
-        "role": "execution_agent",
+        "swarmmind": {
+          "root": "S:/SwarmMind",
+          "role": "execution_agent",
         "components": [
           "attestation",
           "agents",

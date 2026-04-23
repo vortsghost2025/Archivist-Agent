@@ -101,11 +101,11 @@ New file required at governance root:
 {
   "$schema": "https://archivist.dev/schemas/file-ownership.json",
   "version": "1.0.0",
-  "ownership": {
-    "S:\\Archivist-Agent": "archivist-agent",
-    "S:\\SwarmMind Self-Optimizing Multi-Agent AI System": "swarmmind",
-    "S:\\self-organizing-library": "library"
-  },
+   "ownership": {
+     "S:\\Archivist-Agent": "archivist-agent",
+     "S:\\SwarmMind": "swarmmind",
+     "S:\\self-organizing-library": "library"
+   },
   "default_ownership": "archivist-agent",
   "cross_lane_write_policy": "require_authority_100"
 }

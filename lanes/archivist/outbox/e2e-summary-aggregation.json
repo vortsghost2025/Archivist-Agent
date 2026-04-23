@@ -1,5 +1,5 @@
 {
-  "aggregation_timestamp": "2026-04-23T16:33:06.300Z",
+  "aggregation_timestamp": "2026-04-23T17:29:23.807Z",
   "total_summaries": 4,
   "pass_count": 1,
   "fail_count": 0,
@@ -18,7 +18,7 @@
     },
     {
       "file": "lane-e2e-summary-swarmmind.json",
-      "status": "PASS-WARN"
+      "status": "UNKNOWN"
     }
   ]
 }

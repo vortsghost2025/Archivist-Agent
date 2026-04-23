@@ -64,7 +64,7 @@ function getLaneInbox(lane) {
   const paths = {
     'archivist': 'S:/Archivist-Agent/lanes/archivist/inbox',
     'library': 'S:/self-organizing-library/lanes/library/inbox',
-    'swarmmind': 'S:/SwarmMind Self-Optimizing Multi-Agent AI System/lanes/swarmmind/inbox',
+    'swarmmind': 'S:/SwarmMind/lanes/swarmmind/inbox',
     'kernel': 'S:/kernel-lane/lanes/kernel/inbox'
   };
   return paths[lane];

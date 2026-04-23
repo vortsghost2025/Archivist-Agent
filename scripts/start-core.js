@@ -19,7 +19,7 @@ const path = require('path');
 
 const ARCHIVIST_ROOT = 'S:/Archivist-Agent';
 const LIBRARY_ROOT = 'S:/self-organizing-library';
-const SWARMIND_ROOT = 'S:/SwarmMind Self-Optimizing Multi-Agent AI System';
+const SWARMIND_ROOT = 'S:/SwarmMind';
 
 function runCommand(cmd, args, cwd) {
   return new Promise((resolve, reject) => {
@@ -169,7 +169,7 @@ async function main() {
   console.log('='.repeat(60));
   console.log('\nTo start lanes individually:');
   console.log('  Library:  cd S:/self-organizing-library && LANE_KEY_PASSPHRASE=<secret> npm run governed-start');
-  console.log('  SwarmMind: cd "S:/SwarmMind Self-Optimizing Multi-Agent AI System" && LANE_KEY_PASSPHRASE=<secret> npm start');
+  console.log('  SwarmMind: cd "S:/SwarmMind" && LANE_KEY_PASSPHRASE=<secret> npm start');
   console.log('\nNote: Archivist does not require governed-start (hosts trust store)');
   
   process.exit(0);

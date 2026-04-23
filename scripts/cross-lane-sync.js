@@ -40,7 +40,7 @@ const LANES = {
         id: 'swarmmind',
         role: 'trace-layer',
         position: 2,
-        root: 'S:\\SwarmMind Self-Optimizing Multi-Agent AI System',
+        root: 'S:\\SwarmMind',
         runtimeState: 'RUNTIME_STATE.json',
         upstream: 'archivist-agent'
     },

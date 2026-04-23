@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-04-23T21:02:25.638Z",
+  "lanes": {
+    "swarmmind": {
+      "lane": "swarmmind",
+      "ok": true,
+      "checks": [
+        {
+          "name": "cross-lane-sync-gate",
+          "ok": true,
+          "output": "{\n  \"trust_store_loaded\": true,\n  \"lanes\": {\n    \"archivist\": {\n      \"lane\": \"archivist\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 96,\n      \"outbox_count\": 159,\n      \"issues\": []\n    },\n    \"kernel\": {\n      \"lane\": \"kernel\",\n      \"ok\": true,\n      \"inbox_count\": 57,\n      \"processed_count\": 22,\n      \"outbox_count\": 10,\n      \"issues\": []\n    },\n    \"library\": {\n      \"lane\": \"library\",\n      \"ok\": true,\n      \"inbox_count\": 2,\n      \"processed_count\": 67,\n      \"outbox_count\": 68,\n      \"issues\": []\n    },\n    \"swarmmind\": {\n      \"lane\": \"swarmmind\",\n      \"ok\": true,\n      \"inbox_count\": 0,\n      \"processed_count\": 79,\n      \"outbox_count\": 20,\n      \"issues\": []\n    }\n  },\n  \"overall_ok\": true\n}"
+        },
+        {
+          "name": "evidence-exchange-check",
+          "ok": true,
+          "output": "Evidence exchange report written to S:\\SwarmMind\\docs\\autonomous-cycle-test\\evidence-exchange-report.json"
+        },
+        {
+          "name": "identity-enforcer",
+          "ok": true,
+          "output": "[identity] Trust store loaded: 4 lanes from S:\\SwarmMind\\lanes\\broadcast\\trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:\\SwarmMind\\lanes\\broadcast\\trust-store.json\n  archivist: keyId=147c5c2bb7d8941f algorithm=RS256 revoked=false\n  library: keyId=cb3e57dd7818da3d algorithm=RS256 revoked=false\n  swarmmind: keyId=60afaa026a3d969d algorithm=RS256 revoked=false\n  kernel: keyId=7f1a9fe931d1fbba algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
+        }
+      ]
+    }
+  },
+  "overall_ok": true
+}

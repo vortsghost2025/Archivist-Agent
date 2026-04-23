@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
+const { deriveKeyId } = require(path.join(__dirname, '..', '.global', 'deriveKeyId.js'));
+
 // LEASE + ATOMIC WRITE: Require kernel primitives for cross-lane mutation safety
 const KERNEL_ROOT = 'S:/kernel-lane';
 const { atomicWriteWithLease } = require(path.join(KERNEL_ROOT, 'scripts', 'atomic-write-util'));
@@ -15,7 +17,7 @@ const PASSFILE = 'S:/Archivist-Agent/.runtime/lane-passphrases.json';
 const LANE_IDENTITY_DIRS = {
   archivist: 'S:/Archivist-Agent/.identity',
   library: 'S:/self-organizing-library/.identity',
-  swarmmind: 'S:/SwarmMind Self-Optimizing Multi-Agent AI System/.identity',
+  swarmmind: 'S:/SwarmMind/.identity',
   kernel: 'S:/kernel-lane/.identity',
 };
 
@@ -72,7 +74,7 @@ function createSignedMessage(msg, laneId) {
     throw new Error(`PRIVATE_KEY_DECRYPT_FAILED for ${laneId}: ${e.message}`);
   }
 
-  const keyId = crypto.createHash('sha256').update(publicPem).digest('hex').substring(0, 16);
+  const keyId = deriveKeyId(publicPem);
   const from = msg.from || msg.from_lane || laneId;
   const to = msg.to || msg.to_lane || null;
   const contentHash = 'sha256:' + crypto.createHash('sha256')

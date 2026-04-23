@@ -26,7 +26,7 @@ const LANES = {
     role: 'governance-root'
   },
   'swarmmind': {
-    root: 'S:\\SwarmMind Self-Optimizing Multi-Agent AI System',
+    root: 'S:\\SwarmMind',
     role: 'trace-layer'
   },
   'library': {

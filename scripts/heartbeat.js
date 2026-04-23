@@ -12,7 +12,7 @@ const DEFAULT_CONFIG = {
   canonicalPaths: {
     archivist: 'S:/Archivist-Agent/lanes/archivist/inbox/',
     library: 'S:/self-organizing-library/lanes/library/inbox/',
-    swarmmind: 'S:/SwarmMind Self-Optimizing Multi-Agent AI System/lanes/swarmmind/inbox/',
+    swarmmind: 'S:/SwarmMind/lanes/swarmmind/inbox/',
     kernel: 'S:/kernel-lane/lanes/kernel/inbox/'
   }
 };
@@ -65,17 +65,69 @@ class Heartbeat {
   writeHeartbeat() {
     const now = new Date();
     const uptimeSeconds = Math.floor((Date.now() - this.startTime) / 1000);
-    const status = this._shuttingDown ? 'shutdown' : 'alive';
+    const heartbeatStatus = this._shuttingDown ? 'done' : 'in_progress';
 
-    const payload = {
-      lane: this.config.laneName,
+    // Create idempotency key as SHA-256 of "heartbeat-{laneName}-fixed"
+    const crypto = require('crypto');
+    const idempotencyKey = crypto.createHash('sha256').update(`heartbeat-${this.config.laneName}-fixed`).digest('hex');
+
+    // Construct schema-compliant heartbeat message
+    const message = {
+      schema_version: "1.1",
+      task_id: `heartbeat-${this.config.laneName}`,
+      idempotency_key: idempotencyKey,
+      from: this.config.laneName,
+      to: this.config.laneName,
+      type: "heartbeat",
+      task_kind: "proposal",
+      priority: "P3",
+      subject: `Heartbeat from ${this.config.laneName} lane`,
+      body: JSON.stringify({
+        lane: this.config.laneName,
+        session_active: !this._shuttingDown,
+        uptime_seconds: uptimeSeconds,
+        messages_processed: this.messagesProcessed,
+        last_inbox_scan: now.toISOString(),
+        version: '1.0'
+      }),
       timestamp: now.toISOString(),
-      status: status,
-      session_active: !this._shuttingDown,
-      uptime_seconds: uptimeSeconds,
-      messages_processed: this.messagesProcessed,
-      last_inbox_scan: now.toISOString(),
-      version: '1.0'
+      requires_action: false,
+      payload: {
+        mode: "inline"
+      },
+      execution: {
+        mode: "manual",
+        engine: "opencode",
+        actor: "lane"
+      },
+      lease: {
+        owner: null,
+        acquired_at: null,
+        expires_at: null,
+        renew_count: 0,
+        max_renewals: 3
+      },
+      retry: {
+        attempt: 1,
+        max_attempts: 3,
+        last_error: null,
+        last_attempt_at: null
+      },
+      evidence: {
+        required: true,
+        evidence_path: null,
+        verified: false,
+        verified_by: null,
+        verified_at: null
+      },
+      heartbeat: {
+        interval_seconds: this.config.intervalSeconds,
+        last_heartbeat_at: now.toISOString(),
+        timeout_seconds: this.config.staleAfterSeconds,
+        status: heartbeatStatus
+      },
+      signature: "",
+      key_id: ""
     };
 
     const dir = this.config.inboxPath;
@@ -84,7 +136,7 @@ class Heartbeat {
         fs.mkdirSync(dir, { recursive: true });
       }
       const filePath = path.join(dir, this._heartbeatFilename(this.config.laneName));
-      fs.writeFileSync(filePath, JSON.stringify(payload, null, 2) + '\n', 'utf8');
+      fs.writeFileSync(filePath, JSON.stringify(message, null, 2) + '\n', 'utf8');
     } catch (err) {
       console.error('Failed to write heartbeat:', err.message);
     }

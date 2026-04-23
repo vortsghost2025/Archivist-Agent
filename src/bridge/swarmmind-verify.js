@@ -24,7 +24,7 @@ const VERIFICATION_CATEGORIES = {
 let swarmMindVerify;
 try {
   const swarmMindPath = process.env.SWARMIND_PATH || 
-    path.resolve('S:', 'SwarmMind Self-Optimizing Multi-Agent AI System');
+    path.resolve('S:', 'SwarmMind');
   swarmMindVerify = require(path.join(swarmMindPath, 'verify.js'));
 } catch (e) {
   console.warn('[Bridge] SwarmMind not available, using fallback:', e.message);

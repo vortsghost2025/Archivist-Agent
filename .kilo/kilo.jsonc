@@ -40,7 +40,7 @@
     "external_directory": {
       "S:/Archivist-Agent": "allow",
       "S:/.global": "allow",
-      "S:/SwarmMind Self-Optimizing Multi-Agent AI System": "allow"
+      "S:/SwarmMind": "allow"
     },
     "bash": {
       "git": "allow",
