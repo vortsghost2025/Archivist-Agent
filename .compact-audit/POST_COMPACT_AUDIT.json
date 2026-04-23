@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T03:33:59.579Z",
+  "timestamp": "2026-04-23T14:36:02.945Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -77,33 +77,33 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-23T03:33:01.536Z",
-        "age_seconds": 58
+        "timestamp": "2026-04-23T14:36:01.890Z",
+        "age_seconds": 1
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-23T03:33:01.547Z",
-        "age_seconds": 58
+        "timestamp": "2026-04-23T14:36:01.911Z",
+        "age_seconds": 1
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-23T03:33:26.348Z",
-        "age_seconds": 33
+        "timestamp": "2026-04-23T14:35:30.283Z",
+        "age_seconds": 32
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-23T03:33:44.294Z",
-        "age_seconds": 15
+        "timestamp": "2026-04-23T14:35:48.032Z",
+        "age_seconds": 14
       }
     },
     "inbox_counts": {
-      "archivist": 30,
+      "archivist": 35,
       "library": 0,
-      "swarmmind": 6,
-      "kernel": 1
+      "swarmmind": 0,
+      "kernel": 0
     },
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
-    "bootstrap_hash": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
+    "bootstrap_hash": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
     "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
     "known_risks": []
   },
@@ -119,8 +119,11 @@
       "pre": "aa34293b720138040decd98d4f2ae7ca61d3b62f732f7b476d2ba7b0e12270a6",
       "post": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb"
     },
-    "bootstrap_intact": true,
-    "bootstrap_detail": null,
+    "bootstrap_intact": false,
+    "bootstrap_detail": {
+      "pre": "22c5239e090b99f7f16da87bc383840a05d1d521ff12c93f47ccf17f647259ca",
+      "post": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153"
+    },
     "handoff_intact": true,
     "handoff_detail": null,
     "message_loss": 1,
@@ -142,6 +145,7 @@
     ],
     "unexpected_changes": [
       "governance_doc_modified",
+      "bootstrap_modified",
       "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
     ]
   },
@@ -159,7 +163,7 @@
       "lane_heartbeats",
       "known_risk_set"
     ],
-    "contradictions_found": 2,
+    "contradictions_found": 3,
     "self_declared_alignment": false
   }
 }

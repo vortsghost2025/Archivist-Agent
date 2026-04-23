@@ -1,0 +1,19 @@
+[2026-04-23 09:15:19] === DUPLICATE DIRECTORY DELETION ===
+[2026-04-23 09:15:20] Canonical: S:\SwarmMind
+[2026-04-23 09:15:20] Duplicate 1: S:\SwarmMind Self-Optimizing Multi-Agent AI System
+[2026-04-23 09:15:20] Duplicate 2: S:\SwarmMind-Self-Optimizing-Multi-Agent-AI-System
+[2026-04-23 09:15:20] 
+[2026-04-23 09:15:20] Canonical files: 1339
+[2026-04-23 09:15:20] Duplicate 1: 1327 files, 65.7 MB
+[2026-04-23 09:15:20] Duplicate 2: 464 files, 10.21 MB
+[2026-04-23 09:15:20] 
+[2026-04-23 09:15:20] === EXECUTING DELETION ===
+[2026-04-23 09:15:20] [ERROR] Failed to delete S:\SwarmMind Self-Optimizing Multi-Agent AI System : Incorrect function.
+
+[2026-04-23 09:15:20] [ERROR] Failed to delete S:\SwarmMind-Self-Optimizing-Multi-Agent-AI-System : The process cannot access the file 'S:\SwarmMind-Self-Optimizing-Multi-Agent-AI-System' because it is being used by another process.
+[2026-04-23 09:15:20] 
+[2026-04-23 09:15:20] === DELETION COMPLETE ===
+[2026-04-23 09:15:20] Directories deleted: 0
+[2026-04-23 09:15:20] Canonical remains: S:\SwarmMind (1339 files)
+[2026-04-23 09:15:20] 
+[2026-04-23 09:15:20] System now uses canonical path only.
