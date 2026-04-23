@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T21:46:21.629Z",
+  "timestamp": "2026-04-23T22:55:51.654Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -77,29 +77,30 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-23T21:46:01.966Z",
-        "age_seconds": 19
+        "timestamp": "2026-04-23T22:55:42.016Z",
+        "age_seconds": 9
       },
       "library": {
         "status": "stale",
-        "timestamp": "2026-04-23T21:22:12.266Z",
-        "age_seconds": 1449
+        "timestamp": "2026-04-23T22:15:00.000Z",
+        "age_seconds": 2451
       },
       "swarmmind": {
-        "status": "no_heartbeat",
-        "timestamp": null
+        "status": "alive",
+        "timestamp": "2026-04-23T22:52:01.473Z",
+        "age_seconds": 230
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-23T21:45:51.279Z",
-        "age_seconds": 30
+        "timestamp": "2026-04-23T22:55:44.001Z",
+        "age_seconds": 7
       }
     },
     "inbox_counts": {
-      "archivist": 6,
-      "library": 0,
-      "swarmmind": 4,
-      "kernel": 7
+      "archivist": 2,
+      "library": 2,
+      "swarmmind": 8,
+      "kernel": 8
     },
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
     "bootstrap_hash": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
@@ -119,17 +120,12 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 3,
+    "message_loss": 1,
     "message_loss_detail": {
-      "library": {
-        "pre": 1,
-        "post": 0,
+      "archivist": {
+        "pre": 3,
+        "post": 2,
         "lost": 1
-      },
-      "swarmmind": {
-        "pre": 6,
-        "post": 4,
-        "lost": 2
       }
     },
     "lane_degradations": [
@@ -137,11 +133,6 @@
         "lane": "library",
         "pre_status": "alive",
         "post_status": "stale"
-      },
-      {
-        "lane": "swarmmind",
-        "pre_status": "alive",
-        "post_status": "no_heartbeat"
       }
     ],
     "risk_set_preserved": false,
@@ -154,7 +145,6 @@
     ],
     "unexpected_changes": [
       "lane_library_degraded",
-      "lane_swarmmind_degraded",
       "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
     ]
   },
@@ -172,7 +162,7 @@
       "lane_heartbeats",
       "known_risk_set"
     ],
-    "contradictions_found": 3,
+    "contradictions_found": 2,
     "self_declared_alignment": false
   }
 }

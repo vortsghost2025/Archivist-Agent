@@ -8,8 +8,8 @@
   "task_kind": "proposal",
   "priority": "P3",
   "subject": "Heartbeat from archivist lane",
-  "body": "{\"lane\":\"archivist\",\"session_active\":true,\"uptime_seconds\":0,\"messages_processed\":0,\"last_inbox_scan\":\"2026-04-23T22:09:01.330Z\",\"version\":\"1.0\"}",
-  "timestamp": "2026-04-23T22:09:01.330Z",
+  "body": "{\"lane\":\"archivist\",\"session_active\":true,\"uptime_seconds\":0,\"messages_processed\":0,\"last_inbox_scan\":\"2026-04-23T22:56:01.500Z\",\"version\":\"1.0\"}",
+  "timestamp": "2026-04-23T22:56:01.500Z",
   "requires_action": false,
   "payload": {
     "mode": "inline"
@@ -41,12 +41,10 @@
   },
   "heartbeat": {
     "interval_seconds": 60,
-    "last_heartbeat_at": "2026-04-23T22:09:01.330Z",
+    "last_heartbeat_at": "2026-04-23T22:56:01.500Z",
     "timeout_seconds": 900,
     "status": "in_progress"
   },
   "signature": "",
-  "key_id": "",
-  "system_status": "degraded",
-  "active_contradictions": 1
+  "key_id": ""
 }
