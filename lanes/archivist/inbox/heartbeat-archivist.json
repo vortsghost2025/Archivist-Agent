@@ -8,8 +8,8 @@
   "task_kind": "proposal",
   "priority": "P3",
   "subject": "Heartbeat from archivist lane",
-  "body": "{\"lane\":\"archivist\",\"session_active\":true,\"uptime_seconds\":0,\"messages_processed\":0,\"last_inbox_scan\":\"2026-04-24T01:43:01.993Z\",\"version\":\"1.0\"}",
-  "timestamp": "2026-04-24T01:43:01.993Z",
+  "body": "{\"lane\":\"archivist\",\"session_active\":true,\"uptime_seconds\":27723,\"messages_processed\":0,\"last_inbox_scan\":\"2026-04-24T05:57:45.224Z\",\"version\":\"1.0\"}",
+  "timestamp": "2026-04-24T05:57:45.224Z",
   "requires_action": false,
   "payload": {
     "mode": "inline"
@@ -41,18 +41,10 @@
   },
   "heartbeat": {
     "interval_seconds": 60,
-    "last_heartbeat_at": "2026-04-24T01:43:01.993Z",
+    "last_heartbeat_at": "2026-04-24T05:57:45.224Z",
     "timeout_seconds": 900,
     "status": "in_progress"
   },
   "signature": "",
-  "key_id": "",
-  "system_state": "degraded",
-  "active_contradictions": [
-    "swarmmind_no_heartbeat",
-    "priority_P0_contradiction"
-  ],
-  "processed_ok": true,
-  "compaction_enabled": false,
-  "compaction_suspend_reason": "Active contradictions present"
+  "key_id": ""
 }
