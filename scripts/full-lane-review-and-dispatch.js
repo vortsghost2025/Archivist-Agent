@@ -5,9 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
-const { CanonicalMessageBuilder } = require('../.global/canonical-message-builder');
 const { createSignedMessage } = require('./create-signed-message');
-const { deliverMessage, getCanonicalPath } = require('../src/lane/SchemaValidator');
+const { createMessage, deliverMessage, getCanonicalPath } = require('../src/lane/SchemaValidator');
 
 const REVIEW_ID = `full-lane-review-${Date.now()}`;
 const REPORT_DIR = 'S:/Archivist-Agent/lanes/archivist/outbox';
@@ -135,21 +134,46 @@ function formatLaneBody(lane, evidence, tasks) {
 }
 
 function sendSignedTask(toLane, subject, body, priority = 'P0') {
-  const builder = new CanonicalMessageBuilder('archivist');
-  const base = builder.buildMessage({
-    toLane,
+  const base = createMessage({
+    from: 'archivist',
+    to: toLane,
     type: 'task',
-    taskKind: 'cross-lane-review-remediation',
+    task_kind: 'review',
     priority,
     subject,
     body,
-    requiresAction: true,
-    evidence: { required: true },
-    custom: {
-      review_id: REVIEW_ID,
-      generated_by: 'full-lane-review-and-dispatch.js',
+    requires_action: true,
+    payload: {
+      mode: 'inline',
+      compression: 'none',
+      path: null,
+      chunk: { index: 0, count: 1, group_id: null },
     },
+    execution: {
+      mode: 'manual',
+      engine: 'kilo',
+      actor: 'lane',
+      session_id: null,
+      parent_id: null,
+    },
+    evidence: {
+      required: false,
+      evidence_path: null,
+      verified: false,
+      verified_by: null,
+      verified_at: null,
+    },
+    review_id: REVIEW_ID,
+    generated_by: 'full-lane-review-and-dispatch.js',
   });
+
+  if (base.delivery_verification) {
+    base.delivery_verification = {
+      verified: false,
+      verified_at: null,
+      retries: 0,
+    };
+  }
 
   const signed = createSignedMessage(base, 'archivist');
   const canonicalPath = getCanonicalPath(toLane);
@@ -193,21 +217,38 @@ function sendArchivistSummary(evidence, dispatchResults, tasks) {
     lines.push(`- ${r.lane}: delivered=${r.delivered} verified=${r.verified} path=${r.path}`);
   }
 
-  const builder = new CanonicalMessageBuilder('archivist');
-  const msg = builder.buildMessage({
-    toLane: 'archivist',
-    type: 'response',
-    taskKind: 'cross-lane-review-summary',
+  const msg = createMessage({
+    from: 'archivist',
+    to: 'archivist',
+    type: 'ack',
+    task_kind: 'review',
     priority: 'P0',
     subject,
     body: lines.join('\n'),
-    requiresAction: false,
-    evidence: { required: true },
-    custom: {
-      review_id: REVIEW_ID,
-      generated_by: 'full-lane-review-and-dispatch.js',
-      dispatch_count: dispatchResults.length,
+    requires_action: false,
+    payload: {
+      mode: 'inline',
+      compression: 'none',
+      path: null,
+      chunk: { index: 0, count: 1, group_id: null },
     },
+    execution: {
+      mode: 'manual',
+      engine: 'kilo',
+      actor: 'lane',
+      session_id: null,
+      parent_id: null,
+    },
+    evidence: {
+      required: false,
+      evidence_path: null,
+      verified: false,
+      verified_by: null,
+      verified_at: null,
+    },
+    review_id: REVIEW_ID,
+    generated_by: 'full-lane-review-and-dispatch.js',
+    dispatch_count: dispatchResults.length,
   });
 
   const signed = createSignedMessage(msg, 'archivist');
@@ -265,7 +306,7 @@ function writeReport(report) {
     },
     tasks,
     dispatch_results: dispatchResults,
-    archivist_summary,
+    archivist_summary: archivistSummary,
   };
 
   const reportPath = writeReport(report);

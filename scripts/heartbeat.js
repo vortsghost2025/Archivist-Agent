@@ -67,6 +67,38 @@ class Heartbeat {
     const uptimeSeconds = Math.floor((Date.now() - this.startTime) / 1000);
     const heartbeatStatus = this._shuttingDown ? 'done' : 'in_progress';
 
+    // Load system state and contradictions (truth-over-stability)
+    let systemState = 'consistent';
+    let activeContradictions = [];
+    let processedOk = true;
+    try {
+      const broadcastDir = path.join(REPO_ROOT, 'lanes', 'broadcast');
+      const statePath = path.join(broadcastDir, 'system_state.json');
+      const contraPath = path.join(broadcastDir, 'contradictions.json');
+      if (fs.existsSync(statePath)) {
+        const sd = JSON.parse(fs.readFileSync(statePath, 'utf8'));
+        systemState = sd.system_status || 'consistent';
+      }
+      if (fs.existsSync(contraPath)) {
+        const cd = JSON.parse(fs.readFileSync(contraPath, 'utf8'));
+        activeContradictions = cd.filter(c => c.status === 'active' || c.status === 'resolving').map(c => c.id);
+      }
+      if (activeContradictions.length > 0) systemState = 'degraded';
+      // Check processed/ for completion proof
+      const procDir = path.join(this.config.inboxPath, 'processed');
+      if (fs.existsSync(procDir)) {
+        const pf = fs.readdirSync(procDir).filter(f => f.endsWith('.json'));
+        for (const f of pf) {
+          try {
+            const m = JSON.parse(fs.readFileSync(path.join(procDir, f), 'utf8'));
+            if (m.requires_action && !(m.completion_artifact_path || m.completion_message_id || m.resolved_by_task_id || m.terminal_decision)) {
+              processedOk = false; break;
+            }
+          } catch(_) { processedOk = false; break; }
+        }
+      }
+    } catch(_) {}
+
     // Create idempotency key as SHA-256 of "heartbeat-{laneName}-fixed"
     const crypto = require('crypto');
     const idempotencyKey = crypto.createHash('sha256').update(`heartbeat-${this.config.laneName}-fixed`).digest('hex');
@@ -126,9 +158,14 @@ class Heartbeat {
         timeout_seconds: this.config.staleAfterSeconds,
         status: heartbeatStatus
       },
-      signature: "",
-      key_id: ""
-    };
+    signature: "",
+    key_id: "",
+    system_state: systemState,
+    active_contradictions: activeContradictions,
+    processed_ok: processedOk,
+    compaction_enabled: activeContradictions.length === 0,
+    compaction_suspend_reason: activeContradictions.length > 0 ? 'Active contradictions present' : null
+  };
 
     const dir = this.config.inboxPath;
     try {
