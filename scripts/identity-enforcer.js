@@ -6,9 +6,9 @@ const path = require('path');
 const crypto = require('crypto');
 
 const TRUST_STORE_SEARCH_PATHS = [
+  'S:/SwarmMind/lanes/broadcast/trust-store.json',
   'S:/Archivist-Agent/lanes/broadcast/trust-store.json',
   'S:/self-organizing-library/lanes/broadcast/trust-store.json',
-  'S:/SwarmMind/lanes/broadcast/trust-store.json',
   'S:/kernel-lane/lanes/broadcast/trust-store.json',
 ];
 
@@ -240,19 +240,21 @@ class IdentityEnforcer {
   }
 
   static signMessage(msg, privateKey, keyId) {
-    const { stableStringify } = require(path.join(
-      fs.existsSync('S:/self-organizing-library/src/attestation/stableStringify.js')
-        ? 'S:/self-organizing-library/src/attestation'
-        : 'S:/kernel-lane/src/attestation',
-      'stableStringify.js'
-    ));
+const { stableStringify } = require(path.join(
+  fs.existsSync('S:/SwarmMind/src/attestation/stableStringify.js')
+  ? 'S:/SwarmMind/src/attestation'
+  : fs.existsSync('S:/self-organizing-library/src/attestation/stableStringify.js')
+  ? 'S:/self-organizing-library/src/attestation'
+  : 'S:/kernel-lane/src/attestation',
+  'stableStringify.js'
+));
 
     const header = { alg: 'RS256', typ: 'JWT', kid: keyId };
     const headerB64 = Buffer.from(JSON.stringify(header)).toString('base64')
       .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
-    const signablePayload = {
-      id: msg.id,
+  const signablePayload = {
+  id: msg.id || msg.task_id || 'unknown',
       lane: msg.from || msg.from_lane || msg.lane,
       from: msg.from || msg.from_lane,
       to: msg.to || msg.to_lane,

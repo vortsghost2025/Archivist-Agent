@@ -1,32 +1,11 @@
 {
-  "timestamp": "2026-04-24T00:21:20.033Z",
+  "timestamp": "2026-04-24T15:28:16.101Z",
   "overall_ok": true,
   "lanes": {
-    "archivist": {
-      "lane": "archivist",
-      "ok": true,
-      "total": 100,
-      "violations": [],
-      "message": "All clear"
-    },
-    "kernel": {
-      "lane": "kernel",
-      "ok": true,
-      "total": 86,
-      "violations": [],
-      "message": "All clear"
-    },
     "library": {
       "lane": "library",
       "ok": true,
-      "total": 73,
-      "violations": [],
-      "message": "All clear"
-    },
-    "swarmmind": {
-      "lane": "swarmmind",
-      "ok": true,
-      "total": 121,
+      "total": 67,
       "violations": [],
       "message": "All clear"
     }

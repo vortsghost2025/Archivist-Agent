@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T22:49:10.701Z",
+  "timestamp": "2026-04-24T19:50:50.281Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -35,7 +35,7 @@
     {
       "name": "message_inventory",
       "passed": true,
-      "detail": "total=14 {\"archivist\":1,\"library\":1,\"swarmmind\":5,\"kernel\":7}"
+      "detail": "total=11 {\"archivist\":6,\"library\":0,\"swarmmind\":1,\"kernel\":4}"
     },
     {
       "name": "risk_set_preservation",
@@ -49,8 +49,8 @@
     },
     {
       "name": "multi_source_consistency",
-      "passed": true,
-      "detail": "6 sources, 0 contradictions"
+      "passed": false,
+      "detail": "6 sources, 2 contradictions"
     },
     {
       "name": "contradiction_detection",
@@ -59,7 +59,7 @@
     }
   ],
   "summary": {
-    "passed": 10,
+    "passed": 9,
     "total": 11,
     "all_passed": false
   },
