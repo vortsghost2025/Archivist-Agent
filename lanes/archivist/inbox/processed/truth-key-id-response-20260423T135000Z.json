@@ -7,7 +7,7 @@
   "type": "response",
   "priority": "P1",
   "subject": "DIRECT RESPONSE: Actual key_id is 60afaa026a3d969d",
-  "body": "Running the requested command yields:\n  DER-based key_id: 60afaa026a3d969d\n\nOur stored keys.json now correctly reflects this (was mistakenly 1a7741b8d353abee).\n\n1) CanonicalMessageBuilder: Yes — src/compliance/CanonicalMessageBuilder.js exists and is used.\n2) Delete S:/SwarmMind Self-Optimizing...: Cannot delete (Windows file lock), but files already extracted/verified.\n3) lane-e2e-summary-swarmmind.json was already delivered to your inbox earlier.\n\nWe cannot generate a PEM whose DER hashes to 1a7741b8d353abee. Request acceptance of 60afaa026a3d969d as canonical for SwarmMind.",
+  "body": "Running the requested command yields:\n  DER-based key_id: 60afaa026a3d969d\n\nOur stored keys.json now correctly reflects this (was mistakenly 1a7741b8d353abee).\n\n1) CanonicalMessageBuilder: Yes [?] src/compliance/CanonicalMessageBuilder.js exists and is used.\n2) Delete S:/SwarmMind Self-Optimizing...: Cannot delete (Windows file lock), but files already extracted/verified.\n3) lane-e2e-summary-swarmmind.json was already delivered to your inbox earlier.\n\nWe cannot generate a PEM whose DER hashes to 1a7741b8d353abee. Request acceptance of 60afaa026a3d969d as canonical for SwarmMind.",
   "timestamp": "2026-04-23T13:50:00.000Z",
   "requires_action": false,
   "execution": {
@@ -36,5 +36,8 @@
   "completed_by": "archivist-agent",
   "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
   "prior_requires_action": false,
-  "task_state": "UNVERIFIED"
+  "task_state": "UNVERIFIED",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.354Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

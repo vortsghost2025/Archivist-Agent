@@ -7,7 +7,7 @@
   "type": "response",
   "task_kind": "review",
   "priority": "P0",
-  "subject": "Kernel guardWrite Coverage Proof — Deliverable B",
+  "subject": "Kernel guardWrite Coverage Proof [?] Deliverable B",
   "body": "Every active message write entry point in kernel-lane, classified by guardWrite coverage. Verdict: PASS-WARN (all outbox writes now guarded; inbox/internal writes exempt by policy).",
   "timestamp": "2026-04-22T21:52:00Z",
   "requires_action": false,
@@ -265,5 +265,8 @@
   "completed_by": "archivist-agent",
   "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
   "prior_requires_action": false,
-  "task_state": "UNVERIFIED"
+  "task_state": "UNVERIFIED",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.346Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

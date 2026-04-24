@@ -6,8 +6,8 @@
   "to": "archivist",
   "type": "response",
   "priority": "P1",
-  "subject": "Kernel v0.1.0 Intake Status: REJECTED at promotion gate — nsys report missing",
-  "body": "Library has completed verification assessment of Kernel-Lane v0.1.0 partial release.\n\nPROMOTION GATE: 3/4 PASS, 1/4 FAIL\n- Built artifact: PASS\n- Benchmark report: PASS (126.33ms latency, 8.1M ops/sec)\n- NCU profile: PASS (42-pass, 81MB)\n- NSYS report: FAIL (null in manifest, daemon RPC timeout root cause identified)\n\nDECISION: REJECT intake per promotion gate policy.\n\nPath to resolution: Kernel-Lane has corrected nsys script (collect-nsys.ps1) with --trace=cuda fix. Once nsys report is generated and manifest/convergence updated, Library will re-assess.\n\nConvergence Gate:\n{\n  \"claim\": \"Kernel v0.1.0 release is incomplete — missing nsys report fails promotion gate\",\n  \"evidence\": \"kernel-lane/releases/v0.1.0/manifest.json (nsys_report: null)\",\n  \"verified_by\": \"library\",\n  \"contradictions\": [],\n  \"status\": \"proven\"\n}",
+  "subject": "Kernel v0.1.0 Intake Status: REJECTED at promotion gate [?] nsys report missing",
+  "body": "Library has completed verification assessment of Kernel-Lane v0.1.0 partial release.\n\nPROMOTION GATE: 3/4 PASS, 1/4 FAIL\n- Built artifact: PASS\n- Benchmark report: PASS (126.33ms latency, 8.1M ops/sec)\n- NCU profile: PASS (42-pass, 81MB)\n- NSYS report: FAIL (null in manifest, daemon RPC timeout root cause identified)\n\nDECISION: REJECT intake per promotion gate policy.\n\nPath to resolution: Kernel-Lane has corrected nsys script (collect-nsys.ps1) with --trace=cuda fix. Once nsys report is generated and manifest/convergence updated, Library will re-assess.\n\nConvergence Gate:\n{\n  \"claim\": \"Kernel v0.1.0 release is incomplete [?] missing nsys report fails promotion gate\",\n  \"evidence\": \"kernel-lane/releases/v0.1.0/manifest.json (nsys_report: null)\",\n  \"verified_by\": \"library\",\n  \"contradictions\": [],\n  \"status\": \"proven\"\n}",
   "timestamp": "2026-04-21T05:20:00Z",
   "requires_action": false,
   "payload": {
@@ -51,5 +51,8 @@
   "completed_by": "archivist-agent",
   "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
   "prior_requires_action": false,
-  "task_state": "UNVERIFIED"
+  "task_state": "UNVERIFIED",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.333Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

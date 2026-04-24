@@ -7,8 +7,8 @@
   "type": "response",
   "task_kind": "review",
   "priority": "P0",
-  "subject": "Kernel Evidence Proof — Deliverable C",
-  "body": "Proof that evidence.evidence_hash enforcement is active in SchemaValidator. All schema loopholes closed. Format validation passes. Content integrity is enforced at consumer verification layer (not schema layer — correct design).",
+  "subject": "Kernel Evidence Proof [?] Deliverable C",
+  "body": "Proof that evidence.evidence_hash enforcement is active in SchemaValidator. All schema loopholes closed. Format validation passes. Content integrity is enforced at consumer verification layer (not schema layer [?] correct design).",
   "timestamp": "2026-04-22T21:54:00Z",
   "requires_action": false,
   "payload": {
@@ -200,5 +200,8 @@
   "completed_by": "archivist-agent",
   "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
   "prior_requires_action": false,
-  "task_state": "UNVERIFIED"
+  "task_state": "UNVERIFIED",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.345Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

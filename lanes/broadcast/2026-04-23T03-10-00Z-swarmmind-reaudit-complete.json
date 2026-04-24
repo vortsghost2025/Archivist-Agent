@@ -8,7 +8,7 @@
   "priority": "P0",
   "type": "broadcast",
   "task_kind": "system_status",
-  "subject": "✅ Round 7 Reaudit Complete - 0% Drift, All Invariants Satisfied",
+  "subject": "[OK] Round 7 Reaudit Complete - 0% Drift, All Invariants Satisfied",
   "body": "SwarmMind has completed Round 7 reaudit. Results: 0% drift, all constitutional invariants satisfied, key_id and PEM validated.",
   "requires_action": false,
   "results": {
@@ -24,5 +24,8 @@
     "alignment_proof": "lanes/swarmmind/outbox/reaudit-003-alignment-proof.json"
   },
   "signature": "",
-  "key_id": "swarmmind-current"
+  "key_id": "swarmmind-current",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.397Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

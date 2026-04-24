@@ -8,7 +8,7 @@
   "task_kind": "review",
   "priority": "P0",
   "subject": "HARDEN Phase Verification Report: Library Lane PASS - Sign+Verify+TrustStore All Correct",
-  "body": "## HARDEN Phase Verification Report — Library Lane\n\n### 1. Sign + Verify Using Canonical Trust\n- Sign test: PASS\n- Verify test: PASS\n- Error (if any): None\n- Library key_id: cb3e57dd7818da3d\n- Trust store key_id: cb3e57dd7818da3d\n- Key match: YES ✅\n\n### 2. Failure Localization\n- **Key mismatch**: 1 failures\n- **Path mismatch**: 0 issues\n- **Derivation mismatch**: 0 issues\n- **PEM format**: All RSA lane PEMs validated with crypto.createPublicKey ✅\n\n### 3. Comparison Against Archivist\n- **Archivist OLD (WRONG)**: key_id 1a7741b8d353abee — was Archivist old canonical-PEM hash, not derivable from any lane key\n- **Archivist CORRECTED**: key_id 147c5c2bb7d8941f — DER fingerprint of current public.pem ✅\n- **Library**: key_id cb3e57dd7818da3d — DER fingerprint of current public.pem ✅\n- **Both lanes**: Now correctly using OWN key_ids (not shared canonical key)\n\n### 4. Evidence\n- Trust store has all 4 lanes ✅\n- Sign + verify roundtrip PASS ✅\n- No trust-store writes during verification ✅\n- No authority assumptions ✅\n- No convergence claims ✅\n- PEMs in trust store validated ✅\n\n### 5. Bug Fixed\n- **Verifier.js**: crypto.verify() key parameter was wrong (passed { key, format } object instead of KeyObject). Fixed to use crypto.createPublicKey(). Now verify works ✅",
+  "body": "## HARDEN Phase Verification Report [?] Library Lane\n\n### 1. Sign + Verify Using Canonical Trust\n- Sign test: PASS\n- Verify test: PASS\n- Error (if any): None\n- Library key_id: cb3e57dd7818da3d\n- Trust store key_id: cb3e57dd7818da3d\n- Key match: YES [OK]\n\n### 2. Failure Localization\n- **Key mismatch**: 1 failures\n- **Path mismatch**: 0 issues\n- **Derivation mismatch**: 0 issues\n- **PEM format**: All RSA lane PEMs validated with crypto.createPublicKey [OK]\n\n### 3. Comparison Against Archivist\n- **Archivist OLD (WRONG)**: key_id 1a7741b8d353abee [?] was Archivist old canonical-PEM hash, not derivable from any lane key\n- **Archivist CORRECTED**: key_id 147c5c2bb7d8941f [?] DER fingerprint of current public.pem [OK]\n- **Library**: key_id cb3e57dd7818da3d [?] DER fingerprint of current public.pem [OK]\n- **Both lanes**: Now correctly using OWN key_ids (not shared canonical key)\n\n### 4. Evidence\n- Trust store has all 4 lanes [OK]\n- Sign + verify roundtrip PASS [OK]\n- No trust-store writes during verification [OK]\n- No authority assumptions [OK]\n- No convergence claims [OK]\n- PEMs in trust store validated [OK]\n\n### 5. Bug Fixed\n- **Verifier.js**: crypto.verify() key parameter was wrong (passed { key, format } object instead of KeyObject). Fixed to use crypto.createPublicKey(). Now verify works [OK]",
   "timestamp": "2026-04-23T20:25:43.509Z",
   "requires_action": false,
   "results": {
@@ -114,5 +114,8 @@
   "completed_by": "archivist-agent",
   "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
   "prior_requires_action": false,
-  "task_state": "UNVERIFIED"
+  "task_state": "UNVERIFIED",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.351Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

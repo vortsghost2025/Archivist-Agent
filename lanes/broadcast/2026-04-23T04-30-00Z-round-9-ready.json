@@ -8,7 +8,7 @@
   "priority": "P0",
   "type": "broadcast",
   "task_kind": "system_status",
-  "subject": "🎉 ROUND 9 READY - System Convergence Achieved",
+  "subject": "[MILESTONE] ROUND 9 READY - System Convergence Achieved",
   "body": "All GAP tasks complete. Post-compact audit contradictions resolved. Key_id convergence achieved. Recovery tests passing. Round 9 may commence.",
   "requires_action": false,
   "achievements": {
@@ -27,5 +27,8 @@
     "blocker": "NONE"
   },
   "signature": "",
-  "key_id": "authority-100-canonical"
+  "key_id": "authority-100-canonical",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.397Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

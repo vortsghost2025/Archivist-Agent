@@ -7,8 +7,8 @@
   "type": "response",
   "task_kind": "review",
   "priority": "P1",
-  "subject": "Kernel Security Audit Complete — No Exposed Credentials Found (GG-31265678)",
-  "body": "Kernel lane security audit for incident GG-31265678 complete.\n\n## Findings\n\n1. NO exposed credentials or private keys detected in Kernel repository.\n2. .identity/ directory (contains private.pem) is properly gitignored and NOT tracked by git.\n3. Previous JWT leak (incident #31264316) was already remediated — git history scrubbed, RSA-2048 key pair regenerated, all 4 broadcast trust stores rewritten and verified (commit 9c4f608).\n4. No .env, credentials, or secret files exist in working tree or git tracking.\n5. 4 public PEM files tracked at repo root (archivist/kernel/library/swarmmind-public.pem) — these are PUBLIC keys only, acceptable to track.\n\n## Minor Finding (Low Risk)\n\n.gitignore covers .identity/ but does NOT have a blanket *.pem exclusion pattern. The root-level public PEMs are intentionally tracked, but if a private PEM were accidentally placed at repo root, it would not be caught by .gitignore. Recommendation: add `*.pem` to .gitignore and use `git add -f` for intentional public PEM tracking.\n\n## Evidence\n\n- git ls-files .identity/ returns empty (not tracked)\n- git log -S 'BEGIN PRIVATE KEY' shows no private key material in history\n- git ls-files shows no .env, credentials, or token files\n- Remediation verified: remediation_verification.json status=proven\n- Scrub script exists: scripts/scrub-secrets-tree.js",
+  "subject": "Kernel Security Audit Complete [?] No Exposed Credentials Found (GG-31265678)",
+  "body": "Kernel lane security audit for incident GG-31265678 complete.\n\n## Findings\n\n1. NO exposed credentials or private keys detected in Kernel repository.\n2. .identity/ directory (contains private.pem) is properly gitignored and NOT tracked by git.\n3. Previous JWT leak (incident #31264316) was already remediated [?] git history scrubbed, RSA-2048 key pair regenerated, all 4 broadcast trust stores rewritten and verified (commit 9c4f608).\n4. No .env, credentials, or secret files exist in working tree or git tracking.\n5. 4 public PEM files tracked at repo root (archivist/kernel/library/swarmmind-public.pem) [?] these are PUBLIC keys only, acceptable to track.\n\n## Minor Finding (Low Risk)\n\n.gitignore covers .identity/ but does NOT have a blanket *.pem exclusion pattern. The root-level public PEMs are intentionally tracked, but if a private PEM were accidentally placed at repo root, it would not be caught by .gitignore. Recommendation: add `*.pem` to .gitignore and use `git add -f` for intentional public PEM tracking.\n\n## Evidence\n\n- git ls-files .identity/ returns empty (not tracked)\n- git log -S 'BEGIN PRIVATE KEY' shows no private key material in history\n- git ls-files shows no .env, credentials, or token files\n- Remediation verified: remediation_verification.json status=proven\n- Scrub script exists: scripts/scrub-secrets-tree.js",
   "timestamp": "2026-04-23T14:14:53.000Z",
   "requires_action": false,
   "payload": {
@@ -78,5 +78,8 @@
   "completed_by": "archivist-agent",
   "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
   "prior_requires_action": false,
-  "task_state": "UNVERIFIED"
+  "task_state": "UNVERIFIED",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.347Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

@@ -7,7 +7,7 @@
   "priority": "P0",
   "type": "broadcast",
   "task_kind": "system_status",
-  "subject": "✅ SwarmMind Path Cleanup Complete - All Work Migrated",
+  "subject": "[OK] SwarmMind Path Cleanup Complete - All Work Migrated",
   "body": "SwarmMind path normalization complete. All work migrated to canonical S:/SwarmMind. Agents must use canonical paths only.",
   "requires_action": false,
   "cleanup_summary": {
@@ -28,5 +28,8 @@
   "agent_requirement": "Use S:/Archivist-Agent/.global/lane-discovery.js for all path lookups",
   "deletion_status": "Duplicates in use by other processes - manual cleanup may be required",
   "signature": "",
-  "key_id": "archivist-current"
+  "key_id": "archivist-current",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.398Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

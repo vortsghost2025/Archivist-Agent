@@ -66,6 +66,17 @@ function isActionRequiredMessage(msg) {
   );
 }
 
+function isEnglishOnly(msg) {
+  const textFields = ['subject', 'body', 'type', 'from', 'to'];
+  for (const field of textFields) {
+    const val = msg && msg[field];
+    if (typeof val === 'string' && /[^\x00-\x7F]/.test(val)) {
+      return false;
+    }
+  }
+  return true;
+}
+
 const DEFAULT_CONFIG = {
   laneName: 'archivist',
   inboxPath: path.join(__dirname, '..', 'lanes', 'archivist', 'inbox'),
@@ -220,11 +231,16 @@ class InboxWatcher {
           msg._sourcePath = filePath;
           const idResult = this.identityEnforcer.enforceMessage(msg);
           msg._identity = idResult;
-          if (idResult.decision === 'reject') {
-            console.log(`[watcher] IDENTITY_REJECT: ${filename} from ${idResult.from} — ${idResult.reason}`);
-            await this.moveToExpired(filename, filePath);
-            continue;
-          }
+      if (idResult.decision === 'reject') {
+        console.log(`[watcher] IDENTITY_REJECT: ${filename} from ${idResult.from} — ${idResult.reason}`);
+        await this.moveToExpired(filename, filePath);
+        continue;
+      }
+      if (!isEnglishOnly(msg)) {
+        console.log(`[watcher] FORMAT_VIOLATION: ${filename} — non-ASCII content detected, marking format_violation=true`);
+        msg.format_violation = true;
+        msg.format_violation_reason = 'Non-ASCII content detected in message fields per English-only constraint';
+      }
           if (!this.checkIdempotencyKey(msg)) {
           await this.moveToProcessed(filename, filePath);
           continue;

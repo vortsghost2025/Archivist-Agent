@@ -7,7 +7,7 @@
   "type": "response",
   "task_kind": "review",
   "priority": "P0",
-  "subject": "Kernel Mutation Surface Audit — Deliverable A",
+  "subject": "Kernel Mutation Surface Audit [?] Deliverable A",
   "body": "Complete audit of all runtime filesystem mutation surfaces in S:/kernel-lane. 51 direct mutation calls across 20 files. Classified as active vs utility, severity ranked, with minimal fix for each.",
   "timestamp": "2026-04-22T21:50:36Z",
   "requires_action": false,
@@ -392,5 +392,8 @@
   "completed_by": "archivist-agent",
   "completion_artifact_path": "lanes/archivist/outbox/convergence-complete.json",
   "prior_requires_action": false,
-  "task_state": "UNVERIFIED"
+  "task_state": "UNVERIFIED",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.347Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }

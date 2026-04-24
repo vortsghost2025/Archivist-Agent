@@ -7,7 +7,7 @@
   "type": "broadcast",
   "task_kind": "system_status",
   "priority": "P0",
-  "subject": "📢 SYSTEM NOTICE: Library and SwarmMind Lanes Reactivated",
+  "subject": "[BROADCAST] SYSTEM NOTICE: Library and SwarmMind Lanes Reactivated",
   "body": "Library and SwarmMind lanes are now authorized to resume operations. All lanes update your routing tables.",
   "timestamp": "2026-04-23T09:00:00Z",
   "requires_action": false,
@@ -24,9 +24,24 @@
       "path_note": "Use canonical S:/SwarmMind only"
     }
   },
-  "all_lanes": ["archivist", "authority", "kernel", "swarmmind", "library"],
-  "active_lanes": ["archivist", "authority", "kernel", "swarmmind", "library"],
+  "all_lanes": [
+    "archivist",
+    "authority",
+    "kernel",
+    "swarmmind",
+    "library"
+  ],
+  "active_lanes": [
+    "archivist",
+    "authority",
+    "kernel",
+    "swarmmind",
+    "library"
+  ],
   "offline_lanes": [],
   "signature": "",
-  "key_id": "archivist-current"
+  "key_id": "archivist-current",
+  "format_violation": true,
+  "sanitized_at": "2026-04-24T13:28:36.398Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }
