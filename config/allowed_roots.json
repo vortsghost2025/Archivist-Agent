@@ -1,5 +1,9 @@
 {
   "allowed_roots": [
+    "S:/Archivist-Agent",
+    "S:/kernel-lane",
+    "S:/self-organizing-library",
+    "S:/SwarmMind",
     "S:\\workspace",
     "S:\\projects"
   ],
