@@ -356,6 +356,9 @@ All three failure modes were discovered in a single end-to-end relay loop test. 
 - Verification layer subject to same failure modes it detects
 - Meta-level checks needed for constraint applicability
 - Temporal reachability, semantic coverage, observational scope must be verified before constraint evaluation
+- **Verification validity principle:** A verification result is only valid if the constraint under which it was evaluated is itself valid within the current system state
+- **Verification drift:** system behaves correctly but verification misclassifies it (distinct from system drift)
+- **VDS (Verification Drift Score):** misclassification events / total verification events; target VDS = 0
 
 ---
 

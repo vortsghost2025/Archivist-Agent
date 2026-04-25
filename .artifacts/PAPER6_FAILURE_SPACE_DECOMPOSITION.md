@@ -91,6 +91,50 @@ This proves that execution verification is lane-relative. A lane cannot verify w
 
 **Key distinction:** `not visible != not real`. The artifact exists; it is simply not observable from the verifier's scope. The system must not conflate "I cannot verify this" with "this is false."
 
+---
+
+## Verification Validity Principle
+
+From the three axes, we derive a second principle governing the verification layer itself:
+
+> **A verification result is only valid if the constraint under which it was evaluated is itself valid within the current system state.**
+
+This means a `verified = false` result is not automatically trustworthy. If the constraint was applied in the wrong domain (wrong phase, wrong vocabulary, wrong scope), the verification result is invalid regardless of its output.
+
+### The Four Verification States
+
+| Case | Meaning | Trustworthy? |
+|------|---------|-------------|
+| verified = false | Execution failed | Yes (if constraint valid) |
+| verified = false (invalid domain) | **Verification failed, not execution** | No |
+| verified = true | Execution passed | Yes (if constraint valid) |
+| verified = true (invalid domain) | **False positive risk** | No |
+
+The last case is the most dangerous: a system that passes verification under an invalid constraint has a false sense of correctness.
+
+---
+
+## Verification Drift
+
+We define **verification drift** as the condition where the system behaves correctly but verification misclassifies it. This is distinct from system drift (where the system itself drifts from governance). Verification drift is the verifier drifting from reality.
+
+**Observed instances:**
+- NFM-018: System correctly produced actionable tasks; verification falsely blocked them
+- NFM-020: Artifact correctly existed in producing lane; verification falsely reported "unverified"
+
+**Proposed metric: VDS (Verification Drift Score)**
+
+Analogous to CPS (Constitutional Drift Score) but measuring verification-reality alignment:
+
+```
+VDS = (misclassification events) / (total verification events)
+```
+
+Where misclassification = verification result disagrees with ground truth due to constraint misapplication (not due to actual execution failure).
+
+**Target: VDS = 0** (verification always agrees with reality)
+**Current state: VDS measurable after relay loop testing**
+
 ### Verification Results
 
 After applying fixes for all three failure modes, the relay loop achieved:
