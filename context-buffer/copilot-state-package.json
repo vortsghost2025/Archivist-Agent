@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T16:59:15.653Z",
+  "generated_at": "2026-04-25T17:05:00.399Z",
   "archivist_state": {
     "system_status": "consistent",
     "contradictions": 0,
@@ -55,6 +55,7 @@
   "copilot_query": [
     "Given 50000ns baseline for matrix_mul on RTX 5060, what is the theoretical lower bound with 16x16 shared-memory tiling?",
     "Is occupancy or memory coalescing the likely bottleneck for a 256-thread block doing row-major reads?",
-    "Should we use warp-level primitives (__shfl_sync) or shared memory for the reduction step after tiling?"
+    "Should we use warp-level primitives (__shfl_sync) or shared memory for the reduction step after tiling?",
+    "What shared memory bank conflicts will a 16x16 column-major read into shared memory produce on the RTX 5060, and how to pad to avoid them?"
   ]
 }
