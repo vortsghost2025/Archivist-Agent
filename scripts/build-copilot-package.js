@@ -73,11 +73,23 @@ function buildStatePackage() {
     }
   } catch (_) {}
 
+  pkg.copilot_query = [];
+
   return pkg;
 }
 
 if (require.main === module) {
+  const args = process.argv.slice(2);
+  const queries = [];
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '-q' || args[i] === '--query') {
+      queries.push(args[++i]);
+    }
+  }
+
   const pkg = buildStatePackage();
+  pkg.copilot_query = queries;
+
   const outputDir = path.join(REPO_ROOT, 'context-buffer');
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
   const outPath = path.join(outputDir, 'copilot-state-package.json');

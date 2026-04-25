@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-25T16:44:24.130Z",
+  "generated_at": "2026-04-25T16:59:15.653Z",
   "archivist_state": {
     "system_status": "consistent",
     "contradictions": 0,
@@ -7,9 +7,9 @@
   },
   "lane_states": {
     "kernel": {
-      "last_commit": "190811e fix: correct headless profiling flags and CSV extraction; update baseline with real metrics",
+      "last_commit": "13729ee docs: add inbox watcher deployment guide",
       "processed": 0,
-      "quarantine": 14,
+      "quarantine": 16,
       "action_required": 0,
       "outbox": 0
     },
@@ -51,5 +51,10 @@
       "dispatched": "2026-04-25T16:39:31.807Z"
     }
   ],
-  "questions_for_copilot": []
+  "questions_for_copilot": [],
+  "copilot_query": [
+    "Given 50000ns baseline for matrix_mul on RTX 5060, what is the theoretical lower bound with 16x16 shared-memory tiling?",
+    "Is occupancy or memory coalescing the likely bottleneck for a 256-thread block doing row-major reads?",
+    "Should we use warp-level primitives (__shfl_sync) or shared memory for the reduction step after tiling?"
+  ]
 }
