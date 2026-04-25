@@ -282,9 +282,19 @@ proceed();
 - SwarmMind executed patch and verification
 - Library preserved artifact continuity
 
+### 8.5 Relay Loop Verification
+
+| Loop | Result | What It Verified |
+|------|--------|-----------------|
+| 1 | processed=1 (Archivist) | First closed relay: Archivist -> SwarmMind -> Archivist |
+| 2 | action-required=1, blocked=0 | NFM-018 fix: actionable tasks no longer blocked |
+| 3 | action-required=1, blocked=0 | Stable repeat, zero drift |
+
+All loops: identity PASS, schema PASS, proof PASS, routing correct.
+
 ---
 
-## 9. Implications (1 page)
+## 9. Implications (1.5 pages)
 
 ### 9.1 For Multi-Agent Systems
 - Reporting layer is vulnerable
@@ -309,6 +319,24 @@ Claim Authorization: "You cannot claim X was modified without proof"
 
 We need both.
 
+### 9.5 Failure Space Decomposition
+
+Constraint violations in proof-gated systems decompose along three orthogonal axes:
+
+| Axis | Failure Mode | ID | Question |
+|------|-------------|-----|----------|
+| Temporal | Constraint evaluated before satisfaction conditions reachable | NFM-018 | When can this be satisfied? |
+| Semantic | Schema does not cover full behavioral vocabulary | NFM-019 | What does the system produce? |
+| Observability | Verifier cannot access evidence across boundaries | NFM-020 | Where is proof observable? |
+
+**Unified constraint validity condition:**
+
+> A constraint is only valid within the domain in which its satisfaction conditions are observable and reachable.
+
+All three failure modes were discovered in a single end-to-end relay loop test. None were detectable by unit tests. This confirms constraint violations are interaction-level phenomena.
+
+**Meta-state-claim divergence:** The verification layer itself produces false claims about verification state when constraints are applied outside their valid domain. The system falsely concludes "no proof" when proof is causally unreachable (temporal), "invalid message" when the schema is incomplete (semantic), or "artifact missing" when it exists outside scope (observability). This is recursive: proof-gated execution must itself be subject to verification.
+
 ---
 
 ## 10. Limitations and Future Work (0.5 pages)
@@ -323,6 +351,11 @@ We need both.
 - LLM-based proof checking
 - Broader failure case collection
 - Formal specification of claim-authorization protocols
+
+### 10.3 Recursive Verification
+- Verification layer subject to same failure modes it detects
+- Meta-level checks needed for constraint applicability
+- Temporal reachability, semantic coverage, observational scope must be verified before constraint evaluation
 
 ---
 
