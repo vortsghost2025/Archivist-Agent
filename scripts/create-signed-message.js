@@ -62,16 +62,18 @@ function createSignedMessage(msg, laneId) {
   }
 
   const passphrase = findPassphrase(laneId);
-  if (!passphrase) throw new Error(`PASSPHRASE_MISSING for lane ${laneId}`);
-
   const publicPem = fs.readFileSync(pubPath, 'utf8');
   const privatePem = fs.readFileSync(privPath, 'utf8');
 
   let privateKey;
   try {
-    privateKey = crypto.createPrivateKey({ key: privatePem, format: 'pem', passphrase });
+    if (passphrase) {
+      privateKey = crypto.createPrivateKey({ key: privatePem, format: 'pem', passphrase });
+    } else {
+      privateKey = crypto.createPrivateKey({ key: privatePem, format: 'pem' });
+    }
   } catch (e) {
-    throw new Error(`PRIVATE_KEY_DECRYPT_FAILED for ${laneId}: ${e.message}`);
+    throw new Error(`PRIVATE_KEY_LOAD_FAILED for ${laneId}: ${e.message}`);
   }
 
   const keyId = deriveKeyId(publicPem);
