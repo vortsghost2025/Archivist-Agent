@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-23T21:20:23.079Z",
+  "timestamp": "2026-04-26T04:41:11.430Z",
   "lanes": {
     "archivist": {
       "lane": "archivist",
@@ -8,7 +8,7 @@
         {
           "name": "cross-lane-sync-gate",
           "ok": true,
-          "output": "{\n  \"trust_store_loaded\": true,\n  \"lanes\": {\n    \"archivist\": {\n      \"lane\": \"archivist\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 56,\n      \"outbox_count\": 161,\n      \"issues\": []\n    },\n    \"kernel\": {\n      \"lane\": \"kernel\",\n      \"ok\": true,\n      \"inbox_count\": 2,\n      \"processed_count\": 68,\n      \"outbox_count\": 10,\n      \"issues\": []\n    },\n    \"library\": {\n      \"lane\": \"library\",\n      \"ok\": true,\n      \"inbox_count\": 0,\n      \"processed_count\": 48,\n      \"outbox_count\": 68,\n      \"issues\": []\n    },\n    \"swarmmind\": {\n      \"lane\": \"swarmmind\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 34,\n      \"outbox_count\": 20,\n      \"issues\": []\n    }\n  },\n  \"overall_ok\": true\n}"
+          "output": "{\n  \"trust_store_loaded\": true,\n  \"lanes\": {\n    \"archivist\": {\n      \"lane\": \"archivist\",\n      \"ok\": true,\n      \"inbox_count\": 15,\n      \"processed_count\": 26,\n      \"outbox_count\": 5,\n      \"issues\": []\n    },\n    \"kernel\": {\n      \"lane\": \"kernel\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 17,\n      \"outbox_count\": 18,\n      \"issues\": []\n    },\n    \"library\": {\n      \"lane\": \"library\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 2,\n      \"outbox_count\": 2,\n      \"issues\": []\n    },\n    \"swarmmind\": {\n      \"lane\": \"swarmmind\",\n      \"ok\": true,\n      \"inbox_count\": 2,\n      \"processed_count\": 13,\n      \"outbox_count\": 8,\n      \"issues\": []\n    }\n  },\n  \"overall_ok\": true\n}"
         },
         {
           "name": "evidence-exchange-check",
@@ -18,7 +18,7 @@
         {
           "name": "identity-enforcer",
           "ok": true,
-          "output": "[identity] Trust store loaded: 4 lanes from S:/Archivist-Agent/lanes/broadcast/trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:/Archivist-Agent/lanes/broadcast/trust-store.json\n  archivist: keyId=147c5c2bb7d8941f algorithm=RS256 revoked=false\n  library: keyId=cb3e57dd7818da3d algorithm=RS256 revoked=false\n  swarmmind: keyId=60afaa026a3d969d algorithm=RS256 revoked=false\n  kernel: keyId=7f1a9fe931d1fbba algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
+          "output": "[identity] Trust store loaded: 4 lanes from S:\\Archivist-Agent\\lanes\\broadcast\\trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:\\Archivist-Agent\\lanes\\broadcast\\trust-store.json\n  archivist: keyId=ee70b78105bc6189 algorithm=RS256 revoked=false\n  kernel: keyId=b677eb87f6be83f9 algorithm=RS256 revoked=false\n  library: keyId=ea2a75bab220adc2 algorithm=RS256 revoked=false\n  swarmmind: keyId=addb0afb8ee5c2ed algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
         }
       ]
     },
@@ -29,7 +29,7 @@
         {
           "name": "cross-lane-sync-gate",
           "ok": true,
-          "output": "{\n  \"trust_store_loaded\": true,\n  \"lanes\": {\n    \"archivist\": {\n      \"lane\": \"archivist\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 56,\n      \"outbox_count\": 161,\n      \"issues\": []\n    },\n    \"kernel\": {\n      \"lane\": \"kernel\",\n      \"ok\": true,\n      \"inbox_count\": 2,\n      \"processed_count\": 68,\n      \"outbox_count\": 10,\n      \"issues\": []\n    },\n    \"library\": {\n      \"lane\": \"library\",\n      \"ok\": true,\n      \"inbox_count\": 0,\n      \"processed_count\": 48,\n      \"outbox_count\": 68,\n      \"issues\": []\n    },\n    \"swarmmind\": {\n      \"lane\": \"swarmmind\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 34,\n      \"outbox_count\": 20,\n      \"issues\": []\n    }\n  },\n  \"overall_ok\": true\n}"
+          "output": "{\n  \"trust_store_loaded\": true,\n  \"lanes\": {\n    \"archivist\": {\n      \"lane\": \"archivist\",\n      \"ok\": true,\n      \"inbox_count\": 15,\n      \"processed_count\": 26,\n      \"outbox_count\": 5,\n      \"issues\": []\n    },\n    \"kernel\": {\n      \"lane\": \"kernel\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 17,\n      \"outbox_count\": 18,\n      \"issues\": []\n    },\n    \"library\": {\n      \"lane\": \"library\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 2,\n      \"outbox_count\": 2,\n      \"issues\": []\n    },\n    \"swarmmind\": {\n      \"lane\": \"swarmmind\",\n      \"ok\": true,\n      \"inbox_count\": 2,\n      \"processed_count\": 13,\n      \"outbox_count\": 8,\n      \"issues\": []\n    }\n  },\n  \"overall_ok\": true\n}"
         },
         {
           "name": "evidence-exchange-check",
@@ -39,7 +39,7 @@
         {
           "name": "identity-enforcer",
           "ok": true,
-          "output": "[identity] Trust store loaded: 4 lanes from S:/Archivist-Agent/lanes/broadcast/trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:/Archivist-Agent/lanes/broadcast/trust-store.json\n  archivist: keyId=147c5c2bb7d8941f algorithm=RS256 revoked=false\n  library: keyId=cb3e57dd7818da3d algorithm=RS256 revoked=false\n  swarmmind: keyId=60afaa026a3d969d algorithm=RS256 revoked=false\n  kernel: keyId=7f1a9fe931d1fbba algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
+          "output": "[identity] Trust store loaded: 4 lanes from S:\\kernel-lane\\lanes\\broadcast\\trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:\\kernel-lane\\lanes\\broadcast\\trust-store.json\n  archivist: keyId=ee70b78105bc6189 algorithm=RS256 revoked=false\n  kernel: keyId=b677eb87f6be83f9 algorithm=RS256 revoked=false\n  library: keyId=ea2a75bab220adc2 algorithm=RS256 revoked=false\n  swarmmind: keyId=addb0afb8ee5c2ed algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
         }
       ]
     },
@@ -50,7 +50,7 @@
         {
           "name": "cross-lane-sync-gate",
           "ok": true,
-          "output": "{\n  \"trust_store_loaded\": true,\n  \"lanes\": {\n    \"archivist\": {\n      \"lane\": \"archivist\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 56,\n      \"outbox_count\": 161,\n      \"issues\": []\n    },\n    \"kernel\": {\n      \"lane\": \"kernel\",\n      \"ok\": true,\n      \"inbox_count\": 2,\n      \"processed_count\": 68,\n      \"outbox_count\": 10,\n      \"issues\": []\n    },\n    \"library\": {\n      \"lane\": \"library\",\n      \"ok\": true,\n      \"inbox_count\": 0,\n      \"processed_count\": 48,\n      \"outbox_count\": 68,\n      \"issues\": []\n    },\n    \"swarmmind\": {\n      \"lane\": \"swarmmind\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 34,\n      \"outbox_count\": 20,\n      \"issues\": []\n    }\n  },\n  \"overall_ok\": true\n}"
+          "output": "{\n  \"trust_store_loaded\": true,\n  \"lanes\": {\n    \"archivist\": {\n      \"lane\": \"archivist\",\n      \"ok\": true,\n      \"inbox_count\": 15,\n      \"processed_count\": 26,\n      \"outbox_count\": 5,\n      \"issues\": []\n    },\n    \"kernel\": {\n      \"lane\": \"kernel\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 17,\n      \"outbox_count\": 18,\n      \"issues\": []\n    },\n    \"library\": {\n      \"lane\": \"library\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 2,\n      \"outbox_count\": 2,\n      \"issues\": []\n    },\n    \"swarmmind\": {\n      \"lane\": \"swarmmind\",\n      \"ok\": true,\n      \"inbox_count\": 2,\n      \"processed_count\": 13,\n      \"outbox_count\": 8,\n      \"issues\": []\n    }\n  },\n  \"overall_ok\": true\n}"
         },
         {
           "name": "evidence-exchange-check",
@@ -60,31 +60,33 @@
         {
           "name": "identity-enforcer",
           "ok": true,
-          "output": "[identity] Trust store loaded: 4 lanes from S:/Archivist-Agent/lanes/broadcast/trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:/Archivist-Agent/lanes/broadcast/trust-store.json\n  archivist: keyId=147c5c2bb7d8941f algorithm=RS256 revoked=false\n  library: keyId=cb3e57dd7818da3d algorithm=RS256 revoked=false\n  swarmmind: keyId=60afaa026a3d969d algorithm=RS256 revoked=false\n  kernel: keyId=7f1a9fe931d1fbba algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
+          "output": "[identity] Trust store loaded: 4 lanes from S:\\self-organizing-library\\lanes\\broadcast\\trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:\\self-organizing-library\\lanes\\broadcast\\trust-store.json\n  archivist: keyId=ee70b78105bc6189 algorithm=RS256 revoked=false\n  kernel: keyId=b677eb87f6be83f9 algorithm=RS256 revoked=false\n  library: keyId=ea2a75bab220adc2 algorithm=RS256 revoked=false\n  swarmmind: keyId=addb0afb8ee5c2ed algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
         }
       ]
     },
     "swarmmind": {
       "lane": "swarmmind",
-      "ok": true,
+      "ok": false,
       "checks": [
         {
           "name": "cross-lane-sync-gate",
-          "ok": true,
-          "output": "{\n  \"trust_store_loaded\": true,\n  \"lanes\": {\n    \"archivist\": {\n      \"lane\": \"archivist\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 56,\n      \"outbox_count\": 161,\n      \"issues\": []\n    },\n    \"kernel\": {\n      \"lane\": \"kernel\",\n      \"ok\": true,\n      \"inbox_count\": 2,\n      \"processed_count\": 68,\n      \"outbox_count\": 10,\n      \"issues\": []\n    },\n    \"library\": {\n      \"lane\": \"library\",\n      \"ok\": true,\n      \"inbox_count\": 0,\n      \"processed_count\": 48,\n      \"outbox_count\": 68,\n      \"issues\": []\n    },\n    \"swarmmind\": {\n      \"lane\": \"swarmmind\",\n      \"ok\": true,\n      \"inbox_count\": 1,\n      \"processed_count\": 34,\n      \"outbox_count\": 20,\n      \"issues\": []\n    }\n  },\n  \"overall_ok\": true\n}"
+          "ok": false,
+          "output": "",
+          "error": "node:internal/modules/cjs/loader:1386\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'S:\\SwarmMind\\scripts\\cross-lane-sync-gate.js'\r\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)\r\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)\r\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)\r\n    at Function._load (node:internal/modules/cjs/loader:1192:37)\r\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)\r\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\r\n    at node:internal/main/run_main_module:36:49 {\r\n  code: 'MODULE_NOT_FOUND',\r\n  requireStack: []\r\n}\r\n\r\nNode.js v22.22.0\r\n"
         },
         {
           "name": "evidence-exchange-check",
-          "ok": true,
-          "output": "Evidence exchange report written to S:\\SwarmMind\\docs\\autonomous-cycle-test\\evidence-exchange-report.json"
+          "ok": false,
+          "output": "",
+          "error": "node:internal/modules/cjs/loader:1386\r\n  throw err;\r\n  ^\r\n\r\nError: Cannot find module 'S:\\SwarmMind\\scripts\\evidence-exchange-check.js'\r\n    at Function._resolveFilename (node:internal/modules/cjs/loader:1383:15)\r\n    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)\r\n    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)\r\n    at Function._load (node:internal/modules/cjs/loader:1192:37)\r\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\r\n    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)\r\n    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)\r\n    at node:internal/main/run_main_module:36:49 {\r\n  code: 'MODULE_NOT_FOUND',\r\n  requireStack: []\r\n}\r\n\r\nNode.js v22.22.0\r\n"
         },
         {
           "name": "identity-enforcer",
           "ok": true,
-          "output": "[identity] Trust store loaded: 4 lanes from S:\\SwarmMind\\lanes\\broadcast\\trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:\\SwarmMind\\lanes\\broadcast\\trust-store.json\n  archivist: keyId=147c5c2bb7d8941f algorithm=RS256 revoked=false\n  library: keyId=cb3e57dd7818da3d algorithm=RS256 revoked=false\n  swarmmind: keyId=60afaa026a3d969d algorithm=RS256 revoked=false\n  kernel: keyId=7f1a9fe931d1fbba algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
+          "output": "[identity] Trust store loaded: 4 lanes from S:\\SwarmMind\\lanes\\broadcast\\trust-store.json\n\n=== Identity Chain Status ===\nMode: enforce\nTrust store: S:\\SwarmMind\\lanes\\broadcast\\trust-store.json\n  archivist: keyId=ee70b78105bc6189 algorithm=RS256 revoked=false\n  kernel: keyId=b677eb87f6be83f9 algorithm=RS256 revoked=false\n  library: keyId=ea2a75bab220adc2 algorithm=RS256 revoked=false\n  swarmmind: keyId=addb0afb8ee5c2ed algorithm=RS256 revoked=false\n\nUsage: node identity-enforcer.js [audit|warn|enforce]\n  audit  — log only, no rejection\n  warn   — log + console warnings, no rejection\n  enforce — reject unsigned/invalid messages"
         }
       ]
     }
   },
-  "overall_ok": true
+  "overall_ok": false
 }

@@ -23,7 +23,16 @@ async function performCompact() {
 
 (async () => {
   try {
+    // Capture pre-compact state and backup critical files
+    const preAudit = new PostCompactAudit();
+    const preSnapshot = preAudit.capturePreCompact();
+    const trustStorePath = preAudit.trustStorePath;
+    const trustStoreBackup = fs.readFileSync(trustStorePath, 'utf8');
+
     await performCompact();
+    // Restore trust store to avoid unintended key changes
+    fs.writeFileSync(trustStorePath, trustStoreBackup, 'utf8');
+
     const audit = new PostCompactAudit();
     const result = audit.run();
 

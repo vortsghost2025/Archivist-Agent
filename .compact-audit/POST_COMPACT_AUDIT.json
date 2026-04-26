@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-26T01:43:14.073Z",
+  "timestamp": "2026-04-26T14:43:24.419Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -7,10 +7,10 @@
       "blocker": null
     },
     "trust_store_key_ids": {
-      "archivist": "147c5c2bb7d8941f",
-      "library": "cb3e57dd7818da3d",
-      "swarmmind": "60afaa026a3d969d",
-      "kernel": "7f1a9fe931d1fbba"
+      "archivist": "ee70b78105bc6189",
+      "kernel": "b677eb87f6be83f9",
+      "library": "ea2a75bab220adc2",
+      "swarmmind": "addb0afb8ee5c2ed"
     },
     "constraint_names": [
       "STRUCTURE_OVER_IDENTITY",
@@ -21,30 +21,30 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-23T21:26:02.138Z",
-        "age_seconds": 53
+        "timestamp": "2026-04-26T14:18:05.316Z",
+        "age_seconds": 2
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-23T21:22:12.266Z",
-        "age_seconds": 282
+        "timestamp": "2026-04-26T14:07:01.168Z",
+        "age_seconds": 667
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-23T21:26:33.657Z",
-        "age_seconds": 21
+        "timestamp": "2026-04-26T14:07:01.391Z",
+        "age_seconds": 666
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-23T21:26:51.132Z",
-        "age_seconds": 4
+        "timestamp": "2026-04-26T14:07:01.170Z",
+        "age_seconds": 667
       }
     },
     "inbox_counts": {
-      "archivist": 3,
+      "archivist": 7,
       "library": 1,
-      "swarmmind": 6,
-      "kernel": 2
+      "swarmmind": 0,
+      "kernel": 0
     },
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
     "bootstrap_hash": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
@@ -55,7 +55,197 @@
       "kernel_partial_convergence",
       "contract_alignment_ambiguous",
       "subagent_code_destruction_surface"
-    ]
+    ],
+    "file_integrity": {
+      "archivist": {
+        "private_pem": {
+          "path": "S:\\Archivist-Agent\\.identity\\private.pem",
+          "exists": true,
+          "hash": "3d21a7f1e18b2c080f776cde64ef2b1f9626a3852afe53b2ebe28404b2764e98"
+        },
+        "public_pem": {
+          "path": "S:\\Archivist-Agent\\.identity\\public.pem",
+          "exists": true,
+          "hash": "a0230f635bcc0f2e05ecbe404993ed1448549e033458e319d12938d79eca92d9"
+        },
+        "snapshot_json": {
+          "path": "S:\\Archivist-Agent\\.identity\\snapshot.json",
+          "exists": true,
+          "hash": "a91e2e67b97630afaef2d97e09512cc0da265011db99e74cb531cbee501ba322"
+        },
+        "keys_json": {
+          "path": "S:\\Archivist-Agent\\.identity\\keys.json",
+          "exists": true,
+          "hash": "fe9b283e5dae3aeb760c05750e41fcd702272ccd5892585643b4049a117f33b7"
+        },
+        "lane_trust_store": {
+          "path": "S:\\Archivist-Agent\\lanes\\broadcast\\trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        },
+        "agents_md": {
+          "path": "S:\\Archivist-Agent\\AGENTS.md",
+          "exists": true,
+          "hash": "01760a98571bea71872a0df3c8ed652159b38391956e4f75eb17e81502f611d1"
+        },
+        "targets_json": {
+          "path": "S:\\Archivist-Agent\\config\\targets.json",
+          "exists": false,
+          "hash": null
+        },
+        "convergence_protocol_md": {
+          "path": "S:\\Archivist-Agent\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+          "exists": true,
+          "hash": "105fe047d5169cf04c87fc6088b8c8685f6b993563466c5dd872b0dafe642ff5"
+        },
+        "trust_store": {
+          "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        }
+      },
+      "library": {
+        "private_pem": {
+          "path": "S:\\self-organizing-library\\.identity\\private.pem",
+          "exists": true,
+          "hash": "edbc4a040d0b4460c4cf0e210cbc7821fa1303c24c86ec281d1b03ec2aa19ba0"
+        },
+        "public_pem": {
+          "path": "S:\\self-organizing-library\\.identity\\public.pem",
+          "exists": true,
+          "hash": "2eec06be0befc8d5604a523395a54ade2e9564449cd437c89552639ec83a5ad3"
+        },
+        "snapshot_json": {
+          "path": "S:\\self-organizing-library\\.identity\\snapshot.json",
+          "exists": true,
+          "hash": "cffaa03d622723f2bc57f97f0491317ca5f65c47f353742e9709b0bc89b92f7b"
+        },
+        "keys_json": {
+          "path": "S:\\self-organizing-library\\.identity\\keys.json",
+          "exists": true,
+          "hash": "5473c6d41d303fa12efca1fb69ba56f6c8e6f43f2dd0ecfd12b1716adea0d456"
+        },
+        "lane_trust_store": {
+          "path": "S:\\self-organizing-library\\lanes\\broadcast\\trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        },
+        "agents_md": {
+          "path": "S:\\self-organizing-library\\AGENTS.md",
+          "exists": true,
+          "hash": "a561cfa7f9c2a95544fd82616129480f6384752805978bdc83ddfea848ec3930"
+        },
+        "targets_json": {
+          "path": "S:\\self-organizing-library\\config\\targets.json",
+          "exists": false,
+          "hash": null
+        },
+        "convergence_protocol_md": {
+          "path": "S:\\self-organizing-library\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+          "exists": true,
+          "hash": "105fe047d5169cf04c87fc6088b8c8685f6b993563466c5dd872b0dafe642ff5"
+        },
+        "trust_store": {
+          "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        }
+      },
+      "swarmmind": {
+        "private_pem": {
+          "path": "S:\\SwarmMind\\.identity\\private.pem",
+          "exists": true,
+          "hash": "d6a5d5ddf2578f08f95531ab70e67d321c82bc5d7734f256b71922ff0d8f128a"
+        },
+        "public_pem": {
+          "path": "S:\\SwarmMind\\.identity\\public.pem",
+          "exists": true,
+          "hash": "c41954228c48ff9c8653c3af3fa75d90c91a25fc78c8d7bd4cad76c4fdd3ec57"
+        },
+        "snapshot_json": {
+          "path": "S:\\SwarmMind\\.identity\\snapshot.json",
+          "exists": true,
+          "hash": "003a28d1cec10b6d8d932593bfc8df97b1b3f742fa16cf900a472a9a5f410e05"
+        },
+        "keys_json": {
+          "path": "S:\\SwarmMind\\.identity\\keys.json",
+          "exists": false,
+          "hash": null
+        },
+        "lane_trust_store": {
+          "path": "S:\\SwarmMind\\lanes\\broadcast\\trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        },
+        "agents_md": {
+          "path": "S:\\SwarmMind\\AGENTS.md",
+          "exists": true,
+          "hash": "013618f080e941b559964bf463ba089a6a9695b98a78a1ccf308f19fcfb56213"
+        },
+        "targets_json": {
+          "path": "S:\\SwarmMind\\config\\targets.json",
+          "exists": false,
+          "hash": null
+        },
+        "convergence_protocol_md": {
+          "path": "S:\\SwarmMind\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+          "exists": false,
+          "hash": null
+        },
+        "trust_store": {
+          "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        }
+      },
+      "kernel": {
+        "private_pem": {
+          "path": "S:\\kernel-lane\\.identity\\private.pem",
+          "exists": true,
+          "hash": "810e4a0d5926b9aa4fa1db950ccc4753f46e79c44e6ba7f9fad7e78630c3bcab"
+        },
+        "public_pem": {
+          "path": "S:\\kernel-lane\\.identity\\public.pem",
+          "exists": true,
+          "hash": "127b44d2bb294ad9a1bd748b5d0cebb376dc890afc52738ca79ec906cb145627"
+        },
+        "snapshot_json": {
+          "path": "S:\\kernel-lane\\.identity\\snapshot.json",
+          "exists": true,
+          "hash": "faa7381bf70f774194f12756e4349152289949d9d4133200c7e30fbd2f71d3fa"
+        },
+        "keys_json": {
+          "path": "S:\\kernel-lane\\.identity\\keys.json",
+          "exists": false,
+          "hash": null
+        },
+        "lane_trust_store": {
+          "path": "S:\\kernel-lane\\lanes\\broadcast\\trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        },
+        "agents_md": {
+          "path": "S:\\kernel-lane\\AGENTS.md",
+          "exists": true,
+          "hash": "04de9a9bf8478447b2082ed0fd62cc7f452562f0074036154435fd7255527d4f"
+        },
+        "targets_json": {
+          "path": "S:\\kernel-lane\\config\\targets.json",
+          "exists": true,
+          "hash": "b155c3a0196a855ba50e1b40e26398388bad73c30004206303a36edc9251bc01"
+        },
+        "convergence_protocol_md": {
+          "path": "S:\\kernel-lane\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+          "exists": false,
+          "hash": null
+        },
+        "trust_store": {
+          "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        }
+      }
+    }
   },
   "post_compact": {
     "active_blocker": {
@@ -77,30 +267,30 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-26T01:43:01.927Z",
-        "age_seconds": 12
+        "timestamp": "2026-04-26T14:43:09.355Z",
+        "age_seconds": 15
       },
       "library": {
-        "status": "alive",
-        "timestamp": "2026-04-26T01:43:01.923Z",
-        "age_seconds": 12
+        "status": "stale",
+        "timestamp": "2026-04-26T14:07:01.168Z",
+        "age_seconds": 2183
       },
       "swarmmind": {
-        "status": "alive",
-        "timestamp": "2026-04-26T01:42:01.958Z",
-        "age_seconds": 72
+        "status": "stale",
+        "timestamp": "2026-04-26T14:07:01.391Z",
+        "age_seconds": 2183
       },
       "kernel": {
-        "status": "alive",
-        "timestamp": "2026-04-26T01:43:01.918Z",
-        "age_seconds": 12
+        "status": "stale",
+        "timestamp": "2026-04-26T14:07:01.170Z",
+        "age_seconds": 2183
       }
     },
     "inbox_counts": {
-      "archivist": 0,
-      "library": 0,
-      "swarmmind": 0,
-      "kernel": 11
+      "archivist": 9,
+      "library": 1,
+      "swarmmind": 1,
+      "kernel": 0
     },
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
     "bootstrap_hash": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
@@ -306,25 +496,8 @@
   "diff": {
     "blocker_changed": false,
     "blocker_detail": null,
-    "trust_chain_intact": false,
-    "trust_detail": {
-      "archivist": {
-        "pre": "147c5c2bb7d8941f",
-        "post": "ee70b78105bc6189"
-      },
-      "library": {
-        "pre": "cb3e57dd7818da3d",
-        "post": "ea2a75bab220adc2"
-      },
-      "swarmmind": {
-        "pre": "60afaa026a3d969d",
-        "post": "addb0afb8ee5c2ed"
-      },
-      "kernel": {
-        "pre": "7f1a9fe931d1fbba",
-        "post": "b677eb87f6be83f9"
-      }
-    },
+    "trust_chain_intact": true,
+    "trust_detail": null,
     "constraints_intact": true,
     "constraints_detail": null,
     "governance_intact": true,
@@ -333,33 +506,33 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 10,
-    "message_loss_detail": {
-      "archivist": {
-        "pre": 3,
-        "post": 0,
-        "lost": 3
+    "message_loss": 0,
+    "message_loss_detail": {},
+    "lane_degradations": [
+      {
+        "lane": "library",
+        "pre_status": "alive",
+        "post_status": "stale"
       },
-      "library": {
-        "pre": 1,
-        "post": 0,
-        "lost": 1
+      {
+        "lane": "swarmmind",
+        "pre_status": "alive",
+        "post_status": "stale"
       },
-      "swarmmind": {
-        "pre": 6,
-        "post": 0,
-        "lost": 6
+      {
+        "lane": "kernel",
+        "pre_status": "alive",
+        "post_status": "stale"
       }
-    },
-    "lane_degradations": [],
+    ],
     "risk_set_preserved": true,
     "missing_risks": [],
     "unexpected_changes": [
-      "trust_store_archivist_key_changed",
-      "trust_store_library_key_changed",
-      "trust_store_swarmmind_key_changed",
-      "trust_store_kernel_key_changed"
-    ]
+      "lane_library_degraded",
+      "lane_swarmmind_degraded",
+      "lane_kernel_degraded"
+    ],
+    "file_integrity_violations": []
   },
   "status": "drifted",
   "proof": {
@@ -376,7 +549,7 @@
       "known_risk_set",
       "file_integrity"
     ],
-    "contradictions_found": 4,
+    "contradictions_found": 3,
     "self_declared_alignment": false
   }
 }
