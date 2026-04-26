@@ -1,9 +1,9 @@
 # Security Key Rotation Runbook
 
-**Status:** OPEN — must be closed with evidence before system is considered secure  
+**Status:** OPEN (Phase 1 complete, Phase 2 in progress) — must be closed with evidence before system is considered secure  
 **Priority:** P0 — blocks all other trust claims  
 **Owner:** Archivist Lane  
-**Last Updated:** [DATE]
+**Last Updated:** 2026-04-25
 
 ---
 
@@ -20,6 +20,15 @@ Forward safety requires rotation + history remediation.
 | Keys in git history readable by anyone with repo access | CRITICAL | .gitignore does not fix history |
 | Keys in forks/clones already pulled | HIGH | Cannot be recalled |
 | Signing provenance broken if keys compromised | HIGH | Invalidates past artifacts |
+
+## Current Assessment (from Phase 1)
+
+- Severity: **HIGH**
+- Phase 1 evidence: `docs/ops/evidence/key-exposure-audit-2026-04-25.txt`
+- Confirmed:
+  - historical exposure risk exists (private key material was previously tracked)
+  - local key files still exist on disk under `.identity/`
+  - `.gitignore` intent is present, but lifecycle controls require hardening
 
 ---
 
