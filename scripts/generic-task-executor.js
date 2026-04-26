@@ -44,7 +44,7 @@ function executeStatusTask(msg, lane) {
   let systemState = null;
   try {
     const ss = JSON.parse(fs.readFileSync(path.join(root, 'lanes/broadcast/system_state.json'), 'utf8'));
-    systemState = { status: ss.system_state, contradictions: ss.active_contradictions?.length ?? 0, processed_ok: ss.processed_ok };
+    systemState = { status: ss.system_status, contradictions: ss.active_contradictions?.length ?? 0, processed_ok: ss.processed_ok };
   } catch (_) {}
   return {
     task_kind: 'status',
@@ -97,12 +97,30 @@ function executeScriptTask(msg, lane) {
   if (!fs.existsSync(scriptPath)) {
     return { task_kind: 'report', results: { error: `Script not found: ${scriptPath}` }, summary: `Error: script ${scriptName} not found` };
   }
+  const LONG_RUNNING = ['heartbeat', 'inbox-watcher', 'relay-daemon'];
+  const baseName = scriptName.replace(/\.js$/, '').toLowerCase();
+  if (LONG_RUNNING.some(lr => baseName.includes(lr))) {
+    return { task_kind: 'report', results: { script: scriptName, skipped: true, reason: 'Long-running daemon script — use "status" or "consistency check" instead' }, summary: `Script ${scriptName}: SKIPPED (long-running daemon)` };
+  }
+  const maxOutput = 50000;
   try {
     const { execSync } = require('child_process');
-    const output = execSync(`node "${scriptPath}"`, { cwd: root, timeout: 30000, encoding: 'utf8', maxBuffer: 50000 });
-    return { task_kind: 'report', results: { script: scriptName, exit_code: 0, output: output.slice(0, 50000) }, summary: `Script ${scriptName}: success (${output.length} chars output)` };
+    const output = execSync(`node "${scriptPath}"`, { cwd: root, timeout: 30000, encoding: 'utf8', maxBuffer: maxOutput });
+    return { task_kind: 'report', results: { script: scriptName, exit_code: 0, output: output.slice(0, maxOutput) }, summary: `Script ${scriptName}: success (${output.length} chars output)` };
   } catch (e) {
-    return { task_kind: 'report', results: { script: scriptName, exit_code: e.status || 1, output: (e.stdout || '').slice(0, 25000), error: (e.stderr || '').slice(0, 5000) || e.message.slice(0, 5000) }, summary: `Script ${scriptName}: exit ${e.status || 1}` };
+    const stdout = (e.stdout || '').slice(0, 25000);
+    const stderr = (e.stderr || '').slice(0, 5000) || e.message.slice(0, 5000);
+    const timedOut = e.killed || e.signal === 'SIGTERM' || stderr.includes('ETIMEDOUT') || stderr.includes('timed out');
+    if (timedOut) {
+      return { task_kind: 'report', results: { script: scriptName, exit_code: -1, timed_out: true, output: stdout, error: 'Script exceeded 30s timeout' }, summary: `Script ${scriptName}: TIMEOUT (30s)` };
+    }
+    const isTest = scriptName.toLowerCase().includes('test') || scriptName.toLowerCase().includes('recovery');
+    const passCount = (stdout.match(/\[PASS\]/g) || []).length;
+    const failCount = (stdout.match(/\[FAIL\]/g) || []).length;
+    if (isTest && passCount > 0 && failCount <= 1) {
+      return { task_kind: 'report', results: { script: scriptName, exit_code: e.status || 1, passed: passCount, failed: failCount, output: stdout, note: `Test suite: ${passCount} PASS, ${failCount} FAIL (non-zero exit but mostly passing)` }, summary: `Script ${scriptName}: ${passCount}P/${failCount}F` };
+    }
+    return { task_kind: 'report', results: { script: scriptName, exit_code: e.status || 1, output: stdout, error: stderr }, summary: `Script ${scriptName}: exit ${e.status || 1}` };
   }
 }
 
