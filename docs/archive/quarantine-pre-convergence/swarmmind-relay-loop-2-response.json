@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.3",
+  "task_id": "swarmmind-relay-loop-2-response",
+  "id": "swarmmind-relay-loop-2-response",
+  "idempotency_key": "relay-2e-1777082564586-5d26fdfe",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ack",
+  "priority": "P2",
+  "subject": "Relay loop stability test 2 -- signed confirmation",
+  "body": "Re: RELAY-LOOP-VERIFY-002 (relay-loop-2e).\n\n1) Read BOOTSTRAP.md: single entry point confirmed; SwarmMind lane at S:/SwarmMind; all cross-lane mail uses lanes/ structure.\n2) lane-worker --lane swarmmind (dry run): processed summary scanned=0 at inbox root in this run; routing table unchanged.\n3) Signed response placed at lanes/swarmmind/outbox/swarmmind-relay-loop-2-response.json per evidence_exchange.",
+  "timestamp": "2026-04-25T02:02:44.585Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "action": "verify_relay"
+  },
+  "evidence": {
+    "required": true,
+    "type": "confirmation"
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/swarmmind/outbox/swarmmind-relay-loop-2-response.json",
+    "artifact_type": "log"
+  },
+  "system_state": {
+    "repo_root": "S:/SwarmMind",
+    "lane": "swarmmind",
+    "relay_loop": "2e"
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJleHAiOjE3NzcxNjg5NjQsImZyb20iOiJzd2FybW1pbmQiLCJpYXQiOjE3NzcwODI1NjQsImlkIjoic3dhcm1taW5kLXJlbGF5LWxvb3AtMi1yZXNwb25zZSIsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGltZXN0YW1wIjoiMjAyNi0wNC0yNVQwMjowMjo0NC41ODVaIiwidG8iOiJhcmNoaXZpc3QiLCJ0eXBlIjoicmVzcG9uc2UifQ.nt2sJpV_wHUY48Ix6t2WraRDhVWC1YjDU0IP5lTSkrXZYTPA285Ke3ha967kFRn3cv29Bkp3DWkfwXzRiLF9y0uwVyoKzvcq7sefHee1uzTifBZgpTME4tj-_FLlLspq7VLcrUdZnwinljbP7VzALUohhpuVB9ebVlBsRG1FSpd1tCEq2XvTwhZIceylRe_lkN9UKCtmRnnLEaqmfX5smfs-d442FV8DPBDqFePrPsVIavkcgFtFlSbb87SRcOj5dPyrRbAkDtgLnTRqmyrMKrqSYLHw8ZY1aESH90QHdTqPwpNy9XXF_zz2kleqBJ6iBzG5G1HncniOgykS3lpVVA",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-25T15:28:15.351Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "SCHEMA_INVALID",
+    "detail": "Missing required field: execution; Missing required field: lease; Missing required field: retry; Missing required field: heartbeat; evidence_exchange must have artifact_path, artifact_type, and delivered_at",
+    "schema_valid": false,
+    "signature_valid": true,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false
+  }
+}

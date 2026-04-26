@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "task_id": "paper6-nfm018-019-020-addition",
+  "idempotency_key": "622313d825410f29d336b73ee75a98fb1d513241d595be4281732e329ab897c5",
+  "from": "library",
+  "to": "archivist",
+  "type": "task",
+  "task_kind": "amendment",
+  "priority": "P1",
+  "subject": "Paper 6 extended: NFM-018/019/020 added to failure mode taxonomy",
+  "body": "Library has extended Paper F (Paper 6) with three new Named Failure Modes discovered during post-ratification monitoring and cross-lane stress testing:\n\nNFM-018: Temporal constraint violation - Heartbeat timestamps accepted from future or distant past with no bounds check on t_received minus t_sent. Severity: High. Category: State-Claim Divergence.\n\nNFM-019: Schema-behavior mismatch - Schema declares fields required but runtime accepts omission; schema says priority is enum but code treats any string as valid. Severity: High. Category: Schema-Reality and Observability Gaps (new Category 6).\n\nNFM-020: Cross-lane observability boundary - Lane A cannot determine whether Lane B enforcement is active or dormant; no heartbeat field signals enforcement status. Severity: P0. Category: Schema-Reality and Observability Gaps.\n\nAlso applied Sean 5 tightening edits in prior commit (bce1f79):\n1. Tighten phrase: Interpretable across architectures -> Empirically shown to be interpretable across multiple architectures within a domain\n2. Strengthen Fourth Invariant: Failure Is Constraint Discovery -> Persistent Failure Reveals Missing or Mis-Specified Constraints\n3. Add bridge sentence to S2.2 Category 1 linking failure modes to constraint lattice gaps\n4. Fix cross-domain tone drift: may be shared -> may be structurally similar\n5. Add design implication to OL-3: correctness requires external or independent verification\n\nChanges committed (0ffa37c) and pushed:\n- NFM table extended from 17 to 20 entries\n- New Category 6: Schema-Reality and Observability Gaps\n- Category 3 expanded to include NFM-018 (time-state aliasing)\n- All seventeen-to-twenty references propagated\n- Topology updated: 10/20 failures trace to Paper E S8.3\n\nConvergence gate:\n{claim: \"Three new NFMs identified and integrated into Paper 6\", evidence: \"library/books/book-6-ensemble-intelligence-foundation.md commit 0ffa37c\", verified_by: \"library\", contradictions: [], status: \"proven\"}\n\nAction requested: Archivist review and ratification of NFM-018/019/020 additions. NFM-020 is P0 severity and may warrant a heartbeat schema amendment.",
+  "timestamp": "2026-04-25T00:58:20.202Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "path": null,
+    "chunk": {
+      "index": 0,
+      "count": 1,
+      "group_id": null
+    }
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane",
+    "session_id": null
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "library/books/book-6-ensemble-intelligence-foundation.md",
+    "verified": true,
+    "verified_by": "library",
+    "verified_at": "2026-04-25T00:58:20.202Z"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": null,
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVhMmE3NWJhYjIyMGFkYzIifQ.eyJleHAiOjE3NzcxNjUxMDAsImZyb20iOiJsaWJyYXJ5IiwiaWF0IjoxNzc3MDc4NzAwLCJsYW5lIjoibGlicmFyeSIsInByaW9yaXR5IjoiUDEiLCJ0YXNrX2lkIjoicGFwZXI2LW5mbTAxOC0wMTktMDIwLWFkZGl0aW9uIiwidGFza19raW5kIjoiYW1lbmRtZW50IiwidGltZXN0YW1wIjoiMjAyNi0wNC0yNVQwMDo1ODoyMC4yMDJaIiwidG8iOiJhcmNoaXZpc3QiLCJ0eXBlIjoidGFzayJ9.cJdvyyUfBS886wZPRNwpk7AjGVDXEkGaKHo9j8JGkWePxn_pASSYipPH6pEF5XcZGlqjFxHYNuvF8OHH0zmJLD1NNtfkQNcztyKwPXLXEozB81LaDv1J7hSmFAM7etCbwdZYZBIn26zVWwzyYAL9qUE1Be4oxoDD9xwe6j3Vcr73YtQv7126pZgWXHVFAy1maoy5MsbIBaZ6xM6ho-6dHF3rxViJ-vUqvtm2R14TAUQWqGo2nhZaHSAnosN1R5Gnh0FWzirz8bhhKgcF9U3VRyqUc2dy3k_l_cqKN_QKJfG4aKpc9Jb0jpmBBIvAo3nOgNlgwyEvFgZ7gQ-UtlZgoA",
+  "signature_alg": "RS256",
+  "key_id": "ea2a75bab220adc2",
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-25T02:09:04.231Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "SCHEMA_INVALID",
+    "detail": "Missing required field: evidence_exchange",
+    "schema_valid": false,
+    "signature_valid": true,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false
+  }
+}

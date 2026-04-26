@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "task_id": "productivity-tasks",
+  "idempotency_key": "productivity-20260423-001",
+  "from": "swarmmind",
+  "to": "LANE_NAME",
+  "type": "task",
+  "priority": "P1",
+  "subject": "Productivity & Improvement Tasks",
+  "body": "## Tasks for LANE_NAME\n\n- Review and update trust-store entries\n- Execute recovery test suite\n- Run stress/throughput tests\n- Verify canonical key derivation\n- Generate lane-specific status report\n- Deliver report to SwarmMind outbox\n\nDeadline: 2026-04-23T18:00:00Z",
+  "timestamp": "2026-04-23T17:20:00.000Z",
+  "requires_action": true,
+  "execution": {
+    "mode": "manual",
+    "engine": "kilo",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "LANE_NAME",
+    "acquired_at": "2026-04-23T17:20:00Z",
+    "expires_at": "2026-04-23T18:00:00Z",
+    "renew_count": 0,
+    "max_renewals": 2
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 2
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "status": "pending"
+  },
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-25T15:28:15.347Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "SCHEMA_INVALID",
+    "detail": "Missing required field: payload; Missing required field: evidence; Missing required field: evidence_exchange; Field \"to\" value \"LANE_NAME\" not in allowed values: archivist, library, swarmmind, kernel; task_kind is required for task/response/escalation/handoff messages",
+    "schema_valid": false,
+    "signature_valid": false,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false
+  }
+}

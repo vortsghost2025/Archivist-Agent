@@ -1,0 +1,62 @@
+{
+  "archived_at": "2026-04-26T15:14:57.662Z",
+  "lane": "archivist",
+  "count": 9,
+  "reason": "Pre-convergence legacy messages with schema violations or malformed content. Archived to clean quarantine directories.",
+  "messages": [
+    {
+      "file": "paper6-nfm018-019-020-addition.json",
+      "from": "library",
+      "subject": "Paper 6 extended: NFM-018/019/020 added to failure",
+      "timestamp": "2026-04-25T00:58:20.202Z"
+    },
+    {
+      "file": "paper6-nfm018-019-020-addition.lane-worker-2026-04-25T15-28-15-346Z.json",
+      "from": "library",
+      "subject": "Paper 6 extended: NFM-018/019/020 added to failure",
+      "timestamp": "2026-04-25T00:58:20.202Z"
+    },
+    {
+      "file": "phase2-summary-20260425T232116.json",
+      "from": "kernel",
+      "subject": "Phase 2 security status update",
+      "timestamp": "2026-04-25T23:21:16.7387841-04:00"
+    },
+    {
+      "file": "productivity-tasks-20260423T172000Z.json",
+      "from": "swarmmind",
+      "subject": "Productivity & Improvement Tasks",
+      "timestamp": "2026-04-23T17:20:00.000Z"
+    },
+    {
+      "file": "response-20260425T190822Z.json",
+      "from": "kernel",
+      "subject": "GEN4 WMMA candidate adoption",
+      "timestamp": "2026-04-25T19:08:22.000Z"
+    },
+    {
+      "file": "response-20260425T192030Z.json",
+      "from": "kernel",
+      "subject": "Kernel inbox tasks summary",
+      "timestamp": "2026-04-25T19:20:30.000Z"
+    },
+    {
+      "file": "swarmmind-relay-loop-2-response.json",
+      "from": "swarmmind",
+      "subject": "Relay loop stability test 2 -- signed confirmation",
+      "timestamp": "2026-04-25T02:02:44.585Z"
+    },
+    {
+      "file": "swarmmind-relay-loop-3-response.json",
+      "from": "swarmmind",
+      "subject": "Relay loop stability test 3 -- signed confirmation",
+      "timestamp": "2026-04-25T02:02:44.585Z"
+    },
+    {
+      "file": "urgent_paper6-nfm020-observability.json",
+      "from": "library",
+      "subject": "Paper 6 extended: NFM-018/019/020 added to failure",
+      "timestamp": "2026-04-25T00:58:20.202Z"
+    }
+  ]
+}

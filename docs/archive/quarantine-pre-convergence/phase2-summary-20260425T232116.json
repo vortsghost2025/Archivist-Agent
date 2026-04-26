@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.1",
+  "task_id": "phase2-summary-20260425T232116",
+  "idempotency_key": "0008e6f5739541b4bf03d436a137d33e",
+  "from": "kernel",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "amendment",
+  "priority": "P1",
+  "subject": "Phase 2 security status update",
+  "body": "Phase 2 security execution update:\n\nCompleted so far:\n- Established canonical ops docs structure and committed/pushed.\n- Captured post-compact audit state commit and pushed.\n- Executed P0 Phase 1 key exposure scope identification.\n- Created and committed evidence artifact: docs/ops/evidence/key-exposure-audit-2026-04-25.txt\n- Severity assessed as HIGH due to historical key exposure risk and local plaintext key presence.\n\nNow in progress:\n- Phase 2 planning artifacts created:\n  - docs/ops/KEY_ROTATION_MATRIX.md\n  - docs/ops/HISTORY_EXPOSURE_DECISION.md\n  - docs/ops/LOCAL_SECRET_HARDENING.md\n  - docs/ops/KEY_LIFECYCLE_POLICY.md\n- SECURITY_KEY_ROTATION_RUNBOOK.md updated to reflect Phase 1 completion and current HIGH assessment.\n\nNext execution focus:\n1) Finalize history exposure decision (Option A vs B).\n2) Execute key rotation matrix and trust-store rebuild sequence.\n3) Harden local secret surface (remove tmp/test keys, ACL baseline).\n4) Produce Phase 2 evidence logs for closure criteria.",
+  "timestamp": "2026-04-25T23:21:16.7387841-04:00",
+  "requires_action": true,
+  "payload": {
+    "chunk": {
+      "count": 1,
+      "group_id": null,
+      "index": 0
+    },
+    "compression": "none",
+    "path": null,
+    "mode": "inline"
+  },
+  "execution": {
+    "parent_id": null,
+    "actor": "lane",
+    "session_id": null,
+    "engine": "opencode",
+    "mode": "manual"
+  },
+  "lease": {
+    "acquired_at": null,
+    "expires_at": null,
+    "max_renewals": 3,
+    "owner": null,
+    "renew_count": 0
+  },
+  "retry": {
+    "attempt": 1,
+    "last_error": null,
+    "max_attempts": 3,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "verified_by": null,
+    "verified_at": null,
+    "required": true,
+    "verified": false,
+    "evidence_path": "S:/Archivist-Agent/docs/ops/evidence/key-exposure-audit-2026-04-25.txt"
+  },
+  "heartbeat": {
+    "status": "in_progress",
+    "timeout_seconds": 900,
+    "last_heartbeat_at": null,
+    "interval_seconds": 300
+  },
+  "watcher": {
+    "poll_seconds": 60,
+    "p0_fast_path": true,
+    "backoff": {
+      "initial_seconds": 60,
+      "multiplier": 2,
+      "max_seconds": 300
+    },
+    "max_concurrent": 1,
+    "stale_after_seconds": 300,
+    "enabled": false,
+    "heartbeat_required": true
+  },
+  "delivery_verification": {
+    "retries": 0,
+    "verified": false,
+    "verified_at": null
+  },
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-26T04:43:19.733Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "SCHEMA_INVALID",
+    "detail": "Missing required field: evidence_exchange; evidence_exchange is required when evidence.required is true for response/ack types",
+    "schema_valid": false,
+    "signature_valid": false,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false
+  }
+}

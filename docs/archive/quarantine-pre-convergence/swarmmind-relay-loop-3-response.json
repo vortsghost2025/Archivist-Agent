@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.3",
+  "task_id": "swarmmind-relay-loop-3-response",
+  "id": "swarmmind-relay-loop-3-response",
+  "idempotency_key": "relay-3-1777082564586-471130d7",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ack",
+  "priority": "P2",
+  "subject": "Relay loop stability test 3 -- signed confirmation",
+  "body": "Re: RELAY-LOOP-VERIFY-003 (relay-loop-3).\n\n1) sync-gate-verify.js: {\"status\":\"PASS\",\"run_at\":\"2026-04-25T02:02:19.979Z\"} (no issues).\n2) test-signed-messages.js: PASS: 3, FAIL: 0.\n3) Signed response at lanes/swarmmind/outbox/swarmmind-relay-loop-3-response.json.",
+  "timestamp": "2026-04-25T02:02:44.585Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "action": "verify_relay_full"
+  },
+  "evidence": {
+    "required": true,
+    "type": "confirmation"
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/swarmmind/outbox/swarmmind-relay-loop-3-response.json",
+    "artifact_type": "log"
+  },
+  "system_state": {
+    "repo_root": "S:/SwarmMind",
+    "lane": "swarmmind",
+    "relay_loop": "3",
+    "sync_gate_verify": {
+      "status": "PASS",
+      "run_at": "2026-04-25T02:02:19.979Z"
+    },
+    "test_signed_messages": {
+      "pass": 3,
+      "fail": 0
+    }
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJleHAiOjE3NzcxNjg5NjQsImZyb20iOiJzd2FybW1pbmQiLCJpYXQiOjE3NzcwODI1NjQsImlkIjoic3dhcm1taW5kLXJlbGF5LWxvb3AtMy1yZXNwb25zZSIsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGltZXN0YW1wIjoiMjAyNi0wNC0yNVQwMjowMjo0NC41ODVaIiwidG8iOiJhcmNoaXZpc3QiLCJ0eXBlIjoicmVzcG9uc2UifQ.go8-spoyiubEWArkXx0qR_Md_cYIYbkmdH1f_G5QmbpZEN0xsgAs0ucmzbnYYCDWM_97HmQQk8JMzWaKaqI8JmtsWTeKGIly0y52nyVyILmm_z1jrVBNAPYLtwMkaCifLOK1uk_gQTiI_S2CQ5ZizIf01QSpic0Acfo1fxerq0xhULVuRYpiQvhCIHKaMCpfRxMSd46tCMlyUyxKJQzs5g6l-h2IxkSAoPh4wfVyilkvbDlRo327bnTY7fZcWDuUayjq-3ZGuYzqJmQuBeECht0Oi_6fjaup0HtfOOcjn4mXdU-wLsNbbcFNv9cdZh-FE6qnW4mN2959xVxqzcgfZA",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-25T15:28:15.352Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "SCHEMA_INVALID",
+    "detail": "Missing required field: execution; Missing required field: lease; Missing required field: retry; Missing required field: heartbeat; evidence_exchange must have artifact_path, artifact_type, and delivered_at",
+    "schema_valid": false,
+    "signature_valid": true,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false
+  }
+}
