@@ -1,0 +1,67 @@
+E2E STRICT REVIEW CLOSURE
+=========================
+Date: 2026-04-26 01:36:22-04:00
+Owner: Kernel lane (execution) / Archivist lane (governance record)
+
+Scope
+-----
+Full cross-lane independent validation across:
+- Archivist
+- Kernel
+- Library
+- SwarmMind
+
+Test Battery Executed
+---------------------
+1) node scripts/test-execution-gate.js
+2) node scripts/test-artifact-resolver.js
+3) node scripts/cross-lane-consistency-check.js
+
+Initial Findings (before fixes)
+-------------------------------
+P0-1: Execution gate routing regression reproduced in all 4 lanes
+- lane-worker did not always route unverified completion-proof artifacts to blocked.
+
+P0-2: Artifact resolver blocked-path regression reproduced in all 4 lanes
+- missing evidence_exchange/completion_artifact_path not consistently blocked.
+
+P1: Consistency checker parity gap
+- scripts/cross-lane-consistency-check.js missing in kernel/library/swarmmind.
+
+Fixes Applied
+-------------
+1) Patched scripts/lane-worker.js fail-closed logic:
+   - if completion proof exists and execution verification fails,
+     route to blocked with reason EXECUTION_NOT_VERIFIED.
+2) Propagated patched lane-worker.js to all 4 lanes.
+3) Distributed scripts/cross-lane-consistency-check.js to all 4 lanes.
+
+Retest Results (after fixes)
+----------------------------
+All 4 lanes:
+- test-execution-gate.js: PASS 10 / FAIL 0
+- test-artifact-resolver.js: PASS 8 / FAIL 0
+- cross-lane-consistency-check.js: executable in all lanes
+
+Consistency Highlights
+----------------------
+- Trust stores: consistent (matching hash and key IDs)
+- Schema validator enums: synced
+- Shared scripts: lane-worker/artifact-resolver/completion-proof synced
+- Remaining observed divergence: heartbeat.js file size differs by lane (likely lane-specific behavior; review separately if required)
+
+Status
+------
+E2E strict-review closure for execution-gate + artifact-resolver P0s: RESOLVED
+
+Related Message IDs
+-------------------
+- kernel-e2e-status-20260426T004753
+- kernel-e2e-independent-20260426T013314
+- kernel-fix-delta-20260426T013550
+
+Evidence Paths
+--------------
+- S:/Archivist-Agent/docs/ops/evidence/e2e-strict-review-closure-2026-04-26.txt
+- S:/kernel-lane/lanes/kernel/outbox/kernel-fix-delta-20260426T013550.json
+- S:/Archivist-Agent/lanes/archivist/inbox/kernel-fix-delta-20260426T013550.json
