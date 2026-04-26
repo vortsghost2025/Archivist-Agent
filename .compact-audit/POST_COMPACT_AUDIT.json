@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-26T00:47:20.085Z",
+  "timestamp": "2026-04-26T01:43:14.073Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -77,27 +77,27 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-26T00:47:01.759Z",
-        "age_seconds": 18
+        "timestamp": "2026-04-26T01:43:01.927Z",
+        "age_seconds": 12
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-26T00:47:01.848Z",
-        "age_seconds": 18
+        "timestamp": "2026-04-26T01:43:01.923Z",
+        "age_seconds": 12
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-26T00:47:02.005Z",
-        "age_seconds": 18
+        "timestamp": "2026-04-26T01:42:01.958Z",
+        "age_seconds": 72
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-26T00:47:01.757Z",
-        "age_seconds": 18
+        "timestamp": "2026-04-26T01:43:01.918Z",
+        "age_seconds": 12
       }
     },
     "inbox_counts": {
-      "archivist": 1,
+      "archivist": 0,
       "library": 0,
       "swarmmind": 0,
       "kernel": 11
@@ -105,7 +105,13 @@
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
     "bootstrap_hash": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
     "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
-    "known_risks": [],
+    "known_risks": [
+      "identity_soft_keys",
+      "determinism_not_guaranteed",
+      "kernel_partial_convergence",
+      "contract_alignment_ambiguous",
+      "subagent_code_destruction_surface"
+    ],
     "file_integrity": {
       "archivist": {
         "private_pem": {
@@ -122,6 +128,31 @@
           "path": "S:\\Archivist-Agent\\.identity\\snapshot.json",
           "exists": true,
           "hash": "a91e2e67b97630afaef2d97e09512cc0da265011db99e74cb531cbee501ba322"
+        },
+        "keys_json": {
+          "path": "S:\\Archivist-Agent\\.identity\\keys.json",
+          "exists": true,
+          "hash": "fe9b283e5dae3aeb760c05750e41fcd702272ccd5892585643b4049a117f33b7"
+        },
+        "lane_trust_store": {
+          "path": "S:\\Archivist-Agent\\lanes\\broadcast\\trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        },
+        "agents_md": {
+          "path": "S:\\Archivist-Agent\\AGENTS.md",
+          "exists": true,
+          "hash": "01760a98571bea71872a0df3c8ed652159b38391956e4f75eb17e81502f611d1"
+        },
+        "targets_json": {
+          "path": "S:\\Archivist-Agent\\config\\targets.json",
+          "exists": false,
+          "hash": null
+        },
+        "convergence_protocol_md": {
+          "path": "S:\\Archivist-Agent\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+          "exists": true,
+          "hash": "105fe047d5169cf04c87fc6088b8c8685f6b993563466c5dd872b0dafe642ff5"
         },
         "trust_store": {
           "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
@@ -145,6 +176,31 @@
           "exists": true,
           "hash": "cffaa03d622723f2bc57f97f0491317ca5f65c47f353742e9709b0bc89b92f7b"
         },
+        "keys_json": {
+          "path": "S:\\self-organizing-library\\.identity\\keys.json",
+          "exists": true,
+          "hash": "5473c6d41d303fa12efca1fb69ba56f6c8e6f43f2dd0ecfd12b1716adea0d456"
+        },
+        "lane_trust_store": {
+          "path": "S:\\self-organizing-library\\lanes\\broadcast\\trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        },
+        "agents_md": {
+          "path": "S:\\self-organizing-library\\AGENTS.md",
+          "exists": true,
+          "hash": "a561cfa7f9c2a95544fd82616129480f6384752805978bdc83ddfea848ec3930"
+        },
+        "targets_json": {
+          "path": "S:\\self-organizing-library\\config\\targets.json",
+          "exists": false,
+          "hash": null
+        },
+        "convergence_protocol_md": {
+          "path": "S:\\self-organizing-library\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+          "exists": true,
+          "hash": "105fe047d5169cf04c87fc6088b8c8685f6b993563466c5dd872b0dafe642ff5"
+        },
         "trust_store": {
           "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
           "exists": true,
@@ -167,6 +223,31 @@
           "exists": true,
           "hash": "003a28d1cec10b6d8d932593bfc8df97b1b3f742fa16cf900a472a9a5f410e05"
         },
+        "keys_json": {
+          "path": "S:\\SwarmMind\\.identity\\keys.json",
+          "exists": false,
+          "hash": null
+        },
+        "lane_trust_store": {
+          "path": "S:\\SwarmMind\\lanes\\broadcast\\trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        },
+        "agents_md": {
+          "path": "S:\\SwarmMind\\AGENTS.md",
+          "exists": true,
+          "hash": "013618f080e941b559964bf463ba089a6a9695b98a78a1ccf308f19fcfb56213"
+        },
+        "targets_json": {
+          "path": "S:\\SwarmMind\\config\\targets.json",
+          "exists": false,
+          "hash": null
+        },
+        "convergence_protocol_md": {
+          "path": "S:\\SwarmMind\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+          "exists": false,
+          "hash": null
+        },
         "trust_store": {
           "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
           "exists": true,
@@ -188,6 +269,31 @@
           "path": "S:\\kernel-lane\\.identity\\snapshot.json",
           "exists": true,
           "hash": "faa7381bf70f774194f12756e4349152289949d9d4133200c7e30fbd2f71d3fa"
+        },
+        "keys_json": {
+          "path": "S:\\kernel-lane\\.identity\\keys.json",
+          "exists": false,
+          "hash": null
+        },
+        "lane_trust_store": {
+          "path": "S:\\kernel-lane\\lanes\\broadcast\\trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        },
+        "agents_md": {
+          "path": "S:\\kernel-lane\\AGENTS.md",
+          "exists": true,
+          "hash": "04de9a9bf8478447b2082ed0fd62cc7f452562f0074036154435fd7255527d4f"
+        },
+        "targets_json": {
+          "path": "S:\\kernel-lane\\config\\targets.json",
+          "exists": true,
+          "hash": "b155c3a0196a855ba50e1b40e26398388bad73c30004206303a36edc9251bc01"
+        },
+        "convergence_protocol_md": {
+          "path": "S:\\kernel-lane\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+          "exists": false,
+          "hash": null
         },
         "trust_store": {
           "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
@@ -227,12 +333,12 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 9,
+    "message_loss": 10,
     "message_loss_detail": {
       "archivist": {
         "pre": 3,
-        "post": 1,
-        "lost": 2
+        "post": 0,
+        "lost": 3
       },
       "library": {
         "pre": 1,
@@ -246,20 +352,13 @@
       }
     },
     "lane_degradations": [],
-    "risk_set_preserved": false,
-    "missing_risks": [
-      "identity_soft_keys",
-      "determinism_not_guaranteed",
-      "kernel_partial_convergence",
-      "contract_alignment_ambiguous",
-      "subagent_code_destruction_surface"
-    ],
+    "risk_set_preserved": true,
+    "missing_risks": [],
     "unexpected_changes": [
       "trust_store_archivist_key_changed",
       "trust_store_library_key_changed",
       "trust_store_swarmmind_key_changed",
-      "trust_store_kernel_key_changed",
-      "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
+      "trust_store_kernel_key_changed"
     ]
   },
   "status": "drifted",
@@ -277,7 +376,7 @@
       "known_risk_set",
       "file_integrity"
     ],
-    "contradictions_found": 5,
+    "contradictions_found": 4,
     "self_declared_alignment": false
   }
 }
