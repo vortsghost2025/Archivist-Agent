@@ -15,7 +15,7 @@
 | Paper C: Phenotype Selection | COMPLETE | ~7,800 | `papers/paper3.txt` |
 | Paper D: Drift, Identity, Ensemble | COMPLETE | ~7,600 | `papers/paper4.txt` |
 | Paper E: WE4FREE Framework | COMPLETE (needs errata) | ~11,400 | `papers/paper5.txt` |
-| Paper F: Failure Modes, Limits, Self-Correction | DRAFT FOR REVIEW | ~8,500 | Library `book-6-...md` |
+| Paper F: Failure Modes, Limits, Self-Correction | REVIEWABLE | ~10,200 | Library `book-6-...md` |
 | CAISC 2026 Outline | OUTLINE ONLY | outline | `CAISC_2026_PAPER_OUTLINE.md` |
 | CAISC 2026 Abstract | DRAFT | 498 words | `CAISC_2026_ABSTRACT.md` |
 | OSF Preprint | SUBMITTED | summary | https://osf.io/n3tya |
