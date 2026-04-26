@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T19:50:50.281Z",
+  "timestamp": "2026-04-26T00:45:09.807Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -35,7 +35,7 @@
     {
       "name": "message_inventory",
       "passed": true,
-      "detail": "total=11 {\"archivist\":6,\"library\":0,\"swarmmind\":1,\"kernel\":4}"
+      "detail": "total=12 {\"archivist\":1,\"library\":0,\"swarmmind\":0,\"kernel\":11}"
     },
     {
       "name": "risk_set_preservation",
@@ -44,24 +44,24 @@
     },
     {
       "name": "lane_liveness",
-      "passed": false,
-      "detail": "3/4 lanes alive"
+      "passed": true,
+      "detail": "4/4 lanes alive"
     },
     {
       "name": "multi_source_consistency",
-      "passed": false,
-      "detail": "6 sources, 2 contradictions"
+      "passed": true,
+      "detail": "6 sources, 0 contradictions"
     },
     {
       "name": "contradiction_detection",
       "passed": true,
-      "detail": "status=drifted unexpected_changes=2"
+      "detail": "status=conflicted unexpected_changes=5"
     }
   ],
   "summary": {
-    "passed": 9,
+    "passed": 11,
     "total": 11,
-    "all_passed": false
+    "all_passed": true
   },
-  "claim": "Restored context has contradictions — cannot prove correctness"
+  "claim": "Restored context matches pre-compact state across all checked dimensions"
 }

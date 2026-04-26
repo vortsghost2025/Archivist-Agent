@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-24T19:48:58.048Z",
+  "timestamp": "2026-04-26T00:47:20.085Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -63,10 +63,10 @@
       "blocker": null
     },
     "trust_store_key_ids": {
-      "archivist": "147c5c2bb7d8941f",
-      "library": "cb3e57dd7818da3d",
-      "swarmmind": "60afaa026a3d969d",
-      "kernel": "7f1a9fe931d1fbba"
+      "archivist": "ee70b78105bc6189",
+      "kernel": "b677eb87f6be83f9",
+      "library": "ea2a75bab220adc2",
+      "swarmmind": "addb0afb8ee5c2ed"
     },
     "constraint_names": [
       "STRUCTURE_OVER_IDENTITY",
@@ -77,40 +77,148 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-24T19:48:02.013Z",
-        "age_seconds": 56
+        "timestamp": "2026-04-26T00:47:01.759Z",
+        "age_seconds": 18
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-24T19:48:02.042Z",
-        "age_seconds": 56
+        "timestamp": "2026-04-26T00:47:01.848Z",
+        "age_seconds": 18
       },
       "swarmmind": {
-        "status": "no_heartbeat",
-        "timestamp": null
+        "status": "alive",
+        "timestamp": "2026-04-26T00:47:02.005Z",
+        "age_seconds": 18
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-04-24T19:48:31.736Z",
-        "age_seconds": 26
+        "timestamp": "2026-04-26T00:47:01.757Z",
+        "age_seconds": 18
       }
     },
     "inbox_counts": {
-      "archivist": 6,
+      "archivist": 1,
       "library": 0,
       "swarmmind": 0,
-      "kernel": 4
+      "kernel": 11
     },
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
     "bootstrap_hash": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
     "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
-    "known_risks": []
+    "known_risks": [],
+    "file_integrity": {
+      "archivist": {
+        "private_pem": {
+          "path": "S:\\Archivist-Agent\\.identity\\private.pem",
+          "exists": true,
+          "hash": "3d21a7f1e18b2c080f776cde64ef2b1f9626a3852afe53b2ebe28404b2764e98"
+        },
+        "public_pem": {
+          "path": "S:\\Archivist-Agent\\.identity\\public.pem",
+          "exists": true,
+          "hash": "a0230f635bcc0f2e05ecbe404993ed1448549e033458e319d12938d79eca92d9"
+        },
+        "snapshot_json": {
+          "path": "S:\\Archivist-Agent\\.identity\\snapshot.json",
+          "exists": true,
+          "hash": "a91e2e67b97630afaef2d97e09512cc0da265011db99e74cb531cbee501ba322"
+        },
+        "trust_store": {
+          "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        }
+      },
+      "library": {
+        "private_pem": {
+          "path": "S:\\self-organizing-library\\.identity\\private.pem",
+          "exists": true,
+          "hash": "edbc4a040d0b4460c4cf0e210cbc7821fa1303c24c86ec281d1b03ec2aa19ba0"
+        },
+        "public_pem": {
+          "path": "S:\\self-organizing-library\\.identity\\public.pem",
+          "exists": true,
+          "hash": "2eec06be0befc8d5604a523395a54ade2e9564449cd437c89552639ec83a5ad3"
+        },
+        "snapshot_json": {
+          "path": "S:\\self-organizing-library\\.identity\\snapshot.json",
+          "exists": true,
+          "hash": "cffaa03d622723f2bc57f97f0491317ca5f65c47f353742e9709b0bc89b92f7b"
+        },
+        "trust_store": {
+          "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        }
+      },
+      "swarmmind": {
+        "private_pem": {
+          "path": "S:\\SwarmMind\\.identity\\private.pem",
+          "exists": true,
+          "hash": "d6a5d5ddf2578f08f95531ab70e67d321c82bc5d7734f256b71922ff0d8f128a"
+        },
+        "public_pem": {
+          "path": "S:\\SwarmMind\\.identity\\public.pem",
+          "exists": true,
+          "hash": "c41954228c48ff9c8653c3af3fa75d90c91a25fc78c8d7bd4cad76c4fdd3ec57"
+        },
+        "snapshot_json": {
+          "path": "S:\\SwarmMind\\.identity\\snapshot.json",
+          "exists": true,
+          "hash": "003a28d1cec10b6d8d932593bfc8df97b1b3f742fa16cf900a472a9a5f410e05"
+        },
+        "trust_store": {
+          "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        }
+      },
+      "kernel": {
+        "private_pem": {
+          "path": "S:\\kernel-lane\\.identity\\private.pem",
+          "exists": true,
+          "hash": "810e4a0d5926b9aa4fa1db950ccc4753f46e79c44e6ba7f9fad7e78630c3bcab"
+        },
+        "public_pem": {
+          "path": "S:\\kernel-lane\\.identity\\public.pem",
+          "exists": true,
+          "hash": "127b44d2bb294ad9a1bd748b5d0cebb376dc890afc52738ca79ec906cb145627"
+        },
+        "snapshot_json": {
+          "path": "S:\\kernel-lane\\.identity\\snapshot.json",
+          "exists": true,
+          "hash": "faa7381bf70f774194f12756e4349152289949d9d4133200c7e30fbd2f71d3fa"
+        },
+        "trust_store": {
+          "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+          "exists": true,
+          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+        }
+      }
+    }
   },
   "diff": {
     "blocker_changed": false,
     "blocker_detail": null,
-    "trust_chain_intact": true,
-    "trust_detail": null,
+    "trust_chain_intact": false,
+    "trust_detail": {
+      "archivist": {
+        "pre": "147c5c2bb7d8941f",
+        "post": "ee70b78105bc6189"
+      },
+      "library": {
+        "pre": "cb3e57dd7818da3d",
+        "post": "ea2a75bab220adc2"
+      },
+      "swarmmind": {
+        "pre": "60afaa026a3d969d",
+        "post": "addb0afb8ee5c2ed"
+      },
+      "kernel": {
+        "pre": "7f1a9fe931d1fbba",
+        "post": "b677eb87f6be83f9"
+      }
+    },
     "constraints_intact": true,
     "constraints_detail": null,
     "governance_intact": true,
@@ -119,8 +227,13 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 7,
+    "message_loss": 9,
     "message_loss_detail": {
+      "archivist": {
+        "pre": 3,
+        "post": 1,
+        "lost": 2
+      },
       "library": {
         "pre": 1,
         "post": 0,
@@ -132,13 +245,7 @@
         "lost": 6
       }
     },
-    "lane_degradations": [
-      {
-        "lane": "swarmmind",
-        "pre_status": "alive",
-        "post_status": "no_heartbeat"
-      }
-    ],
+    "lane_degradations": [],
     "risk_set_preserved": false,
     "missing_risks": [
       "identity_soft_keys",
@@ -148,7 +255,10 @@
       "subagent_code_destruction_surface"
     ],
     "unexpected_changes": [
-      "lane_swarmmind_degraded",
+      "trust_store_archivist_key_changed",
+      "trust_store_library_key_changed",
+      "trust_store_swarmmind_key_changed",
+      "trust_store_kernel_key_changed",
       "risks_lost: identity_soft_keys, determinism_not_guaranteed, kernel_partial_convergence, contract_alignment_ambiguous, subagent_code_destruction_surface"
     ]
   },
@@ -164,9 +274,10 @@
       "handoff_doc",
       "inbox_message_counts",
       "lane_heartbeats",
-      "known_risk_set"
+      "known_risk_set",
+      "file_integrity"
     ],
-    "contradictions_found": 2,
+    "contradictions_found": 5,
     "self_declared_alignment": false
   }
 }
