@@ -1,0 +1,432 @@
+KEY EXPOSURE AUDIT
+==================
+Date: 2026-04-25 22:50:19
+Repo: S:/Archivist-Agent
+Auditor: Archivist Lane
+
+SCOPE COMMANDS RUN:
+-------------------
+git log --all --full-history -- '*key*' '*secret*' '*.pem' '*.env' '*.pfx' '*.p12'
+git log --all --oneline -S 'BEGIN RSA'
+git log --all --oneline -S 'BEGIN PRIVATE'
+git log --all --oneline -S 'sk-'
+git log --all --oneline -S 'token'
+git log --all --oneline -S 'secret'
+Get-ChildItem -Recurse -Include *.pem,*.key,*.env,*.pfx | Select-Object FullName
+Get-Content .gitignore | Select-String -Pattern 'key|secret|env|pem'
+
+FINDINGS:
+---------
+Files found in git history matching key patterns:
+commit b68b7800ab6c04d0e41a6080c2a3fc5af1de41f7
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Fri Apr 24 19:27:10 2026 -0400
+
+    clean-slate: nuke all legacy mail, pipeline verified on SwarmMind
+
+commit e7c1a5248fd023243598c37d78d2d8d286b943f9
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Fri Apr 24 18:59:56 2026 -0400
+
+    cleanup: quarantine cleared, 95 execution_verified stamps, v1.3 SchemaValidator, deriveKeyId.js, remediation script
+
+commit 892f67bc64d72f1e3cc9604df96cde3ee1c8df8a
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Fri Apr 24 09:41:29 2026 -0400
+
+    feat: enforce English-only constraint for all system messages
+    
+    - Add sanitize-emoji.js: strips non-ASCII from 314 messages across all lanes
+    - Add isEnglishOnly() to inbox-watcher.js: marks non-ASCII as format_violation
+    - Non-ASCII messages get format_violation=true, not processed for state transitions
+    - Deploy sanitizer and updated inbox-watcher to all lanes
+    - All 314 violations sanitized: emoji replaced with ASCII equivalents
+
+commit 767286dcd1905f8618ac7b0a79e8e62b8117aacb
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Thu Apr 23 21:43:33 2026 -0400
+
+    feat: completion gate controller + audit ΓÇö no message enters processed/ without proof
+    
+    - completion-gate.js: enforces strict gate ΓÇö actionable requires proof, informational requires terminal type
+    - completion-gate-audit.js: reports processed_ok, blocked_count, lifecycle_violations, terminal_messages_verified
+    - completion-gate-remediate.js: stamps terminal_decision on actionable messages needing retroactive disposition
+    - 215 non-terminal-type messages ejected from processed/ to action-required/
+    - 165 messages pass gate (160 terminal informational + 5 actionable with proof)
+    - All 4 lanes: processed_ok=true, blocked_count=0
+    - Scripts deployed to all 4 lanes (parity confirmed)
+
+commit 523fbbdaad6b0dcf4e1f2252f7b89acd18d4e4f3
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Thu Apr 23 20:23:40 2026 -0400
+
+    fix: global recovery, heartbeat truth-over-stability, task_state=UNVERIFIED
+    
+    - Deploy recover-action-required-from-processed.js to ALL 4 lanes (script parity confirmed: sha256 match)
+    - Move 371 action-required/ messages to processed/ with task_state=UNVERIFIED
+    - Fix 9 messages without completion proof (added disposition)
+    - Verify COUNT(action_required in processed/) == 0 across ALL lanes
+    - Fix heartbeat.js on all lanes: contradictions override system_state (truth-over-stability)
+    - Sync canonical contradictions.json and system_state.json to all lanes
+    - All heartbeats now report system_state=degraded with 2 active contradictions
+    - completion-proof-audit: overall_ok=true across all lanes (100+86+73+121=380 total)
+
+commit 9c8fb395c7ed508cf81045e0be957614a6989652
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Thu Apr 23 17:32:35 2026 -0400
+
+    fix: add completion proof to 306 processed/ messages, add bulk completion scripts
+
+commit a4d9de13d17d555248f3a272bf5270d931fab37f
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Thu Apr 23 17:03:13 2026 -0400
+
+    Enforce identity across all lanes + CI integration
+    
+    - Implement cross-lane-sync-gate.js (replace placeholder)
+    - Add CI integration check (ci-integration-check.js)
+    - Deploy identity-enforcer.js to all lanes in enforce mode
+    - Copy validation scripts to all lanes (Kernel, Library, SwarmMind)
+    - Process all inbox messages (Archivist, Kernel, SwarmMind) to processed/
+    - Fix key_id issues (per-lane DER fingerprints)
+    - Add content_hash validation (validateMessage function)
+    - POST-CONVERGENCE LOCK active
+    - Convergence complete (convergence-complete.json)
+
+commit 0a4cfd16ad841c33e179682e82af43c4c3c3392e
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Thu Apr 23 12:01:11 2026 -0400
+
+    fix: adopt DER fingerprint standard for key_ids, update trust store and snapshot with correct DER key_ids
+
+commit 14633fbc4ec768ae3772255ca9c275dd9f06796d
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Wed Apr 22 19:57:04 2026 -0400
+
+    [checkpoint] Trust store sync + convergence artifacts
+    
+    - Trust store aligned across all 4 lanes
+    - LANE_REGISTRY.json path fix
+    - Convergence contradiction checker added
+    - Schema artifacts updated
+
+commit a8b2fa5b9d7073204f3c2571ac773949b22e5ca0
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Wed Apr 22 18:17:27 2026 -0400
+
+    [archivist] Resolve 3 P0 blocking issues
+    
+    P0-1: Create edit-intent registry
+    P0-2: Fix .trust/keys.json key_id: 1a7741b8d353abee -> 583b2c36f397ef01
+    P0-3: Resolve 5 gate violations (historical, gate now protected)
+
+commit ba31894ffe62f4092f9e00c76feb8f80ba42bde4
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Wed Apr 22 15:57:46 2026 -0400
+
+    fix: trust store convergence ΓÇö correct key_ids, broadcast store, TrustStoreManager path, 11/11 recovery tests
+
+commit 94309314f44f97f1021e064c4d60c0670282ee1b
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Wed Apr 22 15:27:13 2026 -0400
+
+    fix: add lanes/*/inbox and lanes/*/outbox to gitignore ΓÇö JWS signing tokens must never be committed
+
+commit 0d0d16a7196e4bd5232b2d6d3360627c853045df
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Wed Apr 22 11:40:33 2026 -0400
+
+    Normalize Archivist key_id to snapshot value and update canonical trust store
+
+commit e24cd4d7e313dada4622ea20594395b954b5b26b
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Wed Apr 22 11:26:52 2026 -0400
+
+    Normalize trust store fingerprints, update canonical trust store, deliver authority messages
+
+commit f5919830bd2cae3f4e0df87ca71740f49e58c320
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Wed Apr 22 08:59:12 2026 -0400
+
+    Update governance files (Round 8 enforcement kernel)
+
+commit 5c5fa6ee25626b3a2c2dea43c14a6080777ad6f2
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Wed Apr 22 07:54:14 2026 -0400
+
+    ACT Round 6: add evidence_exchange protocol to schema + validator
+    
+    - schema: add evidence_exchange block to inbox-message-v1.json
+    - validator: add evidence_exchange validation for response/ack types
+    - add createMessage defaults for evidence_exchange
+
+commit ce585c278eb16782b5cf7608cad8537b865b9299
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Tue Apr 21 21:05:57 2026 -0400
+
+    ACT round proof + trust store update
+
+commit 40a9f09df4d2ebc053d93ee5a04af0d303fde049
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Tue Apr 21 19:07:47 2026 -0400
+
+    Move remaining expired messages to quarantine (unsigned, unknown type)
+
+commit d458cd01e09d17664a4bdd778ed407978ba96239
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Tue Apr 21 19:07:12 2026 -0400
+
+    Move unsigned expired messages to quarantine
+
+commit 16fc874304281366455cb3c1e607757ab0dd000f
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Tue Apr 21 19:05:35 2026 -0400
+
+    Update SchemaValidator to v1.3 (optional task_kind, relaxed idempotency, add ack/alert types) and move trust messages to inbox
+
+commit 5a9e2fab7dcfcd57f9cb47cdd2f6f5e2c8bf0d74
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Sun Apr 19 18:40:03 2026 -0400
+
+    Update trust store with real SwarmMind and Library keys
+    
+    - SwarmMind key: 69d22f8a1192cf45
+    - Library key: 713485afdb41c35a (newly generated)
+    - Added pending library.json for key export
+
+commit 75af917639373594983f42a6129ce640b8d7572b
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Sun Apr 19 17:03:38 2026 -0400
+
+    [Security] Remove private keys from tracking, complete Identity Layer v0.2
+    
+    Security Fix:
+    - Removed .identity/private.pem and .identity/public.pem from git
+    - Updated .gitignore to prevent future tracking
+    - Rotated key pair (old key compromised in history)
+    
+    Identity Layer v0.2:
+    - Signed JWS identity snapshots (RSA-SHA256)
+    - Updated IDENTITY_LAYER_SPEC.md with v0.2 format
+    - Updated REHYDRATE.md with verification steps
+    - All 13 tests pass
+    - snapshot.json includes issued_by, key_id, expires_at
+    - snapshot.jws provides cryptographic proof
+    
+    Trust Store:
+    - Updated keys.json with new archivist public key
+    - Key ID: d5faddfa2ab2ff3f
+    
+    Cross-Lane Coordination:
+    - Updated CONTINUITY_REGISTRY.json
+    - Lane relay inbox updated
+
+commit 3db5da30ec23155d62fd867c1e87818344563d4a
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Sun Apr 19 14:49:13 2026 -0400
+
+    [Identity Layer] Implement Agent Identity Layer v0.1
+    
+    Components:
+    - IDENTITY_LAYER_SPEC.md: Full specification
+    - snapshot.json: Persistent identity state
+    - REHYDRATE.md: Rehydration protocol
+    - continuity_handshake.js: Handshake implementation
+    - test-identity-layer.js: 9 tests passing
+    
+    Features:
+    - Survives model switches
+    - Survives context truncation
+    - Invariant: A (runtime) = B (snapshot) = C (trust)
+    - Goals, open_loops, context_fingerprint preserved
+    - Archive snapshots for audit trail
+    
+    Integrates with:
+    - .trust/keys.json for trust verification
+    - BOOTSTRAP.md for governance
+    - A=B=C invariant pattern
+
+commit e68ad6ee5f30362bdd34d49ea3f82dfbe515d752
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Sun Apr 19 10:08:02 2026 -0400
+
+    [attestation] Register SwarmMind public key in trust store
+    
+    - Key ID: 69d22f8a1192cf45
+    - Registered at: 2026-04-19T13:45:00Z
+    - Authority: 80 (execution layer)
+    
+    Trust store status:
+    - Archivist: REGISTERED (72036d1654b0034a)
+    - SwarmMind: REGISTERED (69d22f8a1192cf45)
+    - Library: PENDING
+    
+    SwarmMind signatures now verifiable by Archivist.
+
+commit 4683e33876f4fa5153056427fd67adda04522ea4
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Sun Apr 19 09:34:23 2026 -0400
+
+    [attestation] Register Archivist RSA-2048 public key in trust store
+    
+    - Generated key ID: 72036d1654b0034a
+    - Registered at: 2026-04-19T13:32:07Z
+    - Trust store now has 1 registered key (archivist)
+    - SwarmMind and Library keys pending
+    
+    Added:
+    - scripts/register-archivist-key.js: Key registration utility
+    - .trust/keys.json: Updated with Archivist public key
+    
+    Note: Private key stored in .identity/ (gitignored for security)
+
+commit 0f127f5c060cb67fa3eb1151d59f8a2bf5278c93
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Sat Apr 18 20:47:44 2026 -0400
+
+    [archivist] Complete continuity proof boundary
+    
+    Created missing inputs:
+    - .identity/keys.json ΓÇö Ed25519 keypair for identity attestation
+    - logs/audit.log ΓÇö Initial audit trail entries
+    
+    Updated CONTINUITY_REGISTRY.json:
+    - recovery_status: partial ΓåÆ verified
+    - All 4 continuity inputs now present and hashed
+    - Constitutional and continuity fingerprints match
+    
+    Verification now passes with all required inputs present.
+    
+    Evidence: node scripts/verify_continuity.js === VERIFICATION PASSED ===
+
+commit a083621993182577ff78220b6735baee7087ece5
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Mon Apr 13 23:26:06 2026 -0400
+
+    docs: Add proper README reflecting real state, add .gitignore for build artifacts
+    
+    - Replace generic README with accurate project description
+    - Document governance stack (21 files, single entry point architecture)
+    - Explain dynamic drift detection (not binary pass/fail)
+    - Add WE4FREE research papers link (OSF)
+    - Clarify what this is: verification layer, not assistant
+    - Document current state: foundation complete, bundles pending
+    - Add .gitignore for target/ and build artifacts
+
+commit 2a9be5542ab94c9e0250f18e49bdcbb83416cbb0
+Author: DeliberateEnsemble <seandavidramsingh@gmail.com>
+Date:   Mon Apr 13 23:07:32 2026 -0400
+
+    feat: Initialize Archivist-Agent Tauri desktop app
+    
+    - Add Tauri configuration and build setup
+    - Implement core commands (build_index, build_registry, summarize_folder, generate_handoff)
+    - Add safety module for path validation
+    - Include governance documentation (BOOTSTRAP, COVENANT, GOVERNANCE, etc.)
+    - Add session handoff and verification report from 2026-04-13
+    - Configure allowed roots and capabilities
+    - Add WE4FREE resilience framework documentation
+    
+    This commit establishes the foundational architecture for the Archivist-Agent
+    governance-aware desktop application with constitutional constraints and
+    single entry point design as documented in BOOTSTRAP.md.
+
+
+Content matches found in history:
+git log --all --oneline -S 'BEGIN RSA'
+
+git log --all --oneline -S 'BEGIN PRIVATE'
+b68b780 clean-slate: nuke all legacy mail, pipeline verified on SwarmMind
+9c8fb39 fix: add completion proof to 306 processed/ messages, add bulk completion scripts
+0f127f5 [archivist] Complete continuity proof boundary
+
+git log --all --oneline -S 'sk-'
+f7a9bc9 accept: GEN4 verification response from kernel lane
+b82fa80 feat: full automated pipeline + execution enum extension (NFM-024 class)
+a60bcb6 Remediation: fix create-signed-message syntax; enforce self-first trust store; tie execution_verified to hasCompletionProof; clean deprecated paths; update heartbeat guard; sync verification passes
+420e7a5 feat: dispatch-task, validate-responses, copilot-state-package tools
+f643e1b feat: task-executor daemon for action-required queue (synced from SwarmMind)
+4b974f8 feat: completion gate triage remediation ΓÇö no deletion, full field preservation
+767286d feat: completion gate controller + audit ΓÇö no message enters processed/ without proof
+9c8fb39 fix: add completion proof to 306 processed/ messages, add bulk completion scripts
+4f2adfb Add canonical message builder and quick reference.
+7c7b7bc Add QUICK_START_PATHS.md for clear agent onboarding
+c2bb288 Complete SwarmMind migration to canonical path
+d68d626 FIX: Trust chain integrity ΓÇö sync SchemaValidator + inbox-watcher from Library
+56136e6 Update current state: reciprocal accountability ratified
+5181d4f Add state snapshot: Library AGENTS.md structural depth upgrade
+d63bae4 Phase 4 complete: Recovery discipline (4A) and Outcome protocol (4B)
+5c9734b Wave 1: reorganize papers, scratch, and registry into dedicated directories
+25e2046 Add WE4FREE papers and theory-practice mapping
+a083621 docs: Add proper README reflecting real state, add .gitignore for build artifacts
+2a9be55 feat: Initialize Archivist-Agent Tauri desktop app
+
+git log --all --oneline -S 'token'
+fa4497b ops: establish canonical governance docs structure
+b68b780 clean-slate: nuke all legacy mail, pipeline verified on SwarmMind
+9c8fb39 fix: add completion proof to 306 processed/ messages, add bulk completion scripts
+9430931 fix: add lanes/*/inbox and lanes/*/outbox to gitignore ΓÇö JWS signing tokens must never be committed
+9f14989 Enforce lane-relay coordination protocol - eliminate inbox guesswork
+58f30b2 [PROTOCOL] Git protocol mandatory for all three lanes
+0ccb870 [i] Divergence reconciliation: SwarmMind status desync resolved
+b451a46 [LANE-1] [RECOVERY] Crash recovery test passed
+03e4d91 [LANE-1] [SYNC-2026-04-17] Multi-lane commit log
+3c19464 [LANE-1] [SYNC-2026-04-17] Governance multi-lane restoration milestone
+5c9734b Wave 1: reorganize papers, scratch, and registry into dedicated directories
+b4c36e2 Session 2026-04-15: Config consolidation, bridge architecture, code review fixes
+090be25 docs: Add system inventory and gap analysis
+8cdcbfc fix: consolidate project structure to src-tauri
+a083621 docs: Add proper README reflecting real state, add .gitignore for build artifacts
+2a9be55 feat: Initialize Archivist-Agent Tauri desktop app
+
+git log --all --oneline -S 'secret'
+fa4497b ops: establish canonical governance docs structure
+095b115 sync: kernel stripe-rake refinements ΓÇö audit dedup, compact wrapper, pre-commit
+b68b780 clean-slate: nuke all legacy mail, pipeline verified on SwarmMind
+9c8fb39 fix: add completion proof to 306 processed/ messages, add bulk completion scripts
+16fc874 Update SchemaValidator to v1.3 (optional task_kind, relaxed idempotency, add ack/alert types) and move trust messages to inbox
+d63bae4 Phase 4 complete: Recovery discipline (4A) and Outcome protocol (4B)
+88a0ff3 Phase 2: Canonical boot scripts and sequence documentation
+090222e [SIGN-OFF] Three-lane deterministic attestation system complete
+0ee8f48 [Phase 4.4] Integration status summary
+3631f01 [Phase 4.4] Add OpenAPI spec and key rotation docs
+d7d787d [decision] Phase 4.3 asymmetric attestation approved - RSA-2048 PKI signatures for queue/audit/continuity
+58f30b2 [PROTOCOL] Git protocol mandatory for all three lanes
+5c9734b Wave 1: reorganize papers, scratch, and registry into dedicated directories
+25e2046 Add WE4FREE papers and theory-practice mapping
+a083621 docs: Add proper README reflecting real state, add .gitignore for build artifacts
+2a9be55 feat: Initialize Archivist-Agent Tauri desktop app
+
+
+Current working tree key-pattern files:
+
+FullName
+--------
+S:\Archivist-Agent\.identity\test-temp\private.pem
+S:\Archivist-Agent\.identity\test-temp\public.pem
+S:\Archivist-Agent\.identity\private.pem
+S:\Archivist-Agent\.identity\public.pem
+S:\Archivist-Agent\.identity\tmp.pem
+
+
+
+.gitignore coverage:
+
+# Identity keys (NEVER commit)
+*.key
+*.pem
+keys.json
+.identity/*.pem
+
+
+
+SEVERITY ASSESSMENT:
+--------------------
+[CRITICAL] Derived from automated checks above.
+
+NEXT PHASE:
+-----------
+Based on findings above, Phase 2 (rotation) scope is:
+- Rotate any active credentials/keys referenced by exposed historical material.
+- Perform history remediation for confirmed sensitive file paths.
+- Validate with post-remediation leak scan before closure.
