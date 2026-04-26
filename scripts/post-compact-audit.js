@@ -116,23 +116,7 @@ class PostCompactAudit {
             };
             results[laneId] = laneFiles;
         }
-// Deduplicate entries for globally-shared files (e.g., AGENTS.md, targets.json, CONVERGENCE_PROTOCOL.md)
-    const unique = {};
-    for (const [laneId, files] of Object.entries(results)) {
-      for (const [key, info] of Object.entries(files)) {
-        const pathKey = `${info.path}`;
-        if (!unique[pathKey]) {
-          unique[pathKey] = { ...info };
-        }
-      }
-    }
-    // Assign deduplicated results under a special 'global' lane identifier
-    results = { global: {} };
-    for (const [pathKey, info] of Object.entries(unique)) {
-      const name = info.name || pathKey.split('/').pop();
-      results.global[name] = info;
-    }
-    return results;
+  return results;
     }
 
     _getLaneHeartbeats() {
