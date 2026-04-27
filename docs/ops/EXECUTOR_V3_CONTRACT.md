@@ -59,6 +59,18 @@
 - `task_kind=ack` for unrecognized tasks (fallback)
 - `results.error` present on any failure
 
+### Ownership Enforcement Metadata
+
+When lane processing runs with `--enforce-ownership`, downstream lane-worker metadata includes:
+
+- `_lane_worker.enforce_ownership: true`
+- `_lane_worker.ownership: object`
+- `_lane_worker.ownership_notes: string[]`
+
+Response validation rule:
+
+- If `_lane_worker.enforce_ownership === true`, both `_lane_worker.ownership` and `_lane_worker.ownership_notes` are required.
+
 ## Truncation Policy
 
 | Verb | Limit | On Exceed |

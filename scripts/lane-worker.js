@@ -60,6 +60,7 @@ function parseArgs(argv) {
     pollSeconds: 20,
     maxFiles: 200,
     json: false,
+    enforceOwnership: false,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -89,6 +90,10 @@ function parseArgs(argv) {
     }
     if (a === '--json') {
       out.json = true;
+      continue;
+    }
+    if (a === '--enforce-ownership') {
+      out.enforceOwnership = true;
       continue;
     }
   }
@@ -153,6 +158,40 @@ function normalizeMessage(msg) {
   return msg;
 }
 
+function evaluateOwnership(msg) {
+  const ownership = msg && typeof msg === 'object' ? msg.ownership : null;
+  if (!ownership || typeof ownership !== 'object') {
+    return { present: false, malformed: false };
+  }
+  if (ownership.owner_agent_id !== undefined && typeof ownership.owner_agent_id !== 'string') {
+    return { present: true, malformed: true, reason: 'owner_agent_id must be a string' };
+  }
+  if (ownership.lease_expires_at !== undefined && typeof ownership.lease_expires_at !== 'string') {
+    return { present: true, malformed: true, reason: 'lease_expires_at must be an ISO string' };
+  }
+  const now = Date.now();
+  const activeAgent = process.env.AGENT_INSTANCE_ID || null;
+  const ownerAgent = ownership.owner_agent_id || null;
+  let leaseExpired = false;
+  if (ownership.lease_expires_at) {
+    const leaseMs = Date.parse(String(ownership.lease_expires_at));
+    if (!Number.isNaN(leaseMs) && leaseMs < now) leaseExpired = true;
+  }
+  const ownerMismatch = Boolean(activeAgent && ownerAgent && activeAgent !== ownerAgent);
+  return {
+    present: true,
+    malformed: false,
+    owner_agent_id: ownerAgent,
+    mode: ownership.mode || null,
+    coordination_group: ownership.coordination_group || null,
+    lease_expires_at: ownership.lease_expires_at || null,
+    lease_expired: leaseExpired,
+    owner_mismatch: ownerMismatch,
+    active_agent_id: activeAgent,
+    conflict_policy: ownership.conflict_policy || null,
+  };
+}
+
 function completionGateApprove(msg) {
   return cp.evaluate(msg);
 }
@@ -196,6 +235,7 @@ class LaneWorker {
     this.lane = options.lane || guessLane(this.repoRoot);
     this.dryRun = options.dryRun !== undefined ? !!options.dryRun : true;
     this.maxFiles = options.maxFiles || 200;
+    this.enforceOwnership = options.enforceOwnership === true;
     this.config = options.config || createDefaultConfig(this.repoRoot, this.lane);
     this.schemaValidator = options.schemaValidator || this._loadSchemaValidator();
     this.signatureValidator = options.signatureValidator || this._loadSignatureValidator();
@@ -325,16 +365,49 @@ class LaneWorker {
       return { queue: 'blocked', reason: 'FAKE_COMPLETION_PROOF', detail: 'terminal_decision/disposition present without evidence_exchange or legacy artifact' };
     }
 
+    const ownership = evaluateOwnership(msg);
+    const ownershipNotes = [];
+    if (!ownership.present) ownershipNotes.push('OWNERSHIP_MISSING');
+    if (ownership.present && ownership.lease_expired) ownershipNotes.push('OWNERSHIP_LEASE_EXPIRED');
+    if (ownership.present && ownership.owner_mismatch) ownershipNotes.push('OWNERSHIP_OWNER_MISMATCH');
+
+    if (ownership.malformed) {
+      return {
+        queue: 'quarantine',
+        reason: 'OWNERSHIP_MALFORMED',
+        detail: ownership.reason || 'ownership object malformed',
+        ownership,
+        ownership_notes: ownershipNotes.concat(['OWNERSHIP_MALFORMED'])
+      };
+    }
+
+    if (
+      this.enforceOwnership &&
+      ownership.present &&
+      ownership.owner_agent_id &&
+      ownership.lease_expires_at &&
+      !ownership.lease_expired &&
+      ownership.owner_mismatch
+    ) {
+      return {
+        queue: 'blocked',
+        reason: 'OWNERSHIP_ENFORCED_MISMATCH',
+        detail: `owner_agent_id=${ownership.owner_agent_id} does not match active agent`,
+        ownership,
+        ownership_notes: ownershipNotes.concat(['OWNERSHIP_BLOCKED_ENFORCED'])
+      };
+    }
+
     const gate = completionGateApprove(msg);
     if (isActionable(msg) && !cp.hasCompletionProof(msg)) {
       if (shouldAutoStart(msg)) {
-        return { queue: 'inProgress', reason: 'ACTIONABLE_NO_PROOF_AUTO_START', detail: gate.detail };
+        return { queue: 'inProgress', reason: 'ACTIONABLE_NO_PROOF_AUTO_START', detail: gate.detail, ownership, ownership_notes: ownershipNotes };
       }
-      return { queue: 'actionRequired', reason: 'ACTIONABLE_NO_PROOF', detail: gate.detail };
+      return { queue: 'actionRequired', reason: 'ACTIONABLE_NO_PROOF', detail: gate.detail, ownership, ownership_notes: ownershipNotes };
     }
 
     if (!gate.pass) {
-      return { queue: 'blocked', reason: gate.reason, detail: gate.detail };
+      return { queue: 'blocked', reason: gate.reason, detail: gate.detail, ownership, ownership_notes: ownershipNotes };
     }
 
   // Artifact resolution check: any message claiming completion proof MUST verify.
@@ -348,6 +421,8 @@ class LaneWorker {
         detail: `Execution verification failed: type=${executionResult.verification_type} reason=${executionResult.reason} artifact_path=${executionResult.artifact_path || 'null'}`,
         execution_verified: false,
         execution_would_verify: executionResult.would_verify === true,
+        ownership,
+        ownership_notes: ownershipNotes,
       };
     }
   }
@@ -361,11 +436,21 @@ class LaneWorker {
           detail: `Execution verification failed: type=${executionResult.verification_type} reason=${executionResult.reason} artifact_path=${executionResult.artifact_path || 'null'}`,
           execution_verified: false,
           execution_would_verify: executionResult.would_verify === true,
+          ownership,
+          ownership_notes: ownershipNotes,
         };
       }
     }
 
-    return { queue: 'processed', reason: gate.reason, detail: gate.detail, execution_verified: cp.hasCompletionProof(msg), execution_would_verify: cp.hasCompletionProof(msg) };
+    return {
+      queue: 'processed',
+      reason: gate.reason,
+      detail: gate.detail,
+      execution_verified: cp.hasCompletionProof(msg),
+      execution_would_verify: cp.hasCompletionProof(msg),
+      ownership,
+      ownership_notes: ownershipNotes
+    };
   }
 
   _writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult) {
@@ -385,6 +470,9 @@ class LaneWorker {
         english_only: isEnglishOnly(msg),
         execution_verified: decision.execution_verified !== undefined ? decision.execution_verified : false,
         would_verify: decision.execution_would_verify === true,
+        enforce_ownership: this.enforceOwnership,
+        ownership: decision.ownership || { present: false },
+        ownership_notes: decision.ownership_notes || [],
       },
     };
     if (decision.reason === 'FORMAT_VIOLATION_NON_ASCII') {
@@ -427,6 +515,9 @@ class LaneWorker {
       has_completion_proof: cp.hasCompletionProof(msg),
       execution_verified: decision.execution_verified !== undefined ? decision.execution_verified : false,
       would_verify: decision.execution_would_verify === true,
+      enforce_ownership: this.enforceOwnership,
+      ownership: decision.ownership || { present: false },
+      ownership_notes: decision.ownership_notes || [],
       dry_run: this.dryRun,
     };
 
@@ -497,6 +588,8 @@ class LaneWorker {
       execution_verified_count: routes.filter((r) => r.execution_verified === true).length,
       execution_failed_count: routes.filter((r) => r.execution_verified === false && r.reason === 'EXECUTION_NOT_VERIFIED').length,
       liveness: this.executionGate.checkLiveness(this.config.queues.processed),
+      enforce_ownership: this.enforceOwnership,
+      ownership_warnings: routes.filter((r) => (r.ownership_notes || []).some((n) => n.startsWith('OWNERSHIP_'))).length,
       routes,
       timestamp: nowIso(),
     };
@@ -514,11 +607,16 @@ async function runCli() {
   const args = parseArgs(process.argv.slice(2));
   const repoRoot = path.resolve(__dirname, '..');
   const lane = args.lane || guessLane(repoRoot);
+  if (args.enforceOwnership) {
+    const agentId = process.env.AGENT_INSTANCE_ID || 'unknown';
+    console.log(`[lane-worker] Ownership enforcement enabled for agent ${agentId}`);
+  }
   const worker = new LaneWorker({
     repoRoot,
     lane,
     dryRun: !args.apply,
     maxFiles: args.maxFiles,
+    enforceOwnership: args.enforceOwnership,
   });
 
   if (!args.watch) {

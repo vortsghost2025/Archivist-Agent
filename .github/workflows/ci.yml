@@ -73,3 +73,8 @@ jobs:
 
       - name: Evidence Artifact Validation
         run: node scripts/evidence-exchange-check.js scan
+
+      - name: Ownership Enforcement Integration
+        run: |
+          export AGENT_INSTANCE_ID=archivist-fast
+          node scripts/test-ownership-enforcement-integration.js

@@ -8,6 +8,20 @@ const REPO_ROOT = path.resolve(__dirname, '..');
 const PROCESSED_DIR = path.join(REPO_ROOT, 'lanes', 'archivist', 'inbox', 'processed');
 const BLOCKED_DIR = path.join(REPO_ROOT, 'lanes', 'archivist', 'inbox', 'blocked');
 
+function validateLaneWorkerResponse(msg) {
+  const lw = msg && msg._lane_worker ? msg._lane_worker : {};
+  const errors = [];
+  if (lw.enforce_ownership === true) {
+    if (!('ownership' in lw)) {
+      errors.push('Missing _lane_worker.ownership when enforce_ownership=true');
+    }
+    if (!Array.isArray(lw.ownership_notes)) {
+      errors.push('Missing or invalid _lane_worker.ownership_notes when enforce_ownership=true');
+    }
+  }
+  return { valid: errors.length === 0, errors };
+}
+
 function validateResponses() {
   const results = { verified: [], failed: [], pending_review: [] };
 
@@ -31,8 +45,11 @@ function validateResponses() {
         route: lw.route,
         reason: lw.reason,
       };
+      const responseSchema = validateLaneWorkerResponse(msg);
+      claim.response_schema_valid = responseSchema.valid;
+      claim.response_schema_errors = responseSchema.errors;
 
-      if (lw.execution_verified && lw.signature_valid) {
+      if (lw.execution_verified && lw.signature_valid && responseSchema.valid) {
         results.verified.push(claim);
       } else {
         results.pending_review.push(claim);
