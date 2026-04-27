@@ -26,6 +26,22 @@ Attach an `ownership` object at top level:
 - `lease_expires_at`: hard timeout for ownership.
 - `conflict_policy`: plain-text arbitration rule.
 
+## Runtime Environment
+
+`lane-worker` reads `AGENT_INSTANCE_ID` from environment to identify the active agent identity during ownership checks.
+
+Example:
+
+```bash
+AGENT_INSTANCE_ID=archivist-fast node scripts/lane-worker.js --lane archivist --watch
+```
+
+With enforcement enabled:
+
+```bash
+AGENT_INSTANCE_ID=archivist-fast node scripts/lane-worker.js --lane archivist --watch --enforce-ownership
+```
+
 ## Operating Pattern
 
 - Many readers, one writer.
@@ -38,5 +54,6 @@ Attach an `ownership` object at top level:
 
 - `ownership`
 - `ownership_notes` (e.g. `OWNERSHIP_LEASE_EXPIRED`, `OWNERSHIP_OWNER_MISMATCH`)
+- `ownership_enforcement_enabled`
 
 This is advisory only (no hard-blocking), so it is safe to adopt incrementally.

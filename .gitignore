@@ -58,6 +58,10 @@ gate-violations.jsonl
 # Heartbeat files (ephemeral)
 heartbeat-*.json
 
+# Runtime state churn (local-only operational state)
+.cursor/hooks/state/continual-learning.json
+lanes/broadcast/system_state.json
+
 # OpenCode config (user-specific)
 opencode_mcp_additions.json
 opencodeupgrades.txt
