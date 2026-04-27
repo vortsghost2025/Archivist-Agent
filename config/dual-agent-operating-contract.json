@@ -1,0 +1,73 @@
+{
+  "version": "1.0.0",
+  "policy_id": "dual-agent-overlap-guardrail",
+  "status": "active",
+  "objective": "Prevent drift from concurrent writes across agents by enforcing lane/file-tree overlap controls.",
+  "scope": {
+    "lanes": [
+      "archivist",
+      "library",
+      "kernel",
+      "swarmmind"
+    ],
+    "protected_shared_paths": [
+      "S:/Archivist-Agent/lanes/broadcast",
+      "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
+      "S:/Archivist-Agent/lanes/broadcast/system_state.json",
+      "S:/Archivist-Agent/scripts"
+    ]
+  },
+  "rule_of_thumb": "If two agents can touch the same file tree within 10 minutes, drift risk is high.",
+  "overlap_window_seconds": 600,
+  "ownership_model": {
+    "single_writer_per_lane": true,
+    "read_allowed_while_locked": true,
+    "writes_require_lease": true,
+    "lease_fields_required": [
+      "owner_agent_id",
+      "lease_expires_at"
+    ]
+  },
+  "enforcement": {
+    "mode": "staged",
+    "on_first_overlap": {
+      "action": "warn",
+      "reason": "DUAL_AGENT_OVERLAP_WARN"
+    },
+    "on_repeat_overlap_within_window": {
+      "action": "block",
+      "reason": "DUAL_AGENT_OVERLAP_BLOCK"
+    },
+    "on_protected_shared_path_overlap": {
+      "action": "block",
+      "reason": "SHARED_PATH_SERIALIZATION_REQUIRED"
+    },
+    "on_unsigned_or_unowned_write_intent": {
+      "action": "quarantine",
+      "reason": "UNVERIFIED_WRITE_INTENT"
+    }
+  },
+  "sync_model": {
+    "cross_lane_write_batching_minutes": 15,
+    "continuous_cross_lane_writes_allowed": false
+  },
+  "telemetry": {
+    "required_events": [
+      "overlap_detected",
+      "overlap_warned",
+      "overlap_blocked",
+      "shared_path_blocked",
+      "quarantine_unverified_intent"
+    ],
+    "required_metrics": [
+      "overlaps_last_60m",
+      "repeat_overlaps_last_60m",
+      "blocked_overlaps_last_60m",
+      "quarantined_unverified_intents_last_60m"
+    ]
+  },
+  "exit_criteria": {
+    "clean_passes_required": 3,
+    "description": "No repeat-overlap blocks and no shared-path collisions across three consecutive review windows."
+  }
+}

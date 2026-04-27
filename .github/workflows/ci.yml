@@ -78,3 +78,6 @@ jobs:
         run: |
           export AGENT_INSTANCE_ID=archivist-fast
           node scripts/test-ownership-enforcement-integration.js
+
+      - name: Dual-Agent Overlap Guardrail Proof
+        run: node scripts/test-dual-agent-operating-contract.js

@@ -21,3 +21,15 @@ See: `docs/ops/EXECUTOR_V3_CONTRACT.md` for contract-level details.
   - records `expected_next_step`
   - compares against first `actual_next_action` post-restore
 - Test now fails if expected next step and actual next action diverge.
+
+### NFM-036: Operator Tool Overlap Drift (Staged Guardrail)
+
+- Added staged dual-agent overlap contract (detect/warn/block-repeat/hard-protect shared paths):
+  - `config/dual-agent-operating-contract.json`
+- Added operator guidance and enforcement model documentation:
+  - `docs/ops/DUAL_AGENT_CONCURRENCY_GUARDRAIL.md`
+- Added Paper F continuation draft section:
+  - `docs/failure-topology/PAPER_F_CONTINUATION_DUAL_AGENT_OVERLAP_GUARDRAIL.md`
+- Added runnable proof test and wired it into CI governance checks:
+  - `scripts/test-dual-agent-operating-contract.js`
+- Enforcement remains staged; global blocking is not enabled by default.
