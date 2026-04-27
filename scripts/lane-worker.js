@@ -7,6 +7,7 @@ const path = require('path');
 const cp = require('./completion-proof');
 const { ArtifactResolver } = require('./artifact-resolver');
 const { ExecutionGate } = require('./execution-gate');
+const { evaluateVerificationDomain } = require('./verification-domain-gate');
 
 const ACTIONABLE_TYPES = new Set(['task', 'escalation', 'request']);
 const NON_ASCII_PATTERN = /[^\x00-\x7F]/;
@@ -114,11 +115,43 @@ function ensureDir(dirPath) {
 }
 
 function safeReadJson(filePath) {
-  try {
-    return { ok: true, value: JSON.parse(fs.readFileSync(filePath, 'utf8')) };
-  } catch (err) {
-    return { ok: false, error: err.message };
+  try { return { ok: true, value: JSON.parse(fs.readFileSync(filePath, 'utf8')) }; }
+  catch (err) { return { ok: false, error: err.message }; }
+}
+
+const REMEDIATABLE_DEFAULT_FIELDS = new Set([
+  'timestamp', 'payload', 'execution', 'lease', 'retry',
+  'evidence', 'evidence_exchange', 'heartbeat',
+]);
+
+function parseMissingRequiredFields(errors) {
+  const out = [];
+  for (const err of errors || []) {
+    const m = String(err).match(/^Missing required field:\s*(.+)$/);
+    if (m && m[1]) out.push(m[1].trim());
+    else return null;
   }
+  return out;
+}
+
+function applySchemaDefaults(msg, lane, missingFields) {
+  const now = nowIso();
+  const remediated = { ...msg };
+  const applied = [];
+  for (const field of missingFields) {
+    if (!REMEDIATABLE_DEFAULT_FIELDS.has(field)) continue;
+    switch (field) {
+      case 'timestamp': remediated.timestamp = now; applied.push('timestamp'); break;
+      case 'payload': remediated.payload = { mode: 'inline', compression: 'none' }; applied.push('payload'); break;
+      case 'execution': remediated.execution = { mode: 'manual', engine: 'pipeline', actor: 'lane' }; applied.push('execution'); break;
+      case 'lease': remediated.lease = { owner: remediated.to || lane, acquired_at: now }; applied.push('lease'); break;
+      case 'retry': remediated.retry = { attempt: 1, max_attempts: 3 }; applied.push('retry'); break;
+      case 'evidence': remediated.evidence = { required: false, verified: false }; applied.push('evidence'); break;
+      case 'evidence_exchange': remediated.evidence_exchange = {}; applied.push('evidence_exchange'); break;
+      case 'heartbeat': remediated.heartbeat = { status: 'pending', last_heartbeat_at: now, interval_seconds: 300, timeout_seconds: 900 }; applied.push('heartbeat'); break;
+    }
+  }
+  return { remediated, applied };
 }
 
 function isActionable(msg) {
@@ -413,6 +446,37 @@ class LaneWorker {
   // Artifact resolution check: any message claiming completion proof MUST verify.
   // Fail-closed: if proof exists but cannot be verified, route to blocked.
   if (gate.pass && cp.hasCompletionProof(msg)) {
+    const domain = evaluateVerificationDomain(msg, { resolver: this.artifactResolver });
+    if (!domain.domain_valid) {
+      if (domain.phase === 'post_execution') {
+        return {
+          queue: 'processed',
+          reason: 'INVALID_DOMAIN_POST_EXECUTION',
+          detail: domain.invalid_domain_reason,
+          execution_verified: false,
+          execution_would_verify: false,
+          domain_gate_executed: true,
+          verification_outcome: 'INVALID_DOMAIN',
+          execution_preserved: true,
+          domain_validation: domain,
+          ownership,
+          ownership_notes: ownershipNotes,
+        };
+      }
+      return {
+        queue: 'blocked',
+        reason: 'INVALID_DOMAIN_PRE_EXECUTION',
+        detail: domain.invalid_domain_reason,
+        execution_verified: false,
+        execution_would_verify: false,
+        domain_gate_executed: true,
+        verification_outcome: domain.verification_outcome,
+        execution_preserved: false,
+        domain_validation: domain,
+        ownership,
+        ownership_notes: ownershipNotes,
+      };
+    }
     const executionResult = this.executionGate.verify(msg);
     if (!executionResult.execution_verified) {
       return {
@@ -421,6 +485,8 @@ class LaneWorker {
         detail: `Execution verification failed: type=${executionResult.verification_type} reason=${executionResult.reason} artifact_path=${executionResult.artifact_path || 'null'}`,
         execution_verified: false,
         execution_would_verify: executionResult.would_verify === true,
+        domain_gate_executed: true,
+        verification_outcome: 'FAIL',
         ownership,
         ownership_notes: ownershipNotes,
       };
@@ -428,6 +494,37 @@ class LaneWorker {
   }
   // Non-actionable messages claiming completion without verifiable artifact = blocked
   if (gate.pass && !isActionable(msg) && cp.hasCompletionProof(msg)) {
+    const domain = evaluateVerificationDomain(msg, { resolver: this.artifactResolver });
+    if (!domain.domain_valid) {
+      if (domain.phase === 'post_execution') {
+        return {
+          queue: 'processed',
+          reason: 'INVALID_DOMAIN_POST_EXECUTION',
+          detail: domain.invalid_domain_reason,
+          execution_verified: false,
+          execution_would_verify: false,
+          domain_gate_executed: true,
+          verification_outcome: 'INVALID_DOMAIN',
+          execution_preserved: true,
+          domain_validation: domain,
+          ownership,
+          ownership_notes: ownershipNotes,
+        };
+      }
+      return {
+        queue: 'blocked',
+        reason: 'INVALID_DOMAIN_PRE_EXECUTION',
+        detail: domain.invalid_domain_reason,
+        execution_verified: false,
+        execution_would_verify: false,
+        domain_gate_executed: true,
+        verification_outcome: domain.verification_outcome,
+        execution_preserved: false,
+        domain_validation: domain,
+        ownership,
+        ownership_notes: ownershipNotes,
+      };
+    }
     const executionResult = this.executionGate.verify(msg);
     if (!executionResult.execution_verified) {
       return {
@@ -436,6 +533,8 @@ class LaneWorker {
           detail: `Execution verification failed: type=${executionResult.verification_type} reason=${executionResult.reason} artifact_path=${executionResult.artifact_path || 'null'}`,
           execution_verified: false,
           execution_would_verify: executionResult.would_verify === true,
+          domain_gate_executed: true,
+          verification_outcome: 'FAIL',
           ownership,
           ownership_notes: ownershipNotes,
         };
@@ -448,12 +547,14 @@ class LaneWorker {
       detail: gate.detail,
       execution_verified: cp.hasCompletionProof(msg),
       execution_would_verify: cp.hasCompletionProof(msg),
+      domain_gate_executed: true,
+      verification_outcome: 'PASS',
       ownership,
       ownership_notes: ownershipNotes
     };
   }
 
-  _writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult) {
+  _writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult, remediation = null) {
     const enriched = {
       ...msg,
       execution_verified: decision.execution_verified !== undefined ? decision.execution_verified : false,
@@ -467,6 +568,7 @@ class LaneWorker {
         detail: decision.detail || null,
         schema_valid: !!schemaResult.valid,
         signature_valid: !!signatureResult.valid,
+        remediation: remediation,
         english_only: isEnglishOnly(msg),
         execution_verified: decision.execution_verified !== undefined ? decision.execution_verified : false,
         would_verify: decision.execution_would_verify === true,
@@ -474,6 +576,9 @@ class LaneWorker {
         ownership_enforcement_enabled: this.enforceOwnership,
         ownership: decision.ownership || { present: false },
         ownership_notes: decision.ownership_notes || [],
+        domain_gate_executed: decision.domain_gate_executed === true,
+        verification_outcome: decision.verification_outcome || null,
+        domain_validation: decision.domain_validation || null,
       },
     };
     if (decision.reason === 'FORMAT_VIOLATION_NON_ASCII') {
@@ -495,10 +600,22 @@ class LaneWorker {
       });
     }
 
-    const msg = rawRead.value;
-    const schemaResult = this.schemaValidator(msg);
-    const signatureResult = this.signatureValidator(msg);
-    const decision = this.decideRoute(msg, schemaResult, signatureResult);
+  let msg = rawRead.value;
+  let schemaResult = this.schemaValidator(msg);
+  const signatureResult = this.signatureValidator(msg);
+  let remediation = null;
+  if (!schemaResult.valid && signatureResult.valid) {
+    const missingFields = parseMissingRequiredFields(schemaResult.errors || []);
+    if (missingFields && missingFields.length > 0) {
+      const patched = applySchemaDefaults(msg, this.lane, missingFields);
+      if (patched.applied.length > 0) {
+        msg = patched.remediated;
+        schemaResult = this.schemaValidator(msg);
+        remediation = { attempted: true, applied_fields: patched.applied, success: schemaResult.valid };
+      }
+    }
+  }
+  const decision = this.decideRoute(msg, schemaResult, signatureResult);
     const targetDir = this.config.queues[decision.queue];
     const targetPath = uniquePath(path.join(targetDir, filename));
 
@@ -520,11 +637,14 @@ class LaneWorker {
       ownership_enforcement_enabled: this.enforceOwnership,
       ownership: decision.ownership || { present: false },
       ownership_notes: decision.ownership_notes || [],
+      verification_outcome: decision.verification_outcome || null,
+      domain_validation: decision.domain_validation || null,
+      domain_gate_executed: decision.domain_gate_executed === true,
       dry_run: this.dryRun,
     };
 
     if (!this.dryRun) {
-      this._writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult);
+      this._writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult, remediation);
       fs.unlinkSync(filePath);
     }
 
