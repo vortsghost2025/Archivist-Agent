@@ -13,3 +13,11 @@
 - Response validation now requires ownership metadata when enforcement is enabled.
 
 See: `docs/ops/EXECUTOR_V3_CONTRACT.md` for contract-level details.
+
+### Compact/Restore Continuity Probe
+
+- Added explicit continuity probe in `scripts/compact-restore-test.js`:
+  - records a `task_id`
+  - records `expected_next_step`
+  - compares against first `actual_next_action` post-restore
+- Test now fails if expected next step and actual next action diverge.
