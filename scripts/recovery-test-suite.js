@@ -3,6 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 const { PostCompactAudit } = require('./post-compact-audit');
 
 const PASS = '[PASS]';
@@ -57,7 +58,56 @@ class RecoveryTestSuite {
     fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
     console.log(`Report: ${reportPath}`);
 
+    this.writeLastRecoveryBroadcast(allPassed, report);
+
     return allPassed;
+  }
+
+  /**
+   * Cross-lane shared state: single file dashboards and other lanes should read for
+   * "current recovery truth" (see docs/ops/LAST_RECOVERY_BROADCAST.md).
+   * Written on every suite run (PROVEN or CONFLICTED) so nothing shows stale PROVEN.
+   */
+  writeLastRecoveryBroadcast(allPassed, report) {
+    const archivistRoot = path.join(__dirname, '..');
+    const broadcastPath = path.join(archivistRoot, 'lanes', 'broadcast', 'last-recovery.json');
+    fs.mkdirSync(path.dirname(broadcastPath), { recursive: true });
+
+    const laneStates = this.audit._getLaneHeartbeats();
+    const aliveCount = Object.values(laneStates).filter((s) => s.status === 'alive').length;
+
+    let gitSha = null;
+    try {
+      gitSha = execSync('git rev-parse HEAD', {
+        cwd: archivistRoot,
+        encoding: 'utf8',
+        timeout: 5000,
+        windowsHide: true,
+      }).trim();
+    } catch (_e) {
+      // not a git checkout or git unavailable
+    }
+
+    const payload = {
+      schema_version: '1.0',
+      artifact: 'last-recovery',
+      timestamp: report.timestamp,
+      suite: report.suite,
+      verdict: allPassed ? 'PROVEN' : 'CONFLICTED',
+      summary: report.summary,
+      claim: report.claim,
+      evidence: {
+        relative: '.compact-audit/RECOVERY_TEST_RESULTS.json',
+        absolute: path.join(archivistRoot, '.compact-audit', 'RECOVERY_TEST_RESULTS.json'),
+      },
+      lane_heartbeats: laneStates,
+      lane_liveness: { alive_count: aliveCount, expected: 4 },
+      run_by: 'scripts/recovery-test-suite.js',
+      archivist_repo_git_sha: gitSha,
+    };
+
+    fs.writeFileSync(broadcastPath, JSON.stringify(payload, null, 2), 'utf8');
+    console.log(`Broadcast: ${broadcastPath}`);
   }
 
   test1_trustChainContinuity() {

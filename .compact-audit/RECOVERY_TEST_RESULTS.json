@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-27T11:46:35.233Z",
+  "timestamp": "2026-04-27T22:08:52.120Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -35,7 +35,7 @@
     {
       "name": "message_inventory",
       "passed": true,
-      "detail": "total=45 {\"archivist\":44,\"library\":0,\"swarmmind\":0,\"kernel\":1}"
+      "detail": "total=3 {\"archivist\":2,\"library\":0,\"swarmmind\":0,\"kernel\":1}"
     },
     {
       "name": "risk_set_preservation",
@@ -45,17 +45,17 @@
     {
       "name": "lane_liveness",
       "passed": false,
-      "detail": "1/4 lanes alive"
+      "detail": "3/4 lanes alive"
     },
     {
       "name": "multi_source_consistency",
       "passed": true,
-      "detail": "6 sources, 0 contradictions"
+      "detail": "6 sources, 0 contradictions (0 unexpected, 0 pre-existing known)"
     },
     {
       "name": "contradiction_detection",
       "passed": true,
-      "detail": "status=drifted unexpected_changes=3"
+      "detail": "status=drifted unexpected_changes=1"
     }
   ],
   "summary": {

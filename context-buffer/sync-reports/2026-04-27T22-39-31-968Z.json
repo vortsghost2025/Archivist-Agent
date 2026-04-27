@@ -1,0 +1,1691 @@
+{
+  "tool": "sync-all-lanes",
+  "started_at": "2026-04-27T22:39:24.034Z",
+  "finished_at": "2026-04-27T22:39:31.968Z",
+  "dry_run": false,
+  "lane_roots": {
+    "archivist": "S:/Archivist-Agent",
+    "swarmmind": "S:/SwarmMind",
+    "kernel": "S:/kernel-lane",
+    "library": "S:/self-organizing-library"
+  },
+  "files_considered": 40,
+  "file_sync": {
+    "records": [
+      {
+        "file": "scripts/lane-worker.js",
+        "status": "synced_or_drifted",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "c53602069043e23cd8b7fbb70533f30ee311119e9c8b1ee8db95a196b66a00e3",
+        "canonical_mtime": 1777325731193.209,
+        "targets": [
+          {
+            "lane": "swarmmind",
+            "action": "synced",
+            "previous_sha256": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1"
+          },
+          {
+            "lane": "kernel",
+            "action": "synced",
+            "previous_sha256": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1"
+          },
+          {
+            "lane": "library",
+            "action": "synced",
+            "previous_sha256": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1"
+          }
+        ],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "c53602069043e23cd8b7fbb70533f30ee311119e9c8b1ee8db95a196b66a00e3",
+            "mtime_ms": 1777325731193.209
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1",
+            "mtime_ms": 1777318155537.23
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1",
+            "mtime_ms": 1777307664534.4263
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1",
+            "mtime_ms": 1777307664534.4263
+          }
+        ]
+      },
+      {
+        "file": "scripts/test-lane-worker-we4free.js",
+        "status": "already_aligned",
+        "canonical_lane": "swarmmind",
+        "canonical_sha256": "ed8713f483be70357aa97c7b9204fd30bead9b6b35979dc77245f4381ec61783",
+        "canonical_mtime": 1777318155542.3672,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "ed8713f483be70357aa97c7b9204fd30bead9b6b35979dc77245f4381ec61783",
+            "mtime_ms": 1777296739139.8037
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "ed8713f483be70357aa97c7b9204fd30bead9b6b35979dc77245f4381ec61783",
+            "mtime_ms": 1777318155542.3672
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "ed8713f483be70357aa97c7b9204fd30bead9b6b35979dc77245f4381ec61783",
+            "mtime_ms": 1777296739139.8037
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "ed8713f483be70357aa97c7b9204fd30bead9b6b35979dc77245f4381ec61783",
+            "mtime_ms": 1777296739139.8037
+          }
+        ]
+      },
+      {
+        "file": "scripts/generic-task-executor.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "cab88ce0c596e0e553ecbb4800df54e0e4e41fc71ca5b5fc2b1820bd19af3612",
+        "canonical_mtime": 1777318155542.3672,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "cab88ce0c596e0e553ecbb4800df54e0e4e41fc71ca5b5fc2b1820bd19af3612",
+            "mtime_ms": 1777318155542.3672
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "cab88ce0c596e0e553ecbb4800df54e0e4e41fc71ca5b5fc2b1820bd19af3612",
+            "mtime_ms": 1777318155542.3672
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "cab88ce0c596e0e553ecbb4800df54e0e4e41fc71ca5b5fc2b1820bd19af3612",
+            "mtime_ms": 1777318155542.3672
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "cab88ce0c596e0e553ecbb4800df54e0e4e41fc71ca5b5fc2b1820bd19af3612",
+            "mtime_ms": 1777318155542.3672
+          }
+        ]
+      },
+      {
+        "file": "scripts/test-executor-v3.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c",
+        "canonical_mtime": 1777319244235.4436,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c",
+            "mtime_ms": 1777319244235.4436
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c",
+            "mtime_ms": 1777319244235.4436
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c",
+            "mtime_ms": 1777319244235.4436
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c",
+            "mtime_ms": 1777319244235.4436
+          }
+        ]
+      },
+      {
+        "file": "scripts/completion-proof.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "d334b21b157ab927811ee3e1a81c1c662e24a796126c900a0ca74280038540b7",
+        "canonical_mtime": 1777045984703.234,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "d334b21b157ab927811ee3e1a81c1c662e24a796126c900a0ca74280038540b7",
+            "mtime_ms": 1777045984703.234
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "d334b21b157ab927811ee3e1a81c1c662e24a796126c900a0ca74280038540b7",
+            "mtime_ms": 1777045984703.234
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "d334b21b157ab927811ee3e1a81c1c662e24a796126c900a0ca74280038540b7",
+            "mtime_ms": 1777045984703.234
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "d334b21b157ab927811ee3e1a81c1c662e24a796126c900a0ca74280038540b7",
+            "mtime_ms": 1777045984703.234
+          }
+        ]
+      },
+      {
+        "file": "scripts/artifact-resolver.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "ce555f230474f1712b06fb6d1ef90c87ab95e0b3ff3671b06eb8791212c866c6",
+        "canonical_mtime": 1777314098531.1174,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "ce555f230474f1712b06fb6d1ef90c87ab95e0b3ff3671b06eb8791212c866c6",
+            "mtime_ms": 1777314098531.1174
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "ce555f230474f1712b06fb6d1ef90c87ab95e0b3ff3671b06eb8791212c866c6",
+            "mtime_ms": 1777314098531.1174
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "ce555f230474f1712b06fb6d1ef90c87ab95e0b3ff3671b06eb8791212c866c6",
+            "mtime_ms": 1777314098531.1174
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "ce555f230474f1712b06fb6d1ef90c87ab95e0b3ff3671b06eb8791212c866c6",
+            "mtime_ms": 1777314098531.1174
+          }
+        ]
+      },
+      {
+        "file": "scripts/execution-gate.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "f336c6d9b3ec694dd3a79afa1004afc2433cdfbc00fe04ed20be0a218538d6a6",
+        "canonical_mtime": 1777313809754.092,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "f336c6d9b3ec694dd3a79afa1004afc2433cdfbc00fe04ed20be0a218538d6a6",
+            "mtime_ms": 1777313809754.092
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "f336c6d9b3ec694dd3a79afa1004afc2433cdfbc00fe04ed20be0a218538d6a6",
+            "mtime_ms": 1777313809754.092
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "f336c6d9b3ec694dd3a79afa1004afc2433cdfbc00fe04ed20be0a218538d6a6",
+            "mtime_ms": 1777313809754.092
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "f336c6d9b3ec694dd3a79afa1004afc2433cdfbc00fe04ed20be0a218538d6a6",
+            "mtime_ms": 1777313809754.092
+          }
+        ]
+      },
+      {
+        "file": "scripts/verification-domain-gate.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "dfe5cb86517c51e53584f46bfe5f3a1c9a5ec78e5c95de36f0c8c7eb515c312f",
+        "canonical_mtime": 1777318155540.069,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "dfe5cb86517c51e53584f46bfe5f3a1c9a5ec78e5c95de36f0c8c7eb515c312f",
+            "mtime_ms": 1777318155540.069
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "dfe5cb86517c51e53584f46bfe5f3a1c9a5ec78e5c95de36f0c8c7eb515c312f",
+            "mtime_ms": 1777305932704.127
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "dfe5cb86517c51e53584f46bfe5f3a1c9a5ec78e5c95de36f0c8c7eb515c312f",
+            "mtime_ms": 1777305932704.127
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "dfe5cb86517c51e53584f46bfe5f3a1c9a5ec78e5c95de36f0c8c7eb515c312f",
+            "mtime_ms": 1777305932704.127
+          }
+        ]
+      },
+      {
+        "file": "scripts/code-version-hash.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12",
+        "canonical_mtime": 1777318155547.585,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12",
+            "mtime_ms": 1777318155547.585
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12",
+            "mtime_ms": 1777305932704.127
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12",
+            "mtime_ms": 1777305932704.127
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12",
+            "mtime_ms": 1777305932704.127
+          }
+        ]
+      },
+      {
+        "file": "scripts/inbox-watcher.ps1",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "43a1716a490fd81568f84987672fb8d079e68367d7292be05f3594831e0b9355",
+        "canonical_mtime": 1777225434291.6042,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "43a1716a490fd81568f84987672fb8d079e68367d7292be05f3594831e0b9355",
+            "mtime_ms": 1777225434291.6042
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "43a1716a490fd81568f84987672fb8d079e68367d7292be05f3594831e0b9355",
+            "mtime_ms": 1777225434291.6042
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "43a1716a490fd81568f84987672fb8d079e68367d7292be05f3594831e0b9355",
+            "mtime_ms": 1777225434291.6042
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "43a1716a490fd81568f84987672fb8d079e68367d7292be05f3594831e0b9355",
+            "mtime_ms": 1777225434291.6042
+          }
+        ]
+      },
+      {
+        "file": "scripts/heartbeat.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "e7a6a97e332d7935bd7cb45c75855bfcffcb98edd6f784977173e650cfab784b",
+        "canonical_mtime": 1777314146793.4565,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "e7a6a97e332d7935bd7cb45c75855bfcffcb98edd6f784977173e650cfab784b",
+            "mtime_ms": 1777314146793.4565
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "e7a6a97e332d7935bd7cb45c75855bfcffcb98edd6f784977173e650cfab784b",
+            "mtime_ms": 1777314146793.4565
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "e7a6a97e332d7935bd7cb45c75855bfcffcb98edd6f784977173e650cfab784b",
+            "mtime_ms": 1777314146793.4565
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "e7a6a97e332d7935bd7cb45c75855bfcffcb98edd6f784977173e650cfab784b",
+            "mtime_ms": 1777314146793.4565
+          }
+        ]
+      },
+      {
+        "file": "scripts/cross-lane-consistency-check.js",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "0093dc26fd06e523717d7345190c49c8c7398661889d925ea059bfb6d440e4c5",
+        "canonical_mtime": 1777323418307.4695,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "0093dc26fd06e523717d7345190c49c8c7398661889d925ea059bfb6d440e4c5",
+            "mtime_ms": 1777323418307.4695
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "0093dc26fd06e523717d7345190c49c8c7398661889d925ea059bfb6d440e4c5",
+            "mtime_ms": 1777323418307.4695
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "0093dc26fd06e523717d7345190c49c8c7398661889d925ea059bfb6d440e4c5",
+            "mtime_ms": 1777323418307.4695
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "0093dc26fd06e523717d7345190c49c8c7398661889d925ea059bfb6d440e4c5",
+            "mtime_ms": 1777323418307.4695
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\2026-04-23T02-00-00Z-archivist-project-review.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "b10f92c35cd0c2664c21ebd03459bddfad39d5ceed4ddda34705efea66788a0b",
+        "canonical_mtime": 1776960108764.552,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "b10f92c35cd0c2664c21ebd03459bddfad39d5ceed4ddda34705efea66788a0b",
+            "mtime_ms": 1776960108764.552
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "b10f92c35cd0c2664c21ebd03459bddfad39d5ceed4ddda34705efea66788a0b",
+            "mtime_ms": 1776960108764.552
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "b10f92c35cd0c2664c21ebd03459bddfad39d5ceed4ddda34705efea66788a0b",
+            "mtime_ms": 1776960108764.552
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "b10f92c35cd0c2664c21ebd03459bddfad39d5ceed4ddda34705efea66788a0b",
+            "mtime_ms": 1776960108764.552
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\2026-04-23T02-48-00Z-system-alert-conflicted.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "b22fbefb7ae641c5cc5b8272c603de084402e66e28d18a044dd59620f68fe98e",
+        "canonical_mtime": 1776960108764.552,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "b22fbefb7ae641c5cc5b8272c603de084402e66e28d18a044dd59620f68fe98e",
+            "mtime_ms": 1776960108764.552
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "b22fbefb7ae641c5cc5b8272c603de084402e66e28d18a044dd59620f68fe98e",
+            "mtime_ms": 1776960108764.552
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "b22fbefb7ae641c5cc5b8272c603de084402e66e28d18a044dd59620f68fe98e",
+            "mtime_ms": 1776960108764.552
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "b22fbefb7ae641c5cc5b8272c603de084402e66e28d18a044dd59620f68fe98e",
+            "mtime_ms": 1776960108764.552
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\2026-04-23T03-10-00Z-swarmmind-reaudit-complete.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "699602cf63fce17d72154412e9db84dfd0b356283fa4657ec99b0f9cfd491fbd",
+        "canonical_mtime": 1777037316397.0244,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "699602cf63fce17d72154412e9db84dfd0b356283fa4657ec99b0f9cfd491fbd",
+            "mtime_ms": 1777037316397.0244
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "699602cf63fce17d72154412e9db84dfd0b356283fa4657ec99b0f9cfd491fbd",
+            "mtime_ms": 1777037316397.0244
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "699602cf63fce17d72154412e9db84dfd0b356283fa4657ec99b0f9cfd491fbd",
+            "mtime_ms": 1777037316397.0244
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "699602cf63fce17d72154412e9db84dfd0b356283fa4657ec99b0f9cfd491fbd",
+            "mtime_ms": 1777037316397.0244
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\2026-04-23T04-30-00Z-round-9-ready.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "1ae5171fe26aa497b771713d39f67b450529d7bf853d0ff8defc34560bef741a",
+        "canonical_mtime": 1777037316398.028,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "1ae5171fe26aa497b771713d39f67b450529d7bf853d0ff8defc34560bef741a",
+            "mtime_ms": 1777037316398.028
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "1ae5171fe26aa497b771713d39f67b450529d7bf853d0ff8defc34560bef741a",
+            "mtime_ms": 1777037316398.028
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "1ae5171fe26aa497b771713d39f67b450529d7bf853d0ff8defc34560bef741a",
+            "mtime_ms": 1777037316398.028
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "1ae5171fe26aa497b771713d39f67b450529d7bf853d0ff8defc34560bef741a",
+            "mtime_ms": 1777037316398.028
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\2026-04-23T09-00-00Z-library-swarmmind-reactivation.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "83432af39ac376a981f676b1feba805ac07641c743a82f8204caeaebfb764e72",
+        "canonical_mtime": 1777037316398.028,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "83432af39ac376a981f676b1feba805ac07641c743a82f8204caeaebfb764e72",
+            "mtime_ms": 1777037316398.028
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "83432af39ac376a981f676b1feba805ac07641c743a82f8204caeaebfb764e72",
+            "mtime_ms": 1777037316398.028
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "83432af39ac376a981f676b1feba805ac07641c743a82f8204caeaebfb764e72",
+            "mtime_ms": 1777037316398.028
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "83432af39ac376a981f676b1feba805ac07641c743a82f8204caeaebfb764e72",
+            "mtime_ms": 1777037316398.028
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\2026-04-23T09-15-00Z-path-cleanup-complete.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "f8a9280db23a6500364ced45c4a9d790e1f71514cf9b3bfa553b04f17f7495a0",
+        "canonical_mtime": 1777037316398.5315,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "f8a9280db23a6500364ced45c4a9d790e1f71514cf9b3bfa553b04f17f7495a0",
+            "mtime_ms": 1777037316398.5315
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "f8a9280db23a6500364ced45c4a9d790e1f71514cf9b3bfa553b04f17f7495a0",
+            "mtime_ms": 1777037316398.5315
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "f8a9280db23a6500364ced45c4a9d790e1f71514cf9b3bfa553b04f17f7495a0",
+            "mtime_ms": 1777037316398.5315
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "f8a9280db23a6500364ced45c4a9d790e1f71514cf9b3bfa553b04f17f7495a0",
+            "mtime_ms": 1777037316398.5315
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\CONCURRENCY_POLICY_v1.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "a5fed2518484737276534425adcd1a4ee5eaf550e1658e8873c885101885a5a2",
+        "canonical_mtime": 1776960108766.552,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "a5fed2518484737276534425adcd1a4ee5eaf550e1658e8873c885101885a5a2",
+            "mtime_ms": 1776960108766.552
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "a5fed2518484737276534425adcd1a4ee5eaf550e1658e8873c885101885a5a2",
+            "mtime_ms": 1776960108766.552
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "a5fed2518484737276534425adcd1a4ee5eaf550e1658e8873c885101885a5a2",
+            "mtime_ms": 1776960108766.552
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "a5fed2518484737276534425adcd1a4ee5eaf550e1658e8873c885101885a5a2",
+            "mtime_ms": 1776960108766.552
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\archivist-p0-edit-intent-registry.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "b510f5703cb5f36a25a01bf3b233b3d90498d1db08155ff188a1a091512ece1c",
+        "canonical_mtime": 1776960108768.563,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "b510f5703cb5f36a25a01bf3b233b3d90498d1db08155ff188a1a091512ece1c",
+            "mtime_ms": 1776960108768.563
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "b510f5703cb5f36a25a01bf3b233b3d90498d1db08155ff188a1a091512ece1c",
+            "mtime_ms": 1776960108768.563
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "b510f5703cb5f36a25a01bf3b233b3d90498d1db08155ff188a1a091512ece1c",
+            "mtime_ms": 1776960108768.563
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "b510f5703cb5f36a25a01bf3b233b3d90498d1db08155ff188a1a091512ece1c",
+            "mtime_ms": 1776960108768.563
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\archivist-p0-gate-violations-resolved.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "61706d5e83c19e0e70bef34e65d26ffb242e3b193bb11cbc25066b99b74fb1b6",
+        "canonical_mtime": 1776960108768.563,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "61706d5e83c19e0e70bef34e65d26ffb242e3b193bb11cbc25066b99b74fb1b6",
+            "mtime_ms": 1776960108768.563
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "61706d5e83c19e0e70bef34e65d26ffb242e3b193bb11cbc25066b99b74fb1b6",
+            "mtime_ms": 1776960108768.563
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "61706d5e83c19e0e70bef34e65d26ffb242e3b193bb11cbc25066b99b74fb1b6",
+            "mtime_ms": 1776960108768.563
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "61706d5e83c19e0e70bef34e65d26ffb242e3b193bb11cbc25066b99b74fb1b6",
+            "mtime_ms": 1776960108768.563
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\archivist-p0-resolution.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "14c17d50417363a4fb61d86767b987d970840278b807df4ff7700469dfe006ce",
+        "canonical_mtime": 1776960108769.0686,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "14c17d50417363a4fb61d86767b987d970840278b807df4ff7700469dfe006ce",
+            "mtime_ms": 1776960108769.0686
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "14c17d50417363a4fb61d86767b987d970840278b807df4ff7700469dfe006ce",
+            "mtime_ms": 1776960108769.0686
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "14c17d50417363a4fb61d86767b987d970840278b807df4ff7700469dfe006ce",
+            "mtime_ms": 1776960108769.0686
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "14c17d50417363a4fb61d86767b987d970840278b807df4ff7700469dfe006ce",
+            "mtime_ms": 1776960108769.0686
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\archivist-p0-trust-keys-fix.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "5e57e695888304602f6567228420815e63f3b54c513baa5dcd9c5a3bc5e18653",
+        "canonical_mtime": 1776960108769.5637,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "5e57e695888304602f6567228420815e63f3b54c513baa5dcd9c5a3bc5e18653",
+            "mtime_ms": 1776960108769.5637
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "5e57e695888304602f6567228420815e63f3b54c513baa5dcd9c5a3bc5e18653",
+            "mtime_ms": 1776960108769.5637
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "5e57e695888304602f6567228420815e63f3b54c513baa5dcd9c5a3bc5e18653",
+            "mtime_ms": 1776960108769.5637
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "5e57e695888304602f6567228420815e63f3b54c513baa5dcd9c5a3bc5e18653",
+            "mtime_ms": 1776960108769.5637
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\book-6-review-coordination-001.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "e542380254517ca576786ff30cada6a79a9d9252fbf9e4ef4262ae20fa2672a3",
+        "canonical_mtime": 1776960108770.0625,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "e542380254517ca576786ff30cada6a79a9d9252fbf9e4ef4262ae20fa2672a3",
+            "mtime_ms": 1776960108770.0625
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "e542380254517ca576786ff30cada6a79a9d9252fbf9e4ef4262ae20fa2672a3",
+            "mtime_ms": 1776960108770.0625
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "e542380254517ca576786ff30cada6a79a9d9252fbf9e4ef4262ae20fa2672a3",
+            "mtime_ms": 1776960108770.0625
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "e542380254517ca576786ff30cada6a79a9d9252fbf9e4ef4262ae20fa2672a3",
+            "mtime_ms": 1776960108770.0625
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\book6-readiness-synthesis-final-001.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "6bcc7e810e56a214d9490d0cb9b5dd4106af2ba88c891338f1304b8714f2b14d",
+        "canonical_mtime": 1776960108770.5625,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "6bcc7e810e56a214d9490d0cb9b5dd4106af2ba88c891338f1304b8714f2b14d",
+            "mtime_ms": 1776960108770.5625
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "6bcc7e810e56a214d9490d0cb9b5dd4106af2ba88c891338f1304b8714f2b14d",
+            "mtime_ms": 1776960108770.5625
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "6bcc7e810e56a214d9490d0cb9b5dd4106af2ba88c891338f1304b8714f2b14d",
+            "mtime_ms": 1776960108770.5625
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "6bcc7e810e56a214d9490d0cb9b5dd4106af2ba88c891338f1304b8714f2b14d",
+            "mtime_ms": 1776960108770.5625
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\contradictions.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "dc8d19bdc2af25f253a9d0db4231a7767cf1602c7d3cd1a41a42a9ca6a8082ee",
+        "canonical_mtime": 1777124432606.0798,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "dc8d19bdc2af25f253a9d0db4231a7767cf1602c7d3cd1a41a42a9ca6a8082ee",
+            "mtime_ms": 1777124432606.0798
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "dc8d19bdc2af25f253a9d0db4231a7767cf1602c7d3cd1a41a42a9ca6a8082ee",
+            "mtime_ms": 1777124432606.0798
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "dc8d19bdc2af25f253a9d0db4231a7767cf1602c7d3cd1a41a42a9ca6a8082ee",
+            "mtime_ms": 1777124432606.0798
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "dc8d19bdc2af25f253a9d0db4231a7767cf1602c7d3cd1a41a42a9ca6a8082ee",
+            "mtime_ms": 1777124432606.0798
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\cross-lane-review-broadcast-1777306810032.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "e0509e30dd8f2266eb2929efb3ac28f729c0552f596839baa22b605ef9a52ec0",
+        "canonical_mtime": 1777306775260.1045,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "e0509e30dd8f2266eb2929efb3ac28f729c0552f596839baa22b605ef9a52ec0",
+            "mtime_ms": 1777306775260.1045
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "e0509e30dd8f2266eb2929efb3ac28f729c0552f596839baa22b605ef9a52ec0",
+            "mtime_ms": 1777306775260.1045
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "e0509e30dd8f2266eb2929efb3ac28f729c0552f596839baa22b605ef9a52ec0",
+            "mtime_ms": 1777306775260.1045
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "e0509e30dd8f2266eb2929efb3ac28f729c0552f596839baa22b605ef9a52ec0",
+            "mtime_ms": 1777306775260.1045
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\edit-intent-registry.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "b677a26d64df1e697ad5fad3a06794b919c742d0acea5379248837dfb01ff54e",
+        "canonical_mtime": 1776960108770.5625,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "b677a26d64df1e697ad5fad3a06794b919c742d0acea5379248837dfb01ff54e",
+            "mtime_ms": 1776960108770.5625
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "b677a26d64df1e697ad5fad3a06794b919c742d0acea5379248837dfb01ff54e",
+            "mtime_ms": 1776960108770.5625
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "b677a26d64df1e697ad5fad3a06794b919c742d0acea5379248837dfb01ff54e",
+            "mtime_ms": 1776960108770.5625
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "b677a26d64df1e697ad5fad3a06794b919c742d0acea5379248837dfb01ff54e",
+            "mtime_ms": 1776960108770.5625
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\edit-intent-schema.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "b08bf8cce505f60c281124b9afc388517188670a3ece4a01069828ff1a48e3ac",
+        "canonical_mtime": 1776960108771.2864,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "b08bf8cce505f60c281124b9afc388517188670a3ece4a01069828ff1a48e3ac",
+            "mtime_ms": 1776960108771.2864
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "b08bf8cce505f60c281124b9afc388517188670a3ece4a01069828ff1a48e3ac",
+            "mtime_ms": 1776960108771.2864
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "b08bf8cce505f60c281124b9afc388517188670a3ece4a01069828ff1a48e3ac",
+            "mtime_ms": 1776960108771.2864
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "b08bf8cce505f60c281124b9afc388517188670a3ece4a01069828ff1a48e3ac",
+            "mtime_ms": 1776960108771.2864
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\gate-schema.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "f47b2732fe97fc53487751f1f79d92b97a7cdda9e9e45b90f99714387cf1e40c",
+        "canonical_mtime": 1776960108771.2864,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "f47b2732fe97fc53487751f1f79d92b97a7cdda9e9e45b90f99714387cf1e40c",
+            "mtime_ms": 1776960108771.2864
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "f47b2732fe97fc53487751f1f79d92b97a7cdda9e9e45b90f99714387cf1e40c",
+            "mtime_ms": 1776960108771.2864
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "f47b2732fe97fc53487751f1f79d92b97a7cdda9e9e45b90f99714387cf1e40c",
+            "mtime_ms": 1776960108771.2864
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "f47b2732fe97fc53487751f1f79d92b97a7cdda9e9e45b90f99714387cf1e40c",
+            "mtime_ms": 1776960108771.2864
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\gate-violations-resolved.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "181f03dc648f14ca5778b80c644db7bbd1b44dc9d3eb59d7b3e4480c1047c118",
+        "canonical_mtime": 1776960108772.2527,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "181f03dc648f14ca5778b80c644db7bbd1b44dc9d3eb59d7b3e4480c1047c118",
+            "mtime_ms": 1776960108772.2527
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "181f03dc648f14ca5778b80c644db7bbd1b44dc9d3eb59d7b3e4480c1047c118",
+            "mtime_ms": 1776960108772.2527
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "181f03dc648f14ca5778b80c644db7bbd1b44dc9d3eb59d7b3e4480c1047c118",
+            "mtime_ms": 1776960108772.2527
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "181f03dc648f14ca5778b80c644db7bbd1b44dc9d3eb59d7b3e4480c1047c118",
+            "mtime_ms": 1776960108772.2527
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\governance-verification-registry.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "496e213ecf3edf41b544710142a404a22688e3cfdf5fc139ebb855a14ecc932a",
+        "canonical_mtime": 1776960108772.752,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "496e213ecf3edf41b544710142a404a22688e3cfdf5fc139ebb855a14ecc932a",
+            "mtime_ms": 1776960108772.752
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "496e213ecf3edf41b544710142a404a22688e3cfdf5fc139ebb855a14ecc932a",
+            "mtime_ms": 1776960108772.752
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "496e213ecf3edf41b544710142a404a22688e3cfdf5fc139ebb855a14ecc932a",
+            "mtime_ms": 1776960108772.752
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "496e213ecf3edf41b544710142a404a22688e3cfdf5fc139ebb855a14ecc932a",
+            "mtime_ms": 1776960108772.752
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\last-recovery.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "305a5e2574021cb8393221f2123a52f06c6fc9ade63a7d46cbc9583893754c60",
+        "canonical_mtime": 1777327733530.5002,
+        "targets": [
+          {
+            "lane": "swarmmind",
+            "action": "synced",
+            "previous_sha256": null
+          },
+          {
+            "lane": "kernel",
+            "action": "synced",
+            "previous_sha256": null
+          },
+          {
+            "lane": "library",
+            "action": "synced",
+            "previous_sha256": null
+          }
+        ],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "305a5e2574021cb8393221f2123a52f06c6fc9ade63a7d46cbc9583893754c60",
+            "mtime_ms": 1777327733530.5002
+          },
+          {
+            "lane": "swarmmind",
+            "exists": false,
+            "sha256": null,
+            "mtime_ms": null
+          },
+          {
+            "lane": "kernel",
+            "exists": false,
+            "sha256": null,
+            "mtime_ms": null
+          },
+          {
+            "lane": "library",
+            "exists": false,
+            "sha256": null,
+            "mtime_ms": null
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\review-ready-schema-v1.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "85714226dafa9a68cab604b2e59f568ba070cee3d0285b148dfd0cebedfbe002",
+        "canonical_mtime": 1776776322450.5144,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "85714226dafa9a68cab604b2e59f568ba070cee3d0285b148dfd0cebedfbe002",
+            "mtime_ms": 1776776322450.5144
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "85714226dafa9a68cab604b2e59f568ba070cee3d0285b148dfd0cebedfbe002",
+            "mtime_ms": 1776776322450.5144
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "85714226dafa9a68cab604b2e59f568ba070cee3d0285b148dfd0cebedfbe002",
+            "mtime_ms": 1776776322450.5144
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "85714226dafa9a68cab604b2e59f568ba070cee3d0285b148dfd0cebedfbe002",
+            "mtime_ms": 1776776322450.5144
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\review-ready-template-v1.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "d1df57985fc1a38657137ee9174f731f897beb094eef4fcf79038e2c11f9fd13",
+        "canonical_mtime": 1776776322453.0293,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "d1df57985fc1a38657137ee9174f731f897beb094eef4fcf79038e2c11f9fd13",
+            "mtime_ms": 1776776322453.0293
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "d1df57985fc1a38657137ee9174f731f897beb094eef4fcf79038e2c11f9fd13",
+            "mtime_ms": 1776776322453.0293
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "d1df57985fc1a38657137ee9174f731f897beb094eef4fcf79038e2c11f9fd13",
+            "mtime_ms": 1776776322453.0293
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "d1df57985fc1a38657137ee9174f731f897beb094eef4fcf79038e2c11f9fd13",
+            "mtime_ms": 1776776322453.0293
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\rosetta-test-harness-001.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "58f05f43a3ab45fcfaf078bd737dcf79ad17f05a3e154a6502281fd213a8ab7b",
+        "canonical_mtime": 1776960108773.2522,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "58f05f43a3ab45fcfaf078bd737dcf79ad17f05a3e154a6502281fd213a8ab7b",
+            "mtime_ms": 1776960108773.2522
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "58f05f43a3ab45fcfaf078bd737dcf79ad17f05a3e154a6502281fd213a8ab7b",
+            "mtime_ms": 1776960108773.2522
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "58f05f43a3ab45fcfaf078bd737dcf79ad17f05a3e154a6502281fd213a8ab7b",
+            "mtime_ms": 1776960108773.2522
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "58f05f43a3ab45fcfaf078bd737dcf79ad17f05a3e154a6502281fd213a8ab7b",
+            "mtime_ms": 1776960108773.2522
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\round10-known-good.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "c44c0e9131e67f835603d9acbed424bc34fde1be424d70370e0f9857e9ec4644",
+        "canonical_mtime": 1776960108773.7742,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "c44c0e9131e67f835603d9acbed424bc34fde1be424d70370e0f9857e9ec4644",
+            "mtime_ms": 1776960108773.7742
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "c44c0e9131e67f835603d9acbed424bc34fde1be424d70370e0f9857e9ec4644",
+            "mtime_ms": 1776960108773.7742
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "c44c0e9131e67f835603d9acbed424bc34fde1be424d70370e0f9857e9ec4644",
+            "mtime_ms": 1776960108773.7742
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "c44c0e9131e67f835603d9acbed424bc34fde1be424d70370e0f9857e9ec4644",
+            "mtime_ms": 1776960108773.7742
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\swarmmind-path-lock.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "b98ecbb1bea7033b88bab8711848d9b2b9fe25a9a20bac33608fcdb43280cb31",
+        "canonical_mtime": 1777055804802.08,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "b98ecbb1bea7033b88bab8711848d9b2b9fe25a9a20bac33608fcdb43280cb31",
+            "mtime_ms": 1777055804802.08
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "b98ecbb1bea7033b88bab8711848d9b2b9fe25a9a20bac33608fcdb43280cb31",
+            "mtime_ms": 1777055804802.08
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "b98ecbb1bea7033b88bab8711848d9b2b9fe25a9a20bac33608fcdb43280cb31",
+            "mtime_ms": 1777055804802.08
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "b98ecbb1bea7033b88bab8711848d9b2b9fe25a9a20bac33608fcdb43280cb31",
+            "mtime_ms": 1777055804802.08
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\system_state.json",
+        "status": "synced_or_drifted",
+        "canonical_lane": "library",
+        "canonical_sha256": "1145c833cebb97dab5b7acbfc7c73f602fe85ee4e60820a301eaa20de246bd80",
+        "canonical_mtime": 1777329541692.9182,
+        "targets": [
+          {
+            "lane": "archivist",
+            "action": "synced",
+            "previous_sha256": "0a5df436c00ebedd416729d4ef028531705ad1e8da963e2c93a837ba2ced308b"
+          },
+          {
+            "lane": "swarmmind",
+            "action": "synced",
+            "previous_sha256": "27e2f788a8a2f6e7c277008320c5dd7e5732a299dd5134206a92bbd7eedaccbb"
+          },
+          {
+            "lane": "kernel",
+            "action": "synced",
+            "previous_sha256": "0b1efa8721e43dc2c807a25cd310428974409775a6b33170cd29542b99d6ffae"
+          }
+        ],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "0a5df436c00ebedd416729d4ef028531705ad1e8da963e2c93a837ba2ced308b",
+            "mtime_ms": 1777329541350.1736
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "27e2f788a8a2f6e7c277008320c5dd7e5732a299dd5134206a92bbd7eedaccbb",
+            "mtime_ms": 1777329421328.9038
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "0b1efa8721e43dc2c807a25cd310428974409775a6b33170cd29542b99d6ffae",
+            "mtime_ms": 1777329541268.75
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "1145c833cebb97dab5b7acbfc7c73f602fe85ee4e60820a301eaa20de246bd80",
+            "mtime_ms": 1777329541692.9182
+          }
+        ]
+      },
+      {
+        "file": "lanes\\broadcast\\trust-store.json",
+        "status": "already_aligned",
+        "canonical_lane": "archivist",
+        "canonical_sha256": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "canonical_mtime": 1777213088769.9316,
+        "targets": [],
+        "lane_states": [
+          {
+            "lane": "archivist",
+            "exists": true,
+            "sha256": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+            "mtime_ms": 1777213088769.9316
+          },
+          {
+            "lane": "swarmmind",
+            "exists": true,
+            "sha256": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+            "mtime_ms": 1777213088769.9316
+          },
+          {
+            "lane": "kernel",
+            "exists": true,
+            "sha256": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+            "mtime_ms": 1777213088769.9316
+          },
+          {
+            "lane": "library",
+            "exists": true,
+            "sha256": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+            "mtime_ms": 1777213088769.9316
+          }
+        ]
+      }
+    ],
+    "copy_operations": [
+      {
+        "file": "scripts/lane-worker.js",
+        "from_lane": "archivist",
+        "to_lane": "swarmmind",
+        "from_sha256": "c53602069043e23cd8b7fbb70533f30ee311119e9c8b1ee8db95a196b66a00e3",
+        "to_sha256_before": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1",
+        "dry_run": false
+      },
+      {
+        "file": "scripts/lane-worker.js",
+        "from_lane": "archivist",
+        "to_lane": "kernel",
+        "from_sha256": "c53602069043e23cd8b7fbb70533f30ee311119e9c8b1ee8db95a196b66a00e3",
+        "to_sha256_before": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1",
+        "dry_run": false
+      },
+      {
+        "file": "scripts/lane-worker.js",
+        "from_lane": "archivist",
+        "to_lane": "library",
+        "from_sha256": "c53602069043e23cd8b7fbb70533f30ee311119e9c8b1ee8db95a196b66a00e3",
+        "to_sha256_before": "1b27de56e0f5c4601f3e8ebae64fd9a8da0c49db4f1e5bb383e73a8cd0bf31b1",
+        "dry_run": false
+      },
+      {
+        "file": "lanes\\broadcast\\last-recovery.json",
+        "from_lane": "archivist",
+        "to_lane": "swarmmind",
+        "from_sha256": "305a5e2574021cb8393221f2123a52f06c6fc9ade63a7d46cbc9583893754c60",
+        "to_sha256_before": null,
+        "dry_run": false
+      },
+      {
+        "file": "lanes\\broadcast\\last-recovery.json",
+        "from_lane": "archivist",
+        "to_lane": "kernel",
+        "from_sha256": "305a5e2574021cb8393221f2123a52f06c6fc9ade63a7d46cbc9583893754c60",
+        "to_sha256_before": null,
+        "dry_run": false
+      },
+      {
+        "file": "lanes\\broadcast\\last-recovery.json",
+        "from_lane": "archivist",
+        "to_lane": "library",
+        "from_sha256": "305a5e2574021cb8393221f2123a52f06c6fc9ade63a7d46cbc9583893754c60",
+        "to_sha256_before": null,
+        "dry_run": false
+      },
+      {
+        "file": "lanes\\broadcast\\system_state.json",
+        "from_lane": "library",
+        "to_lane": "archivist",
+        "from_sha256": "1145c833cebb97dab5b7acbfc7c73f602fe85ee4e60820a301eaa20de246bd80",
+        "to_sha256_before": "0a5df436c00ebedd416729d4ef028531705ad1e8da963e2c93a837ba2ced308b",
+        "dry_run": false
+      },
+      {
+        "file": "lanes\\broadcast\\system_state.json",
+        "from_lane": "library",
+        "to_lane": "swarmmind",
+        "from_sha256": "1145c833cebb97dab5b7acbfc7c73f602fe85ee4e60820a301eaa20de246bd80",
+        "to_sha256_before": "27e2f788a8a2f6e7c277008320c5dd7e5732a299dd5134206a92bbd7eedaccbb",
+        "dry_run": false
+      },
+      {
+        "file": "lanes\\broadcast\\system_state.json",
+        "from_lane": "library",
+        "to_lane": "kernel",
+        "from_sha256": "1145c833cebb97dab5b7acbfc7c73f602fe85ee4e60820a301eaa20de246bd80",
+        "to_sha256_before": "0b1efa8721e43dc2c807a25cd310428974409775a6b33170cd29542b99d6ffae",
+        "dry_run": false
+      }
+    ],
+    "attempted_targets": 9,
+    "successful_or_planned_targets": 9
+  },
+  "test_results": [
+    {
+      "lane": "archivist",
+      "lane_worker_test": {
+        "command": "node \"scripts/test-lane-worker-we4free.js\"",
+        "pass": 17,
+        "fail": 0,
+        "total": 17,
+        "ok": true,
+        "details": [
+          "FAIL: 0"
+        ],
+        "raw": "[PASS] dry-run does not mutate filesystem\n[PASS] invalid JSON routes to quarantine\n[PASS] invalid schema routes to quarantine\n[PASS] missing signature routes to blocked\n[PASS] signature mismatch routes to blocked\n[PASS] lane mismatch routes to blocked\n[PASS] non-ASCII format violation routes to quarantine\n[PASS] requires_action=true without proof routes to action-required\n[PASS] fake terminal_decision without artifact routes to blocked\n[PASS] evidence.required=true without artifact_path routes to blocked\n[PASS] valid terminal informational routes to processed\n[PASS] lane-worker never writes system_state.json\n[PASS] signed message missing known default fields -> remediated + processed\n[PASS] unsigned message missing fields -> quarantined\n[PASS] malformed ownership/schema field -> not remediated silently\n[PASS] remediated message includes schema_remediation audit metadata\n[PASS] remediation retries only once\n\n========================================\nWE4FREE Test Suite Results\n========================================\nPASS: 17\nFAIL: 0\nTOTAL: 17\n========================================\n  [OK] dry-run does not mutate filesystem\n  [OK] invalid JSON routes to quarantine\n  [OK] invalid schema routes to quarantine\n  [OK] missing signature routes to blocked\n  [OK] signature mismatch routes to blocked\n  [OK] lane mismatch routes to blocked\n  [OK] non-ASCII format violation routes to quarantine\n  [OK] requires_action=true without proof routes to action-required\n  [OK] fake terminal_decision without artifact routes to blocked\n  [OK] evidence.required=true without artifact_path routes to blocked\n  [OK] valid terminal informational routes to processed\n  [OK] lane-worker never writes system_state.json\n  [OK] signed message missing known default fields -> remediated + processed\n  [OK] unsigned message missing fields -> quarantined\n  [OK] malformed ownership/schema field -> not remediated silently\n  [OK] remediated message includes schema_remediation audit metadata\n  [OK] remediation retries only once\n",
+        "error": null
+      },
+      "executor_test": {
+        "command": "node \"scripts/test-executor-v3.js\"",
+        "pass": 64,
+        "fail": 0,
+        "total": 64,
+        "ok": true,
+        "details": [],
+        "raw": "[PASS] status: explicit task_kind\n[PASS] status: NLP \"what is the lane status\"\n[PASS] read file: reads content\n[PASS] read file: directory listing\n[PASS] run script: missing script error\n[PASS] run script: daemon skip\n[PASS] git: status\n[PASS] git: disallowed subcommand\n[PASS] git: shell metacharacters blocked\n[PASS] grep: pattern search\n[PASS] grep: no pattern error\n[PASS] write file: outside own lane rejected\n[PASS] write file: governance file blocked\n[PASS] write file: 10KB limit enforced\n[PASS] consistency check: explicit\n[PASS] consistency check: NLP \"is the system consistent\"\n[PASS] list dir: returns entries\n[PASS] list dir: entry shape has name/type/size/modified\n[PASS] list dir: outside allowed roots rejected\n[PASS] hash file: returns sha256\n[PASS] hash file: deterministic\n[PASS] hash file: alias sha256\n[PASS] diff: identical files\n[PASS] diff: different files\n[PASS] diff: compare alias\n[PASS] diff: missing second path error\n[PASS] count: occurrences in file\n[PASS] count: zero occurrences\n[PASS] count: directory mode works\n[PASS] NLP: \"check if trust store is consistent\" -> consistency check\n[PASS] NLP: \"how many messages processed\" -> status\n[PASS] NLP: \"what files exist in scripts\" -> list dir\n[PASS] NLP: \"what is the sha of heartbeat.js\" -> hash file\n[PASS] NLP: \"find where NFM is defined\" -> grep\n[PASS] NLP: \"latest commits\" -> git log\n[PASS] NLP: \"uncommitted changes\" -> git status\n[PASS] NLP: 12 route groups loaded\n[PASS] adversarial: empty body -> fallback ack\n[PASS] adversarial: gibberish body -> fallback ack\n[PASS] adversarial: explicit verb + NLP conflict -> explicit wins\n[PASS] adversarial: path traversal in read\n[PASS] adversarial: path traversal in hash\n[PASS] adversarial: git push rejected\n[PASS] adversarial: git checkout rejected\n[PASS] adversarial: write to trust-store.json blocked\n[PASS] adversarial: write to .identity/ blocked\n[PASS] safety: path outside roots in grep rejected\n[PASS] safety: path outside roots in count rejected\n[PASS] safety: path outside roots in diff rejected\n[PASS] safety: write to BOOTSTRAP.md blocked\n[PASS] safety: write to GOVERNANCE.md blocked\n[PASS] safety: write to contradictions.json blocked\n[PASS] safety: isPathAllowed rejects unknown root\n[PASS] safety: isPathAllowed accepts lane root\n[PASS] instrumentation: timing metadata on result\n[PASS] instrumentation: NLP routing includes timing\n[PASS] rollout: version is 3.x\n[PASS] rollout: feature flags present and enabled\n[PASS] governance: createResponse includes _governance metadata\n[PASS] determinism: status same result twice\n[PASS] determinism: hash same file twice\n[PASS] concurrency: lock file prevents double-execution\n[PASS] concurrency: stale lock is re-entrant\n[PASS] hash: different files produce different hashes\n\n========================================\nExecutor v3 Golden Tests: 64 PASS, 0 FAIL, 64 total\n========================================\n",
+        "error": null
+      },
+      "all_pass": true
+    },
+    {
+      "lane": "swarmmind",
+      "lane_worker_test": {
+        "command": "node \"scripts/test-lane-worker-we4free.js\"",
+        "pass": 17,
+        "fail": 0,
+        "total": 17,
+        "ok": true,
+        "details": [
+          "FAIL: 0"
+        ],
+        "raw": "[PASS] dry-run does not mutate filesystem\n[PASS] invalid JSON routes to quarantine\n[PASS] invalid schema routes to quarantine\n[PASS] missing signature routes to blocked\n[PASS] signature mismatch routes to blocked\n[PASS] lane mismatch routes to blocked\n[PASS] non-ASCII format violation routes to quarantine\n[PASS] requires_action=true without proof routes to action-required\n[PASS] fake terminal_decision without artifact routes to blocked\n[PASS] evidence.required=true without artifact_path routes to blocked\n[PASS] valid terminal informational routes to processed\n[PASS] lane-worker never writes system_state.json\n[PASS] signed message missing known default fields -> remediated + processed\n[PASS] unsigned message missing fields -> quarantined\n[PASS] malformed ownership/schema field -> not remediated silently\n[PASS] remediated message includes schema_remediation audit metadata\n[PASS] remediation retries only once\n\n========================================\nWE4FREE Test Suite Results\n========================================\nPASS: 17\nFAIL: 0\nTOTAL: 17\n========================================\n  [OK] dry-run does not mutate filesystem\n  [OK] invalid JSON routes to quarantine\n  [OK] invalid schema routes to quarantine\n  [OK] missing signature routes to blocked\n  [OK] signature mismatch routes to blocked\n  [OK] lane mismatch routes to blocked\n  [OK] non-ASCII format violation routes to quarantine\n  [OK] requires_action=true without proof routes to action-required\n  [OK] fake terminal_decision without artifact routes to blocked\n  [OK] evidence.required=true without artifact_path routes to blocked\n  [OK] valid terminal informational routes to processed\n  [OK] lane-worker never writes system_state.json\n  [OK] signed message missing known default fields -> remediated + processed\n  [OK] unsigned message missing fields -> quarantined\n  [OK] malformed ownership/schema field -> not remediated silently\n  [OK] remediated message includes schema_remediation audit metadata\n  [OK] remediation retries only once\n",
+        "error": null
+      },
+      "executor_test": {
+        "command": "node \"scripts/test-executor-v3.js\"",
+        "pass": 64,
+        "fail": 0,
+        "total": 64,
+        "ok": true,
+        "details": [],
+        "raw": "[PASS] status: explicit task_kind\n[PASS] status: NLP \"what is the lane status\"\n[PASS] read file: reads content\n[PASS] read file: directory listing\n[PASS] run script: missing script error\n[PASS] run script: daemon skip\n[PASS] git: status\n[PASS] git: disallowed subcommand\n[PASS] git: shell metacharacters blocked\n[PASS] grep: pattern search\n[PASS] grep: no pattern error\n[PASS] write file: outside own lane rejected\n[PASS] write file: governance file blocked\n[PASS] write file: 10KB limit enforced\n[PASS] consistency check: explicit\n[PASS] consistency check: NLP \"is the system consistent\"\n[PASS] list dir: returns entries\n[PASS] list dir: entry shape has name/type/size/modified\n[PASS] list dir: outside allowed roots rejected\n[PASS] hash file: returns sha256\n[PASS] hash file: deterministic\n[PASS] hash file: alias sha256\n[PASS] diff: identical files\n[PASS] diff: different files\n[PASS] diff: compare alias\n[PASS] diff: missing second path error\n[PASS] count: occurrences in file\n[PASS] count: zero occurrences\n[PASS] count: directory mode works\n[PASS] NLP: \"check if trust store is consistent\" -> consistency check\n[PASS] NLP: \"how many messages processed\" -> status\n[PASS] NLP: \"what files exist in scripts\" -> list dir\n[PASS] NLP: \"what is the sha of heartbeat.js\" -> hash file\n[PASS] NLP: \"find where NFM is defined\" -> grep\n[PASS] NLP: \"latest commits\" -> git log\n[PASS] NLP: \"uncommitted changes\" -> git status\n[PASS] NLP: 12 route groups loaded\n[PASS] adversarial: empty body -> fallback ack\n[PASS] adversarial: gibberish body -> fallback ack\n[PASS] adversarial: explicit verb + NLP conflict -> explicit wins\n[PASS] adversarial: path traversal in read\n[PASS] adversarial: path traversal in hash\n[PASS] adversarial: git push rejected\n[PASS] adversarial: git checkout rejected\n[PASS] adversarial: write to trust-store.json blocked\n[PASS] adversarial: write to .identity/ blocked\n[PASS] safety: path outside roots in grep rejected\n[PASS] safety: path outside roots in count rejected\n[PASS] safety: path outside roots in diff rejected\n[PASS] safety: write to BOOTSTRAP.md blocked\n[PASS] safety: write to GOVERNANCE.md blocked\n[PASS] safety: write to contradictions.json blocked\n[PASS] safety: isPathAllowed rejects unknown root\n[PASS] safety: isPathAllowed accepts lane root\n[PASS] instrumentation: timing metadata on result\n[PASS] instrumentation: NLP routing includes timing\n[PASS] rollout: version is 3.x\n[PASS] rollout: feature flags present and enabled\n[PASS] governance: createResponse includes _governance metadata\n[PASS] determinism: status same result twice\n[PASS] determinism: hash same file twice\n[PASS] concurrency: lock file prevents double-execution\n[PASS] concurrency: stale lock is re-entrant\n[PASS] hash: different files produce different hashes\n\n========================================\nExecutor v3 Golden Tests: 64 PASS, 0 FAIL, 64 total\n========================================\n",
+        "error": null
+      },
+      "all_pass": true
+    },
+    {
+      "lane": "kernel",
+      "lane_worker_test": {
+        "command": "node \"scripts/test-lane-worker-we4free.js\"",
+        "pass": 17,
+        "fail": 0,
+        "total": 17,
+        "ok": true,
+        "details": [
+          "FAIL: 0"
+        ],
+        "raw": "[PASS] dry-run does not mutate filesystem\n[PASS] invalid JSON routes to quarantine\n[PASS] invalid schema routes to quarantine\n[PASS] missing signature routes to blocked\n[PASS] signature mismatch routes to blocked\n[PASS] lane mismatch routes to blocked\n[PASS] non-ASCII format violation routes to quarantine\n[PASS] requires_action=true without proof routes to action-required\n[PASS] fake terminal_decision without artifact routes to blocked\n[PASS] evidence.required=true without artifact_path routes to blocked\n[PASS] valid terminal informational routes to processed\n[PASS] lane-worker never writes system_state.json\n[PASS] signed message missing known default fields -> remediated + processed\n[PASS] unsigned message missing fields -> quarantined\n[PASS] malformed ownership/schema field -> not remediated silently\n[PASS] remediated message includes schema_remediation audit metadata\n[PASS] remediation retries only once\n\n========================================\nWE4FREE Test Suite Results\n========================================\nPASS: 17\nFAIL: 0\nTOTAL: 17\n========================================\n  [OK] dry-run does not mutate filesystem\n  [OK] invalid JSON routes to quarantine\n  [OK] invalid schema routes to quarantine\n  [OK] missing signature routes to blocked\n  [OK] signature mismatch routes to blocked\n  [OK] lane mismatch routes to blocked\n  [OK] non-ASCII format violation routes to quarantine\n  [OK] requires_action=true without proof routes to action-required\n  [OK] fake terminal_decision without artifact routes to blocked\n  [OK] evidence.required=true without artifact_path routes to blocked\n  [OK] valid terminal informational routes to processed\n  [OK] lane-worker never writes system_state.json\n  [OK] signed message missing known default fields -> remediated + processed\n  [OK] unsigned message missing fields -> quarantined\n  [OK] malformed ownership/schema field -> not remediated silently\n  [OK] remediated message includes schema_remediation audit metadata\n  [OK] remediation retries only once\n",
+        "error": null
+      },
+      "executor_test": {
+        "command": "node \"scripts/test-executor-v3.js\"",
+        "pass": 64,
+        "fail": 0,
+        "total": 64,
+        "ok": true,
+        "details": [],
+        "raw": "[PASS] status: explicit task_kind\n[PASS] status: NLP \"what is the lane status\"\n[PASS] read file: reads content\n[PASS] read file: directory listing\n[PASS] run script: missing script error\n[PASS] run script: daemon skip\n[PASS] git: status\n[PASS] git: disallowed subcommand\n[PASS] git: shell metacharacters blocked\n[PASS] grep: pattern search\n[PASS] grep: no pattern error\n[PASS] write file: outside own lane rejected\n[PASS] write file: governance file blocked\n[PASS] write file: 10KB limit enforced\n[PASS] consistency check: explicit\n[PASS] consistency check: NLP \"is the system consistent\"\n[PASS] list dir: returns entries\n[PASS] list dir: entry shape has name/type/size/modified\n[PASS] list dir: outside allowed roots rejected\n[PASS] hash file: returns sha256\n[PASS] hash file: deterministic\n[PASS] hash file: alias sha256\n[PASS] diff: identical files\n[PASS] diff: different files\n[PASS] diff: compare alias\n[PASS] diff: missing second path error\n[PASS] count: occurrences in file\n[PASS] count: zero occurrences\n[PASS] count: directory mode works\n[PASS] NLP: \"check if trust store is consistent\" -> consistency check\n[PASS] NLP: \"how many messages processed\" -> status\n[PASS] NLP: \"what files exist in scripts\" -> list dir\n[PASS] NLP: \"what is the sha of heartbeat.js\" -> hash file\n[PASS] NLP: \"find where NFM is defined\" -> grep\n[PASS] NLP: \"latest commits\" -> git log\n[PASS] NLP: \"uncommitted changes\" -> git status\n[PASS] NLP: 12 route groups loaded\n[PASS] adversarial: empty body -> fallback ack\n[PASS] adversarial: gibberish body -> fallback ack\n[PASS] adversarial: explicit verb + NLP conflict -> explicit wins\n[PASS] adversarial: path traversal in read\n[PASS] adversarial: path traversal in hash\n[PASS] adversarial: git push rejected\n[PASS] adversarial: git checkout rejected\n[PASS] adversarial: write to trust-store.json blocked\n[PASS] adversarial: write to .identity/ blocked\n[PASS] safety: path outside roots in grep rejected\n[PASS] safety: path outside roots in count rejected\n[PASS] safety: path outside roots in diff rejected\n[PASS] safety: write to BOOTSTRAP.md blocked\n[PASS] safety: write to GOVERNANCE.md blocked\n[PASS] safety: write to contradictions.json blocked\n[PASS] safety: isPathAllowed rejects unknown root\n[PASS] safety: isPathAllowed accepts lane root\n[PASS] instrumentation: timing metadata on result\n[PASS] instrumentation: NLP routing includes timing\n[PASS] rollout: version is 3.x\n[PASS] rollout: feature flags present and enabled\n[PASS] governance: createResponse includes _governance metadata\n[PASS] determinism: status same result twice\n[PASS] determinism: hash same file twice\n[PASS] concurrency: lock file prevents double-execution\n[PASS] concurrency: stale lock is re-entrant\n[PASS] hash: different files produce different hashes\n\n========================================\nExecutor v3 Golden Tests: 64 PASS, 0 FAIL, 64 total\n========================================\n",
+        "error": null
+      },
+      "all_pass": true
+    },
+    {
+      "lane": "library",
+      "lane_worker_test": {
+        "command": "node \"scripts/test-lane-worker-we4free.js\"",
+        "pass": 17,
+        "fail": 0,
+        "total": 17,
+        "ok": true,
+        "details": [
+          "FAIL: 0"
+        ],
+        "raw": "[PASS] dry-run does not mutate filesystem\n[PASS] invalid JSON routes to quarantine\n[PASS] invalid schema routes to quarantine\n[PASS] missing signature routes to blocked\n[PASS] signature mismatch routes to blocked\n[PASS] lane mismatch routes to blocked\n[PASS] non-ASCII format violation routes to quarantine\n[PASS] requires_action=true without proof routes to action-required\n[PASS] fake terminal_decision without artifact routes to blocked\n[PASS] evidence.required=true without artifact_path routes to blocked\n[PASS] valid terminal informational routes to processed\n[PASS] lane-worker never writes system_state.json\n[PASS] signed message missing known default fields -> remediated + processed\n[PASS] unsigned message missing fields -> quarantined\n[PASS] malformed ownership/schema field -> not remediated silently\n[PASS] remediated message includes schema_remediation audit metadata\n[PASS] remediation retries only once\n\n========================================\nWE4FREE Test Suite Results\n========================================\nPASS: 17\nFAIL: 0\nTOTAL: 17\n========================================\n  [OK] dry-run does not mutate filesystem\n  [OK] invalid JSON routes to quarantine\n  [OK] invalid schema routes to quarantine\n  [OK] missing signature routes to blocked\n  [OK] signature mismatch routes to blocked\n  [OK] lane mismatch routes to blocked\n  [OK] non-ASCII format violation routes to quarantine\n  [OK] requires_action=true without proof routes to action-required\n  [OK] fake terminal_decision without artifact routes to blocked\n  [OK] evidence.required=true without artifact_path routes to blocked\n  [OK] valid terminal informational routes to processed\n  [OK] lane-worker never writes system_state.json\n  [OK] signed message missing known default fields -> remediated + processed\n  [OK] unsigned message missing fields -> quarantined\n  [OK] malformed ownership/schema field -> not remediated silently\n  [OK] remediated message includes schema_remediation audit metadata\n  [OK] remediation retries only once\n",
+        "error": null
+      },
+      "executor_test": {
+        "command": "node \"scripts/test-executor-v3.js\"",
+        "pass": 64,
+        "fail": 0,
+        "total": 64,
+        "ok": true,
+        "details": [],
+        "raw": "[PASS] status: explicit task_kind\n[PASS] status: NLP \"what is the lane status\"\n[PASS] read file: reads content\n[PASS] read file: directory listing\n[PASS] run script: missing script error\n[PASS] run script: daemon skip\n[PASS] git: status\n[PASS] git: disallowed subcommand\n[PASS] git: shell metacharacters blocked\n[PASS] grep: pattern search\n[PASS] grep: no pattern error\n[PASS] write file: outside own lane rejected\n[PASS] write file: governance file blocked\n[PASS] write file: 10KB limit enforced\n[PASS] consistency check: explicit\n[PASS] consistency check: NLP \"is the system consistent\"\n[PASS] list dir: returns entries\n[PASS] list dir: entry shape has name/type/size/modified\n[PASS] list dir: outside allowed roots rejected\n[PASS] hash file: returns sha256\n[PASS] hash file: deterministic\n[PASS] hash file: alias sha256\n[PASS] diff: identical files\n[PASS] diff: different files\n[PASS] diff: compare alias\n[PASS] diff: missing second path error\n[PASS] count: occurrences in file\n[PASS] count: zero occurrences\n[PASS] count: directory mode works\n[PASS] NLP: \"check if trust store is consistent\" -> consistency check\n[PASS] NLP: \"how many messages processed\" -> status\n[PASS] NLP: \"what files exist in scripts\" -> list dir\n[PASS] NLP: \"what is the sha of heartbeat.js\" -> hash file\n[PASS] NLP: \"find where NFM is defined\" -> grep\n[PASS] NLP: \"latest commits\" -> git log\n[PASS] NLP: \"uncommitted changes\" -> git status\n[PASS] NLP: 12 route groups loaded\n[PASS] adversarial: empty body -> fallback ack\n[PASS] adversarial: gibberish body -> fallback ack\n[PASS] adversarial: explicit verb + NLP conflict -> explicit wins\n[PASS] adversarial: path traversal in read\n[PASS] adversarial: path traversal in hash\n[PASS] adversarial: git push rejected\n[PASS] adversarial: git checkout rejected\n[PASS] adversarial: write to trust-store.json blocked\n[PASS] adversarial: write to .identity/ blocked\n[PASS] safety: path outside roots in grep rejected\n[PASS] safety: path outside roots in count rejected\n[PASS] safety: path outside roots in diff rejected\n[PASS] safety: write to BOOTSTRAP.md blocked\n[PASS] safety: write to GOVERNANCE.md blocked\n[PASS] safety: write to contradictions.json blocked\n[PASS] safety: isPathAllowed rejects unknown root\n[PASS] safety: isPathAllowed accepts lane root\n[PASS] instrumentation: timing metadata on result\n[PASS] instrumentation: NLP routing includes timing\n[PASS] rollout: version is 3.x\n[PASS] rollout: feature flags present and enabled\n[PASS] governance: createResponse includes _governance metadata\n[PASS] determinism: status same result twice\n[PASS] determinism: hash same file twice\n[PASS] concurrency: lock file prevents double-execution\n[PASS] concurrency: stale lock is re-entrant\n[PASS] hash: different files produce different hashes\n\n========================================\nExecutor v3 Golden Tests: 64 PASS, 0 FAIL, 64 total\n========================================\n",
+        "error": null
+      },
+      "all_pass": true
+    }
+  ],
+  "lane_health": [
+    {
+      "lane": "archivist",
+      "inbox": {
+        "total": 2,
+        "actionable": 1,
+        "terminal": 1,
+        "unreadable": 0
+      },
+      "outbox": {
+        "total": 54
+      },
+      "checks": {
+        "has_system_state_json": true,
+        "has_trust_store_json": true
+      },
+      "healthy": true,
+      "unhealthy_reasons": []
+    },
+    {
+      "lane": "swarmmind",
+      "inbox": {
+        "total": 0,
+        "actionable": 0,
+        "terminal": 0,
+        "unreadable": 0
+      },
+      "outbox": {
+        "total": 0
+      },
+      "checks": {
+        "has_system_state_json": true,
+        "has_trust_store_json": true
+      },
+      "healthy": true,
+      "unhealthy_reasons": []
+    },
+    {
+      "lane": "kernel",
+      "inbox": {
+        "total": 1,
+        "actionable": 1,
+        "terminal": 0,
+        "unreadable": 0
+      },
+      "outbox": {
+        "total": 40
+      },
+      "checks": {
+        "has_system_state_json": true,
+        "has_trust_store_json": true
+      },
+      "healthy": true,
+      "unhealthy_reasons": []
+    },
+    {
+      "lane": "library",
+      "inbox": {
+        "total": 0,
+        "actionable": 0,
+        "terminal": 0,
+        "unreadable": 0
+      },
+      "outbox": {
+        "total": 16
+      },
+      "checks": {
+        "has_system_state_json": true,
+        "has_trust_store_json": true
+      },
+      "healthy": true,
+      "unhealthy_reasons": []
+    }
+  ],
+  "summary": {
+    "synced_targets": 9,
+    "attempted_sync_targets": 9,
+    "lanes_all_tests_pass": 4,
+    "total_lanes": 4,
+    "healthy_lanes": 4,
+    "failing_test_lanes": 0,
+    "unhealthy_lanes": 0,
+    "overall_ok": true
+  }
+}

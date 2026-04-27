@@ -24,13 +24,7 @@ const LANE_IDENTITY_DIRS = {
   kernel: 'S:/kernel-lane/.identity',
 };
 
-function stableStringify(value) {
-  if (value === null || typeof value !== 'object') return JSON.stringify(value);
-  if (Array.isArray(value)) return '[' + value.map(stableStringify).join(',') + ']';
-  const keys = Object.keys(value).sort();
-  const parts = keys.map((k) => JSON.stringify(k) + ':' + stableStringify(value[k]));
-  return '{' + parts.join(',') + '}';
-}
+const { stableStringify } = require(path.join(__dirname, '..', 'src', 'attestation', 'stableStringify'));
 
 function base64UrlEncode(input) {
   const buf = Buffer.isBuffer(input) ? input : Buffer.from(input);
