@@ -47,6 +47,7 @@ const SESSION_ID = process.env.LANE_SESSION_ID || `sess_${Date.now().toString(36
 const SESSION_EPOCH = new Date().toISOString();
 const ORIGIN_RUNTIME = process.env.LANE_ORIGIN_RUNTIME || 'opencode';
 const ORIGIN_WORKSPACE = process.cwd();
+const WORKER_ID = process.pid.toString();
 
 function getActiveOwner(laneRoot) {
   const lockPath = path.join(laneRoot, 'lanes', laneRoot.split('/').pop().toLowerCase(), 'state', 'active-owner.json');
@@ -85,11 +86,40 @@ function nowIso() {
   return new Date().toISOString();
 }
 
+function logAudit(sourcePath, targetPath, reason, workerId, sessionId, context = {}) {
+  const timestamp = nowIso();
+  const safeSessionId = sessionId || 'unknown';
+  const logLine = `${timestamp},worker_id=${workerId},session_id=${safeSessionId},from_path="${sourcePath}",to_path="${targetPath}",reason="${reason}"\n`;
+  
+  // Log to stdout
+  process.stdout.write(logLine);
+  
+  // Log to file
+  try {
+    // Determine lane root from inbox path: <root>/lanes/<lane>/inbox
+    const inboxPath = context.inboxPath;
+    const lane = context.lane;
+    if (!inboxPath || !lane) throw new Error('missing audit context (inboxPath/lane)');
+    const laneRoot = path.resolve(inboxPath, '..', '..', '..');
+    const logDir = path.join(laneRoot, 'lanes', lane, 'state');
+    if (!fs.existsSync(logDir)) {
+      fs.mkdirSync(logDir, { recursive: true });
+    }
+    const logFile = path.join(logDir, 'worker-audit.log');
+    fs.appendFileSync(logFile, logLine, 'utf8');
+  } catch (err) {
+    // Don't let audit logging break the worker
+    process.stderr.write(`[lane-worker] Audit logging failed: ${err.message}\n`);
+  }
+}
+
 function parseArgs(argv) {
   const out = {
     lane: null,
     apply: false,
+    applyOnce: false,
     watch: false,
+    manualCadence: false,
     pollSeconds: 20,
     maxFiles: 200,
     json: false,
@@ -107,8 +137,18 @@ function parseArgs(argv) {
       out.apply = true;
       continue;
     }
+    if (a === '--apply-once') {
+      out.applyOnce = true;
+      out.apply = true;
+      out.watch = false;
+      continue;
+    }
     if (a === '--watch') {
       out.watch = true;
+      continue;
+    }
+    if (a === '--manual-cadence') {
+      out.manualCadence = true;
       continue;
     }
     if (a === '--poll-seconds' && argv[i + 1]) {
@@ -302,6 +342,7 @@ class LaneWorker {
     this.lane = options.lane || guessLane(this.repoRoot);
     this.dryRun = options.dryRun !== undefined ? !!options.dryRun : true;
     this.maxFiles = options.maxFiles || 200;
+    this.manualCadence = options.manualCadence === true;
     this.enforceOwnership = options.enforceOwnership === true;
     this.config = options.config || createDefaultConfig(this.repoRoot, this.lane);
     this.schemaValidator = options.schemaValidator || this._loadSchemaValidator();
@@ -480,10 +521,16 @@ class LaneWorker {
 
     const gate = completionGateApprove(msg);
     if (isActionable(msg) && !cp.hasCompletionProof(msg)) {
-      if (shouldAutoStart(msg)) {
+      if (!this.manualCadence && shouldAutoStart(msg)) {
         return { queue: 'inProgress', reason: 'ACTIONABLE_NO_PROOF_AUTO_START', detail: gate.detail, ownership, ownership_notes: ownershipNotes };
       }
-      return { queue: 'actionRequired', reason: 'ACTIONABLE_NO_PROOF', detail: gate.detail, ownership, ownership_notes: ownershipNotes };
+      return {
+        queue: 'actionRequired',
+        reason: this.manualCadence ? 'ACTIONABLE_NO_PROOF_MANUAL_CADENCE' : 'ACTIONABLE_NO_PROOF',
+        detail: gate.detail,
+        ownership,
+        ownership_notes: ownershipNotes
+      };
     }
 
     if (!gate.pass) {
@@ -648,6 +695,12 @@ class LaneWorker {
         origin_runtime: ORIGIN_RUNTIME,
         origin_workspace: ORIGIN_WORKSPACE,
       },
+      output_provenance: {
+        agent: `lane-worker-${WORKER_ID}`,
+        lane: this.lane,
+        generated_at: nowIso(),
+        session_id: SESSION_ID,
+      },
     },
     };
     if (decision.reason === 'FORMAT_VIOLATION_NON_ASCII') {
@@ -657,55 +710,67 @@ class LaneWorker {
     fs.writeFileSync(targetPath, JSON.stringify(enriched, null, 2), 'utf8');
   }
 
-  processFile(filePath) {
-    const filename = path.basename(filePath);
-    const rawRead = safeReadJson(filePath);
+processFile(filePath) {
+  const filename = path.basename(filePath);
+  const rawRead = safeReadJson(filePath);
 
-    if (!rawRead.ok) {
-      return this._routeRaw(filePath, 'quarantine', {
-        reason: 'INVALID_JSON',
-        detail: rawRead.error,
-        filename,
+  if (!rawRead.ok) {
+    return this._routeRaw(filePath, 'quarantine', {
+      reason: 'INVALID_JSON',
+      detail: rawRead.error,
+      filename,
+    });
+  }
+
+  let msg = rawRead.value;
+
+  if (!this.isOwner && msg.requires_action === true) {
+    const needsReviewDir = this.config.queues.needsReview || path.join(path.dirname(filePath), 'needs-review');
+    if (!fs.existsSync(needsReviewDir)) fs.mkdirSync(needsReviewDir, { recursive: true });
+    const nrPath = uniquePath(path.join(needsReviewDir, filename));
+    if (!this.dryRun) {
+      fs.renameSync(filePath, nrPath);
+      // Audit log for file move
+      logAudit(filePath, nrPath, 'FOREIGN_INSTANCE_ACTIONABLE', WORKER_ID, SESSION_ID, {
+        inboxPath: this.config.queues.inbox,
+        lane: this.lane,
       });
     }
+    return {
+      source: filePath, filename, target_queue: 'needs-review',
+      target_path: nrPath, reason: 'FOREIGN_INSTANCE_ACTIONABLE',
+      detail: `Non-owner session ${SESSION_ID.slice(0,12)}: actionable message from different instance deferred`,
+      schema_valid: false, signature_valid: false, actionable: true,
+      has_completion_proof: false, dry_run: this.dryRun,
+    };
+  }
 
-    let msg = rawRead.value;
-
-    if (!this.isOwner && msg.requires_action === true) {
-      const needsReviewDir = this.config.queues.needsReview || path.join(path.dirname(filePath), 'needs-review');
-      if (!fs.existsSync(needsReviewDir)) fs.mkdirSync(needsReviewDir, { recursive: true });
-      const nrPath = uniquePath(path.join(needsReviewDir, filename));
-      if (!this.dryRun) {
-        fs.renameSync(filePath, nrPath);
+  if (msg._lane_worker && msg._lane_worker.session_identity &&
+      msg._lane_worker.session_identity.session_id &&
+      msg._lane_worker.session_identity.session_id !== SESSION_ID) {
+    if (!msg.allow_cross_instance && msg.requires_action === true) {
+      const staleDir = this.config.queues.staleForeign || path.join(path.dirname(filePath), 'stale-foreign');
+      if (!fs.existsSync(staleDir)) fs.mkdirSync(staleDir, { recursive: true });
+      const sfPath = uniquePath(path.join(staleDir, filename));
+      if (!this.dryRun) { 
+        fs.renameSync(filePath, sfPath);
+        // Audit log for file move
+        logAudit(filePath, sfPath, 'STALE_FOREIGN_INSTANCE', WORKER_ID, SESSION_ID, {
+          inboxPath: this.config.queues.inbox,
+          lane: this.lane,
+        });
       }
       return {
-        source: filePath, filename, target_queue: 'needs-review',
-        target_path: nrPath, reason: 'FOREIGN_INSTANCE_ACTIONABLE',
-        detail: `Non-owner session ${SESSION_ID.slice(0,12)}: actionable message from different instance deferred`,
+        source: filePath, filename, target_queue: 'stale-foreign',
+        target_path: sfPath, reason: 'STALE_FOREIGN_INSTANCE',
+        detail: `Message from foreign session ${msg._lane_worker.session_identity.session_id.slice(0,12)}, cross-instance not allowed`,
         schema_valid: false, signature_valid: false, actionable: true,
         has_completion_proof: false, dry_run: this.dryRun,
       };
     }
+  }
 
-    if (msg._lane_worker && msg._lane_worker.session_identity &&
-        msg._lane_worker.session_identity.session_id &&
-        msg._lane_worker.session_identity.session_id !== SESSION_ID) {
-      if (!msg.allow_cross_instance && msg.requires_action === true) {
-        const staleDir = this.config.queues.staleForeign || path.join(path.dirname(filePath), 'stale-foreign');
-        if (!fs.existsSync(staleDir)) fs.mkdirSync(staleDir, { recursive: true });
-        const sfPath = uniquePath(path.join(staleDir, filename));
-        if (!this.dryRun) { fs.renameSync(filePath, sfPath); }
-        return {
-          source: filePath, filename, target_queue: 'stale-foreign',
-          target_path: sfPath, reason: 'STALE_FOREIGN_INSTANCE',
-          detail: `Message from foreign session ${msg._lane_worker.session_identity.session_id.slice(0,12)}, cross-instance not allowed`,
-          schema_valid: false, signature_valid: false, actionable: true,
-          has_completion_proof: false, dry_run: this.dryRun,
-        };
-      }
-    }
-
-    let schemaResult = this.schemaValidator(msg);
+  let schemaResult = this.schemaValidator(msg);
   const signatureResult = this.signatureValidator(msg);
   let remediation = null;
   if (!schemaResult.valid && signatureResult.valid) {
@@ -749,37 +814,47 @@ class LaneWorker {
   dry_run: this.dryRun,
 };
 
-    if (!this.dryRun) {
-      this._writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult, remediation);
-      fs.unlinkSync(filePath);
-    }
+   if (!this.dryRun) {
+     this._writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult, remediation);
+     // Audit log for file move
+     logAudit(filePath, targetPath, decision.reason, WORKER_ID, SESSION_ID, {
+       inboxPath: this.config.queues.inbox,
+       lane: this.lane,
+     });
+     fs.unlinkSync(filePath);
+   }
 
-    return record;
+  return record;
+}
+
+_routeRaw(filePath, queueKey, meta) {
+  const filename = path.basename(filePath);
+  const targetDir = this.config.queues[queueKey];
+  const targetPath = uniquePath(path.join(targetDir, filename));
+  const record = {
+    source: filePath,
+    filename,
+    target_queue: queueKey,
+    target_path: targetPath,
+    reason: meta.reason,
+    detail: meta.detail || null,
+    schema_valid: false,
+    signature_valid: false,
+    actionable: false,
+    has_completion_proof: false,
+    dry_run: this.dryRun,
+  };
+
+  if (!this.dryRun) {
+    fs.renameSync(filePath, targetPath);
+    // Audit log for file move
+    logAudit(filePath, targetPath, meta.reason || 'UNKNOWN', WORKER_ID, SESSION_ID, {
+      inboxPath: this.config.queues.inbox,
+      lane: this.lane,
+    });
   }
-
-  _routeRaw(filePath, queueKey, meta) {
-    const filename = path.basename(filePath);
-    const targetDir = this.config.queues[queueKey];
-    const targetPath = uniquePath(path.join(targetDir, filename));
-    const record = {
-      source: filePath,
-      filename,
-      target_queue: queueKey,
-      target_path: targetPath,
-      reason: meta.reason,
-      detail: meta.detail || null,
-      schema_valid: false,
-      signature_valid: false,
-      actionable: false,
-      has_completion_proof: false,
-      dry_run: this.dryRun,
-    };
-
-    if (!this.dryRun) {
-      fs.renameSync(filePath, targetPath);
-    }
-    return record;
-  }
+  return record;
+}
 
   processOnce() {
     this.ensureQueues();
@@ -816,6 +891,7 @@ class LaneWorker {
       execution_verified_count: routes.filter((r) => r.execution_verified === true).length,
       execution_failed_count: routes.filter((r) => r.execution_verified === false && r.reason === 'EXECUTION_NOT_VERIFIED').length,
       liveness: this.executionGate.checkLiveness(this.config.queues.processed),
+      manual_cadence: this.manualCadence,
       enforce_ownership: this.enforceOwnership,
       ownership_enforcement_enabled: this.enforceOwnership,
       ownership_warnings: routes.filter((r) => (r.ownership_notes || []).some((n) => n.startsWith('OWNERSHIP_'))).length,
@@ -834,6 +910,10 @@ async function sleep(ms) {
 
 async function runCli() {
   const args = parseArgs(process.argv.slice(2));
+  if (args.applyOnce) {
+    args.watch = false;
+    args.apply = true;
+  }
   const repoRoot = path.resolve(__dirname, '..');
   const lane = args.lane || guessLane(repoRoot);
   if (args.enforceOwnership) {
@@ -843,8 +923,9 @@ async function runCli() {
   const worker = new LaneWorker({
     repoRoot,
     lane,
-    dryRun: !args.apply,
+    dryRun: args.manualCadence ? true : !args.apply,
     maxFiles: args.maxFiles,
+    manualCadence: args.manualCadence,
     enforceOwnership: args.enforceOwnership,
   });
 
