@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-28T16:54:47.369Z",
+  "generated_at": "2026-04-28T17:29:18.240Z",
   "source": "scripts/publish-lattice-freedom-pulse.js",
   "metrics": [
     {
@@ -7,8 +7,8 @@
       "lattice_freedom": 0,
       "queue_depth": 1,
       "blocked": 33,
-      "quarantine": 70,
-      "line": "lane=archivist lattice_freedom=0 queue_depth=1 blocked=33 quarantine=70"
+      "quarantine": 73,
+      "line": "lane=archivist lattice_freedom=0 queue_depth=1 blocked=33 quarantine=73"
     },
     {
       "lane": "kernel",
