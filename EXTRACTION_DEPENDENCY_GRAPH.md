@@ -62,7 +62,7 @@ GOVERNANCE LAYER
 │
 ▼
 EXECUTION LAYER
-├── S:/SwarmMind Self-Optimizing Multi-Agent AI System/
+├── S:/SwarmMind/
 │   ├── GOVERNANCE_MANIFEST.json
 │   │   └── depends-on: Archivist/BOOTSTRAP.md (upstream lane)
 │   │   └── derived-from: papers

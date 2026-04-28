@@ -199,7 +199,7 @@ S:/Archivist-Agent/BOOTSTRAP.md
     ↓ [delegates to execution]
     
 EXECUTION LAYER (Authority: 80)
-S:/SwarmMind Self-Optimizing Multi-Agent AI System/
+S:/SwarmMind/
 ├── GOVERNANCE_MANIFEST.json
 └── Cannot modify governance
     ↓ [delegates to memory]

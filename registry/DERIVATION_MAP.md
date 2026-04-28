@@ -28,7 +28,7 @@
 | `references` | self-organizing-library | Uses pattern observatory for Rosetta Stone evidence |
 | `derived-from` | federation | Governance framework concepts derived from federation experimentation |
 
-### SwarmMind Self-Optimizing Multi-Agent AI System
+### SwarmMind
 
 | Relationship | Target | Notes |
 |--------------|--------|-------|

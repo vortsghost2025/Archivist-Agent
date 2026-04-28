@@ -303,7 +303,7 @@ Layers 21-34: Config Management, Backup/Recovery, Security, Compliance, Observab
 
 ---
 
-## PROJECT E: SWARMMIND (S:\SwarmMind Self-Optimizing Multi-Agent AI System)
+## PROJECT E: SWARMMIND (S:\SwarmMind)
 **Purpose:** Swarm-based AI system
 **Status:** Active
 **GitHub:** https://github.com/vortsghost2025/SwarmMind-Self-Optimizing-Multi-Agent-AI-System
@@ -341,7 +341,7 @@ Layers 21-34: Config Management, Backup/Recovery, Security, Compliance, Observab
 |------|----------|-------------|
 | Deliberate-AI-Ensemble | All docs, games, trading, framework | Backup copies in various C: locations |
 | FreeAgent | Swarm orchestrator | S:\snac-v2\.kilo\tools\freeagent |
-| SwarmMind | Self-optimizing AI | S:\SwarmMind Self-Optimizing Multi-Agent AI System |
+| SwarmMind | Self-optimizing AI | S:\SwarmMind |
 | Archivist-Agent | Tauri file agent | S:\Archivist-Agent |
 
 ---
