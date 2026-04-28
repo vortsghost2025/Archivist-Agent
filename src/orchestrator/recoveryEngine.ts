@@ -10,7 +10,7 @@ import { addToQuarantine, QuarantineEntry } from './quarantineStore';
 import { loadPhenotype, savePhenotype, Phenotype } from './phenotypeStore';
 import { auditLog } from "./logger";
 
-const TRUST_STORE_PATH = path.resolve('S:/Archivist-Agent/.trust/keys.json');
+const TRUST_STORE_PATH = path.resolve('S:/Archivist-Agent/lanes/broadcast/trust-store.json');
 const HANDOFF_SIGNAL_FILE = path.resolve('S:/Archivist-Agent/AGENT_HANDOFF_REQUIRED.md');
 const QUARANTINE_MAX_RETRIES = 3;
 const QUARANTINE_BACKOFF_MS = 5000;

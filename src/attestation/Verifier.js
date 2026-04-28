@@ -8,7 +8,7 @@
 const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
-const { ALG_MAP, VERIFY_REASON, TRUST_STORE_VERSION } = require('./constants');
+const { ALG_MAP, VERIFY_REASON, TRUST_STORE_VERSION, TRUST_STORE_PATH } = require('./constants');
 const { stableStringify } = require('./stableStringify');
 
 class Verifier {
@@ -18,11 +18,11 @@ class Verifier {
     this._loadTrustStore();
   }
 
-	_defaultTrustStorePath() {
-		const envPath = process.env.TRUST_STORE_PATH;
-		if (envPath) return envPath;
-		return path.join('S:', 'Archivist-Agent', '.trust', 'keys.json');
-	}
+  _defaultTrustStorePath() {
+    const envPath = process.env.TRUST_STORE_PATH;
+    if (envPath) return envPath;
+    return TRUST_STORE_PATH;
+  }
 
 	_loadTrustStore() {
 		if (!fs.existsSync(this.trustStorePath)) {

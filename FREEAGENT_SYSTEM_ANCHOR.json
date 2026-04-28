@@ -14,7 +14,7 @@
           "governance_documents",
           "orchestrator_interface"
         ],
-        "key_file": ".trust/keys.json"
+        "key_file": "lanes/broadcast/trust-store.json"
       },
       "library": {
         "root": "S:/self-organizing-library",
@@ -27,18 +27,28 @@
         ],
         "key_file": ".identity/snapshot.jws"
       },
-        "swarmmind": {
-          "root": "S:/SwarmMind",
-          "role": "execution_agent",
-        "components": [
-          "attestation",
-          "agents",
-          "queue",
-          "coordination",
-          "memory"
-        ],
-        "key_file": ".identity/snapshot.jws"
-      }
+"swarmmind": {
+      "root": "S:/SwarmMind",
+      "role": "execution_agent",
+      "components": [
+        "attestation",
+        "agents",
+        "queue",
+        "coordination",
+        "memory"
+      ],
+      "key_file": ".identity/snapshot.jws"
+    },
+    "kernel": {
+      "root": "S:/kernel-lane",
+      "role": "compute_validation",
+      "components": [
+        "attestation",
+        "queue",
+        "identity"
+      ],
+      "key_file": ".identity/snapshot.jws"
+    }
     },
     "verification_path": {
       "archivist": [],
@@ -58,7 +68,7 @@
         "src/queue/Queue.js"
       ]
     },
-    "trust_store_path": "S:/Archivist-Agent/.trust/keys.json"
+    "trust_store_path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json"
   },
   "forbidden_surfaces": [
     "medical",

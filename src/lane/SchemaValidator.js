@@ -23,8 +23,9 @@ const REQUIRED_FIELDS = [
   'lease',
   'retry',
   'evidence',
-  'evidence_exchange',
-  'heartbeat'
+  // 'evidence_exchange' removed from unconditional required – only required when
+  // evidence.required=true for response/ack types (checked in validate() below).
+  // 'heartbeat' removed from unconditional required – optional per v1.3.
 ];
 
 const ENUM_CONSTRAINTS = {
@@ -37,12 +38,12 @@ const ENUM_CONSTRAINTS = {
   // Governance process: proposal, review, amendment, ratification
   // Task lifecycle: ack, done, status, report, handoff
   // System: alert, notification, heartbeat
-  task_kind: ['proposal', 'review', 'amendment', 'ratification', 'ack', 'done', 'status', 'report', 'handoff', 'alert', 'notification', 'heartbeat'],
+  task_kind: ['proposal', 'review', 'amendment', 'ratification', 'ack', 'done', 'status', 'report', 'handoff', 'alert', 'notification', 'heartbeat', 'audit'],
   priority: ['P0', 'P1', 'P2', 'P3'],
   'payload.mode': ['inline', 'path', 'chunked'],
   'payload.compression': ['none', 'gzip'],
   'execution.mode': ['manual', 'session_task', 'watcher', 'auto', 'pipeline'],
-  'execution.engine': ['kilo', 'opencode', 'other', 'pipeline'],
+  'execution.engine': ['kilo', 'opencode', 'codex', 'other', 'pipeline'],
   'execution.actor': ['lane', 'subagent', 'watcher', 'task-executor', 'kernel', 'library', 'swarmmind', 'archivist'],
   'heartbeat.status': ['pending', 'in_progress', 'done', 'failed', 'escalated', 'timed_out'],
   'evidence_exchange.artifact_type': ['benchmark', 'profile', 'release', 'log', 'response', 'report', 'artifact'],
@@ -160,6 +161,11 @@ function validate(message) {
         }
       }
     }
+  }
+
+  // v1.3: heartbeat field required only for heartbeat-type messages
+  if (message.type === 'heartbeat' && !('heartbeat' in message)) {
+    errors.push('heartbeat is required for heartbeat-type messages');
   }
 
   return { valid: errors.length === 0, errors };
