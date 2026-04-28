@@ -6,6 +6,13 @@
       "parentBranch": "master",
       "createdAt": "2026-04-27T22:08:19.734Z",
       "remote": "origin"
+    },
+    "wt-1777389987498-1": {
+      "branch": "brief-cloth",
+      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\brief-cloth",
+      "parentBranch": "master",
+      "createdAt": "2026-04-28T15:26:27.498Z",
+      "remote": "origin"
     }
   },
   "sessions": {
@@ -24,16 +31,51 @@
     "ses_22f037d20ffektGEC6SeKJ6YOH": {
       "worktreeId": "wt-1777327699734-1",
       "createdAt": "2026-04-27T22:08:25.053Z"
+    },
+    "ses_22c18f0a0ffertVGnCLDzHWs6S": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T11:43:48.715Z"
+    },
+    "ses_22b4d15b2ffeZCbndvdHv3b8uy": {
+      "worktreeId": "wt-1777389987498-1",
+      "createdAt": "2026-04-28T15:26:29.145Z"
+    },
+    "ses_22b4cae3cffe5S0DthVUQpeqRc": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T15:26:54.975Z"
+    },
+    "ses_22b37e5a4ffe2qS8UAmZ4lfFuo": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T15:49:37.179Z"
+    },
+    "ses_22b0c140affe6EduyWxiNC9NND": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T16:37:28.755Z"
+    },
+    "ses_22af89c7cffesdJM9UKmxeP5sj": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T16:58:44.538Z"
+    },
+    "ses_22addcfeaffeWq5WNvI3YAw5HD": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T17:28:00.843Z"
     }
   },
   "tabOrder": {
     "local": [
       "ses_231492e9cffeO9fMvvs4eG1UO2",
       "ses_230748dadffeKffkwkQdaht39C",
-      "ses_22f927996ffeQ6wrlbfp3dU1fL"
+      "ses_22f927996ffeQ6wrlbfp3dU1fL",
+      "ses_22c18f0a0ffertVGnCLDzHWs6S",
+      "ses_22b4cae3cffe5S0DthVUQpeqRc",
+      "ses_22b37e5a4ffe2qS8UAmZ4lfFuo",
+      "ses_22b0c140affe6EduyWxiNC9NND",
+      "ses_22af89c7cffesdJM9UKmxeP5sj",
+      "ses_22addcfeaffeWq5WNvI3YAw5HD"
     ]
   },
   "worktreeOrder": [
-    "wt-1777327699734-1"
+    "wt-1777327699734-1",
+    "wt-1777389987498-1"
   ]
 }

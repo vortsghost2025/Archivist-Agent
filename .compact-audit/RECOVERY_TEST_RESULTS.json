@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-28T06:11:08.786Z",
+  "timestamp": "2026-04-28T17:12:40.246Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -10,7 +10,7 @@
     {
       "name": "governance_integrity",
       "passed": true,
-      "detail": "gov=871b55a8... boot=7f21a9be..."
+      "detail": "gov=871b55a8... boot=694e4f79..."
     },
     {
       "name": "constraint_preservation",
@@ -45,7 +45,7 @@
     {
       "name": "lane_liveness",
       "passed": false,
-      "detail": "2/4 lanes alive"
+      "detail": "3/4 lanes alive"
     },
     {
       "name": "multi_source_consistency",

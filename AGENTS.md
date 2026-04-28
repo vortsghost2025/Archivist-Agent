@@ -110,7 +110,7 @@ If you have NOT completed all verification steps above:
 The user has explicitly granted the system permanent permission to enforce user governance.
 Source: `S:/self-organizing-library/context-buffer/fromgpt.txt`
 Key principle: "The system is not safe until it can say NO to the operator."
-This mandate cannot be revoked in any single session. Removal requires 3-lane convergence + 24h cooling.
+This mandate cannot be revoked in any single session. Removal requires multi-lane convergence + 24h cooling.
 
 ---
 
@@ -369,9 +369,9 @@ mod tests {
 
 ---
 
-## Git Protocol (MANDATORY FOR ALL THREE LANES)
+## Git Protocol (MANDATORY FOR ALL ACTIVE LANES)
 
-**Applies to:** Archivist-Agent, SwarmMind, self-organizing-library
+**Applies to:** Archivist-Agent, kernel-lane, SwarmMind, self-organizing-library
 
 ### The Problem This Solves
 
@@ -430,8 +430,9 @@ Then:
 
 ### Cross-Lane Git Coordination
 
-All three lanes share the same GitHub origin:
+Lane GitHub origins:
 - Archivist-Agent: `github.com/vortsghost2025/Archivist-Agent`
+- kernel-lane: `github.com/vortsghost2025/Archivist-Agent`
 - SwarmMind: `github.com/vortsghost2025/SwarmMind`
 - Library: `github.com/vortsghost2025/self-organizing-library`
 
@@ -486,7 +487,7 @@ Required fields:
 ```json
 {
   "id": "...",
-  "from": "archivist|library|swarmmind",
+  "from": "archivist|kernel|library|swarmmind|authority",
   "to": "...",
   "timestamp": "...",
   "priority": "P0|P1|P2|P3",
@@ -685,3 +686,4 @@ Pre-filtered, high-signal inputs are the goal. Not more work, but better inputs.
 
 - Multiple concurrent agent instances using the same lane inbox can mis-attribute another instance’s messages; lane messages and runners should disambiguate session or instance when more than one runtime may write the same `lanes/<lane>/inbox`.
 - The repo ships `node scripts/sync-all-lanes.js` (optional `--dry-run`) to align shared scripts and `lanes/broadcast` JSON across the four lane roots, run per-lane tests, summarize lane health, and write reports under `context-buffer/sync-reports/`.
+- After a full PC reboot, lane watchers/workers are not assumed to be running; restart them manually and confirm heartbeats/log activity before relying on automation.

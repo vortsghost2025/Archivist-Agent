@@ -1,0 +1,37 @@
+{
+  "generated_at": "2026-04-28T16:44:48.575Z",
+  "checks": [
+    {
+      "lane": "archivist",
+      "root": "S:/Archivist-Agent",
+      "package_json_found": false,
+      "package_watch_script": null,
+      "watcher_script_found": true,
+      "lane_worker_found": true
+    },
+    {
+      "lane": "kernel",
+      "root": "S:/kernel-lane",
+      "package_json_found": false,
+      "package_watch_script": null,
+      "watcher_script_found": true,
+      "lane_worker_found": true
+    },
+    {
+      "lane": "library",
+      "root": "S:/self-organizing-library",
+      "package_json_found": true,
+      "package_watch_script": "node scripts/inbox-watcher.js --watch",
+      "watcher_script_found": true,
+      "lane_worker_found": true
+    },
+    {
+      "lane": "swarmmind",
+      "root": "S:/SwarmMind",
+      "package_json_found": false,
+      "package_watch_script": null,
+      "watcher_script_found": true,
+      "lane_worker_found": true
+    }
+  ]
+}

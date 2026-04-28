@@ -6,6 +6,7 @@ const path = require('path');
 const crypto = require('crypto');
 
 const { deriveKeyId } = require(path.join(__dirname, '..', '.global', 'deriveKeyId.js'));
+const { normalizeMessageForSchema } = require(path.join(__dirname, '..', 'src', 'lane', 'SchemaValidator.js'));
 
 // LEASE + ATOMIC WRITE: Require kernel primitives for cross-lane mutation safety
 const KERNEL_ROOT = 'S:/kernel-lane';
@@ -102,7 +103,7 @@ function buildCanonicalMessage(options = {}) {
     ...heartbeat,
   };
 
-  return {
+  return normalizeMessageForSchema({
     schema_version,
     task_id: resolvedTaskId,
     idempotency_key: resolvedIdempotency,
@@ -123,7 +124,7 @@ function buildCanonicalMessage(options = {}) {
     evidence_exchange: mergedEvidenceExchange,
     heartbeat: mergedHeartbeat,
     ...extra,
-  };
+  });
 }
 
 function stableStringify(value) {

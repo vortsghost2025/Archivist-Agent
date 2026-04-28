@@ -17,6 +17,7 @@ const VALID_TASK_KINDS = new Set([
   'status',
   'ack',
   'handoff',
+  'ratification',
 ]);
 
 function loadGateConfig(configPath = DEFAULT_CONFIG_PATH) {

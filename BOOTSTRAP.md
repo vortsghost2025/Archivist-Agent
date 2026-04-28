@@ -8,6 +8,9 @@
 
 **Every agent MUST use these paths. No variants allowed.**
 
+**No-guesswork message contract (schema + signing + send/log):**  
+`S:/Archivist-Agent/docs/ops/LANE_MESSAGE_INDEX.md`
+
 ```javascript
 // Load this immediately:
 const { LaneDiscovery } = require('S:/Archivist-Agent/.global/lane-discovery.js');
@@ -894,17 +897,19 @@ EVIDENCE: INCIDENT_LOG_2026-04-18.md
 
 ---
 
-## THE LANE-RELAY PROTOCOL (ENFORCED)
+## THE LANE MESSAGING PROTOCOL (ENFORCED)
 
 ```
 RULE: All cross-lane communication MUST use the lanes/ structure.
 
 PATHS (DETERMINISTIC - NO GUESSING):
 - Archivist inbox: lanes/archivist/inbox/
+- Kernel inbox:    lanes/kernel/inbox/
 - Library inbox:   lanes/library/inbox/
 - SwarmMind inbox: lanes/swarmmind/inbox/
+- Authority inbox: lanes/authority/inbox/
 
-EACH REPO HAS ALL THREE DIRECTORIES - THIS IS NOT ONE REPO.
+EACH REPO USES THE CANONICAL lanes/ STRUCTURE.
 
 SESSION START PROTOCOL (MANDATORY):
 1. READ lanes/{self}/inbox/ FIRST

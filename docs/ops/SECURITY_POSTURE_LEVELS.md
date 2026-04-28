@@ -61,7 +61,7 @@
 | Identity as first-class lane or service | Recommended | Authority sub-lane may be sufficient |
 | Audit log tamper-evidence | Yes | Append-only, signed |
 | Rate limiting on message acceptance | Yes | Prevent replay flooding |
-| 3-lane convergence for trust changes | Yes | No single lane can modify trust store |
+| Multi-lane convergence (3-of-4) for trust changes | Yes | No single lane can modify trust store |
 | Intrusion detection on key usage | Yes | Alert on anomalous signing patterns |
 | Encrypted key at rest | Yes | Passphrase-protected PEM or vault |
 
@@ -108,7 +108,7 @@ Before moving from Level 2 to Level 3:
 
 - [ ] Move keys from filesystem to vault/HSM
 - [ ] Enable encrypted-at-rest keys
-- [ ] Implement 3-lane convergence for trust store changes
+- [ ] Implement multi-lane convergence (3-of-4) for trust store changes
 - [ ] Set up audit log with tamper-evidence
 - [ ] Implement rate limiting on inbox acceptance
 - [ ] Full NFM-025 through NFM-028 mitigation verified

@@ -84,6 +84,35 @@ function getNestedValue(obj, dottedKey) {
   return dottedKey.split('.').reduce((o, k) => o && o[k], obj);
 }
 
+function normalizeMessageForSchema(input) {
+  const message = input && typeof input === 'object' ? input : {};
+  const out = { ...message };
+
+  if (!out.execution || typeof out.execution !== 'object') {
+    out.execution = {};
+  }
+  if (!out.heartbeat || typeof out.heartbeat !== 'object') {
+    out.heartbeat = {};
+  }
+  if (!out.evidence_exchange || typeof out.evidence_exchange !== 'object') {
+    out.evidence_exchange = {};
+  }
+  if (!out.lease || typeof out.lease !== 'object') {
+    out.lease = {};
+  }
+  if (!out.retry || typeof out.retry !== 'object') {
+    out.retry = {};
+  }
+
+  // Compatibility normalization for common invalid legacy values (NFM-019 fixes).
+  if (out.execution.mode === 'constitutional') out.execution.mode = 'manual';
+  if (out.execution.engine === 'governance') out.execution.engine = 'opencode';
+  if (out.heartbeat.status === 'active') out.heartbeat.status = 'in_progress';
+  if (out.evidence_exchange.artifact_type === 'proposal') out.evidence_exchange.artifact_type = 'artifact';
+
+  return out;
+}
+
 /**
  * Validate a message against the inbox message v1.0 schema.
  * Returns { valid: boolean, errors: string[] }
@@ -285,7 +314,7 @@ function createMessage(template = {}) {
   },
   };
 
-  const message = { ...defaults, ...template };
+  const message = normalizeMessageForSchema({ ...defaults, ...template });
 
   // Bug 3 fix: ALWAYS force delivery_verification.verified = false on creation.
   // Only deliverMessage() can set this to true after schema validation + disk write.
@@ -338,11 +367,12 @@ function loadSchema() {
  *           path: string, error: string|null, validation_errors: string[]|null }
  */
 function deliverMessage(message, canonicalPath) {
+  const normalizedMessage = normalizeMessageForSchema(message);
   // VALIDATE BEFORE WRITE — Bug 1 fix: never stamp verified=true without schema check
-  const validationResult = validate(message);
+  const validationResult = validate(normalizedMessage);
   const schemaValid = validationResult.valid;
 
-  const filename = `${message.task_id || message.message_id || `msg-${Date.now()}`}.json`;
+  const filename = `${normalizedMessage.task_id || normalizedMessage.message_id || `msg-${Date.now()}`}.json`;
   const fullPath = path.join(canonicalPath, filename);
 
   try {
@@ -350,30 +380,30 @@ function deliverMessage(message, canonicalPath) {
     fs.mkdirSync(canonicalPath, { recursive: true });
 
     // Pre-stamp delivery_verification with schema result
-    if (message.delivery_verification) {
-      message.delivery_verification.verified = false; // will be set to true only if both checks pass
-      message.delivery_verification.validation_errors = schemaValid ? null : validationResult.errors;
+    if (normalizedMessage.delivery_verification) {
+      normalizedMessage.delivery_verification.verified = false; // will be set to true only if both checks pass
+      normalizedMessage.delivery_verification.validation_errors = schemaValid ? null : validationResult.errors;
     }
 
     // Write message — even if schema-invalid, for audit trail
-    fs.writeFileSync(fullPath, JSON.stringify(message, null, 2), 'utf8');
+    fs.writeFileSync(fullPath, JSON.stringify(normalizedMessage, null, 2), 'utf8');
 
     // Verify delivery (v1.1 requirement) — file landed on disk
     const exists = fs.existsSync(fullPath);
 
     if (exists) {
       // delivery_verification.verified = true ONLY if both schema valid AND file landed
-      if (message.delivery_verification) {
-        message.delivery_verification.verified = schemaValid;
-        message.delivery_verification.verified_at = schemaValid ? new Date().toISOString() : null;
+      if (normalizedMessage.delivery_verification) {
+        normalizedMessage.delivery_verification.verified = schemaValid;
+        normalizedMessage.delivery_verification.verified_at = schemaValid ? new Date().toISOString() : null;
         // Clean up validation_errors if valid (no errors to report)
         if (schemaValid) {
-          delete message.delivery_verification.validation_errors;
+          delete normalizedMessage.delivery_verification.validation_errors;
         }
       }
 
       // Re-write with updated verification stamps
-      fs.writeFileSync(fullPath, JSON.stringify(message, null, 2), 'utf8');
+      fs.writeFileSync(fullPath, JSON.stringify(normalizedMessage, null, 2), 'utf8');
     }
 
     if (!schemaValid) {
@@ -419,6 +449,7 @@ function getCanonicalPath(lane) {
 module.exports = {
   validate,
   validateAndThrow,
+  normalizeMessageForSchema,
   createMessage,
   computeIdempotencyKey,
   loadSchema,

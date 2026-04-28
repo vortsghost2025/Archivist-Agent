@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-28T00:44:29.900Z",
+  "timestamp": "2026-04-28T17:12:44.864Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -249,14 +249,21 @@
   },
   "post_compact": {
     "active_blocker": {
-      "exists": false,
-      "blocker": null
+      "exists": true,
+      "blocker": {
+        "active": false,
+        "owner": null,
+        "priority": null,
+        "task_id": null,
+        "reason": null,
+        "updated_at": "2026-04-28T02:30:00Z"
+      }
     },
     "trust_store_key_ids": {
-      "archivist": "ee70b78105bc6189",
-      "kernel": "b677eb87f6be83f9",
+      "archivist": "65ae05b2a9e749cb",
       "library": "ea2a75bab220adc2",
-      "swarmmind": "addb0afb8ee5c2ed"
+      "swarmmind": "addb0afb8ee5c2ed",
+      "kernel": "b677eb87f6be83f9"
     },
     "constraint_names": [
       "STRUCTURE_OVER_IDENTITY",
@@ -267,33 +274,33 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-28T00:44:01.359Z",
-        "age_seconds": 28
+        "timestamp": "2026-04-28T17:12:01.644Z",
+        "age_seconds": 43
       },
       "library": {
-        "status": "stale",
-        "timestamp": "2026-04-27T21:53:57.329Z",
-        "age_seconds": 10232
+        "status": "alive",
+        "timestamp": "2026-04-28T17:00:00Z",
+        "age_seconds": 764
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-28T00:44:01.948Z",
-        "age_seconds": 27
+        "timestamp": "2026-04-28T17:12:01.903Z",
+        "age_seconds": 42
       },
       "kernel": {
         "status": "stale",
         "timestamp": "2026-04-27T21:53:57.329Z",
-        "age_seconds": 10232
+        "age_seconds": 69527
       }
     },
     "inbox_counts": {
       "archivist": 0,
-      "library": 1,
+      "library": 0,
       "swarmmind": 0,
       "kernel": 0
     },
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
-    "bootstrap_hash": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
+    "bootstrap_hash": "694e4f7935bcc1e6b883b45632a922e52d4a238eea6698b191747749cbe94fca",
     "handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
     "known_risks": [
       "identity_soft_keys",
@@ -307,12 +314,12 @@
         "private_pem": {
           "path": "S:\\Archivist-Agent\\.identity\\private.pem",
           "exists": true,
-          "hash": "3d21a7f1e18b2c080f776cde64ef2b1f9626a3852afe53b2ebe28404b2764e98"
+          "hash": "97877280bd8499544830664b68b3fb5836fada1f4ecad5c7004c84eec908b02a"
         },
         "public_pem": {
           "path": "S:\\Archivist-Agent\\.identity\\public.pem",
           "exists": true,
-          "hash": "a0230f635bcc0f2e05ecbe404993ed1448549e033458e319d12938d79eca92d9"
+          "hash": "506c2d0838b6862cd7d6eff248c0aaf6b005b89b01a62f16ebee18a18655f90a"
         },
         "snapshot_json": {
           "path": "S:\\Archivist-Agent\\.identity\\snapshot.json",
@@ -327,12 +334,12 @@
         "lane_trust_store": {
           "path": "S:\\Archivist-Agent\\lanes\\broadcast\\trust-store.json",
           "exists": true,
-          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+          "hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
         },
         "agents_md": {
           "path": "S:\\Archivist-Agent\\AGENTS.md",
           "exists": true,
-          "hash": "b4cff5597a5cbca3a0fac013f5ee77818c82c3e15066d97083f95ac46d57c929"
+          "hash": "5828957b4295750f1de4d7eff8da7d106aeba203157357f6d387f208d5479c06"
         },
         "targets_json": {
           "path": "S:\\Archivist-Agent\\config\\targets.json",
@@ -347,7 +354,7 @@
         "trust_store": {
           "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
           "exists": true,
-          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+          "hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
         }
       },
       "library": {
@@ -374,7 +381,7 @@
         "lane_trust_store": {
           "path": "S:\\self-organizing-library\\lanes\\broadcast\\trust-store.json",
           "exists": true,
-          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+          "hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
         },
         "agents_md": {
           "path": "S:\\self-organizing-library\\AGENTS.md",
@@ -394,7 +401,7 @@
         "trust_store": {
           "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
           "exists": true,
-          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+          "hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
         }
       },
       "swarmmind": {
@@ -421,12 +428,12 @@
         "lane_trust_store": {
           "path": "S:\\SwarmMind\\lanes\\broadcast\\trust-store.json",
           "exists": true,
-          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+          "hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
         },
         "agents_md": {
           "path": "S:\\SwarmMind\\AGENTS.md",
           "exists": true,
-          "hash": "013618f080e941b559964bf463ba089a6a9695b98a78a1ccf308f19fcfb56213"
+          "hash": "566c8601ae68ded461a62848218d635e410136c34ba3fd1d40138f8a526259c8"
         },
         "targets_json": {
           "path": "S:\\SwarmMind\\config\\targets.json",
@@ -441,7 +448,7 @@
         "trust_store": {
           "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
           "exists": true,
-          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+          "hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
         }
       },
       "kernel": {
@@ -468,7 +475,7 @@
         "lane_trust_store": {
           "path": "S:\\kernel-lane\\lanes\\broadcast\\trust-store.json",
           "exists": true,
-          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+          "hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
         },
         "agents_md": {
           "path": "S:\\kernel-lane\\AGENTS.md",
@@ -488,38 +495,62 @@
         "trust_store": {
           "path": "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
           "exists": true,
-          "hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a"
+          "hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
         }
       }
     }
   },
   "diff": {
-    "blocker_changed": false,
-    "blocker_detail": null,
-    "trust_chain_intact": true,
-    "trust_detail": null,
+    "blocker_changed": true,
+    "blocker_detail": {
+      "pre": {
+        "exists": false,
+        "blocker": null
+      },
+      "post": {
+        "exists": true,
+        "blocker": {
+          "active": false,
+          "owner": null,
+          "priority": null,
+          "task_id": null,
+          "reason": null,
+          "updated_at": "2026-04-28T02:30:00Z"
+        }
+      }
+    },
+    "trust_chain_intact": false,
+    "trust_detail": {
+      "archivist": {
+        "pre": "ee70b78105bc6189",
+        "post": "65ae05b2a9e749cb"
+      }
+    },
     "constraints_intact": true,
     "constraints_detail": null,
     "governance_intact": true,
     "governance_detail": null,
-    "bootstrap_intact": true,
-    "bootstrap_detail": null,
+    "bootstrap_intact": false,
+    "bootstrap_detail": {
+      "pre": "7f21a9bef484a5fadd551da583f7915577944decf657abbae543e032079a2153",
+      "post": "694e4f7935bcc1e6b883b45632a922e52d4a238eea6698b191747749cbe94fca"
+    },
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 7,
+    "message_loss": 8,
     "message_loss_detail": {
       "archivist": {
         "pre": 7,
         "post": 0,
         "lost": 7
+      },
+      "library": {
+        "pre": 1,
+        "post": 0,
+        "lost": 1
       }
     },
     "lane_degradations": [
-      {
-        "lane": "library",
-        "pre_status": "alive",
-        "post_status": "stale"
-      },
       {
         "lane": "kernel",
         "pre_status": "alive",
@@ -529,25 +560,98 @@
     "risk_set_preserved": true,
     "missing_risks": [],
     "unexpected_changes": [
-      "lane_library_degraded",
-      "lane_kernel_degraded"
+      "active_blocker_changed",
+      "trust_store_archivist_key_changed",
+      "bootstrap_modified",
+      "lane_kernel_degraded",
+      "file_integrity_archivist_private_pem_changed",
+      "file_integrity_archivist_trust_store_changed",
+      "file_integrity_library_trust_store_changed",
+      "file_integrity_swarmmind_trust_store_changed",
+      "file_integrity_kernel_trust_store_changed"
     ],
     "file_integrity_violations": [
       {
         "lane": "archivist",
+        "file": "private_pem",
+        "pre_hash": "3d21a7f1e18b2c080f776cde64ef2b1f9626a3852afe53b2ebe28404b2764e98",
+        "post_hash": "97877280bd8499544830664b68b3fb5836fada1f4ecad5c7004c84eec908b02a"
+      },
+      {
+        "lane": "archivist",
+        "file": "public_pem",
+        "pre_hash": "a0230f635bcc0f2e05ecbe404993ed1448549e033458e319d12938d79eca92d9",
+        "post_hash": "506c2d0838b6862cd7d6eff248c0aaf6b005b89b01a62f16ebee18a18655f90a"
+      },
+      {
+        "lane": "archivist",
+        "file": "lane_trust_store",
+        "pre_hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "post_hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
+      },
+      {
+        "lane": "archivist",
         "file": "agents_md",
         "pre_hash": "01760a98571bea71872a0df3c8ed652159b38391956e4f75eb17e81502f611d1",
-        "post_hash": "b4cff5597a5cbca3a0fac013f5ee77818c82c3e15066d97083f95ac46d57c929"
+        "post_hash": "5828957b4295750f1de4d7eff8da7d106aeba203157357f6d387f208d5479c06"
+      },
+      {
+        "lane": "archivist",
+        "file": "trust_store",
+        "pre_hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "post_hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
+      },
+      {
+        "lane": "library",
+        "file": "lane_trust_store",
+        "pre_hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "post_hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
+      },
+      {
+        "lane": "library",
+        "file": "trust_store",
+        "pre_hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "post_hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
+      },
+      {
+        "lane": "swarmmind",
+        "file": "lane_trust_store",
+        "pre_hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "post_hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
+      },
+      {
+        "lane": "swarmmind",
+        "file": "agents_md",
+        "pre_hash": "013618f080e941b559964bf463ba089a6a9695b98a78a1ccf308f19fcfb56213",
+        "post_hash": "566c8601ae68ded461a62848218d635e410136c34ba3fd1d40138f8a526259c8"
+      },
+      {
+        "lane": "swarmmind",
+        "file": "trust_store",
+        "pre_hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "post_hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
+      },
+      {
+        "lane": "kernel",
+        "file": "lane_trust_store",
+        "pre_hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "post_hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
       },
       {
         "lane": "kernel",
         "file": "agents_md",
         "pre_hash": "04de9a9bf8478447b2082ed0fd62cc7f452562f0074036154435fd7255527d4f",
         "post_hash": "98c61bc150292b51c3b36d5e8c9acfcb55727b79a8b4bc967fc3a31292ae3f80"
+      },
+      {
+        "lane": "kernel",
+        "file": "trust_store",
+        "pre_hash": "58a8aad5aa6597feb98b913ee09ccc0025b95258449753c501cfb0663a5daa8a",
+        "post_hash": "8df0e14e44af9643e50968b78504b25b9aa8ba52afcb256cabdbb97bbca3eba3"
       }
     ]
   },
-  "status": "drifted",
+  "status": "conflicted",
   "proof": {
     "method": "multi_source_contradiction_test",
     "sources_checked": [
@@ -562,7 +666,7 @@
       "known_risk_set",
       "file_integrity"
     ],
-    "contradictions_found": 2,
+    "contradictions_found": 9,
     "self_declared_alignment": false
   }
 }

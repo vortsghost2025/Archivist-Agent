@@ -126,7 +126,7 @@ We cannot fully:
 1. If any lane detects a message that is cryptographically valid but behaviorally anomalous (e.g., self-contradicting claims, impossible timestamps, tasks outside the lane's scope), it flags the message as `provenance_suspect`
 2. A `provenance_suspect` flag triggers an immediate trust store verification across all lanes (cross-lane hash comparison)
 3. If trust stores diverge, system state degrades to `compromised` — all message processing halts
-4. Recovery requires 3-lane convergence (3 out of 4 lanes must agree on the correct trust store state)
+4. Recovery requires multi-lane convergence (3 out of 4 active lanes must agree on the correct trust store state)
 
 ### Phase 5: Trust Degradation Integration
 
