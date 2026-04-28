@@ -74,7 +74,7 @@ flowchart TD
 
 **Protocol invariant:**  
 `observe -> cluster -> infer -> propose -> simulate` may be autonomous.  
-`ratify -> enforce` may not be autonomous beyond authorized ratification procedure.
+Autonomous discovery stops at `SIMULATED`. `RATIFIED` requires external lattice authority. `ENFORCED` requires ratification proof plus a live enforcement entrypoint.
 
 ---
 
@@ -140,6 +140,19 @@ Every proposed constraint must include a complete evidence packet:
 **Evidence gate rule:**  
 No candidate can advance to ratification review without all fields populated and traceable.
 
+### Ratification proof requirement
+
+A constraint may not transition from `RATIFIED` to `ENFORCED` unless a `ratification_proof` object exists and is verifiable:
+
+- `ratified_by`
+- `ratification_artifact`
+- `signature_or_attestation`
+- `ratified_at`
+- `scope`
+- `enforcement_entrypoint`
+
+If any `ratification_proof` field is missing, stale, or non-verifiable, transition to `ENFORCED` is invalid.
+
 ---
 
 ## 6. Decision Statuses
@@ -167,7 +180,40 @@ All constraint proposals must carry exactly one status:
 - `SIMULATED -> REJECTED` and `SIMULATED -> QUARANTINED` are valid exits.
 - `CANDIDATE_CONSTRAINT -> ENFORCED` is invalid.
 - `SIMULATED -> ENFORCED` is invalid.
+- `SIMULATED -> RATIFIED` without a lattice artifact is invalid.
+- `DISPLAYED -> RATIFIED` is invalid.
+- `RECURRENT -> RATIFIED` without a full evidence packet is invalid.
+- `FREEAGENT_DRAFT -> RATIFIED` without lattice review is invalid.
 - Any enforceable transition without `RATIFIED` is invalid.
+- Any enforcement based only on dashboard, graph, or status mirror is invalid.
+
+### Forbidden transition table
+
+| Forbidden transition or trigger | Why forbidden | Required correction |
+|---|---|---|
+| `CANDIDATE -> ENFORCED` | Bypasses ratification authority | Route through `SIMULATED -> RATIFIED` first |
+| `SIMULATED -> ENFORCED` | Simulation is non-binding | Require external lattice ratification and proof |
+| `SIMULATED -> RATIFIED` without lattice artifact | No authority evidence | Attach ratification artifact and attestation |
+| `DISPLAYED -> RATIFIED` | Visibility is not authority | Require external lattice decision record |
+| `RECURRENT -> RATIFIED` without evidence packet | Frequency is not proof | Produce full evidence packet and review |
+| `FREEAGENT_DRAFT -> RATIFIED` without lattice review | Drafts are pre-authority | Complete formal lattice review workflow |
+| Enforcement from dashboard/graph/status mirror only | Mirrors are display artifacts | Require ratification proof + live entrypoint |
+
+### Artifact typing table
+
+| Artifact type | Role | Can it ratify? | Can it enforce? | Typical examples |
+|---|---|---|---|---|
+| Evidence artifacts | Document observed failures and causal patterns | No | No | NFM traces, recurrence clusters, bypass analyses, simulation records |
+| Display artifacts | Summarize system state for visibility | No | No | Dashboards, graphs, status mirrors, summary views |
+| Authority artifacts | Record lattice-approved governance decisions | Yes | No | Ratification decisions, signed lattice records, governance approvals |
+| Enforcement artifacts | Bind ratified scope to live enforcement path | No | Yes, if ratified proof exists | Live enforcement entrypoints, active enforcement bindings |
+
+Artifact interaction rules:
+
+- Display artifacts can summarize evidence.
+- Evidence artifacts can support ratification review.
+- Only authority artifacts can ratify.
+- Only ratified enforcement entrypoints can enforce.
 
 ---
 
