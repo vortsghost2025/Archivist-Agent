@@ -4,7 +4,7 @@
 
 ### SwarmMind PowerShell Window
 ```powershell
-cd "S:\SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:\SwarmMind"
 
 # Create observer mode tag
 '{"mode":"observer","purpose":"stress-test-read-only","created_by":"manual-test"}' | Out-File -Encoding utf8 .session-mode
@@ -47,7 +47,7 @@ Remove-Item .session-mode
 
 ### Start Observer Mode (SwarmMind)
 ```powershell
-cd "S:\SwarmMind Self-Optimizing Multi-Agent AI System"; echo '{"mode":"observer","purpose":"test"}' > .session-mode; kilo
+cd "S:\SwarmMind"; echo '{"mode":"observer","purpose":"test"}' > .session-mode; kilo
 ```
 
 ### Start Observer Mode (library)
@@ -57,7 +57,7 @@ cd "S:\self-organizing-library"; echo '{"mode":"observer","purpose":"test"}' > .
 
 ### Cleanup After Testing
 ```powershell
-Remove-Item "S:\SwarmMind Self-Optimizing Multi-Agent AI System\.session-mode" -ErrorAction SilentlyContinue
+Remove-Item "S:\SwarmMind\.session-mode" -ErrorAction SilentlyContinue
 Remove-Item "S:\self-organizing-library\.session-mode" -ErrorAction SilentlyContinue
 ```
 

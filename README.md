@@ -203,7 +203,7 @@ Six classification types: DIMENSION_MISMATCH, EVIDENCE_GAP, INTERPRETATION_DRIFT
 {
   "ownership": {
     "S:\\Archivist-Agent": { "lane_id": "archivist-agent", "authority": 100 },
-    "S:\\SwarmMind Self-Optimizing Multi-Agent AI System": { "lane_id": "swarmmind", "authority": 80 },
+    "S:\\SwarmMind": { "lane_id": "swarmmind", "authority": 80 },
     "S:\\self-organizing-library": { "lane_id": "library", "authority": 60 }
   },
   "cross_lane_write_policy": "require_authority_100_or_same_lane"

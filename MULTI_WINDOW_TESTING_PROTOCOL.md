@@ -214,7 +214,7 @@ if last_heartbeat > lock_timeout_ms:
 ### Starting a Read-Only Test Window (PowerShell)
 ```powershell
 # In SwarmMind directory
-cd "S:\SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:\SwarmMind"
 
 # Create observer mode tag
 echo '{"mode":"observer","purpose":"stress-test"}' > .session-mode

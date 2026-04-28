@@ -17,7 +17,7 @@ Owner: Archivist (implementation), Library (documentation)
 
 **Commands:**
 ```bash
-cd "S:/SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:/SwarmMind"
 node scripts/test-hardening-drill.js
 
 cd "S:/self-organizing-library"

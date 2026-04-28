@@ -114,7 +114,7 @@ cd S:\Archivist-Agent
 git tag -a "coord-2026-04-17-cross-review" -m "Cross-project governance review"
 git push origin coord-2026-04-17-cross-review
 
-cd "S:\SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:\SwarmMind"
 git tag -a "coord-2026-04-17-cross-review" -m "Cross-project governance review"
 git push origin coord-2026-04-17-cross-review
 ```
@@ -226,7 +226,7 @@ Each commit should reference the active session:
 ### Example 1: Simple Commit
 
 ```bash
-cd "S:\SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:\SwarmMind"
 git add src/app.js
 git commit -m "[LANE-2] Fix typo in app.js"
 git push origin master
@@ -235,7 +235,7 @@ git push origin master
 ### Example 2: Cross-Lane Commit
 
 ```bash
-cd "S:\SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:\SwarmMind"
 git add -A
 git commit -m "[LANE-2] [SYNC-2026-04-17] Resolver fix
 
@@ -262,7 +262,7 @@ cd S:\Archivist-Agent
 git tag -a "coord-2026-04-17-resolver-fix" -m "Multi-lane resolver fix"
 git push origin coord-2026-04-17-resolver-fix
 
-cd "S:\SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:\SwarmMind"
 git tag -a "coord-2026-04-17-resolver-fix" -m "Multi-lane resolver fix"
 git push origin coord-2026-04-17-resolver-fix
 ```

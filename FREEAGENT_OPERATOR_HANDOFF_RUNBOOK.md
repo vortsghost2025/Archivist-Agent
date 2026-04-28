@@ -17,7 +17,7 @@ This runbook defines operator procedures when the system generates a handoff sig
 **Locations:**
 - `S:/Archivist-Agent/AGENT_HANDOFF_REQUIRED.md`
 - `S:/self-organizing-library/AGENT_HANDOFF_REQUIRED.md`
-- `S:/SwarmMind Self-Optimizing Multi-Agent AI System/AGENT_HANDOFF_REQUIRED.md`
+- `S:/SwarmMind/AGENT_HANDOFF_REQUIRED.md`
 
 ---
 
@@ -224,7 +224,7 @@ ItemId: <id>
 
 ```bash
 # check-handoffs.sh
-for lane in "Archivist-Agent" "self-organizing-library" "SwarmMind Self-Optimizing Multi-Agent AI System"; do
+for lane in "Archivist-Agent" "self-organizing-library" "SwarmMind"; do
   if [ -f "S:/$lane/AGENT_HANDOFF_REQUIRED.md" ]; then
     echo "HANDOFF DETECTED: $lane"
     cat "S:/$lane/AGENT_HANDOFF_REQUIRED.md"

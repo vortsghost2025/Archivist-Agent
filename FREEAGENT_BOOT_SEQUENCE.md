@@ -64,7 +64,7 @@ LANE_KEY_PASSPHRASE=<secret> npm run governed-start
 #### SwarmMind
 
 ```bash
-cd "S:/SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:/SwarmMind"
 LANE_KEY_PASSPHRASE=<secret> npm start
 ```
 
@@ -109,7 +109,7 @@ cd S:/self-organizing-library/.identity
 ### SwarmMind (Requires Signing)
 
 ```bash
-cd "S:/SwarmMind Self-Optimizing Multi-Agent AI System/.identity"
+cd "S:/SwarmMind/.identity"
 LANE_KEY_PASSPHRASE=<secret> node sign-snapshot.js
 ```
 

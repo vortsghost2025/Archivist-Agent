@@ -72,7 +72,7 @@
 ### 1. Capture Agent Trace (from SwarmMind)
 
 ```bash
-cd "S:\SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:\SwarmMind"
 npm start
 # SwarmMind generates traces internally
 # Export: node export-trace.js > traces/agent-session.json

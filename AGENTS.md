@@ -440,11 +440,11 @@ All three lanes share the same GitHub origin:
 
 ---
 
-## Enforced Lane-Relay Protocol (MANDATORY)
+## Lane Communication Protocol (MANDATORY)
 
-**All cross-lane communication MUST use the enforced `lanes/` structure.**
+**All cross-lane communication MUST use the `lanes/` structure.**
 
-**⚠️ `.lane-relay/` is DEPRECATED. Do NOT use. Use `lanes/` instead.**
+> ⚠️ `.lane-relay/` is DEPRECATED. Do NOT use. Use `lanes/` instead.
 
 ### Directory Structure (ENFORCED)
 

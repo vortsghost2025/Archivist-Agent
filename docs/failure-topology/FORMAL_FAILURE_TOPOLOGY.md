@@ -72,7 +72,7 @@ B1: SwarmMind Missing .identity/ Directory
   - ID: B1
   - Classification: IDENTITY_INTEGRITY / MISSING_DIRECTORY
   - Lane(s): swarmmind
-  - Trigger: S:/SwarmMind Self-Optimizing Multi-Agent AI System/.identity/ does not exist
+  - Trigger: S:/SwarmMind/.identity/ does not exist
   - Symptom: SwarmMind cannot sign or verify messages. Trust store entry orphaned.
   - Evidence: key_id 72bd1d099a7490ab in trust store, no .identity/ directory
   - Recovery: Operator must create .identity/ directory with RSA-2048 keys

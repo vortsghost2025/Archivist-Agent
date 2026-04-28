@@ -359,7 +359,7 @@ All file operations validate against `allowed_roots.json`:
 {
   "allowed_roots": [
     "S:\\Archivist-Agent",
-    "S:\\SwarmMind Self-Optimizing Multi-Agent AI System",
+    "S:\\SwarmMind",
     "S:\\self-organizing-library"
   ]
 }

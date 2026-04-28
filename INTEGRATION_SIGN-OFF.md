@@ -283,7 +283,7 @@ npm run governed-start
 LANE_KEY_PASSPHRASE="secret" npm run generate-keys
 
 # SwarmMind (similar process)
-cd "S:/SwarmMind Self-Optimizing Multi-Agent AI System"
+cd "S:/SwarmMind"
 LANE_KEY_PASSPHRASE="secret" node scripts/generate-keys.js
 ```
 

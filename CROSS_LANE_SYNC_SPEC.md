@@ -293,7 +293,7 @@ Each lane maintains a `RUNTIME_STATE.json` that other lanes can read.
     },
     {
       "id": "swarmmind",
-      "runtime_state_path": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System\\RUNTIME_STATE.json"
+      "runtime_state_path": "S:\\SwarmMind\\RUNTIME_STATE.json"
     }
   ]
 }
@@ -391,7 +391,7 @@ Agent incorporates restored context without re-reading full governance files.
 | Lane | RUNTIME_STATE.json | GOVERNANCE_RESOLUTION.json |
 |------|-------------------|---------------------------|
 | Archivist-Agent | `S:\Archivist-Agent\RUNTIME_STATE.json` | N/A (root) |
-| SwarmMind | `S:\SwarmMind Self-Optimizing Multi-Agent AI System\RUNTIME_STATE.json` | `S:\SwarmMind Self-Optimizing Multi-Agent AI System\GOVERNANCE_RESOLUTION.json` |
+| SwarmMind | `S:\SwarmMind\RUNTIME_STATE.json` | `S:\SwarmMind\GOVERNANCE_RESOLUTION.json` |
 | self-organizing-library | `S:\self-organizing-library\RUNTIME_STATE.json` | N/A |
 
 ---

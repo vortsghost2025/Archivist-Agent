@@ -156,7 +156,7 @@ IF action requires cross-lane:
 | Lane | Directory | Authority | Role |
 |------|-----------|-----------|------|
 | Archivist | `S:\Archivist-Agent\` | 100 | Governance root |
-| SwarmMind | `S:\SwarmMind Self-Optimizing Multi-Agent AI System\` | 80 | Execution layer |
+| SwarmMind | `S:\SwarmMind\` | 80 | Execution layer |
 | Library | `S:\self-organizing-library\` | 60 | Memory layer |
 
 **All other projects (37) = archives/reference only**
