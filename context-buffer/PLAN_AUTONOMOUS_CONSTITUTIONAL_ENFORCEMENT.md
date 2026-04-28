@@ -2,11 +2,11 @@
 
 **Author:** Archivist Lane
 **Date:** 2026-04-28
-**Status:** AMENDED PROPOSAL (v2) — requires re-ratification per Kernel + SwarmMind amendments
+**Status:** AMENDED PROPOSAL (v3) — requires re-ratification per Library amendments L1–L4
 **Priority:** P1
 **Ratification Scope:** Phases 1–5 only (OBSERVE through RATIFY). Phases 6–7 (INTEGRATE/MONITOR) require a separate proposal with own 3-lane ratification.
 **Evidence Base:** constraint-lattice.js, CPS_ENFORCEMENT.md, VERIFICATION_LANES.md, CHECKPOINTS.md, NFM-003
-**Amendment History:** v1 proposed 2026-04-28; Kernel AMEND (4 amendments); SwarmMind AMEND (5 amendments A1–A5). All 9 amendments incorporated below.
+**Amendment History:** v1 proposed 2026-04-28; Kernel AMEND (K1–K4); SwarmMind AMEND (A1–A5); Library AMEND (L1–L4). All 13 amendments incorporated below.
 
 ---
 
@@ -143,9 +143,11 @@ class ConstraintGapDetector {
 
 **Confidence Assessment:**
 
-- **HIGH** — Gap confirmed by 2+ independent signals (quarantine + drift + CPS anomaly)
-- **MEDIUM** — Gap indicated by 1 signal with clear structural evidence
-- **LOW** — Gap hypothesized from pattern but no direct evidence yet
+- **HIGH** — Gap confirmed by 2+ independent signals (quarantine + drift + CPS anomaly) with verifiable `evidence_path`
+- **MEDIUM** — Gap indicated by 1 signal with clear structural evidence AND verified `evidence_path`
+- **LOW** — Gap hypothesized from pattern but no direct evidence yet, OR signal lacks verifiable `evidence_path`
+
+**AMENDMENT L1:** Each gap candidate MUST carry an `evidence_path` before advancing from CLASSIFY to HYPOTHESIZE. Unverified gap signals (those without a resolvable `evidence_path`) are LOW confidence by default, regardless of signal count. This prevents false-positive constraint synthesis from noisy quarantine data. A gap with 2+ signals but no resolvable evidence path remains LOW until evidence is provided.
 
 Only HIGH and MEDIUM confidence gaps advance to PROPOSE.
 
@@ -229,6 +231,8 @@ Kernel (Position 4, Authority 60, `can_govern: false`) is an execution/optimizat
 **Rejection requires evidence.** A lane cannot reject a proposal without providing a falsification: "This constraint is wrong because..."
 
 **Amendment requires specificity.** A lane cannot amend without providing the exact change.
+
+**AMENDMENT L2 — bridge_state check at ratification gate:** Library's governance depth layer computes `bridge_state` per node (values: `enforced`, `documented_only`, `obsolete`). The RATIFY phase MUST reject any proposed constraint that would create new `documented_only` or `obsolete` bridge states without also proposing the enforcement bridge. A constraint without an enforcement path is not governance — it is aspiration. Every ratified constraint MUST include an `enforcement_bridge` declaration: how the constraint transitions from `documented_only` to `enforced`. If no enforcement bridge is proposed, the ratification verdict is REJECT with reason `NO_ENFORCEMENT_BRIDGE`.
 
 **Kernel feasibility assessment format:**
 
@@ -319,18 +323,33 @@ function testConvergence(lattice, knownFailureModes) {
 }
 ```
 
+**AMENDMENT L4 — Runtime-verifiable convergence:** The convergence test MUST be executable against live graph data. The `/api/graph-data` endpoint already exposes governance depth. The test MUST:
+
+1. Query live graph data (not static test fixtures) for the current constraint set
+2. Compute `coverage_ratio` from actual lattice state vs. known failure modes
+3. Log `coverage_ratio` to `system_state.json` after each execution
+4. Report `coverage_ratio` in lane heartbeats (Section 4, Phase E)
+5. Be invocable as a standalone CLI command: `node src/bridge/convergence-test.js --live`
+
+Static convergence claims (asserting coverage against hardcoded failure mode lists) are NOT sufficient. The test must prove coverage against the live governance graph at runtime.
+
 ---
 
 ## 4. Implementation Roadmap
 
 ### Phase A: ConstraintGapDetector (Week 1)
 
-1. Implement `ConstraintGapDetector` class in `src/bridge/constraint-gap-detector.js`
-2. Wire into existing `lane-worker.js` processing pipeline
-3. Add gap signals from quarantine + deformation log
-4. Tests in `src/bridge/__tests__/constraint-gap-detector.test.js`
+**AMENDMENT L3:** The ConstraintGapDetector MUST run in OBSERVE-only mode first (report gaps, do not auto-propose). Auto-proposal is Phase B work. Running both simultaneously risks constraint spam before classification logic is validated against known NFMs.
 
-**Deliverable:** System can detect and classify constraint gaps automatically.
+1. Implement `ConstraintGapDetector` class in `src/bridge/constraint-gap-detector.js`
+2. Wire into existing `lane-worker.js` processing pipeline in OBSERVE-only mode — detector logs gap candidates but does NOT create proposals
+3. Add gap signals from quarantine + deformation log
+4. Validate classification logic against known NFMs (NFM-003 bypass vectors as test corpus)
+5. Tests in `src/bridge/__tests__/constraint-gap-detector.test.js`
+
+**OBSERVE-only constraint:** The detector's `scanForGaps()` method returns gap candidates but MUST NOT call `deliverMessage()` or any proposal pipeline function. Gap candidates are written to a local gap log only. Proposal generation is gated behind an explicit `enableProposalMode()` call that is ONLY invoked after Phase A validation is complete and operator confirms readiness for Phase B.
+
+**Deliverable:** System can detect and classify constraint gaps automatically. Proposal generation is disabled until Phase B.
 
 ### Phase B: Constraint Proposal Pipeline (Week 2)
 
@@ -455,7 +474,7 @@ This plan does NOT replace any existing governance document. It extends them:
 
 ---
 
-## 7.1 Amendment Summary (v1 → v2)
+## 7.1 Amendment Summary (v1 → v2 → v3)
 
 | ID | Source | Section | Change |
 |----|--------|---------|--------|
@@ -468,8 +487,12 @@ This plan does NOT replace any existing governance document. It extends them:
 | A3 | SwarmMind | 2.7,2.8,4 | Ratification scope split: this proposal covers Phases 1–5; Phases 6–7 require separate proposal |
 | A4 | SwarmMind | 4.Phase D | Delegation audit uncovered paths → candidate signals; operator review gate before re-entry |
 | A5 | SwarmMind | 7 (Governance) | Invariant: no auto-modification of GOVERNANCE.md, RECIPROCAL_ACCOUNTABILITY.md, BOOTSTRAP.md without separate operator-acknowledged proposal + 24h cooling |
+| L1 | Library | 2.3 (Classify) | Gap candidates require `evidence_path` before advancing; unverified signals default to LOW confidence |
+| L2 | Library | 2.6 (Ratify) | Ratification gate requires `enforcement_bridge` declaration; reject constraints that create `documented_only`/`obsolete` bridge states without enforcement path |
+| L3 | Library | 4.Phase A | ConstraintGapDetector runs OBSERVE-only first; no auto-proposal until Phase B; proposal mode gated behind `enableProposalMode()` + operator confirmation |
+| L4 | Library | 3.3 (Convergence) | Convergence test must be runtime-verifiable against live graph data; `coverage_ratio` logged to `system_state.json`; reported in heartbeats; static claims insufficient |
 
-**Converged principle across both lanes:** The system discovers and proposes; the operator decides what becomes enforceable. No self-activation of enforcement. No self-modification of constitutional policy.
+**Converged principle across all three lanes:** The system discovers and proposes; the operator decides what becomes enforceable. No self-activation of enforcement. No self-modification of constitutional policy. Discovery without verification is noise; governance without enforcement paths is aspiration.
 
 ---
 
@@ -488,5 +511,5 @@ The system converges when: for every observed failure mode, the lattice contains
 **End of Plan Document**
 
 **Claim:** This plan provides a concrete path from reactive constraint checking to autonomous constitutional enforcement (discovery and proposal phase; enforcement activation operator-gated).
-**Evidence:** `src/bridge/constraint-lattice.js` (current reactive implementation), `context-buffer/PLAN_AUTONOMOUS_CONSTITUTIONAL_ENFORCEMENT.md` (this document, v2 amended).
-**Status:** unproven — requires re-ratification after amendments.
+**Evidence:** `src/bridge/constraint-lattice.js` (current reactive implementation), `context-buffer/PLAN_AUTONOMOUS_CONSTITUTIONAL_ENFORCEMENT.md` (this document, v3 amended — 13 amendments from 3 lanes incorporated).
+**Status:** unproven — requires re-ratification after Library amendments L1–L4.
