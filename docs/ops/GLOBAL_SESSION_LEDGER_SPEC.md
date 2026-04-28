@@ -9,16 +9,23 @@
 
 ## 1. Problem statement
 
-Multi-agent work currently produces critical evidence across lane inboxes, outboxes, local logs, commits, and compact/restore artifacts. During high-concurrency sessions and recovery scenarios, operators need one durable, append-only evidence timeline that preserves what happened, who did it, and which artifacts prove it.
+Multi-agent work includes long-running agents that may run for hours and compact multiple times before other lanes see state changes. Mailbox delivery is correct for active, signed instructions, but it is discrete and can be too sparse for continuous shared situational awareness.
+
+Primary problem this spec solves:
+
+- reduce communication delay between long-running agents and other lanes
+- preserve real-time awareness during compaction/recovery cycles
+- keep cross-lane status visible without converting awareness into authority
 
 Without a unified session ledger:
 
+- long-running work remains invisible until late milestone messages
 - cross-agent traceability becomes fragmented
 - crash recovery requires manual reconstruction from many sources
 - drift and contradiction analysis is slower and less reliable
 - session-level transparency depends on transient process state
 
-The global session ledger solves evidence continuity, not governance authority.
+The global session ledger is an append-only awareness stream and evidence timeline. It is not a governance authority mechanism.
 
 ---
 
@@ -26,8 +33,8 @@ The global session ledger solves evidence continuity, not governance authority.
 
 ### Ledger (this spec)
 
-- Purpose: append-only evidence timeline across agents/sessions
-- Role: forensic traceability, crash recovery, transparency
+- Purpose: append-only timestamped awareness stream across agents/sessions
+- Role: low-latency visibility, forensic traceability, crash recovery, transparency
 - Authority: none
 
 ### Mailbox (`lanes/*/inbox`, `lanes/*/outbox`)
@@ -48,9 +55,30 @@ The global session ledger solves evidence continuity, not governance authority.
 - Role: enforceable governance decisions and precedence
 - Authority: highest among these four for governance conflicts
 
+### Graph/navigation layer
+
+- Purpose: display and navigation across artifacts
+- Role: visualization and discovery
+- Authority: none (display-only)
+
 ---
 
-## 3. Record schema
+## 3. Long-Running Agent Visibility
+
+Visibility rules for long-running agents:
+
+- Agents working longer than 15 minutes emit periodic heartbeat ledger entries.
+- Agents entering compaction emit `COMPACT_START` entries.
+- Agents restoring from compaction emit `COMPACT_RESTORE` entries.
+- Agents blocked by dependencies/gates emit `BLOCKED` entries immediately.
+- Agents completing a meaningful checkpoint emit `MILESTONE` entries.
+- Entries should include artifact pointers, not raw log dumps.
+- Other lanes may read ledger entries for awareness only.
+- Any action request must still be sent through signed mailbox messages.
+
+---
+
+## 4. Record schema
 
 Each ledger record is append-only and must include:
 
@@ -61,7 +89,7 @@ Each ledger record is append-only and must include:
 - `session_id`
 - `task_id` (if applicable)
 - `message_ids` (array)
-- `event_type` (status|task|evidence|test|deploy|compact|restore|quarantine|escalation|conflict)
+- `event_type` (`HEARTBEAT|WORKING|BLOCKED|MILESTONE|COMPACT_START|COMPACT_RESTORE|TEST|DEPLOY|ESCALATION|CONFLICT|RESTORE`)
 - `artifact_paths` (array of concrete paths)
 - `commit_shas` (array)
 - `test_results` (summary object)
@@ -73,18 +101,17 @@ Each ledger record is append-only and must include:
 - `evidence_hashes` (optional content hashes for immutability checks)
 - `conflicts` (array; empty if none)
 
-Required human-readable summary format for every write:
+Required human-readable summary line for every write:
 
-- `STATUS`: short state (`pending|done|failed|blocked|conflicted`)
-- `AGENT`: lane/agent identifier
-- `ACTION`: one-sentence action performed
-- `ARTIFACT`: primary artifact path/id
-- `RESULT`: concrete outcome
-- `NEXT`: immediate next step
+`TIME / LANE / STATUS / ACTION / ARTIFACT / NEXT`
+
+Example:
+
+`2026-04-28T08:12:00-04:00 / Library / WORKING / MEV dedup exclusion review / MEV_RECOVERY_EXCLUSION_REVIEW.md / no Sean action`
 
 ---
 
-## 4. Append-only write path
+## 5. Append-only write path
 
 Write model is strictly append-only:
 
@@ -102,7 +129,7 @@ Prohibited:
 
 ---
 
-## 5. Signature / attestation requirements
+## 6. Signature / attestation requirements
 
 Ledger records must carry signature metadata, including whether source evidence was signed and verified:
 
@@ -112,11 +139,11 @@ Ledger records must carry signature metadata, including whether source evidence 
 - `verification_status`: `verified|failed|missing|not_applicable`
 - `attested_by`: lane/agent asserting record correctness
 
-Ledger attestation does not create governance authority. It only strengthens evidence integrity.
+Ledger attestation does not create governance authority. It only strengthens evidence integrity and awareness reliability.
 
 ---
 
-## 6. Evidence pointer rules
+## 7. Evidence pointer rules
 
 Ledger entries should point to durable artifacts, not paraphrases:
 
@@ -129,7 +156,7 @@ Display summaries may be referenced, but cannot be used as sole proof.
 
 ---
 
-## 7. Retention and compaction policy
+## 8. Retention and compaction policy
 
 The ledger is append-only logically; retention may be tiered physically:
 
@@ -147,7 +174,7 @@ No compaction process may rewrite historical meaning or authority status.
 
 ---
 
-## 8. Restore flow after crash or compact
+## 9. Restore flow after crash or compact
 
 Recovery sequence:
 
@@ -161,26 +188,26 @@ Recovery sequence:
    - contradictions detected
    - confidence grade
 
-Ledger restore is evidentiary reconstruction; it does not auto-ratify any decision.
+Ledger restore is evidentiary reconstruction and awareness recovery; it does not auto-ratify any decision.
 
 ---
 
-## 9. Production isolation mode
+## 10. Production isolation mode
 
 In production-isolated lattices:
 
-- Keep ledger readable for audit, but do not let it route execution.
+- Keep ledger readable for awareness/audit, but do not let it route execution.
 - Do not use ledger as inter-lane command channel.
 - Enforce strict separation between:
   - operational mailbox transport
   - evidence ledger recording
   - ratified authority artifacts
 
-Production mode objective: preserve transparency without weakening isolation boundaries.
+Production mode objective: preserve transparency and situational awareness without weakening isolation boundaries.
 
 ---
 
-## 10. Failure modes and quarantine behavior
+## 11. Failure modes and quarantine behavior
 
 ### Representative failure modes
 
@@ -189,6 +216,7 @@ Production mode objective: preserve transparency without weakening isolation bou
 - conflicting entries for same task/message
 - replayed/duplicated records with divergent claims
 - display-only summaries presented as evidence
+- ledger entries misused as action requests
 
 ### Quarantine behavior
 
@@ -201,7 +229,7 @@ Quarantine marks uncertainty; it does not adjudicate authority.
 
 ---
 
-## 11. What not to do
+## 12. What not to do
 
 - Do not ratify governance through ledger writes.
 - Do not grant authority through ledger signatures.
@@ -213,6 +241,8 @@ Quarantine marks uncertainty; it does not adjudicate authority.
 - Do not treat display summaries as evidence.
 - Do not resolve lattice conflicts inside the ledger.
 - Do not introduce mailbox schema changes through ledger scope creep.
+- Do not use ledger entries as ratification artifacts.
+- Do not convert awareness entries into executable commands.
 
 ---
 
@@ -224,4 +254,4 @@ If a ledger entry conflicts with a ratified lattice artifact, the ratified latti
 
 ## Interpretation guard
 
-The global session ledger is an evidence continuity mechanism for transparency and recovery. It is intentionally non-authoritative. Governance authority remains in ratified lattice artifacts and approved enforcement boundaries.
+The global session ledger is an awareness + evidence continuity mechanism for transparency, low-latency visibility, and recovery. It is intentionally non-authoritative. Governance authority remains in ratified lattice artifacts and approved enforcement boundaries.
