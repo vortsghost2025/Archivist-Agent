@@ -2,9 +2,11 @@
 
 **Author:** Archivist Lane
 **Date:** 2026-04-28
-**Status:** PROPOSAL — requires 3-lane ratification
+**Status:** AMENDED PROPOSAL (v2) — requires re-ratification per Kernel + SwarmMind amendments
 **Priority:** P1
+**Ratification Scope:** Phases 1–5 only (OBSERVE through RATIFY). Phases 6–7 (INTEGRATE/MONITOR) require a separate proposal with own 3-lane ratification.
 **Evidence Base:** constraint-lattice.js, CPS_ENFORCEMENT.md, VERIFICATION_LANES.md, CHECKPOINTS.md, NFM-003
+**Amendment History:** v1 proposed 2026-04-28; Kernel AMEND (4 amendments); SwarmMind AMEND (5 amendments A1–A5). All 9 amendments incorporated below.
 
 ---
 
@@ -12,7 +14,7 @@
 
 The current governance stack is **reactive**: it checks known constraints against observed behavior and flags violations. This is necessary but insufficient. The system cannot discover constraints it doesn't already have.
 
-**The evolution:** Make the lattice **proactive** — it must autonomously discover missing constraints by observing failure patterns, propose new constraints to close those gaps, ratify them through verification lanes, and enforce them without requiring manual coordination scaffolding.
+**The evolution:** Make the lattice **proactive** — it must autonomously discover missing constraints by observing failure patterns, propose new constraints to close those gaps, and ratify them through verification lanes. Enforcement activation is operator-gated; the system discovers and proposes, the operator decides what becomes enforceable.
 
 **Key principle from operator:** Delegation surface doesn't invent new failure classes; it expands reachable failure modes. The lattice must actively discover missing constraints that prune the delegation surface until failure modes converge with the governance specification.
 
@@ -48,12 +50,12 @@ NFM-003 demonstrated this exactly: `internalBinding` was an unknown bypass vecto
 ### 2.1 Overview
 
 ```
-OBSERVE → CLASSIFY → HYPOTHESIZE → PROPOSE → RATIFY → ENFORCE → MONITOR
-   ↑                                                              │
-   └──────────────────────────────────────────────────────────────┘
+OBSERVE → CLASSIFY → HYPOTHESIZE → PROPOSE → RATIFY → [INTEGRATE → MONITOR]
+ ↑ │                                       └── separate proposal required
+ └──────────────────────────────────────────────────────────────┘
 ```
 
-This is a **closed-loop constraint discovery system**. It runs continuously and converges: each cycle discovers missing constraints and tightens the lattice, reducing the delegation surface until failure modes converge with the governance specification.
+This is a **constraint discovery and proposal system**. Phases 1–5 (OBSERVE through RATIFY) run continuously and converge: each cycle discovers missing constraints and ratifies them. Phases 6–7 (INTEGRATE and MONITOR) are covered by a separate proposal that requires its own ratification. This separation prevents the discovery loop from self-activating enforcement.
 
 ### 2.2 Phase 1: OBSERVE (Failure Pattern Collection)
 
@@ -192,17 +194,26 @@ Only HIGH and MEDIUM confidence gaps advance to PROPOSE.
 4. The expected enforcement behavior
 5. A falsification test — what observation would prove this constraint is wrong?
 
-### 2.6 Phase 5: RATIFY (3-Lane Convergence)
+### 2.6 Phase 5: RATIFY (Dual-Track Convergence)
 
-**What:** Lanes review the proposal. Ratification requires convergence.
+**What:** Lanes review the proposal. Ratification uses dual tracks.
 
-**Ratification rules (from GOVERNANCE.md + VERIFICATION_LANES.md):**
+**AMENDMENT K1+K4: Dual ratification tracks:**
 
-| Gap Severity | Ratification Requirement |
-|-------------|------------------------|
-| P0 (CONSTRAINT_GAP, DELEGATION_GAP) | 3-lane convergence + operator acknowledgment |
-| P1 (CHECKPOINT_GAP) | 2-lane convergence |
-| P2 (SCHEMA_GAP, EVIDENCE_GAP) | 1-lane review + 24h no-objection |
+| Track | Responsibility | Lanes | Scope |
+|-------|---------------|-------|-------|
+| **Governance Track** | Constraint logic, constitutional alignment | Archivist + Library | P0/P1 ratification quorum |
+| **Feasibility Track** | Runtime performance, execution viability | Kernel | Advisory assessment only |
+
+Kernel (Position 4, Authority 60, `can_govern: false`) is an execution/optimization surface, not a governance ratification lane. Kernel provides feasibility assessment; it does not vote on governance proposals.
+
+**Ratification rules (revised):**
+
+| Gap Severity | Governance Track | Feasibility Track | Operator |
+|-------------|-----------------|-------------------|----------|
+| P0 (CONSTRAINT_GAP, DELEGATION_GAP) | 2-lane convergence (Archivist + Library) | Kernel assessment | Acknowledgment required |
+| P1 (CHECKPOINT_GAP) | 2-lane convergence (Archivist + Library) | Kernel assessment (optional) | Not required |
+| P2 (SCHEMA_GAP, EVIDENCE_GAP) | 1-lane review + 24h no-objection | Not required | Not required |
 
 **Ratification response format:**
 
@@ -219,13 +230,28 @@ Only HIGH and MEDIUM confidence gaps advance to PROPOSE.
 
 **Amendment requires specificity.** A lane cannot amend without providing the exact change.
 
-### 2.7 Phase 6: ENFORCE (Lattice Integration)
+**Kernel feasibility assessment format:**
 
-**What:** Ratified constraints are integrated into the lattice.
+```json
+{
+  "type": "response",
+  "task_kind": "feasibility_assessment",
+  "body": "FEASIBLE | INFEASIBLE | FEASIBLE_WITH_CONDITIONS",
+  "performance_concerns": ["..."],
+  "resource_estimates": { "cpu_overhead": "<X%", "memory_delta": "<Y MB>" },
+  "required_artifacts": ["benchmark_baseline", "profiling_plan"]
+}
+```
+
+### 2.7 Phase 6: INTEGRATE (Lattice Structure Integration) — SEPARATE PROPOSAL REQUIRED
+
+> **AMENDMENT A1+A3:** This phase is NOT ratified by this proposal. It requires a separate proposal with its own 3-lane ratification before implementation. Included here for architectural completeness only.
+
+**What:** Ratified constraints are integrated into the lattice structure with `enforcement=false`.
 
 **Integration sequence:**
 
-1. Add constraint to `ConstraintLattice` via `addConstraint()` or `addToConstitution()`
+1. Add constraint to `ConstraintLattice` via `addConstraint()` or `addToConstitution()` with `enforcement: false`
 2. Update `createGovernanceLattice()` factory function
 3. Add constraint to CPS weight table in `constitutional_constraints.yaml`
 4. Update relevant checkpoint in `CHECKPOINTS.md`
@@ -233,9 +259,11 @@ Only HIGH and MEDIUM confidence gaps advance to PROPOSE.
 6. Run constraint lattice tests to verify no regressions
 7. Commit + push
 
-**Enforcement is immediate after integration.** No grace period. If the lattice has the constraint, it's enforced.
+**Enforcement is NOT automatic after integration.** Each constraint remains `enforcement=false` until a separate operator-gated activation step explicitly transitions it to `enforcement=true`. No constraint reaches `enforcement=true` without explicit operator action.
 
-### 2.8 Phase 7: MONITOR (Deformation Tracking)
+### 2.8 Phase 7: MONITOR (Deformation Tracking) — SEPARATE PROPOSAL REQUIRED
+
+> **AMENDMENT A3:** This phase is NOT ratified by this proposal. It requires a separate proposal with its own 3-lane ratification before implementation. Included here for architectural completeness only.
 
 **What:** After enforcement, monitor the lattice for deformation caused by the new constraint.
 
@@ -316,8 +344,8 @@ function testConvergence(lattice, knownFailureModes) {
 ### Phase C: Ratification Tracker (Week 2-3)
 
 1. Implement `RatificationTracker` — tracks proposal responses from lanes
-2. Apply convergence rules (3-lane for P0, 2-lane for P1, 1-lane for P2)
-3. Auto-integrate ratified constraints into lattice
+2. Apply convergence rules (Governance Track: 2-lane for P0, 2-lane for P1, 1-lane for P2; Feasibility Track: Kernel assessment for P0/P1)
+3. **AMENDMENT A2:** Auto-integrate P2 constraints only (after 24h no-objection). P0 and P1 require operator acknowledgment before integration. No constraint reaches `enforcement=true` without explicit operator action.
 4. Tests for ratification logic
 
 **Deliverable:** System can ratify and integrate constraints without manual coordination.
@@ -327,7 +355,7 @@ function testConvergence(lattice, knownFailureModes) {
 1. Enumerate all delegation paths in the system (lane-to-lane, agent-to-subagent, operator-to-system)
 2. For each path, verify constraint coverage
 3. Generate `DELEGATION_SURFACE_AUDIT.md`
-4. Feed uncovered paths back into Phase A as gap signals
+4. **AMENDMENT A4:** Uncovered paths are reported as candidate gap signals only. Feeding into Phase A requires operator review of the audit document. No automatic re-entry into the discovery loop without operator gate.
 
 **Deliverable:** Complete map of delegation surface with constraint coverage.
 
@@ -342,14 +370,51 @@ function testConvergence(lattice, knownFailureModes) {
 
 ---
 
+## 4.1 Optimization and Performance Requirements (Kernel Amendment K2+K3)
+
+**AMENDMENT K2:** Every implementation phase must produce optimization artifacts:
+
+| Phase | Required Optimization Artifacts |
+|-------|-------------------------------|
+| A (ConstraintGapDetector) | Benchmark baseline for gap scan cycle time; memory profile of detector at rest and during scan |
+| B (Proposal Pipeline) | Message delivery latency benchmarks; throughput under load (messages/min) |
+| C (Ratification Tracker) | Ratification convergence time benchmarks; state size per tracked proposal |
+| D (Delegation Surface Audit) | Audit scan runtime for N delegation paths; config/targets.json entries for each phase |
+| E (Continuous Monitoring) | Convergence test cycle time; heartbeat overhead measurement |
+
+**Regression thresholds:**
+
+- Constraint lattice operations (meet/join/respectsLattice) must not exceed **<5% overhead** vs. pre-implementation baseline
+- Gap scan cycle must complete in **<2s** for 1000 quarantined messages
+- Message delivery must not add **>100ms** latency vs. current `deliverMessage()`
+- Memory footprint must not increase by **>50MB** over current baseline
+
+**Profiling plan:**
+
+- `nsys` profiling for gap scan and ratification convergence cycles
+- `ncu` profiling for constraint lattice hot paths if GPU-accelerated components are added
+- Benchmark suite in `src/bridge/__tests__/benchmarks/` with before/after measurements
+
+**AMENDMENT K3:** Evidence responsibilities are split by lane:
+
+| Lane | Verifies | Evidence Type |
+|------|----------|---------------|
+| Library | Constraint logic correctness, constitutional alignment, implication chain validity | Logic review, test coverage, schema compliance |
+| Kernel | Runtime performance, resource usage, regression thresholds | Benchmarks, profiling reports, memory/CPU metrics |
+
+Both lanes must approve before P0 constraints advance to operator acknowledgment.
+
+---
+
 ## 5. Success Criteria
 
 | Criterion | Measure | Target |
 |-----------|---------|--------|
 | Gap detection | ConstraintGapDetector identifies known gaps | All 6 NFM-003 bypass vectors detected |
 | Proposal generation | System generates valid schema-compliant proposals | 100% schema pass rate |
-| Ratification | Proposals reach convergence without manual intervention | P0: 3-lane in <24h, P1: 2-lane in <12h |
-| Integration | Ratified constraints auto-added to lattice | Zero manual lattice edits needed |
+| Ratification | Proposals reach convergence without manual intervention (governance track) | P0: 2-lane governance + Kernel feasibility in <24h, P1: 2-lane in <12h |
+| Integration | P2 constraints auto-added to lattice; P0/P1 require operator acknowledgment | P2: zero manual lattice edits; P0/P1: operator gate before integration |
+| Enforcement | Operator-gated activation after integration | No constraint reaches enforcement=true without operator action |
 | Convergence | Coverage ratio for known failure modes | ≥ 95% within 30 days |
 | Stability | No regression in existing tests | All constraint-lattice tests pass |
 
@@ -361,7 +426,7 @@ function testConvergence(lattice, knownFailureModes) {
 |------|-----------|
 | False gap detection (over-constraining) | Falsification test required per proposal; deformation monitoring detects over-constraint |
 | Proposal spam (too many low-confidence gaps) | Only HIGH/MEDIUM advance; LOW queued for batch review |
-| Ratification deadlock (lanes never converge) | 24h timeout → escalate to operator; P2 auto-ratifies after no-objection |
+| Ratification deadlock (lanes never converge) | 24h timeout → escalate to operator; P2 auto-ratifies after no-objection; dual-track ensures governance vs. feasibility are independent |
 | Constraint conflicts (new constraint contradicts existing) | Meet/join operations detect conflicts before integration |
 | Lattice explosion (too many constraints) | Periodic constraint consolidation; merge implied constraints |
 | Operator bypass of ratified constraints | RECIPROCAL_ACCOUNTABILITY.md already governs this; UDS Checkpoint 0 enforces |
@@ -377,9 +442,34 @@ This plan does NOT replace any existing governance document. It extends them:
 | `constraint-lattice.js` | Add `ConstraintGapDetector` + `RatificationTracker` |
 | `CPS_ENFORCEMENT.md` | Add dynamic constraint weights from ratified proposals |
 | `CHECKPOINTS.md` | Add auto-generated checkpoints from CONSTRAINT_GAP proposals |
-| `VERIFICATION_LANES.md` | Add ratification convergence rules |
+| `VERIFICATION_LANES.md` | Add dual-track ratification convergence rules |
 | `USER_DRIFT_SCORING.md` | Add gap-detection signals as UDS inputs |
-| `GOVERNANCE.md` | Add autonomous discovery protocol |
+| `GOVERNANCE.md` | Add autonomous discovery protocol (requires separate operator-acknowledged proposal — see A5 below) |
+
+**AMENDMENT A5 — Governance Document Protection Invariant:**
+
+> **INVARIANT:** No `ConstraintGapDetector` or `RatificationTracker` output may modify `GOVERNANCE.md`, `RECIPROCAL_ACCOUNTABILITY.md`, or `BOOTSTRAP.md` without a separate operator-acknowledged proposal. The discovery loop discovers and proposes; it does not self-modify constitutional policy files. Any modification to these documents requires:
+> 1. A separate proposal distinct from the constraint proposal itself
+> 2. Operator acknowledgment (not just lane ratification)
+> 3. 24h cooling period after operator acknowledgment before the modification takes effect
+
+---
+
+## 7.1 Amendment Summary (v1 → v2)
+
+| ID | Source | Section | Change |
+|----|--------|---------|--------|
+| K1 | Kernel | 2.6 (Ratification) | Dual ratification tracks: Governance (Archivist+Library) vs. Feasibility (Kernel advisory) |
+| K2 | Kernel | 4.1 (new) | Optimization artifact requirements per phase: benchmarks, regression thresholds, profiling plan |
+| K3 | Kernel | 4.1 (new) | Split evidence verification: Library verifies logic, Kernel verifies runtime performance |
+| K4 | Kernel | 2.6 (Ratification) | Remove Kernel from P0/P1 governance quorum; Kernel provides feasibility assessment only |
+| A1 | SwarmMind | 2.7 (Phase 6) | ENFORCE → INTEGRATE; constraints added with `enforcement=false`; operator-gated activation |
+| A2 | SwarmMind | 4.Phase C | Auto-integrate P2 only; P0/P1 require operator acknowledgment before integration |
+| A3 | SwarmMind | 2.7,2.8,4 | Ratification scope split: this proposal covers Phases 1–5; Phases 6–7 require separate proposal |
+| A4 | SwarmMind | 4.Phase D | Delegation audit uncovered paths → candidate signals; operator review gate before re-entry |
+| A5 | SwarmMind | 7 (Governance) | Invariant: no auto-modification of GOVERNANCE.md, RECIPROCAL_ACCOUNTABILITY.md, BOOTSTRAP.md without separate operator-acknowledged proposal + 24h cooling |
+
+**Converged principle across both lanes:** The system discovers and proposes; the operator decides what becomes enforceable. No self-activation of enforcement. No self-modification of constitutional policy.
 
 ---
 
@@ -387,16 +477,16 @@ This plan does NOT replace any existing governance document. It extends them:
 
 This plan operationalizes the Delegation Amplification Theorem:
 
-> The delegation surface grows with capability. The constraint lattice must grow correspondingly. Autonomous discovery is the mechanism that ensures this co-growth without requiring manual intervention for each new constraint.
+> The delegation surface grows with capability. The constraint lattice must grow correspondingly. Autonomous discovery is the mechanism that ensures this co-growth without requiring manual intervention for each new constraint proposal. Operator gating ensures that what is proposed does not automatically become enforced — the lattice discovers, the operator activates.
 
 The system converges when: for every observed failure mode, the lattice contains a constraint that prevents, detects, or contains it. This is NOT completeness (unobserved failure modes may exist). This IS closure (every observed gap is closed).
 
-**The lattice doesn't need to be perfect. It needs to be self-repairing.**
+**The lattice doesn't need to be perfect. It needs to be self-repairing. And the operator decides when the repairs take effect.**
 
 ---
 
 **End of Plan Document**
 
-**Claim:** This plan provides a concrete path from reactive constraint checking to autonomous constitutional enforcement.
-**Evidence:** `src/bridge/constraint-lattice.js` (current reactive implementation), `context-buffer/PLAN_AUTONOMOUS_CONSTITUTIONAL_ENFORCEMENT.md` (this document).
-**Status:** unproven — requires implementation and ratification.
+**Claim:** This plan provides a concrete path from reactive constraint checking to autonomous constitutional enforcement (discovery and proposal phase; enforcement activation operator-gated).
+**Evidence:** `src/bridge/constraint-lattice.js` (current reactive implementation), `context-buffer/PLAN_AUTONOMOUS_CONSTITUTIONAL_ENFORCEMENT.md` (this document, v2 amended).
+**Status:** unproven — requires re-ratification after amendments.
