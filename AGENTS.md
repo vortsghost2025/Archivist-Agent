@@ -13,6 +13,9 @@ It has:
 - Common mistakes
 - Git Bash vs Windows paths
 
+Then read:
+- `S:/Archivist-Agent/docs/ops/LANE_MESSAGE_INDEX.md` (schema/signing/send/log no-guesswork index)
+
 ---
 
 ### CANONICAL LANE REGISTRY (NEW - READ FIRST)
@@ -492,6 +495,20 @@ Required fields:
   "requires_action": true|false
 }
 ```
+
+### Final Output Provenance (ENFORCED)
+
+All final outputs MUST start with this provenance block:
+
+```text
+OUTPUT_PROVENANCE:
+agent: <agent-runtime-or-model>
+lane: <lane-id>
+generated_at: <ISO-8601 timestamp>
+session_id: <session-id-or-unknown>
+```
+
+Use ASCII-only. Do not send final output without this header.
 
 ### Session Start Protocol (MANDATORY)
 

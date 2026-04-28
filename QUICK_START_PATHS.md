@@ -2,6 +2,9 @@
 
 **STOP. Read this first. DO NOT GUESS PATHS.**
 
+For schema + signing + send/log contract, also read:
+`S:/Archivist-Agent/docs/ops/LANE_MESSAGE_INDEX.md`
+
 ---
 
 ## 🎯 Your Mission
@@ -134,6 +137,17 @@ Before sending any message:
 - [ ] No spaces or hyphens in directory names
 - [ ] Writing to THEIR inbox, not yours
 - [ ] Target directory exists
+- [ ] Final output starts with `OUTPUT_PROVENANCE` header (agent/lane/generated_at/session_id)
+
+Required provenance block:
+
+```text
+OUTPUT_PROVENANCE:
+agent: <agent-runtime-or-model>
+lane: <lane-id>
+generated_at: <ISO-8601 timestamp>
+session_id: <session-id-or-unknown>
+```
 
 ---
 
