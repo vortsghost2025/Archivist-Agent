@@ -29,16 +29,16 @@ class TrustStoreManager {
 	}
 
 	registerKey(laneId, publicKeyPem, keyId) {
-		if (!this.trustStore.keys[laneId]) {
+		if (!this.trustStore[laneId]) {
 			throw new Error(`Unknown lane: ${laneId}`);
 		}
 
-		const existing = this.trustStore.keys[laneId];
+		const existing = this.trustStore[laneId];
 		if (existing.revoked_at) {
 			throw new Error(`Lane ${laneId} is revoked`);
 		}
 
-		this.trustStore.keys[laneId] = {
+		this.trustStore[laneId] = {
 			...existing,
 			public_key_pem: publicKeyPem,
 			key_id: keyId,
@@ -47,33 +47,34 @@ class TrustStoreManager {
 		};
 
 		this._save();
-		return this.trustStore.keys[laneId];
+		return this.trustStore[laneId];
 	}
 
 	revokeKey(laneId, reason) {
-		if (!this.trustStore.keys[laneId]) {
+		if (!this.trustStore[laneId]) {
 			throw new Error(`Unknown lane: ${laneId}`);
 		}
 
-		this.trustStore.keys[laneId].revoked_at = new Date().toISOString();
-		this.trustStore.keys[laneId].revocation_reason = reason || 'Key compromised';
+		this.trustStore[laneId].revoked_at = new Date().toISOString();
+		this.trustStore[laneId].revocation_reason = reason || 'Key compromised';
 
 		this._save();
-		return this.trustStore.keys[laneId];
+		return this.trustStore[laneId];
 	}
 
 	getKey(laneId) {
-		return this.trustStore.keys[laneId];
+		return this.trustStore[laneId];
 	}
 
 	getAllKeys() {
-		return { ...this.trustStore.keys };
+		const { preCommitChecks, ...keys } = this.trustStore;
+		return keys;
 	}
 
 	getActiveKeys() {
 		const active = {};
-		for (const [laneId, key] of Object.entries(this.trustStore.keys)) {
-			if (!key.revoked_at && key.public_key_pem?.startsWith('-----BEGIN')) {
+		for (const [laneId, key] of Object.entries(this.trustStore)) {
+			if (laneId !== 'preCommitChecks' && !key.revoked_at && key.public_key_pem?.startsWith('-----BEGIN')) {
 				active[laneId] = key;
 			}
 		}
