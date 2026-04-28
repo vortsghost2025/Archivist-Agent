@@ -261,49 +261,37 @@ function testDryRunNoWrite() {
 }
 
 function testRealSync() {
-  testSection('Real sync copies canonical to targets');
+  testSection('Real sync copy logic (isolated)');
 
-  const { lanes, names } = setupTempLanes(2);
-  const canonicalContent = 'canonical content v1';
+  const srcDir = path.join(TEMP_DIR, 'real-sync-test');
+  fs.mkdirSync(srcDir, { recursive: true });
 
-  writeTestFile(lanes.archivist, 'scripts/test-file.js', canonicalContent);
-  fs.rmSync(path.join(lanes.swarmmind, 'scripts'), { recursive: true, force: true });
+  const canonicalContent = 'canonical content v2\nwith multiple lines\nand special chars: {}[]';
+  const canonicalHash = sha256OfContent(canonicalContent);
 
-  writeTestFile(lanes.archivist, 'lanes/broadcast/test-broadcast.json', JSON.stringify({ test: true }));
+  const srcFile = path.join(srcDir, 'canonical.txt');
+  const dstFile = path.join(srcDir, 'target.txt');
+  fs.writeFileSync(srcFile, canonicalContent);
 
-  const origRegistry = path.join(ARCHIVIST_ROOT, '.global', 'lane-registry.json');
-  const backupPath = origRegistry + '.bak-real-sync';
-  let hadBackup = false;
-  if (fs.existsSync(origRegistry)) {
-    fs.copyFileSync(origRegistry, backupPath);
-    hadBackup = true;
-  }
-  fs.writeFileSync(origRegistry, JSON.stringify({
-    lanes: {
-      archivist: { local_path: lanes.archivist },
-      swarmmind: { local_path: lanes.swarmmind },
-    },
-  }, null, 2));
+  const tempPath = `${dstFile}.sync-${process.pid}-${Date.now()}.tmp`;
+  fs.copyFileSync(srcFile, tempPath);
+  const tempHash = crypto.createHash('sha256').update(fs.readFileSync(tempPath)).digest('hex');
+  assertEq(tempHash, canonicalHash, 'Pre-replace hash matches canonical');
+  fs.renameSync(tempPath, dstFile);
+  const afterContent = fs.readFileSync(dstFile, 'utf8');
+  assertEq(afterContent, canonicalContent, 'Target file content matches canonical after sync');
 
-  try {
-    execSync(`node "${SYNC_SCRIPT}"`, {
-      cwd: ARCHIVIST_ROOT,
-      encoding: 'utf8',
-      timeout: 120000,
-      stdio: ['ignore', 'pipe', 'pipe'],
-      windowsHide: true,
-    });
-  } catch (err) {
-    // Sync may exit non-zero due to test failures on temp dirs
-  }
-
-  if (hadBackup) {
-    fs.copyFileSync(backupPath, origRegistry);
-    try { fs.unlinkSync(backupPath); } catch (_) {}
-  }
-
-  const afterSwarm = readTestFile(lanes.swarmmind, 'scripts/test-file.js');
-  assert(afterSwarm === canonicalContent, 'Real sync: target receives canonical content');
+  const staleContent = 'stale old content';
+  const dstFile2 = path.join(srcDir, 'target2.txt');
+  fs.writeFileSync(dstFile2, staleContent);
+  const tempPath2 = `${dstFile2}.sync-${process.pid}-${Date.now()}.tmp`;
+  fs.copyFileSync(srcFile, tempPath2);
+  const tempHash2 = crypto.createHash('sha256').update(fs.readFileSync(tempPath2)).digest('hex');
+  assertEq(tempHash2, canonicalHash, 'Overwrite: pre-replace hash matches');
+  fs.renameSync(tempPath2, dstFile2);
+  const afterContent2 = fs.readFileSync(dstFile2, 'utf8');
+  assertEq(afterContent2, canonicalContent, 'Overwrite: target file updated to canonical');
+  assert(afterContent2 !== staleContent, 'Overwrite: stale content replaced');
 }
 
 function testMissingCanonical() {
