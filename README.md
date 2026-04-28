@@ -59,6 +59,7 @@ Required properties:
 Runbook:
 
 - `docs/ops/LANE_AUTOPILOT_WATCHERS.md`
+- `docs/ops/GREEN_STATE_RUNBOOK.md`
 
 Highlights:
 

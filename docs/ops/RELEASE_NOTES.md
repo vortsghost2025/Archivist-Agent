@@ -1,5 +1,11 @@
 # Release Notes
 
+## 2026-04-28
+
+### Green State Runbook
+
+- Added `docs/ops/GREEN_STATE_RUNBOOK.md` to standardize end-to-end health probe checks, green/yellow/red criteria, and fast operational commands.
+
 ## 2026-04-27
 
 ### Ownership Enforcement (Staged)
