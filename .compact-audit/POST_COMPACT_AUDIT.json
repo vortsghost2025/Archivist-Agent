@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-26T14:43:24.419Z",
+  "timestamp": "2026-04-28T00:44:29.900Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -267,29 +267,29 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-26T14:43:09.355Z",
-        "age_seconds": 15
+        "timestamp": "2026-04-28T00:44:01.359Z",
+        "age_seconds": 28
       },
       "library": {
         "status": "stale",
-        "timestamp": "2026-04-26T14:07:01.168Z",
-        "age_seconds": 2183
+        "timestamp": "2026-04-27T21:53:57.329Z",
+        "age_seconds": 10232
       },
       "swarmmind": {
-        "status": "stale",
-        "timestamp": "2026-04-26T14:07:01.391Z",
-        "age_seconds": 2183
+        "status": "alive",
+        "timestamp": "2026-04-28T00:44:01.948Z",
+        "age_seconds": 27
       },
       "kernel": {
         "status": "stale",
-        "timestamp": "2026-04-26T14:07:01.170Z",
-        "age_seconds": 2183
+        "timestamp": "2026-04-27T21:53:57.329Z",
+        "age_seconds": 10232
       }
     },
     "inbox_counts": {
-      "archivist": 9,
+      "archivist": 0,
       "library": 1,
-      "swarmmind": 1,
+      "swarmmind": 0,
       "kernel": 0
     },
     "governance_hash": "871b55a8a3de38bbb6e83ac424abfc29800c2fb27ee63cdfb58de7d398c2f5cb",
@@ -332,7 +332,7 @@
         "agents_md": {
           "path": "S:\\Archivist-Agent\\AGENTS.md",
           "exists": true,
-          "hash": "01760a98571bea71872a0df3c8ed652159b38391956e4f75eb17e81502f611d1"
+          "hash": "b4cff5597a5cbca3a0fac013f5ee77818c82c3e15066d97083f95ac46d57c929"
         },
         "targets_json": {
           "path": "S:\\Archivist-Agent\\config\\targets.json",
@@ -473,7 +473,7 @@
         "agents_md": {
           "path": "S:\\kernel-lane\\AGENTS.md",
           "exists": true,
-          "hash": "04de9a9bf8478447b2082ed0fd62cc7f452562f0074036154435fd7255527d4f"
+          "hash": "98c61bc150292b51c3b36d5e8c9acfcb55727b79a8b4bc967fc3a31292ae3f80"
         },
         "targets_json": {
           "path": "S:\\kernel-lane\\config\\targets.json",
@@ -506,16 +506,17 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 0,
-    "message_loss_detail": {},
+    "message_loss": 7,
+    "message_loss_detail": {
+      "archivist": {
+        "pre": 7,
+        "post": 0,
+        "lost": 7
+      }
+    },
     "lane_degradations": [
       {
         "lane": "library",
-        "pre_status": "alive",
-        "post_status": "stale"
-      },
-      {
-        "lane": "swarmmind",
         "pre_status": "alive",
         "post_status": "stale"
       },
@@ -529,10 +530,22 @@
     "missing_risks": [],
     "unexpected_changes": [
       "lane_library_degraded",
-      "lane_swarmmind_degraded",
       "lane_kernel_degraded"
     ],
-    "file_integrity_violations": []
+    "file_integrity_violations": [
+      {
+        "lane": "archivist",
+        "file": "agents_md",
+        "pre_hash": "01760a98571bea71872a0df3c8ed652159b38391956e4f75eb17e81502f611d1",
+        "post_hash": "b4cff5597a5cbca3a0fac013f5ee77818c82c3e15066d97083f95ac46d57c929"
+      },
+      {
+        "lane": "kernel",
+        "file": "agents_md",
+        "pre_hash": "04de9a9bf8478447b2082ed0fd62cc7f452562f0074036154435fd7255527d4f",
+        "post_hash": "98c61bc150292b51c3b36d5e8c9acfcb55727b79a8b4bc967fc3a31292ae3f80"
+      }
+    ]
   },
   "status": "drifted",
   "proof": {
@@ -549,7 +562,7 @@
       "known_risk_set",
       "file_integrity"
     ],
-    "contradictions_found": 3,
+    "contradictions_found": 2,
     "self_declared_alignment": false
   }
 }

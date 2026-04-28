@@ -1,14 +1,39 @@
 {
-  "worktrees": {},
+  "worktrees": {
+    "wt-1777327699734-1": {
+      "branch": "best-dungeon",
+      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\best-dungeon",
+      "parentBranch": "master",
+      "createdAt": "2026-04-27T22:08:19.734Z",
+      "remote": "origin"
+    }
+  },
   "sessions": {
     "ses_231492e9cffeO9fMvvs4eG1UO2": {
       "worktreeId": null,
       "createdAt": "2026-04-27T11:33:01.159Z"
+    },
+    "ses_230748dadffeKffkwkQdaht39C": {
+      "worktreeId": null,
+      "createdAt": "2026-04-27T15:25:15.818Z"
+    },
+    "ses_22f927996ffeQ6wrlbfp3dU1fL": {
+      "worktreeId": null,
+      "createdAt": "2026-04-27T19:32:12.171Z"
+    },
+    "ses_22f037d20ffektGEC6SeKJ6YOH": {
+      "worktreeId": "wt-1777327699734-1",
+      "createdAt": "2026-04-27T22:08:25.053Z"
     }
   },
   "tabOrder": {
     "local": [
-      "ses_231492e9cffeO9fMvvs4eG1UO2"
+      "ses_231492e9cffeO9fMvvs4eG1UO2",
+      "ses_230748dadffeKffkwkQdaht39C",
+      "ses_22f927996ffeQ6wrlbfp3dU1fL"
     ]
-  }
+  },
+  "worktreeOrder": [
+    "wt-1777327699734-1"
+  ]
 }

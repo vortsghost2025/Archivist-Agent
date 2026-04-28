@@ -235,7 +235,7 @@ Each lane maintains a `RUNTIME_STATE.json` that other lanes can read.
     {
       "id": "swarmmind",
       "relationship": "integration-target",
-      "manifest_path": "S:\\SwarmMind Self-Optimizing Multi-Agent AI System\\GOVERNANCE_MANIFEST.json"
+      "manifest_path": "S:\\SwarmMind\\GOVERNANCE_MANIFEST.json"
     }
   ]
 }
