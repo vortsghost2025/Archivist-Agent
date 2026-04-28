@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.3",
+  "id": "ownership-convention-1777294436657-library",
+  "task_id": "ownership-convention-1777294436657-library",
+  "idempotency_key": "ownership-convention-1777294436657-library",
+  "from": "archivist",
+  "to": "library",
+  "type": "task",
+  "task_kind": "review",
+  "priority": "P1",
+  "subject": "Dual Archivist ownership tags convention",
+  "body": "Ownership-tag convention activated for dual Archivist operation. Use message field: ownership { coordination_group, owner_agent_id, mode, lease_expires_at, conflict_policy }. Current recommended group: archivist-dual. This is advisory metadata for safe parallelism; one writer policy still applies.",
+  "timestamp": "2026-04-27T12:53:56.657Z",
+  "requires_action": false,
+  "ownership": {
+    "coordination_group": "archivist-dual",
+    "owner_agent_id": "archivist-fast",
+    "mode": "active",
+    "lease_expires_at": "2026-04-27T14:53:56.657Z",
+    "conflict_policy": "owner-wins-until-lease-expiry"
+  },
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "pipeline",
+    "actor": "archivist"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-27T12:53:56.657Z"
+  },
+  "content_hash": "sha256:0f76eead88dbbf83be50078c962936e1cc55b570e73bf10beb9124dd3971d712",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MGY3NmVlYWQ4OGRiYmY4M2JlNTAwNzhjOTYyOTM2ZTFjYzU1YjU3MGU3M2JmMTBiZWI5MTI0ZGQzOTcxZDcxMiIsImV4cCI6MTc3NzM4MDgzNiwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzI5NDQzNiwiaWQiOiJvd25lcnNoaXAtY29udmVudGlvbi0xNzc3Mjk0NDM2NjU3LWxpYnJhcnkiLCJsYW5lIjoiYXJjaGl2aXN0IiwicHJpb3JpdHkiOiJQMSIsInRhc2tfaWQiOiJvd25lcnNoaXAtY29udmVudGlvbi0xNzc3Mjk0NDM2NjU3LWxpYnJhcnkiLCJ0byI6ImxpYnJhcnkifQ.FzTPr14n1aarnyo0AvM0dMVx2G_RXJfiW15Zfs8pWQzO9g-VcZSqOd2Aisw-tvsaYssZNx-Ft8lex23KXFlhYxtg7KSiIW23vxVXZkntIVQm-D7Z_uIqAIovXOvz9r10daltEsqdhPZj_e6buRVSyiun4zsEisOV3IYmpfddeZw2c-F6Y0e4zvjDGNjYVvKvaXMRMKQeiVlh1RfIyNuUvrNtAFWg_3RSaCeN0nxknplzC57zTrrRg9Cup_GQD2YIlYkC-j7w6VMLMgTyo9wYb9cRq6_KcTdPlq4n02flMMXzEHv-UDUDsuugNei7JdZEQoUz3uCgCAbPrOUKZwT1qA",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

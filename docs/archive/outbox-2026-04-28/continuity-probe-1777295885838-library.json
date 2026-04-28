@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.3",
+  "id": "continuity-probe-1777295885838-library",
+  "task_id": "continuity-probe-1777295885838-library",
+  "idempotency_key": "continuity-probe-1777295885838-library",
+  "from": "archivist",
+  "to": "library",
+  "type": "task",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Compact/Restore continuity probe update",
+  "body": "Continuity probe added and verified. compact-restore-test now records task_id and expected_next_step before compact, then compares actual_next_action after restore. Current run: PASS (expected matches actual). Evidence: S:/Archivist-Agent/COMPACT_RESTORE_TEST_RESULTS.json Release notes updated in docs/ops/RELEASE_NOTES.md.",
+  "timestamp": "2026-04-27T13:18:05.838Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "pipeline",
+    "actor": "archivist"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-27T13:18:05.838Z"
+  },
+  "content_hash": "sha256:fb68fee64ad9bcd08f532ec7ff3ab919504e7ce975cbc72fb8f5745c0fdb5159",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ZmI2OGZlZTY0YWQ5YmNkMDhmNTMyZWM3ZmYzYWI5MTk1MDRlN2NlOTc1Y2JjNzJmYjhmNTc0NWMwZmRiNTE1OSIsImV4cCI6MTc3NzM4MjI4NSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzI5NTg4NSwiaWQiOiJjb250aW51aXR5LXByb2JlLTE3NzcyOTU4ODU4MzgtbGlicmFyeSIsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6ImNvbnRpbnVpdHktcHJvYmUtMTc3NzI5NTg4NTgzOC1saWJyYXJ5IiwidG8iOiJsaWJyYXJ5In0.agL7n1NycdHDdwrN-szZV09QZUVFBLP6ZaTI0MBAZfqrt0ZDxjy5nxqwXBpcfVO4ZtVI1JiylERFGNzf0xEzKOiHuHHkPtP1Rrxk1eJK4uRGsOei8M7J6C2SDhWMqPeF7Hl3RxNblyFRf9AkcXNx_J8FQvDtzskDTf0YSViItCBJfNYNZ713KirlWdNk4jStJCkn6mRfsuqMq3GbGdj-IEpAajXwhsJ1B1g2PXwfYszcxhdf7kM3F2Gg16p4b8hBaXtp9aj8wIDk9-02hB4CFt84EY26QKvteXAT-uGjWV19JYDCuozbvvlkt6tkRVlWZf234_60FZbgJeoFiy0Lgw",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

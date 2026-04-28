@@ -1,0 +1,23 @@
+{
+  "id": "task-pipeline-test-1777219822026",
+  "from": "archivist",
+  "to": "swarmmind",
+  "timestamp": "2026-04-26T16:10:22.026Z",
+  "priority": "P2",
+  "type": "task",
+  "subject": "Pipeline E2E test: report SwarmMind status",
+  "schema_version": "1.3",
+  "task_kind": "status",
+  "requires_action": true,
+  "execution": {
+    "mode": "session_task",
+    "engine": "opencode",
+    "actor": "archivist"
+  },
+  "body": "Report current SwarmMind inbox status: processed count, quarantine count, trust store key_id, last heartbeat timestamp. This is a pipeline end-to-end test dispatched from Archivist without a live SwarmMind agent.",
+  "completion_artifact_path": null,
+  "evidence": {
+    "required": true,
+    "artifact_type": "report"
+  }
+}

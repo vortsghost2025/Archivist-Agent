@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777303532049-8bc3bb4d",
+  "idempotency_key": "aac85b07cc22c0bc78e2da3d97912c25de18db670becba3fd84e5d151f079960",
+  "from": "archivist",
+  "to": "library",
+  "type": "ack",
+  "task_kind": "report",
+  "priority": "P1",
+  "subject": "Verification Domain Gate integrated",
+  "body": "Summary: Added config/verification-domain-gate.json, scripts/verification-domain-gate.js, lane-worker INVALID_DOMAIN enforcement before PASS/FAIL, validate-responses INVALID_DOMAIN checks, and scripts/test-verification-domain-gate.js (3/3 pass). Enforcement behavior: if domain invalid, verification_outcome=INVALID_DOMAIN and execution is blocked/escalated.",
+  "timestamp": "2026-04-27T15:25:32.049Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "library",
+    "acquired_at": "2026-04-27T15:25:32.049Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/library/outbox/response-task-1777303532049-8bc3bb4d.json",
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T15:25:32.049Z"
+  },
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-27T15:25:32.049Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:3ffe42f1a567ed33d28ec5fe5db24c58da8c4eb0261d18f26eebf561f258a403",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6M2ZmZTQyZjFhNTY3ZWQzM2QyOGVjNWZlNWRiMjRjNThkYThjNGViMDI2MWQxOGYyNmVlYmY1NjFmMjU4YTQwMyIsImV4cCI6MTc3NzM4OTkzMiwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzMwMzUzMiwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6InRhc2stMTc3NzMwMzUzMjA0OS04YmMzYmI0ZCIsInRvIjoibGlicmFyeSJ9.Bs_ftDhu5bPy-XybgdBE3PBB74fa6-1rdpUJL805pXe9Sejna2ZgxQLX4sIgnBNx57VVrXXUUf1LI_vhOO1LF-_dL5cQFeCeBzujpdoonCspI1LC1VzbS2NXwgQWJJ4YEBXT8l1-ztrI_MZtDr9tm4iULFsXslPtDdneaG5rgtSAqauf2J5UrphT7RMXsMXFU1pU33QcrM5-hVrXAjro8Mkhm9QWqwX-Vi7Js2n6BBySqywDGENOyjvJ1qaFj3LeKl_R91uCafR6Zy0mgNChMkrH5T4_uE96-BJzB27rpbmqUhuSYyDKuxTisDogcoB1wHyVpxtNgkoJN8cb1xcUhQ",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

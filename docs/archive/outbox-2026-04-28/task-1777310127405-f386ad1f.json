@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777310127405-f386ad1f",
+  "idempotency_key": "d58878ebd88c3309faa4fc65348f182f3e7f2afb1e3d1c1b7ab30b5a84cd017d",
+  "from": "archivist",
+  "to": "swarmmind",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P2",
+  "subject": "probe: hash",
+  "body": "hash file scripts/lane-worker.js",
+  "timestamp": "2026-04-27T17:15:27.410Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T17:15:27.405Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": false,
+    "verified": false
+  },
+  "evidence_exchange": {},
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-27T17:15:27.405Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:180ce8e5fb7e85acc02ec9458fe0c2b49e3e585923f1ac998713469800233e32",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MTgwY2U4ZTVmYjdlODVhY2MwMmVjOTQ1OGZlMGMyYjQ5ZTNlNTg1OTIzZjFhYzk5ODcxMzQ2OTgwMDIzM2UzMiIsImV4cCI6MTc3NzM5NjUyNywiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzMxMDEyNywiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InRhc2stMTc3NzMxMDEyNzQwNS1mMzg2YWQxZiIsInRvIjoic3dhcm1taW5kIn0.pJBWURSi581kQem8zMlNXmb232O0r6HupzgoYEEHv2Kq4NLtYR3Lq1-zUTnJz94jNoQHlgLmTqtKaLrLFi0KY95OjE6ySZOiPBJUx0RIHSTwYzEUZxxhUe52qMq8XGDe3bEnDeu46HXwoocWD7opU8d22kN6Chuuwn5L8a04aYEUrvZ9qY22nqFreJMkLbJZT9rhMJgI1xiFt4IeaFtGRVnudOnBpjrjTMrbER7CKFxNPtpwREsVOmWjZx1qR136KeejhPdwttBMInJ7om13oOgOCSGIADqd-BX7nbuciZIq6HS2Tu3XZdEsOyrzLxten5sLbl6eioQ4rj4m8iFyFw",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

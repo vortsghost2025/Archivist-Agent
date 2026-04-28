@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777135075025-54cf5248",
+  "idempotency_key": "e5c97dc064445f6ccc6428ad523284636bd4e93314b76d962a52d0236dfb6f6a",
+  "from": "archivist",
+  "to": "library",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P2",
+  "subject": "Update website landing page with lane architecture diagram",
+  "body": "Add a section to the website showing the 4-lane architecture: Archivist (governance), Library (verification), SwarmMind (execution), Kernel (CUDA/GPU). Include the relay loop diagram if possible. Return signed response when deployed.",
+  "timestamp": "2026-04-25T16:37:55.025Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "library",
+    "acquired_at": "2026-04-25T16:37:55.025Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/library/outbox/response-task-1777135075025-54cf5248.json",
+    "artifact_type": "response",
+    "delivered_at": "2026-04-25T16:37:55.025Z"
+  },
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-25T16:37:55.025Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:3c0a979d29851f4b8c1702f4d8264c21c5fd1f6c5da60a9142a27ecf357b1f06",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6M2MwYTk3OWQyOTg1MWY0YjhjMTcwMmY0ZDgyNjRjMjFjNWZkMWY2YzVkYTYwYTkxNDJhMjdlY2YzNTdiMWYwNiIsImV4cCI6MTc3NzIyMTQ3NSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzEzNTA3NSwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InRhc2stMTc3NzEzNTA3NTAyNS01NGNmNTI0OCIsInRvIjoibGlicmFyeSJ9.ARLukFcF_kVevj28Opk8Vlg36kJcjXLVxDu5mJpqUalIlu8evrQEpEaqzRLxpl6SQZzmRMYcEltJ7mDOJcC30Yl96NhICQ8kgnwWSXBA9XyduAych6pxjk3bbiSGn7gLva_FnShFaq7qiLevcWEIu7L8036-cM2ENJNI3aK8YuTQXE9IuLmm1-9hwWPlRdNHcbkWz3wQmZoGZFbsmmcsJB6Q21_fLmZlG8Lv_nQHUBpH3opTuw4bHPijCgtt4RX4a3BAXTj9RaCITwgtzfdRzKdRYLKFV1hb9AG3DKsuPOoblB5yXNtTEY5QuKczdhJgln4WtAtUf4IuCXDfBioFVQ",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

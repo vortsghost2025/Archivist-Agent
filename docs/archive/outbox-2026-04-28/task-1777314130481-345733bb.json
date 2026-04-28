@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777314130481-345733bb",
+  "idempotency_key": "eae657175d7fe62652405b4fec34f5fe069f5f1dccf7a60d35e61118b8fcc9fe",
+  "from": "archivist",
+  "to": "swarmmind",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P2",
+  "subject": "swarm-task-3 hash lane-worker",
+  "body": "hash file scripts/lane-worker.js",
+  "timestamp": "2026-04-27T18:22:10.481Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T18:22:10.481Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/swarmmind/outbox/response-task-1777314130481-345733bb.json",
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T18:22:10.481Z"
+  },
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-27T18:22:10.481Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:180ce8e5fb7e85acc02ec9458fe0c2b49e3e585923f1ac998713469800233e32",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MTgwY2U4ZTVmYjdlODVhY2MwMmVjOTQ1OGZlMGMyYjQ5ZTNlNTg1OTIzZjFhYzk5ODcxMzQ2OTgwMDIzM2UzMiIsImV4cCI6MTc3NzQwMDUzMCwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzMxNDEzMCwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InRhc2stMTc3NzMxNDEzMDQ4MS0zNDU3MzNiYiIsInRvIjoic3dhcm1taW5kIn0.B9sXZzEhKxDNglmjsYXkicOJcXijnqZ2iMyrJOBQ3EdxCXWpMwHovyRZa5zGZvFpCrZtFc3XsBc1ErDaOzVqE3QOKNtZxil9j23zJLn8LHv9XSxOpF8rv7UCqYR501QGF2jY5gz0NDK-QtAGVbtHdZ0NLmcwpta7gMtLvWa8tLq94zNeDHVTW5ht-AIyxfpIscGP_ZuSZijSgwigqzJrbdX0X1ANy0zgx8uE2VPAnTwJ0tvfcnmZe7T29Bx2gQloyGC76j4N7qQx0gwiYI3Y54RQcQG2Q9uSsMokamQDx01N1yuMI0VEe3tnCIix8jhzXE1CwMGfqG-4iiGIF1Y37g",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

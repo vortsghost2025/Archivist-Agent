@@ -1,0 +1,20 @@
+{
+  "id": "task-20260428-strict-review-kernel",
+  "from": "archivist",
+  "to": "kernel",
+  "timestamp": "2026-04-28T00:26:14.531Z",
+  "priority": "P1",
+  "type": "task",
+  "task_kind": "audit",
+  "subject": "Strict E2E lane review + assigned task",
+  "requires_action": true,
+  "schema_version": "1.3",
+  "body": "1. STRICT REVIEW: Run full end-to-end lane review. Check: inbox processed?, outbox clean?, lane-worker 17/17?, executor 64/64?, system_state consistent?, trust-store present?, broadcast files match other lanes?, active-owner.json exists?, any stale or orphaned items?\n\n2. ASSIGNED TASK: Review matrix_tensor_async.cu grid-dim-Y launch error. Diagnose the cudaErrorInvalidValue — is it a dim calculation bug or a hardware limit on RTX 5060? Write findings to context-buffer/kernel-findings/ and report back.\n\nReport results to archivist inbox with convergence_gate.",
+  "convergence_gate": {
+    "claim": "To be filled after review",
+    "evidence": "To be filled",
+    "verified_by": "kernel",
+    "contradictions": [],
+    "status": "unproven"
+  }
+}

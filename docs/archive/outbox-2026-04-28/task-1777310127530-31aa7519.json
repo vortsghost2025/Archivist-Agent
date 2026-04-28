@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777310127530-31aa7519",
+  "idempotency_key": "371a31b39a5ec8dbfbf98b8320925c305f0a7bd0304538ab10d6746cb6a7123d",
+  "from": "archivist",
+  "to": "swarmmind",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P2",
+  "subject": "probe: unsupported",
+  "body": "please redesign architecture and open a PR",
+  "timestamp": "2026-04-27T17:15:27.534Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T17:15:27.530Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": false,
+    "verified": false
+  },
+  "evidence_exchange": {},
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-27T17:15:27.530Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:2b3e83893367e5cba48179c70c5f5147fbf5831cfec1cd1ff9e68a679825109c",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MmIzZTgzODkzMzY3ZTVjYmE0ODE3OWM3MGM1ZjUxNDdmYmY1ODMxY2ZlYzFjZDFmZjllNjhhNjc5ODI1MTA5YyIsImV4cCI6MTc3NzM5NjUyNywiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzMxMDEyNywiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InRhc2stMTc3NzMxMDEyNzUzMC0zMWFhNzUxOSIsInRvIjoic3dhcm1taW5kIn0.hcczbyG5wNYUpRw3eB6sCx58Puav-4lijDhmuDWeiMMRwYLdP2ZFOBLqqoofZ1atW4OPJNq7UtXERK_XaCaN2S-pO4bHGnrUOgWkMIRxN-39dPqvKNM-ocVS_Cmx2mSFtyerQvNnKGd1_X77Bl8R5TMNn2OXwNa6wlyZv-5SqDO5_EkD87kcmIOvd34DI0xA6ia8W2QpG3Hwo86l0PYsMZNmqxyBCmGU_I_gw5nRey8JYR7sWKc0xF0ZYJYiaKCguaM1158MqbBxKCwnRWE-7q2UPaRmDfFsTB_rrOp4oEKxTt8xd9ZSpWuyi64M5r6hX-6TZRvnGxEn3y8RV4awGQ",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

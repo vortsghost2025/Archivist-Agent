@@ -1,0 +1,19 @@
+{
+  "id": "realign-cross-session-protocol-20260427T200500Z",
+  "from": "archivist",
+  "to": "archivist",
+  "timestamp": "2026-04-27T20:05:00Z",
+  "priority": "P1",
+  "type": "review",
+  "task_kind": "protocol-realignment",
+  "subject": "[lane:archivist][thread:session-safety] Realign cross-session mailbox handling",
+  "requires_action": true,
+  "body": "Request sent to Archivist mailbox for protocol realignment to prevent cross-instance message confusion. Includes v1.4 schema additions, router decision policy, lane owner lock, and staged rollout.",
+  "convergence_gate": {
+    "claim": "Protocol realignment request was delivered to Archivist inbox and logged in outbox.",
+    "evidence": "lanes/archivist/inbox/20260427T200500Z_archivist_realign-cross-session-protocol.json",
+    "verified_by": "self",
+    "contradictions": [],
+    "status": "proven"
+  }
+}

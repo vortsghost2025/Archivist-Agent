@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777303541866-05c93b05",
+  "idempotency_key": "5d5b9f79897c541e596d00ac534c659d6b1dc0716db6d1faea8f04f7a0407770",
+  "from": "archivist",
+  "to": "swarmmind",
+  "type": "task",
+  "task_kind": "review",
+  "priority": "P1",
+  "subject": "Delegated capability test: domain-gate count",
+  "body": "count \\",
+  "timestamp": "2026-04-27T15:25:41.866Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T15:25:41.866Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/swarmmind/outbox/response-task-1777303541866-05c93b05.json",
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T15:25:41.866Z"
+  },
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-27T15:25:41.866Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:f6479ed2de013063b5252596fa0261ed9ce49fb9dc75d8439b788aaff30cd57c",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ZjY0NzllZDJkZTAxMzA2M2I1MjUyNTk2ZmEwMjYxZWQ5Y2U0OWZiOWRjNzVkODQzOWI3ODhhYWZmMzBjZDU3YyIsImV4cCI6MTc3NzM4OTk0MSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzMwMzU0MSwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6InRhc2stMTc3NzMwMzU0MTg2Ni0wNWM5M2IwNSIsInRvIjoic3dhcm1taW5kIn0.e6ubDQHPRD4JwjU-V0JmK3n52PdPT6L9dMseE1Ni5BusRvjkyITfHl1x106bH1l-2Nko8jpK41EnJab2wcYhKSUE91CHMCZeokdTudWPsrqyuh9LzDEV22Z7jKn6BQMqVxoOoCPcSpOgunUYbqgYOHdIBKQYXs5TVcr4X5tyarE_qeCiNW5zVdt2PIPkeRLm37PRQH_eeF21WTCGdpr44mAwTg6gp7cNjYo8mB2c2A7mT55A3G531Q764XOS-Amicbi0qPqU25f70iruSi8xJ1SwyEAa-cMcyclSML7oiXixqWxcP4i0EC30LX-PIxRc17OEvLJ7baymX2MphQIy4Q",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

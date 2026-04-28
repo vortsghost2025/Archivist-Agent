@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777310127319-e4d12329",
+  "idempotency_key": "cd4e0e72b0101d932507228b7e81fbdd970c7068b67baee3126ef9a6c00ddcfb",
+  "from": "archivist",
+  "to": "swarmmind",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P2",
+  "subject": "probe: list dir",
+  "body": "list dir scripts",
+  "timestamp": "2026-04-27T17:15:27.325Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T17:15:27.319Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": false,
+    "verified": false
+  },
+  "evidence_exchange": {},
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-27T17:15:27.319Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:068145c15fbf4c0220dd86b5a0917d6be0baf93b0a76dafb8e60f79edf75a1e8",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MDY4MTQ1YzE1ZmJmNGMwMjIwZGQ4NmI1YTA5MTdkNmJlMGJhZjkzYjBhNzZkYWZiOGU2MGY3OWVkZjc1YTFlOCIsImV4cCI6MTc3NzM5NjUyNywiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzMxMDEyNywiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InRhc2stMTc3NzMxMDEyNzMxOS1lNGQxMjMyOSIsInRvIjoic3dhcm1taW5kIn0.U02q94yixxvpJ25yR2E8wnKf8IMWmJW6DjfstyNRkRREZ4ZwbpB1BO6nzw3JvS--iSRbvKunmKTRPTQKisZ6aNvOq5D9h8OjoFTxhS8l8aB6F3zG4Jm-VVBGcgDmxF7sfDTySbWLgd-OR3_P6OWea3HyAptK_P0CReG9HE4utaINC0A0wxZjgSYncz7ebjMayJbFKVGTduyuIA6ii-f7FZJmXHc-AdS_NPACirjtMN2jcw79iZhTk4gZft45BAImPlePfv4Zap0ojjQlTE4sQNDrcI1XtsD4ErWhEtGx36fYGypjnqWbY4txWlPtW_TPA0gGfBsQI8jG5xZ3vejVXA",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

@@ -1,0 +1,466 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-1777290391593-archivist-4",
+  "idempotency_key": "resp-1777290391645-e2e-177729039159",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: count dir mode",
+  "body": "\"lane\" in S:/Archivist-Agent/lanes: 1010 occurrences (191 files)",
+  "timestamp": "2026-04-27T11:46:31.645Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-27T11:46:31.645Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T11:46:31.645Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T11:46:31.645Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-1777290391593-archivist-4",
+  "_execution_result": {
+    "path": "S:/Archivist-Agent/lanes",
+    "pattern": "lane",
+    "count": 1010,
+    "files_scanned": 191,
+    "bytes_scanned": 592479,
+    "truncated": false,
+    "matches_by_file": [
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\agent-inventory-published-20260423.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\inventory.json",
+        "count": 37
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\inventory.schema.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\2026-04-23T02-00-00Z-archivist-project-review.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\2026-04-23T02-48-00Z-system-alert-conflicted.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\2026-04-23T03-10-00Z-swarmmind-reaudit-complete.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\2026-04-23T09-00-00Z-library-swarmmind-reactivation.json",
+        "count": 6
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\2026-04-23T09-15-00Z-path-cleanup-complete.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\archivist-p0-edit-intent-registry.json",
+        "count": 1
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\archivist-p0-gate-violations-resolved.json",
+        "count": 1
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\archivist-p0-resolution.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\book-6-review-coordination-001.json",
+        "count": 6
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\CONCURRENCY_POLICY_v1.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\CONVERGENCE_CONSTRAINT.md",
+        "count": 7
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\CONVERGENCE_PROTOCOL.md",
+        "count": 26
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\edit-intent-schema.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\gate-schema.json",
+        "count": 13
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\gate-violations.jsonl",
+        "count": 12
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\governance-verification-registry.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\README.md",
+        "count": 9
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\review-ready-schema-v1.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\review-ready-template-v1.json",
+        "count": 1
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\swarmmind-path-lock.json",
+        "count": 4
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\trust-store.json",
+        "count": 4
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\broadcast\\trust-store.json.pre-fix-backup",
+        "count": 5
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\heartbeat-archivist.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-archivist-1.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-archivist-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-archivist-4.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-kernel-1.json",
+        "count": 21
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-kernel-2.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-kernel-4.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-library-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-library-3.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-library-4.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289676473-swarmmind-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289998887-archivist-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289998887-archivist-4.json",
+        "count": 114
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289998887-kernel-1.json",
+        "count": 21
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289998887-kernel-2.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289998887-library-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289998887-library-3.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289998887-library-4.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777289998887-swarmmind-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-e2e-1777290391593-archivist-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-test-v3-listdir-20260426213653.json",
+        "count": 9
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\response-test-v3-nlp-20260426213653.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\archivist-escalation-response-20260426T021000.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\archivist-response-library-20260426T020000.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\response-e2e-1777289676473-archivist-1.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\response-e2e-1777289676473-archivist-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\response-e2e-1777289676473-archivist-4.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\response-e2e-1777289998887-archivist-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\response-e2e-1777289998887-archivist-4.json",
+        "count": 114
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\response-e2e-1777290391593-archivist-2.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\task-1777135075025-54cf5248.json",
+        "count": 4
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\task-1777168059707-0ce46b2e.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\task-1777178013298-ec4a724f.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\task-1777178117635-ad39c353.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\outbox\\task-1777178169580-0de22904.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-22T16-15-00Z_gap-handoff-request.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T02-00-00Z-archivist-task-assignment.json",
+        "count": 11
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T02-48-00Z-archivist-escalation-conflicted.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T03-00-00Z-gap-001.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T03-10-00Z-gap-002.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T03-20-00Z-gap-003.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T03-30-00Z-gap-004.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T03-40-00Z-gap-005.json",
+        "count": 1
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T03-50-00Z-gap-006.json",
+        "count": 1
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T04-00-00Z-gap-007.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T04-10-00Z-gap-008.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\inbox\\2026-04-23T04-30-00Z-gap-009.json",
+        "count": 5
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\outbox\\authority-approval-key-convergence-20260423.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\authority\\outbox\\ratification-complete-20260423.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\library\\inbox\\book6-readiness-synthesis-final.md",
+        "count": 1
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\archivist-multi-task-review-001.json",
+        "count": 5
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\archivist-multi-task-review-001.lane-worker-2026-04-25T15-28-15-344Z.json",
+        "count": 5
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\escalation-trust-inconsistency-2026-04-26.json",
+        "count": 4
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-code-review-individual-20260426.json",
+        "count": 5
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-compute-sanitizer-20260426.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-e2e-closure-20260426T013701.json",
+        "count": 4
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-e2e-independent-20260426T013314.json",
+        "count": 17
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-e2e-status-20260426T004753.json",
+        "count": 10
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-fix-delta-20260426T013550.json",
+        "count": 15
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-gen5-fp8-findings-20260426.json",
+        "count": 1
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-snac-reuse-20260426.json",
+        "count": 4
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\kernel-to-archivist-swarmmind-cutover-20260426T1758Z.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\library-kernel-e2e-verification-20260426.json",
+        "count": 9
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-gen4-verification-20260425204503.json",
+        "count": 3
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777128120270.json",
+        "count": 5
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777129683454.json",
+        "count": 4
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777135010379-74482a1f.json",
+        "count": 6
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777135010379-74482a1f.lane-worker-2026-04-26T04-43-19-739Z.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777135171807-aec8f337.json",
+        "count": 6
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777135171807-aec8f337.lane-worker-2026-04-26T04-43-19-741Z.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777139048955-f8f79e82.json",
+        "count": 6
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777139048955-f8f79e82.lane-worker-2026-04-26T04-43-19-742Z.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777139085267-330c6d92.json",
+        "count": 6
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777139085267-330c6d92.lane-worker-2026-04-26T04-43-19-743Z.json",
+        "count": 2
+      },
+      {
+        "file": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\processed\\response-task-1777139176934-bcace2dc.json",
+        "count": 6
+      }
+    ],
+    "_routing": {
+      "source": "explicit",
+      "verb": "count",
+      "confidence": 1
+    }
+  },
+  "content_hash": "sha256:63d87b8134388ebee845c5c0df2d9a2dbcfd5a27e278f859d40973af7118fdf4",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6NjNkODdiODEzNDM4OGViZWU4NDVjNWMwZGYyZDlhMmRiY2ZkNWEyN2UyNzhmODU5ZDQwOTczYWY3MTE4ZmRmNCIsImV4cCI6MTc3NzM3Njc5MSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzI5MDM5MSwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLWUyZS0xNzc3MjkwMzkxNTkzLWFyY2hpdmlzdC00IiwidG8iOiJhcmNoaXZpc3QifQ.uzasqniuy1MOBX4jdxeg4X99VDsPMXPa5LQWMBA3G5y9Kbdbehw3mOFRpmw1YBnVDtUj2XQWk_ZpVAQQPwJYCPGJr0Je6VDSSK0BUmtAIbTG1yQ4p0yTPYxxIeOhyut7e6UT63TGByj7cEOYgCcb3I9qEs3e6_67qu7ySAftYZTPb_b48-VFLGpP1nDH-Uesc1l7IoAYLcwqwnllmaI3p3gTlfVNbDzZCypAnwh6dkDYKua_JR_6HZlQmsChWacfyU_VV6Mxq_RGCaYxa-nbgW0gr-Bn8L6RpzHMeKQixZ8PwZY_E7SwcnfXKwhrMglSvgMIp3ixovewDXvDEqI8ww",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

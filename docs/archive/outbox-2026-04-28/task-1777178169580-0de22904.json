@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777178169580-0de22904",
+  "idempotency_key": "115e25a4c811629248fd3d4f75fe9ef3e2aafacbcf232c29c3c2bd6425d2c03a",
+  "from": "archivist",
+  "to": "swarmmind",
+  "type": "task",
+  "task_kind": "status",
+  "priority": "P1",
+  "subject": "E2E test - report current state",
+  "body": "End-to-end pipeline test. Report your current lane state: processed count, blocked count, quarantine count, last commit, any blockers. No code changes needed.",
+  "timestamp": "2026-04-26T04:36:09.580Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T04:36:09.580Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/swarmmind/outbox/response-task-1777178169580-0de22904.json",
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T04:36:09.580Z"
+  },
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-26T04:36:09.580Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:500b1f9e898d9850f1bf4fa616b547ed47ef0e1026b951d531b5fcf69b7ac5bc",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6NTAwYjFmOWU4OThkOTg1MGYxYmY0ZmE2MTZiNTQ3ZWQ0N2VmMGUxMDI2Yjk1MWQ1MzFiNWZjZjY5YjdhYzViYyIsImV4cCI6MTc3NzI2NDU2OSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzE3ODE2OSwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6InRhc2stMTc3NzE3ODE2OTU4MC0wZGUyMjkwNCIsInRvIjoic3dhcm1taW5kIn0.fjC3-vyrTNjbq72DKk9bYYJledDlEJm330H-g44icWXNu_Hu8EfDD1-CQDMlku9usLPmHCaOd_i7v0Kh3x5LZDMcICp1JnYq96SplIwVZgpFO_4NDbwcac-aOMD7mzriHwjwgCpArjaTbr324tC2bDZrE5v2SaGwdBdloiLKlmw5R-I-P9XsHu7SdqQJFf1vZP3pK1FUpvsVeJRd5KSp_cTxwo8LHWd4gPqwsQviz8V-P4SwAxNMWNuNvy-gG_oT9x8qiuh3TJ85-hxgGGynL1SxvcurkkEjdpADUmr52GN4A865FKkNfZOQsKHOqhAOjM8MCIcxy1cwWD4QF2JoFQ",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.3",
+  "task_id": "task-1777168059707-0ce46b2e",
+  "idempotency_key": "3cc4f009e2ae87c82360793686b83a74e5249255026129f3bdbe5c0e7254f445",
+  "from": "archivist",
+  "to": "swarmmind",
+  "type": "task",
+  "task_kind": "status",
+  "priority": "P2",
+  "subject": "Liveness check - report current state",
+  "body": "Report your current state: scripts working, inbox status, blockers. No code changes needed.",
+  "timestamp": "2026-04-26T01:47:39.708Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T01:47:39.708Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/swarmmind/outbox/response-task-1777168059707-0ce46b2e.json",
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T01:47:39.708Z"
+  },
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-26T01:47:39.708Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 3600
+  },
+  "content_hash": "sha256:3747091d7342b6600c9de54aa3ab86245f46dcf860c0f8b4bee061c7c9911787",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6Mzc0NzA5MWQ3MzQyYjY2MDBjOWRlNTRhYTNhYjg2MjQ1ZjQ2ZGNmODYwYzBmOGI0YmVlMDYxYzdjOTkxMTc4NyIsImV4cCI6MTc3NzI1NDQ1OSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzE2ODA1OSwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InRhc2stMTc3NzE2ODA1OTcwNy0wY2U0NmIyZSIsInRvIjoic3dhcm1taW5kIn0.OZYcNbHX1vp79pEVTlTDkglWDMDd3DfynSyo8iLg6i26EkG2ZxBxA7U4W0KotyTmNZqC1gBbL3tr9S574QEA-3QJ1QDIAs9tY3oTw6bfZSKRTymNXE-KqZpxO_U4m9itsLkDu2nIlT3-ohGLL4WVzaeyurfV58SOe0V34wiBdCqNhJu_mJBuZsy8oLGICp-8vMvBJmGnhKfxRj263okm0JCdB2pXsSZiB31oLM9mXbF-fho7y267MBj0MMULkZkr88w_T6r9NHOf32wrnf5FyZeavtlpCEn6b4YblDPL0Gqc-Yamni3ft7icQ6yVJgLUKqo6znd2_l9aCLrB1TVaQg",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

@@ -133,10 +133,21 @@ function chooseCanonicalState(states) {
   return existing[0];
 }
 
-function copyFileWithDirs(source, target, dryRun) {
+function copyFileWithDirs(source, target, dryRun, expectedSha256) {
   if (dryRun) return;
   ensureDir(path.dirname(target));
-  fs.copyFileSync(source, target);
+  const tempPath = `${target}.sync-${process.pid}-${Date.now()}.tmp`;
+  fs.copyFileSync(source, tempPath);
+  const tempSha256 = fileSha256(tempPath);
+  if (expectedSha256 && tempSha256 !== expectedSha256) {
+    try { fs.unlinkSync(tempPath); } catch (_err) {}
+    throw new Error(`copy verification failed before replace: expected ${expectedSha256}, got ${tempSha256}`);
+  }
+  fs.renameSync(tempPath, target);
+  const finalSha256 = fileSha256(target);
+  if (expectedSha256 && finalSha256 !== expectedSha256) {
+    throw new Error(`copy verification failed after replace: expected ${expectedSha256}, got ${finalSha256}`);
+  }
 }
 
 function formatShortHash(sha) {
@@ -287,6 +298,7 @@ function main() {
   const syncDetails = [];
   let syncedCount = 0;
   let totalFileTargets = 0;
+  let syncFailedCount = 0;
 
   const broadcastPaths = new Set();
   for (const lane of LANE_ORDER) {
@@ -323,7 +335,7 @@ function main() {
       totalFileTargets++;
       const targetPath = path.join(laneRoots[state.lane], relativePath);
       try {
-        copyFileWithDirs(canonical.absolutePath, targetPath, DRY_RUN);
+        copyFileWithDirs(canonical.absolutePath, targetPath, DRY_RUN, canonical.sha256);
         targets.push({
           lane: state.lane,
           action: DRY_RUN ? 'would_sync' : 'synced',
@@ -339,6 +351,7 @@ function main() {
           dry_run: DRY_RUN,
         });
       } catch (err) {
+        syncFailedCount++;
         targets.push({
           lane: state.lane,
           action: 'sync_failed',
@@ -400,18 +413,20 @@ function main() {
       copy_operations: syncDetails,
       attempted_targets: totalFileTargets,
       successful_or_planned_targets: syncedCount,
+      failed_targets: syncFailedCount,
     },
     test_results: testResults,
     lane_health: laneHealth,
     summary: {
       synced_targets: syncedCount,
       attempted_sync_targets: totalFileTargets,
+      failed_sync_targets: syncFailedCount,
       lanes_all_tests_pass: LANE_ORDER.length - failingTestLanes,
       total_lanes: LANE_ORDER.length,
       healthy_lanes: LANE_ORDER.length - unhealthyLanes,
       failing_test_lanes: failingTestLanes,
       unhealthy_lanes: unhealthyLanes,
-      overall_ok: allTestsPass && allHealthy,
+      overall_ok: allTestsPass && allHealthy && syncFailedCount === 0,
     },
   };
 

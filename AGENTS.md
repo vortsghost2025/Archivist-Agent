@@ -511,6 +511,8 @@ If your context was compacted mid-session:
 2. If any test fails, status = `conflicted` — stop and escalate.
 3. Compare your handoff hash against `.compact-audit/HANDOFF_HASH_LOG.jsonl` — if mismatch, quarantine the restore.
 
+**Cross-lane “recovery truth” (for dashboards and other repos):** each suite run also writes `lanes/broadcast/last-recovery.json` (verdict `PROVEN` or `CONFLICTED`, plus per-lane heartbeat summary). Other lanes should treat that file — after `node scripts/sync-all-lanes.js` if needed — as the current state, not stale UI. See `docs/ops/LAST_RECOVERY_BROADCAST.md`.
+
 ### Sending Messages (MANDATORY)
 
 When sending TO another lane:
@@ -653,3 +655,16 @@ When uncertain, ask:
 > You're not trying to make me smarter—you're trying to make everything that reaches me already make sense.
 
 Pre-filtered, high-signal inputs are the goal. Not more work, but better inputs.
+
+---
+
+## Learned User Preferences
+
+- Use workspace-scoped extension settings so the Archivist-Agent window stays light for orchestration and lane relay; keep full compiler and language tooling where builds and profiling actually run (for example the kernel-lane workspace).
+- Coordinate across lanes with a short intake read and one active focus before fan-out; avoid loading every lane with parallel work by default.
+- A remote Kernel runner (for example on Kilo) is only visible on this machine through `lanes/` artifacts, heartbeats, and shared log files such as `S:/self-organizing-library/context-buffer/kernelcloud.txt`—not through local process lists or cloud consoles unless the operator shares them.
+
+## Learned Workspace Facts
+
+- Multiple concurrent agent instances using the same lane inbox can mis-attribute another instance’s messages; lane messages and runners should disambiguate session or instance when more than one runtime may write the same `lanes/<lane>/inbox`.
+- The repo ships `node scripts/sync-all-lanes.js` (optional `--dry-run`) to align shared scripts and `lanes/broadcast` JSON across the four lane roots, run per-lane tests, summarize lane health, and write reports under `context-buffer/sync-reports/`.
