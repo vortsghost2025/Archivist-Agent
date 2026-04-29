@@ -32,6 +32,7 @@ const CANONICAL_FILES = [
   'scripts/inbox-watcher.ps1',
   'scripts/heartbeat.js',
   'scripts/cross-lane-consistency-check.js',
+  'src/lane/SchemaValidator.js',
 ];
 
 const LANE_ORDER = ['archivist', 'swarmmind', 'kernel', 'library'];

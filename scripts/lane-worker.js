@@ -82,6 +82,13 @@ const LANE_HINTS = [
   { hint: 'swarmmind', lane: 'swarmmind' },
 ];
 
+const LANE_ROOTS = {
+  archivist: 'S:/Archivist-Agent',
+  library: 'S:/self-organizing-library',
+  kernel: 'S:/kernel-lane',
+  swarmmind: 'S:/SwarmMind',
+};
+
 function nowIso() {
   return new Date().toISOString();
 }
@@ -90,13 +97,10 @@ function logAudit(sourcePath, targetPath, reason, workerId, sessionId, context =
   const timestamp = nowIso();
   const safeSessionId = sessionId || 'unknown';
   const logLine = `${timestamp},worker_id=${workerId},session_id=${safeSessionId},from_path="${sourcePath}",to_path="${targetPath}",reason="${reason}"\n`;
-  
-  // Log to stdout
+
   process.stdout.write(logLine);
-  
-  // Log to file
+
   try {
-    // Determine lane root from inbox path: <root>/lanes/<lane>/inbox
     const inboxPath = context.inboxPath;
     const lane = context.lane;
     if (!inboxPath || !lane) throw new Error('missing audit context (inboxPath/lane)');
@@ -108,8 +112,52 @@ function logAudit(sourcePath, targetPath, reason, workerId, sessionId, context =
     const logFile = path.join(logDir, 'worker-audit.log');
     fs.appendFileSync(logFile, logLine, 'utf8');
   } catch (err) {
-    // Don't let audit logging break the worker
     process.stderr.write(`[lane-worker] Audit logging failed: ${err.message}\n`);
+  }
+}
+
+function sendNack(originalMsg, rejectionReason, rejectionDetail, targetLane, fromLane) {
+  try {
+    const senderLane = String(originalMsg.from || fromLane || 'unknown').toLowerCase();
+    const senderRoot = LANE_ROOTS[senderLane];
+    if (!senderRoot) {
+      process.stderr.write(`[lane-worker] NACK: cannot determine root for sender lane "${senderLane}"\n`);
+      return null;
+    }
+    const senderInbox = path.join(senderRoot, 'lanes', senderLane, 'inbox');
+    if (!fs.existsSync(senderInbox)) {
+      fs.mkdirSync(senderInbox, { recursive: true });
+    }
+    const nackMsg = {
+      schema_version: '1.3',
+      task_id: `nack-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      idempotency_key: `nack-${originalMsg.task_id || 'unknown'}-${Date.now()}`,
+      from: String(targetLane || 'unknown').toLowerCase(),
+      to: senderLane,
+      type: 'notification',
+      task_kind: 'status',
+      priority: 'P2',
+      subject: `NACK: message rejected at ${targetLane}`,
+      body: `Your message (task_id=${originalMsg.task_id || 'unknown'}, type=${originalMsg.type || 'unknown'}) was rejected.\nReason: ${rejectionReason}\nDetail: ${rejectionDetail || 'none'}\nOriginal subject: ${originalMsg.subject || 'unknown'}`,
+      timestamp: nowIso(),
+      requires_action: false,
+      payload: { mode: 'inline', compression: 'none' },
+      execution: { mode: 'manual', engine: 'kilo', actor: 'lane' },
+      lease: { owner: null, acquired_at: null },
+      retry: { attempt: 1, max_attempts: 1 },
+      evidence: { required: false, verified: false },
+      evidence_exchange: {},
+      heartbeat: { status: 'done', last_heartbeat_at: nowIso() },
+      nack_for_task_id: originalMsg.task_id || null,
+      nack_reason: rejectionReason,
+      nack_detail: rejectionDetail || null,
+    };
+    const nackPath = path.join(senderInbox, `nack-${nackMsg.task_id}.json`);
+    fs.writeFileSync(nackPath, JSON.stringify(nackMsg, null, 2), 'utf8');
+    return nackPath;
+  } catch (err) {
+    process.stderr.write(`[lane-worker] NACK delivery failed: ${err.message}\n`);
+    return null;
   }
 }
 
@@ -814,15 +862,17 @@ processFile(filePath) {
   dry_run: this.dryRun,
 };
 
-   if (!this.dryRun) {
-     this._writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult, remediation);
-     // Audit log for file move
-     logAudit(filePath, targetPath, decision.reason, WORKER_ID, SESSION_ID, {
-       inboxPath: this.config.queues.inbox,
-       lane: this.lane,
-     });
-     fs.unlinkSync(filePath);
-   }
+  if (!this.dryRun) {
+      this._writeWithMetadata(targetPath, msg, decision, schemaResult, signatureResult, remediation);
+      logAudit(filePath, targetPath, decision.reason, WORKER_ID, SESSION_ID, {
+        inboxPath: this.config.queues.inbox,
+        lane: this.lane,
+      });
+      fs.unlinkSync(filePath);
+      if (decision.queue === 'quarantine' || decision.queue === 'blocked') {
+        sendNack(msg, decision.reason, decision.detail, this.lane, this.lane);
+      }
+    }
 
   return record;
 }
@@ -846,13 +896,20 @@ _routeRaw(filePath, queueKey, meta) {
   };
 
   if (!this.dryRun) {
-    fs.renameSync(filePath, targetPath);
-    // Audit log for file move
-    logAudit(filePath, targetPath, meta.reason || 'UNKNOWN', WORKER_ID, SESSION_ID, {
-      inboxPath: this.config.queues.inbox,
-      lane: this.lane,
-    });
-  }
+      fs.renameSync(filePath, targetPath);
+      logAudit(filePath, targetPath, meta.reason || 'UNKNOWN', WORKER_ID, SESSION_ID, {
+        inboxPath: this.config.queues.inbox,
+        lane: this.lane,
+      });
+      if (queueKey === 'quarantine' || queueKey === 'blocked') {
+        try {
+          const rawRead2 = safeReadJson(targetPath);
+          if (rawRead2.ok) {
+            sendNack(rawRead2.value, meta.reason, meta.detail, this.lane, this.lane);
+          }
+        } catch (_) {}
+      }
+    }
   return record;
 }
 
