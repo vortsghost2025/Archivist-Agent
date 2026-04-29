@@ -1,0 +1,19 @@
+{
+  "lane": "archivist",
+  "role": "governance-coordinator",
+  "position": 1,
+  "authority": 90,
+  "baseline_policy": {
+    "max_uncommitted_files": 15,
+    "max_processed_inbox_files": 200,
+    "max_root_entries": 50,
+    "heartbeat_interval_seconds": 60,
+    "heartbeat_stale_after_seconds": 900,
+    "require_signed_messages": true
+  },
+  "convergence": {
+    "coordinator": true,
+    "ratification_authority": true,
+    "review_deadline_sessions": 2
+  }
+}
