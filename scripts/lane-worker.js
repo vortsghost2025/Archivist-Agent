@@ -119,6 +119,12 @@ function logAudit(sourcePath, targetPath, reason, workerId, sessionId, context =
 function sendNack(originalMsg, rejectionReason, rejectionDetail, targetLane, fromLane) {
   try {
     const senderLane = String(originalMsg.from || fromLane || 'unknown').toLowerCase();
+    if (senderLane === String(targetLane || '').toLowerCase()) {
+      return null;
+    }
+    if (originalMsg.type === 'notification' && originalMsg.task_kind === 'status' && originalMsg.nack_reason) {
+      return null;
+    }
     const senderRoot = LANE_ROOTS[senderLane];
     if (!senderRoot) {
       process.stderr.write(`[lane-worker] NACK: cannot determine root for sender lane "${senderLane}"\n`);
