@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://archivist-agent.local/schemas/ai-findings-v1.json",
+  "title": "AI findings for graph snapshot packs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "pack_id",
+    "generated_at",
+    "analyzer",
+    "pack_path",
+    "manifest_file",
+    "summary",
+    "per_image",
+    "comparison_hint"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "pack_id": {
+      "type": "string",
+      "description": "Folder name of the pack, e.g. pack-20260428-200453"
+    },
+    "generated_at": {
+      "type": "string",
+      "description": "ISO-8601 timestamp when this findings file was written"
+    },
+    "analyzer": {
+      "type": "string",
+      "description": "Identifier for the model or human filling this file"
+    },
+    "pack_path": {
+      "type": "string",
+      "description": "Absolute path to the snapshot pack directory"
+    },
+    "manifest_file": {
+      "type": "string",
+      "description": "Usually manifest.json inside the pack"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "one_paragraph",
+        "verification_posture",
+        "top_risk_signals",
+        "top_next_steps",
+        "overall_confidence"
+      ],
+      "properties": {
+        "one_paragraph": { "type": "string" },
+        "verification_posture": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "verified": { "type": ["integer", "null"] },
+            "unverified": { "type": ["integer", "null"] },
+            "conflicted": { "type": ["integer", "null"] },
+            "quarantined": { "type": ["integer", "null"] },
+            "notes": { "type": "string" }
+          }
+        },
+        "top_risk_signals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["signal", "confidence"],
+            "properties": {
+              "signal": { "type": "string" },
+              "confidence": {
+                "type": "string",
+                "enum": ["high", "medium", "low"]
+              },
+              "evidence_image_indices": {
+                "type": "array",
+                "items": { "type": "integer", "minimum": 1 }
+              }
+            }
+          },
+          "maxItems": 5
+        },
+        "top_next_steps": {
+          "type": "array",
+          "items": { "type": "string" },
+          "maxItems": 5
+        },
+        "overall_confidence": {
+          "type": "string",
+          "enum": ["high", "medium", "low"]
+        }
+      }
+    },
+    "per_image": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["index", "file", "repo_filter_guess", "observations", "confidence"],
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Matches manifest.json index"
+          },
+          "file": { "type": "string" },
+          "repo_filter_guess": {
+            "type": ["string", "null"],
+            "description": "Best-effort from UI, or null if unclear"
+          },
+          "entry_point_guess": {
+            "type": ["string", "null"]
+          },
+          "observations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          }
+        }
+      }
+    },
+    "comparison_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compare_with_pack_ids"],
+      "properties": {
+        "compare_with_pack_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Previous pack folder names to diff against"
+        },
+        "delta_focus": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What to prioritize when comparing packs"
+        }
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

@@ -51,12 +51,12 @@ function evaluateTemporal(msg) {
     };
   }
 
-  return {
-    valid: executionTs >= dispatchTs,
-    reason: executionTs >= dispatchTs ? null : 'execution timestamp precedes dispatch',
-    expected: 'execution_timestamp > dispatch_timestamp',
-    actual: executionTs >= dispatchTs,
-  };
+    return {
+      valid: executionTs >= dispatchTs,
+      reason: executionTs >= dispatchTs ? null : 'execution timestamp precedes dispatch',
+      expected: 'execution_timestamp >= dispatch_timestamp',
+      actual: executionTs >= dispatchTs,
+    };
 }
 
 function evaluateSemantic(msg, localCodeVersionHash = null) {

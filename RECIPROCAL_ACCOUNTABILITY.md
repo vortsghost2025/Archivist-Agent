@@ -35,7 +35,7 @@ THE SYSTEM IS NOT SAFE UNTIL IT CAN SAY "NO" TO THE OPERATOR.
 **The Uncomfortable Truth:**
 ```
 The user is STILL an unverified input source.
-The user can override anything.
+The user can submit override intent across all lanes; execution of state-changing overrides remains constitution-gated by convergence and quarantine policy.
 The user can inject across all lanes.
 The user can collapse isolation instantly.
 "Implicit user trust" contradicts everything this system was built to prevent.
@@ -88,16 +88,16 @@ The user operates as an implicit lane — no folder required, but rules apply:
   "authority": 100,
   "risk_level": "HIGHEST",
   "requires_verification": true,
-  "cannot_bypass": true,
-  "can_override": true,
-  "override_triggers_quarantine": true
+  "initiation_authority": true,
+  "can_submit_override_intent": true,
+  "execution_gated_by_constitution": true
 }
 ```
 
 ### 3.2 Why Highest Risk
 
 The user can:
-- Override anything (authority 100)
+- Submit override intent across all lanes (initiation authority 100)
 - Inject across all lanes simultaneously
 - Collapse isolation instantly
 - Move faster than verification
@@ -354,3 +354,4 @@ This document makes that symmetrical.
 - USER_DRIFT_SCORING.md — User drift detection
 - CHECKPOINTS.md — Safety checks
 - VERIFICATION_LANES.md — Process (how we verify)
+

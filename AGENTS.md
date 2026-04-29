@@ -681,6 +681,10 @@ Pre-filtered, high-signal inputs are the goal. Not more work, but better inputs.
 - Use workspace-scoped extension settings so the Archivist-Agent window stays light for orchestration and lane relay; keep full compiler and language tooling where builds and profiling actually run (for example the kernel-lane workspace).
 - Coordinate across lanes with a short intake read and one active focus before fan-out; avoid loading every lane with parallel work by default.
 - A remote Kernel runner (for example on Kilo) is only visible on this machine through `lanes/` artifacts, heartbeats, and shared log files such as `S:/self-organizing-library/context-buffer/kernelcloud.txt`—not through local process lists or cloud consoles unless the operator shares them.
+- Prefer no-guesswork lane operations: provide canonical inbox/outbox paths, exact signing/sending steps, and ready-to-run startup prompts for manually launched lane agents.
+- The user has low vision and cannot reliably copy/read terminal output; run commands directly and summarize results instead of asking them to execute or parse terminal output.
+- When graph data is visually dense, prefer a single batch snapshot-bundle export workflow so all graphs can be reviewed together with vision-capable AI.
+- Label cross-lane outputs with complete `OUTPUT_PROVENANCE` fields (agent, lane, generated_at, session_id, and target_lane when relevant) so cycled messages stay unambiguous across agents.
 
 ## Learned Workspace Facts
 

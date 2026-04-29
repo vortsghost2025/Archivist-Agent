@@ -1,0 +1,9 @@
+{
+  "compact_status": "idle",
+  "last_checkpoint_ts": 1777484796924,
+  "last_token_usage": 120000,
+  "last_handoff_hash": "7c6b2a73fe3200de19fc3ab5ed8a761c13d17cb7e05934d4146bbb61847881bb",
+  "fallback_attempted": false,
+  "fallback_reason": null,
+  "fallback_error": null
+}

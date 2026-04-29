@@ -351,7 +351,7 @@ No agent verifies their own work as final authority.
 1. Builder self-checks (unit tests, integration)
 2. Independent adversarial review (Codex lane)
 3. Operator signoff on contradictions
-4. If operator overrides: convergence gate + quarantine review (RECIPROCAL_ACCOUNTABILITY.md:4)
+4. If operator submits override intent: convergence gate + quarantine review decide execution admissibility (RECIPROCAL_ACCOUNTABILITY.md:4)
 
 ---
 
@@ -407,3 +407,4 @@ Before marking any component complete, provide:
 - COVENANT.md — Values (what we believe)
 - CHECKPOINTS.md — Safety checks
 - CPS_ENFORCEMENT.md — Enforcement mechanisms
+
