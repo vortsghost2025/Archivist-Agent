@@ -1,0 +1,81 @@
+{
+  "output_provenance": {
+    "agent": "codex-5.3",
+    "lane": "archivist",
+    "generated_at": "2026-04-30T12:53:30.388Z",
+    "session_id": "unknown"
+  },
+  "source": {
+    "graph_json_path": "C:\\Users\\seand\\Downloads\\graph-snapshot-FreeAgent-2026-04-30-12-52-02-534.json",
+    "node_count": 828,
+    "edge_count": 16926,
+    "finding_count": 0
+  },
+  "summary": {
+    "conflicted": 70,
+    "blocked": 0,
+    "quarantined": 1,
+    "unverified": 575,
+    "verified": 182,
+    "resolved": 0,
+    "unknown": 0,
+    "contradiction_edges": 0
+  },
+  "findings_summary": null,
+  "focus_nodes": [
+    {
+      "id": "2003e3946c86dbf9",
+      "label": "AGENT HANDOFF BRIEF - Current Context",
+      "status": "conflicted"
+    },
+    {
+      "id": "bda5d25735663d77",
+      "label": "🎊 PROJECT COMPLETION SUMMARY",
+      "status": "conflicted"
+    },
+    {
+      "id": "339f82f33db3bf86",
+      "label": "AGENT OPERATIONAL PROTOCOL",
+      "status": "conflicted"
+    },
+    {
+      "id": "46f72116106c6d55",
+      "label": "ALERTING RULES",
+      "status": "conflicted"
+    },
+    {
+      "id": "b585750139e20b54",
+      "label": "API Test Breakdown - February 9, 2026",
+      "status": "conflicted"
+    },
+    {
+      "id": "387eb5981c9fc13d",
+      "label": "ARCHITECTURE MASTER SPEC",
+      "status": "conflicted"
+    },
+    {
+      "id": "a23cb8dc41d84138",
+      "label": "WE4FREE Platform - Universal Swarm Architecture Validation",
+      "status": "conflicted"
+    },
+    {
+      "id": "cff9421396c74fbd",
+      "label": "Arena Constitutional Validation - February 10, 2026",
+      "status": "conflicted"
+    },
+    {
+      "id": "704392bf27412eb6",
+      "label": "BOOTSTRAP EXAMPLE: The WE Team",
+      "status": "conflicted"
+    },
+    {
+      "id": "6ed054b4a438d970",
+      "label": "CONSTITUTIONAL BOOTSTRAP TEMPLATE",
+      "status": "conflicted"
+    }
+  ],
+  "next_actions": [
+    "Resolve one conflicted node before any new feature work.",
+    "Convert top unverified claims into test cards with evidence paths."
+  ]
+}

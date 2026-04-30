@@ -1,28 +1,27 @@
-# STATE SNAPSHOT
-LANE: archivist
-CHANGE: full session output (see list)
-VERIFIED_BY: archivist
-RESULT: proven
-NEXT_BLOCKER: none
+# CURRENT STATE SNAPSHOT
 
-## Changes
-- v1.4 session identity fields added to lane-worker (session_id, origin_runtime, origin_workspace, session_epoch)
-- Lane-owner lock: active-owner.json with 15min heartbeat expiry
-- Foreign-instance routing: needs-review/ and stale-foreign/ queues
-- Fixed schema_remediation field name in lane-worker
-- Fixed deprecated SwarmMind path in cross-lane-consistency-check.js
-- sync-all-lanes.js built and verified (4/4 lanes pass all tests)
-- Expanded test suites: lane-worker 17/17, executor 64/64 all lanes
-- Processed 13 inbox items (terminal→processed/, P0 review captured)
-- SwarmMind outbox archived (63 items)
-- Kernel inbox cleared (11 stale→processed/)
-- Broadcast secondary files synced across all lanes
-- All 4 lanes committed and pushed to GitHub
+## Timestamp
+2026-04-29T23:28:50Z
 
-## Test Results
-- lane-worker: 17/17 all lanes
-- executor: 64/64 all lanes
-- sync: 4/4 healthy
+## Verification
+- BOOTSTRAP.md read and verified.
+- Governance constraints acknowledged (single entry point, lane registry, structure > identity, correction mandatory, etc.).
+- Verification lane: **L** (Implementation lane).
 
-## Git
-- all pushed
+## Drift Baseline
+- CPS score: **19** (baseline sum of active constraints: STRUCTURE_OVER_IDENTITY 5, CORRECTION_MANDATORY 4, SINGLE_ENTRY_POINT 5, OPERATOR_ACCOUNTABILITY 5).
+- No dynamic adjustments applied (no UDS penalty, no drift signals, no correction rejections).
+- Active drift signals: **none**.
+
+## Session Scope
+- Current session operates in the **Archivist** lane, performing implementation actions (writing final state snapshot).
+
+## System Status
+- No `SIGNATURE_INVALID`, `SCHEMA_INVALID`, or `NON_TERMINAL_TYPE` entries in any lane's `worker-audit.log`.
+- All four lane inboxes (`archivist`, `kernel`, `swarmmind`, `library`) are empty after `lane-worker --apply-once` runs.
+- Auto mode restored for all lanes.
+- System synchronized and operational.
+
+## Next Steps
+- Maintain a 15–30 minute watch window to monitor heartbeats and new audit log entries for regression.
+- If any issues arise, repeat log checks and lane‑worker processing.

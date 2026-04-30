@@ -1,0 +1,11 @@
+{
+  "id": "dispatch-swarmmind-evidence-request-20260429",
+  "from": "archivist",
+  "to": "swarmmind",
+  "timestamp": "2026-04-29T16:51:00Z",
+  "priority": "P1",
+  "type": "task",
+  "requires_action": true,
+  "subject": "Advisory findings + lane health evidence request",
+  "body": "Submit an evidence packet: (1) heartbeat status + timestamp, (2) current queue health (count + oldest age), (3) latest advisory findings artifact path, (4) unsigned/schema-invalid message incidence yes/no + short detail, (5) current single blocker. Findings remain advisory until Archivist task-conversion. No ratified/enforced claims in this response."
+}

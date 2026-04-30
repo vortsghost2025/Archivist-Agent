@@ -1,0 +1,6 @@
+{
+    "kilo-code.new.autocomplete.enableSmartInlineTaskKeybinding": true,
+    "kilo-code.new.browserAutomation.enabled": true,
+    "kilo-code.new.browserAutomation.headless": true,
+    "kilo-code.new.claudeCodeCompat": true
+}

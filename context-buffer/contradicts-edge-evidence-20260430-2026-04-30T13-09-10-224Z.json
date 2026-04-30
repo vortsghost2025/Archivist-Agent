@@ -1,0 +1,211 @@
+{
+  "output_provenance": {
+    "agent": "codex-5.3",
+    "lane": "archivist",
+    "generated_at": "2026-04-30T13:09:10.229Z",
+    "session_id": "unknown"
+  },
+  "purpose": "validate explicit CONTRADICTS edge artifacts for pending needs_lane_review nodes",
+  "snapshots_checked": [
+    "S:/self-organizing-library/docs/graph/snapshots/snapshot-Archivist-Agent-2026-04-29T20-16-18.json",
+    "S:/self-organizing-library/docs/graph/snapshots/contradiction-hub-Archivist-Agent-2026-04-29T20-16-18.json"
+  ],
+  "results": [
+    {
+      "node_id": "e2d590843468dbe7",
+      "contradicts_found": false,
+      "status_recommendation": "proven_spurious",
+      "snapshots_checked": [
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/snapshot-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 364,
+          "edge_type_counts": {
+            "shared-tag": 78,
+            "authority": 286
+          },
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        },
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/contradiction-hub-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 0,
+          "edge_type_counts": {},
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        }
+      ]
+    },
+    {
+      "node_id": "f536c15cc2486eea",
+      "contradicts_found": false,
+      "status_recommendation": "proven_spurious",
+      "snapshots_checked": [
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/snapshot-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 358,
+          "edge_type_counts": {
+            "shared-tag": 72,
+            "authority": 286
+          },
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        },
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/contradiction-hub-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 0,
+          "edge_type_counts": {},
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        }
+      ]
+    },
+    {
+      "node_id": "3023460d99160a03",
+      "contradicts_found": false,
+      "status_recommendation": "proven_spurious",
+      "snapshots_checked": [
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/snapshot-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 278,
+          "edge_type_counts": {
+            "shared-tag": 54,
+            "authority": 224
+          },
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        },
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/contradiction-hub-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 0,
+          "edge_type_counts": {},
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        }
+      ]
+    },
+    {
+      "node_id": "fb8212e128adc1c5",
+      "contradicts_found": false,
+      "status_recommendation": "proven_spurious",
+      "snapshots_checked": [
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/snapshot-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 135,
+          "edge_type_counts": {
+            "shared-tag": 57,
+            "authority": 78
+          },
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        },
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/contradiction-hub-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 0,
+          "edge_type_counts": {},
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        }
+      ]
+    },
+    {
+      "node_id": "1bda9962fbd5ca75",
+      "contradicts_found": false,
+      "status_recommendation": "proven_spurious",
+      "snapshots_checked": [
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/snapshot-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 323,
+          "edge_type_counts": {
+            "shared-tag": 91,
+            "authority": 232
+          },
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        },
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/contradiction-hub-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 0,
+          "edge_type_counts": {},
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        }
+      ]
+    },
+    {
+      "node_id": "45d50e60309ef11c",
+      "contradicts_found": false,
+      "status_recommendation": "proven_spurious",
+      "snapshots_checked": [
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/snapshot-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 222,
+          "edge_type_counts": {
+            "shared-tag": 66,
+            "authority": 156
+          },
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        },
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/contradiction-hub-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 0,
+          "edge_type_counts": {},
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        }
+      ]
+    },
+    {
+      "node_id": "8f11fb5f4a3a5efc",
+      "contradicts_found": false,
+      "status_recommendation": "proven_spurious",
+      "snapshots_checked": [
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/snapshot-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 294,
+          "edge_type_counts": {
+            "shared-tag": 60,
+            "authority": 234
+          },
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        },
+        {
+          "snapshot_path": "S:/self-organizing-library/docs/graph/snapshots/contradiction-hub-Archivist-Agent-2026-04-29T20-16-18.json",
+          "exists": true,
+          "node_present": true,
+          "connected_edge_count": 0,
+          "edge_type_counts": {},
+          "contradicts_edge_count": 0,
+          "contradicts_edges": []
+        }
+      ]
+    }
+  ]
+}

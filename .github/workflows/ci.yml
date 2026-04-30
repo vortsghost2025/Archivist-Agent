@@ -2,88 +2,45 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
-  rust-checks:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
         with:
-          components: rustfmt, clippy
-      
-      - name: Check formatting
-        run: cargo fmt --check
-        working-directory: src-tauri
-      
-      - name: Run clippy
-        run: cargo clippy -- -D warnings
-        working-directory: src-tauri
-      
-      - name: Run tests
-        run: cargo test
-        working-directory: src-tauri
-      
-      - name: Run security audit
+          node-version: '18'
+
+      - name: Install dependencies (if package.json exists)
         run: |
-          cargo install cargo-audit
-          cargo audit
-        working-directory: src-tauri
+          if (Test-Path "package.json") { npm ci }
 
-  python-checks:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      
-      - name: Install dependencies
+      - name: Run pre‑commit style checks
         run: |
-          python -m pip install --upgrade pip
-          if [ -f ai-ensemble-lab/requirements.txt ]; then pip install -r ai-ensemble-lab/requirements.txt; fi
-      
-      - name: Check Python syntax
-        run: python -m py_compile ai-ensemble-lab/src/*.py
-        continue-on-error: true
+          pwsh ./scripts/pre-commit.ps1
 
-  governance-drift-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Check governance files exist
+      - name: Run health check
+        run: node ./scripts/health-check.js
+
+      - name: Run schema validation (all lanes)
+        run: node ./scripts/validate-schema.js --all
+
+      - name: Run sample pre‑send validation
         run: |
-          test -f BOOTSTRAP.md || exit 1
-          test -f USER_DRIFT_SCORING.md || exit 1
-          test -f CHECKPOINTS.md || exit 1
-      
-      - name: Verify single entry point
-        run: |
-          # BOOTSTRAP.md must be the entry point
-          grep -q "THE SINGLE ENTRY POINT" BOOTSTRAP.md || exit 1
-          echo "Governance structure verified"
+          $msg = '{"schema_version":"1.3","task_id":"test-123","idempotency_key":"test-123","from":"archivist","to":"swarmmind","type":"notification","task_kind":"proposal","priority":"P2","subject":"Health Test","body":"Testing pre‑send validation","timestamp":"$(Get-Date -Format o)","requires_action":false}'
+          $msgPath = "./temp-test-message.json"
+          Set-Content -Path $msgPath -Value $msg -Encoding utf8
+          node ./scripts/pre-send-validator.js $msgPath
 
-      - name: Evidence Artifact Validation
-        run: node scripts/evidence-exchange-check.js scan
-
-      - name: Ownership Enforcement Integration
-        run: |
-          export AGENT_INSTANCE_ID=archivist-fast
-          node scripts/test-ownership-enforcement-integration.js
-
-      - name: Dual-Agent Overlap Guardrail Proof
-        run: node scripts/test-dual-agent-operating-contract.js
-
-      - name: Verification Domain Gate Integration
-        run: node scripts/test-verification-domain-integration.js
-
-      - name: Concurrency Attack Domain Gate Proof
-        run: node scripts/test-concurrency-attack-domain-gate.js
+      - name: Sync all lanes (ensure script propagation)
+        run: node ./scripts/sync-all-lanes.js

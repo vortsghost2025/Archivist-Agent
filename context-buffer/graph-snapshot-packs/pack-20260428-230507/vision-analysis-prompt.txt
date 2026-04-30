@@ -1,0 +1,7 @@
+﻿Analyze these graph snapshots as a time sequence.
+Tasks:
+1) Identify stable structures vs rapidly changing clusters.
+2) Estimate verification posture from visible counters (verified/unverified/conflicted/quarantined).
+3) List top 3 risk signals and top 3 actionable next steps.
+4) Highlight any evidence of central contradiction hubs.
+Return concise bullet points and a confidence level per claim.

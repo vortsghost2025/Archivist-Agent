@@ -13,6 +13,20 @@
       "parentBranch": "master",
       "createdAt": "2026-04-28T15:26:27.498Z",
       "remote": "origin"
+    },
+    "wt-1777467892970-1": {
+      "branch": "thoughtful-almandine",
+      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\thoughtful-almandine",
+      "parentBranch": "master",
+      "createdAt": "2026-04-29T13:04:52.970Z",
+      "remote": "origin"
+    },
+    "wt-1777485718539-1": {
+      "branch": "humorous-bactrosaurus",
+      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\humorous-bactrosaurus",
+      "parentBranch": "master",
+      "createdAt": "2026-04-29T18:01:58.539Z",
+      "remote": "origin"
     }
   },
   "sessions": {
@@ -59,6 +73,42 @@
     "ses_22addcfeaffeWq5WNvI3YAw5HD": {
       "worktreeId": null,
       "createdAt": "2026-04-28T17:28:00.843Z"
+    },
+    "ses_22aa3304effe8ijX9l84p4m17F": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T18:32:02.826Z"
+    },
+    "ses_22a2d9141ffevJ7KzrDsFgDPmH": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T20:40:31.207Z"
+    },
+    "ses_229c6da35ffeoZjVMD5zyEuD9Q": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T22:32:42.739Z"
+    },
+    "ses_2299df02fffeIZp9av8ekNbT4U": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T23:17:24.088Z"
+    },
+    "ses_22930d7fbffeJ2gQfQWESnIiBe": {
+      "worktreeId": null,
+      "createdAt": "2026-04-29T01:16:33.774Z"
+    },
+    "ses_226a857c9ffennufIczSKixyK7": {
+      "worktreeId": "wt-1777467892970-1",
+      "createdAt": "2026-04-29T13:04:54.287Z"
+    },
+    "ses_22695bc78ffeiLWylCRLoRjivH": {
+      "worktreeId": null,
+      "createdAt": "2026-04-29T13:25:13.291Z"
+    },
+    "ses_2262301e9ffefIZMaJGaKtytYQ": {
+      "worktreeId": null,
+      "createdAt": "2026-04-29T15:30:32.129Z"
+    },
+    "ses_2259858e5ffehQDUtSnhchPT62": {
+      "worktreeId": "wt-1777485718539-1",
+      "createdAt": "2026-04-29T18:02:01.172Z"
     }
   },
   "tabOrder": {
@@ -71,11 +121,20 @@
       "ses_22b37e5a4ffe2qS8UAmZ4lfFuo",
       "ses_22b0c140affe6EduyWxiNC9NND",
       "ses_22af89c7cffesdJM9UKmxeP5sj",
-      "ses_22addcfeaffeWq5WNvI3YAw5HD"
+      "ses_22addcfeaffeWq5WNvI3YAw5HD",
+      "ses_22aa3304effe8ijX9l84p4m17F",
+      "ses_22a2d9141ffevJ7KzrDsFgDPmH",
+      "ses_229c6da35ffeoZjVMD5zyEuD9Q",
+      "ses_2299df02fffeIZp9av8ekNbT4U",
+      "ses_22930d7fbffeJ2gQfQWESnIiBe",
+      "ses_22695bc78ffeiLWylCRLoRjivH",
+      "ses_2262301e9ffefIZMaJGaKtytYQ"
     ]
   },
   "worktreeOrder": [
     "wt-1777327699734-1",
-    "wt-1777389987498-1"
+    "wt-1777389987498-1",
+    "wt-1777467892970-1",
+    "wt-1777485718539-1"
   ]
 }

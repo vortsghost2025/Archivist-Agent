@@ -1,0 +1,234 @@
+{
+  "output_provenance": {
+    "agent": "codex-5.3",
+    "lane": "archivist",
+    "generated_at": "2026-04-29T17:28:58.000Z",
+    "session_id": "unknown"
+  },
+  "mode": "snapshot-driven-roadmap-extraction",
+  "constraints": {
+    "read_only": true,
+    "advisory_only": true,
+    "no_mutation": [
+      "graph",
+      "mapper",
+      "authority",
+      "enforcement",
+      "ratification"
+    ]
+  },
+  "packs_analyzed": [
+    {
+      "pack_id": "pack-20260428-200319",
+      "path": "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319",
+      "image_count": 8,
+      "screenshot_count": 7,
+      "bytes_total": 673438,
+      "copy_artifacts": 0,
+      "has_ai_template": false,
+      "time_window": {
+        "min": "2026-04-28T19:59:51.9983647-04:00",
+        "max": "2026-04-28T19:59:52.3961804-04:00"
+      }
+    },
+    {
+      "pack_id": "pack-20260428-200453",
+      "path": "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453",
+      "image_count": 8,
+      "screenshot_count": 7,
+      "bytes_total": 673438,
+      "copy_artifacts": 0,
+      "has_ai_template": false,
+      "time_window": {
+        "min": "2026-04-28T19:59:51.9983647-04:00",
+        "max": "2026-04-28T19:59:52.3961804-04:00"
+      }
+    },
+    {
+      "pack_id": "pack-20260428-200914",
+      "path": "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200914",
+      "image_count": 8,
+      "screenshot_count": 7,
+      "bytes_total": 673438,
+      "copy_artifacts": 0,
+      "has_ai_template": true,
+      "time_window": {
+        "min": "2026-04-28T19:59:51.9983647-04:00",
+        "max": "2026-04-28T19:59:52.3961804-04:00"
+      }
+    },
+    {
+      "pack_id": "pack-20260428-230507",
+      "path": "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-230507",
+      "image_count": 8,
+      "screenshot_count": 7,
+      "bytes_total": 673438,
+      "copy_artifacts": 0,
+      "has_ai_template": true,
+      "time_window": {
+        "min": "2026-04-28T19:59:51.9983647-04:00",
+        "max": "2026-04-28T19:59:52.3961804-04:00"
+      }
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "F-001",
+      "source_snapshot_id": "all-packs",
+      "source_repo_or_filter": "graph-snapshot-packs",
+      "detection_rule": "coverage-gap-detection",
+      "observation": "2/4 packs include AI findings template; non-template packs block structured comparison.",
+      "evidence_paths": [
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453\\manifest.json"
+      ],
+      "confidence": "high",
+      "recommended_owner": "library",
+      "recommended_next_action": "Generate standardized findings JSON for each pack with a shared schema.",
+      "status": "observation",
+      "authority_warning": "Advisory only; no authority/enforcement inference.",
+      "priority": "P0"
+    },
+    {
+      "finding_id": "F-002",
+      "source_snapshot_id": "all-packs",
+      "source_repo_or_filter": "graph-snapshot-packs",
+      "detection_rule": "drift-over-time-detection",
+      "observation": "Snapshot volume is high (32 images) but mostly visual artifacts; contradiction and governance state are not encoded as machine fields.",
+      "evidence_paths": [
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200914\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-230507\\manifest.json"
+      ],
+      "confidence": "high",
+      "recommended_owner": "archivist",
+      "recommended_next_action": "Require per-pack machine-readable extraction output (nodes/edges/contradictions/governance links).",
+      "status": "observation",
+      "authority_warning": "No ratification/enforcement claim allowed from visual data.",
+      "priority": "P0"
+    },
+    {
+      "finding_id": "F-003",
+      "source_snapshot_id": "all-packs",
+      "source_repo_or_filter": "graph-snapshot-packs",
+      "detection_rule": "connectivity-anomaly-detection",
+      "observation": "0 duplicated copy artifacts detected; this can distort trend comparisons and create false contradiction density.",
+      "evidence_paths": [],
+      "confidence": "medium",
+      "recommended_owner": "library",
+      "recommended_next_action": "Deduplicate copy artifacts before trend analysis and keep one canonical pack per interval.",
+      "status": "hypothesis",
+      "authority_warning": "Potential distortion only; requires lane review.",
+      "priority": "P1"
+    },
+    {
+      "finding_id": "F-004",
+      "source_snapshot_id": "all-packs",
+      "source_repo_or_filter": "graph-snapshot-packs",
+      "detection_rule": "governance-path-gap-detection",
+      "observation": "Snapshot manifests do not carry explicit governance path metadata (authority/trust/enforcement links).",
+      "evidence_paths": [
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200914\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-230507\\manifest.json"
+      ],
+      "confidence": "high",
+      "recommended_owner": "kernel",
+      "recommended_next_action": "Add governance link extraction fields to snapshot metadata and findings outputs.",
+      "status": "observation",
+      "authority_warning": "Governance integrity cannot be inferred from images alone.",
+      "priority": "P1"
+    },
+    {
+      "finding_id": "F-005",
+      "source_snapshot_id": "all-packs",
+      "source_repo_or_filter": "graph-snapshot-packs",
+      "detection_rule": "paper-coverage-gap-detection",
+      "observation": "No machine linkage from papers to graph nodes is present in pack manifests/templates.",
+      "evidence_paths": [
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200914\\manifest.json",
+        "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-230507\\manifest.json"
+      ],
+      "confidence": "medium",
+      "recommended_owner": "swarmmind",
+      "recommended_next_action": "Emit paper-node mapping table for each snapshot cycle.",
+      "status": "needs_lane_review",
+      "authority_warning": "Coverage gap inferred from absent fields; needs lane confirmation.",
+      "priority": "P2"
+    }
+  ],
+  "ranked_actions": {
+    "P0": [
+      {
+        "finding_id": "F-001",
+        "action": "Generate standardized findings JSON for each pack with a shared schema.",
+        "owner": "library",
+        "evidence_paths": [
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453\\manifest.json"
+        ],
+        "status": "observation"
+      },
+      {
+        "finding_id": "F-002",
+        "action": "Require per-pack machine-readable extraction output (nodes/edges/contradictions/governance links).",
+        "owner": "archivist",
+        "evidence_paths": [
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200914\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-230507\\manifest.json"
+        ],
+        "status": "observation"
+      }
+    ],
+    "P1": [
+      {
+        "finding_id": "F-003",
+        "action": "Deduplicate copy artifacts before trend analysis and keep one canonical pack per interval.",
+        "owner": "library",
+        "evidence_paths": [],
+        "status": "hypothesis"
+      },
+      {
+        "finding_id": "F-004",
+        "action": "Add governance link extraction fields to snapshot metadata and findings outputs.",
+        "owner": "kernel",
+        "evidence_paths": [
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200914\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-230507\\manifest.json"
+        ],
+        "status": "observation"
+      }
+    ],
+    "P2": [
+      {
+        "finding_id": "F-005",
+        "action": "Emit paper-node mapping table for each snapshot cycle.",
+        "owner": "swarmmind",
+        "evidence_paths": [
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200319\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200453\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-200914\\manifest.json",
+          "S:\\Archivist-Agent\\context-buffer\\graph-snapshot-packs\\pack-20260428-230507\\manifest.json"
+        ],
+        "status": "needs_lane_review"
+      }
+    ],
+    "P3": []
+  },
+  "summary": {
+    "total_packs": 4,
+    "total_findings": 5,
+    "p0": 2,
+    "p1": 2,
+    "p2": 1,
+    "p3": 0
+  }
+}

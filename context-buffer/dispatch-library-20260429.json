@@ -1,0 +1,11 @@
+{
+  "id": "dispatch-library-evidence-request-20260429",
+  "from": "archivist",
+  "to": "library",
+  "timestamp": "2026-04-29T16:50:30Z",
+  "priority": "P1",
+  "type": "task",
+  "requires_action": true,
+  "subject": "Wait-window evidence packet request",
+  "body": "Submit a short evidence packet: (1) heartbeat status + timestamp, (2) current single blocker, (3) latest artifact path + timestamp, (4) proven vs assumed (one line each), (5) what you need from Archivist now. Keep dual-plane authority website work isolated from Graph Analyst scoped MVP. No cross-lane mutation in this response."
+}

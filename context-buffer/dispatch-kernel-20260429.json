@@ -1,0 +1,11 @@
+{
+  "id": "dispatch-kernel-evidence-request-20260429",
+  "from": "archivist",
+  "to": "kernel",
+  "timestamp": "2026-04-29T16:50:45Z",
+  "priority": "P1",
+  "type": "task",
+  "requires_action": true,
+  "subject": "Compact/restore + lane health evidence request",
+  "body": "Submit an evidence packet: (1) heartbeat status + timestamp, (2) compact runner status (consistent/diverged), (3) last compact evidence paths: POST_COMPACT_AUDIT.json, RECOVERY_TEST_RESULTS.json, meta.json, (4) current single blocker, (5) requested operator/archivist decision in one line. No governance-state mutation; report only evidence-backed claims."
+}

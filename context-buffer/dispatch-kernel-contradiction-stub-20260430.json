@@ -1,0 +1,30 @@
+{
+  "target_lane": "Kernel",
+  "batches": [
+    {
+      "batch_id": 1,
+      "batch_file": "S:/Archivist-Agent/context-buffer/contradiction_batch_1_20260430.json",
+      "node_ids": [
+        "b69a4f0162fc2f23"
+      ]
+    },
+    {
+      "batch_id": 2,
+      "batch_file": "S:/Archivist-Agent/context-buffer/contradiction_batch_2_20260430.json",
+      "node_ids": [
+        "65fb533da2a76f09",
+        "477f6d60614778ea"
+      ]
+    },
+    {
+      "batch_id": 3,
+      "batch_file": "S:/Archivist-Agent/context-buffer/contradiction_batch_3_20260430.json",
+      "node_ids": [
+        "e0e603e85e1972ea",
+        "f11bae9816e77556"
+      ]
+    }
+  ],
+  "deadline_utc": "2026-04-30T02:00:00Z",
+  "response_path_template": "S:/Archivist-Agent/lanes/archivist/inbox/contradiction-batch-<batch_id>-responses-20260430.json"
+}

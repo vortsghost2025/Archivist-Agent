@@ -1,0 +1,95 @@
+# =============================================================
+# Archivist-Agent .gitignore v2 (DRY-RUN DRAFT ONLY)
+# Scope: Ignore volatile/runtime output without masking source
+# =============================================================
+
+# -------------------------------------------------------------
+# Secrets (never track)
+# -------------------------------------------------------------
+*.pem
+*.key
+*.jws
+lane-passphrases.json
+.runtime/lane-passphrases.json
+.runtime/**/*.json
+.env
+.env.*
+
+# -------------------------------------------------------------
+# Build/dependency artifacts
+# -------------------------------------------------------------
+src-tauri/target/
+target/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# -------------------------------------------------------------
+# Compact audit runtime state
+# -------------------------------------------------------------
+.compact-audit/
+
+# -------------------------------------------------------------
+# Context-buffer: keep docs, ignore bulky/generated data
+# -------------------------------------------------------------
+context-buffer/**/*.json
+context-buffer/**/*.jsonl
+context-buffer/**/*.zip
+context-buffer/**/*.png
+context-buffer/**/*.jpg
+context-buffer/**/*.jpeg
+context-buffer/**/*.gif
+context-buffer/**/*.webp
+context-buffer/**/*.csv
+context-buffer/**/*.log
+context-buffer/**/*.tmp
+context-buffer/**/*.bak
+
+# Re-include documentation artifacts in context-buffer
+!context-buffer/**/*.md
+!context-buffer/**/*.txt
+!context-buffer/**/README*
+
+# -------------------------------------------------------------
+# Lane runtime noise only (do NOT blanket-ignore lanes/)
+# -------------------------------------------------------------
+lanes/**/state/*.json
+lanes/**/inbox/heartbeat-*.json
+lanes/**/inbox/**/heartbeat-*.json
+lanes/**/worker-audit.log
+lanes/**/*.jsonl
+lanes/**/*.log
+lanes/**/*.tmp
+
+# -------------------------------------------------------------
+# General volatile files
+# -------------------------------------------------------------
+*.tmp
+*.bak
+*~
+
+# -------------------------------------------------------------
+# OS/editor noise
+# -------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.code-workspace
+
+# -------------------------------------------------------------
+# Explicitly keep core source-of-truth paths visible
+# (redundant if parent paths are not ignored; included for clarity)
+# -------------------------------------------------------------
+!scripts/**
+!schemas/**
+!.global/**
+!.github/**
+!src/**
+!src-tauri/**
+!docs/**
+!*.md

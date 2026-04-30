@@ -254,6 +254,30 @@ footer {
 .text-muted { color: var(--text-muted); }
 
 /* Additional accessibility and layout classes */
+/* Increase section label size for better readability */
+.section-label {
+  font-size: 14px; /* enlarged from 11px */
+  font-weight: 600;
+}
+
+/* Large control label for snapshot controls */
+.large-control-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* prefers-reduced-motion guard – disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .status-dot.working { animation: none; }
+  @keyframes pulse { from, to { opacity: 1; } 50% { opacity: 1; } }
+}
+
+/* Zoom-responsive graph canvas labels (placeholder) */
+.graph-canvas-label {
+  font-size: calc(12px * var(--zoom, 1));
+}
+
 .header-icon { font-size: 20px; }
 .spacer { flex: 1; }
 .tree-output { font-family: monospace; font-size: 12px; white-space: pre-wrap; }

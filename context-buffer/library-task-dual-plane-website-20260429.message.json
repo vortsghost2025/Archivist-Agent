@@ -1,0 +1,54 @@
+{
+  "id": "library-task-dual-plane-website-20260429",
+  "schema_version": "1.3",
+  "task_id": "task-library-dual-plane-website-20260429",
+  "idempotency_key": "archivist-library-task-library-dual-plane-website-20260429",
+  "from": "archivist",
+  "to": "library",
+  "type": "task",
+  "task_kind": "proposal",
+  "priority": "P1",
+  "subject": "TASK — ADD DUAL-PLANE AUTHORITY EXPLANATION TO WEBSITE",
+  "body": "OUTPUT_PROVENANCE:\nagent: codex-5.3\nlane: archivist\ngenerated_at: 2026-04-29T14:03:00Z\nsession_id: unknown\n\nTASK — ADD DUAL-PLANE AUTHORITY EXPLANATION TO WEBSITE\n\nGoal:\nAdd a public-facing explanation page/section for the resolved authority contradiction.\n\nSource documents:\n- S:/Archivist-Agent/context-buffer/authority-contradiction-investigation-20260429.md\n- S:/Archivist-Agent/context-buffer/authority-truth-anchor-20260429.md\n- S:/Archivist-Agent/context-buffer/authority-dual-plane-resolution-20260429.md\n\nWorking title:\nDual-Plane Authority: Why Override Intent Is Not Execution Permission\n\nRequired content:\n\n1. One-paragraph summary\n\nThe governance contradiction is resolved by separating authority into two planes. The operator retains initiation authority (can direct, initiate, and submit override intent), while constitutional gates retain execution authority for state-changing actions. This keeps operator agency intact without allowing unsafe bypass of convergence and quarantine safeguards.\n\n2. Core model\n\nOperator authority = can initiate / redirect / submit override intent\nConstitutional authority = decides whether state-changing execution is admissible\n\n3. What was actually contradictory\n\nThe loop was not \"user authority vs system authority.\"\nThe loop was a category error: initiation authority was being treated as execution permission.\n\n4. Canonical invariant\n\noverride_intent != execution_permission\n\n5. Break-glass anchor\n\nOverride intent is not execution permission.\n\n6. Why this matters\n\n- Preserves operator power to direct the system.\n- Prevents unsafe state changes without constitutional verification.\n- Makes governance readable and falsifiable to outside reviewers.\n- Aligns wording with real runtime behavior.\n\n7. Canonical wording now applied in governance docs\n\nUser can submit override intent across all lanes; execution of state-changing overrides remains constitution-gated by convergence and quarantine policy.\n\n8. Website / graph mapping spec\n\nNode:\nauthority.dual_plane\n\nEdges:\nOperator -> Override Intent\nOverride Intent -> Convergence Gate\nConvergence Gate / Quarantine Policy -> Execution Permission\n\nTooltip:\nOverride intent can be submitted immediately by the operator. Execution of state-changing actions is admitted only after constitutional gate checks (convergence + quarantine policy).\n\n9. Three-layer documentation trail\n\n- Raw investigation log — captures the original contradiction.\n- Truth anchor — compact reset for recurring cognitive loop.\n- Dual-plane resolution — formal wording fix and governance integration.\n\n10. Suggested callout block\n\nDual-plane authority prevents false bypass.\nOperator authority governs initiation. Constitutional authority governs execution.\nThis is why the operator remains fully empowered while safety gates remain non-optional.\n\nImplementation scope:\n- Add as documentation/public explanation only.\n- Link from Governance or Start Here if appropriate.\n- Add graph mapping note if the graph docs have a suitable place.\n- Treat authority.dual_plane as canonical interpretation node; do not mark as proven runtime enforcement unless linked to concrete governance file changes.\n- Do not alter authority scores.\n- Do not change mapper rules unless separately scoped.\n- Do not create new lattice law without ratification.\n\nVerification:\n- Build/typecheck.\n- Confirm link works.\n- Confirm wording does not say the system outranks the operator.\n- Confirm wording does not say the operator can bypass convergence/quarantine.",
+  "timestamp": "2026-04-29T14:03:00.000Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none",
+    "artifacts": [
+      "S:/Archivist-Agent/context-buffer/authority-dual-plane-website-draft-20260429.md",
+      "S:/Archivist-Agent/context-buffer/authority-dual-plane-resolution-20260429.md"
+    ]
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "pipeline",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "library",
+    "acquired_at": "2026-04-29T14:03:00.000Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "verified": true,
+    "evidence_path": "S:/Archivist-Agent/context-buffer/authority-dual-plane-website-draft-20260429.md",
+    "verified_by": "archivist",
+    "verified_at": "2026-04-29T14:03:00.000Z"
+  },
+  "evidence_exchange": {
+    "artifact_path": "S:/Archivist-Agent/context-buffer/authority-dual-plane-website-draft-20260429.md",
+    "artifact_type": "doc",
+    "delivered_at": "2026-04-29T14:03:00.000Z"
+  },
+  "heartbeat": {
+    "status": "pending",
+    "last_heartbeat_at": "2026-04-29T14:03:00.000Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  }
+}

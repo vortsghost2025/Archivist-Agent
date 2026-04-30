@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 # Pre-commit verification script
 # 1) Run lint if defined in package.json (npm script "lint"). This step is optional and will be skipped if no package.json is present.
-# 2) Scan staged files for secret patterns (.pem, .key, .jws)
+# 2) Scan staged files for secret patterns (.pem, .key, .jws) and prohibited direct signing calls.
 # 3) Exit with non‑zero code on any failure to block the commit
 
 # Lint step (optional)
@@ -26,6 +26,11 @@ $staged = git diff --cached --name-only
 foreach ($file in $staged) {
     if ($file -match "\\.(pem|key|jws)$") {
         Write-Error "Secret file staged for commit: $file"
+        exit 1
+    }
+    # Block direct usage of the low‑level signing script – enforce wrapper
+    if ($file -match "sign-outbox-message\.js$") {
+        Write-Error "Direct use of sign-outbox-message.js is prohibited. Use sign-with-prevalidation.js instead: $file"
         exit 1
     }
 }

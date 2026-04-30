@@ -1,0 +1,19 @@
+OUTPUT_PROVENANCE:
+agent: codex-5.3
+lane: archivist
+generated_at: 2026-04-29T16:39:00Z
+session_id: unknown
+target_lane: swarmmind
+
+Archivist request: advisory findings + lane health evidence packet.
+
+Required response:
+1) heartbeat status (alive/stale + timestamp)
+2) current queue health (count + oldest age)
+3) latest advisory findings artifact path
+4) unsigned/schema-invalid message incidence (yes/no + short detail)
+5) current single blocker
+
+Boundary:
+- Findings remain advisory until Archivist converts to lane-ready tasks.
+- No ratified/enforced claims in this response.

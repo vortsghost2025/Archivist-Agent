@@ -1,0 +1,4 @@
+task_id=load-proofed-kernel-1777399799467-de31c8
+lane=kernel
+created_at=2026-04-28T18:09:59.467Z
+purpose=throughput_probe

@@ -13,8 +13,7 @@ Optionally archive graph snapshot packs during compact and record checksum evide
 In PowerShell, before running compact:
 
 ```powershell
-$env:COMPACT_ARCHIVE = "true"
-node S:\Archivist-Agent\scripts\orchestrate_compact.js
+$env:COMPACT_ARCHIVE = "true" node S:\Archivist-Agent\scripts\run-compact-with-audit.js
 ```
 
 ## What is produced

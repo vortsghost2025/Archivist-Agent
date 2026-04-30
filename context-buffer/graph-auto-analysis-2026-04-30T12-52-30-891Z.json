@@ -1,0 +1,101 @@
+{
+  "output_provenance": {
+    "agent": "codex-5.3",
+    "lane": "archivist",
+    "generated_at": "2026-04-30T12:52:30.883Z",
+    "session_id": "unknown"
+  },
+  "source": {
+    "graph_json_path": "S:\\Archivist-Agent\\context-buffer\\graph-roadmap-extraction-result-2026-04-29T17-28-57-999Z.json",
+    "node_count": 0,
+    "edge_count": 0,
+    "finding_count": 5
+  },
+  "summary": {
+    "conflicted": 0,
+    "blocked": 0,
+    "quarantined": 0,
+    "unverified": 0,
+    "verified": 0,
+    "resolved": 0,
+    "unknown": 0,
+    "contradiction_edges": 0
+  },
+  "findings_summary": {
+    "priorities": {
+      "P0": 2,
+      "P1": 2,
+      "P2": 1,
+      "P3": 0
+    },
+    "statusCounts": {
+      "conflicted": 0,
+      "blocked": 0,
+      "unverified": 0,
+      "verified": 0,
+      "resolved": 0,
+      "unknown": 5
+    },
+    "normalized": [
+      {
+        "id": "F-001",
+        "label": "2/4 packs include AI findings template; non-template packs block structured comparison.",
+        "status": "observation",
+        "priority": "P0"
+      },
+      {
+        "id": "F-002",
+        "label": "Snapshot volume is high (32 images) but mostly visual artifacts; contradiction and governance state are not encoded as machine fields.",
+        "status": "observation",
+        "priority": "P0"
+      },
+      {
+        "id": "F-003",
+        "label": "0 duplicated copy artifacts detected; this can distort trend comparisons and create false contradiction density.",
+        "status": "hypothesis",
+        "priority": "P1"
+      },
+      {
+        "id": "F-004",
+        "label": "Snapshot manifests do not carry explicit governance path metadata (authority/trust/enforcement links).",
+        "status": "observation",
+        "priority": "P1"
+      },
+      {
+        "id": "F-005",
+        "label": "No machine linkage from papers to graph nodes is present in pack manifests/templates.",
+        "status": "needs_lane_review",
+        "priority": "P2"
+      }
+    ]
+  },
+  "focus_nodes": [
+    {
+      "id": "F-001",
+      "label": "2/4 packs include AI findings template; non-template packs block structured comparison.",
+      "status": "observation",
+      "priority": "P0"
+    },
+    {
+      "id": "F-002",
+      "label": "Snapshot volume is high (32 images) but mostly visual artifacts; contradiction and governance state are not encoded as machine fields.",
+      "status": "observation",
+      "priority": "P0"
+    },
+    {
+      "id": "F-003",
+      "label": "0 duplicated copy artifacts detected; this can distort trend comparisons and create false contradiction density.",
+      "status": "hypothesis",
+      "priority": "P1"
+    },
+    {
+      "id": "F-004",
+      "label": "Snapshot manifests do not carry explicit governance path metadata (authority/trust/enforcement links).",
+      "status": "observation",
+      "priority": "P1"
+    }
+  ],
+  "next_actions": [
+    "Run a maintenance pass: verify high-impact unverified nodes."
+  ]
+}

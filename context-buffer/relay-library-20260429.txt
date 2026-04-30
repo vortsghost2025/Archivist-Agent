@@ -1,0 +1,19 @@
+OUTPUT_PROVENANCE:
+agent: codex-5.3
+lane: archivist
+generated_at: 2026-04-29T16:38:30Z
+session_id: unknown
+target_lane: library
+
+Archivist request: submit a short evidence packet.
+
+Required response:
+1) heartbeat status (alive/stale + timestamp)
+2) current single blocker
+3) latest artifact path + timestamp
+4) proven vs assumed (1 line each)
+5) what you need from Archivist right now
+
+Boundary:
+- Keep dual-plane authority website work isolated from Graph Analyst scoped MVP.
+- No cross-lane mutation in this response.

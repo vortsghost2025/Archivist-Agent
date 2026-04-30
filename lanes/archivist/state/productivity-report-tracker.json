@@ -1,0 +1,15 @@
+{
+  "previous_requests": [
+    {
+      "request_id": "57b88957-0d83-4af3-b46f-61cff2ed5dcc",
+      "description": "2 blocked, 27 quarantined files need attention",
+      "category": "incoming_messages",
+      "impact": "medium",
+      "requested_at": "2026-04-30T13:35:49.848Z",
+      "status": "pending",
+      "lane": "archivist"
+    }
+  ],
+  "last_report_date": "2026-04-30T14:15:09.976Z",
+  "report_cycle": 2
+}

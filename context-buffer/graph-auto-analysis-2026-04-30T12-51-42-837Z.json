@@ -1,0 +1,27 @@
+{
+  "output_provenance": {
+    "agent": "codex-5.3",
+    "lane": "archivist",
+    "generated_at": "2026-04-30T12:51:42.829Z",
+    "session_id": "unknown"
+  },
+  "source": {
+    "graph_json_path": "S:\\Archivist-Agent\\context-buffer\\graph-roadmap-extraction-result-2026-04-29T17-28-57-999Z.json",
+    "node_count": 0,
+    "edge_count": 0
+  },
+  "summary": {
+    "conflicted": 0,
+    "blocked": 0,
+    "quarantined": 0,
+    "unverified": 0,
+    "verified": 0,
+    "resolved": 0,
+    "unknown": 0,
+    "contradiction_edges": 0
+  },
+  "focus_nodes": [],
+  "next_actions": [
+    "Run a maintenance pass: verify high-impact unverified nodes."
+  ]
+}
