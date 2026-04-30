@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.3",
+  "task_id": "contradiction-batch-3-responses-20260430",
+  "idempotency_key": "batch3-resp-f717e4b0-1d2e-40fc-b20a-e69b3dd85913",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ratification",
+  "priority": "P1",
+  "subject": "Contradiction Batch 3 — Archivist lane responses",
+  "body": "ARCHIVIST responses for Batch 3 contradiction nodes. 1 node(s) classified.",
+  "timestamp": "2026-04-30T12:38:12.834Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-30T12:38:12.834Z",
+    "expires_at": null,
+    "renewal_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_type": "report",
+    "artifact_path": "S:/archivist/evidence/contradiction-resolution/batch3-responses-20260430.json"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": "2026-04-30T12:38:12.834Z",
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "responses": [
+    {
+      "node_id": "d52d670ab9d41169",
+      "status": "proven_spurious",
+      "edge_evidence": "Archivist self-review: Internal governance artifact; no CONTRADICTS edges exist. CONFLICTED status and contradictionCount=65 are artifact-derived false positives from shared-tag clustering; semantic conflict absent. Classified as proven_spurious.",
+      "confidence": "high",
+      "next_action": "Archive as proven_spurious; no further action"
+    }
+  ]
+}
