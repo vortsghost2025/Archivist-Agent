@@ -35,7 +35,7 @@
       "lane_id": "kernel",
       "role": "execution",
       "local_path": "S:/kernel-lane",
-      "repo": "https://github.com/vortsghost2025/Archivist-Agent",
+      "repo": "https://github.com/vortsghost2025/kernel-lane.git",
       "branch": "multi-agent-coordination-gap",
       "mailboxes": {
         "inbox": "S:/kernel-lane/lanes/kernel/inbox",
