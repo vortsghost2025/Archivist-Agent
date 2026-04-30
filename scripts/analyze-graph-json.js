@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const ROOT = 'S:/Archivist-Agent';
 const OUT_DIR = path.join(ROOT, 'context-buffer');
@@ -257,7 +258,9 @@ function main() {
     process.exit(1);
   }
 
-  const doc = safeReadJson(inputPath);
+  const rawContent = fs.readFileSync(inputPath, 'utf8').replace(/^\uFEFF/, '');
+const fileHash = crypto.createHash('sha256').update(rawContent).digest('hex');
+const doc = JSON.parse(rawContent);
   const nodes = pickNodes(doc);
   const edges = pickEdges(doc);
   const findings = pickFindings(doc);
@@ -282,7 +285,8 @@ function main() {
       graph_json_path: inputPath,
       node_count: nodes.length,
       edge_count: edges.length,
-      finding_count: findings.length
+      finding_count: findings.length,
+        hash: fileHash
     },
     summary: {
       conflicted: counts.conflicted,

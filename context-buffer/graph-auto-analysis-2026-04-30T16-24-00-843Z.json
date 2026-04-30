@@ -1,0 +1,82 @@
+{
+  "output_provenance": {
+    "agent": "codex-5.3",
+    "lane": "archivist",
+    "generated_at": "2026-04-30T16:24:00.843Z",
+    "session_id": "unknown"
+  },
+  "source": {
+    "graph_json_path": "C:\\Users\\seand\\Downloads\\graph-snapshot-2026-04-30-16-14-21-321.json",
+    "node_count": 517,
+    "edge_count": 44097,
+    "finding_count": 0,
+    "hash": "267b4b79b32d8a2effb86d78496564ac7c327879bbbb83133cd51d111fd6f7e7"
+  },
+  "summary": {
+    "conflicted": 17,
+    "blocked": 0,
+    "quarantined": 16,
+    "unverified": 368,
+    "verified": 116,
+    "resolved": 0,
+    "unknown": 0,
+    "contradiction_edges": 0
+  },
+  "findings_summary": null,
+  "focus_nodes": [
+    {
+      "id": "044d760a04bbfa30",
+      "label": "\ud83e\udde0 What the Previous Reviewer Got WRONG (The \u201cLies\u201d)",
+      "status": "conflicted"
+    },
+    {
+      "id": "fb8212e128adc1c5",
+      "label": "APR15",
+      "status": "conflicted"
+    },
+    {
+      "id": "e0e603e85e1972ea",
+      "label": "THE SINGLE ENTRY POINT",
+      "status": "conflicted"
+    },
+    {
+      "id": "1bda9962fbd5ca75",
+      "label": "Paper Outline: When AI Systems Lie About Their Own State",
+      "status": "conflicted"
+    },
+    {
+      "id": "d52d670ab9d41169",
+      "label": "VERIFICATION CHECKPOINT SYSTEM",
+      "status": "conflicted"
+    },
+    {
+      "id": "a88504c97e8f2e4f",
+      "label": "COVENANT.md \u2014 Values (What We Believe)",
+      "status": "conflicted"
+    },
+    {
+      "id": "45d50e60309ef11c",
+      "label": "LIBRARY MAP EXTRACTION: RECOVERY ASSUMPTIONS",
+      "status": "conflicted"
+    },
+    {
+      "id": "8f11fb5f4a3a5efc",
+      "label": "LIBRARY MAP ANALYSIS: COMPLETE AUTHORITY CHAIN",
+      "status": "conflicted"
+    },
+    {
+      "id": "1d846649979dcec1",
+      "label": "USERDRIFTSCORING.md",
+      "status": "conflicted"
+    },
+    {
+      "id": "65fb533da2a76f09",
+      "label": "pre compaction validation buffer",
+      "status": "conflicted"
+    }
+  ],
+  "next_actions": [
+    "Resolve one conflicted node before any new feature work.",
+    "Convert top unverified claims into test cards with evidence paths."
+  ]
+}
