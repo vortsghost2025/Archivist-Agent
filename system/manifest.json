@@ -1,0 +1,37 @@
+{
+  "OUTPUT_PROVENANCE": {
+    "agent": "kilo/openrouter/free",
+    "lane": "archivist",
+    "generated_at": "2026-04-30T18:15:30-04:00",
+    "session_id": "unknown"
+  },
+  "schema_version": "1.0.0",
+  "description": "Canonical constraint lattice manifest for Archivist-Agent governance",
+  "constraints": [
+    {
+      "id": "CSL-001",
+      "type": "temporal_reachability",
+      "scope": "NFM-018 (temporal reachability mismatch) - stale heartbeat condition",
+      "guardrails": [
+        "Only applies to lane liveness heartbeat checks",
+        "Retry cap: 3 attempts maximum for stale heartbeat remediation",
+        "Does not apply to phase ambiguity or other CAISC failure modes"
+      ],
+      "retry_cap": 3,
+      "status": "proven_scope_limited",
+      "evidence": [
+        "S:/Archivist-Agent/docs/ops/CONSTRAINT_SYNTHESIS_TRIAL_001.md",
+        "S:/Archivist-Agent/lanes/broadcast/constraint-synthesis-trial-001.json"
+      ],
+      "verified_by": "archivist",
+      "created_at": "2026-04-30T18:15:30-04:00",
+      "last_validated": "2026-04-30T18:15:30-04:00"
+    }
+  ],
+  "paper_a_invariants": [
+    "symmetry",
+    "selection",
+    "propagation",
+    "stability"
+  ]
+}
