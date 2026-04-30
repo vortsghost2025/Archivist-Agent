@@ -1,5 +1,8 @@
 param(
-  [switch]$WriteSnapshot
+  [switch]$WriteSnapshot,
+  [int]$BaseIntervalSeconds = 15,
+  [int]$HighMemoryIntervalSeconds = 30,
+  [double]$HighMemoryPercent = 92
 )
 
 $lanes = @(
@@ -11,7 +14,6 @@ $lanes = @(
 
 $watchPids = @(49032, 41392, 18472, 37400, 5928, 19864, 25504)
 $previousAlive = @{}
-$staleMinutes = 30
 $freshWindowMinutes = 10
 $snapshotPath = "S:\Archivist-Agent\context-buffer\lane-activity-watch-latest.md"
 
@@ -74,7 +76,6 @@ function Get-VisibleRiskSignals($root) {
 while ($true) {
   $now = Get-Date
   $freshCutoff = $now.AddMinutes(-$freshWindowMinutes)
-  $staleCutoff = $now.AddMinutes(-$staleMinutes)
 
   $laneRows = @()
   $latestWriteRows = @()
@@ -120,10 +121,15 @@ while ($true) {
 
   $memPercent = Get-MemoryPercent
   $memLine = "unknown"
+  $sleepSeconds = $BaseIntervalSeconds
   if ($null -ne $memPercent) {
     if ($memPercent -ge 95) {
       $memLine = "$memPercent% WARNING"
       $overallRisk += "memory above 95%"
+      $sleepSeconds = [math]::Max($HighMemoryIntervalSeconds, $BaseIntervalSeconds)
+    } elseif ($memPercent -ge $HighMemoryPercent) {
+      $memLine = "$memPercent% elevated"
+      $sleepSeconds = [math]::Max($HighMemoryIntervalSeconds, $BaseIntervalSeconds)
     } else {
       $memLine = "$memPercent% normal-for-operator"
     }
@@ -176,7 +182,7 @@ while ($true) {
   } else {
     Write-Host "Risk: none visible"
   }
-  Write-Host "Next: keep observing"
+  Write-Host "Next: keep observing (poll ${sleepSeconds}s)"
   Write-Host ""
   Write-Host "--- Per-PID CPU/RAM ---"
   $pidRows | Format-Table -AutoSize
@@ -194,11 +200,11 @@ while ($true) {
     }
     $snapshot += "PIDs: $aliveCount watched, $($disappeared.Count) disappeared"
     if ($overallRisk.Count -gt 0) { $snapshot += "Risk: $($overallRisk -join '; ')" } else { $snapshot += "Risk: none visible" }
-    $snapshot += "Next: keep observing"
+    $snapshot += "Next: keep observing (poll ${sleepSeconds}s)"
     $snapshot += ""
     $snapshot += "Updated: $($now.ToString('yyyy-MM-dd HH:mm:ss'))"
     Set-Content -Path $snapshotPath -Value ($snapshot -join [Environment]::NewLine) -Encoding utf8
   }
 
-  Start-Sleep 15
+  Start-Sleep $sleepSeconds
 }

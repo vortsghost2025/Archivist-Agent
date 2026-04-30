@@ -247,8 +247,10 @@ class InboxWatcher {
         }
         messages.push(msg);
       } catch (e) {
+      let rawPreview = '';
+      try { rawPreview = fs.readFileSync(filePath, 'utf8'); } catch (_) {}
       console.error(`[watcher] Cannot parse ${filename}:`, e.message);
-      await this.moveToExpired(filename, filePath);
+      await this.moveMalformedToQuarantine(filename, filePath, e, rawPreview);
       }
     }
 
@@ -364,6 +366,37 @@ class InboxWatcher {
       console.log(`[watcher] ACTION-REQUIRED HOLD: ${filename} moved to action-required/`);
     } catch (e) {
       console.error(`[watcher] Cannot move ${filename} to action-required/:`, e.message);
+    }
+  }
+
+  async moveMalformedToQuarantine(filename, sourcePath, parseError, rawSample) {
+    const qDest = path.join(this.config.quarantinePath, filename);
+    const sidecar = path.join(this.config.quarantinePath, `${filename}.error.json`);
+    try {
+      if (!fs.existsSync(this.config.quarantinePath)) {
+        fs.mkdirSync(this.config.quarantinePath, { recursive: true });
+      }
+      if (fs.existsSync(sourcePath)) {
+        if (fs.existsSync(qDest)) {
+          fs.unlinkSync(sourcePath);
+        } else {
+          await moveFileWithLease(sourcePath, qDest, this.config.laneName, 30000);
+        }
+      }
+      const errorPayload = {
+        timestamp: new Date().toISOString(),
+        lane: this.config.laneName,
+        file: filename,
+        reason: 'MALFORMED_JSON',
+        error: String(parseError && parseError.message ? parseError.message : parseError),
+        raw_preview: typeof rawSample === 'string' ? rawSample.slice(0, 500) : ''
+      };
+      fs.writeFileSync(sidecar, JSON.stringify(errorPayload, null, 2), 'utf8');
+      this._logQuarantine(filename, 'MALFORMED_JSON', this._trackQuarantine(filename, 'MALFORMED_JSON'));
+      this.processedKeys.add(filename);
+      console.log(`[watcher] QUARANTINE: ${filename} malformed JSON moved to quarantine/`);
+    } catch (e) {
+      console.error(`[watcher] Cannot quarantine malformed ${filename}:`, e.message);
     }
   }
 
