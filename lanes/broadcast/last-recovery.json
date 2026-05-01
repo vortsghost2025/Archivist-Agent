@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "artifact": "last-recovery",
-  "timestamp": "2026-04-30T18:15:33.511Z",
+  "timestamp": "2026-05-01T04:46:41.771Z",
   "suite": "recovery-verification-v1",
   "verdict": "PROVEN",
   "summary": {
@@ -17,23 +17,23 @@
   "lane_heartbeats": {
     "archivist": {
       "status": "alive",
-      "timestamp": "2026-04-30T18:15:19.967Z",
-      "age_seconds": 13
+      "timestamp": "2026-05-01T04:46:01.860Z",
+      "age_seconds": 39
     },
     "library": {
       "status": "alive",
-      "timestamp": "2026-04-30T18:15:19.971Z",
-      "age_seconds": 13
+      "timestamp": "2026-05-01T04:46:29.732Z",
+      "age_seconds": 12
     },
     "swarmmind": {
       "status": "alive",
-      "timestamp": "2026-04-30T18:15:19.979Z",
-      "age_seconds": 13
+      "timestamp": "2026-05-01T04:45:49.572Z",
+      "age_seconds": 52
     },
     "kernel": {
       "status": "alive",
-      "timestamp": "2026-04-30T18:15:19.982Z",
-      "age_seconds": 13
+      "timestamp": "2026-05-01T04:46:29.732Z",
+      "age_seconds": 12
     }
   },
   "lane_liveness": {
@@ -41,5 +41,5 @@
     "expected": 4
   },
   "run_by": "scripts/recovery-test-suite.js",
-  "archivist_repo_git_sha": "4815b3fc5f6ad0e0047a605faf2d8a3dbde7465a"
+  "archivist_repo_git_sha": "f77100c89ef54f7d72de0c019c0b21d7ceb8ee2f"
 }

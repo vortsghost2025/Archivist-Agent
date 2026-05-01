@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-30T18:15:33.220Z",
+  "timestamp": "2026-05-01T01:21:54.294Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -281,30 +281,30 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-04-30T18:15:19.967Z",
-        "age_seconds": 13
+        "timestamp": "2026-05-01T01:21:01.858Z",
+        "age_seconds": 52
       },
       "library": {
         "status": "alive",
-        "timestamp": "2026-04-30T18:15:19.971Z",
-        "age_seconds": 13
+        "timestamp": "2026-05-01T01:19:53.066Z",
+        "age_seconds": 121
       },
       "swarmmind": {
         "status": "alive",
-        "timestamp": "2026-04-30T18:15:19.979Z",
-        "age_seconds": 13
+        "timestamp": "2026-05-01T01:21:47.994Z",
+        "age_seconds": 6
       },
       "kernel": {
-        "status": "alive",
-        "timestamp": "2026-04-30T18:15:19.982Z",
-        "age_seconds": 13
+        "status": "stale",
+        "timestamp": "2026-04-30T22:36:23.504Z",
+        "age_seconds": 9930
       }
     },
     "inbox_counts": {
-      "archivist": 1,
-      "library": 80,
-      "swarmmind": 0,
-      "kernel": 0
+      "archivist": 12,
+      "library": 130,
+      "swarmmind": 1,
+      "kernel": 2
     },
     "governance_hash": "7ecff70766061c3c09bbb7f94dfe50dc40c6e1088821b555dce7dfa4f146af05",
     "bootstrap_hash": "694e4f7935bcc1e6b883b45632a922e52d4a238eea6698b191747749cbe94fca",
@@ -346,7 +346,7 @@
         "agents_md": {
           "path": "S:\\Archivist-Agent\\AGENTS.md",
           "exists": true,
-          "hash": "7ef370688a75fba3e9c2ab2c25b949862d7270302244a7957a11af51688ffc77"
+          "hash": "1f88f87d5eb0d8fbb47973f5d29f77e4366acdc012cdb4dc23e95a6f0bfdb1c4"
         },
         "targets_json": {
           "path": "S:\\Archivist-Agent\\config\\targets.json",
@@ -393,7 +393,7 @@
         "agents_md": {
           "path": "S:\\self-organizing-library\\AGENTS.md",
           "exists": true,
-          "hash": "a561cfa7f9c2a95544fd82616129480f6384752805978bdc83ddfea848ec3930"
+          "hash": "8cba9b96bff45d453f3e659dfae7bb12fc40242c6b35dd99f1eefea024f9ba34"
         },
         "targets_json": {
           "path": "S:\\self-organizing-library\\config\\targets.json",
@@ -522,13 +522,34 @@
     "handoff_detail": null,
     "message_loss": 0,
     "message_loss_detail": {},
-    "lane_degradations": [],
+    "lane_degradations": [
+      {
+        "lane": "kernel",
+        "pre_status": "alive",
+        "post_status": "stale"
+      }
+    ],
     "risk_set_preserved": true,
     "missing_risks": [],
-    "unexpected_changes": [],
-    "file_integrity_violations": []
+    "unexpected_changes": [
+      "lane_kernel_degraded"
+    ],
+    "file_integrity_violations": [
+      {
+        "lane": "archivist",
+        "file": "agents_md",
+        "pre_hash": "7ef370688a75fba3e9c2ab2c25b949862d7270302244a7957a11af51688ffc77",
+        "post_hash": "1f88f87d5eb0d8fbb47973f5d29f77e4366acdc012cdb4dc23e95a6f0bfdb1c4"
+      },
+      {
+        "lane": "library",
+        "file": "agents_md",
+        "pre_hash": "a561cfa7f9c2a95544fd82616129480f6384752805978bdc83ddfea848ec3930",
+        "post_hash": "8cba9b96bff45d453f3e659dfae7bb12fc40242c6b35dd99f1eefea024f9ba34"
+      }
+    ]
   },
-  "status": "aligned",
+  "status": "drifted",
   "proof": {
     "method": "multi_source_contradiction_test",
     "sources_checked": [
@@ -543,7 +564,7 @@
       "known_risk_set",
       "file_integrity"
     ],
-    "contradictions_found": 0,
+    "contradictions_found": 1,
     "self_declared_alignment": false
   }
 }
