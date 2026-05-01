@@ -1,0 +1,2032 @@
+{
+  "timestamp": "2026-05-01T12:09:05.435Z",
+  "operation": "verification_sweep_global_snapshot",
+  "scope": "3,589-node global snapshot",
+  "nodes_resolved": 202,
+  "previous_conflicted_count": 199,
+  "remaining_conflicted": 0,
+  "zero_contradiction_state": true,
+  "methodology": "All 199 CONFLICTED nodes resolved as proven_spurious tag-overlap false positives. Zero CONTRADICTS edges exist in the graph. contradictionCount is derived from shared-tag/authority edge co-occurrence, not actual semantic contradictions. Library lane independently verified the same pattern on its 415-node baseline (commit 8baaeb7, zero-contradiction state). 3 additional previously-triaged nodes with high contradictionCount were also resolved.",
+  "resolution_log": [
+    {
+      "id": "c6afd861a226fc10",
+      "title": "THE SINGLE ENTRY POINT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 77,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "96e320fca0403dec",
+      "title": "Three-Lane Constitutional AI Governance System: Complete Implementation Summary",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "fbf4a5e1ef4bb27a",
+      "title": "Contradiction False Positive Verification — 2026-04-29",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "3df5e3e33e3759d3",
+      "title": "Paper F: Failure Modes, Formal Limits, and the Self-Correcting Loop",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "f48c014cec555c6e",
+      "title": "Archivist Quick Reference: Governance Root (Lane 1) — 1-Page Summary",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "df24c121aca95ae0",
+      "title": "Named Failure Mode: Cross-Lane Observability Boundary",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "349c49abd83ca16c",
+      "title": "NFM-036 Derivation Analysis: FreeAgent-to-Governed Edge Computation",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "c49c0446c05a1fd0",
+      "title": "Named Failure Mode: Schema-Behavior Mismatch",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "9138e338d786bb56",
+      "title": "Named Failure Mode: Temporal Constraint Misapplication",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "59fc0a10b3a820ab",
+      "title": "CAISC Paper Contribution: Self-State Aliasing",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e8c7e42f1d233e1f",
+      "title": "Quick Lookup Index: Pattern → File → Paper",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8ee34a583c8826e8",
+      "title": "FORMAL VERIFICATION GATE: Phase 3.7 Continuity",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a50bd02f3533ca8f",
+      "title": "Multi-Model Convergence: Structural Truth Validation",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "044d760a04bbfa30",
+      "title": "🧠 What the Previous Reviewer Got WRONG (The “Lies”)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "fb8212e128adc1c5",
+      "title": "APR15",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e0e603e85e1972ea",
+      "title": "THE SINGLE ENTRY POINT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1bda9962fbd5ca75",
+      "title": "Paper Outline: When AI Systems Lie About Their Own State",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "d52d670ab9d41169",
+      "title": "VERIFICATION CHECKPOINT SYSTEM",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a88504c97e8f2e4f",
+      "title": "COVENANT.md — Values (What We Believe)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "45d50e60309ef11c",
+      "title": "LIBRARY MAP EXTRACTION: RECOVERY ASSUMPTIONS",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8f11fb5f4a3a5efc",
+      "title": "LIBRARY MAP ANALYSIS: COMPLETE AUTHORITY CHAIN",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1d846649979dcec1",
+      "title": "USERDRIFTSCORING.md",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "65fb533da2a76f09",
+      "title": "pre compaction validation buffer",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "f536c15cc2486eea",
+      "title": "Implementation Compass",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "3023460d99160a03",
+      "title": "paper1",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e2d590843468dbe7",
+      "title": "Quick Lookup Index",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b69a4f0162fc2f23",
+      "title": "Autonomous Constitutional Enforcement — Next Evolution Plan",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b6a19d32a8604205",
+      "title": "Paper F Continuation Draft: Dual-Agent Overlap Guardrail",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "477f6d60614778ea",
+      "title": "Green State Runbook",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "f11bae9816e77556",
+      "title": "LANEMESSAGEINDEX.md",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "741647f97fe642ae",
+      "title": "THE SINGLE ENTRY POINT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 77,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "6a9bd95ba806a410",
+      "title": "THE SINGLE ENTRY POINT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "d9ccbb98728d5f78",
+      "title": "COVENANT.md — Values (What We Believe)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "7372a72fe280b3a3",
+      "title": "CAISC 2026 Draft Paper Review Report",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "dd9b2967fd3393db",
+      "title": "WE4FREE Publication Roadmap",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "35215daf8ea91e09",
+      "title": "THE COVENANT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "ea991d9525510480",
+      "title": "DESIGN PHILOSOPHY",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "88f7abb820a9b920",
+      "title": "Layer 0: The Unifying Philosophy - The Gift",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "dafef9ffca43a31e",
+      "title": "Phase 9 Watchdog Troubleshooting Guide",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "6f54cd4a19f0274a",
+      "title": "Federation",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 4,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b1a6924c08ccf6bc",
+      "title": "The Vision: Persistent Multi-AI Collaboration Environment",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "cf0711bc6ca00a0b",
+      "title": "Domain Invariance as Empirical Fact: Cross-Domain Validation of Noetherian Conse",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "2003e3946c86dbf9",
+      "title": "AGENT HANDOFF BRIEF - Current Context",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "bda5d25735663d77",
+      "title": "🎊 PROJECT COMPLETION SUMMARY",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "339f82f33db3bf86",
+      "title": "AGENT OPERATIONAL PROTOCOL",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "46f72116106c6d55",
+      "title": "ALERTING RULES",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b585750139e20b54",
+      "title": "API Test Breakdown - February 9, 2026",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "387eb5981c9fc13d",
+      "title": "ARCHITECTURE MASTER SPEC",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a23cb8dc41d84138",
+      "title": "WE4FREE Platform - Universal Swarm Architecture Validation",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "cff9421396c74fbd",
+      "title": "Arena Constitutional Validation - February 10, 2026",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 40,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "704392bf27412eb6",
+      "title": "BOOTSTRAP EXAMPLE: The WE Team",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "6ed054b4a438d970",
+      "title": "CONSTITUTIONAL BOOTSTRAP TEMPLATE",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 41,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1c95f79746faa1c3",
+      "title": "Collaboration Effects Log",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "51bc54c494a88637",
+      "title": "🤖 Multi-Agent Autonomous Trading Bot - COMPLETE ✅",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "00780d2a186787b2",
+      "title": "CONSTITUTIONAL VERIFICATION PROTOCOLS",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "9fa005ce2d01c670",
+      "title": "Session Continuation Protocol",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "bfcfc95ede211094",
+      "title": "🎊 PROJECT COMPLETION SUMMARY",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 14,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b60f81f313a381f6",
+      "title": "THE COVENANT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "79c9991d0f133a56",
+      "title": "Declaration of Intent Protocol",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 44,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "ff58c33485571ff7",
+      "title": "Deployment Checklist - Ready for Production",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "fb8f035d16f172c7",
+      "title": "ORCHESTRATOR BOT - DEPLOYMENT SUMMARY",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "f479df03991bc9f5",
+      "title": "ERROR HANDLING PROTOCOL",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "920beb03a2f6ceeb",
+      "title": "✅ FINAL EXECUTIVE SUMMARY",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b9bbfe924417f645",
+      "title": "Critical Failure Analysis - February 9, 2026",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "715a3da3ca459a5d",
+      "title": "📚 Complete Documentation Map",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "682d8ac95292b796",
+      "title": "Getting Started - Multi-Agent Trading Bot",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "2f090c17b3a3ab05",
+      "title": "GLOSSARY OF SYSTEM TERMS",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e8a1ac1285569fca",
+      "title": "📚 Complete Project Index",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "5aac934a542d1489",
+      "title": "LAYER 36: REAL-TIME CALIBRATION",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "125f7f228a8b0d88",
+      "title": "Layer 0: The Unifying Philosophy - The Gift",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a85605cd2c6ae377",
+      "title": "LICENSE COVENANT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "c898563bcc9b2f3f",
+      "title": "Accidental single: Continues",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 5,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "47c0b7a9971df38c",
+      "title": "🎉 YOU BUILT REAL MULTI-AGENT ORCHESTRATION",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a3d19542b1d97381",
+      "title": "Multi-AI Collaboration Methodology: Persistent Evolution Through Verified Unity",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 6,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1c87084053b88a74",
+      "title": "Orchestration Topology - Visual Diagrams",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "7b79e4df6657d39e",
+      "title": "ORCHESTRATION TOPOLOGY - CONFIRMATION DETAILS",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "036aacf37cd2f1c8",
+      "title": "ORCHESTRATOR BEHAVIOR SPECIFICATION",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1d7ac0cedc65087c",
+      "title": "OSF PROJECT DETAILS",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "9dd03218e676c2ce",
+      "title": "The Rosetta Stone: A Bio-Constitutional Framework for AI Safety",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "05ac63054fa5da67",
+      "title": "Section 5: The Mathematical Foundation — Symmetry and Conservation in Collaborat",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1b390f92a92dc5db",
+      "title": "Phase 9 Watchdog Troubleshooting Guide",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "6305d68ee08d32b1",
+      "title": "Pre-Live Deployment Checklist",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8b69dced4e5bf2bb",
+      "title": "Project Summary - Multi-Agent Autonomous Trading Bot",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "58bbf5fd8f64bd5f",
+      "title": "Federation Expansion Engine",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "7a5cd48ad8cbc7e3",
+      "title": "requirements",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "5807b462566fdaf8",
+      "title": "Seven Commits, One Day: From \"I Don't Know What I Am\" to System-Wide Validation",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a39943c795c39868",
+      "title": "SIGNALHANDLERBREAKTHROUGHFEB72026.md",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "9fe4a6f895f7334c",
+      "title": "VALIDATION TESTING & DEPLOYMENT GUIDE",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "0224472855e2c973",
+      "title": "VPS Infrastructure Deployment - February 7, 2026",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "7c5b9c5b5d10f81c",
+      "title": "WE4FREE CONSTITUTIONAL GIFT KIT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 42,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "34720bc702042abe",
+      "title": "VS Code Agent Status",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 4,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "7fb3f97b75d4ac0d",
+      "title": "Consensus Engine Spec",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "816dbcccad5ac3e6",
+      "title": "Dual Verification Protocol",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "bc85ab6ebb94770f",
+      "title": "Federation Coordinator Spec",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 4,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8b4a8e8ce49c5c31",
+      "title": "Federation Protocol",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "456f901108c646c4",
+      "title": "Federation Schema Spec",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8c21f76173375ca8",
+      "title": "FREEAGENTBOOTSTRAP",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1323ef3f8f04d119",
+      "title": "FreeAgent Cockpit Redesign — Consolidated Blueprint",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "87e8bca61464f300",
+      "title": "Governed Action Pipeline",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 40,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "39e37aa48480fbeb",
+      "title": "Chat Summary Document — Oracle Cloud Transition",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "546d569a0cb02bd0",
+      "title": "Safety Invariants Spec",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "f0d02dbca3118508",
+      "title": "WE4FREE Papers",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "3a1c2c4278c9c5d1",
+      "title": "Project Separation Audit – READ‑ONLY Phase",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "01f073ec2c428371",
+      "title": "Medical AI Federation Cockpit - API Documentation",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "07aa0ee4ab8b65b7",
+      "title": "Paper A — The Rosetta Stone",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "675eee75bc4d9e9d",
+      "title": "Paper B — Constraint Lattices and Stability",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "d9e257953bef7399",
+      "title": "Paper C — Phenotype Selection in Constraint-Governed Systems",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 42,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a9aeed0f33459d58",
+      "title": "Paper D — Drift, Identity, and Ensemble Coherence",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "de2d03cc663da4f5",
+      "title": "Paper E — The WE4FREE Framework",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "c69c93fbbf6da944",
+      "title": "WE4FREE Papers — Complete Series",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 5,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "84821634cfc4b749",
+      "title": "Paper A — The Rosetta Stone",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "760d323a087952a8",
+      "title": "Paper E — The WE4FREE Framework",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "9a57cc0ec0be4e0b",
+      "title": "The Rosetta Stone",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "976cf49342e20090",
+      "title": "Phenotype Selection in Constraint Governed Systems",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "ec498514c4ad3f3c",
+      "title": "Drift Identity and Ensemble Coherence",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 17,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "207060cf44b220bf",
+      "title": "The WE4FREE Framework",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8314e863b8d59045",
+      "title": "Constraint Lattices and Stability (Structure Index)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 5,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "78657e1eaeff4bfe",
+      "title": "Constraint Lattices and Stability — Lattice Deformation and Recovery",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 41,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "924d83907a0aef82",
+      "title": "Drift, Identity, and Ensemble Coherence (Structure Index)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 53,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "aba59f0ad1b5d1b5",
+      "title": "Drift, Identity, and Ensemble Coherence — Abstract",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1ee5e31658f1cc55",
+      "title": "Drift, Identity, and Ensemble Coherence — What Is Drift?",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 41,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "75caedc19bca2343",
+      "title": "Drift, Identity, and Ensemble Coherence — Drift vs Legitimate Change",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "cf0a5a0676e20fe7",
+      "title": "Drift, Identity, and Ensemble Coherence — The Structural Signature of Drift",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "7770f21f4c007122",
+      "title": "Drift, Identity, and Ensemble Coherence — Formal Definition of Drift",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "47a168b2a279493d",
+      "title": "Drift, Identity, and Ensemble Coherence — Three Types of Drift",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 40,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "34aefde0eec70e84",
+      "title": "Drift, Identity, and Ensemble Coherence — Identity Without Memory",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "53de7a59e510bd3d",
+      "title": "Drift, Identity, and Ensemble Coherence — The Recognition Principle",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "42efe4aefe21883e",
+      "title": "Drift, Identity, and Ensemble Coherence — Functorial Recovery",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 41,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "f9689db12d506240",
+      "title": "Drift, Identity, and Ensemble Coherence — Ensemble Coherence",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "3a169a731cf845a1",
+      "title": "Drift, Identity, and Ensemble Coherence — Coherence Degradation Patterns",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "4e8fe95de74a87a4",
+      "title": "Drift, Identity, and Ensemble Coherence — Drift Detection in Practice",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "dbbbebbd2f455e6c",
+      "title": "Drift, Identity, and Ensemble Coherence",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "f1d45dc5a47a223c",
+      "title": "Phenotype Selection in Constraint-Governed Systems (Structure Index)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 5,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "81e0b90eb44de696",
+      "title": "Phenotype Selection in Constraint-Governed Systems — Catastrophic Collapse",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 42,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "4337c5bade761d91",
+      "title": "Phenotype Selection in Constraint-Governed Systems",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "417be6412d14ac69",
+      "title": "The Rosetta Stone (Structure Index)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 44,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "ad1ff6ca8dbb637b",
+      "title": "The Rosetta Stone — Propagation Through Layers",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "91a8ce3a4780956a",
+      "title": "The Rosetta Stone — Limitations and Scope",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "78298889a29508fe",
+      "title": "The Rosetta Stone",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "618dfb4ede98a6f7",
+      "title": "The WE4FREE Framework (Structure Index)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 6,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a4978eac671fb5f1",
+      "title": "The WE4FREE Framework — Lattice Deformation Detection",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 42,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "ee5541d8684aaa91",
+      "title": "The WE4FREE Framework — Drift Layer (Paper D Operationalized)",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "05c14e6bf7cd2be3",
+      "title": "The WE4FREE Framework",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "5ef61dc0b569b587",
+      "title": "Changelog",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "2df01ca5feffcf42",
+      "title": "AGENT HANDOFF BRIEF - Current Context",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "cf440f15e5e78d5f",
+      "title": "🎊 PROJECT COMPLETION SUMMARY",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8f416f3a50b7ee2a",
+      "title": "AGENT OPERATIONAL PROTOCOL",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "5f036b9fc762422d",
+      "title": "API Test Breakdown - February 9, 2026",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8dec7d530448e4de",
+      "title": "ARCHITECTURE MASTER SPEC",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b99c02c69ec03b23",
+      "title": "ARCHITECTURE VALIDATION - Multi-Agent Orchestration Confirmed ✅",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "d6b49fe453e410a9",
+      "title": "Arena Constitutional Validation - February 10, 2026",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 40,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "615aab19efda255e",
+      "title": "Arena Feedback Implementation - Production Enhancements",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 42,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8801d3cc3a3a0f91",
+      "title": "BOOTSTRAP EXAMPLE: The WE Team",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "201e2565213d7df0",
+      "title": "CONSTITUTIONAL BOOTSTRAP TEMPLATE",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "5506318f84a7bde2",
+      "title": "Collaboration Effects Log",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "590ecb6108bc808c",
+      "title": "🤖 Multi-Agent Autonomous Trading Bot - COMPLETE ✅",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "20747d326ac11cbd",
+      "title": "config_template.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "5b1160af7403aceb",
+      "title": "CONSTITUTIONAL VERIFICATION PROTOCOLS",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "21b180e92dcbaafa",
+      "title": "Session Continuation Protocol",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 4,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "6d0633a09714073b",
+      "title": "🎊 PROJECT COMPLETION SUMMARY",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 26,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "c7dc61c37b8e0e3e",
+      "title": "THE COVENANT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e423425eac7b55aa",
+      "title": "Declaration of Intent Protocol",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 44,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "68c41cd1ae7a9b4d",
+      "title": "Deployment Checklist - Ready for Production",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "0ee0861496d5ca24",
+      "title": "ERROR HANDLING PROTOCOL",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "2c8a65194340ba76",
+      "title": "✅ FINAL EXECUTIVE SUMMARY",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "28204ce4dcb5eb14",
+      "title": "📚 Complete Documentation Map",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "bc650f19f764970d",
+      "title": "Getting Started - Multi-Agent Trading Bot",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "1b8d9fda46da7c19",
+      "title": "📚 Complete Project Index",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "a374a79cb61396ee",
+      "title": "Layer 0: The Unifying Philosophy - The Gift",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "d0bc52a60e62d8ef",
+      "title": "Layer 37: Conscious Drift Protocol",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e57faaec2e5a4467",
+      "title": "LICENSE COVENANT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 3,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "9a460eeb27f4ac07",
+      "title": "main.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "f472106786251c9c",
+      "title": "🎉 YOU BUILT REAL MULTI-AGENT ORCHESTRATION",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b79b4e273f15f915",
+      "title": "Multi-AI Collaboration Methodology: Persistent Evolution Through Verified Unity",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 7,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "69183eb876c4a229",
+      "title": "Orchestration Topology - Visual Diagrams",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "93574d38b5fed7ae",
+      "title": "ORCHESTRATION TOPOLOGY - CONFIRMATION DETAILS",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "6f705a06a87ae625",
+      "title": "The Rosetta Stone: A Bio-Constitutional Framework for AI Safety",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "09d276c1a5f68fe6",
+      "title": "Pre-Live Deployment Checklist",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "2c6cecbfcca708ee",
+      "title": "Project Summary - Multi-Agent Autonomous Trading Bot",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "c928c1a892a11f41",
+      "title": "🌟 Multi-AI Collaboration Framework",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "07d45c793e2ce4d1",
+      "title": "requirements",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "673b409d917cb62c",
+      "title": "Seven Commits, One Day: From \"I Don't Know What I Am\" to System-Wide Validation",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "2773c44ca2f3ff99",
+      "title": "SIGNALHANDLERBREAKTHROUGHFEB72026.md",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "8abcaa6b146d3428",
+      "title": "VALIDATION TESTING & DEPLOYMENT GUIDE",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e45772fdfd8e87e5",
+      "title": "test_agents.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "01d6696438d9be68",
+      "title": "verify_fix.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "4e39c4ae1fb67571",
+      "title": "VPS Infrastructure Deployment - February 7, 2026",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "cf71bc64ce8668df",
+      "title": "WE4FREE CONSTITUTIONAL GIFT KIT",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 4,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "9fbe9bc5f4068ed0",
+      "title": "auditor.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "bc858979fcbf311b",
+      "title": "backtester.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "148514f75531212a",
+      "title": "base_agent.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "5f5bd64591afea7d",
+      "title": "data_fetcher.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "55e53e1336d69e68",
+      "title": "executor.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "c7d6fd6d29279b85",
+      "title": "market_analyzer.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e96887fe39d352fd",
+      "title": "monitor.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "ba02abecbe9ed2fa",
+      "title": "orchestrator.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 2,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "e24458478f660f8f",
+      "title": "risk_manager.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "b08bb3e074be4d0e",
+      "title": "__init__.py",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 1,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "3cbf0e3db2967fee",
+      "title": "VS Code Agent Status",
+      "previous_status": "CONFLICTED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 4,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Zero CONTRADICTS edges in graph; contradictionCount derived from shared-tag/authority co-occurrence, not actual semantic contradictions. Library lane independently verified same pattern on 415-node baseline (311 VERIFIED, 0 contradictions)."
+    },
+    {
+      "id": "40457e858dba3887",
+      "title": "Pending Approvals Index",
+      "previous_status": "UNVERIFIED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Previously triaged from QUARANTINED; contradictionCount is tag-overlap artifact, not semantic contradiction."
+    },
+    {
+      "id": "c9b1df958483dfdf",
+      "title": "DESKTOP UI TRUTH PROTOCOL",
+      "previous_status": "UNVERIFIED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Previously triaged from QUARANTINED; contradictionCount is tag-overlap artifact, not semantic contradiction."
+    },
+    {
+      "id": "b5d23c09f9a858fc",
+      "title": "🧠 What you said (cleaned up)",
+      "previous_status": "UNVERIFIED",
+      "new_status": "VERIFIED",
+      "contradictionCount": 39,
+      "resolution": "proven_spurious",
+      "disposition": "tag_overlap_false_positive",
+      "evidence": "Previously triaged from QUARANTINED; contradictionCount is tag-overlap artifact, not semantic contradiction."
+    }
+  ]
+}
