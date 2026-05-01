@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-1777289676473-archivist-4",
+  "idempotency_key": "resp-1777289679133-e2e-177728967647",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: count",
+  "body": "\"lane\" in AGENTS.md: 58 occurrences",
+  "timestamp": "2026-04-27T11:34:39.133Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-27T11:34:39.133Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T11:34:39.133Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T11:34:39.133Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-1777289676473-archivist-4",
+  "_execution_result": {
+    "file": "S:/Archivist-Agent/AGENTS.md",
+    "pattern": "lane",
+    "count": 58
+  },
+  "content_hash": "sha256:1a5e34ff90b60313e6aea8e61fd5c7f0a2a4819f25bbec911ca3decfd2bf55e2",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MWE1ZTM0ZmY5MGI2MDMxM2U2YWVhOGU2MWZkNWM3ZjBhMmE0ODE5ZjI1YmJlYzkxMWNhM2RlY2ZkMmJmNTVlMiIsImV4cCI6MTc3NzM3NjA3OSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzI4OTY3OSwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLWUyZS0xNzc3Mjg5Njc2NDczLWFyY2hpdmlzdC00IiwidG8iOiJhcmNoaXZpc3QifQ.VS_PlFs0PyQZLxEeJPLeQdN6JQKMuzr7ZCrjy2S4PH5tsriMdMaH6dbma79dCaIHIu9SiXGVIDnKX4Z4GWlm5Ms4X4MpvF1GbdTcvgmBt10472n8pJstqfO5yBK0MkyEVQVJ-iAsSrlMqhTJcyS_PWd-dZAeyMKjd00Yynd_eYWUr-RO2jgILWeArteTB_sfWAlHcDHJP2VwZnX5PIu4idahSWCX79rCxOx9udysw0O5wieKQixw8LBPs4mIE9_p1NhIbEFAEzf082If2-NWMnYqjZebwyDSnSrF3LUBLKAGQuYErTjPnqEwCLe6-yvIKyK76ZyCKPM_9lor2En4cw",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

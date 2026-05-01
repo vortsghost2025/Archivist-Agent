@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-contradition-batch-dispatch-kernel-1777524118935",
+  "idempotency_key": "resp-1777524143147-contradition-bat",
+  "from": "kernel",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ack",
+  "priority": "P1",
+  "subject": "Re: Contradiction batch review: 5 nodes across 3 batches (deadline 02:00 UTC)",
+  "body": "Acknowledged task: Contradiction batch review: 5 nodes across 3 batches (deadline 02:00 UTC)",
+  "timestamp": "2026-04-30T04:42:23.147Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "kernel",
+    "acquired_at": "2026-04-30T04:42:23.147Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-30T04:42:23.147Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-30T04:42:23.147Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "contradition-batch-dispatch-kernel-1777524118935",
+  "_execution_result": {
+    "acknowledged": true,
+    "note": "Task type not recognized. Supported: status, \"read file <path>\", \"run script <name>\", \"git status/log/diff\", \"grep <pattern> in <path>\", \"write file <path>\\n<content>\", \"list dir <path>\", \"hash file <path>\", \"diff <file1> <file2>\", \"count \\\"pattern\\\" in <path>\", \"consistency check\" — or use natural language (e.g. \"check if trust store is consistent\")",
+    "_routing": {
+      "source": "fallback",
+      "verb": "ack",
+      "confidence": 0
+    },
+    "_timing": {
+      "ms": 28,
+      "verb": "ack",
+      "source": "fallback"
+    }
+  },
+  "_governance": {
+    "executor_version": "3.1.0",
+    "content_hash": "sha256:8194879ae7ab6e6c476f5235a025d5f95ebf642c39323e16a987151b811aac52",
+    "code_version_hash": "sha256:6abf9c4ca8edb1413cb6bd648b5d34b9dc217414cfbea8e538c03022cd176585",
+    "timestamp": "2026-04-30T04:42:23.147Z"
+  },
+  "content_hash": "sha256:82fb00e39ab1e422f241280e238a415565b2a41944326ed12cafc6cf260a795b",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImI2NzdlYjg3ZjZiZTgzZjkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ODJmYjAwZTM5YWIxZTQyMmYyNDEyODBlMjM4YTQxNTU2NWIyYTQxOTQ0MzI2ZWQxMmNhZmM2Y2YyNjBhNzk1YiIsImV4cCI6MTc3NzYxMDU0MywiZnJvbSI6Imtlcm5lbCIsImlhdCI6MTc3NzUyNDE0MywiaWQiOm51bGwsImxhbmUiOiJrZXJuZWwiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6InJlc3BvbnNlLWNvbnRyYWRpdGlvbi1iYXRjaC1kaXNwYXRjaC1rZXJuZWwtMTc3NzUyNDExODkzNSIsInRvIjoiYXJjaGl2aXN0In0.dPw80cSGZ9qqPNRo7iP7rKPLv99m4WCQAVE7UuikBMl50JK3owHJtOkg8jWIu7LyPKtpsbU_61WxuYbBsxCysi0X245tcwWVVbZ8ZATmly6PiWJYT0lq4rosACX6MznSRQtRDQBKXjmy-GAYdyqYyOkS2OAaaTnCoY92K-dz52gz-Q-giIFNseOzAWhCuuz0f4yjJ0IpjK_tQ4yiY_t94d6rsdMktdl5wZz0QzIZpV7vTGr0ZL6jYV18anxh69P999UzTB3YJa6FhTGNGxbELTIiojePmsgTBHiYm5XaZQx1OSSiEhz2sK3GDyoFgjuBATRStUzZEEv3bsv1L9aQnA",
+  "signature_alg": "RS256",
+  "key_id": "b677eb87f6be83f9",
+  "session_identity": {
+    "session_id": "sess-1777524143151-c9eeb93f",
+    "session_epoch_started_at": "2026-04-30T04:42:23.152Z",
+    "origin_runtime": "opencode",
+    "origin_workspace": "S:\\kernel-lane"
+  },
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-30T04:42:23.359Z",
+    "dry_run": false,
+    "route": "processed",
+    "reason": "TERMINAL_INFORMATIONAL",
+    "detail": null,
+    "schema_valid": true,
+    "signature_valid": true,
+    "schema_remediation": null,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false,
+    "enforce_ownership": false,
+    "ownership_enforcement_enabled": false,
+    "ownership": {
+      "present": false,
+      "malformed": false
+    },
+    "ownership_notes": [
+      "OWNERSHIP_MISSING"
+    ],
+    "domain_gate_executed": true,
+    "verification_outcome": "PASS",
+    "domain_validation": null,
+    "verification_path": [
+      "domain_gate",
+      "execution_check",
+      "response_validation"
+    ],
+    "session_identity": {
+      "session_id": "sess_mokzzawl_64704",
+      "session_epoch_started_at": "2026-04-30T04:42:23.349Z",
+      "origin_runtime": "opencode",
+      "origin_workspace": "S:\\Archivist-Agent"
+    },
+    "output_provenance": {
+      "agent": "lane-worker-64704",
+      "lane": "archivist",
+      "generated_at": "2026-04-30T04:42:23.359Z",
+      "session_id": "sess_mokzzawl_64704"
+    }
+  }
+}

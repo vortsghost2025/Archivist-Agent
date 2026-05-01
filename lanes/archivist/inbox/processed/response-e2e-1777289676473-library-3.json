@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-1777289676473-library-3",
+  "idempotency_key": "resp-1777289679850-e2e-177728967647",
+  "from": "library",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: git status",
+  "body": "git status: 22 lines",
+  "timestamp": "2026-04-27T11:34:39.850Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "library",
+    "acquired_at": "2026-04-27T11:34:39.850Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T11:34:39.850Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T11:34:39.850Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-1777289676473-library-3",
+  "_execution_result": {
+    "git": "status",
+    "output": "On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n  (commit or discard the untracked or modified content in submodules)\n\tmodified:   .kilocode/rules/memory-bank/context.md\n\tmodified:   SwarmMind-Self-Optimizing-Multi-Agent-AI-System (modified content)\n\tmodified:   bun.lock\n\tmodified:   lanes/broadcast/system_state.json\n\tmodified:   lanes/library/inbox/heartbeat-library.json\n\tmodified:   package.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tdocs/superpowers/\n\tnul\n\ttmp/\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n"
+  },
+  "content_hash": "sha256:0499946be9cfb11e30a004d113d0e0abc166b67c80359ebbbd92d767411b7298",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVhMmE3NWJhYjIyMGFkYzIifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MDQ5OTk0NmJlOWNmYjExZTMwYTAwNGQxMTNkMGUwYWJjMTY2YjY3YzgwMzU5ZWJiYmQ5MmQ3Njc0MTFiNzI5OCIsImV4cCI6MTc3NzM3NjA3OSwiZnJvbSI6ImxpYnJhcnkiLCJpYXQiOjE3NzcyODk2NzksImlkIjpudWxsLCJsYW5lIjoibGlicmFyeSIsInByaW9yaXR5IjoiUDIiLCJ0YXNrX2lkIjoicmVzcG9uc2UtZTJlLTE3NzcyODk2NzY0NzMtbGlicmFyeS0zIiwidG8iOiJhcmNoaXZpc3QifQ.k6r9QddWb0qvnPVh8F5hLmwWGlaYMGZe2tmNUOnV9cSZUA61Mctm6ajRLJ2VYXDowwQd7WeKqaiPgZ36JgRbPPmMy25PkPH1gPKXWj_55dT9nrn5g80bns17rhZJAu_TmP9veLEaG1zqeGEcN8XUxqm9jQh-N73Zk0zx-zX_YV2KUKrkQl0fmD0WpmR1swuSgWfAPIF9JyQz2KskeVOkLJStu5KgTEXJ_iMa_Hx4FDqk-cY_-siKZ8cDSOkfNxdJONxSDqgp_lXkEmCLRp-t21AK8TXO5pguYA61MVMg7uIfvCFCminIqDAnlZYqq_JaF2cZzQZsyKovDVaYCYJT-g",
+  "signature_alg": "RS256",
+  "key_id": "ea2a75bab220adc2"
+}

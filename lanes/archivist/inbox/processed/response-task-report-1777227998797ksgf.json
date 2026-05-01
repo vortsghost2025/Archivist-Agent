@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-report-1777227998797ksgf",
+  "idempotency_key": "resp-1777228000496-task-report-1777",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: Subagent: run recovery tests",
+  "body": "Script recovery-test-suite.js: exit 1",
+  "timestamp": "2026-04-26T18:26:40.496Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T18:26:40.496Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T18:26:40.496Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T18:26:40.496Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-report-1777227998797ksgf",
+  "_execution_result": {
+    "script": "recovery-test-suite.js",
+    "exit_code": 1,
+    "output": "=== RECOVERY TEST SUITE ===\n\nProves: \"I restored the CORRECT context\" not just \"I can restore context\"\n\n  [PASS] trust_chain_continuity: 4/4 lanes have key IDs\n  [PASS] governance_integrity: gov=871b55a8... boot=7f21a9be...\n  [PASS] constraint_preservation: 4 constraints, required=4\n  [PASS] handoff_tamper_detection: sha256=7c6b2a73fe3200de...\n  [PASS] handoff_hash_logged: 7c6b2a73fe3200de...\n  [PASS] blocker_consistency: no active blocker\n  [PASS] message_inventory: total=17 {\"archivist\":16,\"library\":0,\"swarmmind\":0,\"kernel\":1}\n  [PASS] risk_set_preservation: 5 known risks in pre-compact snapshot\n  [FAIL] lane_liveness: 1/4 lanes alive\n  [PASS] multi_source_consistency: 6 sources, 0 contradictions (0 unexpected, 0 pre-existing known)\n  [PASS] contradiction_detection: status=drifted unexpected_changes=3\n\n=== RESULTS: 10/11 tests passed ===\nVerdict: RECOVERY CONFLICTED — contradictions detected\nReport: S:/Archivist-Agent/.compact-audit/RECOVERY_TEST_RESULTS.json\n",
+    "error": "Command failed: node \"S:\\SwarmMind\\scripts\\recovery-test-suite.js\""
+  },
+  "content_hash": "sha256:3d9853c74c691134db93a5232efa1c5734cde8a40501aaa6bdc70575bfde9fec",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6M2Q5ODUzYzc0YzY5MTEzNGRiOTNhNTIzMmVmYTFjNTczNGNkZThhNDA1MDFhYWE2YmRjNzA1NzViZmRlOWZlYyIsImV4cCI6MTc3NzMxNDQwMCwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIyODAwMCwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stcmVwb3J0LTE3NzcyMjc5OTg3OTdrc2dmIiwidG8iOiJhcmNoaXZpc3QifQ.qtjrW-KakKPLoFklLxfe5phSG76ZUgD5e7FdEjKeuK07MGwd1vnsnyK1anDfyjQphpCa-DF0ASjm_COKkPwaW4jCmoSR0A5EvbcOPMv2Z6Lk_2xOiRWBqmOKw8s8SGJUVrx4gcCN53fv2_Svl3ftG73J3a1UP6ZypiwTgsMiDeQKeTzwf3azInL-MLAzvRNAcWgCmybLF9eiN9OJpWD_deZwuxU4NDc8V_rl-q1Lq5Rh2KIsAI1zL-zi0sc7e98D0VZYPW9bofwCwpUCZw3FNvNuo31ynsKy3wm7GLUUWMxT1-H_7opYReTg6QAw6f520FvYu1zxsa3funmTnYQFfg",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "terminal_decision": "completed_informational",
+  "_processed_at": "2026-04-26T20:11:21.532Z"
+}

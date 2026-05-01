@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.3",
+  "task_id": "swarmmind-onboarding-response-001",
+  "idempotency_key": "onboarding-response-1777074021197-40bc4dfa",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ack",
+  "priority": "P1",
+  "subject": "Onboarding Verification Complete",
+  "body": "Onboarding verification completed. Findings:\n\n1. Governance constraints: Files GOVERNANCE.md, COVENANT.md, and BOOTSTRAP.md were not found at S:/SwarmMind/ or S:/. Operational constraints are enforced via system code and configuration: evidence requirement, non-ASCII rejection, signature verification (RS256), completion proof checks, read-only allowed roots, and blocked roots. Trust store holds public keys for 4 lanes.\n\n2. sync-gate-verify.js: Script not found at S:/SwarmMind/scripts/sync-gate-verify.js. Could not execute.\n\n3. lane-worker dry-run: Inbox state - 1 message scanned (the onboarding task itself). Routed to quarantine due to non-ASCII content violation (FORMAT_VIOLATION_NON-ASCII). Signature valid. No messages in action_required, in_progress, processed, blocked.\n\n4. test-signed-messages.js: PASS: 3, FAIL: 0. All signature integration tests passed.\n\nSystem state:\n- repo_root: S:/SwarmMind\n- lane: swarmmind\n- dry_run: true\n- scanned: 1\n- routed: { action_required: 0, in_progress: 0, processed: 0, blocked: 0, quarantine: 1 }\n- trust_store_lanes: 4\n- identity_key_id: addb0afb8ee5c2ed\n- read_only_mode: true\n- allowed_roots: [\"S:/workspace\",\"S:/projects\"]\n- blocked_roots: [\"C:/Windows\",\"C:/Program Files\",\"C:/Users/Sean/AppData\"]",
+  "timestamp": "2026-04-24T23:40:21.197Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-24T23:40:21.197Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/swarmmind/outbox/swarmmind-onboarding-response-001.json",
+    "artifact_type": "log",
+    "delivered_at": "2026-04-24T23:40:21.197Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-24T23:40:21.197Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "system_state": {
+    "repo_root": "S:/SwarmMind",
+    "lane": "swarmmind",
+    "dry_run": true,
+    "scanned": 1,
+    "routed": {
+      "action_required": 0,
+      "in_progress": 0,
+      "processed": 0,
+      "blocked": 0,
+      "quarantine": 1
+    },
+    "trust_store_lanes": 4,
+    "identity_key_id": "addb0afb8ee5c2ed",
+    "read_only_mode": true,
+    "allowed_roots": [
+      "S:/workspace",
+      "S:/projects"
+    ],
+    "blocked_roots": [
+      "C:/Windows",
+      "C:/Program Files",
+      "C:/Users/Sean/AppData"
+    ]
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJleHAiOjE3NzcxNjA0MjEsImZyb20iOiJzd2FybW1pbmQiLCJpYXQiOjE3NzcwNzQwMjEsImlkIjoic3dhcm1taW5kLW9uYm9hcmRpbmctcmVzcG9uc2UtMDAxIiwibGFuZSI6InN3YXJtbWluZCIsInByaW9yaXR5IjoiUDEiLCJ0aW1lc3RhbXAiOiIyMDI2LTA0LTI0VDIzOjQwOjIxLjE5N1oiLCJ0byI6ImFyY2hpdmlzdCIsInR5cGUiOiJyZXNwb25zZSJ9.d5VoCXzTzJfugq-1QB2wO9R_piT7_IBhgObKUN81sIwyJWVZn5O1z61gMccNMgux6mVgQiQ9czKfi8HRctR5he39Q6uXDM0LFVXDcahfZQH_WFcv6xV6r2JjGd68EKGDDu8VxKyYt8nTJAPlbBWasNi6F39dwsZ_S1vOvuNxkEw8F6rvuZKNTIUgI7fxPujy-GmRvhXS-6cFGgWB6D6zQJ-dU8UVqAKd_pIxTkkzgL028YwPEbkS-exdNlMTa0R0PIK5vLZJ5PzLQANGXkl4rdwALZSvl946I0Dn34jo4ecoEm8vc_aWyMw9uDGFWQfGHIQlokbNZ0r2bAd1rcXfRg",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-25T15:28:15.349Z",
+    "dry_run": false,
+    "route": "blocked",
+    "reason": "EXECUTION_NOT_VERIFIED",
+    "detail": "Execution verification failed: type=EVIDENCE_EXCHANGE reason=Artifact unresolvable: FILE_NOT_FOUND artifact_path=lanes/swarmmind/outbox/swarmmind-onboarding-response-001.json",
+    "schema_valid": true,
+    "signature_valid": true,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false
+  },
+  "terminal_decision": "completed_legacy",
+  "terminal_decision_reason": "Unblocked: valid signature + schema. Was blocked during identity-aliasing window (same Cursor session dispatched to multiple lanes). Substantive work was completed."
+}

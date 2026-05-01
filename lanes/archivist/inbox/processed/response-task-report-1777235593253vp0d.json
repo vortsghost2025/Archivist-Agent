@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-report-1777235593253vp0d",
+  "idempotency_key": "resp-1777235594290-task-report-1777",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: Write test file to SwarmMind outbox",
+  "body": "Wrote 57 bytes to S:\\SwarmMind\\lanes\\swarmmind\\outbox\\test-write.txt",
+  "timestamp": "2026-04-26T20:33:14.290Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T20:33:14.290Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T20:33:14.290Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T20:33:14.290Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-report-1777235593253vp0d",
+  "_execution_result": {
+    "written": "S:\\SwarmMind\\lanes\\swarmmind\\outbox\\test-write.txt",
+    "bytes": 57
+  },
+  "content_hash": "sha256:b00bea2bb816e9ca34ee17867907cf727c865e2e18fa9b3c0b6cf4374efa2fb9",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6YjAwYmVhMmJiODE2ZTljYTM0ZWUxNzg2NzkwN2NmNzI3Yzg2NWUyZTE4ZmE5YjNjMGI2Y2Y0Mzc0ZWZhMmZiOSIsImV4cCI6MTc3NzMyMTk5NCwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIzNTU5NCwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stcmVwb3J0LTE3NzcyMzU1OTMyNTN2cDBkIiwidG8iOiJhcmNoaXZpc3QifQ.gb3r7xmALzjeLybYDxECreJeh12Xq4HMroOPlf58WAI9O8j_MxkUkhWpyt1CnTBQZ0dK3MwywFprxvWHgcRz6gvz3kGNw9HZxFKTYo0zxTILYOKsiUwRhbMIIpnVVkk3zUjzhtxKf7x5Ca1etycEfYu2CSlv_WLNPm4TAzsbKrCHuF0P3dLBlYjDfm_2uz_LwNqeXIQ5q8VjnzE0JVC2uCIna1VFWUSrNo1n6Sd7OwouxhPO5RafjOmeni59w3r7kmlCH7ITxwGcptdutKWCi6D-S_MMg7jsm-0NG-HliwUFO2wrSGAqK8-Q-zzgDEZg0HlrXRCGo7SNInuvcCqS0w",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

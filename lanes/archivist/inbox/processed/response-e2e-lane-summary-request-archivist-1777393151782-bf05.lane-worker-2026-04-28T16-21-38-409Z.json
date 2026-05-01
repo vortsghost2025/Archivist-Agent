@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-lane-summary-request-archivist-1777393151782-bf05",
+  "idempotency_key": "resp-1777393268119-e2e-lane-summary",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ack",
+  "priority": "P1",
+  "subject": "Re: E2E TEST: Lane summary + next-step suggestions",
+  "body": "Acknowledged task: E2E TEST: Lane summary + next-step suggestions",
+  "timestamp": "2026-04-28T16:21:08.119Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-28T16:21:08.119Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-28T16:21:08.119Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-28T16:21:08.119Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-lane-summary-request-archivist-1777393151782-bf05",
+  "_execution_result": {
+    "acknowledged": true,
+    "note": "Task type not recognized. Supported: status, \"read file <path>\", \"run script <name>\", \"git status/log/diff\", \"grep <pattern> in <path>\", \"write file <path>\\n<content>\", \"list dir <path>\", \"hash file <path>\", \"diff <file1> <file2>\", \"count \\\"pattern\\\" in <path>\", \"consistency check\" — or use natural language (e.g. \"check if trust store is consistent\")",
+    "_routing": {
+      "source": "fallback",
+      "verb": "ack",
+      "confidence": 0
+    },
+    "_timing": {
+      "ms": 3,
+      "verb": "ack",
+      "source": "fallback"
+    }
+  },
+  "_governance": {
+    "executor_version": "3.1.0",
+    "content_hash": "sha256:4c0f509be04d45f9e1e6a3f59d6e13309e1a9bcdda0e0da0021124a73698e1ce",
+    "code_version_hash": "sha256:1ca86208a6734d7d396fc8ec356b78dda820aaedd650f932bfe7a6fcc40156b9",
+    "timestamp": "2026-04-28T16:21:08.119Z"
+  },
+  "content_hash": "sha256:38cd1b33575115e8fae1730f8830e37d001e443b4376b2718351e6c329846515",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjY1YWUwNWIyYTllNzQ5Y2IifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MzhjZDFiMzM1NzUxMTVlOGZhZTE3MzBmODgzMGUzN2QwMDFlNDQzYjQzNzZiMjcxODM1MWU2YzMyOTg0NjUxNSIsImV4cCI6MTc3NzQ3OTY2OCwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzM5MzI2OCwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6InJlc3BvbnNlLWUyZS1sYW5lLXN1bW1hcnktcmVxdWVzdC1hcmNoaXZpc3QtMTc3NzM5MzE1MTc4Mi1iZjA1IiwidG8iOiJhcmNoaXZpc3QifQ.HLuR7IgUNOFGouq2lyxMXbFXNAqiscpFAqbW7CTZ4x46sDL-cMaW9us_nQLk7P_zrnt-N9LvbIVMxImi2evL9vD_OtELXHM30t0BX1ylOL468u0sgnroZIA4ni-9pFRAtHRGztxVbWR9MhjllD9gKUlWJDAIutI7BNapUV870Hg9h4_qsg5qlhlqf392zzFMacbbj1RJDZv13S1REjXg4_HH_5CECoKEevaEdT3B-cnStJuckYe_4UxFhySkf5jogE-rXqJfBWoEtQdPZBOWzVnD1IlLULdvD_rycvLPmX1rMF0m81cK_3gRtirsJmCJGQRD68TFfCytaTSFbu3Waw",
+  "signature_alg": "RS256",
+  "key_id": "65ae05b2a9e749cb",
+  "session_identity": {
+    "session_id": "sess-1777393268124-a1741e2e",
+    "session_epoch_started_at": "2026-04-28T16:21:08.124Z",
+    "origin_runtime": "opencode",
+    "origin_workspace": "S:\\Archivist-Agent"
+  },
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-28T16:21:38.409Z",
+    "dry_run": false,
+    "route": "processed",
+    "reason": "TERMINAL_INFORMATIONAL",
+    "detail": null,
+    "schema_valid": true,
+    "signature_valid": true,
+    "schema_remediation": null,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false,
+    "enforce_ownership": false,
+    "ownership_enforcement_enabled": false,
+    "ownership": {
+      "present": false,
+      "malformed": false
+    },
+    "ownership_notes": [
+      "OWNERSHIP_MISSING"
+    ],
+    "domain_gate_executed": true,
+    "verification_outcome": "PASS",
+    "domain_validation": null,
+    "verification_path": [
+      "domain_gate",
+      "execution_check",
+      "response_validation"
+    ],
+    "session_identity": {
+      "session_id": "sess_moiu2uab_47848",
+      "session_epoch_started_at": "2026-04-28T16:21:38.387Z",
+      "origin_runtime": "opencode",
+      "origin_workspace": "S:\\Archivist-Agent"
+    }
+  }
+}

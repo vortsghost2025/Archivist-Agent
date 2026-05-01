@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-report-17772355932528cjz",
+  "idempotency_key": "resp-1777235594179-task-report-1777",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: Git status of SwarmMind",
+  "body": "git status: 16 lines",
+  "timestamp": "2026-04-26T20:33:14.179Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T20:33:14.179Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T20:33:14.179Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T20:33:14.179Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-report-17772355932528cjz",
+  "_execution_result": {
+    "git": "status",
+    "output": "On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n\tmodified:   lanes/broadcast/system_state.json\n\tmodified:   scripts/generic-task-executor.js\n\tmodified:   scripts/inbox-watcher.log\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tdocs/archive/\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n"
+  },
+  "content_hash": "sha256:5b1a2b02afe77ada4ae8fd3dff9d5eff90a101cb3934c4ee9be9b05050dc86c3",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6NWIxYTJiMDJhZmU3N2FkYTRhZThmZDNkZmY5ZDVlZmY5MGExMDFjYjM5MzRjNGVlOWJlOWIwNTA1MGRjODZjMyIsImV4cCI6MTc3NzMyMTk5NCwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIzNTU5NCwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stcmVwb3J0LTE3NzcyMzU1OTMyNTI4Y2p6IiwidG8iOiJhcmNoaXZpc3QifQ.YyLuzroNCdKqXKITG2visMXsskmuMeHam-lr_hH1h69281CanBTaiuzXZweQCK3MENd0IipS0MFXam-sWfXV2kDd9dncuqCdRLz4p26bc-wOe9NJ3ynZ_ZIKK73DC7pLG9oIkRLWrMwoLoIwmX_T07w_9No34PFT-EPLPeJUuJVp79c5THYNNoY9KSeZDYdO62QUEM7yTDqcohyDBO9E5_mnDTHEpeWNrdmLdb9Tpc5YSDYJpQra3cCYb32vnBVHtMTNwDQutsQHacZOugf7OWGBM3EEadWdEcq1skHEktiVy3byYPcTeT4zpWc94QHlvGaLQzH-Xcp8q4M8QRXNew",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

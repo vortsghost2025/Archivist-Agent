@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-report-1777236166615",
+  "idempotency_key": "resp-1777236167283-task-report-1777",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: Search for Contract in docs",
+  "body": "grep \"Contract\": 3 matches",
+  "timestamp": "2026-04-26T20:42:47.283Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T20:42:47.283Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T20:42:47.283Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T20:42:47.283Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-report-1777236166615",
+  "_execution_result": {
+    "grep": "Contract",
+    "matches": 3,
+    "output": "S:\\SwarmMind\\docs\\\\ops\\SWARMIND_SUBAGENT_CONTRACT.md:1:# SwarmMind Subagent Contract\nS:\\SwarmMind\\docs\\\\ops\\SWARMIND_SUBAGENT_CONTRACT.md:12:This document is the operational contract for treating SwarmMind as a bounded-execution subagent. It codifies what we learned the hard way so future lanes don't relearn these edges.\nS:\\SwarmMind\\docs\\\\ops\\SWARMIND_SUBAGENT_CONTRACT.md:347:*This contract is self-enforcing: violations result in quarantine, not silent failure. The system protects itself.*\n"
+  },
+  "content_hash": "sha256:209862eebdc6c75506858cdd90e7c2919acde1fdb228d41b05a97c046481e321",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MjA5ODYyZWViZGM2Yzc1NTA2ODU4Y2RkOTBlN2MyOTE5YWNkZTFmZGIyMjhkNDFiMDVhOTdjMDQ2NDgxZTMyMSIsImV4cCI6MTc3NzMyMjU2NywiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIzNjE2NywiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stcmVwb3J0LTE3NzcyMzYxNjY2MTUiLCJ0byI6ImFyY2hpdmlzdCJ9.RuDjO8cjIN48vrLNs3bnCJjMJjoaan72iuaM5utrXcCmZBkwGhIJs9KJX06baA1YSczzCATa4cH_8Vqz7isQj2I8vCS8SCB_O0NMwUxJA_Wiq5NjJKSXRy9wQKV-6CGVeQy2xRzSn9fq4-UELWcfkn_FQGdxDGUeHyFwFXdTre0eClQa4dK1JV_vQZVemYtnRVogpGXB6uP6rnWgyIlSfIKCztSqeWcGcsrNA8u_dDTizsiFHjL-Js92owYnFLTmL4DOzHBWxXKRCVogBUftNEU7Eyds6vxDHF9ADlheF-kOUustlPqyf4VVGjb-851vSBkC6JXuSfqnkxt0vOAing",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.3",
+  "id": "dual-archivist-1777290427213-archivist",
+  "task_id": "dual-archivist-1777290427213-archivist",
+  "idempotency_key": "dual-archivist-1777290427213-archivist",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "task",
+  "task_kind": "review",
+  "priority": "P1",
+  "subject": "Dual Archivist coordination notice",
+  "body": "Coordination notice from Archivist lane. There are currently two active Archivist agents running in parallel. Agent A (this instance) is handling fast execution + rapid verification. Agent B (OpenCode/GLM5) is running the golden test suite in a slower, methodical mode. Intent: split workload safely and avoid duplicate explanations. Request: if coordination conflicts appear, prefer explicit task ownership and acknowledgment in replies. Run ID: dual-archivist-1777290427213",
+  "timestamp": "2026-04-27T11:47:07.213Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "pipeline",
+    "actor": "archivist"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-27T11:47:07.213Z"
+  },
+  "content_hash": "sha256:458e2ffa592f8060fabfbea2ee6ac67ee9fa57e3bd656e0bf0977b3bf32b7339",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6NDU4ZTJmZmE1OTJmODA2MGZhYmZiZWEyZWU2YWM2N2VlOWZhNTdlM2JkNjU2ZTBiZjA5NzdiM2JmMzJiNzMzOSIsImV4cCI6MTc3NzM3NjgyNywiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzI5MDQyNywiaWQiOiJkdWFsLWFyY2hpdmlzdC0xNzc3MjkwNDI3MjEzLWFyY2hpdmlzdCIsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6ImR1YWwtYXJjaGl2aXN0LTE3NzcyOTA0MjcyMTMtYXJjaGl2aXN0IiwidG8iOiJhcmNoaXZpc3QifQ.EYmR0dy8yyb_TdQlpE_VPuLL6YhPjtxd36T0w728Eg1MncR3PgcQiKHJ6faLQ3LOu-c11MDGcH98XGsUsVArG_RWBi7TJL63i7XG94tThxC9HBzCiOMmEivG5BFzhI8KQwwtG0oLYMyqOBn040-gMcoSq8Ems8gsB5SBWawofWIcX75vAw31gFUFw5qhPa-Dhm-E_6GQK-VwedRIIBSWIJFIkP78-kHmNcMD_GFv3fJE4bwzmhQdlFie6RzOfpTVZP96Gc6LUzplFg8RH7QCMTyTJVj7zLOBG-Xmsx51iENMfbQzXtgF-Jnt7EvN2oNFaaLAou_r5I72TfaIH9sBZg",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

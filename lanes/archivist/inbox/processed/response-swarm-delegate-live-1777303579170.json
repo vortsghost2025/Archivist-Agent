@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-swarm-delegate-live-1777303579170",
+  "idempotency_key": "resp-1777303579642-swarm-delegate-l",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ack",
+  "priority": "P1",
+  "subject": "Re: Delegated capability test: status (no-proof path)",
+  "body": "Acknowledged task: Delegated capability test: status (no-proof path)",
+  "timestamp": "2026-04-27T15:26:19.642Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T15:26:19.643Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T15:26:19.643Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T15:26:19.643Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "swarm-delegate-live-1777303579170",
+  "_execution_result": {
+    "acknowledged": true,
+    "note": "Task type not recognized. Supported: status, \"read file <path>\", \"run script <name>\", \"git status/log/diff\", \"grep <pattern> in <path>\", \"write file <path>\\n<content>\", \"list dir <path>\", \"hash file <path>\", \"diff <file1> <file2>\", \"count \\\"pattern\\\" in <path>\", \"consistency check\" — or use natural language (e.g. \"check if trust store is consistent\")",
+    "_routing": {
+      "source": "fallback",
+      "verb": "ack",
+      "confidence": 0
+    },
+    "_timing": {
+      "ms": 3,
+      "verb": "ack",
+      "source": "fallback"
+    }
+  },
+  "_governance": {
+    "executor_version": "3.1.0",
+    "content_hash": "sha256:4c0f509be04d45f9e1e6a3f59d6e13309e1a9bcdda0e0da0021124a73698e1ce",
+    "timestamp": "2026-04-27T15:26:19.643Z"
+  },
+  "content_hash": "sha256:b93949c6a622ff609ef8f8944ab7310e4e01aa74742b4c3424e6ab60c200a6e4",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6YjkzOTQ5YzZhNjIyZmY2MDllZjhmODk0NGFiNzMxMGU0ZTAxYWE3NDc0MmI0YzM0MjRlNmFiNjBjMjAwYTZlNCIsImV4cCI6MTc3NzM4OTk3OSwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzMwMzU3OSwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6InJlc3BvbnNlLXN3YXJtLWRlbGVnYXRlLWxpdmUtMTc3NzMwMzU3OTE3MCIsInRvIjoiYXJjaGl2aXN0In0.kpZv2EbqXi9ZL8w8T_Mya02iAsy5_oPQoG70AftpKzn7AaYPHUNvv0E9d5lsSIZmev-O0977Rxg-rjdG_ym5SDkAdyCbyEVNbDRi5Be343j8BQKEEcxFHdhEKiBA-fVRAl0IDSIJrM0bh5ZX1PklYjir009B7UDP8GGrfC_j-kjvkOnL043MQvo0w4fK5uV5l_Tmt8FeZqgc8C-lTx3tnhBQR1rv3l3aLdpw43co2frWhyKEn7wBJPuXdKeIzIQjEVry16OGgr3RIqTSpGP9cceWOWWyj9ZHekOrWJU6Xgey-K2577Gd_mQQXMSDyagOjTfuhwjfL4-FLj3CeXmZpg",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

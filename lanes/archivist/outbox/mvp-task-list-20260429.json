@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "task_list_id": "graph-analyst-mvp-tasks-20260429",
+  "generated_at": "2026-04-30T14:45:00Z",
+  "tasks": [
+    {
+      "id": "GA-1",
+      "description": "Implement read-only Graph Analyst agent that accepts exported graph snapshot JSON files and produces analysis reports.",
+      "priority": "high"
+    },
+    {
+      "id": "GA-2",
+      "description": "Define and implement the core detection rules: contradiction cluster detection, connectivity anomaly detection, declared-vs-enforced mismatch detection, drift-over-time detection, and coverage gap detection.",
+      "priority": "high"
+    },
+    {
+      "id": "GA-3",
+      "description": "Create output formatter producing JSON reports with fields: finding_id, source_snapshot_id, source_repo_or_filter, detection_rule, observation, evidence_paths, confidence, recommended_owner, recommended_next_action, status, authority_warning.",
+      "priority": "medium"
+    }
+  ],
+  "notes": "All tasks are read-only, no lane message dispatch, and must be confined to the Graph Analyst lane."
+}

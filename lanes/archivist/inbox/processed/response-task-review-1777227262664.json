@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-review-1777227262664",
+  "idempotency_key": "resp-1777227376060-task-review-1777",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: Subagent test: consistency check",
+  "body": "Consistency check: PASS",
+  "timestamp": "2026-04-26T18:16:16.060Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T18:16:16.060Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T18:16:16.060Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T18:16:16.060Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-review-1777227262664",
+  "_execution_result": {
+    "check_type": "cross-lane-consistency",
+    "output": "=== CROSS-LANE CONSISTENCY CHECK ===\n\n1. TRUST STORES\n  archivist: hash=58a8aad5aa6597fe | archivist:ee70b78105bc6189, kernel:b677eb87f6be83f9, library:ea2a75bab220adc2, swarmmind:addb0afb8ee5c2ed\n  kernel: hash=58a8aad5aa6597fe | archivist:ee70b78105bc6189, kernel:b677eb87f6be83f9, library:ea2a75bab220adc2, swarmmind:addb0afb8ee5c2ed\n  library: hash=58a8aad5aa6597fe | archivist:ee70b78105bc6189, kernel:b677eb87f6be83f9, library:ea2a75bab220adc2, swarmmind:addb0afb8ee5c2ed\n  swarmmind: hash=58a8aad5aa6597fe | archivist:ee70b78105bc6189, kernel:b677eb87f6be83f9, library:ea2a75bab220adc2, swarmmind:addb0afb8ee5c2ed\n  Consistent: YES\n\n2. SCHEMA VALIDATOR ENUMS\n  execution.mode: SYNCED\n  execution.engine: SYNCED\n  execution.actor: SYNCED\n  task_kind: SYNCED\n  artifact_type: SYNCED\n  type: SYNCED\n  priority: SYNCED\n\n3. SYSTEM STATE\n  archivist: status=consistent | contradictions=0 | processed_ok=true\n  kernel: status=consistent | contradictions=0 | processed_ok=true\n  library: status=consistent | contradictions=0 | processed_ok=true\n  swarmmind: status=consistent | contradictions=0 | processed_ok=true\n\n4. SHARED SCRIPT VERSIONS (by file size)\n  lane-worker.js: SYNCED\n  generic-task-executor.js: SYNCED\n  post-compact-audit.js: SYNCED\n  create-signed-message.js: SYNCED\n  identity-enforcer.js: SYNCED\n  relay-daemon.js: SYNCED\n  artifact-resolver.js: SYNCED\n  completion-proof.js: SYNCED\n  heartbeat.js: SYNCED\n\n5. .IDENTITY IN .GITIGNORE\n  archivist: COVERED\n  kernel: COVERED\n  library: COVERED\n  swarmmind: COVERED\n\n6. PEM FILES IN GIT HISTORY\n  archivist: 2 PEM/KEY files found\n    .identity/private.pem\n    .identity/public.pem\n  kernel: 6 PEM/KEY files found\n  library: CLEAN\n  swarmmind: 7 PEM/KEY files found\n\n7. INBOX HYGIENE\n  archivist: root=13 ar=0 proc=41 block=0 quar=0\n  kernel: root=1 ar=0 proc=20 block=0 quar=0\n  library: root=0 ar=0 proc=18 block=0 quar=0\n  swarmmind: root=0 ar=1 proc=15 block=0 quar=2\n\n8. BOOTSTRAP.MD CONSISTENCY\n  Consistent: YES\n\n=== END CONSISTENCY CHECK ===\n"
+  },
+  "content_hash": "sha256:743b629f821367fe2dbcea7970f2a2ccca352df9a11f8d18fa7bb2da355d21c9",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6NzQzYjYyOWY4MjEzNjdmZTJkYmNlYTc5NzBmMmEyY2NjYTM1MmRmOWExMWY4ZDE4ZmE3YmIyZGEzNTVkMjFjOSIsImV4cCI6MTc3NzMxMzc3NiwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIyNzM3NiwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stcmV2aWV3LTE3NzcyMjcyNjI2NjQiLCJ0byI6ImFyY2hpdmlzdCJ9.kduFG1eGIiyH5j6mhXX0sYwoPV0Y9z7v4Q23fehVQ8NtGSrqxc3yKPtQzkd8_-avdaTdh4k7PXiVJ5Z1EgYPV3BDJmxetC_XbcKkZyrLIbDXvFhCPWQZCOlYPrKlzth7JE00WTCveJU_pL5AcjZ3cQyR_8v6vN2s27s1cECINVkJ5sx0CvN_VVQA-5NE7y9ej54iOxFosK7SK_fiYbS5EhgNiT2FupKPehU6RLTI-0fMERxsVKiEud5eqjB8A1f6APk1-RcX4G5DiiN9NXdTTHkB5tLSyjwmNavK8w78KCPYprvCwWUVpLNZKHgJtMQwSKK8McoDALDTIQmtIOrjRw",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "terminal_decision": "completed_informational",
+  "_processed_at": "2026-04-26T20:11:21.541Z"
+}

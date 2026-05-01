@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-1777290391593-archivist-1",
+  "idempotency_key": "resp-1777290391605-e2e-177729039159",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "status",
+  "priority": "P2",
+  "subject": "Re: status natural language",
+  "body": "archivist: processed=80 quarantine=0 blocked=0 ar=0 key_id=ee70b78105bc6189 state=consistent ok=true",
+  "timestamp": "2026-04-27T11:46:31.605Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-27T11:46:31.605Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T11:46:31.606Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T11:46:31.606Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-1777290391593-archivist-1",
+  "_execution_result": {
+    "processed_count": 80,
+    "quarantine_count": 0,
+    "blocked_count": 0,
+    "action_required_count": 0,
+    "trust_store_key_id": "ee70b78105bc6189",
+    "system_state": {
+      "status": "consistent",
+      "contradictions": 0,
+      "processed_ok": true
+    },
+    "_routing": {
+      "source": "nlp",
+      "verb": "status",
+      "confidence": 0.7,
+      "matched_pattern": "/how many.*process/"
+    }
+  },
+  "content_hash": "sha256:0f3629321fa88d0dc792c3918f6845a9f280c3f868a9f6629543678c059dfbd1",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MGYzNjI5MzIxZmE4OGQwZGM3OTJjMzkxOGY2ODQ1YTlmMjgwYzNmODY4YTlmNjYyOTU0MzY3OGMwNTlkZmJkMSIsImV4cCI6MTc3NzM3Njc5MSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzI5MDM5MSwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLWUyZS0xNzc3MjkwMzkxNTkzLWFyY2hpdmlzdC0xIiwidG8iOiJhcmNoaXZpc3QifQ.JXNMGSK94Hm9-E2SO1wITzGiQ_5ruPS-ljZjZAtFsRA0u84ItujL5OaGHoU73ZoCz72o3lSP87LwG-iMpfpAA80VfOMxsisu4n1PNl222A7QuW7ei9-5g8VWzAiXUU99xok-DMk5t0_YXqk95eO_DwNxwaCcbcgX3ZnrjXORF6UPZ-0T0-XkoMqmbiZGmS0GwwZT2M1nPlErHfxAPrgffdl19jOTLsjxzqCLzUWraJaEJ1aQbV7z3d4XGqBxyJCm--AH_m_20TmeontlL5vRI1MRMFTpoQJ_yMDditgJKMsk6_jqLI2zrsQA2AdXY0mFUoEZBi8pZ7cFdFcN6CVbIA",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

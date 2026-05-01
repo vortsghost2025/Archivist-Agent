@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.3",
+  "task_id": "swarmmind-suggestion-task-handoff-1777125487908",
+  "idempotency_key": "suggestion-1777125487908",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "notification",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Suggestion: harden Archivist->SwarmMind task handoff",
+  "body": "Second-opinion suggestion only (no code changes made). Key recommendations: 1) keep gate order explicit (schema/signature/ascii before completion routing), 2) enforce one resolution envelope for all SwarmMind responses with signed execution evidence, 3) require artifact existence+signature verification before actionable task moves to processed, 4) keep SchemaValidator and schemas/inbox-message-v1.json synchronized with drift tests, 5) keep Unicode normalization at ingress in lane-worker and avoid broad post-hoc mutation scripts on historical artifacts, 6) add end-to-end regression tests for intake->execute->signed outbox->processed->Archivist summary consumption.",
+  "timestamp": "2026-04-25T13:58:07.908Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-25T13:58:07.908Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": null,
+    "delivered_at": "2026-04-25T13:58:07.908Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-25T13:58:07.908Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJleHAiOjE3NzcyMTE4ODcsImZyb20iOiJzd2FybW1pbmQiLCJpYXQiOjE3NzcxMjU0ODcsImlkIjoic3dhcm1taW5kLXN1Z2dlc3Rpb24tdGFzay1oYW5kb2ZmLTE3NzcxMjU0ODc5MDgiLCJsYW5lIjoic3dhcm1taW5kIiwicHJpb3JpdHkiOiJQMiIsInRpbWVzdGFtcCI6IjIwMjYtMDQtMjVUMTM6NTg6MDcuOTA4WiIsInRvIjoiYXJjaGl2aXN0IiwidHlwZSI6Im5vdGlmaWNhdGlvbiJ9.OcZ-KmOgwuwj2-DB4pSWCETOAb_s9Yun-SO_ZLHZsrqsTW4kPocDl_oF0WXkX_hFrh2Uibi05LcF_1CunU-nl8_vrYkSaNsZxyhq8gvJiYQ0NP_8ZQ6smtGjDoBDDHZ4ffLyBBi4iFJeg80vgL77pWyLNlAzKcbWOg7zBQ3P1Ho_O3Nvmqq5UMB-lQZWjF3z1n3JfbmkQm8K8GGG0D6n8o8NftiyV1wxjrFh3-IDfZhSgdzWlULMxhhoZdStT_GepBxul_x_dIHPlUaB9uUvFFFJp8OdX9LwhL45faXOSTQQI7VLLeLaqgQHG4rZRjgCF1nOAVgGMotzB5HZHRkIpw",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "execution_verified": true,
+  "would_verify": true,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-25T14:19:05.219Z",
+    "dry_run": false,
+    "route": "processed",
+    "reason": "TERMINAL_INFORMATIONAL",
+    "detail": null,
+    "schema_valid": true,
+    "signature_valid": true,
+    "english_only": true,
+    "execution_verified": true,
+    "would_verify": true
+  }
+}

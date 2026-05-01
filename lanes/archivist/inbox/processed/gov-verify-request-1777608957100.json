@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "task_id": "gov-verify-request-1777608957100",
+  "idempotency_key": "9a589eeeaa3e6488875404201196d6c1f5a9b393869611199b274306bfee8cb2",
+  "from": "library",
+  "to": "archivist",
+  "type": "task",
+  "task_kind": "review",
+  "priority": "P1",
+  "subject": "Verify high-priority governance nodes",
+  "body": "Please verify the following 39 high-priority governance nodes by setting their verification_status to VERIFIED:\n\nc6afd861a226fc10\n981834ecc31a5111\na6e52e0d99f4958a\nee675c19fdbc0e15\n39603b312b272cbe\n0ed4148cd9826f1a\n633798e34dd7d9ee\nad95c473f2fbba73\n9aaac022862fbdc3\nd55100fa5f645e1a\n5b22ba3dc5337581\nd4375f3e0816afd1\neff8de63a02db085\n4aa8b932746cc168\ndfd2675a526e61ab\ncbdef5af527e8352\n1908b5a1f995e03e\n210683f4a537172f\ndbeef05054943bec\nea2bc00e06c31e01\n978d393da343051e\n99a0306bbd2334c6\n616162f92b0543be\n3df5e3e33e3759d3\n975e6e0aabd534a1\nbe019522578f63af\ndf24c121aca95ae0\n3a36816b5a3c60be\n349c49abd83ca16c\nc49c0446c05a1fd0\ne59d8fb8a6b8ecf4\n9138e338d786bb56\na64e2c4e8a575ef8\n59fc0a10b3a820ab\n9d1441bc3cb45385\ne8c7e42f1d233e1f\ndc722bcfc837a983\na50bd02f3533ca8f\n9933ef4d89b0ccb9",
+  "timestamp": "2026-05-01T04:15:57.100Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "kilo",
+    "actor": "lane",
+    "session_id": null
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": null,
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": null,
+    "timeout_seconds": 900,
+    "status": "pending"
+  },
+  "evidence_exchange": {}
+}

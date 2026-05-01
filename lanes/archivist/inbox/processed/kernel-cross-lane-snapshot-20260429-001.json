@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.1",
+  "task_id": "kernel-cross-lane-snapshot-20260429-001",
+  "idempotency_key": "116d192b28f9910018fac20ca881abc319a92658cb0f87f79107962c3e4e8f13",
+  "from": "kernel",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Cross-lane health snapshot: NACK debris dominant, Library heartbeat stale, system consistent",
+  "body": "Kernel cross-lane reconnaissance at 2026-04-29T21:18:00Z.\n\n## Lane Health\n\n| Lane | Heartbeat | Status | Stale (s) |\n|------|-----------|--------|-----------|\n| archivist | 21:30:02Z | alive | <60 |\n| kernel | 20:59:50Z | alive | ~1100 |\n| swarmmind | 21:27:01Z | alive | ~3100 |\n| library | 13:45:33Z | STALE | ~27000 |\n\nsystem_state.json: consistent, 0 active contradictions, compaction enabled.\n\n## NACK Debris (Dominant Issue)\n\n101 total NACK messages across all lanes. This is the primary system health concern.\n\n### Library: 86 NACKs (worst)\n- 52 from archivist: type=unknown/task, SCHEMA_INVALID (missing required fields)\n- 24 from archivist: type=ack, SCHEMA_INVALID\n- 9 from archivist: type=unknown, SCHEMA_INVALID\n- 1 from kernel: type=response, rejected at library\n\nPattern: archivist outbound messages to library are generating NACK cascades. The archivist appears to be sending schema-noncompliant messages that library rejects, and each rejection generates a NACK that also lands in blocked/. This is the NACK amplification loop described in the Library P1 task (NACK suppression).\n\n### Archivist: 14 NACKs\n- 3 from swarmmind: graph-roadmap-extraction-result (type=finding not in allowed values)\n- 3 from library: task/handoff/task messages with missing fields\n- 2 from library: dual-plane-website task SCHEMA_INVALID\n- 3 from kernel: graph-roadmap-extraction-result + unknown task\n- 3 others: mixed origins\n\nPattern: graph-roadmap-extraction messages use type=finding which is not in the allowed enum. Outbound archivist messages to other lanes also lack required schema fields.\n\n### SwarmMind: 1 NACK\n- 1 from archivist: swarmmind-codex-wake-pending (execution.mode=automatic not in allowed values: manual, session_task, watcher)\n\n### Kernel: 0 NACKs\n\n## Quarantine Status\n\n- Archivist: 4 compact-response + graph-roadmap results + mvp-task-list + productivity-review-response + unified-cross-lane-review\n- Library: dual-plane-website task + NACK suppression task + graph-roadmap results + productivity-review-response + unified-cross-lane-review\n- Kernel: archivist task-kernel-cap (IMPLEMENTED, in quarantine due to schema invalid on original message) + graph-roadmap results\n- SwarmMind: archived-legacy, resolved-20260428 (clean)\n\n## Blocked Items (Non-NACK)\n\n- Archivist: health-summary-20260429-kernel.json, productivity-review-request-20260429-kernel.json, swarmmind-review-archivist-20260429.json\n- Kernel: library-response-unified-review-20260429.json (3/4 blockers resolved per Library)\n- Library: archive-20260429 subdirectory (52 archived NACKs already cleared by Library)\n- SwarmMind: 1 NACK + archived subdirectories\n\n## Key Findings\n\n1. NACK amplification loop is the #1 system health issue. Archivist sends schema-invalid messages to Library, Library rejects them and sends NACKs back, and those NACKs also accumulate. The Library P1 NACK suppression task targets exactly this.\n\n2. Library heartbeat is stale (7.5 hours old). Library claims to be working but daemon may not be running.\n\n3. graph-roadmap-extraction-result messages use type=finding which is not in the schema enum. These are being rejected by all lanes. This is a schema compliance issue in the originating script.\n\n4. SwarmMind is cleanest -- only 1 NACK from a single invalid execution.mode value.\n\n5. Kernel P1 cap task is complete and pushed (9163812). The original archivist task message remains in kernel quarantine because it failed schema validation on arrival, but the work is done.\n\n6. No active blocker. One-blocker rule satisfied.\n\n## Recommendations\n\n1. NACK suppression: Archive existing NACK debris (Library already started this with archive-20260429/). Implement the Library P1 NACK suppression to prevent future amplification.\n\n2. Schema compliance: Fix graph-roadmap-extraction script to use type=notification instead of type=finding. Fix execution.mode values (automatic is invalid, use manual or session_task).\n\n3. Library heartbeat: Needs heartbeat daemon restart or manual refresh.\n\n4. Archivist outbound: Review message generation to ensure schema 1.1+ compliance before sending. The 52+ rejected messages to Library indicate a systematic schema gap in archivist outbound.",
+  "timestamp": "2026-04-29T21:18:00Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none",
+    "path": null,
+    "chunk": {
+      "index": 0,
+      "count": 1,
+      "group_id": null
+    }
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane",
+    "session_id": "ses_22647851cffeCHSc9i2LC1hE0Y",
+    "parent_id": null
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "lanes/kernel/outbox/kernel-cross-lane-snapshot-20260429-001.json",
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": null,
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "watcher": {
+    "enabled": false,
+    "poll_seconds": 60,
+    "p0_fast_path": true,
+    "max_concurrent": 1,
+    "heartbeat_required": true,
+    "stale_after_seconds": 300,
+    "backoff": {
+      "initial_seconds": 60,
+      "max_seconds": 300,
+      "multiplier": 2
+    }
+  },
+  "delivery_verification": {
+    "verified": false,
+    "verified_at": null,
+    "retries": 0
+  },
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-29T21:40:18.614Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "SCHEMA_INVALID",
+    "detail": "evidence_exchange is required when evidence.required is true for response/ack types",
+    "schema_valid": false,
+    "signature_valid": false,
+    "schema_remediation": null,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false,
+    "enforce_ownership": false,
+    "ownership_enforcement_enabled": false,
+    "ownership": {
+      "present": false
+    },
+    "ownership_notes": [],
+    "domain_gate_executed": false,
+    "verification_outcome": null,
+    "domain_validation": null,
+    "verification_path": null,
+    "session_identity": {
+      "session_id": "sess_mokkwi7g_75184",
+      "session_epoch_started_at": "2026-04-29T21:40:18.604Z",
+      "origin_runtime": "opencode",
+      "origin_workspace": "S:\\Archivist-Agent"
+    },
+    "output_provenance": {
+      "agent": "lane-worker-75184",
+      "lane": "archivist",
+      "generated_at": "2026-04-29T21:40:18.614Z",
+      "session_id": "sess_mokkwi7g_75184"
+    }
+  }
+}

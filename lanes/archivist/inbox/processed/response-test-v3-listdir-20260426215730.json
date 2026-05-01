@@ -1,0 +1,591 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-test-v3-listdir-20260426215730",
+  "idempotency_key": "resp-1777255236969-test-v3-listdir-",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P3",
+  "subject": "Re: Test: list dir verb",
+  "body": "Directory S:/SwarmMind/scripts: 89 entries",
+  "timestamp": "2026-04-27T02:00:36.969Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T02:00:36.969Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T02:00:36.969Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T02:00:36.969Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "test-v3-listdir-20260426215730",
+  "_execution_result": {
+    "path": "S:/SwarmMind/scripts",
+    "entries": [
+      {
+        "name": "activate-identity.js",
+        "type": "FILE",
+        "size": 3741,
+        "modified": "2026-04-23T18:29:26.616Z"
+      },
+      {
+        "name": "artifact-resolver.js",
+        "type": "FILE",
+        "size": 5343,
+        "modified": "2026-04-25T15:50:02.380Z"
+      },
+      {
+        "name": "atomic-write-util.js",
+        "type": "FILE",
+        "size": 521,
+        "modified": "2026-04-23T21:30:55.527Z"
+      },
+      {
+        "name": "automatic-authority-simulation.js",
+        "type": "FILE",
+        "size": 4563,
+        "modified": "2026-04-23T21:49:15.710Z"
+      },
+      {
+        "name": "build-copilot-package.js",
+        "type": "FILE",
+        "size": 3204,
+        "modified": "2026-04-25T16:58:10.563Z"
+      },
+      {
+        "name": "bulk-complete-reopened.js",
+        "type": "FILE",
+        "size": 3711,
+        "modified": "2026-04-23T21:28:49.934Z"
+      },
+      {
+        "name": "ci-execution-truth-guard.js",
+        "type": "FILE",
+        "size": 4552,
+        "modified": "2026-04-24T17:50:02.765Z"
+      },
+      {
+        "name": "ci-integration-check.js",
+        "type": "FILE",
+        "size": 2280,
+        "modified": "2026-04-23T20:59:08.722Z"
+      },
+      {
+        "name": "collision-check.js",
+        "type": "FILE",
+        "size": 3703,
+        "modified": "2026-04-23T16:01:48.800Z"
+      },
+      {
+        "name": "compact-context.js",
+        "type": "FILE",
+        "size": 2727,
+        "modified": "2026-04-25T22:39:41.015Z"
+      },
+      {
+        "name": "compact-restore-test.js",
+        "type": "FILE",
+        "size": 15048,
+        "modified": "2026-04-23T18:29:26.615Z"
+      },
+      {
+        "name": "completion-gate-audit.js",
+        "type": "FILE",
+        "size": 5760,
+        "modified": "2026-04-24T01:12:55.130Z"
+      },
+      {
+        "name": "completion-gate-remediate.js",
+        "type": "FILE",
+        "size": 2720,
+        "modified": "2026-04-24T01:12:55.130Z"
+      },
+      {
+        "name": "completion-gate-triage-remediate.js",
+        "type": "FILE",
+        "size": 7313,
+        "modified": "2026-04-24T05:57:02.833Z"
+      },
+      {
+        "name": "completion-gate.js",
+        "type": "FILE",
+        "size": 4780,
+        "modified": "2026-04-24T15:21:14.600Z"
+      },
+      {
+        "name": "completion-proof-audit.js",
+        "type": "FILE",
+        "size": 3251,
+        "modified": "2026-04-24T20:15:47.881Z"
+      },
+      {
+        "name": "completion-proof.js",
+        "type": "FILE",
+        "size": 5293,
+        "modified": "2026-04-24T15:53:04.703Z"
+      },
+      {
+        "name": "concurrency-policy.js",
+        "type": "FILE",
+        "size": 4938,
+        "modified": "2026-04-23T16:01:48.800Z"
+      },
+      {
+        "name": "convergence-contradiction-check.js",
+        "type": "FILE",
+        "size": 10259,
+        "modified": "2026-04-23T16:01:48.801Z"
+      },
+      {
+        "name": "create-signed-message.js",
+        "type": "FILE",
+        "size": 5827,
+        "modified": "2026-04-25T20:59:58.585Z"
+      },
+      {
+        "name": "create-stress-report.js",
+        "type": "FILE",
+        "size": 1410,
+        "modified": "2026-04-23T22:55:31.558Z"
+      },
+      {
+        "name": "cross-lane-consistency-check.js",
+        "type": "FILE",
+        "size": 6056,
+        "modified": "2026-04-26T04:51:05.136Z"
+      },
+      {
+        "name": "cross-lane-sync-gate.js",
+        "type": "FILE",
+        "size": 4886,
+        "modified": "2026-04-23T20:58:17.612Z"
+      },
+      {
+        "name": "cross-lane-sync.js",
+        "type": "FILE",
+        "size": 9853,
+        "modified": "2026-04-23T18:29:24.277Z"
+      },
+      {
+        "name": "debug-ci.js",
+        "type": "FILE",
+        "size": 940,
+        "modified": "2026-04-23T21:01:56.431Z"
+      },
+      {
+        "name": "debug-consistency.js",
+        "type": "FILE",
+        "size": 1724,
+        "modified": "2026-04-23T16:01:48.802Z"
+      },
+      {
+        "name": "dispatch-kernel-tasks.js",
+        "type": "FILE",
+        "size": 4908,
+        "modified": "2026-04-25T23:43:22.085Z"
+      },
+      {
+        "name": "dispatch-task.js",
+        "type": "FILE",
+        "size": 4482,
+        "modified": "2026-04-25T16:36:01.074Z"
+      },
+      {
+        "name": "e2e-monitor.js",
+        "type": "FILE",
+        "size": 3637,
+        "modified": "2026-04-23T16:01:48.803Z"
+      },
+      {
+        "name": "edit-lease-manager.js",
+        "type": "FILE",
+        "size": 5169,
+        "modified": "2026-04-23T16:01:48.804Z"
+      },
+      {
+        "name": "enforce-consistency-invariant.js",
+        "type": "FILE",
+        "size": 3760,
+        "modified": "2026-04-24T20:12:09.830Z"
+      },
+      {
+        "name": "enforce_consistency_invariant.js",
+        "type": "FILE",
+        "size": 1234,
+        "modified": "2026-04-24T09:50:33.374Z"
+      },
+      {
+        "name": "evidence-exchange-check.js",
+        "type": "FILE",
+        "size": 3060,
+        "modified": "2026-04-23T20:24:21.854Z"
+      },
+      {
+        "name": "execution-gate.js",
+        "type": "FILE",
+        "size": 8313,
+        "modified": "2026-04-24T20:09:38.494Z"
+      },
+      {
+        "name": "fix-processed-completion-proof.js",
+        "type": "FILE",
+        "size": 3285,
+        "modified": "2026-04-23T21:31:33.958Z"
+      },
+      {
+        "name": "full-lane-review-and-dispatch.js",
+        "type": "FILE",
+        "size": 11416,
+        "modified": "2026-04-23T23:00:13.016Z"
+      },
+      {
+        "name": "gen-archivist-key.js",
+        "type": "FILE",
+        "size": 1013,
+        "modified": "2026-04-23T16:01:48.806Z"
+      },
+      {
+        "name": "generate-onboarding-response.js",
+        "type": "FILE",
+        "size": 3972,
+        "modified": "2026-04-24T23:40:18.207Z"
+      },
+      {
+        "name": "generic-task-executor.js",
+        "type": "FILE",
+        "size": 32916,
+        "modified": "2026-04-27T01:29:13.405Z"
+      },
+      {
+        "name": "governance-message-verifier.js",
+        "type": "FILE",
+        "size": 5375,
+        "modified": "2026-04-23T18:29:05.853Z"
+      },
+      {
+        "name": "health-core.js",
+        "type": "FILE",
+        "size": 4425,
+        "modified": "2026-04-23T18:29:05.852Z"
+      },
+      {
+        "name": "heartbeat.js",
+        "type": "FILE",
+        "size": 8361,
+        "modified": "2026-04-26T14:07:02.796Z"
+      },
+      {
+        "name": "heartbeat.js.pre-sync.bak",
+        "type": "FILE",
+        "size": 3356,
+        "modified": "2026-04-26T14:07:02.796Z"
+      },
+      {
+        "name": "identity-enforcer.js",
+        "type": "FILE",
+        "size": 13853,
+        "modified": "2026-04-25T20:58:47.993Z"
+      },
+      {
+        "name": "identity-self-healing.js",
+        "type": "FILE",
+        "size": 6404,
+        "modified": "2026-04-23T18:29:05.849Z"
+      },
+      {
+        "name": "inbox-watcher.js",
+        "type": "FILE",
+        "size": 20726,
+        "modified": "2026-04-24T13:38:48.948Z"
+      },
+      {
+        "name": "inbox-watcher.log",
+        "type": "FILE",
+        "size": 3259649,
+        "modified": "2026-04-26T17:26:22.711Z"
+      },
+      {
+        "name": "inbox-watcher.ps1",
+        "type": "FILE",
+        "size": 3747,
+        "modified": "2026-04-26T17:43:54.292Z"
+      },
+      {
+        "name": "lane-health-monitor.js",
+        "type": "FILE",
+        "size": 4157,
+        "modified": "2026-04-23T18:28:29.634Z"
+      },
+      {
+        "name": "lane-worker.js",
+        "type": "FILE",
+        "size": 19309,
+        "modified": "2026-04-26T05:35:18.987Z"
+      },
+      {
+        "name": "lease-write.js",
+        "type": "FILE",
+        "size": 1212,
+        "modified": "2026-04-23T16:01:48.811Z"
+      },
+      {
+        "name": "monitor.js",
+        "type": "FILE",
+        "size": 9377,
+        "modified": "2026-04-23T16:01:48.812Z"
+      },
+      {
+        "name": "nuke-lane-mail.js",
+        "type": "FILE",
+        "size": 1656,
+        "modified": "2026-04-24T23:12:13.401Z"
+      },
+      {
+        "name": "outbox-write-guard.js",
+        "type": "FILE",
+        "size": 6808,
+        "modified": "2026-04-23T18:28:29.617Z"
+      },
+      {
+        "name": "patch-schema-execution-enums.js",
+        "type": "FILE",
+        "size": 785,
+        "modified": "2026-04-25T20:59:08.118Z"
+      },
+      {
+        "name": "path-normalization-guard.js",
+        "type": "FILE",
+        "size": 5198,
+        "modified": "2026-04-23T16:01:48.813Z"
+      },
+      {
+        "name": "post-compact-audit.js",
+        "type": "FILE",
+        "size": 22087,
+        "modified": "2026-04-26T05:08:20.949Z"
+      },
+      {
+        "name": "recover-action-required-from-processed.js",
+        "type": "FILE",
+        "size": 4006,
+        "modified": "2026-04-23T21:18:34.322Z"
+      },
+      {
+        "name": "recovery-test-suite.js",
+        "type": "FILE",
+        "size": 6656,
+        "modified": "2026-04-23T18:28:29.607Z"
+      },
+      {
+        "name": "register-archivist-key.js",
+        "type": "FILE",
+        "size": 1276,
+        "modified": "2026-04-23T16:01:48.814Z"
+      },
+      {
+        "name": "relay-daemon.js",
+        "type": "FILE",
+        "size": 8577,
+        "modified": "2026-04-25T14:22:01.352Z"
+      },
+      {
+        "name": "remediate-execution-verified.js",
+        "type": "FILE",
+        "size": 1499,
+        "modified": "2026-04-24T22:52:30.542Z"
+      },
+      {
+        "name": "run-compact-with-audit.js",
+        "type": "FILE",
+        "size": 2411,
+        "modified": "2026-04-26T14:18:01.459Z"
+      },
+      {
+        "name": "sanitize-emoji.js",
+        "type": "FILE",
+        "size": 2950,
+        "modified": "2026-04-24T20:13:00.170Z"
+      },
+      {
+        "name": "schema-validator.js",
+        "type": "FILE",
+        "size": 8180,
+        "modified": "2026-04-23T16:01:48.815Z"
+      },
+      {
+        "name": "send-ack.js",
+        "type": "FILE",
+        "size": 1228,
+        "modified": "2026-04-23T22:56:22.467Z"
+      },
+      {
+        "name": "send-reverse-test-messages.js",
+        "type": "FILE",
+        "size": 2149,
+        "modified": "2026-04-24T21:33:02.603Z"
+      },
+      {
+        "name": "send-test-messages.js",
+        "type": "FILE",
+        "size": 2155,
+        "modified": "2026-04-24T21:22:47.214Z"
+      },
+      {
+        "name": "sign-outbox-message.js",
+        "type": "FILE",
+        "size": 6059,
+        "modified": "2026-04-23T19:43:25.115Z"
+      },
+      {
+        "name": "sign-snapshot.js",
+        "type": "FILE",
+        "size": 4306,
+        "modified": "2026-04-23T16:01:48.816Z"
+      },
+      {
+        "name": "smoke-core.js",
+        "type": "FILE",
+        "size": 5188,
+        "modified": "2026-04-23T18:28:08.106Z"
+      },
+      {
+        "name": "start-core.js",
+        "type": "FILE",
+        "size": 5754,
+        "modified": "2026-04-23T18:28:08.184Z"
+      },
+      {
+        "name": "sync-gate-verify.js",
+        "type": "FILE",
+        "size": 6876,
+        "modified": "2026-04-24T23:46:48.272Z"
+      },
+      {
+        "name": "sync-identity-from-trust.js",
+        "type": "FILE",
+        "size": 2737,
+        "modified": "2026-04-23T16:01:48.819Z"
+      },
+      {
+        "name": "system-status.js",
+        "type": "FILE",
+        "size": 1736,
+        "modified": "2026-04-23T16:01:48.820Z"
+      },
+      {
+        "name": "task-executor.js",
+        "type": "FILE",
+        "size": 7976,
+        "modified": "2026-04-25T15:59:38.058Z"
+      },
+      {
+        "name": "test-artifact-resolver.js",
+        "type": "FILE",
+        "size": 11996,
+        "modified": "2026-04-24T17:10:27.987Z"
+      },
+      {
+        "name": "test-completion-proof.js",
+        "type": "FILE",
+        "size": 6264,
+        "modified": "2026-04-24T15:25:30.955Z"
+      },
+      {
+        "name": "test-execution-gate.js",
+        "type": "FILE",
+        "size": 14024,
+        "modified": "2026-04-24T17:49:30.978Z"
+      },
+      {
+        "name": "test-lane-worker-no-proof.js",
+        "type": "FILE",
+        "size": 3049,
+        "modified": "2026-04-24T13:36:56.609Z"
+      },
+      {
+        "name": "test-lane-worker-we4free.js",
+        "type": "FILE",
+        "size": 15475,
+        "modified": "2026-04-24T15:07:38.891Z"
+      },
+      {
+        "name": "test-phase4-gates.js",
+        "type": "FILE",
+        "size": 6084,
+        "modified": "2026-04-23T16:01:48.821Z"
+      },
+      {
+        "name": "test-signed-messages.js",
+        "type": "FILE",
+        "size": 14195,
+        "modified": "2026-04-24T16:22:22.109Z"
+      },
+      {
+        "name": "tmp-sync-scripts.js",
+        "type": "FILE",
+        "size": 829,
+        "modified": "2026-04-26T15:24:31.484Z"
+      },
+      {
+        "name": "validate-responses.js",
+        "type": "FILE",
+        "size": 3595,
+        "modified": "2026-04-25T16:41:53.542Z"
+      },
+      {
+        "name": "validate-schema.js",
+        "type": "FILE",
+        "size": 8661,
+        "modified": "2026-04-23T18:28:08.100Z"
+      },
+      {
+        "name": "validate-system-anchor.js",
+        "type": "FILE",
+        "size": 7889,
+        "modified": "2026-04-23T16:01:48.821Z"
+      },
+      {
+        "name": "verify_continuity.js",
+        "type": "FILE",
+        "size": 6923,
+        "modified": "2026-04-23T16:01:48.822Z"
+      },
+      {
+        "name": "write-swarmmind-inbox-responses-2026-04-25.js",
+        "type": "FILE",
+        "size": 5991,
+        "modified": "2026-04-25T02:03:44.110Z"
+      }
+    ],
+    "count": 89
+  },
+  "content_hash": "sha256:a3d8d121a5b42d7b69df423ac89adf17f9394275478c9d317a7660e44495c9c6",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6YTNkOGQxMjFhNWI0MmQ3YjY5ZGY0MjNhYzg5YWRmMTdmOTM5NDI3NTQ3OGM5ZDMxN2E3NjYwZTQ0NDk1YzljNiIsImV4cCI6MTc3NzM0MTYzNiwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzI1NTIzNiwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAzIiwidGFza19pZCI6InJlc3BvbnNlLXRlc3QtdjMtbGlzdGRpci0yMDI2MDQyNjIxNTczMCIsInRvIjoiYXJjaGl2aXN0In0.XMBofXThobEkyzcVKeYQMcWVIwJWTSvD7W8cRT3X7xVErmuDQI9_C2r0QjJ7-cR3f5AVnqhik3QLi_Z1tSLv5V-anEz1Rxsbx3yp6n6-PMvlbiKKur4Llj9Fn0amFOtStNPm_awUt2wMBhAa3cFE1Nbzkeiz8kDLRt8dG7Dz-5MBo_CvwEjbltOlTy-sR33s39a_LID5yO8Y4ZAiWLPk87ckcRA7FhDG1FEojiOKFwptqFTZRNr3BqkepMQ5Jbovan5R3LMTTW4DQXVrZBwnoXKoGXcKmyl1uYoaAYgZh4RMIfOXggh2evqQJRykCLXTyqid3MNeLoD_vgciJ_nSrg",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

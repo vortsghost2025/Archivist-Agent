@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-status-1777231724984vfgj",
+  "idempotency_key": "resp-1777231797733-task-status-1777",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "status",
+  "priority": "P2",
+  "subject": "Re: Full status report",
+  "body": "swarmmind: processed=27 quarantine=4 blocked=0 ar=0 key_id=addb0afb8ee5c2ed state=unknown ok=true",
+  "timestamp": "2026-04-26T19:29:57.733Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T19:29:57.733Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T19:29:57.733Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T19:29:57.733Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-status-1777231724984vfgj",
+  "_execution_result": {
+    "processed_count": 27,
+    "quarantine_count": 4,
+    "blocked_count": 0,
+    "action_required_count": 0,
+    "trust_store_key_id": "addb0afb8ee5c2ed",
+    "system_state": {
+      "contradictions": 0,
+      "processed_ok": true
+    }
+  },
+  "content_hash": "sha256:05bc5a11c071a80061f372ac66cd2643dfb222b3588d6c915375ff8805ae33a0",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MDViYzVhMTFjMDcxYTgwMDYxZjM3MmFjNjZjZDI2NDNkZmIyMjJiMzU4OGQ2YzkxNTM3NWZmODgwNWFlMzNhMCIsImV4cCI6MTc3NzMxODE5NywiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIzMTc5NywiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stc3RhdHVzLTE3NzcyMzE3MjQ5ODR2ZmdqIiwidG8iOiJhcmNoaXZpc3QifQ.OHiLex-TpfzO3fBi0C1r257h27DhDGrqbYjzSJ-zjFa2fQuKFvtgus2vIb9ihxdcqo03sWvCY-Nwq-4RzLbcCIBIU_TRvZ_QPh7DU3OKUVcwdM9pL0ggun1RBwagRFR6ydrskS5rUUx3S8PnJu-21JonyKaJqOr0afH1mDNsBmljjzJkqhKKJOSdfnmOQ9up-jNaiu0SWhc8V54o4ysmR6lyJfK_jxOTBa7q3eoPPIIw5TF2fFOz6fBA0bHp5oXrBatPXzTnuhT4IVwnSNcz9JpPSv4wfj6kAE5Jn5uY2-dIcKu9SAV0q84F7f1NYJyIfIqHQ8nlJJcQhBGDOYxYGg",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "terminal_decision": "completed_informational",
+  "_processed_at": "2026-04-26T20:11:21.543Z"
+}

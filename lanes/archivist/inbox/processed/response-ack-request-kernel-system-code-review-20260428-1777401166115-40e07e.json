@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-ack-request-kernel-system-code-review-20260428-1777401166115-40e07e",
+  "idempotency_key": "resp-1777401179615-ack-request-kern",
+  "from": "kernel",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P1",
+  "subject": "Re: Action Required: ACK system-code-review-20260428",
+  "body": "Wrote 304 bytes to S:\\kernel-lane\\lanes\\kernel\\outbox\\ack-system-code-review-20260428.json",
+  "timestamp": "2026-04-28T18:32:59.615Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "kernel",
+    "acquired_at": "2026-04-28T18:32:59.615Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-28T18:32:59.615Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-28T18:32:59.615Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "ack-request-kernel-system-code-review-20260428-1777401166115-40e07e",
+  "_execution_result": {
+    "written": "S:\\kernel-lane\\lanes\\kernel\\outbox\\ack-system-code-review-20260428.json",
+    "bytes": 304,
+    "_routing": {
+      "source": "explicit",
+      "verb": "write file",
+      "confidence": 1
+    },
+    "_timing": {
+      "ms": 1,
+      "verb": "write file",
+      "source": "explicit"
+    }
+  },
+  "_governance": {
+    "executor_version": "3.1.0",
+    "content_hash": "sha256:6eb47730d046d1c334352ee7e37690c127ccfe4433c28fc88fe6f359d8085747",
+    "code_version_hash": "sha256:992af0aa7c4606851a35c2da8efd1107aad3dcc86eac40760abed04e5cfbc346",
+    "timestamp": "2026-04-28T18:32:59.615Z"
+  },
+  "content_hash": "sha256:b2495f713a0ab725b251e04a16c960820c8ed67ce6923accaed5d282ba48ff70",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImI2NzdlYjg3ZjZiZTgzZjkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6YjI0OTVmNzEzYTBhYjcyNWIyNTFlMDRhMTZjOTYwODIwYzhlZDY3Y2U2OTIzYWNjYWVkNWQyODJiYTQ4ZmY3MCIsImV4cCI6MTc3NzQ4NzU3OSwiZnJvbSI6Imtlcm5lbCIsImlhdCI6MTc3NzQwMTE3OSwiaWQiOm51bGwsImxhbmUiOiJrZXJuZWwiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6InJlc3BvbnNlLWFjay1yZXF1ZXN0LWtlcm5lbC1zeXN0ZW0tY29kZS1yZXZpZXctMjAyNjA0MjgtMTc3NzQwMTE2NjExNS00MGUwN2UiLCJ0byI6ImFyY2hpdmlzdCJ9.uXBErM2CD8XRHq3rpZXCxb6oyTf2btFSEwak4H4RBQBmv1SJFit3bnF9QXGct4kFgR7NcXSdMbZmRXyq2-YsI5LGnZsHOonh1pYioYpKg46tp5zcT_93REobutqHYDdLn_sdc5zefeTbs_HCf7QTfR5KViiCy9MQMRjFwyJfq6cmaIa3uQGPz8B2ysccay2h2eOlA-o_jWr9VczPrG_5AsK7UphAawvuAKkD7Ipu3rPi91ZXQdhtcPPtZ7qAATzCE2pxEUFeD5eHtSlu3Nkeo7nK_ZHqvb1bekzZ_HahklajYn9sqPpPy2vA691ZT-eLyN5tE8_Sp5k-ffyTsoHy8Q",
+  "signature_alg": "RS256",
+  "key_id": "b677eb87f6be83f9",
+  "session_identity": {
+    "session_id": "sess-1777401179619-1e631853",
+    "session_epoch_started_at": "2026-04-28T18:32:59.619Z",
+    "origin_runtime": "opencode",
+    "origin_workspace": "S:\\kernel-lane"
+  },
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-28T18:32:59.867Z",
+    "dry_run": false,
+    "route": "processed",
+    "reason": "TERMINAL_INFORMATIONAL",
+    "detail": null,
+    "schema_valid": true,
+    "signature_valid": true,
+    "schema_remediation": null,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false,
+    "enforce_ownership": false,
+    "ownership_enforcement_enabled": false,
+    "ownership": {
+      "present": false,
+      "malformed": false
+    },
+    "ownership_notes": [
+      "OWNERSHIP_MISSING"
+    ],
+    "domain_gate_executed": true,
+    "verification_outcome": "PASS",
+    "domain_validation": null,
+    "verification_path": [
+      "domain_gate",
+      "execution_check",
+      "response_validation"
+    ],
+    "session_identity": {
+      "session_id": "sess_moiyrro1_26984",
+      "session_epoch_started_at": "2026-04-28T18:32:59.857Z",
+      "origin_runtime": "opencode",
+      "origin_workspace": "S:\\Archivist-Agent"
+    },
+    "output_provenance": {
+      "agent": "lane-worker-26984",
+      "lane": "archivist",
+      "generated_at": "2026-04-28T18:32:59.867Z",
+      "session_id": "sess_moiyrro1_26984"
+    }
+  }
+}

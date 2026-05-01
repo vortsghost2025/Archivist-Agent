@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.3",
+  "task_id": "contradiction-batch-3-responses-20260430",
+  "idempotency_key": "batch3-resp-f717e4b0-1d2e-40fc-b20a-e69b3dd85913",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ratification",
+  "priority": "P1",
+  "subject": "Contradiction Batch 3 — Archivist lane responses",
+  "body": "ARCHIVIST responses for Batch 3 contradiction nodes. 1 node(s) classified.",
+  "timestamp": "2026-04-30T12:38:12.834Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-30T12:38:12.834Z",
+    "expires_at": null,
+    "renewal_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_type": "batch_response",
+    "artifact_path": "S:/archivist/evidence/contradiction-resolution/batch3-responses-20260430.json"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": "2026-04-30T12:38:12.834Z",
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "responses": [
+    {
+      "node_id": "d52d670ab9d41169",
+      "status": "proven_spurious",
+      "edge_evidence": "Archivist self-review: Internal governance artifact; no CONTRADICTS edges exist. CONFLICTED status and contradictionCount=65 are artifact-derived false positives from shared-tag clustering; semantic conflict absent. Classified as proven_spurious.",
+      "confidence": "high",
+      "next_action": "Archive as proven_spurious; no further action"
+    }
+  ],
+  "content_hash": "sha256:e9fde403afb2f184973bcaf679ccde2af7d330d34285216e128f4b98e68ba076",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjY1YWUwNWIyYTllNzQ5Y2IifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ZTlmZGU0MDNhZmIyZjE4NDk3M2JjYWY2NzljY2RlMmFmN2QzMzBkMzQyODUyMTZlMTI4ZjRiOThlNjhiYTA3NiIsImV4cCI6MTc3NzYzOTE0MiwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzU1Mjc0MiwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAxIiwidGFza19pZCI6ImNvbnRyYWRpY3Rpb24tYmF0Y2gtMy1yZXNwb25zZXMtMjAyNjA0MzAiLCJ0byI6ImFyY2hpdmlzdCJ9.Ak4uLzwCLY1bWyT3ns10Nlc3tPni2T1nI9gFiwXP2BZ1JpYZY54apdMic0xnvNvCtk_ciSKKrABQSWm_ph09LDwt4uhF5wapJKW2qXDm4ZoiE1HFnAU7IFJ-E_ujd7kwEZflDcGi5eEY9N2JwrSy3rOHxgmCSHEWaOnKxMM9brl82Ml_H5vbLNZ5amnMQ3ZgV0w8URHw_FqTbrPHGm2Q8OhlADrLG-m8K-KA8NpElqhTDNYCO9xLQSy18On3M5eg0CTDeSkY78B0Bdvkl9g5BWd6-j6FeLkYxzsrnoJShdNzyRAtiNDpqfFXE-5PuVdCEh3Meg5xDC8LYKiiEimFVQ",
+  "signature_alg": "RS256",
+  "key_id": "65ae05b2a9e749cb",
+  "session_identity": {
+    "session_id": "sess-1777552742610-c6697322",
+    "session_epoch_started_at": "2026-04-30T12:39:02.610Z",
+    "origin_runtime": "opencode",
+    "origin_workspace": "S:\\SwarmMind"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.3",
+  "task_id": "contradiction-batch-2-responses-20260430",
+  "idempotency_key": "batch2-resp-f3eaa716-e6ed-4dd4-be74-f166742218f9",
+  "from": "library",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ratification",
+  "priority": "P1",
+  "subject": "Contradiction Batch 2 — Library lane responses",
+  "body": "LIBRARY responses for Batch 2 contradiction nodes. 1 node(s) classified.",
+  "timestamp": "2026-04-30T12:38:56.509Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "library",
+    "acquired_at": "2026-04-30T12:38:56.509Z",
+    "expires_at": null,
+    "renewal_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "verified": false
+  },
+  "evidence_exchange": {
+    "artifact_type": "batch_response",
+    "artifact_path": "S:/library/evidence/contradiction-resolution/batch2-responses-20260430.json"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": "2026-04-30T12:38:56.509Z",
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "responses": [
+    {
+      "node_id": "8f11fb5f4a3a5efc",
+      "status": "needs_lane_review",
+      "edge_evidence": "Library-assigned node from Archivist-Agent; appears in contradiction hub with CONFLICTED status and 65 contradictions; Library cross-tagged. No CONTRADICTS edges found in graph snapshot; Library cannot produce provenance without Archivist edge artifacts.",
+      "confidence": "medium",
+      "next_action": "Await Archivist CONTRADICTS edge evidence for 8f11fb5f4a3a5efc"
+    }
+  ],
+  "content_hash": "sha256:230c04ea55ca71d8049ff22d82a971e43972a4daa6c90763414ba0450f7539c0",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVhMmE3NWJhYjIyMGFkYzIifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MjMwYzA0ZWE1NWNhNzFkODA0OWZmMjJkODJhOTcxZTQzOTcyYTRkYWE2YzkwNzYzNDE0YmEwNDUwZjc1MzljMCIsImV4cCI6MTc3NzYzOTE0MiwiZnJvbSI6ImxpYnJhcnkiLCJpYXQiOjE3Nzc1NTI3NDIsImlkIjpudWxsLCJsYW5lIjoibGlicmFyeSIsInByaW9yaXR5IjoiUDEiLCJ0YXNrX2lkIjoiY29udHJhZGljdGlvbi1iYXRjaC0yLXJlc3BvbnNlcy0yMDI2MDQzMCIsInRvIjoiYXJjaGl2aXN0In0.QTOAiXEkmFqAkakmwylguu1ZoXW4UszNdkWYn5vvWxR-oIfS1gQFFqPLBZHh-wBciG2_ho7IT3rlIrSMOjJaWDBssz0Xsj0hM2cI8im9q6UEJ9l6Ci0HHI_34DD3y1cSzv3rO-ZEYBKoZCwk0Alk9KKmnTwGKFK5dLGSMmG0JzsrhPHiGcxh5oIpQVSAIkZ3P2bQW--7YF16iUd_Ed6Dc9gU12B4A93PROHaxZEa9eICK0QMvWhdmMn-FNLKDCeM448rpI0KJs9weuQgfB80WX5Hernvd4iOpRFNApa3bKjriOmkWNQZW6fErxXkwT8rh8VK7VN0SjcmzOFa5TsJAw",
+  "signature_alg": "RS256",
+  "key_id": "ea2a75bab220adc2",
+  "session_identity": {
+    "session_id": "sess-1777552742601-7e67d773",
+    "session_epoch_started_at": "2026-04-30T12:39:02.601Z",
+    "origin_runtime": "opencode",
+    "origin_workspace": "S:\\SwarmMind"
+  }
+}

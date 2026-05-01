@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-test-v3-hash-20260426213653",
+  "idempotency_key": "resp-1777253901474-test-v3-hash-202",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P3",
+  "subject": "Re: Test: hash file verb",
+  "body": "SHA256 S:/SwarmMind/scripts/heartbeat.js: bff93bf58c0cf3e1... (8361 bytes)",
+  "timestamp": "2026-04-27T01:38:21.474Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T01:38:21.474Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T01:38:21.474Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T01:38:21.474Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "test-v3-hash-20260426213653",
+  "_execution_result": {
+    "path": "S:/SwarmMind/scripts/heartbeat.js",
+    "size": 8361,
+    "sha256": "bff93bf58c0cf3e1af72d806403616ef136094304e54991abfb880c1077908c9",
+    "modified": "2026-04-26T14:07:02.796Z"
+  },
+  "content_hash": "sha256:b85f74522d61fbc380fb2bab616b37209561fd06ce1d1feab0dd9eb66720a375",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6Yjg1Zjc0NTIyZDYxZmJjMzgwZmIyYmFiNjE2YjM3MjA5NTYxZmQwNmNlMWQxZmVhYjBkZDllYjY2NzIwYTM3NSIsImV4cCI6MTc3NzM0MDMwMSwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzI1MzkwMSwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAzIiwidGFza19pZCI6InJlc3BvbnNlLXRlc3QtdjMtaGFzaC0yMDI2MDQyNjIxMzY1MyIsInRvIjoiYXJjaGl2aXN0In0.Mpq0w9-x8sggFSeHiVSLVehdoef8fm1q2tRPrZWJCMyqUhzgYV8JxLhY5-fwTo9Fm1GJGxBV5_AYYsn-SySXe9Ho40NO3skmYpwU-JpbBE082tRlLM86gRO4RAoTXp4IjWNSXOmh3InCmm_ptLW1nZ2w7F8pOaYSzaCY9317dC_O8WypiCL5b5-4opD8W7OMhshtnWgZ0GYaWR58_KQNUlp5eC1MDt8xZZlJI5Lu3MhBGJwLdnJ09pAblctUC3Vg3--1HRJDEamP_Dta86FWQIk6UlsrPS-UZtxgTpTB6e8KlUKkGJEesR-XONKSi8lEHeY0isOVzfRQu9nsmeNvHA",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

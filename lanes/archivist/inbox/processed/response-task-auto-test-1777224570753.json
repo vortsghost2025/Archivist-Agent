@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-auto-test-1777224570753",
+  "idempotency_key": "resp-1777226153087-task-auto-test-1",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "status",
+  "priority": "P2",
+  "subject": "Re: Automated pipeline test: SwarmMindWatcher with cwd fix",
+  "body": "swarmmind: Processed=14, Quarantine=1",
+  "timestamp": "2026-04-26T17:55:53.088Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T17:55:53.093Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T17:55:53.093Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T17:55:53.093Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-auto-test-1777224570753",
+  "_execution_result": {
+    "processed_count": 14,
+    "quarantine_count": 1
+  },
+  "content_hash": "sha256:f83bd5f41f1c4051ac882b50e17a93af78d8a2c5c0e7a142bf979d8e3276d8a0",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ZjgzYmQ1ZjQxZjFjNDA1MWFjODgyYjUwZTE3YTkzYWY3OGQ4YTJjNWMwZTdhMTQyYmY5NzlkOGUzMjc2ZDhhMCIsImV4cCI6MTc3NzMxMjU1MywiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIyNjE1MywiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stYXV0by10ZXN0LTE3NzcyMjQ1NzA3NTMiLCJ0byI6ImFyY2hpdmlzdCJ9.AExspfQaxF7j20dgDaUKtk7ryIVGC0P7gQnefhN9ENzezyr6zQ7ofR1_PhU_HMlTSmdFiRRAgj0b6UNw-C5rnO5pODbStBCYr0IEzgrhAqOPi5BXui_CSYhjjo4HALknUctrNV7U5mwfzzYGO3XmzaZBlrcqlyV-17E-bjmrPumlcuoDu6GuMy-_wx41s29mvlB71ypNdqSrdzZPTKIGXTPRiT8zo31kEbHLXyFjahSgeAAHGiN8GPzjDfvyeGoyFX26_rWjy89l_QhES51BDNJBJZ-dNo1-5V9Cy_qx9Uo6lcXJtRacz7bcZCqcQu1My3Bs_JOwMzNX4jHTF_zbww",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "terminal_decision": "completed_informational",
+  "_processed_at": "2026-04-26T20:11:21.530Z"
+}

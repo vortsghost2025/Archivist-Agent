@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-1777289998887-library-3",
+  "idempotency_key": "resp-1777290000062-e2e-177728999888",
+  "from": "library",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: git status",
+  "body": "git status: 22 lines",
+  "timestamp": "2026-04-27T11:40:00.062Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "library",
+    "acquired_at": "2026-04-27T11:40:00.062Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T11:40:00.062Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T11:40:00.062Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-1777289998887-library-3",
+  "_execution_result": {
+    "git": "status",
+    "output": "On branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add <file>...\" to update what will be committed)\n  (use \"git restore <file>...\" to discard changes in working directory)\n  (commit or discard the untracked or modified content in submodules)\n\tmodified:   .kilocode/rules/memory-bank/context.md\n\tmodified:   SwarmMind-Self-Optimizing-Multi-Agent-AI-System (modified content)\n\tmodified:   bun.lock\n\tmodified:   lanes/broadcast/system_state.json\n\tmodified:   lanes/library/inbox/heartbeat-library.json\n\tmodified:   package.json\n\nUntracked files:\n  (use \"git add <file>...\" to include in what will be committed)\n\tdocs/superpowers/\n\tnul\n\ttmp/\n\nno changes added to commit (use \"git add\" and/or \"git commit -a\")\n",
+    "_routing": {
+      "source": "explicit",
+      "verb": "git",
+      "confidence": 1
+    }
+  },
+  "content_hash": "sha256:0499946be9cfb11e30a004d113d0e0abc166b67c80359ebbbd92d767411b7298",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVhMmE3NWJhYjIyMGFkYzIifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MDQ5OTk0NmJlOWNmYjExZTMwYTAwNGQxMTNkMGUwYWJjMTY2YjY3YzgwMzU5ZWJiYmQ5MmQ3Njc0MTFiNzI5OCIsImV4cCI6MTc3NzM3NjQwMCwiZnJvbSI6ImxpYnJhcnkiLCJpYXQiOjE3NzcyOTAwMDAsImlkIjpudWxsLCJsYW5lIjoibGlicmFyeSIsInByaW9yaXR5IjoiUDIiLCJ0YXNrX2lkIjoicmVzcG9uc2UtZTJlLTE3NzcyODk5OTg4ODctbGlicmFyeS0zIiwidG8iOiJhcmNoaXZpc3QifQ.VKth0LkXWrFMpraecYUDLYzi9VAttKbLXbhHEuxqeX-yG2dbtvVfJivMfMKCJabS7KEJtKep9RpVvhUF45HNbEuyi7QMurgvkPb2WC4-5m2uuccIiRaRxWZJK6pLr5x1IG9hNI8x0JvgwXWX711w0w4P7tB0YA8TY0lTHw5vtr-Cjdp3JfiTM40ZspIkBlXO0ddeZhFJ06BQrbuuIKZ6ToJwFap_-WvjdND5pU3WRR7t-6zmbobVGIPwiPQHNzRP81OLDyWYXuLtBxti8O2-itltXbWG81B2ks0dGGpC1he4ia8Hcz2zRPnelmRgFzhVW9JQFifNxGjaqoysIRCjmg",
+  "signature_alg": "RS256",
+  "key_id": "ea2a75bab220adc2"
+}

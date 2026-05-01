@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-notification-1777234511190wi3v",
+  "idempotency_key": "resp-1777235594054-task-notificatio",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "notification",
+  "priority": "P3",
+  "subject": "Re: Archivist check-in: subagent pipeline verified",
+  "body": "Acknowledged task: Archivist check-in: subagent pipeline verified",
+  "timestamp": "2026-04-26T20:33:14.054Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T20:33:14.054Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T20:33:14.054Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T20:33:14.054Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-notification-1777234511190wi3v",
+  "_execution_result": {
+    "acknowledged": true,
+    "note": "Task type not recognized. Supported: status, \"read file <path>\", \"run script <name>\", \"git status/log/diff\", \"grep <pattern> in <path>\", \"write file <path>\\n<content>\", \"consistency check\""
+  },
+  "content_hash": "sha256:d6f3ca6de3e245872707b6b48c82bd7e2a2f69124880e8a035f22abfe2162789",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ZDZmM2NhNmRlM2UyNDU4NzI3MDdiNmI0OGM4MmJkN2UyYTJmNjkxMjQ4ODBlOGEwMzVmMjJhYmZlMjE2Mjc4OSIsImV4cCI6MTc3NzMyMTk5NCwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIzNTU5NCwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAzIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stbm90aWZpY2F0aW9uLTE3NzcyMzQ1MTExOTB3aTN2IiwidG8iOiJhcmNoaXZpc3QifQ.lntwTEtEvYoUg2jmgyzlXV2Ly-tnFyktZBDFZf3jKkAKhdK7IN39R0Ki_GFzqnVgSHM89ba92_icPaQoTKWs0MJTmG7DMLNjhQ1-isRdiVHjQjjwJLt4HYcG-OHITiOxVb3L9VTthFScCrvRD82f4oVSuFgRBqJyMhXrpXyBGWsRg1reUAZ849xmecqk5HOciuoUIayOtqxlBe5cQkJccwfeA5wGoqiQWBnG_hjKxifoGdiYV8J2_JWdHSX6pC5WVfgjo7hw2dEYpFyqP8MDJPiSWJeM0lb_hlB-NDZPm-_kKY8NGtwGJDM8tq6RUI8lQOyybdocO_BKGYrrj7ikOg",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

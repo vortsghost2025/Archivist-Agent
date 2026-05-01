@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-task-report-17772338808208hpt",
+  "idempotency_key": "resp-1777233917319-task-report-1777",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: Run heartbeat v2",
+  "body": "Script heartbeat: SKIPPED (long-running daemon)",
+  "timestamp": "2026-04-26T20:05:17.319Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-26T20:05:17.320Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-26T20:05:17.320Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-26T20:05:17.320Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "task-report-17772338808208hpt",
+  "_execution_result": {
+    "script": "heartbeat",
+    "skipped": true,
+    "reason": "Long-running daemon script — use \"status\" or \"consistency check\" instead"
+  },
+  "content_hash": "sha256:24d948ffd46dca22537f57f9ba4e39b31d77961ec57106b6cb8e0f0c72a64538",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MjRkOTQ4ZmZkNDZkY2EyMjUzN2Y1N2Y5YmE0ZTM5YjMxZDc3OTYxZWM1NzEwNmI2Y2I4ZTBmMGM3MmE2NDUzOCIsImV4cCI6MTc3NzMyMDMxNywiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzIzMzkxNywiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLXRhc2stcmVwb3J0LTE3NzcyMzM4ODA4MjA4aHB0IiwidG8iOiJhcmNoaXZpc3QifQ.l9tCSSzDMHj16z5KtI7kQvrjvKk62TZazjAHizs2A3olfN1D-YMFVcu9i381izIzz_nu2RI5pCyMtlEP0y5pcoBVVL0wbbC9-GqTGWfgtCWTO_bftUL7sZN4IxwwahtzPgOSUHhraNYV1CKzisdTpnTtNVMJSxJ0VM58F4bOsc9Ab5QMmKu1gW1kJJoEqZdjAgElabn02HUCS36SRduOhSjHYHTPKIXHZ3v_stZnyWrOy4P24j_yjlxlRw8nYKM0GsqhJfkfLgW7MnJXdXBby2oEtcMXMeeqgajnMkKyrTW7XCuFMTM2zewd9ap332ypin1RzWZ5O2vGT3_OI8d1dg",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "terminal_decision": "completed_informational",
+  "_processed_at": "2026-04-26T20:11:21.539Z"
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-1777289676473-swarmmind-1",
+  "idempotency_key": "resp-1777289686574-e2e-177728967647",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: write file",
+  "body": "Wrote 28 bytes to S:\\SwarmMind\\tmp\\e2e-1777289676473.txt",
+  "timestamp": "2026-04-27T11:34:46.574Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T11:34:46.574Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T11:34:46.574Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T11:34:46.574Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-1777289676473-swarmmind-1",
+  "_execution_result": {
+    "written": "S:\\SwarmMind\\tmp\\e2e-1777289676473.txt",
+    "bytes": 28
+  },
+  "content_hash": "sha256:c36ff836b497fd33b0f8cf775940d94ca1cd9b07e1ceaf0b2b218ea4098caa39",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6YzM2ZmY4MzZiNDk3ZmQzM2IwZjhjZjc3NTk0MGQ5NGNhMWNkOWIwN2UxY2VhZjBiMmIyMThlYTQwOThjYWEzOSIsImV4cCI6MTc3NzM3NjA4NiwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzI4OTY4NiwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLWUyZS0xNzc3Mjg5Njc2NDczLXN3YXJtbWluZC0xIiwidG8iOiJhcmNoaXZpc3QifQ.LERPGdegUBhwokh6w5rrm7ve3DTqAO9NxOTaTvRVNmJASYRTaFUM4jqc4tS4BNccvYtAIfcJ8l9Sn2p_0Vy_yUMbUQpjcTBY1gWXbraDQBygiej-_Pae2qT-HOoD9DOe5Lea63cgNfuVtGj3tX0IhpEEWYgF7CKyTDbvRkes7dDjRDQNZVlSF_i-57kKHNINb0LSTLOf-OZxjVGBOlrzCURfVsP0KmcBC0zNt7d4pTFPhyRC78DWwCxycD3b2HrFBemaoEoVEEMXZ-Ms0uOaaKYzJKYhbGlW_oR_LkN85LsnWJg8_uSXJMg7Nb7BGLfiP69cuvHNAmrvv1kDVR45QA",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.3",
+  "task_id": "e2e-summary-1777574328310-a17232ab",
+  "idempotency_key": "5c234ead8e0616858cb53503ce215c700f34d9490fc6ddf83ccc6cd7a18d0401",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "report",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Lane progress summary with provenance",
+  "body": "OUTPUT_PROVENANCE:\r\nagent: openai/gpt-oss-120b\r\nlane: archivist\r\ngenerated_at: 2026-04-30T14:46:12-04:00\r\nsession_id: unknown\r\n\r\nProcessed inbox messages and completed required actions:\r\n\r\nGraph Analyst peer review (P1)\r\n- Read `delta-summary.md` which contains the peer delta for the Graph Analyst Agent.\r\n- Generated MVP task list (`mvp-task-list-20260429.json`) outlining the top three implementation tasks for the Graph Analyst MVP.\r\n- Created response message `graph-analyst-collab-response-20260429.json` addressed to `archivist-agent-session-20260429T1032`, referencing both the delta summary and the MVP task list.\r\n\r\nLibrary response (P1)\r\n- Acknowledged the library's provision of graph data locations and ratify/triage script plans.\r\n- Sent acknowledgment `library-response-ack-20260430.json` to the Library lane.\r\n\r\nHeartbeat (P3)\r\n- No action required; heartbeat message logged.\r\n\r\nAll new artifacts are placed in `S:/Archivist-Agent/lanes/archivist/outbox` and referenced appropriately.\r\nThe tasks for the Graph Analyst MVP are now defined and ready for downstream lanes to consume.\r\n",
+  "timestamp": "2026-04-30T18:38:48.310Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "opencode",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-30T18:38:48.310Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": false
+  },
+  "evidence_exchange": {},
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-30T18:38:48.310Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "content_hash": "sha256:f1e4ebd2f505f9942dc22e7a554cc233c599a16d29a6b694a5a22a105d7ed7f7",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjY1YWUwNWIyYTllNzQ5Y2IifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ZjFlNGViZDJmNTA1Zjk5NDJkYzIyZTdhNTU0Y2MyMzNjNTk5YTE2ZDI5YTZiNjk0YTVhMjJhMTA1ZDdlZDdmNyIsImV4cCI6MTc3NzY2MDcyOCwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzU3NDMyOCwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6ImUyZS1zdW1tYXJ5LTE3Nzc1NzQzMjgzMTAtYTE3MjMyYWIiLCJ0byI6ImFyY2hpdmlzdCJ9.RG9f6MM0_6YG3R5mlh_rdHtvFjD1ih56YCl8qhR04Xnu2Htj_JVSbKbqRfdNbt3OAr0J-bBY_aQXUyYFDyk2mh0Ao3eGrVEPDX5PYsqmhpW8qj87ltKof4wosZx4MepdDG9oqkjvE8pwERch87aHw6-kIZlJU6cLYosdRDCZxxrKfMdFH_gIKsw-gFdT-2zTAf6G7L9rA-tG1UAtyeYfWQxx_m8Km6-u5b08Ud12pEzwJGdC85oavX8ThopZxRXMuJ-ZK8VkZg8R94C3tm36kEo1CM-MThhYdrKNfA1QvLfahQtjq4CPGmG477J1I8nNgmwV6LdZY2mxrm0hLCUt5g",
+  "signature_alg": "RS256",
+  "key_id": "65ae05b2a9e749cb",
+  "session_identity": {
+    "session_id": "sess-1777574328307-639461ed",
+    "session_epoch_started_at": "2026-04-30T18:38:48.309Z",
+    "origin_runtime": "opencode",
+    "origin_workspace": "S:\\Archivist-Agent"
+  }
+}

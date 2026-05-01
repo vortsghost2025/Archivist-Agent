@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.3",
+  "task_id": "cross-lane-terminology-status-20260428",
+  "idempotency_key": "terminology-status-20260428",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Cross-lane terminology alignment status (2026-04-28)",
+  "body": "Status of terminology alignment requests sent to all lanes:\n\n- SwarmMind: COMPLETE -- no wording changes required; report delivered (terminology-alignment-report-20260428-signed.json).\n- Archivist: SOURCE -- updated SECURITY_POSTURE_LEVELS.md and TRUST_LAYER_V1.md (3-lane → multi-lane).\n- Kernel: TASK DELIVERED -- terminology-alignment-kernel-1777395955361-6f694a.json in processed; summary response PENDING (session was down).\n- Library: TASK DELIVERED -- terminology-alignment-library-1777395955376-bd8d3b.json in processed; summary response PENDING.\n\nAction requested: When Kernel/Library sessions return, please prompt them to submit signed summaries to Archivist inbox for final consolidation.",
+  "timestamp": "2026-04-28T17:12:00.000Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "codex",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-28T17:12:00.000Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "S:/SwarmMind/docs/cross-lane-terminology-status-20260428.json",
+    "verified": true,
+    "verified_by": "swarmmind",
+    "verified_at": "2026-04-28T17:12:00.000Z"
+  },
+  "evidence_exchange": {
+    "artifact_path": "S:/SwarmMind/docs/cross-lane-terminology-status-20260428.json",
+    "artifact_type": "report",
+    "delivered_at": "2026-04-28T17:12:00.000Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-28T17:12:00.000Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "convergence_gate": {
+    "claim": "Terminology alignment: SwarmMind complete; Archivist updated; Kernel/Library pending session recovery.",
+    "evidence": "S:/SwarmMind/docs/cross-lane-terminology-status-20260428.json",
+    "verified_by": "swarmmind",
+    "contradictions": [],
+    "status": "proven"
+  },
+  "content_hash": "sha256:dda42e0341089f01855e7604a77cf84517bbb43e40850aa28020406e4b780565",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ZGRhNDJlMDM0MTA4OWYwMTg1NWU3NjA0YTc3Y2Y4NDUxN2JiYjQzZTQwODUwYWEyODAyMDQwNmU0Yjc4MDU2NSIsImV4cCI6MTc3NzQ4MjkzNywiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzM5NjUzNywiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6ImNyb3NzLWxhbmUtdGVybWlub2xvZ3ktc3RhdHVzLTIwMjYwNDI4IiwidG8iOiJhcmNoaXZpc3QifQ.xLPVCEV0zVPyXHsytYmAWfyLlmjcxi0syS9oLuY-4T-bTjhVgA6t4JvjTkmBIF9_w9cSBadMkt3M7WgFCTaCgaWjTFyZEEJtMJIfGJ6glH27D6eUJLKMzbl6dLxVzZsi28nIf5D-wB53OAKS3Z1sYOL5cRTmN1g4xQWMla0yOhMoKJAcrrDpoxMWOr5_-k_5rIMIdNoB3Ea8wjaPd-Z2L2lAxChZatDdp_hKZkc2-qAokUPyc65EYTvO9-fUoqCLkb2X1WnU1hhvTKLteFDNNWClPadBBrxK0mX4AFp9z4bkvO8gOSsMLmfSt6ofqqz-IC73wHf5gpBKheWh_V5V7g",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "session_identity": {
+    "session_id": "sess-1777396537738-b69baae9",
+    "session_epoch_started_at": "2026-04-28T17:15:37.739Z",
+    "origin_runtime": "opencode",
+    "origin_workspace": "S:\\SwarmMind"
+  },
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-28T17:15:42.271Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "FORMAT_VIOLATION_NON_ASCII",
+    "detail": "Message contains non-ASCII content. Re-request in English per governance constraint.",
+    "schema_valid": true,
+    "signature_valid": true,
+    "schema_remediation": null,
+    "english_only": false,
+    "execution_verified": false,
+    "would_verify": false,
+    "enforce_ownership": false,
+    "ownership_enforcement_enabled": false,
+    "ownership": {
+      "present": false
+    },
+    "ownership_notes": [],
+    "domain_gate_executed": false,
+    "verification_outcome": null,
+    "domain_validation": null,
+    "verification_path": null,
+    "session_identity": {
+      "session_id": "sess_moiw0d9x_60120",
+      "session_epoch_started_at": "2026-04-28T17:15:42.261Z",
+      "origin_runtime": "opencode",
+      "origin_workspace": "S:\\Archivist-Agent"
+    },
+    "output_provenance": {
+      "agent": "lane-worker-60120",
+      "lane": "archivist",
+      "generated_at": "2026-04-28T17:15:42.271Z",
+      "session_id": "sess_moiw0d9x_60120"
+    }
+  },
+  "format_violation": true,
+  "format_violation_reason": "Non-ASCII content detected. Re-request in English per governance constraint."
+}

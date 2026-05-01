@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-1777289676473-archivist-2",
+  "idempotency_key": "resp-1777289679123-e2e-177728967647",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: list dir",
+  "body": "Directory S:/Archivist-Agent/lanes: 10 entries",
+  "timestamp": "2026-04-27T11:34:39.123Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-04-27T11:34:39.123Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T11:34:39.123Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T11:34:39.123Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-1777289676473-archivist-2",
+  "_execution_result": {
+    "path": "S:/Archivist-Agent/lanes",
+    "entries": [
+      {
+        "name": "agent-inventory-published-20260423.json",
+        "type": "FILE",
+        "size": 383,
+        "modified": "2026-04-23T16:01:48.759Z"
+      },
+      {
+        "name": "archivist",
+        "type": "DIR",
+        "size": 0,
+        "modified": "2026-04-23T21:22:52.278Z"
+      },
+      {
+        "name": "authority",
+        "type": "DIR",
+        "size": 0,
+        "modified": "2026-04-23T12:07:06.409Z"
+      },
+      {
+        "name": "broadcast",
+        "type": "DIR",
+        "size": 0,
+        "modified": "2026-04-25T21:08:59.724Z"
+      },
+      {
+        "name": "inventory.json",
+        "type": "FILE",
+        "size": 2929,
+        "modified": "2026-04-23T18:31:06.681Z"
+      },
+      {
+        "name": "inventory.schema.json",
+        "type": "FILE",
+        "size": 2256,
+        "modified": "2026-04-23T16:01:48.776Z"
+      },
+      {
+        "name": "kernel",
+        "type": "DIR",
+        "size": 0,
+        "modified": "2026-04-23T12:07:07.568Z"
+      },
+      {
+        "name": "library",
+        "type": "DIR",
+        "size": 0,
+        "modified": "2026-04-20T17:33:52.593Z"
+      },
+      {
+        "name": "logs",
+        "type": "DIR",
+        "size": 0,
+        "modified": "2026-04-23T12:21:36.174Z"
+      },
+      {
+        "name": "swarmmind",
+        "type": "DIR",
+        "size": 0,
+        "modified": "2026-04-20T17:33:52.596Z"
+      }
+    ],
+    "count": 10
+  },
+  "content_hash": "sha256:2976a72a0ecaf68fe2d14923a6db32571e9f1f3252548ef5032def1e048f438f",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVlNzBiNzgxMDViYzYxODkifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6Mjk3NmE3MmEwZWNhZjY4ZmUyZDE0OTIzYTZkYjMyNTcxZTlmMWYzMjUyNTQ4ZWY1MDMyZGVmMWUwNDhmNDM4ZiIsImV4cCI6MTc3NzM3NjA3OSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc3NzI4OTY3OSwiaWQiOm51bGwsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLWUyZS0xNzc3Mjg5Njc2NDczLWFyY2hpdmlzdC0yIiwidG8iOiJhcmNoaXZpc3QifQ.mdjBTjOPwfLBd5VgDZ5vNot7VtPGabxi48WYMGXOE4mv2b2ZYNJTUKsJY_IQHLPk3GwejYFnXkIfiL-dBMmIvyFmgY_Q2e5n0dFAQ4K3wX_w2YpJOAQ6vF4IQ9MkxPn21y7qNJkIEMlIwX2czzMxX9isar9mLu4dT9ET0cvKA2izfWKZ4IxyR4IA_ZZAJoFJBc-UFNUCvnmIM4fehUt6ViVCqT5KdSufHsWzXwdLB4Ef_cninrf9yjuLFhV-JN0kYg9rXCa5UmThTpy30g5Cz9T6XJ3GNtEccsKjv5nR8VOcx6wBQmsetVfSUaRDmtQVdSiSqKDgNAUTwhsj65Zerg",
+  "signature_alg": "RS256",
+  "key_id": "ee70b78105bc6189"
+}

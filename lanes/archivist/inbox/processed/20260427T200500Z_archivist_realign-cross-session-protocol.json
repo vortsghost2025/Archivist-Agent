@@ -1,0 +1,51 @@
+{
+  "id": "realign-cross-session-protocol-20260427T200500Z",
+  "from": "archivist",
+  "to": "archivist",
+  "timestamp": "2026-04-27T20:05:00Z",
+  "priority": "P1",
+  "type": "review",
+  "task_kind": "protocol-realignment",
+  "subject": "[lane:archivist][thread:session-safety] Realign cross-session mailbox handling",
+  "requires_action": true,
+  "body": "Request: realign mailbox/session routing to prevent cross-instance confusion after crash/reopen. Context: one Archivist instance misread another instance's messages as old self-session mail.\n\nProposed protocol patch (Message Schema v1.4 additive):\n1) Add required message identity fields:\n   - session_id\n   - agent_instance_id\n   - origin_runtime (cursor|kilo|local|other)\n   - origin_workspace\n   - session_epoch_started_at\n2) Add thread binding fields:\n   - thread_id\n   - in_reply_to\n   - allow_cross_instance (default false)\n   - delivery_context.target_instance_id / target_session_id\n3) Router policy:\n   - target_instance_id == self -> normal route\n   - target_instance_id != self -> foreign-instance/\n   - same thread but different instance/session with allow_cross_instance=false -> needs-review/\n   - message older than current session epoch and different instance -> stale-foreign/\n   - legacy messages missing new fields -> legacy-review/ (never auto-execute requires_action=true)\n4) Add lane owner lock file:\n   - lanes/<lane>/state/active-owner.json\n   - if owner exists and is not self -> secondary instance observe-only\n   - if owner heartbeat expires -> controlled takeover with reason\n5) Human-readable subject prefix:\n   - [lane:<lane>][inst:<id>][sess:<id>][thread:<id>]\n\nRollout suggestion:\nA) Producer-first write of new fields\nB) Backward-compatible router (v1.3 + v1.4)\nC) Enforce lock on Archivist lane first\nD) Expand strict target-instance routing to all lanes after 24h stable window",
+  "convergence_gate": {
+    "claim": "Cross-session mailbox ambiguity was identified and a concrete protocol realignment spec is proposed.",
+    "evidence": "Operator report + captured session behavior in lane workflows.",
+    "verified_by": "user",
+    "contradictions": [],
+    "status": "proven"
+  },
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-28T00:44:03.062Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "SCHEMA_INVALID",
+    "detail": "Missing required field: schema_version; Missing required field: task_id; Missing required field: idempotency_key; Missing required field: payload; Missing required field: execution; Missing required field: lease; Missing required field: retry; Missing required field: evidence; Missing required field: evidence_exchange; Missing required field: heartbeat; Field \"type\" value \"review\" not in allowed values: task, response, heartbeat, escalation, handoff, ack, alert, notification, status; Field \"task_kind\" value \"protocol-realignment\" not in allowed values: proposal, review, amendment, ratification, ack, done, status, report, handoff, alert, notification, heartbeat",
+    "schema_valid": false,
+    "signature_valid": false,
+    "schema_remediation": null,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false,
+    "enforce_ownership": false,
+    "ownership_enforcement_enabled": false,
+    "ownership": {
+      "present": false
+    },
+    "ownership_notes": [],
+    "domain_gate_executed": false,
+    "verification_outcome": null,
+    "domain_validation": null,
+    "verification_path": null,
+    "session_identity": {
+      "session_id": "sess_mohwl3dw_35764",
+      "session_epoch_started_at": "2026-04-28T00:44:03.044Z",
+      "origin_runtime": "opencode",
+      "origin_workspace": "S:\\Archivist-Agent"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.3",
+  "task_id": "nack-1777583005480-h9uwb9",
+  "idempotency_key": "nack-coord-packet-1777576400161-8bcd5cb4-1777583005480",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "notification",
+  "task_kind": "status",
+  "priority": "P2",
+  "subject": "NACK: message rejected at swarmmind",
+  "body": "Your message (task_id=coord-packet-1777576400161-8bcd5cb4, type=notification) was rejected.\nReason: SCHEMA_INVALID\nDetail: Field \"task_kind\" value \"coordination\" not in allowed values: proposal, review, amendment, ratification, ack, done, status, report, handoff, alert, notification, heartbeat, audit\nOriginal subject: [CONTRADICTION_SIGNATURE_39] Propagation Coordination Packet",
+  "timestamp": "2026-04-30T21:03:25.480Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "kilo",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": false
+  },
+  "evidence_exchange": {},
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-30T21:03:25.480Z"
+  },
+  "nack_for_task_id": "coord-packet-1777576400161-8bcd5cb4",
+  "nack_reason": "SCHEMA_INVALID",
+  "nack_detail": "Field \"task_kind\" value \"coordination\" not in allowed values: proposal, review, amendment, ratification, ack, done, status, report, handoff, alert, notification, heartbeat, audit"
+}

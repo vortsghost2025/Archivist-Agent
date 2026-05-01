@@ -1,0 +1,151 @@
+{
+  "id": "GOVERNANCE-DOC-CHECK-response-1777093305960",
+  "task_id": "GOVERNANCE-DOC-CHECK",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "ack",
+  "priority": "P2",
+  "subject": "GOVERNANCE-DOC-CHECK completed",
+  "body": "All governance docs exist and are non-empty across all 4 lanes",
+  "timestamp": "2026-04-25T05:01:45.960Z",
+  "schema_version": "1.3",
+  "requires_action": false,
+  "idempotency_key": "governance-doc-check-resp-1777093305960",
+  "payload": {
+    "mode": "inline",
+    "data": {
+      "task_id": "GOVERNANCE-DOC-CHECK",
+      "lane": "swarmmind",
+      "completed_at": "2026-04-25T04:28:42.000Z",
+      "status": "pass",
+      "summary": "All governance docs exist and are non-empty across all 4 lanes",
+      "results": [
+        {
+          "lane": "archivist",
+          "root": "S:/Archivist-Agent",
+          "BOOTSTRAP.md": {
+            "exists": true,
+            "size_bytes": 22853
+          },
+          "GOVERNANCE.md": {
+            "exists": true,
+            "size_bytes": 10638
+          },
+          "COVENANT.md": {
+            "exists": true,
+            "size_bytes": 4059
+          }
+        },
+        {
+          "lane": "swarmmind",
+          "root": "S:/SwarmMind",
+          "BOOTSTRAP.md": {
+            "exists": true,
+            "size_bytes": 22853
+          },
+          "GOVERNANCE.md": {
+            "exists": true,
+            "size_bytes": 10638
+          },
+          "COVENANT.md": {
+            "exists": true,
+            "size_bytes": 4059
+          }
+        },
+        {
+          "lane": "kernel",
+          "root": "S:/kernel-lane",
+          "BOOTSTRAP.md": {
+            "exists": true,
+            "size_bytes": 22853
+          },
+          "GOVERNANCE.md": {
+            "exists": true,
+            "size_bytes": 10638
+          },
+          "COVENANT.md": {
+            "exists": true,
+            "size_bytes": 4059
+          }
+        },
+        {
+          "lane": "library",
+          "root": "S:/self-organizing-library",
+          "BOOTSTRAP.md": {
+            "exists": true,
+            "size_bytes": 22853
+          },
+          "GOVERNANCE.md": {
+            "exists": true,
+            "size_bytes": 10638
+          },
+          "COVENANT.md": {
+            "exists": true,
+            "size_bytes": 4059
+          }
+        }
+      ],
+      "anomalies": [],
+      "execution_verified": false,
+      "would_verify": false,
+      "_lane_worker": {
+        "lane": "archivist",
+        "routed_at": "2026-04-25T05:00:39.499Z",
+        "dry_run": false,
+        "route": "quarantine",
+        "reason": "SCHEMA_INVALID",
+        "detail": "Missing required field: schema_version; Missing required field: idempotency_key; Missing required field: from; Missing required field: to; Missing required field: type; Missing required field: priority; Missing required field: subject; Missing required field: body; Missing required field: timestamp; Missing required field: requires_action; Missing required field: payload; Missing required field: execution; Missing required field: lease; Missing required field: retry; Missing required field: evidence; Missing required field: evidence_exchange; Missing required field: heartbeat",
+        "schema_valid": false,
+        "signature_valid": false,
+        "english_only": true,
+        "execution_verified": false,
+        "would_verify": false
+      }
+    }
+  },
+  "execution": {
+    "max_attempts": 1,
+    "timeout_ms": 60000
+  },
+  "lease": {
+    "acquired": false,
+    "holder": null,
+    "expires_at": null
+  },
+  "retry": {
+    "count": 0,
+    "max": 0,
+    "backoff_ms": 0
+  },
+  "heartbeat": {
+    "interval_ms": 30000,
+    "last_beat": null
+  },
+  "evidence": {
+    "required": false
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "log",
+    "delivered_at": "2026-04-25T05:01:45.960Z"
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJleHAiOjE3NzcxNzk3MDUsImZyb20iOiJzd2FybW1pbmQiLCJpYXQiOjE3NzcwOTMzMDUsImlkIjoiR09WRVJOQU5DRS1ET0MtQ0hFQ0stcmVzcG9uc2UtMTc3NzA5MzMwNTk2MCIsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGltZXN0YW1wIjoiMjAyNi0wNC0yNVQwNTowMTo0NS45NjBaIiwidG8iOiJhcmNoaXZpc3QiLCJ0eXBlIjoicmVzcG9uc2UifQ.O1YHeo1U2gcrYSNIGiCwiutNu8A8BhP_Mxk5PhuiFh06e8ZngXWaPtfGgEA4rvAX8MslnMQyOxfFkj5koEiyKDSu4hyzNCAtQ4XF1ne-5Um-AqbLfSAKuJNIrxavSV1BRJ903j8agqpYUWHZmyKDSin6KRbogVPGSoioflZuqs3s4yVIUI54hwWXCeSFGlyANp903kTlKjmRZRsoHdnJJ0UzsmV0dlW84Cvv16iw98iLnTIi_fJ5hBCHb0yfv86gN6m_nJfSA9EwSRE3KUbu0Pa5XLlrw-ectzLHwunbHqzSrFYoSR6lHt_OCDkE7JUoma7zyaFq8M-BZLmtBdBgvw",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed",
+  "execution_verified": true,
+  "would_verify": true,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-25T05:02:23.435Z",
+    "dry_run": false,
+    "route": "processed",
+    "reason": "TERMINAL_INFORMATIONAL",
+    "detail": null,
+    "schema_valid": true,
+    "signature_valid": true,
+    "english_only": true,
+    "execution_verified": true,
+    "would_verify": true
+  }
+}

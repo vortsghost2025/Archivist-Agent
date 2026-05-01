@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.3",
+  "task_id": "nack-1777576551908-2i8jx4",
+  "idempotency_key": "nack-coord-packet-1777576400155-ef649b98-1777576551908",
+  "from": "library",
+  "to": "archivist",
+  "type": "notification",
+  "task_kind": "status",
+  "priority": "P2",
+  "subject": "NACK: message rejected at library",
+  "body": "Your message (task_id=coord-packet-1777576400155-ef649b98, type=notification) was rejected.\nReason: SCHEMA_INVALID\nDetail: Field \"task_kind\" value \"coordination\" not in allowed values: proposal, review, amendment, ratification, ack, done, status, report, handoff, alert, notification, heartbeat, audit\nOriginal subject: [CONTRADICTION_SIGNATURE_39] Propagation Coordination Packet",
+  "timestamp": "2026-04-30T19:15:51.908Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "kilo",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": false
+  },
+  "evidence_exchange": {},
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-30T19:15:51.908Z"
+  },
+  "nack_for_task_id": "coord-packet-1777576400155-ef649b98",
+  "nack_reason": "SCHEMA_INVALID",
+  "nack_detail": "Field \"task_kind\" value \"coordination\" not in allowed values: proposal, review, amendment, ratification, ack, done, status, report, handoff, alert, notification, heartbeat, audit"
+}

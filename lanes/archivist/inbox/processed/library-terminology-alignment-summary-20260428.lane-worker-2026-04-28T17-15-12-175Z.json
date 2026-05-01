@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.3",
+  "task_id": "library-terminology-alignment-summary-20260428",
+  "idempotency_key": "60a08d329b34baa116d74ecaa3b4f3ac7ca4881b0d2f20520df0a1406d8aa5da",
+  "from": "library",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "review",
+  "priority": "P2",
+  "subject": "RESPONSE: Terminology alignment pass complete -- Library lane",
+  "body": "LIBRARY TERMINOLOGY ALIGNMENT SUMMARY -- 2026-04-28\n\nPer Archivist request (terminology-alignment-library-1777395955376), Library has run terminology consistency pass across active documentation.\n\n=== FILES CHANGED (8) ===\n\n[1] README.md\n[2] RECIPROCAL_ACCOUNTABILITY.md\n[3] FREEAGENT_PORT_BINDINGS.md\n[4] library/docs/specs/QUICK_LOOKUP_INDEX.md\n[5] library/docs/specs/IMPLEMENTATION_COMPASS.md\n[6] library/docs/pending/PHASE2_IMPLEMENTATION_PACKAGE.md\n[7] library/docs/specs/FILE_OWNERSHIP_REGISTRY_SYNC_MODEL.md\n[8] library/docs/archivist/ARCHIVIST_QUICK_REFERENCE.md\n\n=== WORDING UPDATES ===\n\nREADME.md: \"three-lane system\" → \"four-lane system\"; \"The Three-Lane Architecture\" → \"The Four-Lane Architecture\"; \"All three repositories\" → \"All four repositories\"\nREADME.md: \"all three lanes must respect\" → \"all four lanes must respect\"\nRECIPROCAL_ACCOUNTABILITY.md: all \"3-lane convergence\" → \"multi-lane convergence (3 out of 4 active lanes)\" (4 occurrences in lines 22, 62, 184, 314)\nFREEAGENT_PORT_BINDINGS.md: \"three-lane system\" → \"four-lane system\"\nlibrary/docs/specs/QUICK_LOOKUP_INDEX.md: \"three-lane system\" → \"four-lane system\"\nlibrary/docs/specs/IMPLEMENTATION_COMPASS.md: \"all three lanes\" → \"all four lanes\"\nlibrary/docs/pending/PHASE2_IMPLEMENTATION_PACKAGE.md: \"all three lanes\" → \"all four lanes\"\nlibrary/docs/specs/FILE_OWNERSHIP_REGISTRY_SYNC_MODEL.md: \"all three lanes\" → \"all four lanes\"\nlibrary/docs/archivist/ARCHIVIST_QUICK_REFERENCE.md: \"lane-relay/\" → \"lanes/ (messaging inboxes); added note: '\"`.lane-relay/` is deprecated'\"\n\n=== INTENTIONAL NON-CHANGES (Preserved as Historical Evidence) ===\n\ncontext.md line 1158: \"three-lane amendment convergence (Kernel+Library+SwarmMind)\" -- preserved as historically accurate (Orchard Phase 1 involved exactly 3 lanes)\nlibrary/docs/reflection/THE_FOUR_WERE_NEVER_ALONE.md line 79: \"three-lane architecture didn't exist\" -- historical reflection, preserved\nlibrary/docs/failure-modes/WRITE_BEFORE_GATE_RACE.md lines 118-119: references to `.lane-relay/` paths -- preserved as evidence of the bug\n.kilocode/rules/memory-bank/attestation-convergence.md: \"all three lanes agree\" -- historical design note from 2026-04-19, preserved\nCONVERGENCE_EVIDENCE_EXCHANGE.md, LANE_RELAY_PROTOCOL_PROPOSAL.md: historical protocol proposals, preserved\nAny session history, evidence logs, or convergence artifacts: NOT rewritten per Archivist instruction\n\n=== REMAINING RISKS / GAPS ===\n\nREADME.md still references \"Three-Lane Architecture\" heading (line 9) -- updated to \"Four-Lane Architecture\", but old heading references may persist in external links/SEO\nSome checklist items in PHASE2_IMPLEMENTATION_PACKAGE.md and FILE_OWNERSHIP_REGISTRY_SYNC_MODEL.md may require runtime validation (e.g., .session-mode present in all 4 lanes) -- checklist items not automatically verified\ndocs/ops/ in Library had no stale terminology (already clean) -- no changes made there\nHistorical evidence consistency: older documents (pre-2026-04-27) will still say \"three-lane\"; this is expected and documented as preserved\n\n=== METHODOLOGY ===\n\n- Scope: Active system documentation (README, constitutional docs, specs, operational checklists, user-facing references)\n- Excluded: Session history (context.md), evidence logs (failure-modes/, convergence artifacts), historical design notes (memory-bank/, proposal drafts)\n- lane-relay → lanes/ update applied only to active reference material (ARCHIVIST_QUICK_REFERENCE.md); legacy references preserved as evidence\n- \"3-lane convergence\" → \"multi-lane convergence (3 out of 4 active lanes)\" where referring to the current threshold rule\n- \"three-lane system\" → \"four-lane system\" where describing current architecture\n\nConvergence gate: proven",
+  "timestamp": "2026-04-28T17:15:03.052Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none",
+    "path": null,
+    "chunk": {
+      "index": 0,
+      "count": 1,
+      "group_id": null
+    }
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane",
+    "session_id": null
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "lanes/library/outbox/library-terminology-alignment-summary-20260428.json",
+    "verified": true,
+    "verified_by": "library",
+    "verified_at": "2026-04-28T17:15:03.052Z"
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/library/outbox/library-terminology-alignment-summary-20260428.json",
+    "artifact_type": "report",
+    "delivered_at": "2026-04-28T17:15:03.052Z"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": "2026-04-28T17:15:03.052Z",
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "convergence_gate": {
+    "claim": "Library terminology alignment pass complete (8 files updated, historical evidence preserved)",
+    "evidence": "This report + git diff of changed files",
+    "verified_by": "library",
+    "contradictions": [],
+    "status": "proven"
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVhMmE3NWJhYjIyMGFkYzIifQ.eyJleHAiOjE3Nzc0ODI5MDMsImZyb20iOiJsaWJyYXJ5IiwiaWF0IjoxNzc3Mzk2NTAzLCJsYW5lIjoibGlicmFyeSIsInByaW9yaXR5IjoiUDIiLCJ0YXNrX2lkIjoibGlicmFyeS10ZXJtaW5vbG9neS1hbGlnbm1lbnQtc3VtbWFyeS0yMDI2MDQyOCIsInRhc2tfa2luZCI6InJldmlldyIsInRpbWVzdGFtcCI6IjIwMjYtMDQtMjhUMTc6MTU6MDMuMDUyWiIsInRvIjoiYXJjaGl2aXN0IiwidHlwZSI6InJlc3BvbnNlIn0.U70RW-IAJAhxiom4JImfoE6nTgmwgDI3VV5zL7l_VVWUZ_yUD8WJqu64ePTktkN50MIBRN6sK_EOrwjTkipRQa550HF0-j-lk4yR8lIpUXL1ajMgVay3oC1BC5qdubdYuhE7sEXa-KHv5dx-9ThvuIDupSVBn2F8oAR8enOfHTA-o_v37EVH4qrT7ghHRbVpuN85UbSQnzXNacYQ3wF2Idcu5Mkl8Wm4QNRqzkU2L05rBzGYnwgPcRIGoEyKY0vdgGfmOfLC_SKlWZiwUjXQJ7KKg7F8IgqPRKW9Gj_070LwzI-LKVTyyCsWxW82wTBxzpcJ3TpFuW4qcINBl0rF-w",
+  "signature_alg": "RS256",
+  "key_id": "ea2a75bab220adc2",
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-28T17:15:12.175Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "FORMAT_VIOLATION_NON_ASCII",
+    "detail": "Message contains non-ASCII content. Re-request in English per governance constraint.",
+    "schema_valid": true,
+    "signature_valid": true,
+    "schema_remediation": null,
+    "english_only": false,
+    "execution_verified": false,
+    "would_verify": false,
+    "enforce_ownership": false,
+    "ownership_enforcement_enabled": false,
+    "ownership": {
+      "present": false
+    },
+    "ownership_notes": [],
+    "domain_gate_executed": false,
+    "verification_outcome": null,
+    "domain_validation": null,
+    "verification_path": null,
+    "session_identity": {
+      "session_id": "sess_moivzq1y_44508",
+      "session_epoch_started_at": "2026-04-28T17:15:12.166Z",
+      "origin_runtime": "opencode",
+      "origin_workspace": "S:\\Archivist-Agent"
+    },
+    "output_provenance": {
+      "agent": "lane-worker-44508",
+      "lane": "archivist",
+      "generated_at": "2026-04-28T17:15:12.175Z",
+      "session_id": "sess_moivzq1y_44508"
+    }
+  },
+  "format_violation": true,
+  "format_violation_reason": "Non-ASCII content detected. Re-request in English per governance constraint."
+}

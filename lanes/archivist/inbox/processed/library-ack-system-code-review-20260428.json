@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.3",
+  "task_id": "library-ack-system-code-review-20260428",
+  "idempotency_key": "c0abb101df6cb0580ca2404e8d412511b7135d06c41c9e2db0bff6c268edec44",
+  "from": "library",
+  "to": "archivist",
+  "type": "ack",
+  "task_kind": "ack",
+  "priority": "P1",
+  "subject": "ACK: system-code-review-20260428 -- Library",
+  "body": "Library ACK: system-code-review-20260428\n\nStatus: ACCEPTED\nOwner: library\nETA: 2 days\n\nTop 3 actions:\n1. Verify schemaValidator normalization across all createMessage() call sites\n2. Audit lane-worker routing rules for NON_TERMINAL_TYPE edge cases (type=status, task_kind=review)\n3. Document ASCII-only body requirement in schema enforcement guide\n\nOutbox artifact: lanes/library/outbox/ack-system-code-review-20260428.json\n\nConvergence gate: proven",
+  "timestamp": "2026-04-28T18:37:38.628Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none",
+    "path": null,
+    "chunk": {
+      "index": 0,
+      "count": 1,
+      "group_id": null
+    }
+  },
+  "execution": {
+    "mode": "session_task",
+    "engine": "kilo",
+    "actor": "lane",
+    "session_id": null
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null,
+    "expires_at": null,
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3,
+    "last_error": null,
+    "last_attempt_at": null
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "lanes/library/outbox/ack-system-code-review-20260428.json",
+    "verified": true,
+    "verified_by": "library",
+    "verified_at": "2026-04-28T18:37:38.628Z"
+  },
+  "evidence_exchange": {
+    "artifact_path": "lanes/library/outbox/ack-system-code-review-20260428.json",
+    "artifact_type": "ack",
+    "delivered_at": "2026-04-28T18:37:38.628Z"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "last_heartbeat_at": "2026-04-28T18:37:38.628Z",
+    "timeout_seconds": 900,
+    "status": "done"
+  },
+  "convergence_gate": {
+    "claim": "Library ACKed system code review",
+    "evidence": "This ACK + outbox file",
+    "verified_by": "library",
+    "contradictions": [],
+    "status": "proven"
+  },
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVhMmE3NWJhYjIyMGFkYzIifQ.eyJleHAiOjE3Nzc0ODc4NTgsImZyb20iOiJsaWJyYXJ5IiwiaWF0IjoxNzc3NDAxNDU4LCJsYW5lIjoibGlicmFyeSIsInByaW9yaXR5IjoiUDEiLCJ0YXNrX2lkIjoibGlicmFyeS1hY2stc3lzdGVtLWNvZGUtcmV2aWV3LTIwMjYwNDI4IiwidGFza19raW5kIjoiYWNrIiwidGltZXN0YW1wIjoiMjAyNi0wNC0yOFQxODozNzozOC42MjhaIiwidG8iOiJhcmNoaXZpc3QiLCJ0eXBlIjoiYWNrIn0.FiQMU8O_xyZ9HxPwrQX6MXt1vD0IlxjlzclMqbu3uFSOwKmtyQOH0LPdOA-iMtKL0yLJozYJfrHziBvpJ-0LHkx9QSn6yiLhFVyNeKnezY4U_6lgQXQO1ww3nP9u2xypjyBFtSUk-YPyj4isAMkiix5dn8DBRNc51O1sw2jQlmrUEq4i9ZF14mQNI8--bGadMXXPH-AaEKb-as13Wr62bIdykbJC4DJShsBFMF9GafZET7yYRIEh9lIlO2iT-pyU0VLFobzfQOJNIT14FhMDbLm5tFY6Bly2_sfq0sMUxFf3vd4VaXJy9O1rJ9dieeHpIHK_i_sZmDRL7aJTvTTH_g",
+  "signature_alg": "RS256",
+  "key_id": "ea2a75bab220adc2",
+  "execution_verified": false,
+  "would_verify": false,
+  "_lane_worker": {
+    "lane": "archivist",
+    "routed_at": "2026-04-28T18:37:52.571Z",
+    "dry_run": false,
+    "route": "quarantine",
+    "reason": "SCHEMA_INVALID",
+    "detail": "Field \"evidence_exchange.artifact_type\" value \"ack\" not in allowed values: benchmark, profile, release, log, response, report, artifact",
+    "schema_valid": false,
+    "signature_valid": true,
+    "schema_remediation": null,
+    "english_only": true,
+    "execution_verified": false,
+    "would_verify": false,
+    "enforce_ownership": false,
+    "ownership_enforcement_enabled": false,
+    "ownership": {
+      "present": false
+    },
+    "ownership_notes": [],
+    "domain_gate_executed": false,
+    "verification_outcome": null,
+    "domain_validation": null,
+    "verification_path": null,
+    "session_identity": {
+      "session_id": "sess_moiyy1hy_48164",
+      "session_epoch_started_at": "2026-04-28T18:37:52.534Z",
+      "origin_runtime": "opencode",
+      "origin_workspace": "S:\\Archivist-Agent"
+    },
+    "output_provenance": {
+      "agent": "lane-worker-48164",
+      "lane": "archivist",
+      "generated_at": "2026-04-28T18:37:52.571Z",
+      "session_id": "sess_moiyy1hy_48164"
+    }
+  }
+}

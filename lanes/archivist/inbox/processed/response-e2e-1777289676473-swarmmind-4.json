@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.3",
+  "task_id": "response-e2e-1777289676473-swarmmind-4",
+  "idempotency_key": "resp-1777289686615-e2e-177728967647",
+  "from": "swarmmind",
+  "to": "archivist",
+  "type": "response",
+  "task_kind": "report",
+  "priority": "P2",
+  "subject": "Re: compare alias",
+  "body": "Error running diff",
+  "timestamp": "2026-04-27T11:34:46.615Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "auto",
+    "engine": "pipeline",
+    "actor": "task-executor"
+  },
+  "lease": {
+    "owner": "swarmmind",
+    "acquired_at": "2026-04-27T11:34:46.615Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": true
+  },
+  "evidence_exchange": {
+    "artifact_path": null,
+    "artifact_type": "response",
+    "delivered_at": "2026-04-27T11:34:46.615Z"
+  },
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-27T11:34:46.615Z",
+    "interval_seconds": 300,
+    "timeout_seconds": 900
+  },
+  "_original_task_id": "e2e-1777289676473-swarmmind-4",
+  "_execution_result": {
+    "error": "Diff failed: ENOENT: no such file or directory, open 'S:\\SwarmMind\\README.md'"
+  },
+  "content_hash": "sha256:0b3831492fbb3170fde6f40bcd36a3b186dc0653108b6897d251136f4e2a0dd6",
+  "signature": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFkZGIwYWZiOGVlNWMyZWQifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6MGIzODMxNDkyZmJiMzE3MGZkZTZmNDBiY2QzNmEzYjE4NmRjMDY1MzEwOGI2ODk3ZDI1MTEzNmY0ZTJhMGRkNiIsImV4cCI6MTc3NzM3NjA4NiwiZnJvbSI6InN3YXJtbWluZCIsImlhdCI6MTc3NzI4OTY4NiwiaWQiOm51bGwsImxhbmUiOiJzd2FybW1pbmQiLCJwcmlvcml0eSI6IlAyIiwidGFza19pZCI6InJlc3BvbnNlLWUyZS0xNzc3Mjg5Njc2NDczLXN3YXJtbWluZC00IiwidG8iOiJhcmNoaXZpc3QifQ.QQyxui0ZfZZA4jbgt0u_aHfKUN-E7GxLdPiaPxikosbce_yAy8-cEFFs75ls1TZ-Ot3IY6eiHGoe6mudyztCW9UnG9aSbenPUaXRGI0x3UR_UUb5-QfoQrqpbsGGzHyVmojJL0JOUOCAi98XFAhK4iDm8p_Rc8sf_nrNIAJi4WiQq5ihA-o4X-Sm_eMAcLrkJoL6Ajfh7gWOqA6ELVpQxD0MOnIPSW0Gg4CvvikRYXPjCWmIoAU-L9AoY_4CmkeIrWDlWCuaZiYtpWg1RPIV9mYUiXrqO6rKO24vhKl4lc4ASx8bBb7AGsheuHAUohuLJ0V8mM4URG69Lntu5JfuGg",
+  "signature_alg": "RS256",
+  "key_id": "addb0afb8ee5c2ed"
+}

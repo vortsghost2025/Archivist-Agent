@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.3",
+  "task_id": "nack-1777576551916-3yip9a",
+  "idempotency_key": "nack-e2e-summary-1777574328331-5efe65fd-1777576551916",
+  "from": "library",
+  "to": "archivist",
+  "type": "notification",
+  "task_kind": "status",
+  "priority": "P2",
+  "subject": "NACK: message rejected at library",
+  "body": "Your message (task_id=e2e-summary-1777574328331-5efe65fd, type=report) was rejected.\nReason: SCHEMA_INVALID\nDetail: Field \"type\" value \"report\" not in allowed values: task, response, heartbeat, escalation, handoff, ack, alert, notification, status\nOriginal subject: Lane progress summary with provenance",
+  "timestamp": "2026-04-30T19:15:51.916Z",
+  "requires_action": false,
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "kilo",
+    "actor": "lane"
+  },
+  "lease": {
+    "owner": null,
+    "acquired_at": null
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": false,
+    "verified": false
+  },
+  "evidence_exchange": {},
+  "heartbeat": {
+    "status": "done",
+    "last_heartbeat_at": "2026-04-30T19:15:51.916Z"
+  },
+  "nack_for_task_id": "e2e-summary-1777574328331-5efe65fd",
+  "nack_reason": "SCHEMA_INVALID",
+  "nack_detail": "Field \"type\" value \"report\" not in allowed values: task, response, heartbeat, escalation, handoff, ack, alert, notification, status"
+}
