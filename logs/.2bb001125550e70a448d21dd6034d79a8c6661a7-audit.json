@@ -6,11 +6,6 @@
     "auditLog": "S:\\Archivist-Agent\\logs\\.2bb001125550e70a448d21dd6034d79a8c6661a7-audit.json",
     "files": [
         {
-            "date": 1776369459953,
-            "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-04-16.log",
-            "hash": "042421188a6e11a853f4b7cc9661f6ce94cc4d93ecb13882b8bdf8bf82a82682"
-        },
-        {
             "date": 1776687809617,
             "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-04-20.log",
             "hash": "0b3dfc7ae065f56bf807438ea8e94152ca2e0fa8e3ebf07cb7837c52a45c0890"
@@ -59,6 +54,11 @@
             "date": 1777515894345,
             "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-04-29.log",
             "hash": "553d197055a106f6b918cd62a25cf146dbdb9f6d79748e10118d568b1bf28020"
+        },
+        {
+            "date": 1777596133262,
+            "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-04-30.log",
+            "hash": "7699fd520aa5bc62eb7db09920a04a7c782a7ab028ea1026e1005750f2a53476"
         }
     ],
     "hashType": "sha256"

@@ -1,0 +1,48 @@
+{
+  "timestamp": "2026-05-01T14:46:34.104Z",
+  "operation": "global_verification_triage_plus_contradiction_resolution",
+  "snapshot_source": "S:/Archivist-Agent/context-buffer/graph-snapshot-2026-04-30-18-45-40-860.json",
+  "snapshot_output": "S:/Archivist-Agent/context-buffer/graph-snapshot-2026-05-01T15-00-00-000Z.json",
+  "triage_counts": {
+    "high_authority_unverified_candidates": 1264,
+    "structural": 485,
+    "high_priority": 161,
+    "medium_priority": 618
+  },
+  "contradiction_resolution": {
+    "nodes_with_contradictionCount_resolved": 66,
+    "examples": [
+      {
+        "id": "c6afd861a226fc10",
+        "title": "THE SINGLE ENTRY POINT",
+        "depth": 90
+      },
+      {
+        "id": "96e320fca0403dec",
+        "title": "Three-Lane Constitutional AI Governance System: Complete Implementation Summary",
+        "depth": 90
+      },
+      {
+        "id": "fbf4a5e1ef4bb27a",
+        "title": "Contradiction False Positive Verification — 2026-04-29",
+        "depth": 90
+      },
+      {
+        "id": "3df5e3e33e3759d3",
+        "title": "Paper F: Failure Modes, Formal Limits, and the Self-Correcting Loop",
+        "depth": 90
+      },
+      {
+        "id": "f48c014cec555c6e",
+        "title": "Archivist Quick Reference: Governance Root (Lane 1) — 1-Page Summary",
+        "depth": 90
+      }
+    ]
+  },
+  "final_status": {
+    "verified": 469,
+    "unverified": 3097,
+    "conflicted": 0,
+    "quarantined": 23
+  }
+}

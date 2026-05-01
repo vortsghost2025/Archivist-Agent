@@ -1,6 +1,6 @@
 # Core/Exterior Graph Classification Plan
 
-**Status:** PROPOSAL — READ ONLY — awaiting operator approval
+**Status:** APPROVED — READY FOR IMPLEMENTATION
 **Author:** Archivist (kilo-auto/free)
 **Date:** 2026-05-01
 **Scope:** 3,589-node global snapshot

@@ -1,0 +1,144 @@
+Here is the complete analysis of the graph data pipeline:
+
+1. API Endpoint
+File: S:\self-organizing-library\src\app\api\graph-data\route.ts URL: GET /api/graph-data
+
+The endpoint imports getGraphData() from @/lib/site-index and returns the result as JSON:
+
+import { getGraphData } from "@/lib/site-index";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  const graphData = getGraphData();
+  return NextResponse.json(graphData);
+}
+Return shape: { nodes: GraphNode[], edges: GraphEdge[], authorityEdges: AuthorityEdge[] }
+
+2. Node Schema (GraphNode)
+Defined in S:\self-organizing-library\src\lib\graph-types.ts (lines 21-36):
+
+Field	Type	Description
+id	string	SHA-256 hash prefix (first 16 chars of sha256(repo:relativePath))
+title	string	Document title (from frontmatter, H1 heading, or filename)
+type	string	Maps from content_type on the IndexEntry
+category	string	Directory-based category classification
+repo	string	Repository name
+connectionCount	number	Count of edges touching this node (in + out)
+tags	string[]	Extracted tags from content/frontmatter
+status	NodeStatus	One of: "UNVERIFIED" | "VERIFIED" | "CONFLICTED" | "QUARANTINED"
+verificationCount	number	Incoming VERIFIES edges count
+contradictionCount	number	Incoming/outgoing CONTRADICTS edges count
+clusterIds	string[]	IDs of clusters this node belongs to (computed by graph-clusters.ts)
+governanceLayer	GovernanceLayer	One of: "constitutional" | "operational" | "theoretical" | "historical" | "evidence" | "application_adjacent" | "unknown"
+authorityDepth	number	Repo-based authority score (0-95)
+bridgeState	BridgeState	One of: "enforced" | "verified" | "partial" | "documented_only" | "contradicted" | "obsolete" | "unknown"
+Note: In getGraphData(), the clusterIds field is NOT populated (it's assigned later by assignClusterIds() in graph-clusters.ts). The type field is populated from the raw content_type field of each IndexEntry.
+
+3. Edge Schema (GraphEdge)
+Defined in S:\self-organizing-library\src\lib\graph-types.ts (lines 38-43):
+
+Field	Type	Description
+source	string	Source node ID
+target	string	Target node ID
+type	string	Edge type category (see below)
+authority	AuthorityEdgeType (optional)	Authority sub-type, present only when type === "authority"
+Possible type values (as produced by getGraphData()):
+Edge type	Source	authority sub-type?
+"link"	Cross-references from markdown links within same repo	No
+"cross-repo-link"	Cross-references from markdown links across repos	No
+"paper-section-of"	Paper section to parent paper structure index	No
+"cross-paper-tag"	Shared tags between paper sections and other papers	No
+"cross-paper-dependency"	Hardcoded paper derivation chain	No
+"shared-tag"	Synthetic edges between nodes sharing the same tag	No
+"authority"	Computed by truth-routing.ts	Yes
+Possible authority sub-type values (AuthorityEdgeType):
+Authority	Color	Meaning
+"VERIFIES"	Green #22C55E	Source verifies target (verification/attestation category)
+"DERIVES_FROM"	Blue #60A5FA	Source derives from target (governance/spec/paper category)
+"CONTRADICTS"	Red #EF4444	Source contradicts target (failure-mode/drift tags)
+"SIGNED_BY"	Purple #C084FC	Source is signed by target (attestation with signing tags)
+"EXECUTES"	Amber #F59E0B	Source executes target (kernel/swarmmind code)
+"DEPENDS_ON"	Gray #9CA3AF	Default fallback for cross-references not matching other rules
+4. Where Graph Data Is Built/Aggregated
+The pipeline has three stages:
+
+Stage 1: Raw Data Generation
+Script: S:\self-organizing-library\scripts\generate-site-index.js
+
+This Node.js script:
+
+Walks 9 repositories on disk
+Classifies each file by extension into content_type (doc, code, data, config, schema, test-data, paper, paper-section, unknown)
+Classifies each file by directory path into category (67 unique values)
+Extracts titles, tags, dates, descriptions from file content
+Builds cross-references by parsing markdown [label](link) syntax
+Builds paper section structure references
+Writes output to data/site-index.json
+Stage 2: JSON Data Store
+File: S:\self-organizing-library\data\site-index.json (87,441 lines, ~3,589 entries, ~1,100 cross-references)
+
+Schema: { schema_version, generated_at, github_org, repo_roots, stats, tag_index, cross_references, entries[] }
+
+Each entry: { id, repo, path, github_url, title, extension, content_type, category, breadcrumbs, tags, date, modified, size_bytes, description, content_snippet }
+
+Stage 3: Runtime Graph Assembly
+File: S:\self-organizing-library\src\lib\site-index.ts — getGraphData() function (lines 157-241)
+
+This function:
+
+Calls computeAuthorityEdges() from S:\self-organizing-library\src\lib\truth-routing.ts — classifies cross-refs and tag-group connections into authority edge types (VERIFIES, DERIVES_FROM, CONTRADICTS, SIGNED_BY, EXECUTES, DEPENDS_ON)
+Calls computeNodeStatuses() from truth-routing.ts — computes each node's status (UNVERIFIED/VERIFIED/CONFLICTED/QUARANTINED) and verification/contradiction counts
+Calls computeGovernanceDepths() from truth-routing.ts — computes governanceLayer, authorityDepth (repo-based), and bridgeState for each node
+Builds edge array by merging: cross_references + shared-tag synthetic edges + authority edges
+Computes connectionCount per node from all edges
+Maps IndexEntries to GraphNodes, attaching status/governance metadata
+Returns { nodes, edges, authorityEdges }
+5. All Possible Type Values
+Node type values (= content_type from raw index):
+"doc", "paper", "code", "data", "config", "schema", "test-data", "paper-section", "unknown"
+
+Node category values (67 total):
+ARCHITECTURE_DECISION_RECORDS, SwarmMind-Self-Optimizing-Multi-Agent-AI-System, agent, ai, ai-ensemble-lab, architecture, attestation, audit, backup_static_old, baseline, benchmark, bridge, code, config, connection-bridge, coordination, data, distributed, docs, drafts, drift, failure-mode, game, governance, iac, identity, infrastructure, integration, kernel, lane-protocol, library, log, math, medical, memory, monitoring, orchestrator, paper, paper-section, pending, phase-6, plans, profile, project, public_html, queue, reflection, release, reports, resilience, root-doc, schema, scratch, script, sensitive, shared-infra, spec, swarmmind, templates, test, tool, ui, usage, verification, we, we4free, web
+
+Node status values:
+"UNVERIFIED", "VERIFIED", "CONFLICTED", "QUARANTINED"
+
+Node governanceLayer values:
+"constitutional", "operational", "theoretical", "historical", "evidence", "application_adjacent", "unknown"
+
+Node bridgeState values:
+"enforced", "verified", "partial", "documented_only", "contradicted", "obsolete", "unknown"
+
+Node repo values (9):
+"self-organizing-library", "Archivist-Agent", "SwarmMind-Self-Optimizing-Multi-Agent-AI-System", "kernel-lane", "federation", "FreeAgent", "papers", "storytime", "Deliberate-AI-Ensemble"
+
+Edge type values:
+"link", "cross-repo-link", "paper-section-of", "cross-paper-tag", "cross-paper-dependency", "shared-tag", "authority"
+
+Edge authority sub-type values (only when type === "authority"):
+"VERIFIES", "DERIVES_FROM", "CONTRADICTS", "SIGNED_BY", "EXECUTES", "DEPENDS_ON"
+
+6. Raw Data Location
+The full graph data source is a single JSON file:
+
+S:\self-organizing-library\data\site-index.json
+
+87,441 lines
+3,589 entries
+1,100 cross-references
+Generated by scripts/generate-site-index.js
+A smaller summary is at S:\self-organizing-library\data\site-index-summary.json (repo counts, top tags, category breakdown — no entries or edges).
+
+The graph is NOT stored as a pre-built graph file. Instead, it is computed at runtime by getGraphData() in src/lib/site-index.ts, which reads data/site-index.json and enriches it with authority/status/governance computations from src/lib/truth-routing.ts.
+
+Key Supporting Files Summary
+File	Role
+src/app/api/graph-data/route.ts	API endpoint (GET /api/graph-data)
+src/lib/site-index.ts	Loads JSON, provides getGraphData() (graph assembler)
+src/lib/graph-types.ts	TypeScript types + color/size constants for nodes/edges
+src/lib/truth-routing.ts	Authority edge classification, node status, governance depth computation
+src/lib/graph-clusters.ts	Cluster computation (repo + tag groups), entry point generation, clusterId assignment
+src/lib/graph-snapshot.ts	Snapshot serialization, download, contradiction hub reports
+src/lib/graph-snapshot-compare.ts	Snapshot diffing (node additions/removals, status/governance changes)
+scripts/generate-site-index.js	Offline script that crawls repos and writes data/site-index.json
+data/site-index.json	Raw indexed data (entries + cross-references + tag index + stats)

@@ -109,6 +109,18 @@
     "ses_2259858e5ffehQDUtSnhchPT62": {
       "worktreeId": "wt-1777485718539-1",
       "createdAt": "2026-04-29T18:02:01.172Z"
+    },
+    "ses_2206a3b58ffeduk0dZUqYJy1m6": {
+      "worktreeId": null,
+      "createdAt": "2026-04-30T18:10:27.941Z"
+    },
+    "ses_21fee6d34ffetwXdv5KxcI8oRm": {
+      "worktreeId": null,
+      "createdAt": "2026-04-30T20:25:41.880Z"
+    },
+    "ses_21fe7abe7ffePTowf189lQvuZ3": {
+      "worktreeId": null,
+      "createdAt": "2026-04-30T20:33:04.226Z"
     }
   },
   "tabOrder": {
@@ -128,7 +140,10 @@
       "ses_2299df02fffeIZp9av8ekNbT4U",
       "ses_22930d7fbffeJ2gQfQWESnIiBe",
       "ses_22695bc78ffeiLWylCRLoRjivH",
-      "ses_2262301e9ffefIZMaJGaKtytYQ"
+      "ses_2262301e9ffefIZMaJGaKtytYQ",
+      "ses_2206a3b58ffeduk0dZUqYJy1m6",
+      "ses_21fee6d34ffetwXdv5KxcI8oRm",
+      "ses_21fe7abe7ffePTowf189lQvuZ3"
     ]
   },
   "worktreeOrder": [

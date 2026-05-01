@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-01T12:20:32.058Z",
+  "timestamp": "2026-05-01T17:24:41.871Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -10,7 +10,7 @@
     {
       "name": "governance_integrity",
       "passed": true,
-      "detail": "gov=7ecff707... boot=694e4f79..."
+      "detail": "gov=b765ec16... boot=694e4f79..."
     },
     {
       "name": "constraint_preservation",
@@ -35,7 +35,7 @@
     {
       "name": "message_inventory",
       "passed": true,
-      "detail": "total=64 {\"archivist\":18,\"library\":43,\"swarmmind\":0,\"kernel\":3}"
+      "detail": "total=54 {\"archivist\":2,\"library\":45,\"swarmmind\":5,\"kernel\":2}"
     },
     {
       "name": "risk_set_preservation",
@@ -44,8 +44,8 @@
     },
     {
       "name": "lane_liveness",
-      "passed": true,
-      "detail": "4/4 lanes alive"
+      "passed": false,
+      "detail": "2/4 lanes alive"
     },
     {
       "name": "multi_source_consistency",
@@ -55,13 +55,13 @@
     {
       "name": "contradiction_detection",
       "passed": true,
-      "detail": "status=drifted unexpected_changes=0"
+      "detail": "status=conflicted unexpected_changes=3"
     }
   ],
   "summary": {
-    "passed": 11,
+    "passed": 10,
     "total": 11,
-    "all_passed": true
+    "all_passed": false
   },
-  "claim": "Restored context matches pre-compact state across all checked dimensions"
+  "claim": "Restored context has contradictions — cannot prove correctness"
 }

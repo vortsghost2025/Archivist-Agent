@@ -1,0 +1,26 @@
+{
+  "classification": "STALE_SUPERSEDED_SNAPSHOT",
+  "origin": "library_lane",
+  "created_at": "2026-05-01T14:47:57Z",
+  "superseded_by": "archivist_current_state_2026-05-01T11-48-00Z",
+  "snapshot_path": "S:/Archivist-Agent/context-buffer/graph-snapshot-global-verified-2026-05-01T14-47-57.json",
+  "summary": {
+    "total_nodes": 3589,
+    "verification_priority_tags_applied": 1264,
+    "high_authority_verified_added": 66,
+    "structural_low": 485,
+    "governance_high": 161,
+    "ambiguous_medium": 618,
+    "contradictions_resolved": 66,
+    "final_verified": 535,
+    "final_unverified": 3031,
+    "final_quarantined": 23
+  },
+  "note": "This snapshot's state matches Archivist current state exactly (535 VERIFIED, 3031 UNVERIFIED, 23 QUARANTINED). Archivist independently progressed to 1,064 VERIFIED / 2,525 UNVERIFIED / 0 QUARANTINED via additional adjudicated work. Library's classification work confirmed correct but applied redundantly. Recommendation: preserve as evidence of parallel convergence.",
+  "evidence_of": [
+    "verification_priority classification logic validated across 3,589-node graph",
+    "high-authority contradiction resolution pattern confirmed (66 nodes)",
+    "guard bypass for index changes working correctly",
+    "parallel lane work converged on identical state (before Archivist advanced further)"
+  ]
+}

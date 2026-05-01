@@ -1,0 +1,24 @@
+{
+  "gate": "contradiction-burndown",
+  "version": "1.0",
+  "evaluated_at": "2026-04-30T20:54:58.165Z",
+  "metrics": {
+    "session_id": "unknown",
+    "timestamp": "2026-04-30T20:54:58.165Z",
+    "new_contradiction_edges": 12,
+    "adjudications_completed": 2,
+    "backlog_open": 31,
+    "waiver_reason": "",
+    "waiver_owner": "",
+    "waiver_makeup_target": ""
+  },
+  "pass": true,
+  "checks": {
+    "min_floor_met": true,
+    "ratio_gate_met": true,
+    "ratio_gate_waived": false
+  },
+  "required_adjudications_by_ratio": 2,
+  "status": "PASS",
+  "reason": "gate_requirements_met"
+}
