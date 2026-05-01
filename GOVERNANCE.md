@@ -1,6 +1,6 @@
 # GOVERNANCE.md — Rules (What We Follow)
 
-**Version:** 1.0
+**Version:** 1.3
 **Status:** Active
 **Entry Point:** BOOTSTRAP.md → GOVERNANCE.md (reference only)
 
@@ -390,7 +390,69 @@ Before marking any component complete, provide:
 
 ---
 
-## 14. Version History
+## 14. Self-State Resolution
+
+**Source:** Governance Amendment — Self-State Resolution (ratified 2026-05-01)
+**Evidence:** Archivist-Agent incident 2026-04-18 (self-state aliasing failure)
+**Authority:** Archivist (governance root), ratified with cross-lane review
+
+Before determining its own status, an agent MUST check sources in this order:
+
+### Source-of-Truth Precedence
+
+**PRIORITY 1: Live runtime/process state**
+
+- Current active process
+- Current live branch / working context
+- Current session initialized in memory
+
+**PRIORITY 2: Local current lock state**
+
+- Only if lock is fresh and matches live lane identity
+- Must validate timestamp against current time
+- If stale, treat as historical, not current
+
+**PRIORITY 3: Shared registry state**
+
+- Advisory for cross-lane coordination
+- NOT authoritative over a live self-process
+- Can be stale due to propagation delays
+
+**PRIORITY 4: Terminated session history**
+
+- Historical only
+- NEVER used as current self-state unless no live runtime exists
+
+### Hard Rule
+
+```
+A live active lane MUST NOT classify itself as terminated from
+stale artifacts without first verifying current runtime state.
+```
+
+### Rationale
+
+On 2026-04-18, an active governance-root lane concluded it was terminated
+by reading a stale `.session-lock` and terminated session entries in
+`SESSION_REGISTRY.json` — while simultaneously operating on branch
+`multi-agent-coordination-gap` and making commits (`90743dd`).
+
+This failure mode (self-state aliasing) occurs when an agent prioritizes
+historical artifacts over live runtime truth.
+
+### Verification Requirement
+
+Before any cross-lane verification, an agent MUST first verify:
+
+1. "Am I alive?" (self-state check)
+2. "Is my authority valid?" (self-authority check)
+3. Only then: "Are others alive?" (cross-lane check)
+
+Self-verification is prerequisite to other-verification.
+
+---
+
+## 15. Version History
 
 | Version | Date | Change |
 |---------|------|--------|
@@ -399,6 +461,7 @@ Before marking any component complete, provide:
 | 1.1 | 2026-04-20 | Added Role Separation (Section 12) |
 | 1.1 | 2026-04-20 | Added Enforcement Proof Requirement (Section 13) |
 | 1.2 | 2026-04-20 | Added Law 8 (Operator Accountability), user-as-lane in Role Separation, reciprocal accountability enforcement |
+| 1.3 | 2026-05-01 | Added Section 14: Self-State Resolution (ratified amendment — source-of-truth precedence, self-verification prerequisite) |
 
 ---
 
