@@ -80,7 +80,7 @@ They are classified as information sources and do not require governance verific
 ## What This Changes
 
 - Exterior nodes no longer count toward lane verification backlogs
-- Exterior nodes cannot generate CONFLICTED status in core graph
+- Exterior nodes cannot generate authority-weighted CONFLICTED status against core nodes unless explicitly promoted
 - Core lanes are only responsible for their own repo's UNVERIFIED nodes
 - The web graph can display two sections naturally
 
