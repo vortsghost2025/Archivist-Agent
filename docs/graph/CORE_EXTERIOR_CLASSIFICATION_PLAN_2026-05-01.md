@@ -1,6 +1,6 @@
 # Core/Exterior Graph Classification Plan
 
-**Status:** APPROVED — READY FOR IMPLEMENTATION
+**Status:** IMPLEMENTED — CANONICAL ADOPTION COMPLETE
 **Author:** Archivist (kilo-auto/free)
 **Date:** 2026-05-01
 **Scope:** 3,589-node global snapshot

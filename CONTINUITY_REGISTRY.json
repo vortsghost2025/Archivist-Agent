@@ -10,7 +10,7 @@
     "covenant_hash": "f1157a754e9f41650b66ce6c644b2784aed5076ef0f030c0fbcbe5edd410d415",
     "governance_hash": "b85cd1e63bed74943b01a82ef53461e2cc77ecc60f2ed87bc0aa7ce12373c9ed",
     "cps_enforcement_hash": "197fd4964aa44d92b4a85a6df089bebf82216ab946417bafae47a54bf9cf40a1",
-    "combined_hash": "72d60ca4606222c8f9d39f708ebb506728195e6c267990d8f2fdb463f0ebf130"
+    "combined_hash": "49acabf46ea91f2fc98889cbd309650db0d1fe4a9bd9b065e0de56b4d461ca16"
   },
   "continuity_fingerprint": {
     "identity_hash": "fe9b283e5dae3aeb760c05750e41fcd702272ccd5892585643b4049a117f33b7",
@@ -20,11 +20,11 @@
     "combined_hash": "d3d5d71bb5b227630416d57db906a6670fe80bade449c0e43d15009c4df420bf"
   },
   "recovery_status": "verified",
-  "recovery_timestamp": "2026-04-19T02:22:41.297Z",
+  "recovery_timestamp": "2026-05-01T20:32:46.619Z",
   "verification_result": {
     "constitutional": "MATCH",
     "continuity": "MATCH",
-    "timestamp": "2026-04-19T02:22:41.296Z"
+    "timestamp": "2026-05-01T20:32:46.618Z"
   },
   "inputs": {
     "identity": ".identity/keys.json",

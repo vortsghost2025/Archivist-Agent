@@ -72,3 +72,4 @@ logs/quarantine-tracker.json
 # Inbox/outbox are LOCAL-ONLY — never commit (may contain JWS signing tokens)
 lanes/*/inbox/
 lanes/*/outbox/
+.aider*
