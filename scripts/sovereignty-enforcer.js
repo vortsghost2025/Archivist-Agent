@@ -94,10 +94,19 @@ function scanDirectory(dirPath, baseDir, excludedDirs = new Set(['node_modules',
   return violations;
 }
 
-function scanLane(laneName) {
-  console.log(`[archivist] Scanning ${laneName} lane scripts...`);
+function resolveLaneName(input) {
+ const lower = input.toLowerCase();
+ for (const key of Object.keys(LANES)) {
+  if (key.toLowerCase() === lower) return key;
+ }
+ return input;
+}
 
-  const scriptsDir = path.join(LANES[laneName], 'scripts');
+function scanLane(laneName) {
+ const resolvedName = resolveLaneName(laneName);
+ console.log(`[archivist] Scanning ${resolvedName} lane scripts...`);
+
+ const scriptsDir = path.join(LANES[resolvedName], 'scripts');
 
   if (!fs.existsSync(scriptsDir)) {
     console.log(`  No scripts directory in ${laneName}`);
@@ -172,12 +181,12 @@ console.log('══════════════════════�
 
 const allViolations = [];
 
-const lanesToScan = targetLane ? [targetLane] : ['Archivist'];
+const lanesToScan = targetLane ? [resolveLaneName(targetLane)] : ['Archivist'];
 lanesToScan.forEach(lane => {
-  const violations = scanLane(lane);
-  allViolations.push(...violations.map(v => ({
-    lane,
-    file: path.join(LANES[lane], 'scripts', v.file),
+ const violations = scanLane(lane);
+ allViolations.push(...violations.map(v => ({
+  lane,
+  file: path.join(LANES[resolveLaneName(lane)], 'scripts', v.file),
     violations: v.violations
   })));
 });
