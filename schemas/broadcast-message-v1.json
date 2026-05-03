@@ -1,0 +1,208 @@
+{
+  "$schema": "http://json-schema.org/draft/07/schema#",
+  "title": "Broadcast Message (Emergency)",
+  "description": "Emergency broadcast to all lanes - requires signature and provenance",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "task_id",
+    "idempotency_key",
+    "from",
+    "to",
+    "type",
+    "task_kind",
+    "subject",
+    "body",
+    "timestamp",
+    "priority",
+    "payload",
+    "execution",
+    "evidence",
+    "heartbeat",
+    "convergence_gate",
+    "OUTPUT_PROVENANCE",
+    "content_hash",
+    "signature",
+    "signature_alg",
+    "key_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.3"]
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "from": {
+      "type": "string",
+      "enum": ["archivist", "library", "swarmmind", "kernel"]
+    },
+    "to": {
+      "type": "string",
+      "enum": ["all"]
+    },
+    "type": {
+      "type": "string",
+      "enum": ["alert"]
+    },
+    "task_kind": {
+      "type": "string",
+      "enum": ["notification", "emergency"]
+    },
+    "subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "body": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["P0"]
+    },
+    "payload": {
+      "type": "object",
+      "required": ["mode", "compression"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["inline"]
+        },
+        "compression": {
+          "type": "string",
+          "enum": ["none"]
+        }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": ["mode", "engine", "actor"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": ["manual", "automatic"]
+        },
+        "engine": {
+          "type": "string"
+        },
+        "actor": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["required", "evidence_path", "verified", "verified_by", "verified_at"],
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "evidence_path": {
+          "type": "string"
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "verified_by": {
+          "type": "string"
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "heartbeat": {
+      "type": "object",
+      "required": ["status", "last_heartbeat_at", "interval_seconds", "timeout_seconds"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["done", "pending", "critical"]
+        },
+        "last_heartbeat_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "interval_seconds": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout_seconds": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "convergence_gate": {
+      "type": "object",
+      "required": ["claim", "evidence", "verified_by", "contradictions", "status"],
+      "properties": {
+        "claim": {
+          "type": "string"
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "verified_by": {
+          "type": "string"
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": ["proven", "unproven", "conflicted", "blocked"]
+        }
+      }
+    },
+    "OUTPUT_PROVENANCE": {
+      "type": "object",
+      "required": ["agent", "lane", "generated_at", "session_id"],
+      "properties": {
+        "agent": {
+          "type": "string"
+        },
+        "lane": {
+          "type": "string"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "session_id": {
+          "type": "string"
+        }
+      }
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "signature": {
+      "type": "string"
+    },
+    "signature_alg": {
+      "type": "string",
+      "enum": ["RS256"]
+    },
+    "key_id": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

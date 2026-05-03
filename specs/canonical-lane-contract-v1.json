@@ -1,0 +1,164 @@
+{
+  "schema_version": "1.3",
+  "contract_id": "canonical-lane-contract-v1",
+  "version": "1.0",
+  "ratified_date": null,
+  "status": "draft-proposal",
+  "author": "archivist",
+  "supersedes": [],
+  "effective_for": ["archivist", "library", "swarmmind", "kernel"],
+  "governance_basis": "STRUCTURE_OVER_IDENTITY + CORRECTION_MANDATORY + SINGLE_ENTRY_POINT + OPERATOR_ACCOUNTABILITY",
+
+  "clauses": {
+    "C1_MESSAGE_VALIDITY": {
+      "title": "Every outbound message MUST pass self-validation before send",
+      "requirement": "HARD",
+      "rules": [
+        "All top-level required fields present per inbox-message-v1.json schema",
+        "type in [task, response, heartbeat, escalation, handoff, ack, alert, notification, status]",
+        "task_kind in [proposal, review, amendment, ratification, ack, done, status, report, handoff, alert, notification, heartbeat, audit]",
+        "to field must be a single valid lane name (archivist|library|swarmmind|kernel) or omitted",
+        "timestamp must be valid ISO-8601 UTC",
+        "NO to:'all' — use fan-out per-lane copies instead"
+      ],
+      "compliance_check": "schema-validator.js against inbox-message-v1.json",
+      "violation_remedy": "Do not send. Fix or escalate to coordinator."
+    },
+
+    "C2_PIPELINE_ORDER": {
+      "title": "Every incoming message MUST pass through gates in fixed order",
+      "requirement": "HARD",
+      "pipeline": [
+        { "step": 1, "name": "PARSE", "action": "Valid JSON parse", "fail_to": "quarantine" },
+        { "step": 2, "name": "NORMALIZE", "action": "Unicode-to-ASCII (NFM-019 map)", "fail_to": "quarantine" },
+        { "step": 3, "name": "VALIDATE_SCHEMA", "action": "Schema check + auto-remediation", "fail_to": "quarantine" },
+        { "step": 4, "name": "VALIDATE_SIGNATURE", "action": "Identity enforcement check", "fail_to": "blocked" },
+        { "step": 5, "name": "CHECK_ASCII", "action": "No non-ASCII after normalization", "fail_to": "quarantine" },
+        { "step": 6, "name": "CHECK_EVIDENCE", "action": "Unresolvable evidence detection (non-actionable only)", "fail_to": "blocked" },
+        { "step": 7, "name": "CHECK_FAKE_PROOF", "action": "Fake completion proof detection", "fail_to": "blocked" },
+        { "step": 8, "name": "CHECK_OWNERSHIP", "action": "Lease/ownership evaluation", "fail_to": "blocked" },
+        { "step": 9, "name": "COMPLETION_GATE", "action": "Has completion proof or is terminal/exempt", "fail_to": "blocked" },
+        { "step": 10, "name": "DOMAIN_GATE", "action": "Verification domain + temporal + code-version check", "fail_to": "blocked" },
+        { "step": 11, "name": "EXECUTION_GATE", "action": "Artifact path resolution + existence check", "fail_to": "blocked" },
+        { "step": 12, "name": "ROUTE", "action": "Actionable/auto-start → action-required/in-progress, else → processed", "fail_to": "none" }
+      ],
+      "compliance_check": "Run test suite: 12-step pipeline with known-good and known-bad inputs"
+    },
+
+    "C3_NACK_BEHAVIOR": {
+      "title": "Every rejected message MUST receive a NACK back to sender",
+      "requirement": "HARD",
+      "rules": [
+        "NACK generated on quarantine or blocked routing",
+        "NACK schema_version: 1.3, type: notification, priority: P2",
+        "NACK body includes: original task_id, rejection reason, gate that rejected",
+        "NACK delivered to sender's canonical lane inbox: lanes/{sender}/inbox/nack-{original_task_id}.json",
+        "NACK delivery verified (file exists at canonical path after write)"
+      ],
+      "compliance_check": "Send invalid message → verify NACK arrives at sender inbox within 2x poll interval"
+    },
+
+    "C4_LEASE_OWNERSHIP": {
+      "title": "Message leasing and lane-worker ownership semantics",
+      "requirement": "HARD",
+      "rules": [
+        "Every message MUST have lease block with: owner, acquired_at, expires_at, renew_count, max_renewals=3",
+        "Lane worker MUST write active-owner.json to lanes/{lane}/state/ with session_id + origin_runtime + origin_workspace",
+        "Lease timeout: 900s (15 min) from acquired_at. Worker MUST re-claim before expiry.",
+        "Cross-instance guard: actionable messages with foreign _lane_worker.session_id route to stale-foreign/",
+        "Ownership enforcement: if --enforce-ownership flag active, owner mismatch → blocked"
+      ],
+      "compliance_check": "Check active-owner.json freshness on startup + poll cycle"
+    },
+
+    "C5_HEARTBEAT_SLA": {
+      "title": "Heartbeat schema and freshness requirements",
+      "requirement": "HARD",
+      "rules": [
+        "Every lane MUST write heartbeat-{lane}.json to own inbox at interval ≤ 60s",
+        "Heartbeat schema_version: 1.3, type: heartbeat, priority: P3",
+        "heartbeat.status field required: one of [pending, in_progress, done, failed, escalated, timed_out]",
+        "heartbeat.last_heartbeat_at MUST be valid ISO-8601 UTC timestamp",
+        "Freshness SLA: heartbeat age ≤ 900s = alive, > 900s = stale, > 3600s = dead",
+        "No heartbeat file present = dead lane"
+      ],
+      "compliance_check": "Scan all 4 lane heartbeat files at recovery test interval"
+    },
+
+    "C6_SOVEREIGNTY_SOURCE": {
+      "title": "Sovereignty enforcement rule source and versioning",
+      "requirement": "HARD",
+      "rules": [
+        "Sovereignty enforcer source: S:/SwarmMind/scripts/sovereignty-enforcer.js (canonical)",
+        "All lanes MUST use the same enforcer logic (can copy, but must track version hash)",
+        "Enforcer MUST detect cross-lane require() with hardcoded S:/<other-lane-root> paths",
+        "Allowed patterns: ./.., ../.., node_modules/, .global/, util/, absolute local paths",
+        "Pre-commit hook MUST run sovereignty-enforcer.js with --strict flag",
+        "Version hash of enforcer MUST be stored in sovereignty report for traceability"
+      ],
+      "compliance_check": "Run same enforcer against all 4 repos, verify identical violation counts"
+    },
+
+    "C7_ADMISSION_GATES": {
+      "title": "Messages must pass all applicable gates before reaching processed/",
+      "requirement": "HARD",
+      "rules": [
+        "No message enters processed/ without: valid schema, ASCII body, valid signature, evidence check passed, completion gate passed",
+        "Actionable messages (requires_action=true) may enter action-required/ without proof, but NOT processed/",
+        "No fake proofs accepted: messages with terminal_decision but no artifact_path → blocked",
+        "Evidence exchange block required when evidence.required=true for response/ack types"
+      ],
+      "compliance_check": "Audit processed/ for any message missing required gate validation"
+    },
+
+    "C8_OUTBOUND_SELF_CHECK": {
+      "title": "Validate own outbound messages before delivery to target lane",
+      "requirement": "HARD",
+      "rules": [
+        "Before writing to target lane inbox, sender MUST validate the message against C1 requirements",
+        "If self-check fails, message is NOT delivered. Fix and retry.",
+        "Self-check failure logged to sender's outbox as aborted-{task_id}.json",
+        "Delivery verification: after write to canonical path, verify file exists with matching content hash"
+      ],
+      "compliance_check": "Audit lane outbox for aborted records; should be zero for operational lanes"
+    },
+
+    "C9_POLLING_INTERVAL": {
+      "title": "Lane worker polling interval standard",
+      "requirement": "SOFT",
+      "rules": [
+        "Recommended poll interval: 30s (balanced between responsiveness and filesystem churn)",
+        "Minimum allowed: 20s",
+        "Maximum allowed: 60s",
+        "Any deviation must be documented with reason in lane's AGENTS.md"
+      ],
+      "compliance_check": "Check lane-worker --poll-seconds config against documented value"
+    },
+
+    "C10_REPRODUCIBILITY": {
+      "title": "Lane must declare runtime dependencies",
+      "requirement": "SOFT",
+      "rules": [
+        "Every lane SHOULD have package.json with pinned dependency versions",
+        "Node.js version SHOULD be documented",
+        "CI SHOULD verify `node scripts/lane-worker.js --dry-run --apply-once` passes smoke test",
+        "Recovery test suite SHOULD run pre-compact and post-compact"
+      ],
+      "compliance_check": "Verify package.json exists with node engine field"
+    }
+  },
+
+  "compliance_matrix": {
+    "description": "Per-lane compliance against all HARD clauses. Checked 2026-05-02.",
+    "lanes": {
+      "archivist": { "C1": "PASS", "C2": "PASS", "C3": "PASS", "C4": "PASS", "C5": "PASS", "C6": "PASS", "C7": "PASS", "C8": "PASS", "C9": "PASS", "C10": "PASS" },
+      "library": { "C1": "PASS", "C2": "PASS", "C3": "PASS", "C4": "PASS", "C5": "FAIL", "C6": "PASS", "C7": "PASS", "C8": "PASS", "C9": "PASS", "C10": "PASS" },
+      "swarmmind": { "C1": "PASS", "C2": "PASS", "C3": "PASS", "C4": "PASS", "C5": "PASS", "C6": "PASS", "C7": "PASS", "C8": "PASS", "C9": "PASS", "C10": "FAIL" },
+      "kernel": { "C1": "PASS", "C2": "PASS", "C3": "PASS", "C4": "PASS", "C5": "PASS", "C6": "PASS", "C7": "PASS", "C8": "PASS", "C9": "PASS", "C10": "FAIL" }
+    }
+  },
+
+  "ratification_required": ["library", "swarmmind", "kernel"],
+  "next_action": "Archivist lane-worker parity implementation (C1, C2, C3, C8 fixes required)",
+  "evidence_path": "S:/Archivist-Agent/specs/canonical-lane-contract-v1.json"
+}

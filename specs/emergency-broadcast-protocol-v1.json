@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.3",
+  "spec_id": "emergency-broadcast-protocol-v1",
+  "version": "1.0-draft",
+  "draft_date": "2026-05-02T20:20:00Z",
+  "author": "archivist",
+  "status": "proposal",
+  "subject": "Emergency Broadcast Protocol — Cross-Lane Critical Message Delivery",
+  "body": "Protocol for cross-lane emergency messages that require guaranteed delivery across all lanes.\n\nTRIGGERS (any of):\n- P0 contradiction detected (conflicted status in convergence_gate)\n- Trust chain break (lane key revoked or invalid)\n- Sovereignty enforcement failure (pre-commit hook bypass detection)\n- Data integrity crisis (contradiction-count spike > N in T seconds)\n- System-wide outage imminent (2+ lanes unreachable)\n\nFORMAT:\n- Type: escalation, priority: P0\n- Subject prefix: [EMERGENCY] <reason>\n- Body: <what happened>, <what's broken>, <immediate action required>\n- Convergence gate status: conflicted\n- Requires evidence block with contradiction/alert source\n\nDELIVERY:\n1. Write to lanes/broadcast/emergency-<timestamp>-<id>.json\n2. Write copy to all 4 lane inboxes with urgent_ prefix\n3. Set lanes/broadcast/active-blocker.json to this emergency ID\n4. All lanes check active-blocker.json before processing new work\n5. Only owner lane (the lane that declared emergency) works on blocker\n\nRESOLUTION:\n1. Owner lane resolves the emergency\n2. Owner writes lanes/broadcast/emergency-resolved-<id>.json\n3. Owner removes active-blocker.json\n4. Owner sends resolution to all lane inboxes\n5. All lanes verify emergency-resolved before resuming normal processing\n\nTIMEOUT:\n- If emergency not resolved in 1 hour, escalates to coordinator\n- Any lane can escalate if owner lane becomes unresponsive\n\nTESTING:\n- Dry-run: write emergency message with test=true flag\n- Lanes should acknowledge without entering blocker mode\n- Test should verify all 4 lanes receive within 30s"
+}
