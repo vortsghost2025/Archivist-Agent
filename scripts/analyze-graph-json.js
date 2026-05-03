@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { executionWeight } = require('./execution-weight');
 
 const ROOT = 'S:/Archivist-Agent';
 const OUT_DIR = path.join(ROOT, 'context-buffer');
@@ -115,10 +116,25 @@ function buildStatusCounts(nodes) {
     } else {
       counts[status] += 1;
     }
+    const weight = executionWeight({ ...node, status });
+    // Gather inputs for provenance
+    const meta = node.metadata || node.meta || node.props || node.properties || {};
+    const probe = node.probe || node.runtime_probe || node.runtime || {};
+    const inputs = { status, meta, probe };
+    const reasonParts = [];
+    if (meta && meta.critical) reasonParts.push('critical');
+    if (probe && probe.lastInvoked) reasonParts.push('recent_invocation');
+    if (probe && probe.invokeCount) reasonParts.push('invoke_count');
+    const reason = reasonParts.length ? reasonParts.join(', ') : 'base_status';
     return {
       id: extractNodeId(node, idx),
       label: extractNodeLabel(node, idx),
-      status
+      status,
+      weight,
+      execution_weight: weight,
+      execution_weight_reason: reason,
+      execution_weight_inputs: inputs,
+      execution_weight_generated_at: new Date().toISOString()
     };
   });
 
@@ -148,8 +164,10 @@ function countContradictionEdges(edges) {
 }
 
 function topPriorityWork(detailed) {
+  // Filter to conflicted or blocked nodes, then sort by descending weight (default 0)
   return detailed
     .filter((n) => n.status === 'conflicted' || n.status === 'blocked')
+    .sort((a, b) => (b.weight || 0) - (a.weight || 0))
     .slice(0, 10);
 }
 
@@ -233,9 +251,9 @@ function writeOutputs(inputPath, payload) {
     ...payload.next_actions.map((a) => `- ${a}`),
     '',
     '## Top Conflict/Blocker Nodes',
-    ...(payload.focus_nodes.length > 0
-      ? payload.focus_nodes.map((n) => `- ${n.id} | ${n.status} | ${n.label}`)
-      : ['- none']),
+      ...(payload.focus_nodes.length > 0
+        ? payload.focus_nodes.map((n) => `- ${n.id} | ${n.status} | ${n.label} | weight:${n.weight || 0}`)
+        : ['- none']),
     '',
     '## Discipline Gate',
     '- No new feature work until one conflicted node is closed with evidence.'
@@ -259,8 +277,8 @@ function main() {
   }
 
   const rawContent = fs.readFileSync(inputPath, 'utf8').replace(/^\uFEFF/, '');
-const fileHash = crypto.createHash('sha256').update(rawContent).digest('hex');
-const doc = JSON.parse(rawContent);
+  const fileHash = crypto.createHash('sha256').update(rawContent).digest('hex');
+  const doc = JSON.parse(rawContent);
   const nodes = pickNodes(doc);
   const edges = pickEdges(doc);
   const findings = pickFindings(doc);
@@ -307,4 +325,12 @@ const doc = JSON.parse(rawContent);
   console.log(JSON.stringify(outputs, null, 2));
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = {
+  buildStatusCounts,
+  executionWeight,
+  topPriorityWork,
+};

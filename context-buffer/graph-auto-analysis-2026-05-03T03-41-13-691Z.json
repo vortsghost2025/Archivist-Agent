@@ -1,0 +1,50 @@
+{
+  "output_provenance": {
+    "agent": "codex-5.3",
+    "lane": "archivist",
+    "generated_at": "2026-05-03T03:41:13.690Z",
+    "session_id": "unknown"
+  },
+  "source": {
+    "graph_json_path": "C:\\Users\\seand\\AppData\\Local\\Temp\\cec-weight-smoke-graph-alt-shapes.json",
+    "node_count": 3,
+    "edge_count": 0,
+    "finding_count": 0,
+    "hash": "a3fbfeda80b37054a3f5c9864ee87c62086dbd60be360de57e6e0efc515d25b4"
+  },
+  "summary": {
+    "conflicted": 2,
+    "blocked": 1,
+    "quarantined": 0,
+    "unverified": 0,
+    "verified": 0,
+    "resolved": 0,
+    "unknown": 0,
+    "contradiction_edges": 0
+  },
+  "findings_summary": null,
+  "focus_nodes": [
+    {
+      "id": "critical-properties",
+      "label": "Critical via properties",
+      "status": "conflicted",
+      "weight": 15
+    },
+    {
+      "id": "probe-blocked",
+      "label": "Probe blocked",
+      "status": "blocked",
+      "weight": 13
+    },
+    {
+      "id": "plain",
+      "label": "Plain conflict",
+      "status": "conflicted",
+      "weight": 10
+    }
+  ],
+  "next_actions": [
+    "Resolve one conflicted node before any new feature work.",
+    "Keep one active blocker only; pause all non-blocker work."
+  ]
+}

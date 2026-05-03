@@ -251,9 +251,11 @@ if (require.main === module) {
   const laneName = laneArgIndex >= 0 && args[laneArgIndex + 1]
     ? String(args[laneArgIndex + 1]).toLowerCase()
     : DEFAULT_CONFIG.laneName;
+  const canonicalInbox = DEFAULT_CONFIG.canonicalPaths[laneName]
+    || path.join(__dirname, '..', 'lanes', laneName, 'inbox');
   const heartbeat = new Heartbeat({
     laneName,
-    inboxPath: path.join(__dirname, '..', 'lanes', laneName, 'inbox'),
+    inboxPath: canonicalInbox,
   });
 
   if (args.includes('--check')) {

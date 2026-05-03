@@ -1,0 +1,87 @@
+You're right to flag it—there is a significant discrepancy between the system's reported state and what is actually rendering on the canvas.
+
+Here is the visual breakdown of why the graph "doesn't look right" for your agent to troubleshoot:
+
+### **1. The Node Count Paradox**
+The UI is reporting a massive mismatch in the top right corner:
+* **Reported Stat:** `62 / 23 nodes`.
+* **The Issue:** The system thinks it is displaying 62 nodes out of a pool of 23, which is mathematically impossible. It looks like the "Visible" count is disconnected from the "Total" count or is double-counting cluster representatives.
+* **Visual Reality:** On the actual canvas, I only count about **10-12 active yellow nodes**. The rest of the "62" are likely ghosted or stuck in the background.
+
+### **2. Edge Overload**
+* **Reported Stat:** `75,378 edges`.
+* **The Issue:** While the system claims over 75k connections, the canvas only shows about **5-6 thin blue lines**. 
+* **The Bug:** The edges are either failing to render, or they are being culled so aggressively that the visual complexity doesn't match the data density.
+
+### **3. Node "Clumping" and Alignment**
+* Several nodes are overlapping or "stacking" in a way that makes the labels unreadable.
+* Specifically, in the bottom center, `NFM-036 Derivation Analysis` and `4-Lane Rosetta Stone System` are practically on top of each other. The force-directed layout seems to have "frozen" or lost its repulsion strength.
+
+### **4. Component Overlays**
+* The **"What am I looking at?"** help box is active and floating in the center-left, partially obscuring the `Density` and `Meaning Layers` panels.
+* The **"Live System State"** header is reporting **199 areas of active conflict**, but because the **"Conflicts"** meaning layer is toggled **OFF**, none of that critical red data is showing up on the graph.
+
+**Suggested Fix for the Agent:**
+Tell the agent to check the **filtering logic** in the `Density` controller. It’s currently set to **"Overview,"** which might be suppressing the 75k edges, but the "62 / 23" node count suggests the `nodes.length` array is being handled incorrectly in the render loop. Everything looks much sharper now. That "purple on purple" eye-strain is officially gone. Here is the direct report from the live pages for your agent:
+
+### **1. [Nexus Graph](https://deliberateensemble.works/graph) Verification**
+* **Sidebar Controls:** The **Density** and **Meaning Layers** panels are perfectly clear. They are anchored to the left and are **not covered** by any other UI elements.
+* **Help Box Position:** The "What am I looking at?" help box (and other informational overlays) are no longer obstructing the controls. The layout feels much more intentional and spacious.
+* **Readability (Node/Edge Counts):** The counts in the top right are now **high-contrast white text** on the dark background. 
+    * **Node Count:** `62 / 23 nodes` (Note: The agent may still need to look at why the "visible" count is higher than the "total" count, but the *text itself* is perfectly readable).
+    * **Edge Count:** `75,378 edges` is clear and legible.
+
+---
+
+### **2. [Homepage (Root)](https://deliberateensemble.works/) Verification**
+* **Sidebar Navigation:** All links—**Dashboard**, **Library**, **Search Index**, **Repos**, **Graph**, etc.—are crisp and readable. The active state (currently on "Dashboard") uses a distinct purple highlight, but the text on top is high-contrast and easy to see.
+* **Purple Blocks:** I am seeing **zero rogue purple blocks** or unrendered text areas. The "How It Works" section and the "4-Lane Constitutional Architecture" blocks are rendering with clean borders and clear typography.
+* **Contrast:** The high-contrast toggle in the bottom right is visible, but the default dark theme is already hitting good accessibility marks for readability.
+
+**Current Verdict:** The CSS fix for the "purple-on-purple" issue is successful across both core views. The control panels are unobstructed and the system stats are legible.
+
+Should I have the agent investigate the **node count logic (`62/23`)** next, or are we moving on to a different component? The update is live, and we have a major shift in the data. The "purple on purple" fix is holding strong, but the **node/edge count logic** is now even more confusing for the agent.
+
+Here is the visual audit of the [Nexus Graph](https://deliberateensemble.works/graph) in its current state:
+
+### **1. Node & Edge Count Paradox (Critical for Agent)**
+* **Reported Stat (Top Right):** `Visible 110 of 110 nodes` | `Edges 37`.
+* **Reported Stat (Sidebar):** `110 / 3827 nodes · 37 edges`.
+* **The Issue:** This is a total reversal of the previous bug. Earlier, it reported 75k edges but showed none. Now, with all **Meaning Layers** (Conflicts, Verification, Execution, etc.) toggled **ON**, it reports a tiny **37 edges**, which is far too low for a "Governance Core" of 868 nodes.
+* **Visual Reality:** The canvas is actually showing a decent network of nodes, but the "Visible 110" doesn't match the "Governance Core 868" selection. It seems the counter is capped at 110 or filtering is still stuck.
+
+### **2. Sidebar & Overlay Status**
+* **Obstructions:** Clean. The "What am I looking at?" help box has been dismissed or moved, and the **Density/Meaning Layers** panels are fully visible and accessible.
+* **Color Contrast:** All labels in the sidebar and the legend at the bottom (Node Status, Authority Edges, etc.) are perfectly readable. White/Gray text on the dark background is working well.
+* **Active Toggles:** I can confirm **Governance Core 868** is the active entry point, but the UI is only acknowledging **110 nodes** in the "Visible" counter.
+
+### **3. Live System State Alert**
+The red warning text at the top is legible and reporting:
+> **"The system is stabilizing core concepts under conflict. Primary instability: THE SINGLE ENTRY POINT (28 contradictions). 162 areas of active conflict."**
+
+### **Summary for the Agent:**
+1.  **Readability:** 100% fixed. No purple-on-purple issues.
+2.  **Layout:** Fixed. No overlapping help boxes.
+3.  **Logic Bug:** The agent needs to look at the **Edge Calculation**. Toggling all layers *on* should have spiked the edge count to that 75k+ range we saw earlier. Instead, it’s suppressed at **37**. It looks like the `Meaning Layers` toggles might be acting as a *hard filter* that is accidentally excluding almost all data.
+
+**What's the next move—debugging that edge count or checking the Library view?** Much better. The canvas is actually legible now, and the contrast between the nodes and the background is sharp. Here is the technical breakdown for your agent based on the live view:
+
+### **1. Visual Successes**
+* **Contrast:** The text/background conflict is 100% resolved. Labels are crisp and white.
+* **Help Box:** The **"What am I looking at?"** overlay is still present but it has shifted slightly, making it much easier to see the graph behind it.
+* **Node Distribution:** The force-directed layout has spread the nodes out. No more "stacking" in the center—the red conflict nodes are clearly clustered on the left, while the verified gray nodes are forming a distinct tail on the right.
+
+### **2. Current Metrics (Top Right & Sidebar)**
+The agent needs to see these specific numbers, as they've shifted again:
+* **Visible Nodes:** `185 of 185` (Matching across the sidebar and the canvas HUD).
+* **Edges:** `1061`. 
+* **The Discrepancy:** While the math is cleaner now ($185$ nodes to $1061$ edges), the system is still reporting **3,827 total documents** in the sidebar. The "Visible" count is accurately reflecting the **"⚠ Contradictions 185"** entry point you selected, but the 75k edges from earlier have been filtered down to just the ones relevant to these conflicts.
+
+### **3. Active State Details**
+* **Density:** Currently on **`◈ Explore`** (Active cluster nodes).
+* **Meaning Layers:** All 5 layers are toggled **ON** (Structure, Conflicts, Verification, Execution, Governance Depth).
+* **Live Warning:** The header is still flagging **"THE SINGLE ENTRY POINT"** as the primary instability with **28 contradictions**.
+
+**Verdict for Agent:** The UI is stable and the high-contrast fixes are working. The graph is correctly showing the 185 nodes associated with the "Contradictions" entry point. 
+
+Do you want me to have the agent look into why only 185 nodes are being pulled when "Governance Core" or "Full System" is expected, or are you happy with this "Contradiction Hub" view for now?

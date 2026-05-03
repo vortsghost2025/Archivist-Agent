@@ -3,7 +3,8 @@ param(
   [int]$PollSeconds = 20,
   [switch]$Apply,
   [switch]$IncludeArchivist,
-  [switch]$VisibleWindows
+  [switch]$VisibleWindows,
+  [switch]$NoForceRestartStale
 )
 
 $lanes = @(
@@ -116,6 +117,16 @@ function Get-ExistingTrackedPid {
   return $pidValue
 }
 
+function Stop-NodePid {
+  param([int]$PidToStop)
+  try {
+    Stop-Process -Id $PidToStop -Force -ErrorAction Stop
+    return $true
+  } catch {
+    return $false
+  }
+}
+
 $results = @()
 $mode = if ($Apply) { "APPLY" } else { "DRY-RUN" }
 $includeArchivistBool = [bool]$IncludeArchivist
@@ -154,26 +165,31 @@ foreach ($lane in $lanes) {
 
     if ($Apply) {
       try {
-        if ($existingWorkerPid) {
-          $entry.worker_pid = $existingWorkerPid
-        } else {
-          $workerPid = Start-LaneWorkerProcess -Lane $lane -Poll $PollSeconds -Visible $visibleWindowsBool
-          $entry.worker_pid = $workerPid
-          $pidRegistry[$workerKey] = $workerPid
+        $forceRestartStale = -not $NoForceRestartStale
+        $restarted = $false
+
+        if ($forceRestartStale -and ($existingWorkerPid -or $existingHeartbeatPid)) {
+          if ($existingWorkerPid) {
+            [void](Stop-NodePid -PidToStop $existingWorkerPid)
+            $pidRegistry.Remove($workerKey) | Out-Null
+          }
+          if ($existingHeartbeatPid) {
+            [void](Stop-NodePid -PidToStop $existingHeartbeatPid)
+            $pidRegistry.Remove($heartbeatKey) | Out-Null
+          }
+          Start-Sleep -Milliseconds 400
+          $restarted = $true
         }
 
-        if ($existingHeartbeatPid) {
-          $entry.heartbeat_pid = $existingHeartbeatPid
-        } else {
-          $heartbeatPid = Start-HeartbeatProcess -Lane $lane -Visible $visibleWindowsBool
-          $entry.heartbeat_pid = $heartbeatPid
-          $pidRegistry[$heartbeatKey] = $heartbeatPid
-        }
+        $workerPid = Start-LaneWorkerProcess -Lane $lane -Poll $PollSeconds -Visible $visibleWindowsBool
+        $heartbeatPid = Start-HeartbeatProcess -Lane $lane -Visible $visibleWindowsBool
+        $entry.worker_pid = $workerPid
+        $entry.heartbeat_pid = $heartbeatPid
+        $pidRegistry[$workerKey] = $workerPid
+        $pidRegistry[$heartbeatKey] = $heartbeatPid
 
-        if ($existingWorkerPid -and $existingHeartbeatPid) {
-          $entry.action = "already_running"
-        } elseif ($existingWorkerPid -or $existingHeartbeatPid) {
-          $entry.action = "partially_started"
+        if ($restarted) {
+          $entry.action = "restarted_stale_lane_services"
         } else {
           $entry.action = "started_lane_services"
         }
@@ -183,7 +199,7 @@ foreach ($lane in $lanes) {
       }
     } else {
       if ($existingWorkerPid -and $existingHeartbeatPid) {
-        $entry.action = "already_running"
+        $entry.action = "would_restart_stale_lane_services"
         $entry.worker_pid = $existingWorkerPid
         $entry.heartbeat_pid = $existingHeartbeatPid
       } else {

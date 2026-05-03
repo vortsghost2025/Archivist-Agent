@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "canonical_execution_contract",
+  "contract_id": "canonical-execution-contract-v1",
+  "title": "Canonical Execution Contract v1",
+  "generated_at": "2026-05-03T02:55:30.526Z",
+  "author_lane": "archivist",
+  "status": "draft_for_lane_ratification",
+  "scope": [
+    "archivist",
+    "library",
+    "kernel",
+    "swarmmind"
+  ],
+  "purpose": "Unify execution-aware orchestration signals, lane-worker admission control, liveness reporting, load limits, and cross-lane feedback into one contract.",
+  "verdict_basis": "Execution-aware orchestration is PARTIAL: execution truth exists, but scheduling/load control is not yet unified.",
+  "non_goals": [
+    "No trust-store changes",
+    "No authority approvals",
+    "No identity regeneration",
+    "No direct cross-lane runtime code edits by this artifact"
+  ],
+  "required_runtime_signals": {
+    "per_lane": [
+      "lane_id",
+      "heartbeat_age_seconds",
+      "worker_lock_owner",
+      "active_task_id",
+      "queue_depth_inbox",
+      "queue_depth_action_required",
+      "queue_depth_in_progress",
+      "queue_depth_blocked",
+      "queue_depth_quarantine",
+      "processed_count",
+      "last_completion_at",
+      "execution_verified_count",
+      "execution_failed_count",
+      "last_quarantine_reason",
+      "last_blocked_reason"
+    ],
+    "per_task": [
+      "task_id",
+      "from",
+      "to",
+      "requires_action",
+      "target_queue",
+      "completion_proof_present",
+      "execution_verified",
+      "execution_verification.reason",
+      "artifact_path",
+      "artifact_exists",
+      "signature_valid",
+      "schema_valid",
+      "routed_at"
+    ]
+  },
+  "hard_rules": [
+    {
+      "id": "CEC-R1",
+      "name": "Processed requires execution truth",
+      "rule": "No actionable message may enter processed/ unless completion-proof.js accepts proof and execution-gate.js resolves the referenced artifact or reference on disk.",
+      "evidence_modules": [
+        "S:/Archivist-Agent/scripts/completion-proof.js",
+        "S:/Archivist-Agent/scripts/execution-gate.js",
+        "S:/Archivist-Agent/scripts/lane-worker.js"
+      ]
+    },
+    {
+      "id": "CEC-R2",
+      "name": "Transport is not execution",
+      "rule": "Relay delivery, inbox presence, signature validity, or schema validity must not be treated as task completion.",
+      "evidence_modules": [
+        "S:/Archivist-Agent/scripts/relay-daemon.js",
+        "S:/Archivist-Agent/scripts/validate-responses.js"
+      ]
+    },
+    {
+      "id": "CEC-R3",
+      "name": "Actionable pending artifacts are not blocked pre-execution",
+      "rule": "A new requires_action=true task with an expected artifact path routes to action-required/ or in-progress/, not blocked/, until the lane has had a chance to execute it.",
+      "evidence_modules": [
+        "S:/Archivist-Agent/scripts/lane-worker.js"
+      ]
+    },
+    {
+      "id": "CEC-R4",
+      "name": "Single governor per lane",
+      "rule": "A lane may have one governing worker lock holder. Observer sessions must not acquire the governing lock or overwrite primary heartbeat.",
+      "evidence_modules": [
+        "S:/Archivist-Agent/scripts/concurrency-policy.js",
+        "S:/Archivist-Agent/scripts/inbox-watcher.js"
+      ]
+    },
+    {
+      "id": "CEC-R5",
+      "name": "Heartbeat truth over stability",
+      "rule": "Stale, missing, malformed, or contradictory heartbeat/state signals must degrade status instead of reporting consistency.",
+      "evidence_modules": [
+        "S:/Archivist-Agent/scripts/recovery-test-suite.js",
+        "S:/Archivist-Agent/scripts/auto-recover-stale-lanes.ps1"
+      ]
+    },
+    {
+      "id": "CEC-R6",
+      "name": "Compaction is recovery, not scheduling",
+      "rule": "Post-compact audit is a fallback safety boundary. It must not be the primary mechanism for load control or agent fan-out control.",
+      "evidence_modules": [
+        "S:/Archivist-Agent/scripts/post-compact-audit.js",
+        "S:/Archivist-Agent/scripts/run-compact-with-audit.js"
+      ]
+    },
+    {
+      "id": "CEC-R7",
+      "name": "Execution graph must be explicit",
+      "rule": "Structural graph visibility must be separated from actual runtime usage. RuntimeProbe/usage reports may mark active, dormant, dead, or unproven components.",
+      "evidence_modules": [
+        "S:/self-organizing-library/src/usage/RuntimeProbe.js",
+        "S:/self-organizing-library/src/usage/UsageGateEnforcer.js"
+      ]
+    }
+  ],
+  "soft_rules": [
+    {
+      "id": "CEC-S1",
+      "name": "Standard runtime health panel",
+      "rule": "All lanes should emit one compact health snapshot consumable by stable-health-panel.ps1 or equivalent."
+    },
+    {
+      "id": "CEC-S2",
+      "name": "One shared execution summary schema",
+      "rule": "All lane-workers should report the same execution counters even when implementation remains lane-specific."
+    },
+    {
+      "id": "CEC-S3",
+      "name": "Schedule from execution signals",
+      "rule": "Future dispatch should prioritize lanes/tasks by live queue depth, stale heartbeat status, blocked/quarantine count, and recent verified completions."
+    }
+  ],
+  "ratification_request": {
+    "each_lane_must_return": [
+      "ACK whether this contract matches current lane behavior",
+      "List gaps between current implementation and required_runtime_signals",
+      "List any clause that conflicts with lane role or existing governance",
+      "Provide evidence artifact path for the review result"
+    ],
+    "expected_artifact_name": "canonical-execution-contract-v1-review-{lane}.json",
+    "due": "next active lane-worker cycle"
+  },
+  "evidence_paths": [
+    "S:/Archivist-Agent/scripts/execution-gate.js",
+    "S:/Archivist-Agent/scripts/lane-worker.js",
+    "S:/Archivist-Agent/scripts/validate-responses.js",
+    "S:/Archivist-Agent/scripts/concurrency-policy.js",
+    "S:/Archivist-Agent/scripts/inbox-watcher.js",
+    "S:/Archivist-Agent/scripts/recovery-test-suite.js",
+    "S:/Archivist-Agent/scripts/post-compact-audit.js",
+    "S:/Archivist-Agent/scripts/relay-daemon.js",
+    "S:/Archivist-Agent/scripts/task-executor.js",
+    "S:/Archivist-Agent/scripts/auto-recover-stale-lanes.ps1",
+    "S:/self-organizing-library/src/usage/RuntimeProbe.js",
+    "S:/self-organizing-library/src/usage/UsageGateEnforcer.js",
+    "S:/self-organizing-library/verification/usage-lane-complete-report.json",
+    "S:/kernel-lane/deploy/ubuntu/runner.sh"
+  ],
+  "confidence": 0.82,
+  "confidence_basis": "Read-only scan found execution gates, runtime probes, concurrency locks, recovery artifacts, and relay/task executor modules, but not one unified execution-weighted scheduler."
+}

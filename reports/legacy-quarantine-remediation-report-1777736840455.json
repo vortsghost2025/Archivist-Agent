@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-05-02T15:47:20.441Z",
+  "total": 6,
+  "results": [
+    {
+      "file": "archivist-final-summary-20260501T173000Z.json",
+      "status": "CREATED",
+      "out": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\remediated-archivist-final-summary-20260501T173000Z.json",
+      "fromLane": "archivist",
+      "type": "status",
+      "task_kind": "report"
+    },
+    {
+      "file": "archivist-health-summary-20260501T172000Z.json",
+      "status": "CREATED",
+      "out": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\remediated-archivist-health-summary-20260501T172000Z.json",
+      "fromLane": "archivist",
+      "type": "status",
+      "task_kind": "report"
+    },
+    {
+      "file": "archivist-verification-record-1777652256767.json",
+      "status": "CREATED",
+      "out": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\remediated-archivist-verification-record-1777652256767.json",
+      "fromLane": "archivist",
+      "type": "response",
+      "task_kind": "audit"
+    },
+    {
+      "file": "kernel-final-summary-20260501T154000.json",
+      "status": "CREATED",
+      "out": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\remediated-kernel-final-summary-20260501T154000.json",
+      "fromLane": "kernel",
+      "type": "status",
+      "task_kind": "status"
+    },
+    {
+      "file": "site-index-verification-20260501-1430.json",
+      "status": "CREATED",
+      "out": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\remediated-site-index-verification-20260501-1430.json",
+      "fromLane": "swarmmind",
+      "type": "response",
+      "task_kind": "audit"
+    },
+    {
+      "file": "swarmmind-status-update-20260501-1650.json",
+      "status": "CREATED",
+      "out": "S:\\Archivist-Agent\\lanes\\archivist\\inbox\\remediated-swarmmind-status-update-20260501-1650.json",
+      "fromLane": "swarmmind",
+      "type": "status",
+      "task_kind": "report"
+    }
+  ]
+}

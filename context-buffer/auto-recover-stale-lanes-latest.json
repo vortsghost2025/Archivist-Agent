@@ -1,0 +1,42 @@
+﻿{
+    "generated_at":  "2026-05-02T21:29:50.4358285-04:00",
+    "mode":  "APPLY",
+    "stale_minutes":  10,
+    "poll_seconds":  20,
+    "include_archivist":  false,
+    "visible_windows":  false,
+    "stale_count":  0,
+    "started_count":  0,
+    "results":  [
+                    {
+                        "lane":  "library",
+                        "heartbeat_path":  "S:\\self-organizing-library\\lanes\\library\\inbox\\heartbeat-library.json",
+                        "heartbeat_age_min":  0.1,
+                        "stale_threshold_min":  10,
+                        "is_stale":  false,
+                        "action":  "none",
+                        "worker_pid":  null,
+                        "heartbeat_pid":  null
+                    },
+                    {
+                        "lane":  "kernel",
+                        "heartbeat_path":  "S:\\kernel-lane\\lanes\\kernel\\inbox\\heartbeat-kernel.json",
+                        "heartbeat_age_min":  0.1,
+                        "stale_threshold_min":  10,
+                        "is_stale":  false,
+                        "action":  "none",
+                        "worker_pid":  null,
+                        "heartbeat_pid":  null
+                    },
+                    {
+                        "lane":  "swarmmind",
+                        "heartbeat_path":  "S:\\SwarmMind\\lanes\\swarmmind\\inbox\\heartbeat-swarmmind.json",
+                        "heartbeat_age_min":  2.8,
+                        "stale_threshold_min":  10,
+                        "is_stale":  false,
+                        "action":  "none",
+                        "worker_pid":  null,
+                        "heartbeat_pid":  null
+                    }
+                ]
+}

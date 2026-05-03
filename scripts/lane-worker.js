@@ -599,38 +599,28 @@ class LaneWorker {
       localCodeVersionHash: this.codeVersionHash,
       repoRoot: this.repoRoot,
     });
-    if (!domain.domain_valid) {
-      if (domain.phase === 'post_execution') {
-        return {
-          queue: 'processed',
-          reason: 'INVALID_DOMAIN_POST_EXECUTION',
-          detail: domain.invalid_domain_reason,
-          execution_verified: false,
-          execution_would_verify: false,
-          domain_gate_executed: true,
-          verification_outcome: 'INVALID_DOMAIN',
-          execution_preserved: true,
-          domain_validation: domain,
-          verification_path: ['domain_gate', 'execution_check', 'response_validation'],
-          ownership,
-          ownership_notes: ownershipNotes,
-        };
-      }
-      return {
-        queue: 'blocked',
-        reason: 'INVALID_DOMAIN_PRE_EXECUTION',
-        detail: domain.invalid_domain_reason,
-        execution_verified: false,
-        execution_would_verify: false,
-        domain_gate_executed: true,
-        verification_outcome: domain.verification_outcome,
-        execution_preserved: false,
-        domain_validation: domain,
-        verification_path: ['domain_gate', 'execution_check', 'response_validation'],
-        ownership,
-        ownership_notes: ownershipNotes,
-      };
-    }
+        if (!domain.domain_valid) {
+          // If the failure is due to observability (artifact not observable), allow execution verification to handle it.
+          if (domain.observability && !domain.observability.valid) {
+            // fall through to execution verification
+          } else {
+            // Fail-closed for other domain validation failures.
+            return {
+              queue: 'blocked',
+              reason: 'INVALID_DOMAIN',
+              detail: domain.invalid_domain_reason,
+              execution_verified: false,
+              execution_would_verify: false,
+              domain_gate_executed: true,
+              verification_outcome: domain.verification_outcome || 'INVALID_DOMAIN',
+              execution_preserved: false,
+              domain_validation: domain,
+              verification_path: ['domain_gate', 'execution_check', 'response_validation'],
+              ownership,
+              ownership_notes: ownershipNotes,
+            };
+          }
+        }
     const executionResult = this.executionGate.verify(msg);
     if (!executionResult.execution_verified) {
       return {
@@ -654,38 +644,28 @@ class LaneWorker {
       localCodeVersionHash: this.codeVersionHash,
       repoRoot: this.repoRoot,
     });
-    if (!domain.domain_valid) {
-      if (domain.phase === 'post_execution') {
-        return {
-          queue: 'processed',
-          reason: 'INVALID_DOMAIN_POST_EXECUTION',
-          detail: domain.invalid_domain_reason,
-          execution_verified: false,
-          execution_would_verify: false,
-          domain_gate_executed: true,
-          verification_outcome: 'INVALID_DOMAIN',
-          execution_preserved: true,
-          domain_validation: domain,
-          verification_path: ['domain_gate', 'execution_check', 'response_validation'],
-          ownership,
-          ownership_notes: ownershipNotes,
-        };
-      }
-      return {
-        queue: 'blocked',
-        reason: 'INVALID_DOMAIN_PRE_EXECUTION',
-        detail: domain.invalid_domain_reason,
-        execution_verified: false,
-        execution_would_verify: false,
-        domain_gate_executed: true,
-        verification_outcome: domain.verification_outcome,
-        execution_preserved: false,
-        domain_validation: domain,
-        verification_path: ['domain_gate', 'execution_check', 'response_validation'],
-        ownership,
-        ownership_notes: ownershipNotes,
-      };
-    }
+        if (!domain.domain_valid) {
+          // If the failure is due to observability (artifact not observable), allow execution verification to handle it.
+          if (domain.observability && !domain.observability.valid) {
+            // fall through to execution verification
+          } else {
+            // Fail-closed for other domain validation failures.
+            return {
+              queue: 'blocked',
+              reason: 'INVALID_DOMAIN',
+              detail: domain.invalid_domain_reason,
+              execution_verified: false,
+              execution_would_verify: false,
+              domain_gate_executed: true,
+              verification_outcome: domain.verification_outcome || 'INVALID_DOMAIN',
+              execution_preserved: false,
+              domain_validation: domain,
+              verification_path: ['domain_gate', 'execution_check', 'response_validation'],
+              ownership,
+              ownership_notes: ownershipNotes,
+            };
+          }
+        }
     const executionResult = this.executionGate.verify(msg);
     if (!executionResult.execution_verified) {
       return {

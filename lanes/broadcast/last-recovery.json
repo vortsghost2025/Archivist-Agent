@@ -1,15 +1,15 @@
 {
   "schema_version": "1.0",
   "artifact": "last-recovery",
-  "timestamp": "2026-05-01T17:24:41.871Z",
+  "timestamp": "2026-05-03T03:26:51.553Z",
   "suite": "recovery-verification-v1",
-  "verdict": "CONFLICTED",
+  "verdict": "PROVEN",
   "summary": {
-    "passed": 10,
+    "passed": 11,
     "total": 11,
-    "all_passed": false
+    "all_passed": true
   },
-  "claim": "Restored context has contradictions — cannot prove correctness",
+  "claim": "Restored context matches pre-compact state across all checked dimensions",
   "evidence": {
     "relative": ".compact-audit/RECOVERY_TEST_RESULTS.json",
     "absolute": "S:\\Archivist-Agent\\.compact-audit\\RECOVERY_TEST_RESULTS.json"
@@ -17,29 +17,29 @@
   "lane_heartbeats": {
     "archivist": {
       "status": "alive",
-      "timestamp": "2026-05-01T17:24:03.122Z",
-      "age_seconds": 38
+      "timestamp": "2026-05-03T03:26:39.944Z",
+      "age_seconds": 11
     },
     "library": {
-      "status": "stale",
-      "timestamp": "2026-05-01T16:53:43.459Z",
-      "age_seconds": 1858
+      "status": "alive",
+      "timestamp": "2026-05-03T03:26:39.824Z",
+      "age_seconds": 11
     },
     "swarmmind": {
       "status": "alive",
-      "timestamp": "2026-05-01T17:23:55.236Z",
-      "age_seconds": 46
+      "timestamp": "2026-05-03T03:26:40.013Z",
+      "age_seconds": 11
     },
     "kernel": {
-      "status": "stale",
-      "timestamp": "2026-05-01T16:54:05.783Z",
-      "age_seconds": 1836
+      "status": "alive",
+      "timestamp": "2026-05-03T03:26:39.890Z",
+      "age_seconds": 11
     }
   },
   "lane_liveness": {
-    "alive_count": 2,
+    "alive_count": 4,
     "expected": 4
   },
   "run_by": "scripts/recovery-test-suite.js",
-  "archivist_repo_git_sha": "c2e7bf32fc1c225fce6fdf77575053631d36fe9a"
+  "archivist_repo_git_sha": "ba7b03c3f425678e70c5ecba53fb108bc41770bd"
 }

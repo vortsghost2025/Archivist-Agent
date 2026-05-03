@@ -59,6 +59,16 @@
             "date": 1777596133262,
             "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-04-30.log",
             "hash": "7699fd520aa5bc62eb7db09920a04a7c782a7ab028ea1026e1005750f2a53476"
+        },
+        {
+            "date": 1777698066141,
+            "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-05-02.log",
+            "hash": "79cc4606ec109c472937ccc1b3af980702e85caf9f7c807c29d133ab3b2e1381"
+        },
+        {
+            "date": 1777783372052,
+            "name": "S:\\Archivist-Agent\\logs\\mcp-puppeteer-2026-05-03.log",
+            "hash": "306f3088b6cc4e1adf25280374e96aa5f3497b8372d97dd23e5cb78191178bef"
         }
     ],
     "hashType": "sha256"
