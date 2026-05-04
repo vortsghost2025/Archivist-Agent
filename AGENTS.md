@@ -692,3 +692,25 @@ Pre-filtered, high-signal inputs are the goal. Not more work, but better inputs.
 - The repo ships `node scripts/sync-all-lanes.js` (optional `--dry-run`) to align shared scripts and `lanes/broadcast` JSON across the four lane roots, run per-lane tests, summarize lane health, and write reports under `context-buffer/sync-reports/`.
 - After a full PC reboot, lane watchers/workers are not assumed to be running; restart them manually and confirm heartbeats/log activity before relying on automation.
 - Contradiction handling policy is strict: never auto-resolve `CONTRADICTS` edges by count/confidence/similarity/lane preference alone; each resolution requires source path/ID, bilateral evidence, domain classification (`paper|code|data`), adjudication status, and explicit next-action owner.
+
+## Non-Negotiable Output Provenance
+
+Every response, report, audit, handoff, generated plan, or user-facing message MUST begin with:
+
+OUTPUT_PROVENANCE:
+agent: <agent/model/tool identity>
+lane: <lane name>
+target: <current task/request/artifact>
+
+When available, include:
+
+generated_at: <ISO-8601 timestamp>
+session_id: <session or run id>
+
+This requirement exists for accessibility and multi-agent governance traceability. Do not omit it.
+
+Canonical contract files:
+- governance/OUTPUT_PROVENANCE_CONTRACT.md
+- governance/output-provenance.contract.json
+- scripts/output-provenance.js
+- scripts/verify-output-provenance.js

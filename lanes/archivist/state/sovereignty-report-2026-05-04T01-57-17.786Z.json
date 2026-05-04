@@ -1,6 +1,6 @@
 {
   "lane_id": "archivist",
-  "timestamp": "2026-05-04T02:04:38.895Z",
+  "timestamp": "2026-05-04T01:57:17.786Z",
   "scanner": "sovereignty-enforcer-fine-tuned",
   "rule": "NO_CROSS_LANE_REQUIRE",
   "total_violations": 0,
