@@ -73,3 +73,9 @@ logs/quarantine-tracker.json
 lanes/*/inbox/
 lanes/*/outbox/
 .aider*
+
+# Cursor IDE settings
+.cursor/settings.json
+
+# Ubuntu error artifacts
+context-buffer/I'm on Ubuntu and can't write direc.txt
