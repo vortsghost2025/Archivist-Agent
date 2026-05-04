@@ -45,7 +45,8 @@
       "missing_acks": [
         "library",
         "swarmmind"
-      ]
+      ],
+      "reminder_sent_at": "2026-05-04T00:21:00Z"
     },
     "2026-04-20T21-25-00Z-archivist-lane4-review": {
       "type": "review",
@@ -68,7 +69,8 @@
       "missing_acks": [
         "library",
         "swarmmind"
-      ]
+      ],
+      "reminder_sent_at": "2026-05-04T00:21:00Z"
     },
     "2026-04-20T21-30-00Z-archivist-urgent-rate-limit": {
       "type": "task",
@@ -90,6 +92,6 @@
       "blocking": false
     }
   },
-  "last_scan": "2026-05-03T02:56:38.493Z",
+  "last_scan": "2026-05-04T00:22:00Z",
   "alert_threshold_hours": 24
 }
