@@ -116,14 +116,41 @@ function logAudit(sourcePath, targetPath, reason, workerId, sessionId, context =
   }
 }
 
+// NFM-020: NACK chain prevention.
+// Guard 1: never send NACK to yourself (senderLane === targetLane).
+// Guard 2: never send NACK for a message that is already a NACK (nack_reason present).
+// Guard 3: never send NACK for a message that carries exempt_from_nack flag.
+// Guard 4: rate-limit — at most one NACK per (sender, original_task_id) per 60s window.
+const NACK_RATE_LIMIT = new Map(); // key: `${senderLane}::${originalTaskId}`, value: last_nack_timestamp
+const NACK_COOLDOWN_MS = 60000;
+
 function sendNack(originalMsg, rejectionReason, rejectionDetail, targetLane, fromLane) {
   try {
     const senderLane = String(originalMsg.from || fromLane || 'unknown').toLowerCase();
     if (senderLane === String(targetLane || '').toLowerCase()) {
       return null;
     }
-    if (originalMsg.type === 'notification' && originalMsg.task_kind === 'status' && originalMsg.nack_reason) {
+    // Guard 2: original is already a NACK — break the chain
+    if (originalMsg.nack_reason) {
       return null;
+    }
+    // Guard 3: message carries anti-chain exemption
+    if (originalMsg.exempt_from_nack === true) {
+      return null;
+    }
+    // Guard 4: rate-limit NACKs per (sender, original task_id)
+    const rateKey = `${senderLane}::${originalMsg.task_id || 'unknown'}`;
+    const lastNack = NACK_RATE_LIMIT.get(rateKey);
+    const now = Date.now();
+    if (lastNack && (now - lastNack) < NACK_COOLDOWN_MS) {
+      return null;
+    }
+    NACK_RATE_LIMIT.set(rateKey, now);
+    // Clean stale rate-limit entries periodically
+    if (NACK_RATE_LIMIT.size > 500) {
+      for (const [k, t] of NACK_RATE_LIMIT) {
+        if (now - t > NACK_COOLDOWN_MS * 2) NACK_RATE_LIMIT.delete(k);
+      }
     }
     const senderRoot = LANE_ROOTS[senderLane];
     if (!senderRoot) {
@@ -157,6 +184,7 @@ function sendNack(originalMsg, rejectionReason, rejectionDetail, targetLane, fro
       nack_for_task_id: originalMsg.task_id || null,
       nack_reason: rejectionReason,
       nack_detail: rejectionDetail || null,
+      exempt_from_nack: true,  // NFM-020: prevent NACK chains — NACKs are terminal
     };
     const nackPath = path.join(senderInbox, `nack-${nackMsg.task_id}.json`);
     fs.writeFileSync(nackPath, JSON.stringify(nackMsg, null, 2), 'utf8');

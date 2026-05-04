@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T17:32:22.921Z",
+  "timestamp": "2026-05-03T17:50:06.051Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -281,30 +281,28 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-05-03T17:32:02.472Z",
-        "age_seconds": 20
+        "timestamp": "2026-05-03T17:50:01.787Z",
+        "age_seconds": 4
       },
       "library": {
-        "status": "stale",
-        "timestamp": "2026-05-03T15:23:01.913Z",
-        "age_seconds": 7760
+        "status": "no_heartbeat",
+        "timestamp": null
       },
       "swarmmind": {
-        "status": "stale",
-        "timestamp": "2026-05-03T15:23:01.450Z",
-        "age_seconds": 7761
+        "status": "no_heartbeat",
+        "timestamp": null
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-05-03T17:32:02.242Z",
-        "age_seconds": 20
+        "timestamp": "2026-05-03T17:50:02.463Z",
+        "age_seconds": 3
       }
     },
     "inbox_counts": {
-      "archivist": 8,
-      "library": 435,
-      "swarmmind": 645,
-      "kernel": 3
+      "archivist": 0,
+      "library": 0,
+      "swarmmind": 0,
+      "kernel": 0
     },
     "governance_hash": "b765ec164223b9071b20fe7a8d4a0867eab04a0902148ffefe08965faa310c68",
     "bootstrap_hash": "694e4f7935bcc1e6b883b45632a922e52d4a238eea6698b191747749cbe94fca",
@@ -540,18 +538,29 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 0,
-    "message_loss_detail": {},
+    "message_loss": 81,
+    "message_loss_detail": {
+      "archivist": {
+        "pre": 1,
+        "post": 0,
+        "lost": 1
+      },
+      "library": {
+        "pre": 80,
+        "post": 0,
+        "lost": 80
+      }
+    },
     "lane_degradations": [
       {
         "lane": "library",
         "pre_status": "alive",
-        "post_status": "stale"
+        "post_status": "no_heartbeat"
       },
       {
         "lane": "swarmmind",
         "pre_status": "alive",
-        "post_status": "stale"
+        "post_status": "no_heartbeat"
       }
     ],
     "risk_set_preserved": true,
