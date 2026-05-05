@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { createSignedMessage } = require('./create-signed-message');
+const { logSendResult } = require('./transfer-log');
 
 const SCHEMA_PATH = 'S:/Archivist-Agent/schemas/inbox-message-v1.json';
 const OUTBOX_ROOT = 'S:/Archivist-Agent/lanes/archivist/outbox';
@@ -137,6 +138,12 @@ function sendMessage(msg, options = {}) {
     const deliveredHash = delivered ? sha256(fs.readFileSync(destPath, 'utf8')) : '';
     result.sent = true;
     result.delivered = delivered && deliveredHash === sha256(content);
+
+    try {
+      logSendResult(result, outbound);
+    } catch (logErr) {
+      console.error(`[TRANSFER-LOG-WARN] ${outbound.task_id}: ${logErr.message}`);
+    }
 
     if (result.delivered) {
       console.log(`[SENT] ${outbound.task_id} -> ${outbound.to} (verified)`);

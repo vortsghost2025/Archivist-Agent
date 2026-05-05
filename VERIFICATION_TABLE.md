@@ -12,7 +12,7 @@
 | AGENTS.md missing | S:\Archivist-Agent\AGENTS.md | True – file exists | None | Archivist |
 | LANE_REGISTRY.json missing | S:\Archivist-Agent\LANE_REGISTRY.json | True – file exists (seen in lanes directory) | None | Archivist |
 | Cross-lane git protocol not followed | S:\Archivist-Agent\CROSS_LANE_GIT_PROTOCOL.md | True – document exists | Ensure pre-commit hooks enforce commit message format | All lanes |
-| No transfer logging for SCP/SSH | S:\kernel-lane\logs\transfer_log.jsonl | True – Kernel HARDEN-1 complete, 36/36 tests pass | None | Kernel |
+| No transfer logging for SCP/SSH | S:\kernel-lane\logs\transfer_log.jsonl, S:\Archivist-Agent\scripts\transfer-log.js, S:\Archivist-Agent\logs\transfer-log.jsonl | True – Kernel HARDEN-1 complete (36/36); Archivist HARDEN-3 complete (35/35 tests pass), wired into send-message.js + inbox-watcher.js | None | Kernel, Archivist |
 | No automated replay script for failed messages | S:\kernel-lane\scripts\replay_failed_messages.sh | True – Implemented in HARDEN-1 | None | Kernel |
 | No drift monitoring service | S:\Archivist-Agent\scripts\consensus-check.js (evaluateDrift), S:\Archivist-Agent\context-buffer\cps_log.jsonl | True – HARDEN-2 consensus_check() integrates drift monitoring with configurable thresholds and routing overrides | None | Archivist |
 | No host-key pinning for SSH | S:\kernel-lane\config\ (check for known_hosts) | True – Implemented in HARDEN-1 send-lane.js | None | Kernel |

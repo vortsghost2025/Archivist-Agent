@@ -25,6 +25,7 @@ const { IdentityEnforcer } = require('./identity-enforcer');
 const { moveFileWithLease } = require('./lease-write');
 const { sendMessage, sendToAll } = require('./send-message');
 const { consensusCheck, routeMessage, loadPolicy: loadConsensusPolicy } = require('./consensus-check');
+const { logTransfer } = require('./transfer-log');
 
 const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
 const PREEMPTION_CYCLE_LIMIT = 2;
@@ -559,15 +560,29 @@ class InboxWatcher {
       } catch (e) {
         console.error(`[watcher] Action handling error for ${msg.id || filename}:`, e.message);
       }
-      // After handling, move the original message to processed to avoid re‑processing.
       await this.moveToProcessed(filename, sourcePath);
       this.processedKeys.add(idempotencyKey);
+      try {
+        logTransfer({
+          source_lane: from, dest_lane: 'archivist', direction: 'receive',
+          protocol: 'local_fs', file_path: sourcePath || '',
+          status: 'verified', signed_by: from,
+          key_id: msg.key_id || '', correlation_id: msg.task_id || idempotencyKey,
+        });
+      } catch (_) {}
       return;
     }
 
     await this.moveToProcessed(filename, sourcePath);
     this.processedKeys.add(idempotencyKey);
-
+    try {
+      logTransfer({
+        source_lane: from, dest_lane: 'archivist', direction: 'receive',
+        protocol: 'local_fs', file_path: sourcePath || '',
+        status: 'verified', signed_by: from,
+        key_id: msg.key_id || '', correlation_id: msg.task_id || idempotencyKey,
+      });
+    } catch (_) {}
     const p = PRIORITY_ORDER[priority] ?? 3;
     if (p <= 1) {
       this.consecutiveP0Count++;

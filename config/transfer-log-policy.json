@@ -1,0 +1,19 @@
+{
+  "version": "1.0",
+  "spec": "HARDEN-3 transfer-log-policy",
+  "log_path": "logs/transfer-log.jsonl",
+  "max_file_bytes": 10485760,
+  "rotation_count": 5,
+  "hash_algorithm": "sha256",
+  "fields": {
+    "required": ["transfer_id", "timestamp", "direction", "source_lane", "dest_lane", "protocol", "file_path", "file_hash", "file_size", "status", "signed_by", "key_id"],
+    "optional": ["duration_ms", "error", "retry_attempt", "correlation_id", "metadata"]
+  },
+  "direction_enum": ["send", "receive", "scp_push", "scp_pull", "ssh_exec", "smb_copy", "local_copy"],
+  "status_enum": ["success", "failed", "retrying", "aborted", "verified"],
+  "protocol_enum": ["scp", "ssh", "smb", "local_fs", "http"],
+  "rotation": {
+    "compress_rotated": true,
+    "suffix": ".gz"
+  }
+}

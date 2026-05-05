@@ -84,7 +84,7 @@ not by importing each other's code.
 ### Confirmed aligned (all 4 repos agree):
 | Artifact | Status |
 |----------|--------|
-| Trust store key IDs | 4/4 identical: archivist=506c2d, library=2eec06be, swarmmind=1450972, kernel=127b44d |
+| Trust store key IDs | 4/4 identical: archivist=506c2d0838b6862c, library=2eec06be0befc8d5, swarmmind=c41954228c48ff9c, kernel=127b44d2bb294ad9 |
 | COVENANT.md | 4/4 identical (hash 7cc17fe31089) |
 | GOVERNANCE.md | 3/4 identical (Archivist has 473-line variant vs 409-line in others) |
 | SchemaValidator.js (scripts/) | 4/4 identical (hash 22dbd10e2f36) |

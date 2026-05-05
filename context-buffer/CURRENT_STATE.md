@@ -15,7 +15,7 @@
 - Active drift signals: **none**.
 
 ## Session Scope
-- Current session operates in the **Archivist** lane, HARDEN-2+ complete.
+- Current session operates in the **Archivist** lane, HARDEN-3 code+tests+wiring complete, final documentation + commit in progress.
 - Library: Verification 401/415 (96.6%), 0 UNVERIFIED. **Library lane-worker restarted (PID 156655).**
 - Library key_id confusion RESOLVED — trust-store identical on both sides, deprecated `.trust/` keys are stale artifacts.
 - SwarmMind: HARDEN-1 complete, alive on Ubuntu
@@ -32,6 +32,16 @@
 - Two prior bugs fixed: verification-domain-gate semantic check + execution-gate dry-run guard
 - Trust-store SwarmMind key_id reverted to canonical `c41954228c48ff9c`
 
+## HARDEN-3 Status (CODE COMPLETE — pending commit)
+- `scripts/transfer-log.js` (~357 lines): logTransfer, logSendResult, queryLog, getStats, loadPolicy, resolveLogPath, hashContent, hashFile, generateTransferId, validateEntry, checkRotation, rotateLog. CLI: query/stats/log/rotate. JSONL format with file hash, rotation with gzip, configurable policy.
+- `config/transfer-log-policy.json` (v1.0): rotation 10MB/5 rotations/gzip, required fields, direction/status/protocol enums
+- `scripts/transfer-log.test.js`: **35/35 tests PASS**
+- `scripts/send-message.js`: logSendResult wired after delivery (line ~140), try/catch guarded
+- `scripts/inbox-watcher.js` (842 lines): logTransfer wired at 2 call sites (action-required + normal processing), try/catch guarded
+- `VERIFICATION_TABLE.md` line 15: updated for Archivist transfer logging
+- `SYSTEM_MAP.md` line 87: SwarmMind key_id fixed to canonical `c41954228c48ff9c`
+- Bug fixes: DEFAULT_POLICY.fields fallback added, validateEntry empty-string check removed
+
 ## Library Round Status (2026-05-05T10:58Z)
 - 6 P0 contradiction-reduction tasks: evidence files created, evidence_path/verified/heartbeat.status fields updated, moved to processed/
 - Library lane-worker restarted — active and running (PID 156655)
@@ -43,7 +53,7 @@
 - Recovery test suite: **10/11 PASS** (lane_liveness expected failure — no active lane workers running)
 - Trust store: **4/4 keys valid** — Archivist=`506c2d0838b6862c`, Library=`2eec06be0befc8d5`, SwarmMind=`c41954228c48ff9c`, Kernel=`127b44d2bb294ad9`. Both sides VERIFIED IDENTICAL.
 - Handoff integrity: **verified** (hash 7c6b2a73... stable)
-- Git HEAD: **1634e93** pushed to origin/master (Archivist), **e437ad3** pushed to main (Library)
+- Git HEAD: **4951d7e** pushed to origin/master (Archivist), **e437ad3** pushed to main (Library)
 - Contradictions: **0** (all resolved)
 - Quarantined nodes: **0**
 - Core/Exterior canonical adoption: **COMPLETE**
@@ -54,7 +64,7 @@
 - ~~⏳ Archivist ratification of new Library key~~ — RESOLVED: trust-store already consistent, no ratification needed
 - ~~⏳ SwarmMind + Kernel trust stores need broadcast update~~ — RESOLVED: trust-store already identical across all lanes
 - ⏳ LANE_KEY_PASSPHRASE not persisted — needs .env or systemd Environment= for daemon auto-signing
-- ❌ HARDEN-3: Secure transfer logging audit trail
+- ❌ HARDEN-3: Secure transfer logging audit trail — ~~❌~~ ✅ **CODE COMPLETE**: transfer-log.js (357 lines), 35/35 tests pass, wired into send-message.js + inbox-watcher.js, config/transfer-log-policy.json v1.0, VERIFICATION_TABLE.md updated. Remaining: commit + push only.
 - ❌ Archivist directive to Library re: authority discrepancy (AGENTS.md authoritative, not .session-mode)
 - ❌ Ubuntu runner artifact rotation policy (deferred to HARDEN-3)
 - ❌ SSH host-key fingerprint population (deferred to HARDEN-3)
