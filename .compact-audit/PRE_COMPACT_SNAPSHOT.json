@@ -13,10 +13,10 @@
     }
   },
   "trust_store_key_ids": {
-    "archivist": "65ae05b2a9e749cb",
-    "library": "ea2a75bab220adc2",
-    "swarmmind": "addb0afb8ee5c2ed",
-    "kernel": "b677eb87f6be83f9"
+    "archivist": "506c2d0838b6862c",
+    "library": "2eec06be0befc8d5",
+    "swarmmind": "1450972ce0a225b7",
+    "kernel": "127b44d2bb294ad9"
   },
   "constraint_names": [
     "STRUCTURE_OVER_IDENTITY",
@@ -250,6 +250,12 @@
         "exists": true,
         "hash": "47102c104ef735f883f7b4002bef1f17aeed2521569f73367130a49442fe8f66"
       }
+    }
+  },
+  "identity_files": {
+    "kernel": {
+      "deleted_per_ruling": true,
+      "ruling": "Archivist P0 2026-05-01: trust-store is canonical, .identity/ not required"
     }
   }
 }

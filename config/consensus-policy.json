@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "description": "Consensus check policy for HARDEN-2 dual-verification integration",
+  "structural_weight": 1.0,
+  "operational_weight": 1.0,
+  "consensus_threshold": 1.0,
+  "reject_on_any_critical": true,
+  "drift_integration": {
+    "enabled": true,
+    "cps_threshold_warning": 30,
+    "cps_threshold_critical": 50,
+    "cps_log_path": "context-buffer/cps_log.jsonl"
+  },
+  "routing": {
+    "proven_action": "route",
+    "conflicted_action": "escalate",
+    "unproven_action": "block",
+    "blocked_action": "hold"
+  }
+}

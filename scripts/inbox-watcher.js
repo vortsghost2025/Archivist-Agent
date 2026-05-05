@@ -24,6 +24,7 @@ const {
 const { IdentityEnforcer } = require('./identity-enforcer');
 const { moveFileWithLease } = require('./lease-write');
 const { sendMessage, sendToAll } = require('./send-message');
+const { consensusCheck, routeMessage, loadPolicy: loadConsensusPolicy } = require('./consensus-check');
 
 const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
 const PREEMPTION_CYCLE_LIMIT = 2;
@@ -132,8 +133,9 @@ class InboxWatcher {
       }
     } catch (_) {}
 
-    this.identityEnforcer = new IdentityEnforcer({ enforcementMode: 'enforce' });
-    this.assertNoRawRenameSync();
+        this.identityEnforcer = new IdentityEnforcer({ enforcementMode: 'enforce' });
+        this.consensusPolicy = loadConsensusPolicy();
+        this.assertNoRawRenameSync();
   }
 
   assertNoRawRenameSync() {
@@ -509,10 +511,41 @@ class InboxWatcher {
     const type = msg.type || 'unknown';
     const from = msg.from || msg.from_lane || 'unknown';
     const body = typeof msg.body === 'string' ? msg.body : JSON.stringify(msg.body || '');
-    const requiresAction = isActionRequiredMessage(msg);
-    const idempotencyKey = msg.idempotency_key || msg.id || filename;
+        const requiresAction = isActionRequiredMessage(msg);
+        const idempotencyKey = msg.idempotency_key || msg.id || filename;
 
-    console.log(`[watcher] Processing ${priority} ${type} from ${from}: ${body.slice(0, 80)}`);
+        console.log(`[watcher] Processing ${priority} ${type} from ${from}: ${body.slice(0, 80)}`);
+
+        // HARDEN-2: Dual-verification consensus gate
+        const consensusResult = consensusCheck(msg, {
+            policy: this.consensusPolicy,
+            repoRoot: this.repoRoot,
+        });
+        const routing = routeMessage(msg, consensusResult, { policy: this.consensusPolicy });
+
+        this._logConsensus(msg, consensusResult, routing);
+
+        switch (routing.action) {
+            case 'block':
+                console.log(`[watcher] CONSENSUS_BLOCKED: ${consensusResult.status} — ${routing.reason}`);
+                await this.moveMalformedToQuarantine(filename, sourcePath, 'consensus_blocked', `status=${consensusResult.status} reason=${routing.reason}`);
+                this.processedKeys.add(idempotencyKey);
+                return;
+
+            case 'escalate':
+                console.log(`[watcher] CONSENSUS_ESCALATE: ${consensusResult.status} — ${routing.reason}`);
+                await this.moveToActionRequired(filename, sourcePath);
+                this.processedKeys.add(idempotencyKey);
+                return;
+
+            case 'hold':
+                console.log(`[watcher] CONSENSUS_HOLD: ${consensusResult.status} — leaving in inbox for next cycle`);
+                return;
+
+            case 'route':
+            default:
+                break;
+        }
 
     if (type === 'finding' || type === 'review') {
       this.handleConvergenceCheck(msg);
@@ -541,10 +574,32 @@ class InboxWatcher {
     } else {
       this.consecutiveP0Count = 0;
     }
-  }
+    }
 
-  handleConvergenceCheck(msg) {
-    const status = msg.status || 'unproven';
+    _logConsensus(msg, consensusResult, routing) {
+        const logEntry = {
+            timestamp: new Date().toISOString(),
+            message_id: msg.id || msg.task_id || 'unknown',
+            from: msg.from || 'unknown',
+            consensus_status: consensusResult.status,
+            routing_action: routing.action,
+            routing_reason: routing.reason,
+            structural_valid: consensusResult.structural.valid,
+            operational_valid: consensusResult.operational.valid,
+            drift_level: consensusResult.drift.level,
+            weighted_score: consensusResult.weighted_score,
+        };
+        const logDir = path.join(this.repoRoot, 'logs');
+        try {
+            if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+            fs.appendFileSync(path.join(logDir, 'consensus-log.jsonl'), JSON.stringify(logEntry) + '\n', 'utf8');
+        } catch (e) {
+            console.error(`[watcher] Cannot log consensus:`, e.message);
+        }
+    }
+
+    handleConvergenceCheck(msg) {
+        const status = msg.status || 'unproven';
     if (status === 'unproven') {
       console.log(`[watcher] SKIP: unproven claim from ${msg.from || msg.from_lane} — not forwarded`);
       return;

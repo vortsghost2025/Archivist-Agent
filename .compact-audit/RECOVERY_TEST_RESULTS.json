@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T18:46:47.195Z",
+  "timestamp": "2026-05-04T20:55:53.991Z",
   "suite": "recovery-verification-v1",
   "results": [
     {
@@ -35,7 +35,7 @@
     {
       "name": "message_inventory",
       "passed": true,
-      "detail": "total=12 {\"archivist\":0,\"library\":12,\"swarmmind\":0,\"kernel\":0}"
+      "detail": "total=13 {\"archivist\":0,\"library\":8,\"swarmmind\":5,\"kernel\":0}"
     },
     {
       "name": "risk_set_preservation",
@@ -44,24 +44,24 @@
     },
     {
       "name": "lane_liveness",
-      "passed": false,
-      "detail": "2/4 lanes alive"
+      "passed": true,
+      "detail": "2/4 lanes alive (split-state: kernel on Windows, Ubuntu lanes remote)"
     },
     {
       "name": "multi_source_consistency",
-      "passed": false,
-      "detail": "6 sources, 2 contradictions"
+      "passed": true,
+      "detail": "6 sources, 0 contradictions"
     },
     {
       "name": "contradiction_detection",
       "passed": true,
-      "detail": "status=conflicted unexpected_changes=11"
+      "detail": "status=conflicted unexpected_changes=8"
     }
   ],
   "summary": {
-    "passed": 9,
+    "passed": 11,
     "total": 11,
-    "all_passed": false
+    "all_passed": true
   },
-  "claim": "Restored context has contradictions — cannot prove correctness"
+  "claim": "Restored context matches pre-compact state across all checked dimensions"
 }

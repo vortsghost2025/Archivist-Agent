@@ -79,3 +79,16 @@ lanes/*/outbox/
 
 # Ubuntu error artifacts
 context-buffer/I'm on Ubuntu and can't write direc.txt
+
+# Node.js runtime (not a Node project)
+node_modules/
+package.json
+package-lock.json
+
+# Playwright test artifacts
+test-results/
+tests/ui/
+
+# Scratch text files
+context-buffer/fsssu.txt
+context-buffer/Here's the full map of your codebas.txt

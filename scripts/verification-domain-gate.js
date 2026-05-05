@@ -61,15 +61,16 @@ function evaluateTemporal(msg) {
 
 function evaluateSemantic(msg, localCodeVersionHash = null) {
   const taskKindValid = !msg.task_kind || VALID_TASK_KINDS.has(String(msg.task_kind).toLowerCase());
-  const hasProof = cp.hasCompletionProof(msg);
-  const evidenceFieldsPresent = hasProof
-    ? Boolean(
-      (msg.evidence_exchange && msg.evidence_exchange.artifact_path) ||
-      msg.completion_artifact_path ||
-      msg.completion_message_id ||
-      msg.resolved_by_task_id
-    )
-    : true;
+const hasProof = cp.hasCompletionProof(msg);
+const evidenceFieldsPresent = hasProof
+? Boolean(
+(msg.evidence && msg.evidence.evidence_path) ||
+(msg.evidence_exchange && msg.evidence_exchange.artifact_path) ||
+msg.completion_artifact_path ||
+msg.completion_message_id ||
+msg.resolved_by_task_id
+)
+: true;
   const routingMetadataValid = !msg._execution_result || !msg._execution_result._routing || Boolean(msg._execution_result._routing.verb);
 
   const messageCodeHash = msg && msg._governance ? msg._governance.code_version_hash : null;

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-05-03T17:50:06.051Z",
+  "timestamp": "2026-05-04T20:55:54.858Z",
   "schema": "post-compact-audit-v1",
   "pre_compact": {
     "active_blocker": {
@@ -14,10 +14,10 @@
       }
     },
     "trust_store_key_ids": {
-      "archivist": "65ae05b2a9e749cb",
-      "library": "ea2a75bab220adc2",
-      "swarmmind": "addb0afb8ee5c2ed",
-      "kernel": "b677eb87f6be83f9"
+      "archivist": "506c2d0838b6862c",
+      "library": "2eec06be0befc8d5",
+      "swarmmind": "1450972ce0a225b7",
+      "kernel": "127b44d2bb294ad9"
     },
     "constraint_names": [
       "STRUCTURE_OVER_IDENTITY",
@@ -281,8 +281,8 @@
     "lane_states": {
       "archivist": {
         "status": "alive",
-        "timestamp": "2026-05-03T17:50:01.787Z",
-        "age_seconds": 4
+        "timestamp": "2026-05-04T20:55:02.115Z",
+        "age_seconds": 52
       },
       "library": {
         "status": "no_heartbeat",
@@ -294,14 +294,14 @@
       },
       "kernel": {
         "status": "alive",
-        "timestamp": "2026-05-03T17:50:02.463Z",
-        "age_seconds": 3
+        "timestamp": "2026-05-04T20:55:02.190Z",
+        "age_seconds": 52
       }
     },
     "inbox_counts": {
       "archivist": 0,
-      "library": 0,
-      "swarmmind": 0,
+      "library": 8,
+      "swarmmind": 5,
       "kernel": 0
     },
     "governance_hash": "b765ec164223b9071b20fe7a8d4a0867eab04a0902148ffefe08965faa310c68",
@@ -344,7 +344,7 @@
         "agents_md": {
           "path": "S:\\Archivist-Agent\\AGENTS.md",
           "exists": true,
-          "hash": "1f88f87d5eb0d8fbb47973f5d29f77e4366acdc012cdb4dc23e95a6f0bfdb1c4"
+          "hash": "c4877cd9d23277f4a603cc0cc43f0ac789246e86c7356b8a8dbbfcc1bef27b61"
         },
         "targets_json": {
           "path": "S:\\Archivist-Agent\\config\\targets.json",
@@ -438,7 +438,7 @@
         "agents_md": {
           "path": "S:\\SwarmMind\\AGENTS.md",
           "exists": true,
-          "hash": "f1e6086859927e7b38aeaf96779f431de0e822696bd4a83ed808ee0486d147b1"
+          "hash": "6b27ee9074c4d8d1fec5590df3aa4d96adb70aa3efaad1a297dc416e3bbf0387"
         },
         "targets_json": {
           "path": "S:\\SwarmMind\\config\\targets.json",
@@ -459,23 +459,23 @@
       "kernel": {
         "private_pem": {
           "path": "S:\\kernel-lane\\.identity\\private.pem",
-          "exists": true,
-          "hash": "810e4a0d5926b9aa4fa1db950ccc4753f46e79c44e6ba7f9fad7e78630c3bcab"
+          "exists": false,
+          "hash": null
         },
         "public_pem": {
           "path": "S:\\kernel-lane\\.identity\\public.pem",
-          "exists": true,
-          "hash": "127b44d2bb294ad9a1bd748b5d0cebb376dc890afc52738ca79ec906cb145627"
+          "exists": false,
+          "hash": null
         },
         "snapshot_json": {
           "path": "S:\\kernel-lane\\.identity\\snapshot.json",
-          "exists": true,
-          "hash": "faa7381bf70f774194f12756e4349152289949d9d4133200c7e30fbd2f71d3fa"
+          "exists": false,
+          "hash": null
         },
         "keys_json": {
           "path": "S:\\kernel-lane\\.identity\\keys.json",
-          "exists": true,
-          "hash": "57943612c60ac317d4868d2266443b15c29d2817154aecc98f2290a7e546c45b"
+          "exists": false,
+          "hash": null
         },
         "lane_trust_store": {
           "path": "S:\\kernel-lane\\lanes\\broadcast\\trust-store.json",
@@ -485,7 +485,7 @@
         "agents_md": {
           "path": "S:\\kernel-lane\\AGENTS.md",
           "exists": true,
-          "hash": "b18423a431869ccf5ab39dfdf34554429554f79e2098ae87619d17f660a021ee"
+          "hash": "3165e1a7d349fa0631794ac6d1fa85ca3e6d9d0f4ce5fcec799ccbcc8ec21efb"
         },
         "targets_json": {
           "path": "S:\\kernel-lane\\config\\targets.json",
@@ -510,21 +510,9 @@
     "blocker_detail": null,
     "trust_chain_intact": false,
     "trust_detail": {
-      "archivist": {
-        "pre": "65ae05b2a9e749cb",
-        "post": "506c2d0838b6862c"
-      },
-      "library": {
-        "pre": "ea2a75bab220adc2",
-        "post": "2eec06be0befc8d5"
-      },
       "swarmmind": {
-        "pre": "addb0afb8ee5c2ed",
+        "pre": "1450972ce0a225b7",
         "post": "c41954228c48ff9c"
-      },
-      "kernel": {
-        "pre": "b677eb87f6be83f9",
-        "post": "127b44d2bb294ad9"
       }
     },
     "constraints_intact": true,
@@ -538,7 +526,7 @@
     "bootstrap_detail": null,
     "handoff_intact": true,
     "handoff_detail": null,
-    "message_loss": 81,
+    "message_loss": 73,
     "message_loss_detail": {
       "archivist": {
         "pre": 1,
@@ -547,8 +535,8 @@
       },
       "library": {
         "pre": 80,
-        "post": 0,
-        "lost": 80
+        "post": 8,
+        "lost": 72
       }
     },
     "lane_degradations": [
@@ -566,10 +554,7 @@
     "risk_set_preserved": true,
     "missing_risks": [],
     "unexpected_changes": [
-      "trust_store_archivist_key_changed",
-      "trust_store_library_key_changed",
       "trust_store_swarmmind_key_changed",
-      "trust_store_kernel_key_changed",
       "governance_doc_modified",
       "lane_library_degraded",
       "lane_swarmmind_degraded",
@@ -589,7 +574,7 @@
         "lane": "archivist",
         "file": "agents_md",
         "pre_hash": "7ef370688a75fba3e9c2ab2c25b949862d7270302244a7957a11af51688ffc77",
-        "post_hash": "1f88f87d5eb0d8fbb47973f5d29f77e4366acdc012cdb4dc23e95a6f0bfdb1c4"
+        "post_hash": "c4877cd9d23277f4a603cc0cc43f0ac789246e86c7356b8a8dbbfcc1bef27b61"
       },
       {
         "lane": "archivist",
@@ -625,7 +610,7 @@
         "lane": "swarmmind",
         "file": "agents_md",
         "pre_hash": "566c8601ae68ded461a62848218d635e410136c34ba3fd1d40138f8a526259c8",
-        "post_hash": "f1e6086859927e7b38aeaf96779f431de0e822696bd4a83ed808ee0486d147b1"
+        "post_hash": "6b27ee9074c4d8d1fec5590df3aa4d96adb70aa3efaad1a297dc416e3bbf0387"
       },
       {
         "lane": "swarmmind",
@@ -643,7 +628,7 @@
         "lane": "kernel",
         "file": "agents_md",
         "pre_hash": "98c61bc150292b51c3b36d5e8c9acfcb55727b79a8b4bc967fc3a31292ae3f80",
-        "post_hash": "b18423a431869ccf5ab39dfdf34554429554f79e2098ae87619d17f660a021ee"
+        "post_hash": "3165e1a7d349fa0631794ac6d1fa85ca3e6d9d0f4ce5fcec799ccbcc8ec21efb"
       },
       {
         "lane": "kernel",
@@ -668,7 +653,7 @@
       "known_risk_set",
       "file_integrity"
     ],
-    "contradictions_found": 11,
+    "contradictions_found": 8,
     "self_declared_alignment": false
   }
 }

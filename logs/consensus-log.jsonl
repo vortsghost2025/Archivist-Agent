@@ -1,0 +1,1 @@
+{"timestamp":"2026-05-04T22:57:35.471Z","message_id":"test-001","from":"library","consensus_status":"proven","routing_action":"route","routing_reason":"consensus proven — message routed to target inbox","structural_valid":true,"operational_valid":true,"drift_level":"normal","weighted_score":1}
