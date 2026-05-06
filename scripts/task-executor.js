@@ -3,16 +3,20 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const { spawnSync } = require('child_process');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
-const LANE = 'swarmmind';
+const LANE = process.env.LANE_ID || 'archivist';
 const ACTION_REQUIRED_DIR = path.join(REPO_ROOT, 'lanes', LANE, 'inbox', 'action-required');
 const IN_PROGRESS_DIR = path.join(REPO_ROOT, 'lanes', LANE, 'inbox', 'in-progress');
 const PROCESSED_DIR = path.join(REPO_ROOT, 'lanes', LANE, 'inbox', 'processed');
 const OUTBOX_DIR = path.join(REPO_ROOT, 'lanes', LANE, 'outbox');
 
-const ARCHIVIST_INBOX = 'S:/Archivist-Agent/lanes/archivist/inbox/';
+const isWin32 = process.platform === 'win32';
+const UBUNTU_ROOT = require('path').join(require('os').homedir(), 'agent', 'repos');
+function _resolvePath(p) { if (isWin32) return p; const m = p.match(/^S:\/(.+)$/); return m ? path.join(UBUNTU_ROOT, m[1]) : p; }
+const ARCHIVIST_INBOX = _resolvePath('S:/Archivist-Agent/lanes/archivist/inbox/');
 
 function nowIso() { return new Date().toISOString(); }
 

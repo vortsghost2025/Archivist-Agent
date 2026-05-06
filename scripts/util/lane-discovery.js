@@ -3,6 +3,7 @@
  * LOCAL LANE DISCOVERY UTILITY
  * ORIGIN: S:/Archivist-Agent/.global/lane-discovery.js
  * LOCALIZED: Archivist (2026-05-02)
+ * UPDATED: 2026-05-06 — Platform-aware (Windows S:/ + Ubuntu)
  * PURPOSE: Local implementation to avoid cross-boundary require() on .global/
  *
  * This is a sovereign copy that reads the lane registry directly
@@ -11,8 +12,42 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
-const REGISTRY_PATH = 'S:/Archivist-Agent/.global/lane-registry.json';
+const isWin32 = process.platform === 'win32';
+const UBUNTU_ROOT = path.join(os.homedir(), 'agent', 'repos');
+
+const REGISTRY_PATH = isWin32
+  ? 'S:/Archivist-Agent/.global/lane-registry.json'
+  : path.join(UBUNTU_ROOT, 'Archivist-Agent', '.global', 'lane-registry.json');
+
+function _resolvePath(winPath) {
+  if (isWin32) return winPath;
+  const match = winPath.match(/^S:\/(.+)$/);
+  if (!match) return winPath;
+  return path.join(UBUNTU_ROOT, match[1]);
+}
+
+function _translateRegistry(registry) {
+  for (const lane of Object.values(registry.lanes)) {
+    lane.local_path = _resolvePath(lane.local_path);
+    if (lane.mailboxes) {
+      for (const [key, val] of Object.entries(lane.mailboxes)) {
+        lane.mailboxes[key] = _resolvePath(val);
+      }
+    }
+    if (lane.broadcast_access) {
+      lane.broadcast_access = _resolvePath(lane.broadcast_access);
+    }
+    if (lane.forbidden_variants) {
+      lane.forbidden_variants = lane.forbidden_variants.map(_resolvePath);
+    }
+  }
+  if (registry.broadcast && registry.broadcast.path) {
+    registry.broadcast.path = _resolvePath(registry.broadcast.path);
+  }
+  return registry;
+}
 
 class LaneDiscovery {
   constructor() {
@@ -22,9 +57,10 @@ class LaneDiscovery {
   loadRegistry() {
     try {
       const data = fs.readFileSync(REGISTRY_PATH, 'utf8');
-      return JSON.parse(data);
+      const raw = JSON.parse(data);
+      return isWin32 ? raw : _translateRegistry(raw);
     } catch (e) {
-      throw new Error(`Failed to load lane registry: ${e.message}. Cannot proceed without registry.`);
+      throw new Error(`Failed to load lane registry from ${REGISTRY_PATH}: ${e.message}. Cannot proceed without registry.`);
     }
   }
 
