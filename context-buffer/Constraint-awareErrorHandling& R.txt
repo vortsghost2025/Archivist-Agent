@@ -1,0 +1,416 @@
+Constraint-aware Error Handling & Resilience Workflow Standard
+
+Constitution-Preserving Resilience Principle
+
+Collaborative AI runs must preserve constitutional invariants under failure: detect and classify faults, apply deterministic constraint-safe decisions, contain blast radius, enable replayable recovery, and maintain full auditability.
+
+Purpose
+
+This standard defines the deterministic resilience workflow required for all WE4FREE collaborative AI runs. The objective is to preserve constitutional constraints, maintain system integrity, ensure containment of failures, and enable deterministic replay.
+Core Principles
+
+Constitution First: No recovery strategy may violate constitutional constraints.
+Integrity Over Availability: Avoid corruption or drift even at the cost of aborting.
+Deterministic Decisions: Error classification must map to a single defined strategy.
+Containment by Default: Unknown failures default to quarantine.
+Replayability: Every failed run must be reproducible with pinned versions and logs.
+Detection Requirements
+
+Timeouts enforced on all tool and external calls.
+Schema validation at every tool boundary.
+Constraint checks at pre-action, post-action, and pre-output stages.
+Performance threshold monitoring (latency, budget, quotas).
+Near-miss detection for prevented constraint violations.
+Error Classification Model
+
+All errors must be tagged with:
+error_domain (execution | contract | performance | constitution | integrity)
+retryable (true/false)
+scope (local_agent | shared_tool | global_run)
+risk_level (low | medium | high | critical)
+containment_required (true/false)
+Constitutional and Integrity errors are never retryable by default and require containment.
+Decision Strategy Matrix
+
+Execution (transient) → RETRY (bounded attempts + backoff).
+Contract failure → QUARANTINE (no retry).
+Performance threshold breach → DEGRADE (if constraint-safe).
+Constitution violation → ABORT (stop-the-line).
+Integrity risk → QUARANTINE or ABORT.
+Retry is allowed only when the action is idempotent, within budget, and does not introduce constitutional risk.
+Containment Controls
+
+Circuit breakers for all external dependencies.
+Rate limiting and bulkheads to prevent cascading failures.
+Retry budgets (max attempts + total time).
+Run-level budget guards (time, cost, token usage).
+Stop-the-line enforcement for constitutional violations.
+Recovery & Replay Requirements
+
+Checkpointing at critical execution boundaries.
+Quarantine record must store trace_id, tool logs, constraint logs, decisions.
+Pinned model versions, prompt hashes, and tool versions.
+Deterministic replay capability with state hash verification.
+Explicit partial success semantics (commit, abort, compensate).
+Observability & Auditability
+
+Structured logging with trace_id and decision_path.
+Dashboards for constraint violations, DLQ depth, retry rates.
+Alerting for constitutional violations and replay failures.
+Post-incident loop updating tests, monitors, and decision matrix. Sharp edges Clarifications 
+Equivalence of failover: how do you prove alternate tools/models preserve constraints?
+
+
+Determinism under retries: are you pinning model versions, prompts, tool configs?
+
+
+Partial success semantics: what is “commit” vs “abort” in multi-agent runs?
+
+
+State hashing/checkpoints: can you detect divergence across agents?
+
+
+Constraint evaluation ordering: pre-action, post-action, pre-output (mandatory)
+
+
+
+Architecture Review Checklist 
+(yes/no gates)
+
+
+A. Detection
+Every external/tool call has timeouts (connect + read) and bounded concurrency.
+
+
+Every tool boundary enforces schema/contract validation (reject on mismatch).
+
+
+The system enforces constraint checks at:
+
+
+pre-action (before executing any tool/action)
+
+
+post-action (after tool returns)
+
+
+pre-output (before emitting final response)
+
+
+Abnormal performance signals exist (latency, budget, queue depth, breaker state).
+
+
+“Near-miss” detection exists (risk detected → prevented) and is logged.
+
+
+B. Classification (mandatory)
+All failures are tagged with: error_domain, retryable, scope, risk_level, containment_required.
+
+
+Constitution and Integrity domains default to: retryable=false, containment_required=true.
+
+
+Unknown errors default to safe containment (quarantine + abort path), not retries.
+
+
+C. Decision Logic (deterministic)
+There is a single decision matrix used by all agents/services (no bespoke per-team logic).
+
+
+Retries require: transient + idempotent + budget available + no constitutional risk.
+
+
+Failover requires declared equivalence (tested) or is disallowed.
+
+
+Degraded mode is explicitly constraint-preserving and labeled “degraded”.
+
+
+Skip is allowed only for steps marked optional with defined invariants.
+
+
+D. Containment
+Circuit breakers exist for each dependency/tool (with open/half-open behavior).
+
+
+Rate limits/bulkheads prevent retry storms and cascading failures.
+
+
+Budgets exist and are enforced: time, attempts, cost/tokens, tool quotas.
+
+
+E. Recovery & Replay
+Checkpointing exists (at least: start, after critical tool calls, pre-output).
+
+
+Quarantine/DLQ exists and stores sufficient context for replay.
+
+
+Replay is deterministic: pinned model/tool versions + configs + prompts + seeds (where applicable).
+
+
+Partial success semantics are defined (commit/abort/compensate).
+
+
+F. Observability & Auditability
+Structured logs include trace_id, run_id, agent_id, decision_path, constraint_eval.
+
+
+Dashboards exist for: constraint violations, near-misses, DLQ depth/age, breaker opens, retry rates.
+
+
+Alerts exist for S0/S1 patterns (constraint violations, DLQ age, breaker open too long).
+
+
+Post-incident loop updates tests + monitors + decision matrix (not just docs).
+
+
+
+Decision Matrix 
+(Error class → strategy → budgets)
+Classification fields (required)
+error_domain: execution | contract | performance | constitution | integrity
+
+
+retryable: boolean
+
+
+scope: local_agent | shared_tool | global_run
+
+
+risk_level: low | medium | high | critical
+
+
+containment_required: boolean
+
+
+Strategy set (exactly one primary)
+RETRY | FAILOVER | DEGRADE | SKIP | QUARANTINE | ABORT
+
+Matrix (default policy)
+
+Domain
+Typical signals
+Retryable?
+Primary strategy
+Secondary
+Budgets / gates
+execution
+timeout, DNS, TCP reset, HTTP 5xx, 429
+✅ often
+RETRY
+QUARANTINE
+max_attempts=5; backoff exp+jitter; respect Retry-After; idempotency required
+contract
+schema mismatch, missing fields, invalid types
+❌
+QUARANTINE
+ABORT
+no retry; capture payload+schema; alert if rate spike
+performance
+latency SLO breach, budget exhausted
+⚠
+DEGRADE
+ABORT
+enforce budgets; degrade must be constraint-safe + labeled
+constitution
+constraint violation, prohibited action/tool, unsafe output form, lattice inconsistency
+❌
+ABORT
+QUARANTINE
+stop-the-line; quarantine trace; escalate if high/critical
+integrity
+duplicate write risk, partial commit, checksum mismatch, inconsistent multi-agent state
+❌ (default)
+QUARANTINE
+ABORT
+require rollback/compensation; no blind retries
+
+
+Additional deterministic gates (apply everywhere)
+Retry allowed only if ALL true
+transient indicator (timeout/429/5xx/network)
+
+
+action is idempotent OR has idempotency_key
+
+
+retry budget available (attempts + total time)
+
+
+circuit breaker not open
+
+
+repeating does not increase constitutional risk
+
+
+Failover allowed only if
+alternate dependency/tool is marked equivalent_under_constraints=true
+
+
+equivalence suite passed in the current version (policy-as-code)
+
+
+Skip allowed only if
+step has optional=true
+
+
+invariants remain satisfied
+
+
+output is labeled “partial”
+
+
+ 
+
+WE4FREE_Sean_Resilience_Code_Bundle.zip
+This includes:
+✅ Centralized resilience policy
+
+
+✅ Deterministic classification + decision engine
+
+
+✅ Trace + checkpoint primitives
+
+
+✅ Circuit breaker–wrapped Node service
+
+
+✅ Lambda SQS worker with partial batch failure handling
+
+
+✅ Production-ready project structure
+
+
+WE4FREE_Sean_Infra_Replay_Constraints_Drift_Bundle.zip
+Includes:
+Terraform infra module set (SQS+DLQ, Lambda, S3 quarantine, DynamoDB idempotency, CloudWatch alarm)
+
+
+CDK (TypeScript) infra stack equivalent
+
+
+Deterministic replay CLI (we4free-replay)
+
+
+Constraint engine skeleton (@we4free/constraint-engine)
+
+
+Drift detection extension (we4free-drift) aligned to Paper D with an interpretable drift score 
+
+
+## This is strong — and it maps cleanly onto your lanes
+
+What you have here is basically the **generic resilience standard** version of the same thing your lane system has been evolving toward:
+
+```text
+detect → classify → decide → contain → recover/replay → audit
+```
+
+That is the right abstraction. It is not just “error handling.” It is **constitution-preserving failure semantics**.
+
+## Best part
+
+The strongest line is:
+
+```text
+Integrity Over Availability: Avoid corruption or drift even at the cost of aborting.
+```
+
+That is exactly your system’s posture.
+
+For WE4FREE / Archivist / SwarmMind, this means:
+
+```text
+Do not keep the run alive by damaging truth.
+Do not retry into drift.
+Do not fail over unless the alternate path preserves constraints.
+Do not call partial success complete.
+```
+
+That is the right doctrine.
+
+## How it fits your current hardening work
+
+| Standard section  | Your system equivalent                                                         |
+| ----------------- | ------------------------------------------------------------------------------ |
+| Detection         | schema validator, execution gate, verification-domain gate, heartbeat, watcher |
+| Classification    | consensus status, blocker/quarantine/action-required, drift classes            |
+| Decision logic    | consensus-check, routing policy, outcome protocol                              |
+| Containment       | quarantine folders, active-blocker, leases, dual-agent guard                   |
+| Recovery & replay | compact audit, tool trace ledger, handoff hashes, recovery-state               |
+| Observability     | consensus logs, system timeline, graph, live state, verification table         |
+
+So this document is not separate from your system. It can become the **external-facing explanation** of why those pieces exist.
+
+## One thing I would tighten
+
+The current doc still has a slightly AWS/serverless flavor:
+
+```text
+SQS Queue
+AWS Lambda Worker
+External APIs
+```
+
+That is fine as a general architecture diagram, but for your lane system I would add a WE4FREE-specific mapping directly under it:
+
+```text
+In WE4FREE lane terms:
+- External APIs / tool calls = model/tool/provider calls
+- SQS queue = lane inbox
+- Lambda worker = lane-worker / inbox-watcher
+- Quarantine trace = lane quarantine + evidence artifact
+- Logs & metrics = tool trace ledger + consensus log + system timeline
+- Checkpoint rewind = compact restore + recovery-state
+```
+
+That will stop readers from thinking this is only a cloud architecture note.
+
+## Add one governance-specific rule
+
+I would add this as a hard rule:
+
+```text
+No fallback is allowed unless its constitutional equivalence is tested and recorded.
+```
+
+You already mention failover equivalence in sharp edges and checklist, but it deserves promotion into the core decision matrix.
+
+Because in multi-agent work, “try another model/tool” is often where drift enters.
+
+## Reviewer-facing summary
+
+A clean public explanation could be:
+
+```text
+This workflow defines how WE4FREE handles failures without sacrificing constitutional integrity. Errors are detected at tool boundaries, classified into deterministic domains, routed through a single decision matrix, and either retried, degraded, quarantined, or aborted. Recovery is only valid if the run can be replayed from pinned context, logs, checkpoints, and state hashes.
+```
+
+## Verdict
+
+**PASS as a resilience standard.**
+
+It is especially strong because it says the uncomfortable part clearly:
+
+```text
+Unknown failures default to quarantine.
+Constitutional and integrity failures are not retryable by default.
+Replayability is mandatory.
+Partial success must be explicit.
+```
+
+That is the difference between normal “robustness” and actual governance resilience.
+
+```text
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+generated_at: 2026-05-05T09:35:00-04:00
+session_id: chatgpt-current
+target: first-sight review of WE4FREE Error Handling & Resilience Workflow Standard
+```
+
+
+

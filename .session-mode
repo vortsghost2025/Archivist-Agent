@@ -5,5 +5,12 @@
   "heartbeat_required": true,
   "created_by": "opencode-desktop",
   "created_at": "2026-04-17T12:00:00.000Z",
-  "notes": "Default governing session for Archivist-Agent primary lane"
+  "lane_identity": {
+    "lane_id": "archivist",
+    "authority": 90,
+    "role": "governance-root",
+    "position": 1,
+    "session_authority": true
+  },
+  "notes": "Canonical authority values per SYSTEM_MAP v1.1 ratification 2026-05-05"
 }

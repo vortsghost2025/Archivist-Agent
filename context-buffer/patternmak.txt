@@ -1,0 +1,95 @@
+Exactly — then the load pattern makes sense.
+
+Right now **OpenCode is acting like the living lane resident**:
+
+```text
+lane repo → local/headless OpenCode agent → reads state → applies fixes → syncs connections → proves behavior
+```
+
+Once the lane stabilizes, you do **not** need a full interactive agent sitting there forever. You can demote it into smaller, bounded services.
+
+## The maturity path
+
+| Stage             | What runs                                               | Purpose                                        |
+| ----------------- | ------------------------------------------------------- | ---------------------------------------------- |
+| **Bootstrap**     | OpenCode live in-lane                                   | Explore, repair, connect, document, reconcile  |
+| **Stabilization** | OpenCode + tests + watcher/manual gates                 | Catch drift while the lane is still changing   |
+| **Automation**    | lane-worker, inbox-watcher, heartbeat, verifier scripts | Routine execution without full agent reasoning |
+| **Steady state**  | Scheduled checks + signed inbox/outbox + dashboards     | Agent only returns for adjudication/escalation |
+
+So yes: **OpenCode is scaffolding**, not the final infrastructure.
+
+## Good rule
+
+Do not remove the live agent until the lane can answer these without it:
+
+```text
+Can it ingest messages?
+Can it validate schema?
+Can it verify identity/signature?
+Can it acquire leases?
+Can it execute allowed tasks?
+Can it report results?
+Can it quarantine invalid work?
+Can it heartbeat current state?
+Can it expose evidence to the graph/site?
+```
+
+Once those are true, the persistent OpenCode process becomes unnecessary.
+
+## What replaces it
+
+For each lane, the replacement stack should be boring:
+
+```text
+lane-worker.js
+inbox-watcher.js
+heartbeat.js
+artifact-resolver.js
+schema validator
+identity/verifier
+quarantine logger
+state snapshot emitter
+```
+
+The agent should become an **on-demand maintainer**, not the runtime.
+
+## The clean handoff condition
+
+I’d call a lane “settled” when this passes:
+
+```text
+Manual agent stopped.
+Inbox message delivered.
+Watcher picks it up.
+Worker validates it.
+Lease acquired.
+Task executed or rejected.
+Result signed/written to outbox.
+Heartbeat updates.
+Dashboard/story log sees the event.
+No human/agent intervention required.
+```
+
+That is the moment the lane graduates from:
+
+```text
+agent-operated repo
+```
+
+to:
+
+```text
+governed lane runtime
+```
+
+That is the real win.
+
+```text
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+generated_at: 2026-05-04T20:30:00-04:00
+session_id: chatgpt-current
+target: OpenCode-as-live-lane-agent bootstrap-to-automation handoff
+```

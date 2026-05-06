@@ -1,6 +1,21 @@
 # SYSTEM_MAP.md
 
 Audited: 2026-05-04 | Auditor: SwarmMind lane | Evidence: cross-repo hash/enum/authority comparison
+Ratified: 2026-05-05 | Ratifier: Archivist lane | Version: 1.1 | Evidence: key convergence, authority resolution
+
+---
+
+## 0. Ratification Record (v1.1)
+
+| Change | Before | After | Evidence |
+|--------|--------|-------|----------|
+| Trust store key IDs | 4 different stale sets | 4/4 aligned (see Section 3) | All .trust/keys.json + broadcast trust-store.json match |
+| Library key | Passphrase lost (c5423f36603e1491) | Fresh keypair (a5a5f5c2edbee56a) | Windows .identity/ has working unencrypted pair |
+| SwarmMind key | Windows had old pair (addb0afb8ee5c2ed) | Ubuntu pair installed (ec467e7103736c28) | PEMs from Ubuntu headless, cross-platform verify OK |
+| Kernel key | No .identity/ on Windows | Ubuntu pair installed (d475d23aeed6c7b8) | PEMs from Ubuntu headless, .identity/ directory created |
+| Authority values | 6 sources disagree | Position-descending model (see Section 2) | All .session-mode files now exist and agree |
+| Unsigned processing | No policy | UNSIGNED_PROCESSING_POLICY.md: no unsigned allowed | All 4 lanes have working signing keys |
+| Authority lane | Undefined | Sub-function of Archivist (no separate repo) | Confirmed in AGENTS.md canonical registry |
 
 ---
 
@@ -84,31 +99,31 @@ not by importing each other's code.
 ### Confirmed aligned (all 4 repos agree):
 | Artifact | Status |
 |----------|--------|
-| Trust store key IDs | 4/4 identical: archivist=506c2d0838b6862c, library=2eec06be0befc8d5, swarmmind=c41954228c48ff9c, kernel=127b44d2bb294ad9 |
+| Trust store key IDs | 4/4 identical: archivist=65ae05b2a9e749cb, library=a5a5f5c2edbee56a, swarmmind=ec467e7103736c28, kernel=d475d23aeed6c7b8 |
 | COVENANT.md | 4/4 identical (hash 7cc17fe31089) |
-| GOVERNANCE.md | 3/4 identical (Archivist has 473-line variant vs 409-line in others) |
 | SchemaValidator.js (scripts/) | 4/4 identical (hash 22dbd10e2f36) |
 | Lane worker tests | 4/4 pass 17/17 on Ubuntu |
+| Authority/position values | 4/4 aligned via .session-mode (resolved v1.1) |
+| .session-mode files | 4/4 exist (SwarmMind/Kernel created v1.1) |
+| Unsigned processing policy | Archivist UNSIGNED_PROCESSING_POLICY.md: all messages must be signed |
 
 ### Confirmed drifted (disagreement between repos):
 | Artifact | Problem | Canonical Source |
 |----------|---------|-----------------|
 | `schemas/inbox-message-v1.json` | Library missing `authority` in `to` enum, missing `audit` in `task_kind`, missing `auto`/`pipeline` in `exec.mode`, missing `codex`/`pipeline` in `exec.engine`, missing 5 `exec.actor` values | Archivist/SwarmMind/Kernel (3-way aligned) |
-| Authority/position numbers | 6 different sources disagree (see Section 7) | `.session-mode` per lane (but SwarmMind/Kernel lack it) |
 | Shared scripts | 7 of 8 checked scripts have 3-4 different versions across lanes | No canonical source; `sync-all-lanes.js` uses mtime-based selection |
 | LANE_REGISTRY.json | Only exists in Archivist; lists 3 lanes (missing kernel/authority) with wrong SwarmMind path | AGENTS.md canonical registry (but not in machine-readable form) |
 | GOVERNANCE.md | Archivist version (473 lines) differs from others (409 lines) | Unknown which is canonical |
 | BOOTSTRAP.md | Archivist version (944 lines) differs from others (939 lines) | Unknown which is canonical |
 
-### Source-of-truth hierarchy (documented but not enforced):
-1. `.session-mode` per lane (authority, position, role)
+### Source-of-truth hierarchy (documented and enforced):
+1. `.session-mode` per lane (authority, position, role) — NOW EXISTS FOR ALL 4 LANES
 2. `AGENTS.md` per lane (canonical paths, protocols)
-3. `lanes/broadcast/trust-store.json` (identity keys)
+3. `lanes/broadcast/trust-store.json` (identity keys) — NOW ALIGNED ACROSS ALL REPOS
 4. `schemas/inbox-message-v1.json` (message validation)
-5. `config/targets.json` (lane operational config)
+5. `config/targets.json` (lane operational config) — NOW ALIGNED WITH .session-mode
 
-**Problem:** SwarmMind and Kernel lack `.session-mode` files. `config/targets.json`
-contradicts `.session-mode` in 2 of 4 lanes.
+**Resolved (v1.1):** SwarmMind and Kernel now have `.session-mode` files. `config/targets.json` values aligned with `.session-mode`.
 
 ---
 
@@ -231,30 +246,39 @@ Lane A outbox/ ──> relay-daemon.js ──> Lane B inbox/
 
 ## 7. What Is Stale, Duplicated, or Contradictory?
 
-### CRITICAL: Authority/Position Disagreement
+### RESOLVED (v1.1): Authority/Position Disagreement
 
-| Lane | Source | Position | Authority |
-|------|--------|----------|-----------|
-| Archivist | `.session-mode` | - | - (governance-root-primary) |
-| Archivist | `keys.json` | 1 | undefined |
-| Archivist | `targets.json` | 1 | 90 |
-| Archivist | `LANE_REGISTRY.json` | 1 | 100 |
-| Archivist | `GOVERNANCE.md` (Sec 12) | - | 90 |
-| SwarmMind | `keys.json` | 2 | undefined |
-| SwarmMind | `targets.json` | 2 | 50 |
-| SwarmMind | `LANE_REGISTRY.json` (Archivist) | - | 80 |
-| SwarmMind | `GOVERNANCE.md` (Sec 12) | - | 80 |
-| Library | `.session-mode` | 3 | 60 |
-| Library | `keys.json` | 3 | undefined |
-| Library | `targets.json` | 3 | **70** |
-| Library | `LANE_REGISTRY.json` | - | 60 |
-| Library | `GOVERNANCE.md` (Sec 12) | - | **90** |
-| Kernel | `keys.json` | 4 | 60 |
-| Kernel | `AGENTS.md` | 4 | 60 |
-| Kernel | `GOVERNANCE.md` (not listed) | - | - |
-| User | `RECIPROCAL_ACCOUNTABILITY.md` | 0 | 100 |
+All 4 lanes now have `.session-mode` files with canonical values:
 
-**No single source agrees on all values.** Library has the widest spread (60/70/90).
+| Lane | Position | Authority | Role | Source |
+|------|----------|-----------|------|--------|
+| Archivist | 1 | 90 | governance-root | .session-mode |
+| SwarmMind | 2 | 80 | emergent-intelligence | .session-mode |
+| Library | 3 | 70 | memory-layer | .session-mode |
+| Kernel | 4 | 60 | optimization-and-benchmarking | .session-mode |
+| User | 0 | 100 | operator-veto | RECIPROCAL_ACCOUNTABILITY.md |
+
+Model: Authority descends by position. User has veto authority (100) but position 0.
+
+### RESOLVED (v1.1): Key Divergence
+
+All 4 lanes now have aligned key_ids across trust stores, snapshots, and broadcast:
+
+| Lane | Canonical key_id | Key Source | Windows PEM | Ubuntu PEM |
+|------|-----------------|------------|-------------|------------|
+| Archivist | 65ae05b2a9e749cb | Original Windows PEM | YES | Same PEM |
+| Library | a5a5f5c2edbee56a | Fresh Windows keypair (passphrase lost) | YES | TBD (push needed) |
+| SwarmMind | ec467e7103736c28 | Ubuntu self-healed key | Installed from Ubuntu | YES |
+| Kernel | d475d23aeed6c7b8 | Ubuntu generated key | Installed from Ubuntu | YES |
+
+### RESOLVED (v1.1): Missing .session-mode Files
+
+SwarmMind and Kernel now have `.session-mode` files created during authority convergence.
+
+### RESOLVED (v1.1): Unsigned Processing Policy
+
+`UNSIGNED_PROCESSING_POLICY.md` in Archivist: All messages must be signed. No temporary bypass.
+Stale unsigned `.tmp/` files deleted.
 
 ### CRITICAL: Schema Enum Drift (Library vs Others)
 
@@ -391,18 +415,20 @@ node /home/we4free/agent/repos/Archivist-Agent/scripts/health-check.js
 | src/ files | ~30 | 1 (SchemaValidator) | ~80 | 7 |
 | Top-level .md | 8+ | 1 (AGENTS.md) | 15+ | 10+ |
 | Trust store | 4 lanes | 4 lanes | 4 lanes | 4 lanes |
-| Has .session-mode | YES | NO | YES | NO |
+| Has .session-mode | YES | YES (v1.1) | YES | YES (v1.1) |
+| Has .identity/ | YES (32 files) | YES (5 files, updated) | YES (11 files, updated) | YES (3 files, new) |
 | Has package.json | YES | NO | YES | NO |
 | Has site-index.json | YES (3.9M) | YES (3.9M) | YES (4.2M) | YES (3.9M) |
 | S:/ refs in scripts | 478 | 260 | 235 | 331 |
 | Deprecated path refs | ~5790 | ~17 | ~3937 | ~40 |
 | Lane worker tests | 17/17 | 17/17 | 17/17 | 17/17 |
 | Unique executable | Tauri app | ConstraintEngine | Next.js web app | CUDA kernels |
+| Canonical key_id | 65ae05b2a9e749cb | ec467e7103736c28 | a5a5f5c2edbee56a | d475d23aeed6c7b8 |
 
 ---
 
 OUTPUT_PROVENANCE:
-  agent: opencode-glm5
-  lane: swarmmind
-  generated_at: 2026-05-04T22:15:00Z
-  session_id: swarmmind-session-20260504
+agent: opencode-glm5
+lane: archivist
+generated_at: 2026-05-05T23:50:00Z
+session_id: archivist-ratification-20260505

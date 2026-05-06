@@ -1,0 +1,144 @@
+
+## Read from the screenshot
+
+Your Ubuntu headless laptop is **working but not dying**.
+
+Key numbers I can see:
+
+```text
+uptime: 2 days, 57 min
+load average: 4.44, 4.72, 4.14
+tasks: 206 total, 3 running, 203 sleeping
+CPU: ~34.7% user, ~2.9% system, ~62% idle-ish shown
+RAM: 7.5 GiB total
+RAM used: ~3.1 GiB
+RAM available: ~3.4 GiB
+swap: 4.0 GiB total, ~390 MiB used
+```
+
+## Verdict
+
+**PASS / healthy but busy.**
+
+This is not an emergency. The machine still has memory available, swap usage is low/moderate, and it is not thrashing.
+
+The main pressure is **load average around 4.5**. If this laptop has 4 CPU threads, that means it is basically running at/near full scheduling pressure. If it has 8 threads, it is fine. Given it is a laptop/headless lab box, I would treat it as:
+
+```text
+CPU: warm / busy
+RAM: okay
+swap: okay
+process state: stable
+risk: agent overlap, not resource collapse
+```
+
+## What is eating it
+
+Top consumers shown:
+
+```text
+.opencode   ~71.8% CPU   ~918 MB RES
+.opencode   ~66.4% CPU   ~879 MB RES
+kilo        ~3.3% CPU    ~414 MB RES
+node        ~1.3% CPU    ~1.1 GB RES
+codex       ~1.0% CPU    ~382 MB RES
+```
+
+So the box is mostly being loaded by **two OpenCode-style agent processes**, not random system junk.
+
+## Your setup pattern makes sense
+
+What you described:
+
+```text
+desktop agent in repo/lane
++
+headless agent in same repo/lane
++
+syncing connections one repo at a time
+```
+
+That is a reasonable migration/sync method **as long as only one of them is allowed to mutate the same lane state at once**.
+
+The resource load is acceptable. The bigger danger is governance drift:
+
+```text
+two agents
+same lane
+same repo
+same state files
+same time
+```
+
+That can produce silent conflicts unless the lane has strict write intent / lease / outbox guard rules active.
+
+## I would not start more agents right now
+
+Current recommendation:
+
+```text
+Do not add a 4th/5th heavy agent on this laptop yet.
+Finish the current lane sync pass first.
+```
+
+The laptop has room, but your system integrity matters more than raw CPU.
+
+## Quick commands I’d run
+
+```bash
+nproc
+free -h
+uptime
+ps -eo pid,comm,%cpu,%mem,rss,args --sort=-%cpu | head -20
+```
+
+For a cleaner pressure view:
+
+```bash
+vmstat 2 5
+```
+
+What you want to see:
+
+```text
+si/so near 0  = no swap thrash
+wa low        = disk not choking
+r near cores  = okay
+r way above cores = queue pressure
+```
+
+## If it starts lagging
+
+Lower agent priority instead of killing them:
+
+```bash
+renice +10 -p <PID>
+```
+
+Or pause one OpenCode process if needed:
+
+```bash
+kill -STOP <PID>
+kill -CONT <PID>
+```
+
+## Operational rule I’d use tonight
+
+```text
+One lane may have two observers.
+Only one writer gets the lease.
+Headless can verify/sync.
+Desktop can supervise/merge.
+No shared state mutation without guardWrite / lease / signed intent.
+```
+
+That keeps the architecture from becoming “two raccoons with keyboards in the same filing cabinet.”
+
+```text
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+generated_at: 2026-05-04T20:28:00-04:00
+session_id: chatgpt-current
+target: first-sight resource and governance-risk read of Ubuntu headless laptop running lane agents
+```
