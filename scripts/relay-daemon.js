@@ -128,11 +128,17 @@ class RelayDaemon {
       if (msg.to !== this.lane) continue;
 
       const targetDir = getInboxDir(this.lane);
-      const targetPath = path.join(targetDir, ent.name);
+    const targetPath = path.join(targetDir, ent.name);
 
-        if (!this.dryRun) {
-          try {
-            if (!fs.existsSync(targetDir)) {
+    if (!this.dryRun) {
+      try {
+        if (fs.existsSync(targetPath)) {
+          fs.unlinkSync(filePath);
+          results.collected++;
+          results.details.push({ file: ent.name, from: otherLane, to: this.lane, target: targetPath, skipped: 'already_exists' });
+          continue;
+        }
+        if (!fs.existsSync(targetDir)) {
               fs.mkdirSync(targetDir, { recursive: true });
             }
             fs.writeFileSync(targetPath, JSON.stringify(msg, null, 2), 'utf8');
