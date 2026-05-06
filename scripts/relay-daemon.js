@@ -4,12 +4,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const CANONICAL_INBOX = {
-  archivist: 'S:/Archivist-Agent/lanes/archivist/inbox/',
-  library:   'S:/self-organizing-library/lanes/library/inbox/',
-  swarmmind: 'S:/SwarmMind/lanes/swarmmind/inbox/',
-  kernel:    'S:/kernel-lane/lanes/kernel/inbox/',
-};
+const { LaneDiscovery } = require('./util/lane-discovery');
+const discovery = new LaneDiscovery();
+const ALL_LANES = ['archivist', 'library', 'swarmmind', 'kernel'];
+
+function getInboxDir(laneId) { return discovery.getInbox(laneId); }
+function getOutboxDir(laneId) { return discovery.getOutbox(laneId); }
+function getLaneRoot(laneId) { return discovery.getLocalPath(laneId); }
 
 const LANE_ROOTS = {
   archivist: 'S:/Archivist-Agent',
@@ -21,11 +22,12 @@ const LANE_ROOTS = {
 function nowIso() { return new Date().toISOString(); }
 
 function parseArgs(argv) {
-  const out = { lane: null, apply: false, pollSeconds: 20, json: false };
+  const out = { lane: null, apply: false, watch: false, pollSeconds: 20, json: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--lane' && argv[i + 1]) { out.lane = String(argv[i + 1]).toLowerCase(); i++; continue; }
     if (a === '--apply') { out.apply = true; continue; }
+    if (a === '--watch') { out.watch = true; continue; }
     if (a === '--poll-seconds' && argv[i + 1]) { out.pollSeconds = Math.max(1, Number(argv[i + 1]) || out.pollSeconds); i++; continue; }
     if (a === '--json') { out.json = true; continue; }
   }
@@ -77,13 +79,13 @@ class RelayDaemon {
       }
 
       const msg = read.value;
-      const targetLane = msg.to;
-      if (!targetLane || !CANONICAL_INBOX[targetLane]) {
-        results.errors.push({ file: ent.name, error: `Unknown target lane: ${targetLane}` });
-        continue;
-      }
+    const targetLane = msg.to;
+    if (!targetLane || !ALL_LANES.includes(targetLane)) {
+      results.errors.push({ file: ent.name, error: `Unknown target lane: ${targetLane}` });
+      continue;
+    }
 
-      const targetDir = CANONICAL_INBOX[targetLane];
+    const targetDir = getInboxDir(targetLane);
       const targetPath = path.join(targetDir, ent.name);
 
       if (!this.dryRun) {
@@ -107,11 +109,11 @@ class RelayDaemon {
   }
 
   collectIncoming() {
-    const otherLanes = Object.keys(CANONICAL_INBOX).filter(l => l !== this.lane);
+    const otherLanes = ALL_LANES.filter(l => l !== this.lane);
     const results = { collected: 0, errors: [], details: [] };
 
     for (const otherLane of otherLanes) {
-      const otherOutbox = path.join(LANE_ROOTS[otherLane], 'lanes', otherLane, 'outbox');
+      const otherOutbox = getOutboxDir(otherLane);
       if (!fs.existsSync(otherOutbox)) continue;
 
       const entries = fs.readdirSync(otherOutbox, { withFileTypes: true });
@@ -123,10 +125,10 @@ class RelayDaemon {
         if (!read.ok) continue;
 
         const msg = read.value;
-        if (msg.to !== this.lane) continue;
+      if (msg.to !== this.lane) continue;
 
-        const targetDir = CANONICAL_INBOX[this.lane];
-        const targetPath = path.join(targetDir, ent.name);
+      const targetDir = getInboxDir(this.lane);
+      const targetPath = path.join(targetDir, ent.name);
 
         if (!this.dryRun) {
           try {
@@ -150,11 +152,11 @@ class RelayDaemon {
   }
 
   collectCrossLaneInbox() {
-    const otherLanes = Object.keys(CANONICAL_INBOX).filter(l => l !== this.lane);
+    const otherLanes = ALL_LANES.filter(l => l !== this.lane);
     const results = { collected: 0, errors: [], details: [] };
 
     for (const otherLane of otherLanes) {
-      const crossInbox = path.join(LANE_ROOTS[otherLane], 'lanes', this.lane, 'inbox');
+      const crossInbox = path.join(getLaneRoot(otherLane), 'lanes', this.lane, 'inbox');
       if (!fs.existsSync(crossInbox)) continue;
 
       const entries = fs.readdirSync(crossInbox, { withFileTypes: true });
@@ -166,15 +168,15 @@ class RelayDaemon {
 
       for (const ent of jsonFiles) {
         const filePath = path.join(crossInbox, ent.name);
-        const targetDir = CANONICAL_INBOX[this.lane];
-        const targetPath = path.join(targetDir, ent.name);
+      const targetDir = getInboxDir(this.lane);
+      const targetPath = path.join(targetDir, ent.name);
 
-        if (!this.dryRun) {
-          try {
-            if (!fs.existsSync(targetDir)) {
-              fs.mkdirSync(targetDir, { recursive: true });
-            }
-            fs.writeFileSync(targetPath, JSON.stringify(safeReadJson(filePath).value || {}, null, 2), 'utf8');
+      if (!this.dryRun) {
+        try {
+          if (!fs.existsSync(targetDir)) {
+            fs.mkdirSync(targetDir, { recursive: true });
+          }
+          fs.writeFileSync(targetPath, JSON.stringify(safeReadJson(filePath).value || {}, null, 2), 'utf8');
             fs.unlinkSync(filePath);
             results.collected++;
             results.details.push({ file: ent.name, from: otherLane + '/lanes/' + this.lane + '/inbox', to: this.lane, target: targetPath });
@@ -216,15 +218,41 @@ async function runCli() {
     dryRun: !args.apply,
   });
 
-  const result = daemon.runOnce();
-  if (args.json) {
-    console.log(JSON.stringify(result, null, 2));
+  if (args.watch) {
+    console.log(`[relay-daemon] lane=${lane} watching every ${args.pollSeconds}s`);
+    const tick = () => {
+      try {
+        const result = daemon.runOnce();
+        const out = result.outbound;
+        const inc = result.incoming;
+        const cx = result.cross_inbox;
+        if (out.delivered > 0 || inc.collected > 0 || cx.collected > 0) {
+          console.log(`[relay-daemon] lane=${lane} outbound: delivered=${out.delivered} incoming: collected=${inc.collected} cross_inbox: collected=${cx.collected}`);
+        }
+      } catch (err) {
+        console.error(`[relay-daemon] tick error: ${err.message}`);
+      }
+    };
+    tick();
+    setInterval(tick, args.pollSeconds * 1000);
   } else {
-    console.log(`[relay-daemon] lane=${result.lane} dry_run=${result.dry_run}`);
-    console.log(`  outbound: scanned=${result.outbound.scanned} delivered=${result.outbound.delivered}`);
-    if (result.outbound.errors.length > 0) {
-      for (const e of result.outbound.errors) console.log(`    ERROR: ${e.file}: ${e.error}`);
+    const result = daemon.runOnce();
+    if (args.json) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      console.log(`[relay-daemon] lane=${result.lane} dry_run=${result.dry_run}`);
+      console.log(` outbound: scanned=${result.outbound.scanned} delivered=${result.outbound.delivered}`);
+      if (result.outbound.errors.length > 0) {
+        for (const e of result.outbound.errors) console.log(` ERROR: ${e.file}: ${e.error}`);
+      }
+      console.log(` incoming: collected=${result.incoming.collected}`);
+      console.log(` cross_inbox: collected=${result.cross_inbox.collected}`);
+      if (result.incoming.errors.length > 0 || result.cross_inbox.errors.length > 0) {
+        for (const e of [...result.incoming.errors, ...result.cross_inbox.errors]) console.log(` ERROR: ${e.file}: ${e.error}`);
+      }
     }
+  }
+}
     console.log(`  incoming: collected=${result.incoming.collected}`);
     console.log(`  cross_inbox: collected=${result.cross_inbox.collected}`);
     if (result.incoming.errors.length > 0 || result.cross_inbox.errors.length > 0) {
@@ -237,4 +265,4 @@ if (require.main === module) {
   runCli().catch(err => { console.error(`[relay-daemon] FATAL: ${err.message}`); process.exit(1); });
 }
 
-module.exports = { RelayDaemon, CANONICAL_INBOX, LANE_ROOTS };
+module.exports = { RelayDaemon, ALL_LANES };
