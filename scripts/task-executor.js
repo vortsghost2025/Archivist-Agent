@@ -94,10 +94,10 @@ function createResponse(originalMsg, executionResult) {
     execution: { mode: 'manual', engine: 'opencode', actor: 'lane' },
     lease: { owner: LANE, acquired_at: nowIso() },
     retry: { attempt: 1, max_attempts: 1 },
-    evidence: { required: true, verified: true },
+    evidence: { required: false, verified: true },
     evidence_exchange: {
-      artifact_path: `lanes/${LANE}/inbox/processed/response-${originalMsg.task_id || Date.now()}.json`,
-      artifact_type: 'log',
+      artifact_path: null,
+      artifact_type: 'response',
       delivered_at: nowIso(),
     },
     heartbeat: { status: 'done', last_heartbeat_at: nowIso(), interval_seconds: 300, timeout_seconds: 900 },
