@@ -1,0 +1,11 @@
+{
+  "id": "signing-test-archivist-20260506014556",
+  "from": "archivist",
+  "to": "library",
+  "timestamp": "2026-05-06T01:45:56.1269857-04:00",
+  "priority": "P2",
+  "type": "task",
+  "body": "Signing pipeline verification test - DER-SPKI-SHA256 key_ids converged across all 4 lanes. All key_ids verified matching canonical values.",
+  "requires_action": false,
+  "schema_version": "1.0"
+}
