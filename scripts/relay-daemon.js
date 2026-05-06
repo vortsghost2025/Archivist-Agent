@@ -253,13 +253,6 @@ async function runCli() {
     }
   }
 }
-    console.log(`  incoming: collected=${result.incoming.collected}`);
-    console.log(`  cross_inbox: collected=${result.cross_inbox.collected}`);
-    if (result.incoming.errors.length > 0 || result.cross_inbox.errors.length > 0) {
-      for (const e of [...result.incoming.errors, ...result.cross_inbox.errors]) console.log(`    ERROR: ${e.file}: ${e.error}`);
-    }
-  }
-}
 
 if (require.main === module) {
   runCli().catch(err => { console.error(`[relay-daemon] FATAL: ${err.message}`); process.exit(1); });
