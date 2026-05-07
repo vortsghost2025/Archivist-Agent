@@ -15,15 +15,35 @@
 const fs = require('fs');
 const path = require('path');
 
+const { getRoots } = require('./util/lane-discovery');
+
 const LANES = {
-  'Archivist': 'S:/Archivist-Agent',
-  'Kernel': 'S:/kernel-lane',
-  'Library': 'S:/self-organizing-library',
-  'SwarmMind': 'S:/SwarmMind'
+  'Archivist': getRoots()['archivist'],
+  'Kernel': getRoots()['kernel'],
+  'Library': getRoots()['library'],
+  'SwarmMind': getRoots()['swarmmind']
 };
 
 const CURRENT_LANE = 'Archivist';
 const CURRENT_ROOT = LANES[CURRENT_LANE];
+
+if (process.platform !== 'win32') {
+  for (const [name, p] of Object.entries(LANES)) {
+    if (/^[A-Za-z]:[\\/]/.test(p)) {
+      console.error(`[sovereignty] FATAL: Windows path leak on ${process.platform}: ${name}=${p}`);
+      process.exit(1);
+    }
+  }
+}
+
+if (process.platform !== 'win32') {
+  for (const [name, p] of Object.entries(LANES)) {
+    if (/^[A-Za-z]:[\\/]/.test(p)) {
+      console.error(`[sovereignty] FATAL: Windows path leak on ${process.platform}: ${name}=${p}`);
+      process.exit(1);
+    }
+  }
+}
 
 function checkForCrossLaneViolation(content, filePath) {
   const violations = [];

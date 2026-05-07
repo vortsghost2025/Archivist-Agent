@@ -14,12 +14,8 @@ function getInboxDir(laneId) { return discovery.getInbox(laneId); }
 function getOutboxDir(laneId) { return discovery.getOutbox(laneId); }
 function getLaneRoot(laneId) { return discovery.getLocalPath(laneId); }
 
-const LANE_ROOTS = {
-  archivist: 'S:/Archivist-Agent',
-  library:   'S:/self-organizing-library',
-  swarmmind: 'S:/SwarmMind',
-  kernel:    'S:/kernel-lane',
-};
+const LANE_ROOTS = {};
+ALL_LANES.forEach(laneId => { LANE_ROOTS[laneId] = discovery.getLocalPath(laneId); });
 
 function nowIso() { return new Date().toISOString(); }
 
