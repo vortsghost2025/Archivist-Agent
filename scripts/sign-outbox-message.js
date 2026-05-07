@@ -7,13 +7,11 @@ const crypto = require('crypto');
 
 const { deriveKeyId } = require(path.join(__dirname, '..', '.global', 'deriveKeyId.js'));
 
-// LEASE + ATOMIC WRITE: Require kernel primitives for cross-lane mutation safety
-const KERNEL_ROOT = 'S:/kernel-lane';
-const { atomicWriteJson, atomicWriteWithLease } = require(path.join(KERNEL_ROOT, 'scripts', 'atomic-write-util'));
+// LEASE + ATOMIC WRITE: Use local copy to avoid cross-lane require()
+const { atomicWriteJson, atomicWriteWithLease } = require('./atomic-write-util');
 
 const PASSFILE_CANDIDATES = [
-  path.join(__dirname, '..', '.runtime', 'lane-passphrases.json'),
-  'S:/Archivist-Agent/.runtime/lane-passphrases.json'
+path.join(__dirname, '..', '.runtime', 'lane-passphrases.json'),
 ];
 
 function parseArgs(argv) {
