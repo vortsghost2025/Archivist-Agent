@@ -138,7 +138,7 @@ class PostCompactAudit {
     const lanes = Object.keys(REPO_MAP);
     const results = {};
 
-    const isUbuntu = fs.existsSync(UBUNTU_REPOS_BASE) && !fs.existsSync('S:/');
+    const isUbuntu = process.platform === 'linux' || fs.existsSync('/proc/uptime');
     if (isUbuntu) {
       return this._probeLocalUbuntuHeartbeats(lanes);
     }
