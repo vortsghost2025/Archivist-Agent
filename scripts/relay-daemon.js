@@ -5,8 +5,10 @@ const fs = require('fs');
 const path = require('path');
 
 const { LaneDiscovery } = require('./util/lane-discovery');
+const { ClaimCommitGuard } = require('./claim-commit-guard');
 const discovery = new LaneDiscovery();
 const ALL_LANES = ['archivist', 'library', 'swarmmind', 'kernel'];
+const claimGuard = new ClaimCommitGuard({ repoRoot: path.resolve(__dirname, '..') });
 
 function getInboxDir(laneId) { return discovery.getInbox(laneId); }
 function getOutboxDir(laneId) { return discovery.getOutbox(laneId); }
@@ -78,12 +80,21 @@ class RelayDaemon {
         continue;
       }
 
-      const msg = read.value;
-    const targetLane = msg.to;
-    if (!targetLane || !ALL_LANES.includes(targetLane)) {
-      results.errors.push({ file: ent.name, error: `Unknown target lane: ${targetLane}` });
-      continue;
-    }
+        const msg = read.value;
+        const targetLane = msg.to;
+        if (!targetLane || !ALL_LANES.includes(targetLane)) {
+          results.errors.push({ file: ent.name, error: `Unknown target lane: ${targetLane}` });
+          continue;
+        }
+
+        const claimCheck = claimGuard.checkOutboxMessage(msg, this.repoRoot, this.outboxDir);
+        if (!claimCheck.allowed) {
+          const uncommitted = claimCheck.details
+            .filter(d => d.status === 'uncommitted' || d.status === 'missing')
+            .map(d => d.path);
+          results.errors.push({ file: ent.name, error: `premature_claim: ${uncommitted.join(', ')}`, claim_guard: claimCheck });
+          continue;
+        }
 
     const targetDir = getInboxDir(targetLane);
       const targetPath = path.join(targetDir, ent.name);
