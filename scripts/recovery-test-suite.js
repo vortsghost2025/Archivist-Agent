@@ -180,7 +180,25 @@ class RecoveryTestSuite {
   test8_laneLiveness() {
     const states = this.audit._getLaneHeartbeats();
     const alive = Object.values(states).filter(s => s.status === 'alive').length;
-    this.log('lane_liveness', alive === 4, `${alive}/4 lanes alive`);
+    const mismatchLanes = Object.entries(states)
+      .filter(([, s]) => s.note && s.note.includes('evidence_boundary_mismatch'))
+      .map(([lane]) => lane);
+    const unreachableLanes = Object.entries(states)
+      .filter(([, s]) => s.note && s.note.includes('ubuntu_unreachable'))
+      .map(([lane]) => lane);
+    let detail = `${alive}/4 lanes alive`;
+    if (mismatchLanes.length > 0) {
+      detail += ` (evidence_boundary_mismatch for ${mismatchLanes.join(',')})`;
+    }
+    if (unreachableLanes.length > 0) {
+      detail += ` (ubuntu_unreachable for ${unreachableLanes.join(',')})`;
+    }
+    const sources = [...new Set(Object.values(states).map(s => s.source).filter(Boolean))];
+    if (sources.length > 1) {
+      detail += ` [sources: ${sources.join(',')}]`;
+    }
+    const passed = alive === 4;
+    this.log('lane_liveness', passed, detail);
   }
 
   test9_multiSourceConsistency() {

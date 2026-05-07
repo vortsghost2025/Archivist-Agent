@@ -4,8 +4,20 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { execSync } = require('child_process');
 
 const _archivistRoot = path.join(__dirname, '..');
+
+const UBUNTU_SSH_HOST = 'we4free@100.95.40.99';
+const UBUNTU_REPOS_BASE = '/home/we4free/agent/repos';
+const HEARTBEAT_TIMEOUT_SECONDS = 900;
+
+const REPO_MAP = {
+  archivist: 'Archivist-Agent',
+  kernel: 'kernel-lane',
+  library: 'self-organizing-library',
+  swarmmind: 'SwarmMind'
+};
 
 const LANES = {
   archivist: { root: _archivistRoot, inbox: path.join(_archivistRoot, 'lanes', 'archivist', 'inbox') },
@@ -121,27 +133,104 @@ class PostCompactAudit {
   return results;
     }
 
-    _getLaneHeartbeats() {
+  _probeUbuntuHeartbeats() {
+    const lanes = Object.keys(REPO_MAP);
     const results = {};
+    const hbPaths = lanes.map(lane => {
+      const repo = REPO_MAP[lane];
+      return `${UBUNTU_REPOS_BASE}/${repo}/lanes/${lane}/inbox/heartbeat-${lane}.json`;
+    });
+    const scriptLines = ['#!/bin/bash'];
+    for (let i = 0; i < lanes.length; i++) {
+      const lane = lanes[i];
+      const fp = hbPaths[i];
+      scriptLines.push(`if [ -f "${fp}" ]; then`);
+      scriptLines.push(`  ts=$(grep -o '"timestamp": *"[^"]*"' "${fp}" | head -1 | sed 's/.*"\\([^"]*\\)".*/\\1/')`);
+      scriptLines.push(`  if [ -z "$ts" ]; then ts="parse-error"; fi`);
+      scriptLines.push(`  echo "${lane}:$ts"`);
+      scriptLines.push(`else`);
+      scriptLines.push(`  echo "${lane}:no-file"`);
+      scriptLines.push(`fi`);
+    }
+    const scriptContent = scriptLines.join('\n');
+    const tmpScript = path.join(require('os').tmpdir(), 'archivist_hb_probe.sh');
+    fs.writeFileSync(tmpScript, scriptContent, 'utf8');
+    const remoteScript = '/tmp/_archivist_heartbeat_probe.sh';
+    const cmd = `scp -o ConnectTimeout=5 -o BatchMode=yes -o StrictHostKeyChecking=no "${tmpScript}" ${UBUNTU_SSH_HOST}:${remoteScript} && ssh -o ConnectTimeout=5 -o BatchMode=yes -o StrictHostKeyChecking=no ${UBUNTU_SSH_HOST} "bash ${remoteScript}; rm -f ${remoteScript}"`;
+    try {
+      const output = execSync(cmd, { encoding: 'utf8', timeout: 20000, windowsHide: true }).trim();
+      for (const line of output.split('\n')) {
+        const colonIdx = line.indexOf(':');
+        if (colonIdx < 1) continue;
+        const lane = line.substring(0, colonIdx);
+        const value = line.substring(colonIdx + 1);
+        if (!REPO_MAP[lane]) continue;
+        if (value === 'no-file' || value === 'parse-error' || !value) {
+          results[lane] = { status: 'no_heartbeat', timestamp: null, source: 'ubuntu-ssh' };
+          continue;
+        }
+        const ts = new Date(value);
+        if (isNaN(ts.getTime())) {
+          results[lane] = { status: 'error', timestamp: null, source: 'ubuntu-ssh' };
+          continue;
+        }
+        const age = Date.now() - ts.getTime();
+        results[lane] = {
+          status: age > HEARTBEAT_TIMEOUT_SECONDS * 1000 ? 'stale' : 'alive',
+          timestamp: value,
+          age_seconds: Math.floor(age / 1000),
+          source: 'ubuntu-ssh'
+        };
+      }
+    } catch (_) {
+      for (const lane of lanes) {
+        results[lane] = { status: 'unreachable', timestamp: null, source: 'ubuntu-ssh' };
+      }
+    } finally {
+      try { fs.unlinkSync(tmpScript); } catch (_e) {}
+    }
+    return results;
+  }
+
+  _getLaneHeartbeats() {
+    const localResults = {};
     for (const [laneId, config] of Object.entries(LANES)) {
       const hbPath = path.join(config.inbox, `heartbeat-${laneId}.json`);
       if (!fs.existsSync(hbPath)) {
-        results[laneId] = { status: 'no_heartbeat', timestamp: null };
+        localResults[laneId] = { status: 'no_heartbeat', timestamp: null, source: 'windows-local' };
         continue;
       }
       try {
         const data = JSON.parse(fs.readFileSync(hbPath, 'utf8'));
         const age = Date.now() - new Date(data.timestamp).getTime();
-        results[laneId] = {
-          status: age > 900000 ? 'stale' : 'alive',
+        localResults[laneId] = {
+          status: age > HEARTBEAT_TIMEOUT_SECONDS * 1000 ? 'stale' : 'alive',
           timestamp: data.timestamp,
-          age_seconds: Math.floor(age / 1000)
+          age_seconds: Math.floor(age / 1000),
+          source: 'windows-local'
         };
       } catch (_) {
-        results[laneId] = { status: 'error', timestamp: null };
+        localResults[laneId] = { status: 'error', timestamp: null, source: 'windows-local' };
       }
     }
-    return results;
+    const localAlive = Object.values(localResults).filter(s => s.status === 'alive').length;
+    if (localAlive === 4) return localResults;
+    const ubuntuResults = this._probeUbuntuHeartbeats();
+    const merged = {};
+    for (const lane of Object.keys(LANES)) {
+      const local = localResults[lane];
+      const remote = ubuntuResults[lane];
+      if (local.status === 'alive') {
+        merged[lane] = local;
+      } else if (remote && remote.status === 'alive') {
+        merged[lane] = { ...remote, note: 'evidence_boundary_mismatch: local stale/missing but ubuntu alive' };
+      } else if (remote && remote.status === 'unreachable') {
+        merged[lane] = { ...local, note: 'ubuntu_unreachable: could not verify remote liveness' };
+      } else {
+        merged[lane] = remote && remote.status !== 'unreachable' ? remote : local;
+      }
+    }
+    return merged;
   }
 
   capturePreCompact() {
@@ -471,33 +560,38 @@ known_risks: this._getKnownRisks(),
       hash: this._hashFile(this.bootstrapPath)
     };
 
-    sources.live_lane_state = {};
-    for (const [laneId, config] of Object.entries(LANES)) {
-      sources.live_lane_state[laneId] = {
-        heartbeat: (() => {
-          const hbPath = path.join(config.inbox, `heartbeat-${laneId}.json`);
-          if (!fs.existsSync(hbPath)) return null;
-          try { return JSON.parse(fs.readFileSync(hbPath, 'utf8')); } catch (_) { return null; }
-        })(),
-        inbox_count: this._countInboxMessages(config.inbox),
-        identity_exists: fs.existsSync(path.join(config.root, '.identity', 'public.pem'))
-      };
-    }
+  sources.live_lane_state = {};
+  const laneHeartbeats = this._getLaneHeartbeats();
+  for (const [laneId, config] of Object.entries(LANES)) {
+    sources.live_lane_state[laneId] = {
+      heartbeat: (() => {
+        const hbPath = path.join(config.inbox, `heartbeat-${laneId}.json`);
+        if (!fs.existsSync(hbPath)) return null;
+        try { return JSON.parse(fs.readFileSync(hbPath, 'utf8')); } catch (_) { return null; }
+      })(),
+      heartbeat_status: laneHeartbeats[laneId],
+      inbox_count: this._countInboxMessages(config.inbox),
+      identity_exists: fs.existsSync(path.join(config.root, '.identity', 'public.pem'))
+    };
+  }
 
-    const contradictions = [];
+  const contradictions = [];
 
-    if (!sources.handoff.exists) contradictions.push('handoff_missing');
-    if (!sources.constraints.exists) contradictions.push('constraints_missing');
-    if (!sources.trust_store.exists) contradictions.push('trust_store_missing');
-    if (!sources.governance.exists) contradictions.push('governance_missing');
-    if (!sources.bootstrap.exists) contradictions.push('bootstrap_missing');
+  if (!sources.handoff.exists) contradictions.push('handoff_missing');
+  if (!sources.constraints.exists) contradictions.push('constraints_missing');
+  if (!sources.trust_store.exists) contradictions.push('trust_store_missing');
+  if (!sources.governance.exists) contradictions.push('governance_missing');
+  if (!sources.bootstrap.exists) contradictions.push('bootstrap_missing');
 
-    for (const [lane, state] of Object.entries(sources.live_lane_state)) {
-      if (!state.identity_exists) contradictions.push(`${lane}_no_identity`);
-      if (state.heartbeat?.status === 'dead' || !state.heartbeat) {
+  for (const [lane, state] of Object.entries(sources.live_lane_state)) {
+    if (!state.identity_exists) contradictions.push(`${lane}_no_identity`);
+    const hbStatus = state.heartbeat_status?.status;
+    if (hbStatus === 'dead' || (hbStatus !== 'alive' && !state.heartbeat && hbStatus !== 'alive')) {
+      if (hbStatus !== 'alive') {
         contradictions.push(`${lane}_no_heartbeat`);
       }
     }
+  }
 
     return {
       sources,
