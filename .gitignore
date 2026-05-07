@@ -97,4 +97,21 @@ tests/ui/
 context-buffer/fsssu.txt
 context-buffer/Here's the full map of your codebas.txt
 
+# Compact audit runtime state
+.compact-audit/*.json
+.compact-audit/*.jsonl
+
+# Lane runtime artifacts
+lanes/broadcast/last-recovery.json
+lanes/*/receipts/
+lanes/*/state/active-owner.json
+lanes/*/state/worker-audit.log
+lanes/*/state/traces/
+lanes/*/state/sovereignty-report-*.json
+lanes/*/reports/
+lanes/*/journal/
+
+# Temp files
+*.local
+
 S:/
