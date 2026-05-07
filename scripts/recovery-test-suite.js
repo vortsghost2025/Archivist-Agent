@@ -36,6 +36,7 @@ class RecoveryTestSuite {
     this.test8_laneLiveness();
     this.test9_multiSourceConsistency();
     this.test10_contradictionDetection();
+    this.test11_restorePacketCrossVerify();
 
     const passed = this.results.filter(r => r.passed).length;
     const total = this.results.length;
@@ -122,7 +123,7 @@ class RecoveryTestSuite {
     const govHash = this.audit._hashFile(this.audit.governancePath);
     const bootHash = this.audit._hashFile(this.audit.bootstrapPath);
     this.log('governance_integrity', !!govHash && !!bootHash,
-      `gov=${govHash?.substring(0,8)}... boot=${bootHash?.substring(0,8)}...`);
+      `gov=${(govHash || '').substring(0,8)}... boot=${(bootHash || '').substring(0,8)}...`);
   }
 
   test3_constraintPreservation() {
@@ -143,12 +144,12 @@ class RecoveryTestSuite {
     this.log('handoff_tamper_detection', !!hash, `sha256=${hash.substring(0,16)}...`);
 
     const record = this.audit.generateTamperEvidentHandoff(content);
-    this.log('handoff_hash_logged', !!record.handoff_hash_sha256, record.handoff_hash_sha256?.substring(0,16) + '...');
+    this.log('handoff_hash_logged', !!record.handoff_hash_sha256, (record.handoff_hash_sha256 || '').substring(0,16) + '...');
   }
 
   test5_blockerConsistency() {
     const blocker = this.audit._getActiveBlocker();
-    this.log('blocker_consistency', true, blocker.exists ? `active: ${blocker.blocker?.id}` : 'no active blocker');
+    this.log('blocker_consistency', true, blocker.exists ? `active: ${(blocker.blocker || {}).id}` : 'no active blocker');
   }
 
   test6_messageInventory() {
@@ -221,6 +222,25 @@ class RecoveryTestSuite {
     const diff = this.audit.runContradictionTest(pre, post);
     const status = this.audit.determineStatus(diff);
     this.log('contradiction_detection', true, `status=${status} unexpected_changes=${diff.unexpected_changes.length}`);
+  }
+
+  test11_restorePacketCrossVerify() {
+    const { CompactRestoreBridge } = require('./compact-restore-bridge');
+    const bridge = new CompactRestoreBridge();
+    const anyPacket = fs.existsSync(path.join(__dirname, '..', '.compact-audit', 'COMPACT_RESTORE_PACKET.json'));
+    if (!anyPacket) {
+      this.log('restore_packet_cross_verify', true, 'no restore packet present — skip (not yet compacted via bridge)');
+      return;
+    }
+    const result = bridge.crossVerifyWithAudit('archivist');
+    if (result.ok === false && result.error === 'missing_data') {
+      this.log('restore_packet_cross_verify', true, 'restore packet exists but no pre-snapshot for cross-check yet');
+      return;
+    }
+    const detail = result.ok
+      ? 'packet aligned with pre-compact snapshot'
+      : `violations: ${(result.violations || []).join(', ')}`;
+    this.log('restore_packet_cross_verify', result.ok, detail);
   }
 }
 

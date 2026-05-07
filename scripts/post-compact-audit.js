@@ -34,6 +34,7 @@ class PostCompactAudit {
     this.bootstrapPath = options.bootstrapPath || path.join(_archivistRoot, 'BOOTSTRAP.md');
     this.governancePath = options.governancePath || path.join(_archivistRoot, 'GOVERNANCE.md');
     this.handoffPath = options.handoffPath || path.join(_archivistRoot, 'COMPACT_CONTEXT_HANDOFF.md');
+    this.restorePacketPath = options.restorePacketPath || null;
   }
 
   _hashContent(content) {
@@ -308,8 +309,8 @@ known_risks: this._getKnownRisks(),
       unexpected_changes: []
     };
 
-    if (pre.active_blocker.exists !== post.active_blocker.exists ||
-        (pre.active_blocker.blocker?.id !== post.active_blocker.blocker?.id)) {
+if (pre.active_blocker.exists !== post.active_blocker.exists ||
+    ((pre.active_blocker.blocker || {}).id !== (post.active_blocker.blocker || {}).id)) {
       diff.blocker_changed = true;
       diff.blocker_detail = {
         pre: pre.active_blocker,
@@ -377,11 +378,11 @@ known_risks: this._getKnownRisks(),
     }
 
     for (const [lane, state] of Object.entries(pre.lane_states)) {
-      if (state.status === 'alive' && post.lane_states[lane]?.status !== 'alive') {
+      if (state.status === 'alive' && (post.lane_states[lane] || {}).status !== 'alive') {
         diff.lane_degradations.push({
           lane,
           pre_status: state.status,
-          post_status: post.lane_states[lane]?.status || 'unknown'
+          post_status: (post.lane_states[lane] || {}).status || 'unknown'
         });
         diff.unexpected_changes.push(`lane_${lane}_degraded`);
       }
@@ -399,7 +400,7 @@ known_risks: this._getKnownRisks(),
             diff.file_integrity_violations = [];
             for (const [lane, files] of Object.entries(pre.file_integrity)) {
                 for (const [fileKey, fileInfo] of Object.entries(files)) {
-                    const postInfo = post.file_integrity[lane]?.[fileKey];
+                    const postInfo = (post.file_integrity[lane] || {})[fileKey];
                     if (!postInfo) continue;
                     if (fileInfo.exists && postInfo.exists && fileInfo.hash && postInfo.hash && fileInfo.hash !== postInfo.hash) {
                         diff.file_integrity_violations.push({ lane, file: fileKey, pre_hash: fileInfo.hash, post_hash: postInfo.hash });
@@ -525,6 +526,53 @@ known_risks: this._getKnownRisks(),
     };
   }
 
+  _loadRestorePacket() {
+    const packetPath = this.restorePacketPath;
+    if (!packetPath) return null;
+    try {
+      if (!fs.existsSync(packetPath)) return null;
+      const packet = JSON.parse(fs.readFileSync(packetPath, 'utf8'));
+      if (!packet.restore_payload) return null;
+      return packet;
+    } catch (_) { return null; }
+  }
+
+  _crossVerifyRestorePacket(packet, preSnapshot) {
+    if (!packet || !preSnapshot) return { verified: false, violations: [] };
+    const violations = [];
+    const payload = packet.restore_payload;
+
+    const packetConstraints = Object.keys(payload.governance_constraints || {});
+    const crp = preSnapshot.compact_restore_packet || {};
+    const preConstraints = crp.constraints
+      ? Object.keys(crp.constraints)
+      : (preSnapshot.constraint_names || []);
+    const preConstraintSet = new Set(preConstraints);
+    for (const c of packetConstraints) {
+      if (!preConstraintSet.has(c)) violations.push(`packet_constraint_not_in_pre:${c}`);
+    }
+
+    const packetCheckpointIds = (payload.active_checkpoints || []).map(c => c.id || c).sort();
+    const preCheckpointIds = (crp.checkpoints || [])
+      .map(c => c.id || c).sort();
+    if (JSON.stringify(packetCheckpointIds) !== JSON.stringify(preCheckpointIds)) {
+      violations.push('checkpoint_mismatch_packet_vs_pre');
+    }
+
+    const authority = packet.authority || {};
+    if (authority.fields_authoritative) {
+      for (const field of authority.fields_authoritative) {
+        const preVal = crp[field];
+        const postVal = payload[field];
+        if (preVal && postVal && JSON.stringify(preVal) !== JSON.stringify(postVal)) {
+          violations.push(`authoritative_field_drift:${field}`);
+        }
+      }
+    }
+
+    return { verified: violations.length === 0, violations };
+  }
+
   multiSourceTruthReload() {
     const sources = {};
 
@@ -560,38 +608,65 @@ known_risks: this._getKnownRisks(),
       hash: this._hashFile(this.bootstrapPath)
     };
 
-  sources.live_lane_state = {};
-  const laneHeartbeats = this._getLaneHeartbeats();
-  for (const [laneId, config] of Object.entries(LANES)) {
-    sources.live_lane_state[laneId] = {
-      heartbeat: (() => {
-        const hbPath = path.join(config.inbox, `heartbeat-${laneId}.json`);
-        if (!fs.existsSync(hbPath)) return null;
-        try { return JSON.parse(fs.readFileSync(hbPath, 'utf8')); } catch (_) { return null; }
-      })(),
-      heartbeat_status: laneHeartbeats[laneId],
-      inbox_count: this._countInboxMessages(config.inbox),
-      identity_exists: fs.existsSync(path.join(config.root, '.identity', 'public.pem'))
-    };
-  }
+    sources.live_lane_state = {};
+    const laneHeartbeats = this._getLaneHeartbeats();
+    for (const [laneId, config] of Object.entries(LANES)) {
+      sources.live_lane_state[laneId] = {
+        heartbeat: (() => {
+          const hbPath = path.join(config.inbox, `heartbeat-${laneId}.json`);
+          if (!fs.existsSync(hbPath)) return null;
+          try { return JSON.parse(fs.readFileSync(hbPath, 'utf8')); } catch (_) { return null; }
+        })(),
+        heartbeat_status: laneHeartbeats[laneId],
+        inbox_count: this._countInboxMessages(config.inbox),
+        identity_exists: fs.existsSync(path.join(config.root, '.identity', 'public.pem'))
+      };
+    }
 
-  const contradictions = [];
+    const restorePacket = this._loadRestorePacket();
+    if (restorePacket) {
+      sources.restore_packet = {
+        path: this.restorePacketPath,
+        exists: true,
+        timestamp: restorePacket.timestamp,
+        context_lost: restorePacket.context_lost,
+      constraints_count: Object.keys((restorePacket.restore_payload || {}).governance_constraints || {}).length,
+      checkpoints_count: ((restorePacket.restore_payload || {}).active_checkpoints || []).length
+      };
+    }
 
-  if (!sources.handoff.exists) contradictions.push('handoff_missing');
-  if (!sources.constraints.exists) contradictions.push('constraints_missing');
-  if (!sources.trust_store.exists) contradictions.push('trust_store_missing');
-  if (!sources.governance.exists) contradictions.push('governance_missing');
-  if (!sources.bootstrap.exists) contradictions.push('bootstrap_missing');
+    const prePath = path.join(this.auditDir, 'PRE_COMPACT_SNAPSHOT.json');
+    const preSnapshot = fs.existsSync(prePath)
+      ? JSON.parse(fs.readFileSync(prePath, 'utf8'))
+      : null;
 
-  for (const [lane, state] of Object.entries(sources.live_lane_state)) {
-    if (!state.identity_exists) contradictions.push(`${lane}_no_identity`);
-    const hbStatus = state.heartbeat_status?.status;
-    if (hbStatus === 'dead' || (hbStatus !== 'alive' && !state.heartbeat && hbStatus !== 'alive')) {
-      if (hbStatus !== 'alive') {
-        contradictions.push(`${lane}_no_heartbeat`);
+    if (restorePacket && preSnapshot) {
+      sources.restore_packet_cross_verify = this._crossVerifyRestorePacket(restorePacket, preSnapshot);
+    }
+
+    const contradictions = [];
+
+    if (!sources.handoff.exists) contradictions.push('handoff_missing');
+    if (!sources.constraints.exists) contradictions.push('constraints_missing');
+    if (!sources.trust_store.exists) contradictions.push('trust_store_missing');
+    if (!sources.governance.exists) contradictions.push('governance_missing');
+    if (!sources.bootstrap.exists) contradictions.push('bootstrap_missing');
+
+    for (const [lane, state] of Object.entries(sources.live_lane_state)) {
+      if (!state.identity_exists) contradictions.push(`${lane}_no_identity`);
+      const hbStatus = (state.heartbeat_status || {}).status;
+      if (hbStatus === 'dead' || (hbStatus !== 'alive' && !state.heartbeat && hbStatus !== 'alive')) {
+        if (hbStatus !== 'alive') {
+          contradictions.push(`${lane}_no_heartbeat`);
+        }
       }
     }
-  }
+
+    if (sources.restore_packet_cross_verify && !sources.restore_packet_cross_verify.verified) {
+      for (const v of sources.restore_packet_cross_verify.violations) {
+        contradictions.push(`restore_packet:${v}`);
+      }
+    }
 
     return {
       sources,
@@ -604,6 +679,14 @@ known_risks: this._getKnownRisks(),
 
   run() {
     console.log('=== Post-Compact Audit ===\n');
+
+    const restorePacket = this._loadRestorePacket();
+    if (restorePacket) {
+      console.log(`[audit] Restore packet loaded: ${this.restorePacketPath}`);
+    console.log(`[audit] Constraints: ${Object.keys((restorePacket.restore_payload || {}).governance_constraints || {}).length}`);
+      console.log(`[audit] Checkpoints: ${((restorePacket.restore_payload || {}).active_checkpoints || []).length}`);
+      console.log(`[audit]   Context lost: ${restorePacket.context_lost} tokens`);
+    }
 
     const prePath = path.join(this.auditDir, 'PRE_COMPACT_SNAPSHOT.json');
     let pre;
@@ -621,13 +704,18 @@ known_risks: this._getKnownRisks(),
 
     const audit = this.generateAudit(pre, post);
 
+    if (restorePacket) {
+      audit.restore_packet_verification = this._crossVerifyRestorePacket(restorePacket, pre);
+      audit.proof.sources_checked.push('compact_restore_packet');
+    }
+
     console.log('\n=== Audit Result ===');
     console.log(`Status: ${audit.status}`);
     console.log(`Contradictions: ${audit.diff.unexpected_changes.length}`);
     if (audit.diff.unexpected_changes.length > 0) {
       console.log('Changes:');
       for (const c of audit.diff.unexpected_changes) {
-        console.log(`  - ${c}`);
+        console.log(` - ${c}`);
       }
     }
     console.log(`Message loss: ${audit.diff.message_loss}`);
@@ -635,14 +723,25 @@ known_risks: this._getKnownRisks(),
     console.log(`Constraints intact: ${audit.diff.constraints_intact}`);
     console.log(`Governance intact: ${audit.diff.governance_intact}`);
     console.log(`Bootstrap intact: ${audit.diff.bootstrap_intact}`);
-        console.log(`Risk set preserved: ${audit.diff.risk_set_preserved}`);
-        console.log(`File integrity violations: ${audit.diff.file_integrity_violations?.length || 0}`);
-        if (audit.diff.file_integrity_violations?.length > 0) {
-            for (const v of audit.diff.file_integrity_violations) {
-                console.log(` - ${v.lane}/${v.file}: ${v.deleted ? 'DELETED' : 'HASH_CHANGED'}`);
-            }
+    console.log(`Risk set preserved: ${audit.diff.risk_set_preserved}`);
+    const fivCount = (audit.diff.file_integrity_violations || []).length;
+    console.log(`File integrity violations: ${fivCount}`);
+    if (fivCount > 0) {
+      for (const v of audit.diff.file_integrity_violations) {
+        console.log(` - ${v.lane}/${v.file}: ${v.deleted ? 'DELETED' : 'HASH_CHANGED'}`);
+      }
+    }
+    console.log(`Self-declared alignment: ${audit.proof.self_declared_alignment}`);
+
+    if (audit.restore_packet_verification) {
+      console.log(`Restore packet verified: ${audit.restore_packet_verification.verified}`);
+      if (audit.restore_packet_verification.violations.length > 0) {
+        console.log('Packet violations:');
+        for (const v of audit.restore_packet_verification.violations) {
+          console.log(` - ${v}`);
         }
-        console.log(`Self-declared alignment: ${audit.proof.self_declared_alignment}`);
+      }
+    }
 
     console.log('\n=== Multi-Source Truth Reload ===');
     const truth = this.multiSourceTruthReload();
@@ -651,7 +750,7 @@ known_risks: this._getKnownRisks(),
     if (truth.contradictions.length > 0) {
       console.log('Contradictions:');
       for (const c of truth.contradictions) {
-        console.log(`  - ${c}`);
+        console.log(` - ${c}`);
       }
     }
 
