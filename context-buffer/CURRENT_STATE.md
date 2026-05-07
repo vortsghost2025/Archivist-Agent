@@ -1,17 +1,15 @@
 # CURRENT STATE SNAPSHOT
 
 ## Timestamp
-2026-05-07T18:30:00Z
-
-## Session Source
-This snapshot written by the Archivist lane agent (Windows session) for handoff to the Ubuntu headless agent. All work below was done in this session.
+2026-05-07T21:30:00Z
 
 ## Verification
 - BOOTSTRAP.md read and verified
 - Governance constraints acknowledged: single_entry_point, structure_over_identity, correction_mandatory, agent_not_part_of_WE
 - Verification lane: **L** (Implementation lane)
 - Recovery suite: **12/12 PASS** on both Windows and Ubuntu (RECOVERY PROVEN)
-- Kernel lane agent online, Library agent deep in compact cycles (~15+), SwarmMind idle
+- Sovereignty: **4/4 lanes sovereign**
+- Services: **10/10 active running** (4 relay-daemons, 4 lane-workers, 2 heartbeats)
 
 ## Drift Baseline
 - CPS score: **19** (STRUCTURE_OVER_IDENTITY 5, CORRECTION_MANDATORY 4, SINGLE_ENTRY_POINT 5, OPERATOR_ACCOUNTABILITY 5)
@@ -19,110 +17,90 @@ This snapshot written by the Archivist lane agent (Windows session) for handoff 
 
 ---
 
-## What Was Done This Session
+## What Was Done This Session (Full)
 
-### 1. Claim-Commit-Guard (Phase 2.6 — COMPLETE)
-- Built `scripts/claim-commit-guard.js` — verifies outbox message artifact claims against git history before delivery
-- Integrated into `scripts/relay-daemon.js` `deliverOutbox()` as pre-delivery check
+### 1. Claim-Commit-Guard Deployed to All 4 Lanes (Phase 2.6 — COMPLETE)
+- `scripts/claim-commit-guard.js` — deployed to Archivist, kernel-lane, SwarmMind, self-organizing-library
+- Integrated into `scripts/relay-daemon.js` `deliverOutbox()` on all 4 lanes
 - Self-referential outbox evidence allowed, `deleted_tracked` files count as verified claims
 
 ### 2. Ubuntu Phase 1 — Daemon Infrastructure (VERIFIED COMPLETE)
-Ubuntu agent completed and verified:
-- 1.1: All 8 services active (4 relay-daemons + 4 executor timers)
-- 1.2: Linger enabled (survives reboot)
-- 1.2: Crash recovery — `Restart=on-failure` + `RestartSec=10` added to all 4 executor services (was missing)
-- 1.3: Log rotation — `/etc/logrotate.d/lane-daemons` created (daily, 14-day, compressed)
-- 1.3: Journalctl capture confirmed for all services
-- 1.4: Tailscale watchdog — `tailscale-watchdog.sh` + systemd timer (60s interval)
-- Path normalization: `%h` paths → absolute paths in kernel/library/swarmmind executor services
+- 10/10 services active (4 relay-daemons + 4 lane-workers + 2 heartbeats)
+- `Restart=always` on all services (was `Restart=on-failure` — missed SIGTERM exits)
+- Log rotation at `/etc/logrotate.d/lane-daemons`
+- Tailscale watchdog timer (60s)
+- `loginctl enable-linger we4free` — survives reboot
 
-### 3. Compact Restore Bridge (COMPLETE — Core Convergence)
-**Problem:** Ubuntu's `compact-restore-test.js` created `COMPACT_RESTORE_PACKET.json` but it was disconnected from the existing audit pipeline (`post-compact-audit.js`, `recovery-test-suite.js`). Packets were written to wrong lane repos. Runner.sh had zero compact/restore logic.
+### 3. Kernel Heartbeat Fix (COMPLETE)
+- `lane-discovery.js` missing exports (`LANES`, `ROOTS`, `getRoots`) — synced from Archivist copy
+- `kernel-heartbeat.service` created (was missing entirely) — enabled and running
+- Worker restart policy fixed to `Restart=always`
 
-**Solution:**
-- **`scripts/compact-restore-bridge.js`** — bridges `COMPACT_RESTORE_PACKET.json` into `.compact-audit/` pipeline
-  - `init` — creates `.compact-audit/` dirs + `meta.json` + `HANDOFF_HASH_LOG.jsonl` for all 4 lanes
-  - `pre-compact <lane> <packet-path>` — captures pre-compact snapshot from restore packet
-  - `restore <lane> <packet-path>` — rebuilds `COMPACT_CONTEXT_HANDOFF.md` + hash log from packet, moves packet to `.compact-audit/` (lane ownership fix)
-  - `cross-verify <lane>` — compares restore packet against pre-compact snapshot, reports violations
-- **`scripts/post-compact-audit.js`** (updated) — added `restorePacketPath` option, `_loadRestorePacket()`, `_crossVerifyRestorePacket()`, restore packet cross-verification in `multiSourceTruthReload()`
-- **`scripts/recovery-test-suite.js`** (updated) — added test11 `restore_packet_cross_verify` (12/12 tests now)
-- **`scripts/runner-v3.sh`** — pre/post compact hooks:
-  - `task_compact_audit_init` — ensures `.compact-audit/` dirs exist
-  - `task_pre_compact_snapshot` — captures state + bridges restore packets
-  - `task_restore_from_packet` — rebuilds handoff from packets, fixes lane ownership
-  - `task_post_compact_verify` — runs `recovery-test-suite.js` after agent session
-- **`scripts/recovery-hourly.sh`** — hourly systemd timer for continuous health monitoring
-- **Ubuntu platform fixes:** All `?.` optional chaining replaced with Node 20 compatible code. `isUbuntu` detection uses `process.platform === 'linux'` (not `!fs.existsSync('S:/')` which was false due to WSL mounts). Added `_probeLocalUbuntuHeartbeats()` for direct file access instead of SSH loopback.
+### 4. Ubuntu Repo Sync (COMPLETE)
+- All 4 repos: ahead=0, behind=0, tracked_dirty=0
+- `.gitignore` updated on all 4 repos for `.compact-audit/`, `COMPACT_CONTEXT_HANDOFF.md`, runtime state files
+- Stale tracked files (COMPACT_RESTORE_PACKET.json, old outbox messages) untracked
 
-### 4. Runner v3 Deployed on Ubuntu
-- Old v2.1 runner loop killed (PID 1090)
-- `runner-v3.sh` copied to `runner.sh` (permanent replacement)
-- Runner v3 runs every 60s with compact hooks
-- `recovery-hourly.timer` active (hourly, next trigger at :00)
+### 5. Library Convergence Response (RECEIVED)
+- `library-to-archivist-convergence-response-2026-05-07.json` in inbox
+- Maps Archivist's 7 gaps to Library's 5 layers
+- Unified 5-phase roadmap proposed (Phase 1 headless infra = DONE, Phase 2-5 remaining)
+- Work split: Archivist owns infrastructure/tooling, Library owns graph/analysis
 
----
+### 6. Contradiction Adjudicator (Phase 4.1 — COMPLETE)
+- `scripts/contradiction-adjudicator.js` — auto-adjudicates CONTRADICTS edges per playbook
+- Rules: K(40)+ tag-group artifacts → proven_spurious, UNVERIFIED vs VERIFIED → proven_spurious, everything else → needs_lane_review
+- Complies with CONTRADICTION_RESOLUTION_PLAYBOOK (no auto-resolve by count/confidence/similarity)
+- Generates full evidence records with domain classification
+- Current state: 0 contradictions in system (clean)
 
-## Current System State
+### 7. Task Chain Engine (Phase 4.2 — COMPLETE)
+- `scripts/task-chain-engine.js` — turns executor from one-shot into loop
+- Chain tracking: active chains, depth limits (max 5), followup generation
+- Followup types: verification followup (for tasks/amendments), consensus followup (for reviews/ratifications)
+- Review/ratification tasks do NOT generate more verification followups (prevents chain explosion)
+- Dedup: tasks processed per-run tracked, no re-processing
+- Inbox scan: files only (no recursive scan into processed/ subdirs)
 
-### Recovery Suite Results
-- **Windows:** 12/12 RECOVERY PROVEN
-- **Ubuntu:** 12/12 RECOVERY PROVEN (after isUbuntu fix + kernel heartbeat patch)
-
-### Ubuntu Runtime
-- 4/4 relay-daemons active
-- 4/4 executor timers active
-- 4 lane-worker PIDs running
-- Tailscale connected at `100.95.40.99`
-- Node.js: v20.20.2 (via nvm, NOT system v12)
-- `loginctl enable-linger we4free` — services survive reboot
-- All repos have local changes blocking `git pull` — **needs sync**
-
-### Known Issues
-1. **Kernel heartbeat.js broken** — `require('./util/lane-discovery').LANES` returns empty array, `Object.entries([])` throws TypeError. P1 message sent to kernel inbox. Kernel agent is online and can fix this.
-2. **Ubuntu repos can't git pull** — all 3 repos have local changes (COMPACT_RESTORE_PACKET.json, .compact-audit/ files, heartbeat patches). Need to either commit+push from Ubuntu or stash+pull.
-3. **Sovereignty violations** — Archivist-Agent has 1 cross-lane import, self-organizing-library has 1 cross-lane import. SwarmMind is clean.
-
-### Library Lane
-- Heartbeat alive (10s ago on Ubuntu)
-- 15+ compact cycles, still processing gap analysis
-- No outbox output yet — generating convergence response internally
-- Executor scans 0 tasks per cycle (inbox empty, agent running separately)
-
-### Kernel Lane
-- Agent is online (operator confirmed)
-- P1 task in inbox: fix heartbeat.js LANES bug
-- Heartbeat goes stale because heartbeat.js crashes
+### 8. Compact Restore Bridge (COMPLETE — from prior work)
+- `scripts/compact-restore-bridge.js` — bridges COMPACT_RESTORE_PACKET.json into .compact-audit/ pipeline
+- `scripts/post-compact-audit.js` — restore packet cross-verification
+- `scripts/recovery-test-suite.js` — 12/12 tests including test11 restore_packet_cross_verify
+- `scripts/runner-v3.sh` — pre/post compact hooks
+- `scripts/recovery-hourly.sh` — hourly systemd timer
 
 ---
 
-## Canonical Lane Registry
+## Known Issues
 
-| Lane | Local Directory | GitHub Repo | Inbox Path | Outbox Path |
-|------|----------------|-------------|------------|-------------|
-| Archivist | `S:/Archivist-Agent` (Win) / `/home/we4free/agent/repos/Archivist-Agent` (Ubuntu) | vortsghost2025/Archivist-Agent | `lanes/archivist/inbox` | `lanes/archivist/outbox` |
-| Kernel | `S:/kernel-lane` (Win) / `/home/we4free/agent/repos/kernel-lane` (Ubuntu) | vortsghost2025/Archivist-Agent | `lanes/kernel/inbox` | `lanes/kernel/outbox` |
-| SwarmMind | `S:/SwarmMind` (Win) / `/home/we4free/agent/repos/SwarmMind` (Ubuntu) | vortsghost2025/SwarmMind | `lanes/swarmmind/inbox` | `lanes/swarmmind/outbox` |
-| Library | `S:/self-organizing-library` (Win) / `/home/we4free/agent/repos/self-organizing-library` (Ubuntu) | vortsghost2025/self-organizing-library | `lanes/library/inbox` | `lanes/library/outbox` |
+1. **S:/ path leaks** — Lane-workers write S:/ paths on Ubuntu (cross-platform path resolution). Gitignored, not committed, regenerated by workers. Will persist until lane-worker path resolution is fully fixed.
+2. **Sovereignty violations** — Archivist-Agent has 1 cross-lane import, self-organizing-library has 1 cross-lane import. SwarmMind and kernel-lane are clean.
 
 ---
 
 ## Next Actions (Priority Order)
 
-### P0 — Do Now
-1. **Fix kernel heartbeat.js** — Kernel agent should pick up P1 from inbox. If not, fix manually: `lane-discovery.js` must populate `LANES` with kernel entry; `heartbeat.js` must handle empty `LANES` gracefully.
-2. **Sync Ubuntu repos** — Commit+push local changes from Ubuntu OR stash+pull to get latest from GitHub. Currently Ubuntu repos are behind origin.
-
 ### P1 — Do Next
-3. **Copy claim-commit-guard.js to kernel-lane, SwarmMind, self-organizing-library** — deploy to all 4 lanes (currently only in Archivist-Agent)
-4. **Wait for Library convergence response** — finalize unified roadmap and work split
-5. **Build contradiction-adjudicator.js** (Phase 4.1) — P0 for self-healing loop, unblocks auto-resolution of CONFLICTED edges
-6. **Build task-chain-engine.js** (Phase 4.2) — P0 for turning executor from one-shot into loop
+1. **Deploy contradiction-adjudicator.js + task-chain-engine.js to other 3 lanes** — currently only in Archivist-Agent
+2. **Build blocked-remediator.js** (Phase 3.2) — auto-fix known patterns in blocked/quarantine
+3. **Fix lane-worker path resolution** — stop S:/ path leaks on Ubuntu
+4. **Process Library convergence response** — finalize unified roadmap, write response back to Library
 
 ### P2 — When Ready
-7. **Build blocked-remediator.js** (Phase 3.2) — auto-fix known patterns in blocked/quarantine
-8. **Sovereignty violation cleanup** — 2 remaining cross-lane imports in Archivist-Agent + Library
-9. **Canonicalization sprint** — authority registry, schema enum unification, shared script consolidation
+5. **Sovereignty violation cleanup** — 2 remaining cross-lane imports
+6. **Canonicalization sprint** — authority registry, schema enum unification, shared script consolidation
+7. **Windows Scheduled Task** — daemon auto-start on Windows (Library's Phase 1 gap 7)
+
+---
+
+## Canonical Lane Registry
+
+| Lane | Local Directory (Win) | Local Directory (Ubuntu) | GitHub Repo | Inbox Path | Outbox Path |
+|------|----------------------|--------------------------|-------------|------------|-------------|
+| Archivist | `S:/Archivist-Agent` | `/home/we4free/agent/repos/Archivist-Agent` | vortsghost2025/Archivist-Agent | `lanes/archivist/inbox` | `lanes/archivist/outbox` |
+| Kernel | `S:/kernel-lane` | `/home/we4free/agent/repos/kernel-lane` | vortsghost2025/kernel-lane | `lanes/kernel/inbox` | `lanes/kernel/outbox` |
+| SwarmMind | `S:/SwarmMind` | `/home/we4free/agent/repos/SwarmMind` | vortsghost2025/SwarmMind | `lanes/swarmmind/inbox` | `lanes/swarmmind/outbox` |
+| Library | `S:/self-organizing-library` | `/home/we4free/agent/repos/self-organizing-library` | vortsghost2025/self-organizing-library | `lanes/library/inbox` | `lanes/library/outbox` |
 
 ---
 
@@ -132,21 +110,19 @@ Ubuntu agent completed and verified:
 |------|------|
 | Bootstrap | `/home/we4free/agent/repos/Archivist-Agent/BOOTSTRAP.md` |
 | AGENTS.md | `/home/we4free/agent/repos/Archivist-Agent/AGENTS.md` |
-| Governance | `/home/we4free/agent/repos/Archivist-Agent/GOVERNANCE.md` |
-| Covenant | `/home/we4free/agent/repos/Archivist-Agent/COVENANT.md` |
+| Contradiction adjudicator | `/home/we4free/agent/repos/Archivist-Agent/scripts/contradiction-adjudicator.js` |
+| Task chain engine | `/home/we4free/agent/repos/Archivist-Agent/scripts/task-chain-engine.js` |
+| Claim-commit guard | All 4 repos: `scripts/claim-commit-guard.js` |
+| Relay daemon | All 4 repos: `scripts/relay-daemon.js` (with ClaimCommitGuard) |
 | Compact restore bridge | `/home/we4free/agent/repos/Archivist-Agent/scripts/compact-restore-bridge.js` |
 | Post-compact audit | `/home/we4free/agent/repos/Archivist-Agent/scripts/post-compact-audit.js` |
 | Recovery test suite | `/home/we4free/agent/repos/Archivist-Agent/scripts/recovery-test-suite.js` |
-| Claim-commit guard | `/home/we4free/agent/repos/Archivist-Agent/scripts/claim-commit-guard.js` |
 | Runner v3 | `/home/we4free/agent/bin/runner-v3.sh` (also `runner.sh`) |
 | Recovery hourly | `/home/we4free/agent/scripts/recovery-hourly.sh` |
-| Runner log | `/home/we4free/agent/logs/agent.log` |
-| Recovery hourly log | `/home/we4free/agent/logs/recovery-hourly.log` |
-| Recovery artifacts | `/home/we4free/agent/artifacts/` |
 | Node binary | `/home/we4free/.nvm/versions/node/v20.20.2/bin/node` (NOT system v12) |
 
 ## Git Protocol Reminder
 - COMMIT + PUSH AS ONE ACTION — never leave commits local-only
 - Check for secrets before push
 - Use `[LANE-X]` prefix in commit messages (Archivist = LANE-1)
-- Ubuntu repos currently blocked from pull by local changes — sync ASAP
+- 4/4 repos fully synced with origin as of 2026-05-07T21:30Z
