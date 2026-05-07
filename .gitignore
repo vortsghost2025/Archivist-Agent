@@ -8,6 +8,10 @@ target/
 *.pem
 keys.json
 
+# API keys (NEVER commit)
+.env
+.env.*
+
 # Session memory (persists locally)
 .memory/
 .identity/*.pem
