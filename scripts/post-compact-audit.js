@@ -137,6 +137,12 @@ class PostCompactAudit {
   _probeUbuntuHeartbeats() {
     const lanes = Object.keys(REPO_MAP);
     const results = {};
+
+    const isUbuntu = fs.existsSync(UBUNTU_REPOS_BASE) && !fs.existsSync('S:/');
+    if (isUbuntu) {
+      return this._probeLocalUbuntuHeartbeats(lanes);
+    }
+
     const hbPaths = lanes.map(lane => {
       const repo = REPO_MAP[lane];
       return `${UBUNTU_REPOS_BASE}/${repo}/lanes/${lane}/inbox/heartbeat-${lane}.json`;
@@ -189,6 +195,31 @@ class PostCompactAudit {
       }
     } finally {
       try { fs.unlinkSync(tmpScript); } catch (_e) {}
+    }
+    return results;
+  }
+
+  _probeLocalUbuntuHeartbeats(lanes) {
+    const results = {};
+    for (const lane of lanes) {
+      const repo = REPO_MAP[lane];
+      const hbPath = path.join(UBUNTU_REPOS_BASE, repo, 'lanes', lane, 'inbox', `heartbeat-${lane}.json`);
+      if (!fs.existsSync(hbPath)) {
+        results[lane] = { status: 'no_heartbeat', timestamp: null, source: 'ubuntu-local' };
+        continue;
+      }
+      try {
+        const data = JSON.parse(fs.readFileSync(hbPath, 'utf8'));
+        const age = Date.now() - new Date(data.timestamp).getTime();
+        results[lane] = {
+          status: age > HEARTBEAT_TIMEOUT_SECONDS * 1000 ? 'stale' : 'alive',
+          timestamp: data.timestamp,
+          age_seconds: Math.floor(age / 1000),
+          source: 'ubuntu-local'
+        };
+      } catch (_) {
+        results[lane] = { status: 'error', timestamp: null, source: 'ubuntu-local' };
+      }
     }
     return results;
   }
