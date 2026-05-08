@@ -5,28 +5,30 @@
   "description": "Surfaces stalled/uncertain work to operators and downstream agents. Prevents agents from claiming 'fixed' when work is uncertain. Inspired by AI Co-Mathematician uncertainty lifecycle (arXiv:2605.06651).",
   "type": "object",
   "properties": {
-    "level": {
+  "level": {
+    "type": "string",
+    "enum": ["low", "medium", "high", "critical"],
+    "description": "low = minor gap, medium = needs attention, high = blocked or unverified runtime, critical = operator must act"
+  },
+  "type": {
+    "type": "array",
+    "items": {
       "type": "string",
-      "enum": ["low", "medium", "high"],
-      "description": "low = minor gap, medium = needs attention, high = blocked or unverified runtime"
+      "enum": [
+        "missing_evidence",
+        "conflicting_sources",
+        "tool_failure",
+        "execution_failure",
+        "stale_state",
+        "ambiguous_intent",
+        "blocked_by_permission",
+        "implementation_unknown",
+        "runtime_not_verified",
+        "dependency_unresolved",
+        "partial_completion",
+        "escalated_review"
+      ]
     },
-    "type": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "enum": [
-          "missing_evidence",
-          "conflicting_sources",
-          "tool_failure",
-          "stale_state",
-          "ambiguous_intent",
-          "blocked_by_permission",
-          "implementation_unknown",
-          "runtime_not_verified",
-          "dependency_unresolved",
-          "partial_completion"
-        ]
-      },
       "minItems": 1,
       "description": "One or more uncertainty categories applicable to this item"
     },

@@ -208,8 +208,8 @@ Fields:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `level` | enum | yes | `low` / `medium` / `high` |
-| `type` | array[enum] | yes | One or more: `missing_evidence`, `conflicting_sources`, `tool_failure`, `stale_state`, `ambiguous_intent`, `blocked_by_permission`, `implementation_unknown`, `runtime_not_verified`, `dependency_unresolved`, `partial_completion` |
+| `level` | enum | yes | `low` / `medium` / `high` / `critical` |
+| `type` | array[enum] | yes | One or more: `missing_evidence`, `conflicting_sources`, `tool_failure`, `execution_failure`, `stale_state`, `ambiguous_intent`, `blocked_by_permission`, `implementation_unknown`, `runtime_not_verified`, `dependency_unresolved`, `partial_completion`, `escalated_review` |
 | `why` | string | yes | Human-readable explanation |
 | `evidence_needed` | array[string] | yes | Specific evidence that would close this uncertainty |
 | `operator_decision_needed` | boolean | yes | `true` if human input required to resolve |

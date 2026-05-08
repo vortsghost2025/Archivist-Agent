@@ -155,11 +155,11 @@ function validateUncertaintyPacket(input) {
   for (const field of required) {
     if (!(field in input)) errors.push('Missing required field: ' + field);
   }
-  const validLevels = ['low', 'medium', 'high'];
+  const validLevels = ['low', 'medium', 'high', 'critical'];
   if (input.level && !validLevels.includes(input.level)) {
     errors.push('Invalid level: ' + input.level + '. Must be: ' + validLevels.join(', '));
   }
-  const validTypes = ['missing_evidence', 'conflicting_sources', 'tool_failure', 'stale_state', 'ambiguous_intent', 'blocked_by_permission', 'implementation_unknown', 'runtime_not_verified', 'dependency_unresolved', 'partial_completion'];
+  const validTypes = ['missing_evidence', 'conflicting_sources', 'tool_failure', 'execution_failure', 'stale_state', 'ambiguous_intent', 'blocked_by_permission', 'implementation_unknown', 'runtime_not_verified', 'dependency_unresolved', 'partial_completion', 'escalated_review'];
   if (Array.isArray(input.type)) {
     for (var i = 0; i < input.type.length; i++) {
       if (!validTypes.includes(input.type[i])) {
