@@ -897,7 +897,7 @@ EVIDENCE: INCIDENT_LOG_2026-04-18.md
 
 ---
 
-## THE LANE MESSAGING PROTOCOL (ENFORCED)
+## THE LANE-RELAY PROTOCOL (ENFORCED)
 
 ```
 RULE: All cross-lane communication MUST use the lanes/ structure.
@@ -909,7 +909,7 @@ PATHS (DETERMINISTIC - NO GUESSING):
 - SwarmMind inbox: lanes/swarmmind/inbox/
 - Authority inbox: lanes/authority/inbox/
 
-EACH REPO USES THE CANONICAL lanes/ STRUCTURE.
+EACH REPO HAS ALL THREE DIRECTORIES - THIS IS NOT ONE REPO.
 
 SESSION START PROTOCOL (MANDATORY):
 1. READ lanes/{self}/inbox/ FIRST
