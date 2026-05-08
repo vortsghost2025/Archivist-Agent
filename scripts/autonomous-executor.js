@@ -248,8 +248,10 @@ class AutonomousExecutor {
       tasksExecuted: 0,
       tasksBlocked: 0,
       tasksExpired: 0,
+      tasksQuarantined: 0,
       remediatorRuns: 0,
       errors: [],
+      uncertainty: [],
     };
     this._lastRemediator = 0;
   }
@@ -281,14 +283,66 @@ class AutonomousExecutor {
 
       if (result.status === 'EXECUTED') {
         this.stats.tasksExecuted++;
+        if (result.execResult && !result.execResult.ok) {
+          var execUncertainty = {
+            level: 'medium',
+            type: ['partial_completion'],
+            why: 'Task executed but executor returned non-zero exit',
+            evidence_needed: ['executor_stderr', 'executor_exit_code'],
+            operator_decision_needed: false,
+            next_safe_check: 'Review executor output for partial state',
+            detected_at: nowIso(),
+            detected_by: 'autonomous-executor-v' + AUTONOMOUS_VERSION,
+            task_id: (fileInfo.msg || {}).task_id || fileInfo.filename,
+          };
+          this.stats.uncertainty.push(execUncertainty);
+        }
         process.stdout.write(`[autonomous-executor] EXECUTED: ${fileInfo.filename}\n`);
       } else if (result.status === 'BLOCKED') {
         this.stats.tasksBlocked++;
+        var blockedUncertainty = {
+          level: 'high',
+          type: ['blocked_by_permission', 'dependency_unresolved'],
+          why: 'Task blocked by journal preflight: ' + (result.reason || 'unknown'),
+          evidence_needed: ['preflight_details', 'active_owner_state'],
+          operator_decision_needed: false,
+          next_safe_check: 'Check active-owner.json and journal state',
+          detected_at: nowIso(),
+          detected_by: 'autonomous-executor-v' + AUTONOMOUS_VERSION,
+          task_id: (fileInfo.msg || {}).task_id || fileInfo.filename,
+        };
+        this.stats.uncertainty.push(blockedUncertainty);
         process.stdout.write(`[autonomous-executor] BLOCKED: ${fileInfo.filename} reason=${result.reason}\n`);
       } else if (result.status === 'QUARANTINED') {
+        this.stats.tasksQuarantined++;
+        var qUncertainty = {
+          level: 'high',
+          type: ['tool_failure'],
+          why: 'Task quarantined due to unparseable JSON: ' + (result.reason || 'unknown'),
+          evidence_needed: ['raw_file_content', 'json_parse_error'],
+          operator_decision_needed: true,
+          next_safe_check: 'Manually inspect quarantined file',
+          detected_at: nowIso(),
+          detected_by: 'autonomous-executor-v' + AUTONOMOUS_VERSION,
+          task_id: fileInfo.filename,
+        };
+        this.stats.uncertainty.push(qUncertainty);
         process.stdout.write(`[autonomous-executor] QUARANTINED: ${fileInfo.filename} reason=${result.reason}\n`);
+        process.stdout.write(`[autonomous-executor] UNCERTAINTY: level=high operator_needed=true 👤\n`);
       } else {
         this.stats.errors.push({ file: fileInfo.filename, reason: result.reason });
+        var errUncertainty = {
+          level: 'high',
+          type: ['execution_failure'],
+          why: 'Task execution error: ' + (result.reason || 'unknown'),
+          evidence_needed: ['error_log', 'task_input'],
+          operator_decision_needed: false,
+          next_safe_check: 'Review error and retry after fix',
+          detected_at: nowIso(),
+          detected_by: 'autonomous-executor-v' + AUTONOMOUS_VERSION,
+          task_id: (fileInfo.msg || {}).task_id || fileInfo.filename,
+        };
+        this.stats.uncertainty.push(errUncertainty);
         process.stderr.write(`[autonomous-executor] ERROR: ${fileInfo.filename} ${result.reason}\n`);
       }
     }
@@ -334,19 +388,32 @@ class AutonomousExecutor {
 
   stop() {
     this.running = false;
+    var uncertaintySummary = { total: this.stats.uncertainty.length, operator_needed: 0 };
+    for (var i = 0; i < this.stats.uncertainty.length; i++) {
+      if (this.stats.uncertainty[i].operator_decision_needed) uncertaintySummary.operator_needed++;
+    }
     journalAppend(this.lane, 'work_completed', {
       target: `autonomous-executor-${this.lane}`,
       intent: `Autonomous executor stopped after ${this.stats.cycleCount} cycles`,
       handoff: this.stats,
+      uncertainty_summary: uncertaintySummary,
     });
   }
 
   getStats() {
+    var uncertaintySummary = { total: this.stats.uncertainty.length, high: 0, critical: 0, operator_needed: 0 };
+    for (var i = 0; i < this.stats.uncertainty.length; i++) {
+      var u = this.stats.uncertainty[i];
+      if (u.level === 'high') uncertaintySummary.high++;
+      if (u.level === 'critical') uncertaintySummary.critical++;
+      if (u.operator_decision_needed) uncertaintySummary.operator_needed++;
+    }
     return {
       lane: this.lane,
       version: AUTONOMOUS_VERSION,
       dryRun: this.dryRun,
       ...this.stats,
+      uncertainty_summary: uncertaintySummary,
     };
   }
 }
