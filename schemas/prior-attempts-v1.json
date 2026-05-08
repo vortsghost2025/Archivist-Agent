@@ -1,0 +1,47 @@
+{
+  "$id": "https://example.com/schemas/prior-attempts-v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Prior Attempts v1",
+  "description": "Records failed exploration attempts so downstream agents avoid repeating them. Inspired by AI Co-Mathematician 'failed explorations as first-class records' (arXiv:2605.06651).",
+  "type": "object",
+  "properties": {
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique identifier for this attempt"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Agent or lane that made this attempt"
+    },
+    "action": {
+      "type": "string",
+      "description": "What was attempted (human-readable)"
+    },
+    "result": {
+      "type": "string",
+      "description": "Outcome of the attempt (e.g., 'typecheck failed', 'approach contradicted by evidence')"
+    },
+    "failed_because": {
+      "type": "string",
+      "description": "Root cause of failure"
+    },
+    "do_not_repeat": {
+      "type": "string",
+      "description": "Prescriptive guidance: what NOT to do again"
+    },
+    "useful_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Evidence or artifacts from this attempt that may be useful despite failure"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this attempt was made"
+    }
+  },
+  "required": ["attempt_id", "actor", "action", "result", "failed_because", "do_not_repeat"]
+}

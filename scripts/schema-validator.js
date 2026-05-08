@@ -124,27 +124,99 @@ function validateUserQuarantine(state) {
 function validateConvergenceGate(output) {
   const required = ['claim', 'evidence', 'verified_by', 'status'];
   const errors = [];
-  
+
   for (const field of required) {
     if (!(field in output)) {
       errors.push(`Missing required field: ${field}`);
     }
   }
-  
+
   const validStatuses = ['proven', 'unproven', 'conflicted', 'blocked'];
   if (output.status && !validStatuses.includes(output.status)) {
     errors.push(`Invalid status: ${output.status}. Must be: ${validStatuses.join(', ')}`);
   }
-  
+
   const validVerifiers = ['archivist', 'library', 'swarmmind', 'codex', 'self', 'user'];
   if (output.verified_by && !validVerifiers.includes(output.verified_by)) {
     errors.push(`Invalid verified_by: ${output.verified_by}. Must be: ${validVerifiers.join(', ')}`);
   }
-  
+
   if (output.verified_by === 'user' && output.status === 'proven') {
     errors.push('verified_by "user" with status "proven" is NOT allowed — user verification requires lane convergence (RECIPROCAL_ACCOUNTABILITY.md:3)');
   }
-  
+
+  return errors.length > 0 ? { valid: false, errors } : { valid: true };
+}
+
+function validateUncertaintyPacket(input) {
+  if (!input || typeof input !== 'object') return { valid: false, errors: ['uncertainty must be an object'] };
+  const errors = [];
+  const required = ['level', 'type', 'why', 'evidence_needed', 'operator_decision_needed', 'next_safe_check'];
+  for (const field of required) {
+    if (!(field in input)) errors.push('Missing required field: ' + field);
+  }
+  const validLevels = ['low', 'medium', 'high'];
+  if (input.level && !validLevels.includes(input.level)) {
+    errors.push('Invalid level: ' + input.level + '. Must be: ' + validLevels.join(', '));
+  }
+  const validTypes = ['missing_evidence', 'conflicting_sources', 'tool_failure', 'stale_state', 'ambiguous_intent', 'blocked_by_permission', 'implementation_unknown', 'runtime_not_verified', 'dependency_unresolved', 'partial_completion'];
+  if (Array.isArray(input.type)) {
+    for (var i = 0; i < input.type.length; i++) {
+      if (!validTypes.includes(input.type[i])) {
+        errors.push('Invalid uncertainty type: ' + input.type[i] + '. Must be: ' + validTypes.join(', '));
+      }
+    }
+  } else if (input.type) {
+    errors.push('uncertainty.type must be an array');
+  }
+  if (typeof input.operator_decision_needed !== 'boolean' && 'operator_decision_needed' in input) {
+    errors.push('operator_decision_needed must be boolean');
+  }
+  return errors.length > 0 ? { valid: false, errors } : { valid: true };
+}
+
+function validateReviewRound(input) {
+  if (!input || typeof input !== 'object') return { valid: false, errors: ['review must be an object'] };
+  const errors = [];
+  const required = ['round', 'reviewer', 'status', 'feedback', 'max_rounds'];
+  for (const field of required) {
+    if (!(field in input)) errors.push('Missing required field: ' + field);
+  }
+  const validStatuses = ['draft', 'needs_repair', 'verified_partial', 'verified_accept', 'rejected', 'escalated'];
+  if (input.status && !validStatuses.includes(input.status)) {
+    errors.push('Invalid review status: ' + input.status + '. Must be: ' + validStatuses.join(', '));
+  }
+  if (typeof input.round === 'number' && typeof input.max_rounds === 'number') {
+    if (input.round >= input.max_rounds && input.status === 'needs_repair') {
+      errors.push('round >= max_rounds with status needs_repair: must escalate (set status=escalated)');
+    }
+  }
+  if (input.status === 'escalated' && !input.escalation_reason) {
+    errors.push('escalation_reason is required when status=escalated');
+  }
+  if (Array.isArray(input.feedback)) {
+    for (var i = 0; i < input.feedback.length; i++) {
+      var fb = input.feedback[i];
+      if (!fb.issue || !fb.required_fix || !fb.evidence_required) {
+        errors.push('feedback[' + i + '] missing required fields: issue, required_fix, evidence_required');
+      }
+    }
+  }
+  return errors.length > 0 ? { valid: false, errors } : { valid: true };
+}
+
+function validatePriorAttempts(input) {
+  if (!Array.isArray(input)) return { valid: false, errors: ['prior_attempts must be an array'] };
+  const errors = [];
+  for (var i = 0; i < input.length; i++) {
+    var attempt = input[i];
+    var required = ['attempt_id', 'actor', 'action', 'result', 'failed_because', 'do_not_repeat'];
+    for (var j = 0; j < required.length; j++) {
+      if (!attempt[required[j]]) {
+        errors.push('prior_attempts[' + i + '] missing required field: ' + required[j]);
+      }
+    }
+  }
   return errors.length > 0 ? { valid: false, errors } : { valid: true };
 }
 
@@ -183,12 +255,15 @@ function gateDecision(bypassSignals, udsScore, isStateChanging, isQuarantined) {
 }
 
 module.exports = {
-  validateUserInputGate,
-  validateUserQuarantine,
-  validateConvergenceGate,
-  evaluateUserInput,
-  gateDecision,
-  loadSchema
+validateUserInputGate,
+validateUserQuarantine,
+validateConvergenceGate,
+validateUncertaintyPacket,
+validateReviewRound,
+validatePriorAttempts,
+evaluateUserInput,
+gateDecision,
+loadSchema
 };
 
 if (require.main === module) {
@@ -208,15 +283,33 @@ if (require.main === module) {
     const result = validateUserQuarantine(input);
     console.log(JSON.stringify(result, null, 2));
     if (!result.valid) process.exit(1);
-  } else if (command === 'validate-convergence') {
-    const input = JSON.parse(args[1] || '{}');
-    const result = validateConvergenceGate(input);
-    console.log(JSON.stringify(result, null, 2));
-    if (!result.valid) process.exit(1);
-  } else {
+} else if (command === 'validate-convergence') {
+const input = JSON.parse(args[1] || '{}');
+const result = validateConvergenceGate(input);
+console.log(JSON.stringify(result, null, 2));
+if (!result.valid) process.exit(1);
+} else if (command === 'validate-uncertainty') {
+const input = JSON.parse(args[1] || '{}');
+const result = validateUncertaintyPacket(input);
+console.log(JSON.stringify(result, null, 2));
+if (!result.valid) process.exit(1);
+} else if (command === 'validate-review') {
+const input = JSON.parse(args[1] || '{}');
+const result = validateReviewRound(input);
+console.log(JSON.stringify(result, null, 2));
+if (!result.valid) process.exit(1);
+} else if (command === 'validate-prior-attempts') {
+const input = JSON.parse(args[1] || '[]');
+const result = validatePriorAttempts(input);
+console.log(JSON.stringify(result, null, 2));
+if (!result.valid) process.exit(1);
+} else {
     console.log('Usage:');
-    console.log('  node schema-validator.js check-input "user text here"');
-    console.log('  node schema-validator.js validate-quarantine \'{"json":"here"}\'');
-    console.log('  node schema-validator.js validate-convergence \'{"json":"here"}\'');
+console.log(' node schema-validator.js check-input "user text here"');
+console.log(' node schema-validator.js validate-quarantine \'{"json":"here"}\'');
+console.log(' node schema-validator.js validate-convergence \'{"json":"here"}\'');
+console.log(' node schema-validator.js validate-uncertainty \'{"level":"high","type":["missing_evidence"],"why":"test","evidence_needed":["x"],"operator_decision_needed":false,"next_safe_check":"x"}\'');
+console.log(' node schema-validator.js validate-review \'{"round":1,"reviewer":"kernel","status":"draft","feedback":[],"max_rounds":3}\'');
+console.log(' node schema-validator.js validate-prior-attempts \'[{"attempt_id":"x","actor":"x","action":"x","result":"x","failed_because":"x","do_not_repeat":"x"}]\'');
   }
 }

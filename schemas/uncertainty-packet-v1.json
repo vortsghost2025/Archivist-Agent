@@ -1,0 +1,66 @@
+{
+  "$id": "https://example.com/schemas/uncertainty-packet-v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Uncertainty Packet v1",
+  "description": "Surfaces stalled/uncertain work to operators and downstream agents. Prevents agents from claiming 'fixed' when work is uncertain. Inspired by AI Co-Mathematician uncertainty lifecycle (arXiv:2605.06651).",
+  "type": "object",
+  "properties": {
+    "level": {
+      "type": "string",
+      "enum": ["low", "medium", "high"],
+      "description": "low = minor gap, medium = needs attention, high = blocked or unverified runtime"
+    },
+    "type": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "missing_evidence",
+          "conflicting_sources",
+          "tool_failure",
+          "stale_state",
+          "ambiguous_intent",
+          "blocked_by_permission",
+          "implementation_unknown",
+          "runtime_not_verified",
+          "dependency_unresolved",
+          "partial_completion"
+        ]
+      },
+      "minItems": 1,
+      "description": "One or more uncertainty categories applicable to this item"
+    },
+    "why": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable explanation of what is uncertain and why"
+    },
+    "evidence_needed": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Specific evidence that would resolve or reduce this uncertainty"
+    },
+    "operator_decision_needed": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this uncertainty cannot be resolved without human/operator input"
+    },
+    "next_safe_check": {
+      "type": "string",
+      "description": "What to check or verify next to reduce uncertainty. Empty string if unknown."
+    },
+    "detected_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this uncertainty was first detected"
+    },
+    "detected_by": {
+      "type": "string",
+      "description": "Agent or lane that detected this uncertainty"
+    }
+  },
+  "required": ["level", "type", "why", "evidence_needed", "operator_decision_needed", "next_safe_check"]
+}

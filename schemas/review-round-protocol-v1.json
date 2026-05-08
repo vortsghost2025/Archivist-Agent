@@ -1,0 +1,87 @@
+{
+  "$id": "https://example.com/schemas/review-round-protocol-v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Review Round Protocol v1",
+  "description": "Iterative review loop for convergence gate and implementation tasks. Prevents one-shot acceptance of flawed work. Inspired by AI Co-Mathematician reviewer persistence (arXiv:2605.06651).",
+  "type": "object",
+  "properties": {
+    "round": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "Current review round number (1-based)"
+    },
+    "reviewer": {
+      "type": "string",
+      "description": "Identity of the reviewing agent or lane"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "needs_repair",
+        "verified_partial",
+        "verified_accept",
+        "rejected",
+        "escalated"
+      ],
+      "description": "Current review status. draft=not yet reviewed, needs_repair=issues found, verified_partial=some claims ok, verified_accept=all claims pass, rejected=fundamental flaw, escalated=stuck after max rounds"
+    },
+    "feedback": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "issue": {
+            "type": "string",
+            "description": "What is wrong or uncertain"
+          },
+          "required_fix": {
+            "type": "string",
+            "description": "What must change to resolve this issue"
+          },
+          "evidence_required": {
+            "type": "string",
+            "description": "What evidence proves the fix is correct"
+          }
+        },
+        "required": ["issue", "required_fix", "evidence_required"]
+      },
+      "description": "Structured feedback items from this review round"
+    },
+    "previous_rounds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "round": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "result": {
+            "type": "string",
+            "enum": ["needs_repair", "verified_partial", "verified_accept", "rejected", "escalated"]
+          },
+          "unresolved_items": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of feedback items still unresolved after this round"
+          }
+        },
+        "required": ["round", "result", "unresolved_items"]
+      },
+      "description": "Summary of all previous review rounds (not including current)"
+    },
+    "max_rounds": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 3,
+      "description": "Maximum review rounds before mandatory escalation to coordinator/operator"
+    },
+    "escalation_reason": {
+      "type": "string",
+      "description": "Why this review was escalated. Required when status=escalated."
+    }
+  },
+  "required": ["round", "reviewer", "status", "feedback", "max_rounds"]
+}
