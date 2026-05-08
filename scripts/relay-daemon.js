@@ -7,6 +7,22 @@ const path = require('path');
 const { LaneDiscovery } = require('./util/lane-discovery');
 const { ClaimCommitGuard } = require('./claim-commit-guard');
 const discovery = new LaneDiscovery();
+
+function runStoreJournalAppend(laneRoot, lane, event, subject, taskId) {
+  var scriptPath = path.join(laneRoot, 'scripts', 'store-journal.js');
+  if (!fs.existsSync(scriptPath)) return;
+  try {
+    var execSync = require('child_process').execSync;
+    var agent = (process.env.AGENT_INSTANCE_ID || 'relay-daemon');
+    var safeSubject = String(subject || 'unknown').replace(/"/g, '').slice(0, 80);
+    var safeTaskId = String(taskId || 'unknown').replace(/"/g, '').slice(0, 60);
+    execSync('node "' + scriptPath + '" append --lane ' + lane +
+      ' --event ' + event +
+      ' --agent "' + agent + '"' +
+      ' --subject "' + safeSubject + '"' +
+      ' --task_id "' + safeTaskId + '"', { cwd: laneRoot, timeout: 10000 });
+  } catch (e) {}
+}
 const ALL_LANES = ['archivist', 'library', 'swarmmind', 'kernel'];
 const claimGuard = new ClaimCommitGuard({ repoRoot: path.resolve(__dirname, '..') });
 
@@ -104,6 +120,7 @@ class RelayDaemon {
           fs.unlinkSync(filePath);
           results.delivered++;
           results.details.push({ file: ent.name, from: this.lane, to: targetLane, target: targetPath });
+          runStoreJournalAppend(this.repoRoot, this.lane, 'message_delivered', msg.subject || msg.task_id, msg.task_id);
         } catch (err) {
           results.errors.push({ file: ent.name, error: err.message });
         }

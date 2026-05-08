@@ -11,6 +11,22 @@ const { evaluateVerificationDomain } = require('./verification-domain-gate');
 const { getCodeVersionHash } = require('./code-version-hash');
 const { getRoots } = require('./util/lane-discovery');
 
+function runStoreJournalAppend(laneRoot, lane, event, subject, taskId) {
+  var scriptPath = path.join(laneRoot, 'scripts', 'store-journal.js');
+  if (!fs.existsSync(scriptPath)) return;
+  try {
+    var execSync = require('child_process').execSync;
+    var agent = (process.env.AGENT_INSTANCE_ID || 'lane-worker');
+    var safeSubject = String(subject || 'unknown').replace(/"/g, '').slice(0, 80);
+    var safeTaskId = String(taskId || 'unknown').replace(/"/g, '').slice(0, 60);
+    execSync('node "' + scriptPath + '" append --lane ' + lane +
+      ' --event ' + event +
+      ' --agent "' + agent + '"' +
+      ' --subject "' + safeSubject + '"' +
+      ' --task_id "' + safeTaskId + '"', { cwd: laneRoot, timeout: 10000 });
+  } catch (e) {}
+}
+
 const ACTIONABLE_TYPES = new Set(['task', 'escalation', 'request']);
 const NON_ASCII_PATTERN = /[^\x00-\x7F]/;
 
@@ -870,6 +886,11 @@ processFile(filePath) {
         lane: this.lane,
       });
       fs.unlinkSync(filePath);
+      var sjEvent = decision.queue === 'actionRequired' ? 'work_started' :
+                    decision.queue === 'processed' ? 'work_completed' :
+                    decision.queue === 'blocked' ? 'work_blocked' :
+                    decision.queue === 'quarantine' ? 'work_quarantined' : 'work_routed';
+      runStoreJournalAppend(this.repoRoot, this.lane, sjEvent, msg.subject || msg.task_id, msg.task_id);
       if (decision.queue === 'quarantine' || decision.queue === 'blocked') {
         sendNack(msg, decision.reason, decision.detail, this.lane, this.lane);
       }
