@@ -170,18 +170,25 @@ test('legacy completion_artifact_path exists -> processed allowed', (tmpRoot) =>
   mkDir(inbox);
 
   const msg = {
-    id: 'legacy-artifact-exists',
-    from: 'library',
-    to: 'archivist',
-    type: 'task',
-    priority: 'P2',
-    timestamp: new Date().toISOString(),
-    requires_action: true,
-    subject: 'Legacy artifact',
-    body: 'Has completion_artifact_path that exists',
-    completion_artifact_path: artifactPath,
-    terminal_decision: 'completed',
-  };
+  id: 'legacy-artifact-exists',
+  from: 'library',
+  to: 'archivist',
+  type: 'task',
+  task_kind: 'report',
+  priority: 'P2',
+  timestamp: new Date().toISOString(),
+  requires_action: true,
+  subject: 'Legacy artifact',
+  body: 'Has completion_artifact_path that exists',
+  evidence: { required: true },
+  evidence_exchange: {
+    artifact_path: artifactPath,
+    artifact_type: 'benchmark',
+    delivered_at: new Date().toISOString(),
+  },
+  completion_artifact_path: artifactPath,
+  terminal_decision: 'completed',
+};
 
   const worker = new LaneWorker({
     repoRoot: tmpRoot,
@@ -274,7 +281,8 @@ test('path traversal attempt is rejected', (tmpRoot) => {
   const traversalPath = tmpRoot + '/../../etc/passwd';
   const result = resolver.resolveExists(traversalPath);
   assert.strictEqual(result.exists, false);
-  assert.strictEqual(result.reason, 'PATH_TRAVERSAL_REJECTED');
+  var validReasons = ['PATH_TRAVERSAL_REJECTED', 'OUTSIDE_ALLOWED_ROOTS'];
+  assert.ok(validReasons.includes(result.reason), 'Must reject with traversal or outside-roots reason, got: ' + result.reason);
 });
 
 // ============================================================

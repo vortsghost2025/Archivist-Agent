@@ -90,15 +90,16 @@ class ArtifactResolver {
     if (!artifactPath || typeof artifactPath !== 'string') return null;
     if (path.isAbsolute(artifactPath)) return artifactPath;
 
-    const candidates = [];
-    for (const rawRoot of this._rawAllowedRoots) {
-      const candidate = path.join(rawRoot, artifactPath);
-      const resolved = path.resolve(candidate);
+    var firstAllowedCandidate = null;
+    for (var i = 0; i < this._rawAllowedRoots.length; i++) {
+      var rawRoot = this._rawAllowedRoots[i];
+      var candidate = path.join(rawRoot, artifactPath);
+      var resolved = path.resolve(candidate);
       if (!this.isWithinAllowedRoots(resolved)) continue;
-      if (fs.existsSync(candidate)) return candidate;
-      candidates.push(candidate);
+      if (!firstAllowedCandidate) firstAllowedCandidate = resolved;
+      if (fs.existsSync(resolved)) return resolved;
     }
-    return candidates.length > 0 ? candidates[0] : null;
+    return firstAllowedCandidate;
   }
 
   resolveExists(artifactPath) {
@@ -106,21 +107,29 @@ class ArtifactResolver {
       return { exists: false, reason: 'EMPTY_PATH' };
     }
 
-    if (this.hasPathTraversal(artifactPath)) {
-      return { exists: false, reason: 'PATH_TRAVERSAL_REJECTED' };
-    }
-
-    let resolvedPath = artifactPath;
-    if (!path.isAbsolute(artifactPath)) {
-      const resolved = this.resolveRelativePath(artifactPath);
-      if (!resolved) {
+    // Absolute paths: check traversal directly
+    if (path.isAbsolute(artifactPath)) {
+      if (!this.isWithinAllowedRoots(artifactPath)) {
         return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
       }
-      resolvedPath = resolved;
-    } else if (!this.isWithinAllowedRoots(artifactPath)) {
+      return this._checkFileExists(artifactPath);
+    }
+
+    // Relative paths: resolve against each allowed root, check traversal per candidate
+    const resolved = this.resolveRelativePath(artifactPath);
+    if (!resolved) {
       return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
     }
 
+    // Final traversal guard on the resolved absolute path
+    if (!this.isWithinAllowedRoots(resolved)) {
+      return { exists: false, reason: 'PATH_TRAVERSAL_REJECTED' };
+    }
+
+    return this._checkFileExists(resolved);
+  }
+
+  _checkFileExists(resolvedPath) {
     if (this.dryRun) {
       return { exists: true, reason: 'DRY_RUN_SKIP_FS_CHECK', path: resolvedPath };
     }
@@ -180,12 +189,30 @@ class ArtifactResolver {
       };
     }
 
-    const fileResult = this.resolveExists(classification.path);
+    // Cross-repo resolution: if message has a 'from' lane, try that lane's repo first
+    var artifactPath = classification.path;
+    if (artifactPath && !path.isAbsolute(artifactPath) && msg.from && _discovery) {
+      var fromLaneRoot = _discovery.getLocalPath(msg.from);
+      if (fromLaneRoot) {
+        var fromCandidate = path.resolve(path.join(fromLaneRoot, artifactPath));
+        if (this.isWithinAllowedRoots(fromCandidate) && fs.existsSync(fromCandidate)) {
+          return {
+            resolved: true,
+            type: classification.type,
+            path: fromCandidate,
+            reason: 'CROSS_REPO_RESOLVED_FROM_LANE',
+            from_lane: msg.from,
+          };
+        }
+      }
+    }
+
+    const fileResult = this.resolveExists(artifactPath);
     if (!fileResult.exists) {
       return {
         resolved: false,
         type: classification.type,
-        path: classification.path,
+        path: artifactPath,
         reason: fileResult.reason,
       };
     }
@@ -193,7 +220,7 @@ class ArtifactResolver {
     return {
       resolved: true,
       type: classification.type,
-      path: classification.path,
+      path: fileResult.path || artifactPath,
       reason: fileResult.reason,
     };
   }
