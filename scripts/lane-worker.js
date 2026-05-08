@@ -10,6 +10,7 @@ const { ExecutionGate } = require('./execution-gate');
 const { evaluateVerificationDomain } = require('./verification-domain-gate');
 const { getCodeVersionHash } = require('./code-version-hash');
 const { getRoots } = require('./util/lane-discovery');
+const { verifyOutputProvenance } = require('./output-provenance');
 
 function runStoreJournalAppend(laneRoot, lane, event, subject, taskId) {
   var scriptPath = path.join(laneRoot, 'scripts', 'store-journal.js');
@@ -556,9 +557,16 @@ class LaneWorker {
     if (!signatureResult.valid) {
       return { queue: 'blocked', reason: 'SIGNATURE_INVALID', detail: signatureResult.reason || 'Signature validation failed' };
     }
-  if (!isEnglishOnly(msg)) {
-    return { queue: 'quarantine', reason: 'FORMAT_VIOLATION_NON_ASCII', detail: 'Message contains non-ASCII content. Re-request in English per governance constraint.' };
-  }
+    if (!isEnglishOnly(msg)) {
+      return { queue: 'quarantine', reason: 'FORMAT_VIOLATION_NON_ASCII', detail: 'Message contains non-ASCII content. Re-request in English per governance constraint.' };
+    }
+
+    if (typeof msg.body === 'string') {
+      var prov = verifyOutputProvenance(msg.body);
+      if (!prov.ok) {
+        return { queue: 'blocked', reason: 'OUTPUT_PROVENANCE_MISSING', detail: 'body lacks OUTPUT_PROVENANCE header. Missing: ' + prov.missing.join(', ') + '. All agent output must include OUTPUT_PROVENANCE:, agent:, lane:, target:.' };
+      }
+    }
 
   // NFM-022 fix: skip hasUnresolvableEvidence for actionable tasks
   // A new task (requires_action=true) hasn't been executed yet, so
