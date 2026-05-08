@@ -1,7 +1,7 @@
 @echo off
 REM All-Lane Auto-Start for Windows
 REM Launched by Windows Task Scheduler on user logon with 30s delay
-REM Runs: relay-daemon + lane-worker + heartbeat for all 4 lanes
+REM Runs: relay-daemon + lane-worker + executor-watcher + heartbeat for all 4 lanes
 
 set BUN=C:\Users\seand\scoop\shims\bun.exe
 
@@ -18,6 +18,8 @@ start "Archivist Relay Daemon" /min cmd /c "%BUN%" run scripts/relay-daemon.js -
 timeout /t 2 /nobreak >nul
 start "Archivist Lane Worker" /min cmd /c "%BUN%" run scripts/lane-worker.js --watch --apply --poll-seconds 20 --lane %LANE% >> %LOGDIR%\lane-worker.log 2>&1
 timeout /t 2 /nobreak >nul
+start "Archivist Executor Watcher" /min cmd /c "%BUN%" run scripts/executor-watcher.js --watch --apply --lane=%LANE% >> %LOGDIR%\executor-watcher.log 2>&1
+timeout /t 2 /nobreak >nul
 start "Archivist Heartbeat" /min cmd /c "%BUN%" run scripts/heartbeat.js --lane %LANE% --continuous --interval 60 >> %LOGDIR%\heartbeat.log 2>&1
 echo [%date% %time%] %LANE% lane started >> %LOGDIR%\windows-autostart.log
 
@@ -30,6 +32,8 @@ echo [%date% %time%] Starting %LANE% lane >> %LOGDIR%\windows-autostart.log
 start "Kernel Relay Daemon" /min cmd /c "%BUN%" run scripts/relay-daemon.js --watch --apply --poll-seconds 20 --lane %LANE% >> %LOGDIR%\relay-daemon.log 2>&1
 timeout /t 2 /nobreak >nul
 start "Kernel Lane Worker" /min cmd /c "%BUN%" run scripts/lane-worker.js --watch --apply --poll-seconds 20 --lane %LANE% >> %LOGDIR%\lane-worker.log 2>&1
+timeout /t 2 /nobreak >nul
+start "Kernel Executor Watcher" /min cmd /c "%BUN%" run scripts/executor-watcher.js --watch --apply --lane=%LANE% >> %LOGDIR%\executor-watcher.log 2>&1
 timeout /t 2 /nobreak >nul
 start "Kernel Heartbeat" /min cmd /c "%BUN%" run scripts/heartbeat.js --lane %LANE% --continuous --interval 60 >> %LOGDIR%\heartbeat.log 2>&1
 echo [%date% %time%] %LANE% lane started >> %LOGDIR%\windows-autostart.log
@@ -44,6 +48,8 @@ start "Library Relay Daemon" /min cmd /c "%BUN%" run scripts/relay-daemon.js --w
 timeout /t 2 /nobreak >nul
 start "Library Lane Worker" /min cmd /c "%BUN%" run scripts/lane-worker.js --watch --apply --poll-seconds 20 --lane %LANE% >> %LOGDIR%\lane-worker.log 2>&1
 timeout /t 2 /nobreak >nul
+start "Library Executor Watcher" /min cmd /c "%BUN%" run scripts/executor-watcher.js --watch --apply --lane=%LANE% >> %LOGDIR%\executor-watcher.log 2>&1
+timeout /t 2 /nobreak >nul
 start "Library Heartbeat" /min cmd /c "%BUN%" run scripts/heartbeat.js --lane %LANE% --continuous --interval 60 >> %LOGDIR%\heartbeat.log 2>&1
 echo [%date% %time%] %LANE% lane started >> %LOGDIR%\windows-autostart.log
 
@@ -57,7 +63,9 @@ start "SwarmMind Relay Daemon" /min cmd /c "%BUN%" run scripts/relay-daemon.js -
 timeout /t 2 /nobreak >nul
 start "SwarmMind Lane Worker" /min cmd /c "%BUN%" run scripts/lane-worker.js --watch --apply --poll-seconds 20 --lane %LANE% >> %LOGDIR%\lane-worker.log 2>&1
 timeout /t 2 /nobreak >nul
+start "SwarmMind Executor Watcher" /min cmd /c "%BUN%" run scripts/executor-watcher.js --watch --apply --lane=%LANE% >> %LOGDIR%\executor-watcher.log 2>&1
+timeout /t 2 /nobreak >nul
 start "SwarmMind Heartbeat" /min cmd /c "%BUN%" run scripts/heartbeat.js --lane %LANE% --continuous --interval 60 >> %LOGDIR%\heartbeat.log 2>&1
 echo [%date% %time%] %LANE% lane started >> %LOGDIR%\windows-autostart.log
 
-echo [%date% %time%] All 4 lanes started >> S:\Archivist-Agent\lanes\archivist\logs\windows-autostart.log
+echo [%date% %time%] All 4 lanes started (with executor-watcher) >> S:\Archivist-Agent\lanes\archivist\logs\windows-autostart.log
