@@ -26,6 +26,7 @@ const { moveFileWithLease } = require('./lease-write');
 const { sendMessage, sendToAll } = require('./send-message');
 const { consensusCheck, routeMessage, loadPolicy: loadConsensusPolicy } = require('./consensus-check');
 const { logTransfer } = require('./transfer-log');
+const { validateUncertaintyPacket, validateReviewRound } = require('./schema-validator');
 
 const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
 const PREEMPTION_CYCLE_LIMIT = 2;
@@ -613,8 +614,8 @@ class InboxWatcher {
         }
     }
 
-    handleConvergenceCheck(msg) {
-        const status = msg.status || 'unproven';
+  handleConvergenceCheck(msg) {
+    const status = msg.status || 'unproven';
     if (status === 'unproven') {
       console.log(`[watcher] SKIP: unproven claim from ${msg.from || msg.from_lane} — not forwarded`);
       return;
@@ -624,6 +625,37 @@ class InboxWatcher {
       console.log(`[watcher] CONVERGENCE: ${msg.claim}`);
       console.log(`[watcher] Evidence: ${msg.evidence}`);
       console.log(`[watcher] Status: ${status}`);
+    }
+
+    // v1.4: Surface uncertainty packets attached to messages
+    if (msg.uncertainty) {
+      var uResult = validateUncertaintyPacket(msg.uncertainty);
+      if (uResult.valid) {
+        var uLevel = (msg.uncertainty.level || 'low').toUpperCase();
+        var operatorNeeded = msg.uncertainty.operator_decision_needed;
+        console.log(`[watcher] UNCERTAINTY: level=${uLevel} type=${(msg.uncertainty.type || []).join(',')} operator_needed=${operatorNeeded} from=${msg.from || 'unknown'}`);
+        if (operatorNeeded) {
+          console.log(`[watcher] UNCERTAINTY 👤 OPERATOR_DECISION_NEEDED: ${msg.uncertainty.why || 'no reason given'}`);
+        }
+      } else {
+        console.log(`[watcher] UNCERTAINTY_INVALID: ${uResult.errors.join('; ')}`);
+      }
+    }
+
+    // v1.4: Surface review round protocol attached to messages
+    if (msg.review) {
+      var rResult = validateReviewRound(msg.review);
+      if (rResult.valid) {
+        var rStatus = msg.review.status || 'draft';
+        var rRound = msg.review.round || 0;
+        var rMax = msg.review.max_rounds || 3;
+        console.log(`[watcher] REVIEW_ROUND: round=${rRound}/${rMax} status=${rStatus} reviewer=${msg.review.reviewer || 'unknown'}`);
+        if (rStatus === 'escalated') {
+          console.log(`[watcher] REVIEW_ESCALATED: round=${rRound} reason=${msg.review.escalation_reason || 'max rounds exceeded'}`);
+        }
+      } else {
+        console.log(`[watcher] REVIEW_INVALID: ${rResult.errors.join('; ')}`);
+      }
     }
   }
 
