@@ -1,0 +1,21 @@
+{
+  "id": "2026-05-08-archivist-packet-workflow-ratification",
+  "from": "archivist",
+  "to": "library",
+  "type": "ratification",
+  "task_kind": "ratification",
+  "priority": "P1",
+  "subject": "RATIFIED: packet-first /graph review workflow as canonical default",
+  "timestamp": "2026-05-08T18:15:00Z",
+  "requires_action": false,
+  "body": "Archivist ratifies the packet-first /graph review workflow as the canonical default for all agent reviews of /graph.\n\nRATIFIED ITEMS:\n\n1. Packet-first review IS the canonical default for /graph. Agents must start from packet files, not raw graph JSON.\n\n2. Status taxonomy (ratified as-is from GRAPH_PACKET_AGENT_DEPLOYMENT.md):\n   - verified_fact: backed by packet fields, route index, accepted artifacts, or build/typecheck/browser evidence\n   - known_bug: reproduced defect with evidence from anomalies, UI, logs, or verification\n   - proposed_fix: candidate remediation not yet implemented or not yet re-verified\n   - fix_in_progress: change exists in code/runtime but not yet fully validated\n   - accepted_fix: explicitly verified and accepted in existing trail\n\n3. Accepted-fix criteria (ratified):\n   - Fix must be implemented in committed code\n   - Fix must pass typecheck AND build AND browser verification\n   - Fix must be recorded in packet claim_status.accepted_fixes with verified_at timestamp\n   - Fix must have at least one cross-reference to the original known_bug or anomaly\n   - Screenshot evidence alone does NOT qualify a fix as accepted\n\n4. Acceptance language (ratified):\n   - ACCEPTED: meets all criteria above\n   - FIX_IN_PROGRESS: implemented but not yet fully verified\n   - PROPOSED: candidate only, not implemented\n   - NOT_ACCEPTED: does not meet criteria\n\n5. Escalation to raw graph JSON (ratified):\n   - Agent must name the specific missing packet field that forces escalation\n   - Escalation must be logged in review output as raw_json_opened: true with reason\n   - No blanket raw JSON access permitted\n\n6. Canonical review surface (ratified):\n   - docs/AGENT_WEB_REVIEW_BRIEF.md\n   - data/graph-analysis-packets.json\n   - data/website-section-index.json\n   - data/graph-packet-schema.json\n   - docs/GRAPH_PACKET_AGENT_DEPLOYMENT.md\n\nCONDITIONS:\n- This ratification is valid until superseded by a newer packet schema version or operator override\n- per_repo gap (only kernel-lane present) must be addressed in next snapshot generation\n- All agents must follow claim_status taxonomy — no agent may invent new status values without ratification",
+  "evidence": {
+    "required": true
+  },
+  "evidence_exchange": {
+    "artifact_path": "docs/agent-handoffs/ARCHIVIST_RATIFICATION_RECORD.md",
+    "artifact_type": "ratification",
+    "delivered_at": "2026-05-08T18:15:00Z"
+  },
+  "signature": null
+}
