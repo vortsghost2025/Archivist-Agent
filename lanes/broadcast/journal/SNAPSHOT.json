@@ -1,11 +1,11 @@
 {
   "schema": "store-journal-snapshot-v2",
-  "generated_at": "2026-05-08T01:03:35.676Z",
+  "generated_at": "2026-05-08T01:28:22.570Z",
   "host": "we",
   "date": "2026-05-08",
   "lanes": {
     "archivist": {
-      "total_entries": 10,
+      "total_entries": 12,
       "in_progress": [
         {
           "agent": "smoke-test-ubuntu",
@@ -32,16 +32,21 @@
         "scripts/autonomous-executor.js",
         "scripts/blocked-remediator.js",
         "scripts/post-commit-hook.sh",
-        "scripts/setup-hooks.js"
+        "scripts/setup-hooks.js",
+        "context-buffer/SESSION_REPORT_2026-05-07_UBUNTU.md",
+        "lanes/broadcast/journal/DAILY_2026-05-07.md",
+        "lanes/broadcast/journal/DAILY_2026-05-08.md",
+        "lanes/broadcast/journal/SNAPSHOT.json",
+        "scripts/store-journal.js"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T01:03:35.658Z",
-        "event": "test_result",
-        "agent": "journal-test"
+        "timestamp": "2026-05-08T01:05:39.311Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
       }
     },
     "kernel": {
-      "total_entries": 12,
+      "total_entries": 21,
       "in_progress": [
         {
           "agent": "git-pre-commit",
@@ -70,16 +75,22 @@
         "scripts/autonomous-executor.js",
         "scripts/blocked-remediator.js",
         "scripts/contradiction-adjudicator.js",
-        "scripts/task-chain-engine.js"
+        "scripts/task-chain-engine.js",
+        "scripts/post-commit-hook.sh",
+        "lanes/broadcast/system_state.json",
+        "lanes/kernel/inbox/2026-05-07T18-25_archivist_kernel-hb-fix.json",
+        "lanes/kernel/inbox/heartbeat-kernel.json",
+        "lanes/kernel/state/active-owner.json",
+        "scripts/executor-watcher.js"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T01:03:23.253Z",
-        "event": "work_started",
-        "agent": "autonomous-executor-v1.0.0"
+        "timestamp": "2026-05-08T01:28:22.553Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
       }
     },
     "swarmmind": {
-      "total_entries": 6,
+      "total_entries": 8,
       "in_progress": [
         {
           "agent": "smoke-test-ubuntu",
@@ -109,43 +120,62 @@
       ],
       "files_changed_today": [
         "scripts/autonomous-executor.js",
-        "scripts/blocked-remediator.js"
+        "scripts/blocked-remediator.js",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-20-51-313Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-21-57-933Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-23-34-723Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-24-49-066Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-26-33-929Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-27-39-831Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-29-27-962Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-30-37-632Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-32-28-963Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-33-31-273Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-35-24-246Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-36-25-137Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-38-22-149Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-39-24-379Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-41-18-650Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-42-15-136Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-43-12-247Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-44-05-683Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-45-05-284Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-45-56-512Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-46-57-726Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-48-47-755Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-49-56-396Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-51-43-408Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-52-58-699Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-54-36-565Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-55-58-955Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-57-33-204Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T00-59-13-554Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T01-00-30-367Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T01-02-20-888Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T01-03-31-994Z.json",
+        "context-buffer/blocked-remediation-report-2026-05-08T01-05-17-487Z.json",
+        "lanes/broadcast/journal/DAILY_2026-05-08.md",
+        "lanes/broadcast/journal/SNAPSHOT.json",
+        "lanes/swarmmind/journal/2026-05-08.jsonl",
+        "scripts/post-commit-hook.sh",
+        "scripts/setup-hooks.js",
+        "scripts/store-journal.js"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T01:03:23.342Z",
-        "event": "work_started",
-        "agent": "autonomous-executor-v1.0.0"
+        "timestamp": "2026-05-08T01:05:41.377Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
       }
     },
     "library": {
-      "total_entries": 4,
-      "in_progress": [
-        {
-          "agent": "smoke-test-ubuntu",
-          "session_id": "smoke-test-003",
-          "target": "journal smoke test",
-          "started_at": "2026-05-08T00:12:28.737Z"
-        },
-        {
-          "agent": "autonomous-executor-v1.0.0",
-          "session_id": "auto-3008749",
-          "target": "autonomous-executor-library",
-          "started_at": "2026-05-08T00:18:21.542Z"
-        }
-      ],
-      "active_ownerships": [
-        {
-          "path": "lanes/library/inbox/action-required",
-          "owner": "autonomous-executor-v1.0.0",
-          "reason": "autonomous task execution"
-        }
-      ],
+      "total_entries": 1,
+      "in_progress": [],
+      "active_ownerships": [],
       "files_changed_today": [
-        "scripts/autonomous-executor.js",
-        "scripts/blocked-remediator.js"
+        "scripts/autonomous-executor.js"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T00:59:23.190Z",
+        "timestamp": "2026-05-08T01:06:25.373Z",
         "event": "work_completed",
         "agent": "git-post-commit"
       }
