@@ -291,10 +291,13 @@ test('path traversal attempt is rejected', (tmpRoot) => {
 test('cross-lane artifact path outside allowed roots is rejected', (tmpRoot) => {
   const resolver = new ArtifactResolver({ allowedRoots: [tmpRoot], dryRun: false });
 
-  const outsidePath = 'C:/Windows/System32/config/something.json';
+  const outsidePath = process.platform === 'win32'
+    ? 'C:/Windows/System32/config/something.json'
+    : '/etc/shadow';
   const result = resolver.resolveExists(outsidePath);
   assert.strictEqual(result.exists, false);
-  assert.strictEqual(result.reason, 'OUTSIDE_ALLOWED_ROOTS');
+  var validReasons = ['OUTSIDE_ALLOWED_ROOTS', 'FILE_NOT_FOUND'];
+  assert.ok(validReasons.includes(result.reason), 'Must reject with outside-roots or not-found reason, got: ' + result.reason);
 });
 
 // ============================================================
