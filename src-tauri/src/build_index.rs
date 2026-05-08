@@ -21,14 +21,19 @@ pub struct IndexResult {
     pub index_path: String,
 }
 
-#[tauri::command]
-pub fn build_index(root: String) -> Result<IndexResult, String> {
-    let path = Path::new(&root);
+    #[tauri::command]
+    pub fn build_index(root: String) -> Result<IndexResult, String> {
+        let path = Path::new(&root);
 
-    // Check read-only mode first (governance constraint)
-    check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
+        // Check read-only mode first (governance constraint)
+        check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
 
-    validate_path(path).map_err(|e| format!("Path validation failed: {}", e))?;
+        // Check CPS threshold (governance constraint)
+        if !crate::cps_check::cps_threshold_check(10) {
+            return Err("CPS threshold check failed — system below constitutional minimum, mutating operations blocked".to_string());
+        }
+
+        validate_path(path).map_err(|e| format!("Path validation failed: {}", e))?;
 
     if !path.exists() {
         return Err(format!("Path does not exist: {}", root));

@@ -30,7 +30,12 @@ pub fn run() {
             // Evidence: BOOTSTRAP.md:53 — ensure governance files are accessible
             global_shim::ensure_shim();
             // Load CPS and decide if system may continue; threshold 10 for demo
-            let _cps_ok = crate::cps_check::cps_threshold_check(10);
+            let cps_ok = crate::cps_check::cps_threshold_check(10);
+            if !cps_ok {
+                eprintln!("CPS threshold check failed — system below constitutional minimum");
+                // Don't abort startup — the app can still run in read-only observing mode.
+                // Individual mutating commands will enforce CPS at the command level.
+            }
             let window = app.get_webview_window("main").unwrap();
             window.set_title("Archivist Agent").ok();
             Ok(())
@@ -38,6 +43,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             ping,
             get_cps_score,
+            cps_guard,
             scan_tree,
             summarize_folder,
             build_index,
@@ -63,6 +69,11 @@ fn get_cps_score() -> i32 {
     // Compute on demand to reflect any test‑time changes.
     let constraints = crate::constitution::load_constraints();
     crate::constitution::compute_cps_score(&constraints)
+}
+
+#[tauri::command]
+fn cps_guard() -> bool {
+    crate::cps_check::cps_threshold_check(10)
 }
 
 #[cfg(test)]

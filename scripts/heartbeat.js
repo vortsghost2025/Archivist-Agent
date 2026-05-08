@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { loadPolicy, assertWatcherConfig } = require('./concurrency-policy');
 const { LANES: _DL } = require('./util/lane-discovery');
+const { createSignedMessage } = require(path.join(__dirname, 'create-signed-message.js'));
 
 const DEFAULT_CONFIG = {
   agentMode: process.env.AGENT_MODE || 'governing',
@@ -125,26 +126,8 @@ class Heartbeat {
   const crypto = require('crypto');
   const idempotencyKey = crypto.createHash('sha256').update(`heartbeat-${this.config.laneName}-fixed`).digest('hex');
 
-  const TRUST_STORE_KEYS = {
-    archivist: '506c2d0838b6862c',
-    library: '2eec06be0befc8d5',
-    swarmmind: 'c41954228c48ff9c',
-    kernel: '127b44d2bb294ad9'
-  };
-
-  const keyId = TRUST_STORE_KEYS[this.config.laneName] || '';
-  const headerB64 = Buffer.from(JSON.stringify({ typ: 'JWT', alg: 'RS256' }))
-    .toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const payloadB64 = Buffer.from(JSON.stringify({
-    from: this.config.laneName,
-    to: this.config.laneName,
-    timestamp: now.toISOString()
-  })).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const sigPlaceholder = Buffer.from(`placeholder-${this.config.laneName}-${Date.now()}`)
-    .toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  const jwsSignature = `${headerB64}.${payloadB64}.${sigPlaceholder}`;
-
-  const message = {
+  // Build base message WITHOUT signature fields — createSignedMessage will add them
+  const baseMessage = {
     schema_version: "1.3",
     task_id: `heartbeat-${this.config.laneName}`,
     idempotency_key: idempotencyKey,
@@ -162,7 +145,6 @@ class Heartbeat {
       messages_processed: this.messagesProcessed,
       last_inbox_scan: now.toISOString(),
       version: '1.3',
-      identity_status: keyId ? 'ratified' : 'unknown'
     }),
     timestamp: now.toISOString(),
     requires_action: false,
@@ -201,14 +183,42 @@ class Heartbeat {
       timeout_seconds: this.config.staleAfterSeconds,
       status: heartbeatStatus
     },
-    signature: jwsSignature,
-    key_id: keyId,
     system_state: systemState,
     active_contradictions: activeContradictions,
     processed_ok: processedOk,
     compaction_enabled: activeContradictions.length === 0,
     compaction_suspend_reason: activeContradictions.length > 0 ? 'Active contradictions present' : null
   };
+
+  // Attempt real RS256 signing; emit unsigned diagnostic if keys are missing
+  let message;
+  try {
+    message = createSignedMessage(baseMessage, this.config.laneName);
+    message.identity_status = 'ratified';
+    // Preserve governance fields that createSignedMessage doesn't know about
+    message.body = JSON.stringify({
+      ...JSON.parse(baseMessage.body),
+      identity_status: 'ratified'
+    });
+  } catch (err) {
+    // Keys not available — emit unsigned diagnostic heartbeat (no fake JWS, no fake RS256)
+    message = {
+      ...baseMessage,
+      signature: null,
+      signature_alg: null,
+      key_id: null,
+      content_hash: null,
+      session_identity: null,
+      identity_status: 'missing_identity_keys',
+      verification_status: 'unsigned_diagnostic_only',
+      error_code: 'MISSING_IDENTITY_KEYS',
+      error_message: 'Heartbeat signing keys are missing; signed heartbeat not emitted.',
+    };
+    message.body = JSON.stringify({
+      ...JSON.parse(baseMessage.body),
+      identity_status: 'missing_identity_keys'
+    });
+  }
 
     const dir = this.config.inboxPath;
     try {
