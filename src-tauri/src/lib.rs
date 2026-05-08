@@ -1,6 +1,5 @@
 mod build_index;
 mod build_registry;
-mod classification;
 mod constants;
 mod constitution;
 mod cps_check;

@@ -27,6 +27,19 @@ function normalizePath(p) {
   return p.replace(/\\/g, '/').toLowerCase();
 }
 
+function isAbsolutePath(p) {
+  if (!p || typeof p !== 'string') return false;
+  if (path.isAbsolute(p)) return true;
+  if (/^[A-Za-z]:[\/\\]/.test(p)) return true;
+  return false;
+}
+
+function hasDotDot(p) {
+  if (!p || typeof p !== 'string') return false;
+  const parts = p.replace(/\\/g, '/').split('/');
+  return parts.some(part => part === '..');
+}
+
 function isContainedWithin(childResolved, rootNormalized) {
   const childNorm = normalizePath(childResolved);
   return childNorm === rootNormalized || childNorm.startsWith(rootNormalized + '/');
@@ -87,62 +100,58 @@ class ArtifactResolver {
   }
 
   resolveRelativePath(artifactPath) {
-    if (!artifactPath || typeof artifactPath !== 'string') return null;
-    if (path.isAbsolute(artifactPath)) return artifactPath;
+    if (!artifactPath || typeof artifactPath !== 'string') return { path: null, withinRoots: false };
+    if (isAbsolutePath(artifactPath)) return { path: artifactPath, withinRoots: true };
 
-    var firstAllowedCandidate = null;
-    for (var i = 0; i < this._rawAllowedRoots.length; i++) {
-      var rawRoot = this._rawAllowedRoots[i];
-      var candidate = path.join(rawRoot, artifactPath);
-      var resolved = path.resolve(candidate);
+    const candidates = [];
+    for (const rawRoot of this._rawAllowedRoots) {
+      const candidate = path.join(rawRoot, artifactPath);
+      const resolved = path.resolve(candidate);
       if (!this.isWithinAllowedRoots(resolved)) continue;
-      if (!firstAllowedCandidate) firstAllowedCandidate = resolved;
-      if (fs.existsSync(resolved)) return resolved;
+      if (fs.existsSync(candidate)) return { path: candidate, withinRoots: true };
+      candidates.push(candidate);
     }
-    return firstAllowedCandidate;
-  }
+        return candidates.length > 0
+            ? { path: candidates[0], withinRoots: true }
+            : { path: null, withinRoots: false };
+    }
 
   resolveExists(artifactPath) {
     if (!artifactPath || typeof artifactPath !== 'string') {
       return { exists: false, reason: 'EMPTY_PATH' };
     }
 
-    // Absolute paths: check traversal directly
-    if (path.isAbsolute(artifactPath)) {
+    if (isAbsolutePath(artifactPath)) {
       if (!this.isWithinAllowedRoots(artifactPath)) {
+        if (hasDotDot(artifactPath)) {
+          return { exists: false, reason: 'PATH_TRAVERSAL_REJECTED' };
+        }
         return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
       }
-      return this._checkFileExists(artifactPath);
+    } else {
+      const relResult = this.resolveRelativePath(artifactPath);
+      if (!relResult.withinRoots) {
+        return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
+      }
+      if (!relResult.path) {
+        return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
+      }
+      artifactPath = relResult.path;
     }
 
-    // Relative paths: resolve against each allowed root, check traversal per candidate
-    const resolved = this.resolveRelativePath(artifactPath);
-    if (!resolved) {
-      return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
-    }
-
-    // Final traversal guard on the resolved absolute path
-    if (!this.isWithinAllowedRoots(resolved)) {
-      return { exists: false, reason: 'PATH_TRAVERSAL_REJECTED' };
-    }
-
-    return this._checkFileExists(resolved);
-  }
-
-  _checkFileExists(resolvedPath) {
     if (this.dryRun) {
-      return { exists: true, reason: 'DRY_RUN_SKIP_FS_CHECK', path: resolvedPath };
+      return { exists: true, reason: 'DRY_RUN_SKIP_FS_CHECK', path: artifactPath };
     }
 
     try {
-      const stat = fs.statSync(resolvedPath);
-      return { exists: true, reason: 'FILE_EXISTS', path: resolvedPath, isFile: stat.isFile() };
+      const stat = fs.statSync(artifactPath);
+      return { exists: true, reason: 'FILE_EXISTS', path: artifactPath, isFile: stat.isFile() };
     } catch (_) {
-      return { exists: false, reason: 'FILE_NOT_FOUND', path: resolvedPath };
+      return { exists: false, reason: 'FILE_NOT_FOUND', path: artifactPath };
     }
-  }
+    }
 
-  classifyProof(msg) {
+    classifyProof(msg) {
     if (!msg || typeof msg !== 'object') return { type: 'NONE', path: null };
 
     if (msg.evidence_exchange && msg.evidence_exchange.artifact_path) {
