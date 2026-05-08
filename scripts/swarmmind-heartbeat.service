@@ -1,0 +1,16 @@
+[Unit]
+Description=SwarmMind Heartbeat — continuous lane health beacon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/we4free/.nvm/versions/node/v20.20.2/bin/node /home/we4free/agent/repos/SwarmMind/scripts/heartbeat.js --lane swarmmind --continuous --interval 60
+WorkingDirectory=/home/we4free/agent/repos/SwarmMind
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+Environment=LANE_NAME=swarmmind
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+
+[Install]
+WantedBy=default.target

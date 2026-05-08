@@ -1,0 +1,14 @@
+[Unit]
+Description=Archivist Heartbeat — continuous lane health beacon
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/we4free/agent/repos/Archivist-Agent
+ExecStart=/home/we4free/.nvm/versions/node/v20.20.2/bin/node scripts/heartbeat.js --lane archivist --continuous --interval 60
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+
+[Install]
+WantedBy=default.target
