@@ -109,9 +109,18 @@ lanes/*/state/worker-audit.log
 lanes/*/state/traces/
 lanes/*/state/sovereignty-report-*.json
 lanes/*/reports/
-lanes/*/journal/
+lanes/archivist/journal/
+lanes/kernel/journal/
+lanes/library/journal/
+lanes/swarmmind/journal/
+lanes/opencode/journal/
+lanes/authority/journal/
 
 # Temp files
 *.local
 
+# Blocked-remediator reports (generated every cycle)
+context-buffer/blocked-remediation-report-*.json
+
 S:/
+JOURNAL_SESSION_ID
