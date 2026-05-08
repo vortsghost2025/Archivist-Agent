@@ -1,18 +1,12 @@
 {
   "schema": "store-journal-snapshot-v2",
-  "generated_at": "2026-05-08T01:28:22.570Z",
+  "generated_at": "2026-05-08T19:27:27.053Z",
   "host": "we",
   "date": "2026-05-08",
   "lanes": {
     "archivist": {
-      "total_entries": 12,
+      "total_entries": 21,
       "in_progress": [
-        {
-          "agent": "smoke-test-ubuntu",
-          "session_id": "smoke-test-002",
-          "target": "journal smoke test",
-          "started_at": "2026-05-08T00:12:26.362Z"
-        },
         {
           "agent": "autonomous-executor-v1.0.0",
           "session_id": "auto-125087",
@@ -37,16 +31,38 @@
         "lanes/broadcast/journal/DAILY_2026-05-07.md",
         "lanes/broadcast/journal/DAILY_2026-05-08.md",
         "lanes/broadcast/journal/SNAPSHOT.json",
-        "scripts/store-journal.js"
+        "scripts/store-journal.js",
+        "lanes/archivist/state/active-owner.json",
+        "lanes/archivist/state/sovereignty-report-latest.json",
+        "lanes/broadcast/experiments/autonomy/2026-05-08T01-40-self-heal-drill-report.md",
+        "lanes/library/state/active-owner.json",
+        "lanes/swarmmind/state/active-owner.json",
+        "scripts/read-only-verifier.js",
+        "BOOTSTRAP.md",
+        "scripts/heartbeat.js",
+        "src-tauri/src/build_index.rs",
+        "src-tauri/src/build_registry.rs",
+        "src-tauri/src/generate_handoff.rs",
+        "src-tauri/src/lib.rs",
+        "scripts/artifact-resolver.js",
+        "src-tauri/src/classification.rs",
+        "src-tauri/src/constants.rs"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T01:05:39.311Z",
+        "timestamp": "2026-05-08T18:42:20.727Z",
         "event": "work_completed",
         "agent": "git-post-commit"
       }
     },
+    "authority": {
+      "total_entries": 0,
+      "in_progress": [],
+      "active_ownerships": [],
+      "files_changed_today": [],
+      "last_activity": null
+    },
     "kernel": {
-      "total_entries": 21,
+      "total_entries": 23,
       "in_progress": [
         {
           "agent": "git-pre-commit",
@@ -81,29 +97,18 @@
         "lanes/kernel/inbox/2026-05-07T18-25_archivist_kernel-hb-fix.json",
         "lanes/kernel/inbox/heartbeat-kernel.json",
         "lanes/kernel/state/active-owner.json",
-        "scripts/executor-watcher.js"
+        "scripts/executor-watcher.js",
+        "BOOTSTRAP.md"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T01:28:22.553Z",
+        "timestamp": "2026-05-08T08:39:13.808Z",
         "event": "work_completed",
         "agent": "git-post-commit"
       }
     },
     "swarmmind": {
-      "total_entries": 8,
+      "total_entries": 15,
       "in_progress": [
-        {
-          "agent": "smoke-test-ubuntu",
-          "session_id": "smoke-test-004",
-          "target": "journal smoke test",
-          "started_at": "2026-05-08T00:12:37.262Z"
-        },
-        {
-          "agent": "autonomous-executor-v1.0.0",
-          "session_id": "auto-3008750",
-          "target": "autonomous-executor-swarmmind",
-          "started_at": "2026-05-08T00:18:21.526Z"
-        },
         {
           "agent": "autonomous-executor-v1.0.0",
           "session_id": "auto-125182",
@@ -159,23 +164,47 @@
         "lanes/swarmmind/journal/2026-05-08.jsonl",
         "scripts/post-commit-hook.sh",
         "scripts/setup-hooks.js",
-        "scripts/store-journal.js"
+        "scripts/store-journal.js",
+        ".gitignore",
+        "lanes/archivist/state/active-owner.json",
+        "lanes/kernel/state/active-owner.json",
+        "lanes/library/state/active-owner.json",
+        "lanes/swarmmind/state/active-owner.json",
+        "scripts/read-only-verifier.js",
+        "BOOTSTRAP.md"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T01:05:41.377Z",
+        "timestamp": "2026-05-08T08:42:53.015Z",
         "event": "work_completed",
         "agent": "git-post-commit"
       }
     },
     "library": {
-      "total_entries": 1,
+      "total_entries": 3,
       "in_progress": [],
       "active_ownerships": [],
       "files_changed_today": [
-        "scripts/autonomous-executor.js"
+        ".kilo/package-lock.json",
+        ".kilocode/package-lock.json",
+        "lanes/broadcast/system_state.json",
+        "lanes/library/evidence/execution-lineage-relevance-map-2026-05-08.json",
+        "lanes/library/inbox/action-required/2026-05-08_operator_packet-workflow-validation-request.json",
+        "lanes/library/inbox/archive/headless-e2e-test-archivist-to-library-1778180503072.json",
+        "lanes/library/inbox/heartbeat-library.json",
+        "lanes/library/inbox/quarantine/2026-05-08_archivist_packet-workflow-ratification.json",
+        "lanes/library/journal/2026-05-08.jsonl",
+        "lanes/library/state/active-owner.json",
+        "lanes/library/state/sovereignty-report-latest.json",
+        "logs/claim-commit-guard.log",
+        "scripts/artifact-resolver.js",
+        "scripts/execution-gate.js",
+        "scripts/generic-task-executor.js",
+        "scripts/test-artifact-resolver.js",
+        "src/components/graph/GraphCanvas.tsx",
+        "lanes/library/inbox/2026-05-08_archivist_packet-workflow-ratification.json"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T01:06:25.373Z",
+        "timestamp": "2026-05-08T19:27:27.033Z",
         "event": "work_completed",
         "agent": "git-post-commit"
       }

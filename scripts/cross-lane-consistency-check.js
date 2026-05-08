@@ -2,13 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const lanes = ['archivist', 'kernel', 'library', 'swarmmind'];
-const roots = {
-  archivist: 'S:/Archivist-Agent',
-  kernel: 'S:/kernel-lane',
-  library: 'S:/self-organizing-library',
-  swarmmind: 'S:/SwarmMind'
-};
+const { LaneDiscovery } = require('./util/lane-discovery');
+const _discovery = new LaneDiscovery();
+
+const lanes = _discovery.listLanes();
+const roots = {};
+for (const lane of lanes) {
+  roots[lane] = _discovery.getLocalPath(lane);
+}
 
 console.log('=== CROSS-LANE CONSISTENCY CHECK ===\n');
 

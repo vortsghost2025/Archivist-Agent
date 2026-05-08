@@ -301,6 +301,48 @@ test('cross-lane artifact path outside allowed roots is rejected', (tmpRoot) => 
 });
 
 // ============================================================
+// TEST 6b: cross-repo relative artifact path resolves against other lane root
+// ============================================================
+test('cross-repo relative artifact path resolves against other lane root', (tmpRoot) => {
+  const archivistRoot = path.join(tmpRoot, 'archivist');
+  const libraryRoot = path.join(tmpRoot, 'library');
+  mkDir(archivistRoot);
+  mkDir(libraryRoot);
+
+  const resolver = new ArtifactResolver({ allowedRoots: [archivistRoot, libraryRoot], dryRun: false });
+
+  const artifactDir = path.join(libraryRoot, 'lanes', 'library', 'evidence');
+  mkDir(artifactDir);
+  const artifactPath = path.join(artifactDir, 'result.json');
+  fs.writeFileSync(artifactPath, JSON.stringify({ cross_repo: true }), 'utf8');
+
+  const relativePath = 'lanes/library/evidence/result.json';
+  const result = resolver.resolveExists(relativePath);
+
+  assert.strictEqual(result.exists, true, 'Cross-repo relative artifact must resolve against other lane root');
+  assert.strictEqual(result.reason, 'FILE_EXISTS');
+  assert.strictEqual(result.path, artifactPath);
+});
+
+// ============================================================
+// TEST 6c: cross-repo relative artifact not found in any lane root → OUTSIDE_ALLOWED_ROOTS
+// ============================================================
+test('cross-repo relative artifact not found in any lane root is rejected', (tmpRoot) => {
+  const archivistRoot = path.join(tmpRoot, 'archivist');
+  const libraryRoot = path.join(tmpRoot, 'library');
+  mkDir(archivistRoot);
+  mkDir(libraryRoot);
+
+  const resolver = new ArtifactResolver({ allowedRoots: [archivistRoot, libraryRoot], dryRun: false });
+
+  const relativePath = 'lanes/library/evidence/nonexistent.json';
+  const result = resolver.resolveExists(relativePath);
+
+  assert.strictEqual(result.exists, false);
+  assert.strictEqual(result.reason, 'FILE_NOT_FOUND');
+});
+
+// ============================================================
 // TEST 7: completion_message_id (non-path proof) accepted without filesystem check
 // ============================================================
 test('completion_message_id accepted without filesystem check', (tmpRoot) => {

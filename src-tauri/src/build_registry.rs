@@ -70,16 +70,16 @@ fn classify_path(path: &Path) -> (String, String) {
     }
 }
 
-    #[tauri::command]
-    pub fn build_registry() -> Result<String, String> {
-        check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
-        
-        // Check CPS threshold (governance constraint)
-        if !crate::cps_check::cps_threshold_check(10) {
-            return Err("CPS threshold check failed — system below constitutional minimum, mutating operations blocked".to_string());
-        }
+#[tauri::command]
+pub fn build_registry() -> Result<String, String> {
+    check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
 
-        let config = load_config().unwrap_or_default();
+    // Check CPS threshold (governance constraint)
+    if !crate::cps_check::cps_threshold_check(10) {
+        return Err("CPS threshold check failed — system below constitutional minimum, mutating operations blocked".to_string());
+    }
+
+    let config = load_config().unwrap_or_default();
     let mut projects: Vec<ProjectInfo> = Vec::new();
 
     for root in &config.allowed_roots {

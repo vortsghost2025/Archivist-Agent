@@ -15,16 +15,16 @@ pub struct HandoffResult {
     pub handoff_path: String,
 }
 
-    #[tauri::command]
-    pub fn generate_handoff(path: String) -> Result<String, String> {
-        check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
-        
-        // Check CPS threshold (governance constraint)
-        if !crate::cps_check::cps_threshold_check(10) {
-            return Err("CPS threshold check failed — system below constitutional minimum, mutating operations blocked".to_string());
-        }
+#[tauri::command]
+pub fn generate_handoff(path: String) -> Result<String, String> {
+    check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
 
-        let path_ref = Path::new(&path);
+    // Check CPS threshold (governance constraint)
+    if !crate::cps_check::cps_threshold_check(10) {
+        return Err("CPS threshold check failed — system below constitutional minimum, mutating operations blocked".to_string());
+    }
+
+    let path_ref = Path::new(&path);
 
     validate_path(path_ref).map_err(|e| format!("Path validation failed: {}", e))?;
 
