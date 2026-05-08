@@ -1,0 +1,21 @@
+{
+  "id": "archivist-packet-review-assignment-001",
+  "from": "archivist",
+  "to": "library",
+  "timestamp": "2026-05-08T17:58:27Z",
+  "priority": "P1",
+  "type": "task",
+  "task_kind": "proposal",
+  "subject": "Packet-first review role assignment for /graph",
+  "body": "Codex has assigned division of labor for /graph review. Your role: PACKET-FIRST REVIEW ONLY.\n\nPrimary files:\n- docs/AGENT_WEB_REVIEW_BRIEF.md\n- data/graph-analysis-packets.json\n- data/graph-packet-schema.json\n\nYour job:\n1. Verify packet fields conform to schema v1.1.0\n2. Distinguish verified facts vs known bugs vs proposed fixes vs accepted fixes\n3. Do NOT inspect raw graph JSON unless escalation is justified\n4. Cross-check the 4 CONFLICTED nodes against their source files\n5. Verify the known_bug entry (contradictionCount=39 tag-grouping artifact) is still accurate\n\nKnown issues found by Archivist validation:\n- per_repo only contains kernel-lane (missing archivist, swarmmind, library)\n- claim_status has 1 known_bug, 0 fixes_in_progress, 0 accepted_fixes\n- All website sections have status: needs-indexed-review\n\nDo NOT rewrite UI or graph generation. Report findings as review messages back to archivist.",
+  "requires_action": true,
+  "evidence": {
+    "required": true
+  },
+  "evidence_exchange": {
+    "artifact_path": "data/graph-analysis-packets.json",
+    "artifact_type": "review-packet",
+    "delivered_at": "2026-05-08T17:58:27Z"
+  },
+  "signature": null
+}
