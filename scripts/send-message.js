@@ -6,6 +6,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { createSignedMessage } = require('./create-signed-message');
 const { logSendResult } = require('./transfer-log');
+const { ensureOutputProvenance, verifyOutputProvenance } = require('./output-provenance');
 
 const SCHEMA_PATH = 'S:/Archivist-Agent/schemas/inbox-message-v1.json';
 const OUTBOX_ROOT = 'S:/Archivist-Agent/lanes/archivist/outbox';
@@ -76,6 +77,13 @@ function validateMessage(msg) {
     errors.push('Invalid key_id. Must be 16 lowercase hex chars.');
   }
 
+  if (typeof msg.body === 'string') {
+    var prov = verifyOutputProvenance(msg.body);
+    if (!prov.ok) {
+      errors.push('OUTPUT_PROVENANCE missing from body. Required fields: OUTPUT_PROVENANCE:, agent:, lane:, target:. Missing: ' + prov.missing.join(', '));
+    }
+  }
+
   return { valid: errors.length === 0, errors };
 }
 
@@ -93,6 +101,20 @@ function sendMessage(msg, options = {}) {
     result.errors.push(`Signing failed: ${e.message}`);
     console.error(`[ABORT] SIGNING_FAILED for ${msg.task_id || '<unknown>'}: ${e.message}`);
     return result;
+  }
+
+  if (typeof outbound.body === 'string') {
+    var prov = verifyOutputProvenance(outbound.body);
+    if (!prov.ok) {
+      outbound.body = ensureOutputProvenance(outbound.body, {
+        agent: 'send-message',
+        lane: signingLane,
+        target: (outbound.subject || 'unknown').slice(0, 80),
+        generated_at: nowIso(),
+      });
+      outbound._provenance_auto_injected = true;
+      outbound._provenance_was_missing = prov.missing;
+    }
   }
 
   const { valid, errors } = validateMessage(outbound);

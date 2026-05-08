@@ -7,6 +7,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { getCodeVersionHash } = require('./code-version-hash');
 const { LaneDiscovery } = require('./util/lane-discovery');
+const { ensureOutputProvenance, verifyOutputProvenance } = require('./output-provenance');
 
 const EXECUTOR_VERSION = '3.1.0';
 const FEATURE_FLAGS = {
@@ -665,6 +666,12 @@ function createResponse(originalMsg, executionResult, lane) {
   const resultJson = JSON.stringify(executionResult.results || {});
   const contentHash = 'sha256:' + crypto.createHash('sha256').update(resultJson).digest('hex');
   const codeVersionHash = getCodeVersionHash(LANE_REGISTRY[lane].root);
+  const provBody = ensureOutputProvenance(executionResult.summary || 'Task completed.', {
+    agent: 'generic-task-executor',
+    lane: lane,
+    target: (originalMsg.subject || 'Task').slice(0, 80),
+    generated_at: nowIso(),
+  });
   return {
     schema_version: '1.3',
     task_id: `response-${originalMsg.task_id || Date.now()}`,
@@ -675,7 +682,7 @@ function createResponse(originalMsg, executionResult, lane) {
     task_kind: executionResult.task_kind || 'ack',
     priority: originalMsg.priority || 'P2',
     subject: `Re: ${originalMsg.subject || 'Task'}`,
-    body: executionResult.summary || 'Task completed.',
+    body: provBody,
     timestamp: nowIso(),
     requires_action: false,
     payload: { mode: 'inline', compression: 'none' },
@@ -696,7 +703,20 @@ function createResponse(originalMsg, executionResult, lane) {
 }
 
 function signAndDeliver(response, lane) {
-  const root = LANE_REGISTRY[lane].root;
+  if (typeof response.body === 'string') {
+    var prov = verifyOutputProvenance(response.body);
+    if (!prov.ok) {
+      response.body = ensureOutputProvenance(response.body, {
+        agent: 'generic-task-executor',
+        lane: lane,
+        target: (response.subject || 'unknown').slice(0, 80),
+        generated_at: nowIso(),
+      });
+      response._provenance_auto_injected = true;
+      response._provenance_was_missing = prov.missing;
+    }
+  }
+  var root = LANE_REGISTRY[lane].root;
   const outboxDir = path.join(root, 'lanes', lane, 'outbox');
   ensureDir(outboxDir);
 
