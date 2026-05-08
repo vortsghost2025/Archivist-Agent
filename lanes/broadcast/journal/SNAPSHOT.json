@@ -1,0 +1,154 @@
+{
+  "schema": "store-journal-snapshot-v2",
+  "generated_at": "2026-05-08T01:03:35.676Z",
+  "host": "we",
+  "date": "2026-05-08",
+  "lanes": {
+    "archivist": {
+      "total_entries": 10,
+      "in_progress": [
+        {
+          "agent": "smoke-test-ubuntu",
+          "session_id": "smoke-test-002",
+          "target": "journal smoke test",
+          "started_at": "2026-05-08T00:12:26.362Z"
+        },
+        {
+          "agent": "autonomous-executor-v1.0.0",
+          "session_id": "auto-125087",
+          "target": "autonomous-executor-archivist",
+          "started_at": "2026-05-08T01:03:23.058Z"
+        }
+      ],
+      "active_ownerships": [
+        {
+          "path": "lanes/archivist/inbox/action-required",
+          "owner": "autonomous-executor-v1.0.0",
+          "reason": "autonomous task execution"
+        }
+      ],
+      "files_changed_today": [
+        ".gitignore",
+        "scripts/autonomous-executor.js",
+        "scripts/blocked-remediator.js",
+        "scripts/post-commit-hook.sh",
+        "scripts/setup-hooks.js"
+      ],
+      "last_activity": {
+        "timestamp": "2026-05-08T01:03:35.658Z",
+        "event": "test_result",
+        "agent": "journal-test"
+      }
+    },
+    "kernel": {
+      "total_entries": 12,
+      "in_progress": [
+        {
+          "agent": "git-pre-commit",
+          "session_id": "git-1778201347",
+          "target": "[LANE-4] test: verify post-commit auto-journal hook",
+          "started_at": "2026-05-08T00:49:07.534Z"
+        },
+        {
+          "agent": "autonomous-executor-v1.0.0",
+          "session_id": "auto-125162",
+          "target": "autonomous-executor-kernel",
+          "started_at": "2026-05-08T01:03:23.253Z"
+        }
+      ],
+      "active_ownerships": [
+        {
+          "path": "lanes/kernel/inbox/action-required",
+          "owner": "autonomous-executor-v1.0.0",
+          "reason": "autonomous task execution"
+        }
+      ],
+      "files_changed_today": [
+        ".gitignore",
+        "scripts/setup-hooks.js",
+        "scripts/store-journal.js",
+        "scripts/autonomous-executor.js",
+        "scripts/blocked-remediator.js",
+        "scripts/contradiction-adjudicator.js",
+        "scripts/task-chain-engine.js"
+      ],
+      "last_activity": {
+        "timestamp": "2026-05-08T01:03:23.253Z",
+        "event": "work_started",
+        "agent": "autonomous-executor-v1.0.0"
+      }
+    },
+    "swarmmind": {
+      "total_entries": 6,
+      "in_progress": [
+        {
+          "agent": "smoke-test-ubuntu",
+          "session_id": "smoke-test-004",
+          "target": "journal smoke test",
+          "started_at": "2026-05-08T00:12:37.262Z"
+        },
+        {
+          "agent": "autonomous-executor-v1.0.0",
+          "session_id": "auto-3008750",
+          "target": "autonomous-executor-swarmmind",
+          "started_at": "2026-05-08T00:18:21.526Z"
+        },
+        {
+          "agent": "autonomous-executor-v1.0.0",
+          "session_id": "auto-125182",
+          "target": "autonomous-executor-swarmmind",
+          "started_at": "2026-05-08T01:03:23.342Z"
+        }
+      ],
+      "active_ownerships": [
+        {
+          "path": "lanes/swarmmind/inbox/action-required",
+          "owner": "autonomous-executor-v1.0.0",
+          "reason": "autonomous task execution"
+        }
+      ],
+      "files_changed_today": [
+        "scripts/autonomous-executor.js",
+        "scripts/blocked-remediator.js"
+      ],
+      "last_activity": {
+        "timestamp": "2026-05-08T01:03:23.342Z",
+        "event": "work_started",
+        "agent": "autonomous-executor-v1.0.0"
+      }
+    },
+    "library": {
+      "total_entries": 4,
+      "in_progress": [
+        {
+          "agent": "smoke-test-ubuntu",
+          "session_id": "smoke-test-003",
+          "target": "journal smoke test",
+          "started_at": "2026-05-08T00:12:28.737Z"
+        },
+        {
+          "agent": "autonomous-executor-v1.0.0",
+          "session_id": "auto-3008749",
+          "target": "autonomous-executor-library",
+          "started_at": "2026-05-08T00:18:21.542Z"
+        }
+      ],
+      "active_ownerships": [
+        {
+          "path": "lanes/library/inbox/action-required",
+          "owner": "autonomous-executor-v1.0.0",
+          "reason": "autonomous task execution"
+        }
+      ],
+      "files_changed_today": [
+        "scripts/autonomous-executor.js",
+        "scripts/blocked-remediator.js"
+      ],
+      "last_activity": {
+        "timestamp": "2026-05-08T00:59:23.190Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
+      }
+    }
+  }
+}

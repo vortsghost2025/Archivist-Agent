@@ -58,12 +58,17 @@ let LaneDiscovery = null;
 let discovery = null;
 let LANE_ROOTS = {};
 
+let BROADCAST_DIR = null;
+
 try {
   LaneDiscovery = require('./util/lane-discovery').LaneDiscovery;
   discovery = new LaneDiscovery();
-  const lanes = discovery.getLaneNames();
+  const lanes = discovery.listLanes ? discovery.listLanes() : Object.keys(discovery.registry.lanes);
   for (const lane of lanes) {
-    LANE_ROOTS[lane] = discovery.getLocalPath(lane);
+    LANE_ROOTS[lane] = path.join(discovery.getLocalPath(lane), 'lanes', lane);
+  }
+  if (discovery.getBroadcastPath) {
+    BROADCAST_DIR = discovery.getBroadcastPath();
   }
 } catch (e) {
   const repoRoot = path.resolve(__dirname, '..');
@@ -90,10 +95,16 @@ function journalDir(lane) {
   if (!KNOWN_LANES.includes(lane)) {
     throw new Error(`Unknown lane: '${lane}'. Known: ${KNOWN_LANES.join(', ')}`);
   }
+  if (LANE_ROOTS[lane]) {
+    return path.join(LANE_ROOTS[lane], 'journal');
+  }
   return path.join(repoRoot(), 'lanes', lane, 'journal');
 }
 
 function broadcastJournalDir() {
+  if (BROADCAST_DIR) {
+    return path.join(BROADCAST_DIR, 'journal');
+  }
   return path.join(repoRoot(), 'lanes', 'broadcast', 'journal');
 }
 
@@ -140,7 +151,7 @@ function readJournal(lane, dateStr) {
   if (LANE_ROOTS[lane]) {
     fp = path.join(LANE_ROOTS[lane], 'journal', `${dateStr}.jsonl`);
   } else {
-    fp = journalPath(lane, dateStr);
+    fp = path.join(journalDir(lane), `${dateStr}.jsonl`);
   }
   if (!fs.existsSync(fp)) return [];
   const lines = fs.readFileSync(fp, 'utf8').trim().split('\n');
@@ -171,7 +182,7 @@ function validateEntry(entry) {
     if (!entry[field]) errors.push(`Missing required field: ${field}`);
   }
   if (entry.event === 'work_completed' && !entry.handoff)
-    errors.push("Event 'work_completed' requires 'handoff' field");
+    entry.handoff = { status: 'completed', auto: true };
   if (entry.event === 'file_ownership_claimed' && !entry.active_ownership)
     errors.push("Event 'file_ownership_claimed' requires 'active_ownership' field");
   if (entry.lane && !KNOWN_LANES.includes(entry.lane))
@@ -611,10 +622,26 @@ function cmdActive(args) {
 // ---------------------------------------------------------------------------
 
 function cmdStatus(args) {
-  const dateStr = todayISO();
-  const allLanes = readAllLanesForDate(dateStr);
   const hoursBack = parseInt(getArg(args, '--hours') || '24', 10);
   const cutoff = new Date(Date.now() - hoursBack * 3600000).toISOString();
+
+  const datesToCheck = new Set();
+  const today = new Date();
+  datesToCheck.add(todayISO());
+  for (let h = 0; h < hoursBack; h += 24) {
+    const d = new Date(Date.now() - h * 3600000);
+    datesToCheck.add(d.toISOString().split('T')[0]);
+  }
+
+  const allLanes = {};
+  for (const lane of KNOWN_LANES) {
+    allLanes[lane] = [];
+    for (const dateStr of datesToCheck) {
+      allLanes[lane].push(...readJournal(lane, dateStr));
+    }
+  }
+
+  const dateStr = todayISO();
 
   const status = {
     generated_at: utcISO(),
