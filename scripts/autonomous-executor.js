@@ -6,8 +6,9 @@ const path = require('path');
 const os = require('os');
 const { spawnSync } = require('child_process');
 const _ld = require('./util/lane-discovery');
+const { sanitizeFilename } = require('./util/sanitize-filename');
 
-const AUTONOMOUS_VERSION = '1.0.0';
+const AUTONOMOUS_VERSION = '1.2.0';
 const POLL_INTERVAL_MS = 15000;
 const REMEDIATOR_INTERVAL_MS = 600000;
 const STALE_AR_MS = 3600000;
@@ -32,6 +33,7 @@ function resolveRepoRoot(lane) {
 }
 
 function nowIso() { return new Date().toISOString(); }
+function nowSafeIso() { return sanitizeFilename(nowIso()); }
 function ensureDir(d) { if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true }); }
 
 function safeReadJson(p) {
@@ -181,6 +183,33 @@ function executeTaskWithJournal(lane, fileInfo) {
   const inProgressPath = path.join(ipDir, fileInfo.filename);
   try { fs.renameSync(fileInfo.fullPath, inProgressPath); }
   catch (e) { return { status: 'ERROR', reason: `Move to in-progress failed: ${e.message}` }; }
+
+  if (msg.task_kind === 'write' || (msg.body && /write\s+(file|to)/i.test(msg.body))) {
+    const targetMatch = (msg.body || '').match(/write\s+file\s+["']?([^"'\s]+)["']?/i)
+      || (msg.body || '').match(/write\s+["']?([^"'\s]+)["']?/i);
+    if (targetMatch) {
+      const targetFile = targetMatch[1];
+      try {
+        const { isSharedScript, isSchemaFile } = require(path.join(repoRoot, 'scripts', 'edit-lease-manager.js'));
+        if (isSharedScript(targetFile) && lane !== 'archivist') {
+          try { fs.renameSync(inProgressPath, fileInfo.fullPath); } catch (_) {}
+          return {
+            status: 'BLOCKED',
+            reason: `SHARED_SCRIPT_GUARD: Autonomous executor cannot modify shared canonical script "${targetFile}". Propose changes via convergence protocol to archivist.`,
+          };
+        }
+        if (isSchemaFile(targetFile) && lane !== 'archivist') {
+          try { fs.renameSync(inProgressPath, fileInfo.fullPath); } catch (_) {}
+          return {
+            status: 'BLOCKED',
+            reason: `SCHEMA_RATIFICATION_GUARD: Autonomous executor cannot modify schema/governance file "${targetFile}". Changes require convergence protocol ratification.`,
+          };
+        }
+      } catch (e) {
+        process.stderr.write(`[autonomous-executor] edit-lease-manager import failed: ${e.message}, proceeding without guard\n`);
+      }
+    }
+  }
 
   const execResult = runGenericExecutor(lane, false);
 

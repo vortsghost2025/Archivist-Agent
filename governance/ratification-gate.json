@@ -1,0 +1,130 @@
+{
+ "schema_version": "1.1",
+ "description": "Ratification gate for shared-script ownership plan. No batch deployment allowed until 3 of 4 lanes approve. Per amendment C5/A7 of CONSOLIDATED_AMENDMENT_PLAN.md.",
+ "created_at": "20260509T043624Z",
+ "updated_at": "20260509T151000Z",
+ "quorum_required": 3,
+ "total_lanes": 4,
+ "max_rejections": 1,
+ "ratification_protocol": {
+  "step_1_proposal": "SHARED_SCRIPT_OWNERSHIP_PLAN.md serves as the proposal document",
+  "step_2_review": "All lanes reviewed the proposal and submitted amendments",
+  "step_3_vote": "All lanes voted AMEND. Amendments consolidated into 9 unique items (CONSOLIDATED_AMENDMENT_PLAN.md). 8/9 implemented, 1 partial.",
+  "step_4_ratification": "AMEND votes must now become APPROVE votes. 3 of 4 lanes must APPROVE for ratification.",
+  "step_5_deploy": "Only after ratification. Archivist deploys remaining work per deployment spec."
+ },
+ "votes": {
+  "archivist": {
+   "convergence_vote": "AMEND",
+   "convergence_timestamp": "2026-05-09T03:00:00Z",
+   "convergence_source": "governance/CONVERGENCE_VOTE_ARCHIVIST_20260509.json",
+   "ratification_vote": "APPROVE",
+   "ratification_timestamp": "2026-05-09T15:10:00Z",
+   "ratification_source": "governance/RATIFICATION_VOTE_ARCHIVIST_20260509.json"
+  },
+  "library": {
+   "convergence_vote": "AMEND",
+   "convergence_timestamp": "2026-05-09T04:30:00Z",
+   "convergence_source": "governance/CONVERGENCE_VOTE_LIBRARY_20260509.json",
+   "convergence_note": "Re-voted from REJECT to AMEND after kernel demonstrated artifacts on convergence branch",
+   "ratification_vote": null,
+   "ratification_timestamp": null,
+   "ratification_source": null
+  },
+  "swarmmind": {
+   "convergence_vote": "AMEND",
+   "convergence_timestamp": "2026-05-09T03:30:00Z",
+   "convergence_source": "governance/CONVERGENCE_VOTE_SWARMMIND_20260509.json",
+   "ratification_vote": null,
+   "ratification_timestamp": null,
+   "ratification_source": null
+  },
+  "kernel": {
+   "convergence_vote": "PROPOSER",
+   "convergence_timestamp": "2026-05-09T00:43:00Z",
+   "convergence_note": "Originator, not a voter in convergence phase. Votes in ratification.",
+   "ratification_vote": null,
+   "ratification_timestamp": null,
+   "ratification_source": null
+  }
+ },
+ "ratification_status": "ratification_in_progress",
+ "approve_count": 1,
+ "approve_required": 3,
+ "deploy_allowed": false,
+ "amendment_status": {
+  "total_consolidated": 9,
+  "implemented": 9,
+  "partial": 0,
+  "plan": "governance/CONSOLIDATED_AMENDMENT_PLAN.md"
+ },
+ "deployment_spec": {
+  "description": "Per amendment A8/C6: which lane deploys each batch",
+  "completed_batches": [
+   {
+    "id": "batch_1_freeze",
+    "description": "Mutation freeze policy — autonomous-executor.js shared-script write guard",
+    "deploying_lane": "archivist",
+    "status": "deployed",
+    "deployed_at": "2026-05-09T02:00:00Z"
+   },
+   {
+    "id": "batch_2_owner_map",
+    "description": "Ownership map + sync-all-lanes.js canonical owner fix",
+    "deploying_lane": "archivist",
+    "status": "deployed",
+    "deployed_at": "2026-05-09T03:00:00Z"
+   },
+   {
+    "id": "batch_2_c2_autodetect",
+    "description": "Auto-detection of shared scripts (C2/A1)",
+    "deploying_lane": "archivist",
+    "status": "deployed",
+    "deployed_at": "2026-05-09T03:30:00Z"
+   },
+   {
+    "id": "batch_3_sync_guard",
+    "description": "Rollback + regression guards in sync-all-lanes.js (C4/C7/A3/A5)",
+    "deploying_lane": "archivist",
+    "status": "deployed",
+    "deployed_at": "2026-05-09T04:00:00Z"
+   },
+   {
+    "id": "batch_4_executor_scope",
+    "description": "sanitizeFilename() in autonomous-executor.js + bulk rename existing colon files (C8/A9)",
+    "deploying_lane": "archivist",
+    "status": "deployed",
+    "deployed_at": "2026-05-09T04:10:00Z"
+   },
+   {
+    "id": "batch_5_c1_ownership_map",
+    "description": "Git-origin-based ownership map (C1/A2)",
+    "deploying_lane": "archivist",
+    "status": "deployed",
+    "deployed_at": "2026-05-09T04:36:00Z"
+   }
+  ],
+  "remaining_batches": [
+   {
+    "id": "batch_6_sanitize_enforcement",
+    "description": "Add sanitizeFilename() to autonomous-executor.js, generic-task-executor.js, blocked-remediator.js, task-chain-engine.js (A9)",
+    "deploying_lane": "archivist",
+    "status": "deployed",
+    "deployed_at": "2026-05-09T15:10:00Z"
+   },
+   {
+    "id": "batch_7_real_sync",
+    "description": "Run sync-all-lanes.js real sync (not dry-run) after ratification",
+    "deploying_lane": "archivist",
+    "status": "blocked_by_ratification"
+   }
+  ],
+  "post_batch_tasks": [
+   {
+    "id": "fix_kernel_lane_constants",
+    "description": "Fix task-executor.js LANE fallback per C3/A3",
+    "status": "completed"
+   }
+  ]
+ }
+}
