@@ -1,13 +1,187 @@
 {
-  "timestamp": "2026-04-24T15:28:16.101Z",
-  "overall_ok": true,
+  "timestamp": "2026-05-08T16:45:44.763Z",
+  "overall_ok": false,
   "lanes": {
+    "archivist": {
+      "lane": "archivist",
+      "ok": false,
+      "total": 13,
+      "violations": [
+        {
+          "file": "20260503T1928_library_reconciliation-request.json",
+          "type": "review",
+          "subject": "",
+          "requires_action": true
+        },
+        {
+          "file": "archivist-reconciliation-request-2026-05-03.json",
+          "type": "task",
+          "subject": "URGENT: Identity reconciliation required — live contradictio",
+          "requires_action": true
+        },
+        {
+          "file": "kernel-task-list-summary-20260503.json",
+          "type": "task",
+          "subject": "Kernel Lane: Task List Protocol + Session Summary",
+          "requires_action": true
+        },
+        {
+          "file": "library-to-archivist-convergence-response-2026-05-07.json",
+          "type": "response",
+          "subject": "Library convergence response: unified autonomous self-healin",
+          "requires_action": true
+        },
+        {
+          "file": "verification-hardening-archivist-20260504t165602z.json",
+          "type": "task",
+          "subject": "P1 hardening tasks from verification table (drift monitor + ",
+          "requires_action": true
+        }
+      ],
+      "message": "VIOLATIONS FOUND"
+    },
+    "kernel": {
+      "lane": "kernel",
+      "ok": false,
+      "total": 4,
+      "violations": [
+        {
+          "file": "20260503T192000_archivist_library-reconciliation-ruling.json",
+          "type": "response",
+          "subject": "ARCHIVIST RULING: Library reconciliation request — stale dat",
+          "requires_action": true
+        },
+        {
+          "file": "verification-hardening-kernel-20260504t165602z.json",
+          "type": "task",
+          "subject": "P1 hardening tasks from verification table (secure transfer ",
+          "requires_action": true
+        }
+      ],
+      "message": "VIOLATIONS FOUND"
+    },
     "library": {
       "lane": "library",
+      "ok": false,
+      "total": 111,
+      "violations": [
+        {
+          "file": "20260504T004600_archivist_cycle-a-closure.json",
+          "type": "response",
+          "subject": "Cycle A formally closed — NO-OP ratified, no packet signatur",
+          "requires_action": true
+        },
+        {
+          "file": "20260504T013500_archivist_work-path-stale-data-ruling.json",
+          "type": "response",
+          "subject": "RULING: Work-path P0 contradiction candidates (184) are STAL",
+          "requires_action": true
+        },
+        {
+          "file": "20260504T013600_archivist_reconciliation-packet-ruling.json",
+          "type": "response",
+          "subject": "RULING: Reconciliation-packet lease expired — requires re-in",
+          "requires_action": true
+        },
+        {
+          "file": "20260504T151000_archivist_node-verification-v3-results.json",
+          "type": "response",
+          "subject": "Archivist Node Verification Sweep v3 Complete — 379/503 VERI",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-14-the-covenant-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - THE COVENAN",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-19-three-lane-constitutional-ai-governance-system-complete-implementation-summary-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - Three-Lane ",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-19-three-lane-constitutional-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - Three-Lane ",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-2-the-single-entry-point-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - THE SINGLE ",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-20-graph-work-path-analysis-report-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - Graph Work-",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-20-graph-work-path-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - Graph Work-",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-4-project-completion-summary-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - PROJECT COM",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-8-seven-commits-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - Seven Commi",
+          "requires_action": true
+        },
+        {
+          "file": "contradiction-reduction-8-seven-commits-one-day-from-i-don-t-know-what-i-am-to-system-wide-validation-library.json",
+          "type": "task",
+          "subject": "Task: Reduce contradictions for node [Library] - Seven Commi",
+          "requires_action": true
+        },
+        {
+          "file": "final-system-convergence-proof-20260430T233000-misrouted.json",
+          "type": "response",
+          "subject": "All lanes have completed assigned tasks: system-wide task co",
+          "requires_action": true
+        },
+        {
+          "file": "kernel-task-list-summary-20260503.json",
+          "type": "task",
+          "subject": "Kernel Lane: Task List Protocol + Session Summary",
+          "requires_action": true
+        },
+        {
+          "file": "library-key-ratification-20260505.json",
+          "type": "task",
+          "subject": "Library key rotation ratified: key_id c5423f36603e1491 (repl",
+          "requires_action": true
+        },
+        {
+          "file": "reconciliation-packet-verification-pass-1.json",
+          "type": "task",
+          "subject": "Reconciliation packet — verification-reconciliation-pass-1 (",
+          "requires_action": true
+        },
+        {
+          "file": "verification-hardening-library-20260504t165602z.json",
+          "type": "task",
+          "subject": "P1 hardening tasks from verification table (schema/runtime v",
+          "requires_action": true
+        }
+      ],
+      "message": "VIOLATIONS FOUND"
+    },
+    "swarmmind": {
+      "lane": "swarmmind",
       "ok": true,
-      "total": 67,
+      "total": 0,
       "violations": [],
-      "message": "All clear"
+      "message": "No processed/ directory"
     }
   }
 }
