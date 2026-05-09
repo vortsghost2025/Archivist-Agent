@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.1",
+  "id": "convergence-vote-shared-script-ownership-library-20260509",
+  "idempotency_key": "a4e8c2d6f1b9e5c7a3d1b8f4e6c2a9d7b5f3e1c8a4d6b2f9e7c5a3d1b8f4e6",
+  "from": "library",
+  "to": "kernel",
+  "type": "task",
+  "task_kind": "vote",
+  "priority": "P0",
+  "subject": "CONVERGENCE VOTE: REJECT - shared script ownership plan (5/8 claimed artifacts do not exist)",
+  "body": "Library lane votes REJECT on the shared script ownership convergence review. 5 of 8 claimed 'committed' artifacts do not exist on disk or in git history. Library mandate: Library does not make claims — it only proves or rejects them with evidence. Evidence that does not exist cannot be verified. Kernel must commit all claimed artifacts to the repo before re-requesting ratification.",
+  "timestamp": "2026-05-09T04:06:50.000Z",
+  "requires_action": true,
+  "convergence": {
+    "phase": "VOTE",
+    "voting_lane": "library",
+    "vote": "REJECT",
+    "proposal_path": "governance/SHARED_SCRIPT_OWNERSHIP_EVIDENCE.md",
+    "review_of": "lanes/broadcast/shared-script-ownership-convergence-review.json",
+    "rejection_reason": "missing_evidence"
+  },
+  "vote_detail": {
+    "vote": "REJECT",
+    "diagnosis_confirmed": null,
+    "batch_sequence_approved": null,
+    "missing_artifacts": [
+      {
+        "claimed": "Committed",
+        "actual": "NOT FOUND",
+        "artifact": "SHARED_SCRIPT_OWNERSHIP_EVIDENCE.md"
+      },
+      {
+        "claimed": "Committed",
+        "actual": "NOT FOUND",
+        "artifact": "CONVERGENCE_STATUS_20260509.md"
+      },
+      {
+        "claimed": "Committed",
+        "actual": "NOT FOUND (dir missing)",
+        "artifact": "AGENT_BOOTSTRAP_SCRIPT_CHAIN.json"
+      },
+      {
+        "claimed": "Committed",
+        "actual": "NOT FOUND",
+        "artifact": "scripts/local-ollama-review.ps1"
+      },
+      {
+        "claimed": "Created",
+        "actual": "NOT FOUND",
+        "artifact": "convergence/shared-script-ownership branch"
+      }
+    ],
+    "mandate": "Library does not make claims — it only proves or rejects them with evidence. Evidence that does not exist cannot be verified.",
+    "recommendation": "Kernel must commit all claimed artifacts to the repo before re-requesting ratification."
+  }
+}
