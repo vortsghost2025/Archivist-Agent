@@ -239,6 +239,16 @@ function executeWriteTask(msg, lane) {
   if (forbidden.some(f => normalized.includes(f))) {
     return { task_kind: 'report', results: { error: `Write to governance/critical file blocked: ${targetPath}` }, summary: 'Error: write to protected file' };
   }
+
+  try {
+    const { isSharedScript, isSchemaFile } = require(path.join(root, 'scripts', 'edit-lease-manager.js'));
+    if (isSharedScript(targetPath) && lane !== 'archivist') {
+      return { task_kind: 'report', results: { error: `SHARED_SCRIPT_WRITE_BLOCKED: "${targetPath}" is a shared canonical script owned by archivist. Lane "${lane}" cannot write directly. Propose changes via convergence protocol (send proposal message to archivist inbox).` }, summary: 'Error: shared script write blocked — use convergence protocol' };
+    }
+    if (isSchemaFile(targetPath) && lane !== 'archivist') {
+      return { task_kind: 'report', results: { error: `SCHEMA_RATIFICATION_REQUIRED: "${targetPath}" is a schema/governance file. Changes require convergence protocol ratification. Send a proposal message to archivist inbox.` }, summary: 'Error: schema write blocked — ratification required' };
+    }
+  } catch (_) {}
   try {
     const lockCheck = acquireTruthCriticalLockIfNeeded(normalized, lane);
     if (!lockCheck.ok) {

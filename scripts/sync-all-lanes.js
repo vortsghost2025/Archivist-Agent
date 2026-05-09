@@ -32,8 +32,17 @@ const CANONICAL_FILES = [
   'scripts/inbox-watcher.ps1',
   'scripts/heartbeat.js',
   'scripts/cross-lane-consistency-check.js',
+  'scripts/autonomous-executor.js',
+  'scripts/edit-lease-manager.js',
+  'scripts/sync-all-lanes.js',
+  'scripts/cross-lane-sync-gate.js',
+  'scripts/output-provenance.js',
+  'scripts/path-normalization-guard.js',
   'src/lane/SchemaValidator.js',
 ];
+
+const CANONICAL_OWNER_LANE = 'archivist';
+const CANONICAL_OWNER_REASON = 'Archivist is the governance root and coordination lane. All shared scripts must flow outward from Archivist only. Non-Archivist lanes must not propagate their copies back.';
 
 const LANE_ORDER = ['archivist', 'swarmmind', 'kernel', 'library'];
 
@@ -122,9 +131,13 @@ function getFileStatesAcrossLanes(relativePath, laneRoots) {
   return states;
 }
 
-function chooseCanonicalState(states) {
+function chooseCanonicalState(states, enforceCanonicalOwner = true) {
   const existing = states.filter((s) => s.exists);
   if (existing.length === 0) return null;
+  if (enforceCanonicalOwner) {
+    const ownerState = existing.find((s) => s.lane === CANONICAL_OWNER_LANE);
+    if (ownerState) return ownerState;
+  }
   existing.sort((a, b) => {
     if (b.mtimeMs !== a.mtimeMs) return b.mtimeMs - a.mtimeMs;
     const laneRankA = LANE_ORDER.indexOf(a.lane);
@@ -382,6 +395,54 @@ function main() {
     });
   }
 
+  const regressionChecks = [];
+  const REGRESSION_PATTERNS = [
+    { pattern: /require\(['"]\.\/output-provenance['"]\)/g, description: 'duplicate output-provenance import', maxOccurrences: 1 },
+    { pattern: /S:\/\//g, description: 'hardcoded S:/ path', maxOccurrences: 0 },
+    { pattern: /S:\\\\/g, description: 'hardcoded S:\\ path', maxOccurrences: 0 },
+    { pattern: /["']S:/g, description: 'quoted S: path literal', maxOccurrences: 5 },
+  ];
+
+  for (const relativePath of CANONICAL_FILES) {
+    const archivistPath = path.join(laneRoots.archivist, relativePath);
+    if (!fs.existsSync(archivistPath)) continue;
+    let content;
+    try { content = fs.readFileSync(archivistPath, 'utf8'); } catch (_) { continue; }
+
+    for (const check of REGRESSION_PATTERNS) {
+      const matches = content.match(check.pattern);
+      const count = matches ? matches.length : 0;
+      if (count > check.maxOccurrences) {
+        regressionChecks.push({
+          file: relativePath,
+          issue: check.description,
+          count,
+          max_allowed: check.maxOccurrences,
+          status: 'REGRESSION',
+        });
+      }
+    }
+
+    for (const lane of LANE_ORDER) {
+      if (lane === CANONICAL_OWNER_LANE) continue;
+      const lanePath = path.join(laneRoots[lane], relativePath);
+      if (!fs.existsSync(lanePath)) continue;
+      const laneContent = fs.readFileSync(lanePath, 'utf8');
+      const canonicalHash = fileSha256(archivistPath);
+      const laneHash = fileSha256(lanePath);
+      if (canonicalHash !== laneHash) {
+        regressionChecks.push({
+          file: relativePath,
+          lane,
+          issue: 'post-sync drift: lane copy does not match canonical',
+          canonical_sha256: canonicalHash,
+          lane_sha256: laneHash,
+          status: 'DRIFT',
+        });
+      }
+    }
+  }
+
   const testResults = [];
   for (const lane of LANE_ORDER) {
     const laneRoot = laneRoots[lane];
@@ -408,6 +469,8 @@ function main() {
     finished_at: new Date().toISOString(),
     dry_run: DRY_RUN,
     lane_roots: laneRoots,
+    canonical_owner: CANONICAL_OWNER_LANE,
+    canonical_owner_reason: CANONICAL_OWNER_REASON,
     files_considered: allRelativePaths.length,
     file_sync: {
       records: syncRecords,
@@ -416,18 +479,22 @@ function main() {
       successful_or_planned_targets: syncedCount,
       failed_targets: syncFailedCount,
     },
+    regression_checks: regressionChecks,
     test_results: testResults,
     lane_health: laneHealth,
     summary: {
       synced_targets: syncedCount,
       attempted_sync_targets: totalFileTargets,
       failed_sync_targets: syncFailedCount,
+      regression_count: regressionChecks.length,
+      regressions: regressionChecks.filter((r) => r.status === 'REGRESSION').length,
+      drift_count: regressionChecks.filter((r) => r.status === 'DRIFT').length,
       lanes_all_tests_pass: LANE_ORDER.length - failingTestLanes,
       total_lanes: LANE_ORDER.length,
       healthy_lanes: LANE_ORDER.length - unhealthyLanes,
       failing_test_lanes: failingTestLanes,
       unhealthy_lanes: unhealthyLanes,
-      overall_ok: allTestsPass && allHealthy && syncFailedCount === 0,
+      overall_ok: allTestsPass && allHealthy && syncFailedCount === 0 && regressionChecks.length === 0,
     },
   };
 
@@ -489,6 +556,19 @@ function printReport(report) {
     const details = `inbox: ${health.inbox.total} items (${health.inbox.actionable} actionable, ${health.inbox.terminal} terminal), outbox: ${health.outbox.total}`;
     const extras = health.healthy ? '' : ` (issues: ${health.unhealthy_reasons.join('; ')})`;
     console.log(`${mark} ${laneName} — ${details}${extras}`);
+  }
+
+  if (report.regression_checks && report.regression_checks.length > 0) {
+    console.log('\nREGRESSION CHECKS:');
+    for (const rc of report.regression_checks) {
+      if (rc.status === 'REGRESSION') {
+        console.log(`❌ ${rc.file}: ${rc.issue} (found ${rc.count}, max ${rc.max_allowed})`);
+      } else if (rc.status === 'DRIFT') {
+        console.log(`⚠️  ${rc.file} [${laneLabel(rc.lane)}]: ${rc.issue}`);
+      }
+    }
+  } else {
+    console.log('\nREGRESSION CHECKS: ✅ None detected');
   }
 
   const summary = report.summary;

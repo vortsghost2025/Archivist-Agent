@@ -1,71 +1,86 @@
 {
   "schema": "store-journal-snapshot-v2",
-  "generated_at": "2026-05-08T08:24:26.755Z",
-  "host": "WE",
-  "date": "2026-05-08",
+  "generated_at": "2026-05-09T00:39:50.568Z",
+  "host": "we",
+  "date": "2026-05-09",
   "lanes": {
     "archivist": {
-      "total_entries": 1,
+      "total_entries": 5,
       "in_progress": [
         {
-          "agent": "test-agent",
-          "session_id": "test-unc-001",
-          "target": "test",
-          "started_at": "2026-05-08T08:24:26.741Z"
+          "agent": "autonomous-executor-v1.0.0",
+          "session_id": "auto-272785",
+          "target": "autonomous-executor-archivist",
+          "started_at": "2026-05-09T00:04:18.885Z"
         }
       ],
-      "active_ownerships": [],
-      "files_changed_today": [],
-      "last_activity": {
-        "timestamp": "2026-05-08T08:24:26.741Z",
-        "event": "work_started",
-        "agent": "test-agent"
-      },
-      "uncertainty_summary": {
-        "total": 1,
-        "high": 1,
-        "operator_decision_needed": 1,
-        "latest": {
-          "level": "high",
-          "type": [
-            "runtime_not_verified"
-          ],
-          "why": "Testing uncertainty packet in journal",
-          "evidence_needed": [
-            "pass"
-          ],
-          "operator_decision_needed": true,
-          "next_safe_check": "verify"
+      "active_ownerships": [
+        {
+          "path": "lanes/archivist/inbox/action-required",
+          "owner": "autonomous-executor-v1.0.0",
+          "reason": "autonomous task execution"
         }
-      },
-      "review_summary": null
+      ],
+      "files_changed_today": [
+        "lanes/archivist/inbox/action-required/2026-05-08_archivist_provenance-uniform-verification.json",
+        "lanes/broadcast/journal/DAILY_2026-05-08.md",
+        "lanes/broadcast/journal/DAILY_2026-05-09.md",
+        "lanes/broadcast/journal/SNAPSHOT.json",
+        "lanes/archivist/state/sovereignty-report-latest.json"
+      ],
+      "last_activity": {
+        "timestamp": "2026-05-09T00:09:43.161Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
+      }
     },
     "authority": {
       "total_entries": 0,
       "in_progress": [],
       "active_ownerships": [],
       "files_changed_today": [],
-      "last_activity": null,
-      "uncertainty_summary": null,
-      "review_summary": null
+      "last_activity": null
     },
     "kernel": {
-      "total_entries": 0,
-      "in_progress": [],
-      "active_ownerships": [],
-      "files_changed_today": [],
-      "last_activity": null,
-      "uncertainty_summary": null,
-      "review_summary": null
-    },
-    "swarmmind": {
-      "total_entries": 10,
+      "total_entries": 7,
       "in_progress": [
         {
           "agent": "autonomous-executor-v1.0.0",
-          "session_id": "auto-125182",
+          "session_id": "auto-272788",
+          "target": "autonomous-executor-kernel",
+          "started_at": "2026-05-09T00:04:18.955Z"
+        }
+      ],
+      "active_ownerships": [
+        {
+          "path": "lanes/kernel/inbox/action-required",
+          "owner": "autonomous-executor-v1.0.0",
+          "reason": "autonomous task execution"
+        }
+      ],
+      "files_changed_today": [
+        "lanes/broadcast/hygiene/latest.json",
+        "lanes/broadcast/operator_alert_latest.json",
+        "lanes/broadcast/system_state.json",
+        "lanes/kernel/inbox/heartbeat-kernel.json",
+        "lanes/kernel/journal/2026-05-08.jsonl",
+        "lanes/kernel/state/sovereignty-report-latest.json",
+        "schemas/context-restore.json"
+      ],
+      "last_activity": {
+        "timestamp": "2026-05-09T00:39:50.539Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
+      }
+    },
+    "swarmmind": {
+      "total_entries": 5,
+      "in_progress": [
+        {
+          "agent": "autonomous-executor-v1.0.0",
+          "session_id": "auto-272805",
           "target": "autonomous-executor-swarmmind",
-          "started_at": "2026-05-08T01:03:23.342Z"
+          "started_at": "2026-05-09T00:04:18.801Z"
         }
       ],
       "active_ownerships": [
@@ -76,70 +91,49 @@
         }
       ],
       "files_changed_today": [
-        "scripts/autonomous-executor.js",
-        "scripts/blocked-remediator.js",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-20-51-313Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-21-57-933Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-23-34-723Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-24-49-066Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-26-33-929Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-27-39-831Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-29-27-962Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-30-37-632Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-32-28-963Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-33-31-273Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-35-24-246Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-36-25-137Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-38-22-149Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-39-24-379Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-41-18-650Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-42-15-136Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-43-12-247Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-44-05-683Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-45-05-284Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-45-56-512Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-46-57-726Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-48-47-755Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-49-56-396Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-51-43-408Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-52-58-699Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-54-36-565Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-55-58-955Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-57-33-204Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T00-59-13-554Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T01-00-30-367Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T01-02-20-888Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T01-03-31-994Z.json",
-        "context-buffer/blocked-remediation-report-2026-05-08T01-05-17-487Z.json",
-        "lanes/broadcast/journal/DAILY_2026-05-08.md",
-        "lanes/broadcast/journal/SNAPSHOT.json",
         "lanes/swarmmind/journal/2026-05-08.jsonl",
-        "scripts/post-commit-hook.sh",
-        "scripts/setup-hooks.js",
-        "scripts/store-journal.js"
+        "lanes/swarmmind/state/active-owner.json",
+        "scripts/compact-restore-test.js",
+        "scripts/compact-restore-bridge.js"
       ],
       "last_activity": {
-        "timestamp": "2026-05-08T02:32:12.067Z",
-        "event": "work_completed",
-        "agent": "autonomous-executor-v1.0.0"
-      },
-      "uncertainty_summary": null,
-      "review_summary": null
-    },
-    "library": {
-      "total_entries": 1,
-      "in_progress": [],
-      "active_ownerships": [],
-      "files_changed_today": [
-        "scripts/autonomous-executor.js"
-      ],
-      "last_activity": {
-        "timestamp": "2026-05-08T01:06:25.373Z",
+        "timestamp": "2026-05-09T00:38:36.106Z",
         "event": "work_completed",
         "agent": "git-post-commit"
-      },
-      "uncertainty_summary": null,
-      "review_summary": null
+      }
+    },
+    "library": {
+      "total_entries": 5,
+      "in_progress": [
+        {
+          "agent": "autonomous-executor-v1.0.0",
+          "session_id": "auto-272797",
+          "target": "autonomous-executor-library",
+          "started_at": "2026-05-09T00:04:18.826Z"
+        }
+      ],
+      "active_ownerships": [
+        {
+          "path": "lanes/library/inbox/action-required",
+          "owner": "autonomous-executor-v1.0.0",
+          "reason": "autonomous task execution"
+        }
+      ],
+      "files_changed_today": [
+        "lanes/broadcast/system_state.json",
+        "lanes/library/inbox/heartbeat-library.json",
+        "lanes/library/journal/2026-05-08.jsonl",
+        "lanes/library/journal/2026-05-09.jsonl",
+        "lanes/library/state/active-owner.json",
+        "lanes/library/state/daemon.log",
+        "lanes/library/state/sovereignty-report-latest.json",
+        "scripts/compact-restore-bridge.js"
+      ],
+      "last_activity": {
+        "timestamp": "2026-05-09T00:10:33.756Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
+      }
     }
   }
 }
