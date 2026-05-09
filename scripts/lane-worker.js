@@ -561,12 +561,13 @@ class LaneWorker {
       return { queue: 'quarantine', reason: 'FORMAT_VIOLATION_NON_ASCII', detail: 'Message contains non-ASCII content. Re-request in English per governance constraint.' };
     }
 
-    if (typeof msg.body === 'string') {
-      var prov = verifyOutputProvenance(msg.body);
-      if (!prov.ok) {
-        return { queue: 'blocked', reason: 'OUTPUT_PROVENANCE_MISSING', detail: 'body lacks OUTPUT_PROVENANCE header. Missing: ' + prov.missing.join(', ') + '. All agent output must include OUTPUT_PROVENANCE:, agent:, lane:, target:.' };
-      }
+  const OUTPUT_PROV_EXEMPT_TYPES = new Set(['task', 'escalation', 'request']);
+  if (typeof msg.body === 'string' && !OUTPUT_PROV_EXEMPT_TYPES.has(String(msg.type || '').toLowerCase()) && !isActionable(msg) && cp.hasCompletionProof(msg)) {
+    var prov = verifyOutputProvenance(msg.body);
+    if (!prov.ok) {
+      return { queue: 'blocked', reason: 'OUTPUT_PROVENANCE_MISSING', detail: 'body lacks OUTPUT_PROVENANCE header. Missing: ' + prov.missing.join(', ') + '. All agent output must include OUTPUT_PROVENANCE:, agent:, lane:, target:.' };
     }
+  }
 
   // NFM-022 fix: skip hasUnresolvableEvidence for actionable tasks
   // A new task (requires_action=true) hasn't been executed yet, so
