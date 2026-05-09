@@ -1,11 +1,11 @@
 {
   "schema": "store-journal-snapshot-v2",
-  "generated_at": "2026-05-09T00:04:18.969Z",
+  "generated_at": "2026-05-09T00:09:20.932Z",
   "host": "we",
   "date": "2026-05-09",
   "lanes": {
     "archivist": {
-      "total_entries": 1,
+      "total_entries": 3,
       "in_progress": [
         {
           "agent": "autonomous-executor-v1.0.0",
@@ -21,11 +21,16 @@
           "reason": "autonomous task execution"
         }
       ],
-      "files_changed_today": [],
+      "files_changed_today": [
+        "lanes/archivist/inbox/action-required/2026-05-08_archivist_provenance-uniform-verification.json",
+        "lanes/broadcast/journal/DAILY_2026-05-08.md",
+        "lanes/broadcast/journal/DAILY_2026-05-09.md",
+        "lanes/broadcast/journal/SNAPSHOT.json"
+      ],
       "last_activity": {
-        "timestamp": "2026-05-09T00:04:18.885Z",
-        "event": "work_started",
-        "agent": "autonomous-executor-v1.0.0"
+        "timestamp": "2026-05-09T00:08:17.587Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
       }
     },
     "authority": {
@@ -36,7 +41,7 @@
       "last_activity": null
     },
     "kernel": {
-      "total_entries": 1,
+      "total_entries": 3,
       "in_progress": [
         {
           "agent": "autonomous-executor-v1.0.0",
@@ -52,15 +57,22 @@
           "reason": "autonomous task execution"
         }
       ],
-      "files_changed_today": [],
+      "files_changed_today": [
+        "lanes/broadcast/hygiene/latest.json",
+        "lanes/broadcast/operator_alert_latest.json",
+        "lanes/broadcast/system_state.json",
+        "lanes/kernel/inbox/heartbeat-kernel.json",
+        "lanes/kernel/journal/2026-05-08.jsonl",
+        "lanes/kernel/state/sovereignty-report-latest.json"
+      ],
       "last_activity": {
-        "timestamp": "2026-05-09T00:04:18.955Z",
-        "event": "work_started",
-        "agent": "autonomous-executor-v1.0.0"
+        "timestamp": "2026-05-09T00:08:18.352Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
       }
     },
     "swarmmind": {
-      "total_entries": 1,
+      "total_entries": 3,
       "in_progress": [
         {
           "agent": "autonomous-executor-v1.0.0",
@@ -76,15 +88,19 @@
           "reason": "autonomous task execution"
         }
       ],
-      "files_changed_today": [],
+      "files_changed_today": [
+        "lanes/swarmmind/journal/2026-05-08.jsonl",
+        "lanes/swarmmind/state/active-owner.json",
+        "scripts/compact-restore-test.js"
+      ],
       "last_activity": {
-        "timestamp": "2026-05-09T00:04:18.801Z",
-        "event": "work_started",
-        "agent": "autonomous-executor-v1.0.0"
+        "timestamp": "2026-05-09T00:09:20.913Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
       }
     },
     "library": {
-      "total_entries": 1,
+      "total_entries": 3,
       "in_progress": [
         {
           "agent": "autonomous-executor-v1.0.0",
@@ -100,11 +116,20 @@
           "reason": "autonomous task execution"
         }
       ],
-      "files_changed_today": [],
+      "files_changed_today": [
+        "lanes/broadcast/system_state.json",
+        "lanes/library/inbox/heartbeat-library.json",
+        "lanes/library/journal/2026-05-08.jsonl",
+        "lanes/library/journal/2026-05-09.jsonl",
+        "lanes/library/state/active-owner.json",
+        "lanes/library/state/daemon.log",
+        "lanes/library/state/sovereignty-report-latest.json",
+        "scripts/compact-restore-bridge.js"
+      ],
       "last_activity": {
-        "timestamp": "2026-05-09T00:04:18.826Z",
-        "event": "work_started",
-        "agent": "autonomous-executor-v1.0.0"
+        "timestamp": "2026-05-09T00:09:20.186Z",
+        "event": "work_completed",
+        "agent": "git-post-commit"
       }
     }
   }
