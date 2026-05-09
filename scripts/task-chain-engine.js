@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { sanitizeFilename } = require('./util/sanitize-filename');
 
 const MAX_CHAIN_DEPTH = 5;
 const DEFAULT_POLL_SECONDS = 60;
@@ -281,7 +282,7 @@ class TaskChainEngine {
       try { fs.mkdirSync(targetDir, { recursive: true }); } catch (_) {}
     }
 
-    var fileName = new Date().toISOString().replace(/[:.]/g, '-') + '_' + this.lane + '_' + followup.task_id + '.json';
+    var fileName = sanitizeFilename(new Date().toISOString()) + '_' + this.lane + '_' + followup.task_id + '.json';
     var filePath = path.join(targetDir, fileName);
     this._writeJson(filePath, followup);
     this._log('Followup written: ' + filePath);
