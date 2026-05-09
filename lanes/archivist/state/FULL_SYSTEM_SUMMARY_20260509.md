@@ -116,20 +116,22 @@ Agent execution: `bead-wrapper.sh` wraps each "bead" — fetches origin, detects
 
 ## WHY SIMILAR ISSUES KEEP RECURRING
 
-### 1. Branch Name Inconsistency (CRITICAL)
+### 1. Branch Name Inconsistency (FIXED LIVE, NEEDS REPO-TRACKING)
 
-**The problem:** rig-sync hardcodes `origin/main` for ALL rigs. But Archivist and SwarmMind use `master` as their default branch.
+**The problem (historical):** rig-sync originally hardcoded `origin/main` for ALL rigs. But Archivist and SwarmMind use `master` as their default branch, so those rigs were not receiving updates.
 
-**The impact:** When rig-sync runs `git rev-parse origin/main` on the Archivist or SwarmMind rigs, it either fails silently or checks the wrong branch. This means those rigs may not be receiving updates.
+**Fix applied this session:** The deployed Ubuntu rig-sync-all.sh was updated to resolve the default branch per-rig instead of hardcoding `main`. Verified: rig-sync logs now show branch-aware syncing with `errors=0` across all 5 rigs.
 
-**Evidence:**
-- Archivist GitHub default branch: `master`
-- SwarmMind GitHub default branch: `master`
-- kernel-lane GitHub default branch: `main`
-- self-organizing-library GitHub default branch: `main`
-- rig-sync-all.sh: does `git rev-parse origin/main` unconditionally
+**Remaining risk:** The repo-tracked copy of rig-sync-all.sh in WE4FREE-Control-Plane may not yet match the deployed Ubuntu script. If the deployed version is ever overwritten (e.g., by a `git pull` that reverts it), the fix is lost.
 
-**Fix:** rig-sync needs to read the default branch per-rig (from config or `git symbolic-ref`) instead of hardcoding `main`.
+**Current status:**
+```yaml
+P0_RIG_SYNC_BRANCH_DETECTION:
+  previous_status: blocker
+  current_status: fixed_live_on_ubuntu
+  proof: rig-sync-all logs show branch-aware syncing with errors=0
+  remaining: ensure repo-tracked/control-plane copy matches deployed script
+```
 
 ### 2. Dual Directory Trees on Ubuntu (STRUCTURAL)
 
@@ -181,7 +183,7 @@ Agent execution: `bead-wrapper.sh` wraps each "bead" — fetches origin, detects
 **The impact:**
 - No real-time cross-platform awareness
 - A push from Windows must be pulled by Ubuntu (and vice versa) via rig-sync (30s cycle)
-- If rig-sync has the branch bug (#1), sync breaks silently
+- If rig-sync regresses (branch bug was fixed but not yet repo-tracked), sync breaks silently
 - No way to quickly push a hotfix from Windows to Ubuntu without committing to GitHub first
 
 **This is by design** (Three-Surface Doctrine: GitHub as canonical spine), but it means any GitHub outage or sync failure creates a partition.
@@ -208,6 +210,7 @@ Agent execution: `bead-wrapper.sh` wraps each "bead" — fetches origin, detects
 | D: Ubuntu rig-sync verification | ✅ | Timer active (30s), 5 rigs, errors=0 |
 | E: WE4FREE-Control-Plane local check | ✅ | Clean, branch `main`, HEAD `7e8f885` |
 | F: Repair report written | ✅ | Committed as `2b6ca92`, pushed |
+| G: rig-sync branch-aware fix | ✅ | Deployed live on Ubuntu, errors=0 |
 | Cleanup 1: Remove stale kernel-lane-new | ✅ | Deleted `S:/kernel-lane-new/` |
 | Cleanup 2: Clean Ubuntu agent/repos | ✅ | `git checkout . && git clean -fd` on all 4 repos |
 | Cleanup 3: NTFS pre-commit hook | ✅ | Installed at `S:/kernel-lane/.git/hooks/pre-commit` |
@@ -219,12 +222,12 @@ Agent execution: `bead-wrapper.sh` wraps each "bead" — fetches origin, detects
 
 | Priority | Action | Why |
 |----------|--------|-----|
-| **P0** | Fix rig-sync branch detection | Archivist + SwarmMind rigs may not be syncing at all |
+| **P0** | Ensure deployed Ubuntu rig-sync script matches repo-tracked WE4FREE-Control-Plane copy | Live fix exists but is not yet in the repo; a pull could revert it |
 | **P1** | Promote NTFS hook to repo-tracked file | Prevents colon-file regression from other clones |
 | **P1** | Add volatile runtime files to `.gitignore` | Reduces noise, makes drift visible |
 | **P2** | Add post-bead cleanup to bead-wrapper.sh | Prevents agent/repos/ accumulation |
-| **P2** | Reconcile or merge Ubuntu dual directory trees | Eliminates structural drift source |
-| **P3** | Add branch-name validation to CI | Prevents future branch name confusion |
+| **P2** | Decide whether Ubuntu dual trees stay separate or get a reconciliation policy | Eliminates structural drift source |
+| **P3** | Add branch-name validation to CI/state-cache | Prevents future branch name confusion |
 
 ---
 
