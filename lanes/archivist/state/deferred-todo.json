@@ -1,0 +1,41 @@
+{
+  "lane_id": "archivist",
+  "created_at": "2026-05-09T20:24:00Z",
+  "classification": "deferred-local-hygiene-debt",
+  "items": [
+    {
+      "id": "kernel-lane-windows-reclone",
+      "title": "Kernel-lane Windows local clone recovery",
+      "priority": "P2",
+      "status": "deferred",
+      "deferred_reason": "Single-agent mode active. Local Archivist surface only until repo state clean and next safe action explicit.",
+      "added_by": "operator-exterior-synthesis",
+      "added_at": "2026-05-09T20:24:00Z",
+      "context": {
+        "root_cause": "Windows S:\\kernel-lane became untrusted due to NTFS/file-lock/stale git index issues during attempted reclone. Original blocker involved old colon-named files from git history; current GitHub HEAD no longer contains colon-named files. Remaining issue is local Windows worktree/index/lock corruption, not a sync infrastructure failure.",
+        "classification": {
+          "github_kernel_lane_head": "clean",
+          "ubuntu_gastown_kernel_lane_mirror": "synced",
+          "windows_kernel_lane": "untrusted",
+          "production_sync_architecture": "not_blocked",
+          "windows_kernel_lane_work": "deferred_until_reclone"
+        }
+      },
+      "steps": [
+        "1. Close Cursor / VS Code / file watchers.",
+        "2. Ensure no shell is inside S:\\kernel-lane.",
+        "3. Fresh clone kernel-lane into a brand-new timestamped path under S:\\.",
+        "4. Verify: Test-Path .git = True, git rev-parse --short HEAD matches origin/main, git status --short is empty.",
+        "5. Only then replace S:\\kernel-lane.",
+        "6. Do not delete old backups until fresh clone is verified."
+      ]
+    }
+  ],
+  "active_surface": {
+    "host": "windows-desktop",
+    "path": "S:\\Archivist-Agent",
+    "agent_count": 1,
+    "kernel_lane": "deferred",
+    "headless_gastown_cloud": "observe_only"
+  }
+}
