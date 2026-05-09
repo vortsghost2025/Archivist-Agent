@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "description": "Ratification gate for shared-script ownership plan. No batch deployment allowed until 3 of 4 lanes approve. Per amendment C5 of SHARED_SCRIPT_OWNERSHIP_PLAN_AMENDMENT.md.",
+  "created_at": "20260509T043624Z",
+  "quorum_required": 3,
+  "total_lanes": 4,
+  "max_rejections": 1,
+  "ratification_protocol": {
+    "step_1_proposal": "SHARED_SCRIPT_OWNERSHIP_PLAN.md serves as the proposal document",
+    "step_2_review": "All lanes review the proposal and amendments",
+    "step_3_vote": "Each lane sends APPROVE/REJECT/AMEND via inbox message",
+    "step_4_ratification": "3 of 4 lanes must APPROVE for ratification. More than 1 REJECT blocks deployment.",
+    "step_5_deploy": "Only after ratification. Archivist deploys all batches per C6 deployment spec."
+  },
+  "votes": {
+    "archivist": {
+      "vote": "AMEND",
+      "timestamp": "2026-05-09T03:00:00Z",
+      "source": "governance/CONVERGENCE_VOTE_ARCHIVIST_20260509.json",
+      "amendments_required": 8,
+      "amendments_implemented": ["C2", "C3", "C4", "C7", "C8"],
+      "amendments_in_progress": ["C1"],
+      "amendments_pending": ["C5", "C6"]
+    },
+    "library": {
+      "vote": null,
+      "timestamp": null,
+      "source": null
+    },
+    "swarmmind": {
+      "vote": null,
+      "timestamp": null,
+      "source": null
+    },
+    "kernel": {
+      "vote": null,
+      "timestamp": null,
+      "source": null
+    }
+  },
+  "ratification_status": "pre_ratification",
+  "deploy_allowed": false,
+  "deployment_spec": {
+    "description": "Per amendment C6: which lane deploys each batch",
+    "batches": [
+      {
+        "id": "batch_1_freeze",
+        "description": "Mutation freeze policy — autonomous-executor.js shared-script write guard",
+        "deploying_lane": "archivist",
+        "rationale": "Archivist owns autonomous-executor.js; change is to that file",
+        "status": "deployed",
+        "deployed_at": "2026-05-09T02:00:00Z"
+      },
+      {
+        "id": "batch_2_owner_map",
+        "description": "Ownership map + sync-all-lanes.js canonical owner fix",
+        "deploying_lane": "archivist",
+        "rationale": "Archivist is governance root; ownership map + sync script live there",
+        "status": "deployed",
+        "deployed_at": "2026-05-09T03:00:00Z"
+      },
+      {
+        "id": "batch_2_c2_autodetect",
+        "description": "Auto-detection of shared scripts (C2)",
+        "deploying_lane": "archivist",
+        "rationale": "sync-all-lanes.js and edit-lease-manager.js changes",
+        "status": "deployed",
+        "deployed_at": "2026-05-09T03:30:00Z"
+      },
+      {
+        "id": "batch_3_sync_guard",
+        "description": "Rollback + regression guards in sync-all-lanes.js (C4, C7, C8)",
+        "deploying_lane": "archivist",
+        "rationale": "All changes in sync-all-lanes.js",
+        "status": "deployed",
+        "deployed_at": "2026-05-09T04:00:00Z"
+      },
+      {
+        "id": "batch_4_executor_scope",
+        "description": "sanitizeFilename() in autonomous-executor.js + bulk rename existing colon files (C8)",
+        "deploying_lane": "archivist",
+        "rationale": "autonomous-executor.js changes + cross-lane file renames",
+        "status": "deployed",
+        "deployed_at": "2026-05-09T04:10:00Z"
+      },
+      {
+        "id": "batch_5_c1_ownership_map",
+        "description": "Git-origin-based ownership map (C1)",
+        "deploying_lane": "archivist",
+        "rationale": "Governance artifact creation",
+        "status": "deployed",
+        "deployed_at": "2026-05-09T04:36:00Z"
+      }
+    ],
+    "post_batch_tasks": [
+      {
+        "id": "fix_kernel_lane_constants",
+        "description": "Fix task-executor.js LANE fallback per C3",
+        "deploying_lane": "archivist",
+        "rationale": "Already fixed — detectLaneFromRepo() works in all 4 copies",
+        "status": "completed"
+      }
+    ]
+  }
+}
