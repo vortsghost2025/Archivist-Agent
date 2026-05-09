@@ -1,0 +1,685 @@
+Yes. You want **two separate but connected things**:
+
+```text
+1. Store Journal
+   Append-only record of what every agent did.
+
+2. Write Lock / File Ownership Gate
+   Prevents two agents from writing the same file at the same time.
+```
+
+The journal tells everyone **what happened**.
+The lock gate prevents collisions **before they happen**.
+
+---
+
+# Recommended design
+
+## 1. Store Journal: append-only shared ledger
+
+Use one canonical journal directory per repo:
+
+```bash
+/home/we4free/agent/repos/<repo>/lanes/broadcast/journal/
+```
+
+Daily files:
+
+```bash
+lanes/broadcast/journal/2026-05-07.jsonl
+lanes/broadcast/journal/2026-05-08.jsonl
+```
+
+Each line is one JSON event.
+
+Example event:
+
+```json
+{
+  "timestamp": "2026-05-07T19:45:12Z",
+  "event_type": "work_started",
+  "agent": "opencode",
+  "lane": "kernel",
+  "host": "ubuntu-headless",
+  "repo": "kernel-lane",
+  "session_id": "unknown",
+  "target": "fix kernel lane-discovery exports",
+  "files_intended": [
+    "scripts/util/lane-discovery.js"
+  ],
+  "lock_ids": [
+    "scripts/util/lane-discovery.js"
+  ],
+  "status": "in_progress"
+}
+```
+
+Completion event:
+
+```json
+{
+  "timestamp": "2026-05-07T20:03:40Z",
+  "event_type": "work_completed",
+  "agent": "opencode",
+  "lane": "kernel",
+  "host": "ubuntu-headless",
+  "repo": "kernel-lane",
+  "target": "fix kernel lane-discovery exports",
+  "files_changed": [
+    "scripts/util/lane-discovery.js"
+  ],
+  "tests_run": [
+    "systemctl --user status kernel-lane-worker",
+    "node scripts/recovery-test-suite.js"
+  ],
+  "result": "PASS",
+  "next_action": "commit kernel source fix",
+  "status": "complete"
+}
+```
+
+This gives every agent a timeline.
+
+---
+
+# 2. File lock gate: make overwrite impossible
+
+Use **atomic lock files**.
+
+Canonical lock directory:
+
+```bash
+/home/we4free/agent/locks/
+```
+
+Lock file path format:
+
+```bash
+/home/we4free/agent/locks/<repo>/<sha256-of-file-path>.lock.json
+```
+
+Example lock content:
+
+```json
+{
+  "lock_id": "kernel-lane:scripts/util/lane-discovery.js",
+  "repo": "kernel-lane",
+  "path": "scripts/util/lane-discovery.js",
+  "owner_agent": "opencode",
+  "owner_lane": "kernel",
+  "host": "ubuntu-headless",
+  "pid": 2607772,
+  "created_at": "2026-05-07T19:45:12Z",
+  "expires_at": "2026-05-07T20:45:12Z",
+  "reason": "fix kernel lane discovery exports",
+  "status": "active"
+}
+```
+
+The rule:
+
+```text
+Before any agent writes a file:
+1. It must acquire the lock.
+2. If the lock exists and is not expired, it must stop.
+3. If it cannot acquire the lock, it may write a proposal, not edit the file.
+```
+
+Use atomic creation so two agents cannot race:
+
+```bash
+mkdir /home/we4free/agent/locks/kernel-lane/scripts.util.lane-discovery.js.lock
+```
+
+`mkdir` is atomic on Linux. Only one process wins.
+
+Better than “check then write,” because check-then-write has a race condition.
+
+---
+
+# Minimal implementation: `store-journal.js`
+
+Create one script in each repo or one shared copy:
+
+```bash
+scripts/store-journal.js
+```
+
+Commands:
+
+```bash
+node scripts/store-journal.js start \
+  --lane kernel \
+  --agent opencode \
+  --target "fix kernel lane discovery" \
+  --files scripts/util/lane-discovery.js
+
+node scripts/store-journal.js lock \
+  --lane kernel \
+  --agent opencode \
+  --file scripts/util/lane-discovery.js \
+  --ttl-minutes 60 \
+  --reason "fix kernel lane discovery"
+
+node scripts/store-journal.js complete \
+  --lane kernel \
+  --agent opencode \
+  --target "fix kernel lane discovery" \
+  --files scripts/util/lane-discovery.js \
+  --result PASS
+
+node scripts/store-journal.js unlock \
+  --lane kernel \
+  --agent opencode \
+  --file scripts/util/lane-discovery.js
+```
+
+And preflight:
+
+```bash
+node scripts/store-journal.js preflight \
+  --lane library \
+  --files scripts/runner-v3.sh scripts/post-compact-audit.js
+```
+
+Output:
+
+```text
+PASS: no active locks
+```
+
+or:
+
+```text
+BLOCKED: scripts/runner-v3.sh is locked by library/kilo until 2026-05-07T20:45:00Z
+```
+
+---
+
+# Stronger: wrap all writes with `guardWrite`
+
+Since your agents already have `guardWrite` thinking, make the lock gate mandatory.
+
+Instead of agents writing with raw `fs.writeFileSync`, require:
+
+```js
+guardWrite({
+  repo: "self-organizing-library",
+  lane: "library",
+  agent: "kilo",
+  path: "scripts/store-journal.js",
+  reason: "implement store journal",
+  content
+});
+```
+
+`guardWrite` should:
+
+```text
+1. Normalize path.
+2. Reject paths outside repo.
+3. Reject forbidden paths.
+4. Check active lock.
+5. Acquire lock if requested.
+6. Write atomically.
+7. Append journal event.
+8. Release lock or keep ownership depending on mode.
+```
+
+Hard-block direct writes later:
+
+```text
+No agent may write source files except through guardWrite / atomicWriteWithLease.
+```
+
+---
+
+# Cross-machine visibility: headless + local desktop
+
+Use git for durable sync, but do not require every runtime event to be committed.
+
+Better structure:
+
+```text
+Runtime journal:
+  lives on headless
+  updated constantly
+  not always committed
+
+Daily summary:
+  generated from journal
+  committed/pushed periodically
+  local desktop pulls it
+```
+
+Paths:
+
+```bash
+lanes/broadcast/journal/2026-05-07.jsonl      # runtime, maybe ignored
+lanes/broadcast/journal/DAILY_2026-05-07.md  # summary, commit-friendly
+```
+
+Desktop can view the latest through SSH:
+
+```powershell
+ssh we4free@100.95.40.99 "tail -80 /home/we4free/agent/repos/self-organizing-library/lanes/broadcast/journal/$(date +%F).jsonl"
+```
+
+Or sync summaries:
+
+```bash
+git pull
+cat lanes/broadcast/journal/DAILY_2026-05-07.md
+```
+
+---
+
+# Preventing overwrite across local + headless
+
+This is harder because Windows local and Ubuntu headless are separate filesystems.
+
+You need a **shared lock authority**.
+
+Best options:
+
+## Option A — Headless is lock authority
+
+All agents, including local desktop agents, must SSH to the headless lock service before writing.
+
+```text
+Local agent wants to edit S:\self-organizing-library\scripts/foo.js
+→ asks headless lock gate for repo/path lock
+→ only writes if lock granted
+```
+
+This is safest.
+
+## Option B — Git branch ownership
+
+One writer per repo/branch:
+
+```text
+headless owns main/source mutation
+local desktop is review-only
+
+or
+
+local owns branch feature/x
+headless owns branch feature/y
+```
+
+This is simpler but less precise.
+
+## Option C — File lock committed to repo
+
+Agents create lock files in:
+
+```bash
+.locks/
+```
+
+and commit/push them. I do **not** love this because it is slow and creates git noise.
+
+---
+
+# Best policy for your system
+
+Use:
+
+```text
+Headless lock authority + local read-only unless lock granted.
+```
+
+Rule:
+
+```text
+No local desktop agent may edit a repo file also editable by headless agents unless it first acquires a headless lock.
+```
+
+---
+
+# Suggested lock states
+
+```text
+CLEAR:
+  file may be edited
+
+LOCKED:
+  file is owned by another agent
+
+STALE:
+  lock expired, but needs review before stealing
+
+PROTECTED:
+  file cannot be edited without human/Archivist approval
+
+FORBIDDEN:
+  file cannot be edited by agents
+```
+
+Protected paths:
+
+```text
+.trust/
+*.pem
+.env
+.env.*
+keys.json
+BOOTSTRAP.md
+GOVERNANCE.md
+COVENANT.md
+systemd service files
+deployment configs
+graph truth data
+```
+
+Agents can propose changes to these, but cannot directly mutate.
+
+---
+
+# Minimal first ratchet
+
+Do not build the perfect distributed lock service first.
+
+Build this first:
+
+```text
+STORE_JOURNAL_v1:
+- append-only daily JSONL
+- preflight check
+- file ownership claim/release
+- stale lock detection
+- daily summary
+- no automatic conflict resolution
+```
+
+Then later:
+
+```text
+WRITE_LOCK_GATE_v2:
+- mandatory guardWrite integration
+- lock server
+- local/remote cross-machine enforcement
+```
+
+---
+
+# Copy-paste task for Archivist/Library
+
+```text
+Implement STORE_JOURNAL_AND_WRITE_LOCK_v1.
+
+Goal:
+Prevent long-running local/headless agents from overwriting each other by creating an append-only work journal and atomic file ownership locks.
+
+Scope:
+- Proposal/report/source files only.
+- No trust-store changes.
+- No key changes.
+- No governance authority mutation.
+- No deployment.
+- No systemd edits unless separately approved.
+
+Required paths:
+- lanes/broadcast/journal/YYYY-MM-DD.jsonl
+- lanes/broadcast/journal/DAILY_YYYY-MM-DD.md
+- /home/we4free/agent/locks/<repo>/
+
+Implement:
+1. schemas/store-journal-entry-v1.json
+2. scripts/store-journal.js
+3. commands:
+   - start
+   - complete
+   - lock
+   - unlock
+   - preflight
+   - active
+   - daily
+4. Atomic lock creation using mkdir or fs.open with wx.
+5. Lock TTL and stale lock detection.
+6. Path normalization:
+   - reject Windows paths like S:/... on Ubuntu
+   - reject paths outside repo root
+   - reject forbidden paths
+7. Journal append-only writes.
+8. Daily summary generation.
+9. Tests using fake files only.
+
+Required behavior:
+- If file is locked by another active agent, preflight returns BLOCKED.
+- If lock is stale, preflight returns STALE_REVIEW_REQUIRED.
+- If file is protected, preflight returns PROTECTED_REQUIRES_APPROVAL.
+- If clear, preflight returns CLEAR.
+- No agent may claim that work is safe to start without running preflight.
+
+Report:
+STORE_JOURNAL_AND_WRITE_LOCK_v1_REPORT:
+- schema path
+- script path
+- lock directory
+- test results
+- sample journal entry
+- sample blocked lock
+- sample stale lock
+- forbidden path test
+- Windows path rejection test
+- next integration step
+```
+
+---
+
+# One-line invariant
+
+```text
+Before an agent writes, it must know who else is writing.
+```
+
+Or more WE4FREE:
+
+```text
+If work is not journaled and ownership is not claimed, it does not exist as safe work.
+```
+
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+target: design shared Store Journal and atomic write-lock system for local/headless multi-agent overwrite prevention
+
+Give this information to **Archivist first**, then let Archivist broadcast the rule to Library, SwarmMind, Kernel, and any local/Gas Town agents.
+
+Archivist should own the **coordination contract** because this affects authority, locks, journals, and write safety.
+
+## Correct order
+
+```text
+1. Archivist
+   Owns the rule and canonical policy.
+
+2. Library
+   Implements/maintains Store Journal + daily summaries.
+
+3. Kernel
+   Implements/enforces write-lock mechanics / filesystem guard.
+
+4. SwarmMind
+   Updates routing so agents check journal/locks before work.
+
+5. Local desktop / Gas Town / cloud agents
+   Consume the policy before acting.
+```
+
+## What to do right now
+
+Do **not** interrupt every running agent with a giant new architecture prompt. That can cause drift and duplicate work.
+
+Instead send a short **coordination patch** to Archivist:
+
+```text
+Archivist: New coordination requirement.
+
+We now have multiple execution surfaces:
+- Windows local agents
+- Headless Ubuntu agents
+- Gas Town / Kilo cloud rig
+- Cloud/model agents when routed
+
+Problem:
+They do not automatically share current work state. We need one shared coordination substrate so agents do not overwrite each other.
+
+Canonical rule:
+Headless Ubuntu is the live runtime coordination authority.
+GitHub is durable source truth.
+Store Journal is operational truth.
+Write Lock Gate prevents file overwrite.
+
+Immediate task:
+Create STORE_JOURNAL_AND_WRITE_LOCK_SYNC_PLAN_v1.
+
+Do not implement yet unless already authorized.
+Do not mutate trust stores, keys, graph truth, deployment, or systemd.
+
+Plan must define:
+1. canonical journal path
+2. canonical lock path
+3. required journal events
+4. lock acquisition/release rules
+5. stale lock handling
+6. local desktop participation
+7. Gas Town/PR participation
+8. cloud agent participation
+9. merge gate rules
+10. first safe implementation step
+
+Active invariant:
+No agent writes shared repo files unless it has checked the journal and acquired/verified a lock.
+```
+
+Then give Library the implementation side:
+
+```text
+Library: Await Archivist coordination ruling, then implement the Store Journal side only.
+
+Scope:
+- schemas/store-journal-entry-v1.json
+- scripts/store-journal.js
+- lanes/broadcast/journal/YYYY-MM-DD.jsonl
+- lanes/broadcast/journal/DAILY_YYYY-MM-DD.md
+
+Do not enforce locks yet unless Kernel confirms the lock contract.
+Do not mutate runtime truth or graph truth.
+```
+
+Then give Kernel the enforcement side:
+
+```text
+Kernel: Await Archivist coordination ruling, then design the Write Lock Gate.
+
+Scope:
+- atomic lock directory under /home/we4free/agent/locks/
+- lock acquisition using mkdir or fs.open wx
+- stale lock detection
+- path normalization
+- reject Windows paths like S:/... on Ubuntu
+- reject outside-repo paths
+- protected path list
+
+Do not replace all write paths yet. Produce enforcement plan and test fixtures first.
+```
+
+Then give SwarmMind the routing side:
+
+```text
+SwarmMind: Await Archivist coordination ruling, then update orchestration rules.
+
+Every new task must:
+1. read current daily journal summary
+2. run lock preflight for intended files
+3. claim lock before writing
+4. append work_started
+5. append work_completed
+6. release lock or record handoff
+
+If locked, route to proposal/review instead of mutation.
+```
+
+## For currently running agents
+
+Send a tiny message only, not the whole design:
+
+```text
+Coordination update:
+Before starting any new file-changing task, stop and check with Archivist for STORE_JOURNAL_AND_WRITE_LOCK_SYNC_PLAN_v1. Finish your current atomic task if already in progress, then report files touched and next_action. Do not start new writes until the journal/lock policy is acknowledged.
+```
+
+That avoids derailing active work.
+
+## Gas Town rule
+
+Gas Town should not be runtime authority. Tell it:
+
+```text
+Gas Town / Library rig:
+Treat your work as PR/bead work only. Do not assume live headless state. Before merge, your PR must be checked against the headless Store Journal and active locks. If disconnected, your state is stale.
+```
+
+## The clean sync model
+
+```text
+Headless Ubuntu:
+  live runtime truth
+  journal authority
+  lock authority
+
+GitHub:
+  source truth
+  PR/merge history
+
+Local desktop:
+  cockpit/operator
+  must check headless locks before shared writes
+
+Gas Town:
+  PR worker
+  must pass headless journal/lock merge gate
+
+Cloud models:
+  reasoning/review only unless routed through a locked workspace session
+```
+
+## First concrete artifact to request
+
+Ask Archivist to create this file:
+
+```text
+/home/we4free/agent/repos/Archivist-Agent/lanes/broadcast/STORE_JOURNAL_AND_WRITE_LOCK_SYNC_PLAN_v1.md
+```
+
+Then broadcast a short pointer to all lanes:
+
+```text
+Read Archivist broadcast:
+lanes/broadcast/STORE_JOURNAL_AND_WRITE_LOCK_SYNC_PLAN_v1.md
+
+New rule:
+No new shared file writes without journal preflight and lock ownership.
+```
+
+## Best immediate move
+
+Give the full design to **Archivist only**.
+Give everyone else a **pause/new-write warning** until Archivist publishes the canonical contract.
+
+```text
+Do not make 4 agents independently design 4 different journal systems.
+Make Archivist define one contract.
+Then Library implements journal.
+Kernel implements lock enforcement.
+SwarmMind wires routing.
+```
+
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+target: decide how to synchronize local/headless/Gas Town/cloud agents around shared journal and write-lock policy
+

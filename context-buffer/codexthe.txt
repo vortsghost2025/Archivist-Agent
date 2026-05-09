@@ -1,0 +1,158 @@
+## This is a strong direction — the split fixes the core failure mode
+
+The important architectural improvement is:
+
+```text
+OLD:
+  /graph loads one monolithic archive-style graph
+  → agents/humans drown in everything at once
+
+NEW:
+  /graph loads a selected lens packet
+  → navigation by default
+  → canonical/full available for audits
+```
+
+That directly addresses the “agents looking at 30k lines” problem.
+
+## What looks correct
+
+```text
+GRAPH_LENS_SPLIT:
+  graph-data shaping: PASS
+  navigation default: PASS
+  explicit edges by default: PASS
+  canonical audit lens preserves expanded inference: PASS
+  API lens selector: PASS
+  UI lens selector: PASS
+  typecheck: PASS
+  build: PASS
+```
+
+The key design win is this distinction:
+
+```text
+navigation lens:
+  human/agent starting map
+  smaller, explicit relationships
+  lower cognitive load
+
+canonical lens:
+  audit-grade graph
+  includes tag-derived inference edges
+  preserves old expanded behavior
+```
+
+That is exactly the right split. You are no longer forcing the first-time reader, UI, and audit pipeline to use the same graph shape.
+
+## I would choose next pass #2 first
+
+Between these:
+
+```text
+1. precomputed static lens artifacts under public/graph/
+2. tighten each lens more aggressively into smaller claim-centric packets
+```
+
+I would do **#2 first**.
+
+Reason:
+
+```text
+Static artifacts improve runtime cost.
+Claim-centric lenses improve comprehension.
+```
+
+Your current pain is still agent comprehension, not API runtime. Smaller claim-centric packets will help Maverick/Gastown/Library agents stop over-reading and over-generalizing.
+
+## Recommended next scoped task
+
+```text
+OUTPUT_PROVENANCE:
+agent: user
+lane: governance-root
+target: graph lens tightening pass
+
+The graph lens split is accepted as implementation-complete pending browser visual check.
+
+Next pass:
+Tighten lens definitions for agent readability.
+
+Do not change runtime architecture.
+Do not regenerate unrelated graph data.
+Do not touch governance/trust/identity files.
+Do not commit or push.
+
+Goal:
+Make each graph lens answer a clear question.
+
+Required:
+1. For each lens, define:
+   - purpose
+   - included node types
+   - included edge types
+   - excluded noise
+   - max recommended node/edge budget
+   - agent review instruction
+2. Prefer claim-centric subsets over file-centric subsets.
+3. Preserve canonical/full lenses for audit completeness.
+4. Add/adjust copy so users understand:
+   - navigation is the default map
+   - canonical is the audit graph
+   - tag-inference edges are not shown by default
+5. Run:
+   - npm run typecheck
+   - npm run build
+
+Required output:
+GRAPH_LENS_TIGHTENING_REPORT:
+  mutation_performed:
+  files_changed:
+  lens_definitions:
+    navigation:
+    authority:
+    governance:
+    papers:
+    repos:
+    full:
+    canonical:
+  explicit_vs_inference_edge_policy:
+  verification:
+    typecheck:
+    build:
+  residual_risks:
+  browser_visual_check_needed:
+  commit_ready:
+  push_ready:
+```
+
+## Visual check checklist
+
+Before accepting/deploying:
+
+```text
+GRAPH_VISUAL_CHECK:
+  /graph default loads navigation lens
+  lens selector is visible and keyboard usable
+  switching lenses does not crash
+  canonical lens still exposes expanded audit graph
+  navigation lens is not visually empty
+  repo-filter zero-edge behavior is explained or avoided
+  counters clearly say whether they are current-lens or global
+```
+
+## Current verdict
+
+```text
+GRAPH_SPLIT:
+  status: ACCEPT_IMPLEMENTATION_PENDING_VISUAL_CHECK
+  next_best_step: tighten lenses into claim-centric agent packets
+  do_not_do_yet: static public graph artifacts
+```
+
+This is a real upgrade: the graph now has **progressive disclosure**, which is exactly what the Co-Mathematician / execution-lineage papers were pointing toward.
+
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+target: graph lens split implementation review and next pass recommendation

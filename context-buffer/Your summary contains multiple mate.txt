@@ -1,0 +1,127 @@
+**Your summary contains multiple material inaccuracies. Here is the verified ground truth:**
+
+---
+
+## File Inventory — What Actually Exists
+
+| Lane | compact-restore-test.js | compact-restore-bridge.js | post-compact-audit.js | run-compact-with-audit.js |
+|------|------------------------|--------------------------|----------------------|---------------------------|
+| **SwarmMind** | ❌ 79-line **implementation note** (not a test) | ❌ **MISSING** | ✅ 595 lines | ✅ 2411 bytes |
+| **Archivist-Agent** | ✅ 456 lines (full 5-phase test) | ✅ 376 lines (full bridge) | ✅ 819 lines | ✅ 6830 bytes |
+| **Kernel** | ✅ 424 lines (full test) | ✅ (mirrors Archivist) | ✅ 601 lines | ✅ 2411 bytes |
+| **Library** | ✅ 426 lines (full test) | ❌ **MISSING** | ✅ 596 lines | ✅ 6830 bytes |
+
+---
+
+## Critical Corrections
+
+### 1. SwarmMind's `compact-restore-test.js` is **NOT a test**
+Content:
+```
+PHASE 1A IMPLEMENTATION CORRECTION
+
+Proceed, but keep the implementation purely inert.
+
+Create:
+- src/lib/graph-snapshot-schema.ts
+- src/lib/graph-snapshot-export.ts
+
+Do not create UI yet.
+Do not write files.
+...
+```
+**This is a code generation instruction document.** No test logic, no `phase2_compactHappens()`, no `phase3_restoreFromPacket()`, no packet creation. It does **not** generate `COMPACT_RESTORE_PACKET.json`.
+
+### 2. **No bridge exists for Library or SwarmMind**
+`compact-restore-bridge.js` is present **only** in Archivist-Agent and kernel-lane.
+- Library: cannot distribute packet, cannot write `.compact-audit/`, cannot generate handoff
+- SwarmMind: same
+
+The bridge functions `restoreFromPacket()` and `crossVerifyWithAudit()` are **not available** to these lanes.
+
+### 3. The "uniform workflow" claim is **false**
+Only 2 of 4 lanes have the full compact/restore pipeline:
+- ✅ Archivist: test + bridge + audit
+- ✅ Kernel: test + bridge + audit
+- ⚠️ Library: test **only** — can create packet but no restore mechanism
+- ❌ SwarmMind: **no test, no bridge** — only a documentation file
+
+Library's `compact-restore-test.js` does write a packet to `LANES['swarmmind'].root` (hardcoded to `S:/SwarmMind`), but:
+- SwarmMind has no bridge to pick it up
+- SwarmMind has no test to validate it
+- The packet just sits there unprocessed
+
+### 4. Schema validation is lane-local, not shared
+Each lane's `validate-schema.js` independently checks for `COMPACT_RESTORE_PACKET.json` in the SwarmMind root. This is **pull-based**, not push-based. No central coordination.
+
+---
+
+## What the Data Shows
+
+**Archivist-Agent** (full cycle):
+```
+compact-restore-test.js → creates packet
+compact-restore-bridge.js → distributes to .compact-audit/, writes handoff
+post-compact-audit.js → cross-verifies pre/post snapshots
+store-journal.js → logs compact_restore event
+```
+
+**Kernel** (full cycle): same as Archivist
+
+**Library** (broken cycle):
+```
+compact-restore-test.js → creates packet (writes to S:/SwarmMind)
+post-compact-audit.js → can verify IF bridge already ran
+BUT: no bridge → packet never distributed → audit fails (missing data)
+```
+
+**SwarmMind** (no cycle):
+```
+compact-restore-test.js → [does not exist as functional test]
+post-compact-audit.js → can run but expects .compact-audit/ data
+BUT: no test, no bridge → nothing to audit
+```
+
+---
+
+## Direct Evidence
+
+**SwarmMind's "test" is a doc:**
+```bash
+head -20 ~/agent/repos/SwarmMind/scripts/compact-restore-test.js
+# Output starts with: "PHASE 1A IMPLEMENTATION CORRECTION"
+```
+
+**Library lacks bridge:**
+```bash
+ls -l ~/agent/repos/self-organizing-library/scripts/compact-restore-bridge.js
+# No such file
+```
+
+**Bridge only in 2 repos:**
+```bash
+ls -l ~/agent/repos/*/scripts/compact-restore-bridge.js
+# Only: Archivist-Agent, kernel-lane
+```
+
+**Library test does have phase2/3** (but no consumer):
+```bash
+grep -n "phase2_compactHappens\|phase3_restoreFromPacket" \
+  ~/agent/repos/self-organizing-library/scripts/compact-restore-test.js
+# Lines: 133, 191, 367, 373 — functions exist
+```
+
+---
+
+## Bottom Line
+
+**The compact-restore system is partially implemented and unevenly deployed:**
+
+| Component | Status | Coverage |
+|-----------|--------|----------|
+| Packet generation | Partial | Archivist, Kernel, Library (SwarmMind has doc only) |
+| Bridge distribution | Partial | Archivist, Kernel only (Library, SwarmMind missing) |
+| Post-audit | Present | All 4 lanes (but fails if bridge never ran) |
+| End-to-end cycle | **Only 2/4 lanes** | Archivist & Kernel only |
+
+The claim "All four lanes use the exact same compact-restore workflow" is **false**. The actual deployment is **fragmented**, with Library and SwarmMind unable to complete the restore cycle.

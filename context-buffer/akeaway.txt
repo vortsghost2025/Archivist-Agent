@@ -1,0 +1,278 @@
+## This is the right takeaway
+
+The strongest finding is:
+
+```text
+The paper does not mainly teach us “more agents.”
+It teaches us better operator-facing coordination:
+  uncertainty visibility
+  iterative review
+  failed-attempt reuse
+  progressive disclosure
+```
+
+That maps almost perfectly to the pain you just saw with the website/graph agents.
+
+## Best implementation target
+
+I would not try to copy the whole “AI co-mathematician” workbench. I would extract **two protocol upgrades**:
+
+```text
+P0:
+  UNCERTAINTY_PACKET_V1
+
+P1:
+  REVIEW_ROUND_PROTOCOL_V1
+```
+
+These are small enough to add without destabilizing the lanes.
+
+---
+
+# P0 — `UNCERTAINTY_PACKET_V1`
+
+Add this to lane messages, convergence reports, graph packets, and repair proposals:
+
+```yaml
+uncertainty:
+  level: low | medium | high
+  type:
+    - missing_evidence
+    - conflicting_sources
+    - tool_failure
+    - stale_state
+    - ambiguous_intent
+    - blocked_by_permission
+    - implementation_unknown
+    - runtime_not_verified
+  why: ""
+  evidence_needed:
+    - ""
+  operator_decision_needed: true | false
+  next_safe_check: ""
+```
+
+Example from your graph-filter mess:
+
+```yaml
+uncertainty:
+  level: high
+  type:
+    - runtime_not_verified
+    - implementation_unknown
+  why: "Diff exists but typecheck fails; UI state wiring not proven."
+  evidence_needed:
+    - "npm run typecheck exit_code 0"
+    - "GraphCanvas receives edgeFilterMode from shared parent or valid provider"
+  operator_decision_needed: false
+  next_safe_check: "Inspect GraphCanvas visibleGraph block and rerun typecheck"
+```
+
+That would have prevented agents from saying “fixed” when it was really “fix in progress.”
+
+---
+
+# P1 — `REVIEW_ROUND_PROTOCOL_V1`
+
+Add a review loop to convergence and implementation tasks:
+
+```yaml
+review:
+  round: 1
+  reviewer: ""
+  status:
+    - draft
+    - needs_repair
+    - verified_partial
+    - verified_accept
+    - rejected
+  feedback:
+    - issue: ""
+      required_fix: ""
+      evidence_required: ""
+  previous_rounds:
+    - round:
+      result:
+      unresolved_items:
+```
+
+Example:
+
+```yaml
+review:
+  round: 2
+  reviewer: exterior-synthesis
+  status: needs_repair
+  feedback:
+    - issue: "GraphCanvas syntax error at line 1140"
+      required_fix: "Remove stray dependency array"
+      evidence_required: "npm run typecheck exit_code 0"
+```
+
+This turns the current chat-driven correction loop into a structured lane protocol.
+
+---
+
+# The third thing: failed-attempt reuse
+
+You already have journals and orphan closure, but you need a field that tells the next agent what **not** to repeat:
+
+```yaml
+prior_attempts:
+  - attempt_id:
+    actor:
+    action:
+    result:
+    failed_because:
+    do_not_repeat:
+    useful_evidence:
+```
+
+Example:
+
+```yaml
+prior_attempts:
+  - attempt_id: graph-filter-context-001
+    actor: Maverick
+    action: "Placed EdgeFilterModeContext inside GraphToolbar"
+    result: "typecheck failed / state flow unproven"
+    failed_because: "GraphCanvas could not see provider; ModeSelector import missing"
+    do_not_repeat: "Do not trap edgeFilterMode state inside GraphToolbar"
+    useful_evidence:
+      - "GraphCanvas.tsx line 1140 syntax error"
+      - "Typecheck TS2304 EdgeFilterModeContext / ModeSelector"
+```
+
+That is exactly the “failed explorations are first-class” idea.
+
+---
+
+# Priority order I’d implement
+
+```text
+P0:
+  Add uncertainty block to:
+    - graph-analysis-packets
+    - convergence reports
+    - implementation reports
+    - repair proposals
+
+P1:
+  Add review_round + reviewer_feedback to convergence gate messages
+
+P2:
+  Add prior_attempts to task messages and journals
+
+P3:
+  Add operator dashboard view:
+    only show high uncertainty + P0/P1 friction points
+```
+
+## Why this is high leverage
+
+Your current system already has:
+
+```text
+lanes
+journals
+workers
+relays
+executors
+governance gates
+verification bundles
+graph packets
+```
+
+The missing layer is not “more automation.” It is:
+
+```text
+What is uncertain?
+Why is it uncertain?
+Who needs to decide?
+What evidence would close it?
+What failed already?
+```
+
+That is the layer the DeepMind paper points at, and it fits your system better than adding another swarm.
+
+---
+
+## Clean next task prompt
+
+```text
+OUTPUT_PROVENANCE:
+agent: user
+lane: governance-root
+target: uncertainty + iterative review protocol design
+
+Design two protocol extensions for the lane system:
+
+1. UNCERTAINTY_PACKET_V1
+2. REVIEW_ROUND_PROTOCOL_V1
+
+Goal:
+Surface stalled/uncertain work clearly to the operator and prevent agents from repeating failed attempts.
+
+Do not mutate.
+Do not edit files.
+Do not commit.
+Do not push.
+
+Required output:
+
+LANE_PROTOCOL_EXTENSION_DESIGN:
+  uncertainty_packet_v1:
+    fields:
+    allowed_values:
+    example_from_graph_filter_fix:
+    example_from_batch_003:
+    validation_rules:
+
+  review_round_protocol_v1:
+    fields:
+    lifecycle:
+    example_rounds:
+    acceptance_criteria:
+    escalation_rules:
+
+  prior_attempts:
+    fields:
+    example:
+    how_agents_should_use_it:
+
+  integration_points:
+    - store-journal
+    - convergence gate
+    - graph-analysis-packets
+    - autonomous executor reports
+    - operator dashboard
+
+  implementation_plan:
+    P0:
+    P1:
+    P2:
+
+  mutation_required_later:
+    files_likely_touched:
+    tests_required:
+```
+
+## Verdict
+
+```text
+AI_CO_MATHEMATICIAN_RELEVANCE:
+  architecture_validation: yes
+  direct_code_reuse: no
+  best_borrow:
+    - uncertainty surfacing
+    - iterative review loop
+    - failed-attempt reuse
+    - progressive disclosure
+  next_best_action:
+    - design UNCERTAINTY_PACKET_V1 + REVIEW_ROUND_PROTOCOL_V1
+```
+
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+target: AI Co-Mathematician relevance map and lane protocol upgrades

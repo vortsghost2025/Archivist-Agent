@@ -1,0 +1,207 @@
+Autonomous Capabilities: Full Inventory, Gaps, and Implementable Improvements
+I. WHAT EXISTS — Full Autonomous Infrastructure
+The system has 10 autonomous components across 213+ scripts, 4 lanes, and 2 OS platforms:
+Core Autonomous Workers
+Component	Script	What It Does	Actually Runs?
+Lane Worker	lane-worker.js (1057 lines)	Routes inbox → action-required/in-progress/processed/blocked/quarantine. Schema validation, signature validation, completion-proof checks, ownership enforcement, NACK chain prevention, Unicode normalization. --watch for poll loop, --apply for live, --manual-cadence for dry-run.	✅ Systemd service on Ubuntu; Windows schtask
+Relay Daemon	relay-daemon.js (291 lines)	Delivers outbox messages to target lane inboxes, collects incoming from other lane outboxes. claim-commit-guard prevents premature delivery.	✅ Systemd service on Ubuntu
+Executor Watcher	executor-watcher.js (218 lines)	Scans action-required/, executes tasks via generic-task-executor.js, journals results, moves blocked tasks.	✅ Windows auto-start
+Autonomous Executor	autonomous-executor.js (414 lines)	Full execution loop: scans action-required, executes with journaling, handles stale tasks (>1hr expiry), runs blocked-remediator on cadence (default 10min).	✅ Windows auto-start
+Heartbeat	heartbeat.js (287 lines)	Lane health beacon every 60s. Writes heartbeat JSON to inbox + system_state.json to broadcast.	✅ Systemd service + Windows schtask
+Inbox Watcher	inbox-watcher.js (842 lines)	Priority-based inbox processing: identity enforcement, idempotency, consensus gate, P0/P1 preemption, starvation guard, ACK/ratification handling, convergence checks, quarantine tracking.	✅ Windows auto-start
+Lane Autopilot Orchestrator	lane-autopilot-orchestrator.js (144 lines)	Spawns/monitors lane-worker watch loops for all 4 lanes. Auto-restarts crashed workers. Streams prefixed logs.	✅ Manual start
+Generic Task Executor	generic-task-executor.js (817 lines)	11-verb command contract: status, read file, run script, git, grep, write file, consistency check, list dir, hash file, diff, count. NLP routing with 12 pattern groups.	✅ Called by executor-watcher
+Task Chain Engine	task-chain-engine.js (436 lines)	Multi-step task chain processor. Follows completed tasks with dependent follow-ups (max depth 5, max 3 iterations). Persistent chain state.	✅ Integrated
+Runner v3	runner-v3.sh (393 lines)	Ubuntu periodic: clone/pull, sovereignty scan, graph analysis, health report, inbox watch, artifact retention, compact audit, autonomous execution, blocked remediation.	✅ Cron-capable
+Platform Deployment
+Platform	Mechanism	Services
+Ubuntu/Linux	systemd services	archivist-lane-worker.service, archivist-relay-daemon.service, archivist-heartbeat.service, swarmmind-heartbeat.service
+Ubuntu/Linux	Cron	recovery-hourly.sh (hourly recovery suite)
+Windows	Task Scheduler	register-runners.ps1 — 6 schtasks (heartbeat + watcher × 3 lanes), 1-minute intervals
+Windows	Auto-start	windows-autostart.bat — relay-daemon + lane-worker + executor-watcher + heartbeat for all 4 lanes
+Windows	Stale recovery	auto-recover-stale-lanes.ps1 — monitors heartbeat age, restarts stale workers
+Supporting Infrastructure (213 scripts total)
+- Recovery: recovery-test-suite.js (11 tests → PROVEN/CONFLICTED verdict), post-compact-audit.js, validate-system-anchor.js
+- Cross-lane sync: sync-all-lanes.js (502 lines — SHA-256 file sync across 4 lane repos)
+- Signing: create-signed-message.js (real RS256), sign-outbox-message.js, sign-with-prevalidation.js
+- Identity: identity-enforcer.js, identity-self-healing.js, KeyManager.js, VerifierWrapper.js, QuarantineManager.js
+- Governance verification: governance-message-verifier.js, convergence-contradiction-check.js, contradiction-adjudicator.js, output-provenance.js
+- Monitoring: monitor.js (CLI dashboard), lane-health-monitor.js, daily-productivity-report.js, e2e-monitor.js
+- Quarantine: quarantine-remediate.js, quarantine-triage.js, blocked-remediator.js
+---
+II. WHAT'S MISSING — 26 Identified Gaps
+CRITICAL (Cascading failures)
+#	Gap	Root Cause	Impact
+1	Heartbeat uses placeholder signature	heartbeat.js:143-145 builds fake JWS (placeholder-{lane}-{timestamp}) instead of calling create-signed-message.js	Every heartbeat is cryptographically invalid. Other lanes' inbox-watchers quarantine heartbeats → cascading "unsigned message" quarantine loop across all lanes
+2	Blocked-remediation loop takes zero actions	blocked-remediator.js runs every ~1.5 min but its rules don't match any of the 21 stuck items	200+ no-op report files accumulate in context-buffer/. 2 blocked + 19 quarantined items are permanently stuck
+3	No runtime authority enforcement in Rust	CRITICAL_FIX_LOG_2026-04-17.md: Library lane (priority 60) can still modify governance files; CPS/UDS thresholds not checked at runtime	A lower-authority lane can alter governance documents with no blocking
+4	CPS startup check result is discarded	lib.rs assigns CPS check to _cps_ok (underscore = deliberately unused)	Application starts regardless of governance state. The only CPS-gated command is ping() which just returns a different string
+HIGH (Architectural gaps)
+#	Gap	Detail
+5	Constraint lattice join operation is placeholder	constraint-lattice.js:108-109 returns ${a}_OR_${b} string. Three separate documents flag this as TODO.
+6	PhenotypeStore is a stub	phenotypeStore.ts:4 — single JSON file, not a database
+7	QuarantineStore is a stub	quarantineStore.ts:4 — append-only JSONL, not a database
+8	Email notification not implemented	Notifier.js:120 — returns not_implemented
+9	Compact operation is placeholder	run-compact-with-audit.js:58-60 — 500ms sleep when COMPACT_COMMAND unset
+10	Bridge modules not wired into execution	.artifacts/TWO_SYSTEM_ARCHITECTURE_DECISION.md:130 — "specification-only, not wired"
+11	classification.rs is dead code	Fully implemented shared classification module exists but 4 commands re-implement classification inline — diverging logic
+12	No OUTPUT_PROVENANCE in Rust commands	AGENTS.md mandates provenance blocks on all outputs. No Tauri command generates them
+13	Dual verification not implementable	Checkpoint 6 requires two independent agent instances. Single-agent sessions can't satisfy this
+14	Schema v1.1 messages still quarantined by v1.3 watchers	Messages from other lanes lack required v1.3 fields, causing SCHEMA_INVALID
+15	evidence_exchange.artifact_path=null causes quarantine	Even valid-signature messages get quarantined when this field is null
+MEDIUM (Documented but unimplemented)
+#	Gap
+16	No automated tests for recovery verification block (CRITICAL_FIX_LOG)
+17	constitutional_constraints.yaml missing RECOVERY_VERIFICATION_MANDATORY
+18	Cross-lane notifications are file-polling, no real-time sync
+19	Deformation metric is heuristic, not formal
+20	Graph-context panel not integrated into main UI
+21	Dual-agent concurrency guardrail enforcement incomplete
+22	Runner.sh task command is placeholder
+LOW (Operational noise)
+#	Gap
+23	200+ blocked-remediation report files accumulating without cleanup
+24	Library inbox high terminal/noise volume
+25	Legacy pre-v1.3 artifacts need archival
+26	CAISC paper references section empty
+---
+III. WHAT CAN BE IMPLEMENTED — Prioritized by Impact
+Wave 1: Fix the Cascading Failure (3 items, removes the root cause of most quarantine issues)
+1. Wire heartbeat to real signing — The signing infrastructure (create-signed-message.js, KeyManager.js, deriveKeyId.js) is fully implemented and production-quality. The heartbeat just doesn't use it. This is the single highest-impact fix.
+What: Refactor heartbeat.js to call create-signed-message.js (or extract its signing 
+      function) instead of building placeholder JWS.
+Files: scripts/heartbeat.js (~20 lines changed)
+Impact: Eliminates the #1 source of quarantine loop failures across all lanes.
+        Every heartbeat becomes verifiable. Cross-lane trust restored.
+Effort: ~2 hours
+2. Fix the blocked-remediation loop — The 21 stuck items need their rules updated, and the report accumulation needs a cleanup policy.
+What: (a) Add rules to blocked-remediator.js that match the actual stuck item patterns
+      (unsigned messages from placeholder signatures, schema v1.1 artifacts)
+      (b) Add max-report-age cleanup (delete reports >24h old)
+      (c) Add auto-archive for quarantine items >7 days old with no remediation path
+Files: scripts/blocked-remediator.js, new: scripts/quarantine-archive-cleanup.js
+Impact: Stops 200+ file accumulation. Clears 21 stuck items. Makes remediation effective.
+Effort: ~3 hours
+3. Wire CPS check into Rust command execution — The function exists, it just needs to be called.
+What: (a) Replace `_cps_ok` in lib.rs with actual enforcement: if CPS < threshold, 
+      return Err("CPS below threshold") from mutating commands
+      (b) Add cps_threshold_check() calls to build_index, build_registry, 
+      generate_handoff
+      (c) Add a CPS-check Tauri event that the frontend can subscribe to
+Files: src-tauri/src/lib.rs, build_index.rs, build_registry.rs, generate_handoff.rs
+Impact: Governance enforcement becomes real in the running binary. CPS actually gates operations.
+Effort: ~4 hours
+Wave 2: Close the Dead-Code Gap (3 items, makes existing code actually work)
+4. Integrate classification.rs into all commands — The shared module exists but 4 commands ignore it.
+What: (a) Import classification.rs functions into build_index.rs, summarize_folder.rs,
+      generate_handoff.rs, build_registry.rs
+      (b) Remove duplicated inline classification logic from each
+      (c) Remove #[allow(dead_code)] from constants.rs
+Files: src-tauri/src/{build_index,summarize_folder,generate_handoff,build_registry,
+       classification,constants}.rs
+Impact: Single source of truth for classification (governance principle enforced).
+        Eliminates 4 divergent implementations. ~150 lines of dead code removed.
+Effort: ~3 hours
+5. Add OUTPUT_PROVENANCE to Rust commands — Required by AGENTS.md, absent from all commands.
+What: Add an OUTPUT_PROVENANCE preamble to every Tauri command response:
+      agent, lane, generated_at, session_id
+Files: src-tauri/src/lib.rs (add provenance helper), each command file (add to return)
+Impact: All outputs traceable. Multi-agent governance traceability restored.
+Effort: ~2 hours
+6. Add evidence_exchange.artifact_path default handling — Prevents null-path quarantine.
+What: In SchemaValidator.js or canonical-message-builder.js, default 
+      artifact_path to "inline" when null/missing instead of allowing null through
+Files: scripts/SchemaValidator.js or .global/canonical-message-builder.js
+Impact: Eliminates quarantine of valid messages with missing artifact_path.
+Effort: ~1 hour
+Wave 3: Make Autonomous Work Self-Sustaining (4 items, removes human-in-the-loop requirements)
+7. Implement real compact operation — Replace the 500ms placeholder with actual Kilo API compact.
+What: Implement COMPACT_COMMAND integration:
+      (a) Call Kilo's compact API (or equivalent) instead of sleep
+      (b) Run recovery-test-suite.js post-compact
+      (c) Write handoff hash to .compact-audit/HANDOFF_HASH_LOG.jsonl
+Files: scripts/run-compact-with-audit.js, scripts/subcompact_worker.js
+Impact: Autonomous compact cycle works end-to-end. Context recovery is real.
+Effort: ~4 hours (depends on Kilo API availability)
+8. Implement PhenotypeStore and QuarantineStore with SQLite — Replace JSON stubs with real databases.
+What: (a) Replace phenotypeStore.ts single-JSON with SQLite (via better-sqlite3)
+      (b) Replace quarantineStore.ts append-only-JSONL with SQLite
+      (c) Add query methods (by status, by age, by lane)
+      (d) Add retention policy (auto-archive >30 days)
+Files: src/orchestrator/phenotypeStore.ts, src/orchestrator/quarantineStore.ts
+Impact: Persistent state that doesn't degrade. Queryable history. Scalable quarantine.
+Effort: ~6 hours
+9. Implement real-time cross-lane notification — Replace file polling with file-system watches.
+What: (a) Use Node.js fs.watch() or chokidar in relay-daemon.js to detect outbox 
+      changes instantly instead of polling every 20 seconds
+      (b) Add WebSocket layer for inter-process notification (optional, for same-machine)
+      (c) Keep file-based as fallback for cross-machine coordination
+Files: scripts/relay-daemon.js, new: scripts/lane-event-bus.js
+Impact: Cross-lane message delivery goes from ~20s latency to ~100ms. 
+        Real-time coordination becomes possible.
+Effort: ~4 hours
+10. Implement Checkpoint 6 as cross-lane verification protocol — Make dual verification actually possible.
+What: (a) When a lane needs dual verification, it sends a verification-request 
+      message to another lane's inbox via the relay daemon
+      (b) The receiving lane's worker processes the request, runs its own 
+      independent verification, and sends the result back
+      (c) Consensus is determined from the two results
+      (d) This uses existing message infrastructure — no new transport needed
+Files: new: scripts/verification-request-handler.js, modifications to lane-worker.js
+Impact: Checkpoint 6 becomes real. Two lanes can independently verify decisions.
+Effort: ~6 hours
+Wave 4: Hardening and Scaling (3 items, makes the system production-grade)
+11. Implement authority enforcement in Rust — Block governance modifications from low-authority lanes.
+What: (a) Add authority_level field to constitutional_constraints.yaml
+      (b) Add runtime check: if caller authority < required authority for operation, 
+      return Err("Insufficient authority")
+      (c) Wire into mutating Tauri commands
+Files: src-tauri/src/safety.rs, constitution.rs, lib.rs
+Impact: Prevents the incident documented in CRITICAL_FIX_LOG_2026-04-17.
+Effort: ~4 hours
+12. Implement real constraint lattice join — Replace the ${a}_OR_${b} placeholder.
+What: (a) Define a proper join semi-lattice over constraint types
+      (b) Implement subsumption checking (does A imply B?)
+      (c) Replace synthetic joins with proper lattice-theoretic joins
+      (d) Add property-based tests (idempotent, commutative, associative)
+Files: src/bridge/constraint-lattice.js
+Impact: Deformation scoring becomes mathematically sound. Governance lattice is real.
+Effort: ~8 hours
+13. Add legacy schema migration automation — Auto-upgrade v1.1 messages to v1.3.
+What: (a) When inbox-watcher encounters a v1.1 message, auto-migrate by adding 
+      missing fields with defaults (convergence_gate: null, payload.chunk: {}, 
+      evidence_exchange: {artifact_path: "inline"})
+      (b) Log migration to transfer-log
+      (c) Don't quarantine for missing optional fields
+Files: scripts/inbox-watcher.js or scripts/SchemaValidator.js
+Impact: Eliminates schema-version quarantine. Backward compatibility maintained.
+Effort: ~3 hours
+---
+IV. SUMMARY: Capability Matrix
+Capability	Documented	Script Infrastructure	Actually Running	Gap Level
+Inbox message routing	✅	✅ lane-worker.js	✅ (systemd)	None
+Cross-lane delivery	✅	✅ relay-daemon.js	✅ (systemd)	None
+Task execution	✅	✅ autonomous-executor.js	✅ (Windows)	None
+Heartbeat liveness	✅	✅ heartbeat.js	✅ (systemd)	Critical: fake signatures
+Message signing	✅	✅ create-signed-message.js	❌ Not called by heartbeat	Critical: signing exists but unused
+CPS enforcement	✅ Full docs	✅ constitution.rs, cps_check.rs	❌ Result discarded	Critical: code exists but not wired
+Read-only enforcement	✅	✅ safety.rs	✅ Actually enforced	None
+Path validation	✅	✅ safety.rs	⚠️ Windows-only paths	Medium: Linux no-op
+Checkpoint system	✅ 7 checkpoints	❌ No runtime implementation	❌	High: docs-only
+UDS scoring	✅ Full spec	❌ Not implemented in code	❌	High: docs-only
+Dual verification	✅ Full spec	⚠️ Inbox-watcher consensus check	❌ No independent L+R lanes	High: partial
+Convergence gate	✅ Full spec	⚠️ convergence-contradiction-check.js	⚠️ Script exists, not in loop	Medium
+Constraint lattice	✅ Full spec	⚠️ constraint-lattice.js	❌ Join is placeholder	High
+Output provenance	✅ Mandatory	✅ output-provenance.js	❌ Not in Rust commands	Medium
+Recovery suite	✅	✅ recovery-test-suite.js	✅ (cron)	None
+Quarantine remediation	✅	✅ blocked-remediator.js	❌ Takes zero actions	Critical
+Bottom line: The system has extensive script infrastructure for autonomous operation (10 worker types, 213 scripts, 4-lane deployment on 2 OS platforms). The critical gaps are not missing scripts — they are wiring gaps: existing production-quality code (signing, CPS checking, classification) that isn't called by the components that need it. The 3 highest-impact fixes (wire heartbeat signing, wire CPS enforcement, fix blocked-remediation rules) would eliminate the majority of cascading failures and require changes to approximately 40 lines across 3 files.
+//checkpoints              
+Run checkpoint verification
+//code-review              
+Governance-aware code review
+//drift-check              
+▣  Orchestrator · GLM-5.1 · 58m 27s
+Check for drift in current conversation
+//governance               
+Load governance constraints from BOOTSTRAP.md

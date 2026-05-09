@@ -46,13 +46,9 @@
       "worktreeId": "wt-1777485718539-1",
       "createdAt": "2026-04-29T18:02:01.172Z"
     },
-    "ses_20c8d778fffeX8CTjjQQ7Um1xP": {
+    "ses_1f2103296ffedTcQvv3MTFyZZw": {
       "worktreeId": null,
-      "createdAt": "2026-05-04T14:44:22.807Z"
-    },
-    "ses_20c6941dcffeHVxOKDPWVDprV1": {
-      "worktreeId": null,
-      "createdAt": "2026-05-04T15:23:55.841Z"
+      "createdAt": "2026-05-09T18:11:20.071Z"
     }
   },
   "tabOrder": {
@@ -79,7 +75,10 @@
       "ses_20c8d778fffeX8CTjjQQ7Um1xP",
       "ses_20c7daa43ffet8mRwJnT7vEB2D",
       "ses_20c7bd9a9ffezDysGkvwyksdqK",
-      "ses_20c6941dcffeHVxOKDPWVDprV1"
+      "ses_20c6941dcffeHVxOKDPWVDprV1",
+      "ses_1f3153a19ffeAJFgbWUQ8FhK7f",
+      "ses_1f2cc16feffeapY40O5lBpcK7p",
+      "ses_1f2103296ffedTcQvv3MTFyZZw"
     ]
   },
   "worktreeOrder": [

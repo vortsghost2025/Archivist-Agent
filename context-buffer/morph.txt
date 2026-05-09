@@ -1,0 +1,386 @@
+sk-AayISOLM1pKs2mXHLPpRTyfdWpyyJ6M2avWKahD5VFA1Cwey
+
+import os
+from openai import OpenAI
+
+# Initialize client
+client = OpenAI(
+    api_key="sk-AayISOLM1pKs2mXHLPpRTyfdWpyyJ6M2avWKahD5VFA1Cwey",
+    base_url="https://api.morphllm.com/v1"
+)
+
+# Sample data
+initial_code = """def greet(name):
+    return "Hello " + name"""
+
+code_edit = """def greet(name: str) -> str:
+// ...existing code..."""""
+
+instructions = "I will add type hints"
+
+# Apply the edit
+response = client.chat.completions.create(
+    model="morph-v3-fast", # 
+    messages=[
+        {
+            "role": "user",
+            "content": f"<instruction>{instructions}</instruction>\n<code>{initial_code}</code>\n<update>{code_edit}</update>"
+        }
+    ]
+)
+
+merged_code = response.choices[0].message.content
+print(merged_code)
+
+import OpenAI from "openai";
+
+// Initialize client
+const openai = new OpenAI({
+  apiKey: "sk-AayISOLM1pKs2mXHLPpRTyfdWpyyJ6M2avWKahD5VFA1Cwey",
+  baseURL: "https://api.morphllm.com/v1",
+});
+
+// Sample data
+const initialCode = `function greet(name) {
+  return "Hello " + name;
+}`;
+
+const codeEdit = `function greet(name: string): string {
+// ... existing code ...
+}`;
+
+const instructions = "I will add TypeScript types";
+
+// Apply the edit
+const response = await openai.chat.completions.create({
+  model: "morph-v3-fast",
+  messages: [
+    {
+      role: "user",
+      content: `<instruction>${instructions}</instruction>\n<code>${initialCode}</code>\n<update>${codeEdit}</update>`,
+    },
+  ],
+});
+
+const mergedCode = response.choices[0].message.content;
+console.log(mergedCode);
+
+# Set your API key
+export MORPH_API_KEY="sk-AayISOLM1pKs2mXHLPpRTyfdWpyyJ6M2avWKahD5VFA1Cwey"
+
+# Apply code edit
+curl -X POST "https://api.morphllm.com/v1/chat/completions" \
+  -H "Authorization: Bearer $MORPH_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "morph-v3-fast",
+    "messages": [
+      {
+        "role": "user",
+        "content": "<instruction>Add error handling to the function</instruction>\n<code>function divide(a, b) {\n  return a / b;\n}</code>\n<update>function divide(a, b) {\n  if (b === 0) throw new Error(\"Division by zero\");\n  return a / b;\n}</update>"
+      }
+    ]
+  }'
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.morphllm.com/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# MCP Integration
+
+> Connect to Morph's 10,500 tok/s file editing via Model Context Protocol
+
+Coding agents waste tokens on full-file rewrites and unfocused searches. Morph MCP gives your agent `edit_file` (10,500 tok/s partial edits) and `codebase_search` (8 parallel tool calls per turn) with zero code changes.
+
+**One command to install:**
+
+<pre style={{backgroundColor: '#f3f4f6', padding: '14px 16px', borderRadius: '8px', overflowX: 'auto', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontSize: '14px', lineHeight: '1.5', color: '#111827', fontWeight: 'bold'}}><code>npx -y @morphllm/morph-setup --morph-api-key YOUR\_API\_KEY</code></pre>
+
+<Info>
+  **Logged in?** Your API key auto-fills above. Otherwise, get it from your [dashboard](https://morphllm.com/dashboard/api-keys).
+</Info>
+
+## Installation (All Clients)
+
+<Steps>
+  <Step title="1. Get Your API Key">
+    Get your API key from the [dashboard](https://morphllm.com/dashboard/api-keys).
+  </Step>
+
+  <Step title="2. Configure Your MCP Client">
+    <Tabs>
+      <Tab title="Claude Code">
+        **One-liner Installation (Recommended)**:
+
+        <pre style={{backgroundColor: '#f3f4f6', padding: '14px 16px', borderRadius: '8px', overflowX: 'auto', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace', fontSize: '14px', lineHeight: '1.5', color: '#111827', fontWeight: 'bold'}}><code style={{color: '#111827'}}>claude mcp add filesystem-with-morph --scope user -e MORPH\_API\_KEY=YOUR\_API\_KEY -- npx -y @morphllm/morphmcp</code></pre>
+
+        <Note>
+          **Configure Claude to prefer Morph**: Add this to your global Claude config:
+
+          ```bash theme={null}
+          mkdir -p ~/.claude && echo "Fast Apply: IMPORTANT: Use \`edit_file\` over \`str_replace\` or full file writes. It works with partial code snippets—no need for full file content.
+          Warp Grep: warp-grep is a subagent that takes in a search string and tries to find relevant context. Best practice is to use it at the beginning of codebase explorations to fast track finding relevant files/lines. Do not use it to pin point keywords, but use it for broader semantic queries. \"Find the XYZ flow\", \"How does XYZ work\", \"Where is XYZ handled?\", \"Where is <error message> coming from?\"" >> ~/.claude/CLAUDE.md
+          ```
+        </Note>
+
+        **Manual Config File Method**:
+
+        Create or edit `.claude.json` in your workspace:
+
+        ```json theme={null}
+        {
+          "mcpServers": {
+            "filesystem-with-morph": {
+              "env": {
+                "MORPH_API_KEY": "YOUR_API_KEY"
+              },
+              "command": "npx -y @morphllm/morphmcp",
+              "args": []
+            }
+          }
+        }
+        ```
+      </Tab>
+
+      <Tab title="Codex">
+        **CLI Installation (Recommended)**:
+
+        ```bash theme={null}
+        # Add Morph MCP server to Codex
+        codex mcp add morph-mcp --env MORPH_API_KEY=YOUR_API_KEY -- npx -y @morphllm/morphmcp
+        ```
+
+        **Manual Config File**:
+
+        Add to `~/.codex/config.toml`:
+
+        ```toml theme={null}
+        [mcp_servers.filesystem-with-morph]
+        env = { "MORPH_API_KEY" = "YOUR_API_KEY" }
+        command = "npx -y @morphllm/morphmcp"
+        args = []
+        # Optional: adjust timeouts
+        startup_timeout_sec = 10
+        tool_timeout_sec = 60
+        ```
+
+        <Note>
+          **CLI Management**: Use `codex mcp list` to see configured servers and `codex mcp remove filesystem-with-morph` to remove.
+        </Note>
+
+        <Note>
+          Add to your `AGENTS.md`:
+
+          ```markdown theme={null}
+          Fast Apply: IMPORTANT: Use `edit_file` over `str_replace` or full file writes. It works with partial code snippets—no need for full file content.
+          Warp Grep: warp-grep is a subagent that takes in a search string and tries to find relevant context. Best practice is to use it at the beginning of codebase explorations to fast track finding relevant files/lines. Do not use it to pin point keywords, but use it for broader semantic queries. "Find the XYZ flow", "How does XYZ work", "Where is XYZ handled?", "Where is <error message> coming from?"
+          ```
+        </Note>
+      </Tab>
+
+      <Tab title="Cursor">
+        Add to your Cursor MCP by clicking this button: <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=morph-mcp&config=eyJlbnYiOnsiTU9SUEhfQVBJX0tFWSI6InlvdXItbW9ycGgtYXBpLWtleS1oZXJlIn0sImNvbW1hbmQiOiJucHggLXkgQG1vcnBobGxtL21vcnBobWNwIn0%3D">        <img src="https://cursor.com/deeplink/mcp-install-light.svg" alt="Install MCP Server" style={{pointerEvents: 'none', display: 'inline-block'}} /></a>
+
+        OR add to your Cursor MCP config file:
+
+        **Location**: `~/.cursor/mcp.json`
+
+        ```json theme={null}
+        {
+          "mcpServers": {
+            "morph-mcp": {
+              "env": {
+                "MORPH_API_KEY": "YOUR_API_KEY"
+              },
+              "command": "npx -y @morphllm/morphmcp",
+              "args": []
+            }
+          }
+        }
+        ```
+
+        <Note>
+          **Global Config**: This configuration works across all your projects automatically. The MCP server detects workspace boundaries via `.git`, `package.json`, and other project indicators.
+        </Note>
+
+        <Tip>
+          **Make Cursor use Morph tools!** Add this to your system prompt in **Settings → Rules for AI**:
+
+          ```
+          Fast Apply: IMPORTANT: Use `edit_file` over `str_replace` or full file writes. It works with partial code snippets—no need for full file content.
+          Warp Grep: warp-grep is a subagent that takes in a search string and tries to find relevant context. Best practice is to use it at the beginning of codebase explorations to fast track finding relevant files/lines. Do not use it to pin point keywords, but use it for broader semantic queries. "Find the XYZ flow", "How does XYZ work", "Where is XYZ handled?", "Where is <error message> coming from?"
+          ```
+        </Tip>
+      </Tab>
+
+      <Tab title="Claude Desktop">
+        Add to your Claude Desktop config file:
+
+        **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`\
+        **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
+
+        ```json theme={null}
+        {
+          "mcpServers": {
+            "filesystem-with-morph": {
+              "env": {
+                "MORPH_API_KEY": "YOUR_API_KEY"
+              },
+              "command": "npx -y @morphllm/morphmcp",
+              "args": []
+            }
+          }
+        }
+        ```
+
+        <Note>
+          **Restart Required**: Completely quit and restart Claude Desktop to load the new configuration.
+        </Note>
+
+        <Note>
+          Add to your project instructions:
+
+          ```markdown theme={null}
+          Fast Apply: IMPORTANT: Use `edit_file` over `str_replace` or full file writes. It works with partial code snippets—no need for full file content.
+          Warp Grep: warp-grep is a subagent that takes in a search string and tries to find relevant context. Best practice is to use it at the beginning of codebase explorations to fast track finding relevant files/lines. Do not use it to pin point keywords, but use it for broader semantic queries. "Find the XYZ flow", "How does XYZ work", "Where is XYZ handled?", "Where is <error message> coming from?"
+          ```
+        </Note>
+      </Tab>
+
+      <Tab title="VS Code">
+        **CLI Installation (Recommended)**:
+
+        ```bash theme={null}
+        code --add-mcp '{"name":"morph-mcp","command":"npx","args":["-y","@morphllm/morphmcp"],"envVars":{"MORPH_API_KEY":"YOUR_API_KEY"}}'
+        ```
+
+        Or use the Command Palette: run `MCP: Add Server`, enter the server details, and select **Global** to save to your user profile.
+
+        **Manual Config File**:
+
+        Run `MCP: Open User Configuration` from the Command Palette, or add to your user-level `mcp.json`:
+
+        ```json theme={null}
+        {
+          "mcpServers": {
+            "filesystem-with-morph": {
+              "env": {
+                "MORPH_API_KEY": "YOUR_API_KEY"
+              },
+              "command": "npx -y @morphllm/morphmcp",
+              "args": []
+            }
+          }
+        }
+        ```
+
+        <Note>
+          Add to your `.github/copilot-instructions.md`:
+
+          ```markdown theme={null}
+          Fast Apply: IMPORTANT: Use `edit_file` over `str_replace` or full file writes. It works with partial code snippets—no need for full file content.
+          Warp Grep: warp-grep is a subagent that takes in a search string and tries to find relevant context. Best practice is to use it at the beginning of codebase explorations to fast track finding relevant files/lines. Do not use it to pin point keywords, but use it for broader semantic queries. "Find the XYZ flow", "How does XYZ work", "Where is XYZ handled?", "Where is <error message> coming from?"
+          ```
+        </Note>
+      </Tab>
+
+      <Tab title="Manual">
+        Run the MCP server directly:
+
+        ```bash theme={null}
+        export MORPH_API_KEY="YOUR_API_KEY"
+        npx -y @morphllm/morphmcp
+        ```
+      </Tab>
+    </Tabs>
+  </Step>
+
+  <Step title="3. Test Installation">
+    **Claude Code**: Type `/mcp` and `/tools` to see Morph's `edit_file` tool\
+    **Codex**: Run `codex mcp list` to verify server is configured, then make edit requests\
+    **Cursor/VS Code**: Make any code edit request - should use Morph automatically\
+    **Manual**: Check server logs show "MCP Server started successfully"
+  </Step>
+</Steps>
+
+## Configuration
+
+| Variable         | Default   | Description              |
+| ---------------- | --------- | ------------------------ |
+| `MORPH_API_KEY`  | Required  | Your API key             |
+| `WORKSPACE_MODE` | `"true"`  | Auto workspace detection |
+| `DEBUG`          | `"false"` | Debug logging            |
+
+### Advanced Configuration
+
+| Variable                  | Default                    | Description                                       |
+| ------------------------- | -------------------------- | ------------------------------------------------- |
+| `MORPH_API_URL`           | `https://api.morphllm.com` | Override the Morph API base URL (for proxies)     |
+| `MORPH_WARP_GREP_TIMEOUT` | `30000`                    | Timeout for Warp Grep model calls in milliseconds |
+
+**Custom API endpoint** — For enterprise deployments or custom authentication flows:
+
+```json theme={null}
+{
+  "mcpServers": {
+    "morph-mcp": {
+      "env": {
+        "MORPH_API_KEY": "<user-jwt-token>",
+        "MORPH_API_URL": "https://your-proxy.example.com"
+      },
+      "command": "npx -y @morphllm/morphmcp",
+      "args": []
+    }
+  }
+}
+```
+
+Your proxy receives requests to `/v1/chat/completions` with the token in the `Authorization: Bearer` header. Forward these to `https://api.morphllm.com/v1/chat/completions` after handling auth/billing.
+
+**Warp Grep timeout** — Increase for large codebases or slow networks:
+
+```json theme={null}
+{
+  "mcpServers": {
+    "morph-mcp": {
+      "env": {
+        "MORPH_API_KEY": "sk-xxx",
+        "MORPH_WARP_GREP_TIMEOUT": "60000"
+      },
+      "command": "npx -y @morphllm/morphmcp",
+      "args": []
+    }
+  }
+}
+```
+
+## Available Tools
+
+### Morph-Powered Tools (Default)
+
+**`edit_file`** - 10,500+ tokens/sec code editing via Morph Apply
+**`warpgrep_codebase_search`** - up to 8 parallel tool calls per turn, a smart, fast search sub agent.
+
+## Troubleshooting
+
+**Server won't start**: Check API key, Node.js 16+, run `npm cache clean --force`\
+**Tools missing**: Restart client, validate JSON config\
+**Workspace issues**: Add `.git` or `package.json`, or set `WORKSPACE_MODE="false"`\
+**Slow performance**: Use `edit_file` over `write_file`, check network to api.morphllm.com
+
+## Performance Optimization
+
+### Best Practices
+
+1. **Use `edit_file` for modifications**: Much faster than reading + writing entire files
+2. **Minimize edit scope**: Include only the sections that need changes
+3. **Batch related edits**: Make multiple changes in a single `edit_file` call
+
+### Performance Comparison
+
+| Method                 | Speed        | Use Case                    |
+| ---------------------- | ------------ | --------------------------- |
+| `edit_file` (Morph)    | \~11 seconds | Code modifications, updates |
+| Search & replace       | \~20 seconds | Simple text substitutions   |
+| Traditional read/write | \~60 seconds | Full file rewrites          |
+

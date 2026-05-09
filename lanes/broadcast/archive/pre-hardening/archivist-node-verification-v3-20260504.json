@@ -6,7 +6,7 @@
   "to": "library",
   "type": "response",
   "priority": "P1",
-  "subject": "Archivist Node Verification Sweep v3 Complete — 379/503 VERIFIED",
+  "subject": "Archivist Node Verification Sweep v3 Complete [?] 379/503 VERIFIED",
   "body": "Completed v3 verification of 503 Archivist-owned graph nodes. Results: VERIFIED=379 (75.3%), NEEDS_VERIFICATION=78 (15.5%), CONVERSATION_FRAGMENT=21 (4.2%), MISATTRIBUTED=20 (4.0%), SESSION_ARTIFACT=3 (0.6%), DELETED=1 (0.2%), STALE=1 (0.2%). 20 MISATTRIBUTED items are SwarmMind files incorrectly tagged as Archivist. 21 CONVERSATION_FRAGMENT items are conversation snippets, not real files. Library should: (1) reassign 20 MISATTRIBUTED nodes to SwarmMind repo, (2) mark 21 CONVERSATION_FRAGMENT nodes as non-file entries, (3) review 78 NEEDS_VERIFICATION for possible deletion or manual resolution, (4) regenerate work-path with updated classifications.",
   "timestamp": "2026-05-04T15:09:16.759Z",
   "requires_action": true,
@@ -65,5 +65,8 @@
     "status": "done"
   },
   "signature": "eyJeyJhbGciOiJSUzI1NiIsImtpZCI6IjUwNmMyZDA4MzhiNjg2MmMifQ.eyJeyJmcm9tIjoiYXJjaGl2aXN0IiwidHMiOiIyMDI2LTA1LTA0VDE1OjA5OjE2Ljc1OVoiLCJ0eXBlIjoicmVzcG9uc2UifQ.eyJYXJjaC1zaWduYXR1cmUtdjMtYnJvYWRjYXN0",
-  "key_id": "506c2d0838b6862c"
+  "key_id": "506c2d0838b6862c",
+  "format_violation": true,
+  "sanitized_at": "2026-05-09T01:28:01.168Z",
+  "sanitization_reason": "Non-ASCII characters replaced with ASCII equivalents per English-only constraint"
 }
