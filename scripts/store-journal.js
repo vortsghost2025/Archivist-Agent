@@ -190,34 +190,33 @@ function validateEntry(entry) {
   if (entry.timestamp && isNaN(Date.parse(entry.timestamp)))
     errors.push(`Invalid timestamp: '${entry.timestamp}'`);
 
-  // v1.4 protocol extension validation (non-blocking warnings)
-  if (entry.uncertainty) {
-    try {
-      const sv = require('./schema-validator');
-      const r = sv.validateUncertaintyPacket(entry.uncertainty);
-      if (!r.valid) {
-        for (const e of r.errors) errors.push('uncertainty: ' + e);
-      }
-    } catch (_) { /* schema-validator not available, skip */ }
-  }
-  if (entry.review) {
-    try {
-      const sv = require('./schema-validator');
-      const r = sv.validateReviewRound(entry.review);
-      if (!r.valid) {
-        for (const e of r.errors) errors.push('review: ' + e);
-      }
-    } catch (_) { /* schema-validator not available, skip */ }
-  }
-  if (entry.prior_attempts) {
-    try {
-      const sv = require('./schema-validator');
-      const r = sv.validatePriorAttempts(entry.prior_attempts);
-      if (!r.valid) {
-        for (const e of r.errors) errors.push('prior_attempts: ' + e);
-      }
-    } catch (_) { /* schema-validator not available, skip */ }
-  }
+	// v1.4 protocol extension validation (non-blocking warnings)
+	var sv = null;
+	try { sv = require('./schema-validator'); } catch (_) { /* schema-validator not available */ }
+	if (sv && entry.uncertainty) {
+		try {
+			var r = sv.validateUncertaintyPacket(entry.uncertainty);
+			if (!r.valid) {
+				for (var _ue = 0; _ue < r.errors.length; _ue++) errors.push('uncertainty: ' + r.errors[_ue]);
+			}
+		} catch (_) { /* skip */ }
+	}
+	if (sv && entry.review) {
+		try {
+			var r2 = sv.validateReviewRound(entry.review);
+			if (!r2.valid) {
+				for (var _re = 0; _re < r2.errors.length; _re++) errors.push('review: ' + r2.errors[_re]);
+			}
+		} catch (_) { /* skip */ }
+	}
+	if (sv && entry.prior_attempts) {
+		try {
+			var r3 = sv.validatePriorAttempts(entry.prior_attempts);
+			if (!r3.valid) {
+				for (var _pe = 0; _pe < r3.errors.length; _pe++) errors.push('prior_attempts: ' + r3.errors[_pe]);
+			}
+		} catch (_) { /* skip */ }
+	}
 
   return errors;
 }
