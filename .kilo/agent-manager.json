@@ -1,34 +1,5 @@
 {
-  "worktrees": {
-    "wt-1777327699734-1": {
-      "branch": "best-dungeon",
-      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\best-dungeon",
-      "parentBranch": "master",
-      "createdAt": "2026-04-27T22:08:19.734Z",
-      "remote": "origin"
-    },
-    "wt-1777389987498-1": {
-      "branch": "brief-cloth",
-      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\brief-cloth",
-      "parentBranch": "master",
-      "createdAt": "2026-04-28T15:26:27.498Z",
-      "remote": "origin"
-    },
-    "wt-1777467892970-1": {
-      "branch": "thoughtful-almandine",
-      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\thoughtful-almandine",
-      "parentBranch": "master",
-      "createdAt": "2026-04-29T13:04:52.970Z",
-      "remote": "origin"
-    },
-    "wt-1777485718539-1": {
-      "branch": "humorous-bactrosaurus",
-      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\humorous-bactrosaurus",
-      "parentBranch": "master",
-      "createdAt": "2026-04-29T18:01:58.539Z",
-      "remote": "origin"
-    }
-  },
+  "worktrees": {},
   "sessions": {
     "ses_22f037d20ffektGEC6SeKJ6YOH": {
       "worktreeId": "wt-1777327699734-1",
@@ -46,7 +17,7 @@
       "worktreeId": "wt-1777485718539-1",
       "createdAt": "2026-04-29T18:02:01.172Z"
     },
-    "ses_1f2103296ffedTcQvv3MTFyZZw": {
+    "ses_20c8d778fffeX8CTjjQQ7Um1xP": {
       "worktreeId": null,
       "createdAt": "2026-05-09T18:11:20.071Z"
     }
@@ -70,7 +41,7 @@
       "ses_22695bc78ffeiLWylCRLoRjivH",
       "ses_2262301e9ffefIZMaJGaKtytYQ",
       "ses_2206a3b58ffeduk0dZUqYJy1m6",
-      "ses_21fee6d34ffetwXdv5KxcI8oRm",
+      "ses_21fee6d34ffetwXdV5KxcI8oRm",
       "ses_21fe7abe7ffePTowf189lQvuZ3",
       "ses_20c8d778fffeX8CTjjQQ7Um1xP",
       "ses_20c7daa43ffet8mRwJnT7vEB2D",
@@ -78,13 +49,9 @@
       "ses_20c6941dcffeHVxOKDPWVDprV1",
       "ses_1f3153a19ffeAJFgbWUQ8FhK7f",
       "ses_1f2cc16feffeapY40O5lBpcK7p",
+      "ses_1f24c93e6ffeHYSExzXgYu1Gwr",
       "ses_1f2103296ffedTcQvv3MTFyZZw"
     ]
   },
-  "worktreeOrder": [
-    "wt-1777327699734-1",
-    "wt-1777389987498-1",
-    "wt-1777467892970-1",
-    "wt-1777485718539-1"
-  ]
+  "sessionsCollapsed": true
 }

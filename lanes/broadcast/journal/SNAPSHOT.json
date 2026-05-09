@@ -1,19 +1,12 @@
 {
   "schema": "store-journal-snapshot-v2",
-  "generated_at": "2026-05-09T13:58:10.725Z",
+  "generated_at": "2026-05-09T17:53:27.548Z",
   "host": "we",
   "date": "2026-05-09",
   "lanes": {
     "archivist": {
-      "total_entries": 15,
-      "in_progress": [
-        {
-          "agent": "autonomous-executor-v1.0.0",
-          "session_id": "auto-272785",
-          "target": "autonomous-executor-archivist",
-          "started_at": "2026-05-09T00:04:18.885Z"
-        }
-      ],
+      "total_entries": 24,
+      "in_progress": [],
       "active_ownerships": [
         {
           "path": "lanes/archivist/inbox/action-required",
@@ -41,12 +34,24 @@
         "lanes/library/evidence/convergence-vote-reject-20260509.json",
         "lanes/library/outbox/CONVERGENCE_VOTE_LIBRARY_20260509.json",
         "governance/CONVERGENCE_AUDIT_KERNEL_20260509.json",
-        "governance/CONVERGENCE_AUDIT_SWARMMIND_20260509.json"
+        "governance/CONVERGENCE_AUDIT_SWARMMIND_20260509.json",
+        "context-buffer/sync-reports/2026-05-09T04-36-01-154Z.json",
+        "context-buffer/sync-reports/2026-05-09T04-56-28-694Z.json",
+        "governance/ratification-gate.json",
+        "governance/shared-script-ownership-map.json",
+        "lanes/broadcast/edit-intents.jsonl",
+        "scripts/lane-worker.js",
+        "governance/CONSOLIDATED_AMENDMENT_PLAN.md",
+        "governance/RATIFICATION_VOTE_ARCHIVIST_20260509.json",
+        "schemas/inbox-message-v1.json",
+        "scripts/blocked-remediator.js",
+        "scripts/task-chain-engine.js",
+        "scripts/util/sanitize-filename.js"
       ],
       "last_activity": {
-        "timestamp": "2026-05-09T13:39:13.426Z",
+        "timestamp": "2026-05-09T17:53:27.520Z",
         "event": "work_completed",
-        "agent": "git-post-commit"
+        "agent": "autonomous-executor-v1.0.0"
       },
       "uncertainty_summary": null,
       "review_summary": null

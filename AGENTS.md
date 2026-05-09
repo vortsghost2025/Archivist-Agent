@@ -47,6 +47,57 @@ const inbox = discovery.getInbox('swarmmind');  // Returns: S:/SwarmMind/lanes/s
 
 ---
 
+### SESSION INIT PROTOCOL (UBUNTU HEADLESS — RUN ON EVERY AGENT LOAD)
+
+When starting a session on the Ubuntu headless machine, run these checks BEFORE doing any work:
+
+**1. Verify sync infrastructure is running:**
+```bash
+systemctl status rig-sync-all.timer   # Must show "active (waiting)"
+```
+
+**2. Check for P0/P1 inbox messages:**
+```bash
+ls lanes/{self}/inbox/action-required/   # Must be empty before starting new work
+```
+
+**3. Verify recovery state (if post-reboot or post-compact):**
+```bash
+node scripts/recovery-test-suite.js      # All 11 tests must pass
+```
+
+**4. Check active blocker:**
+```bash
+cat lanes/broadcast/active-blocker.json 2>/dev/null   # If exists, ONLY that blocker's owner lane works
+```
+
+**5. Consult SCRIPT_INDEX.md:**
+```bash
+cat SCRIPT_INDEX.md # Lists every active script, its purpose, and how to call it
+```
+
+**6. Record session provenance:**
+```bash
+# Every session MUST emit OUTPUT_PROVENANCE at start and in all final outputs
+# Format:
+#   OUTPUT_PROVENANCE:
+#     agent: <runtime-or-model>
+#     lane: <lane-id>
+#     generated_at: <ISO-8601>
+#     session_id: <unique-id>
+```
+
+**Why this matters:** Agents have historically created scripts that no other agent knows about, leading to duplicated effort, orphaned tooling, and scripts that are empty or broken. The SCRIPT_INDEX.md is the single source of truth for what scripts exist and how to use them.
+
+**Rules for new scripts on Ubuntu:**
+1. Add to SCRIPT_INDEX.md immediately — unindexed scripts don't exist
+2. Put system scripts in `/usr/local/bin/`, not in home directory
+3. No v2/v3 filename suffixes — replace the original
+4. No copies — one canonical location, everything else is a symlink
+5. Scripts unused for 30 days get archived to `~/agent/bin/_archived-single-use/`
+
+---
+
 **STOP. READ THIS SECTION COMPLETELY BEFORE ANY OTHER ACTION.**
 
 This project operates under constitutional governance. Before taking any action, you are expected to complete governance verification.
