@@ -19,6 +19,21 @@ const FALLBACK_LANE_ROOTS = {
   library: 'S:/self-organizing-library',
 };
 
+const LINUX_REPO_ROOT = '/home/we4free/agent/repos';
+const LINUX_LANE_ROOTS = {
+  archivist: `${LINUX_REPO_ROOT}/Archivist-Agent`,
+  swarmmind: `${LINUX_REPO_ROOT}/SwarmMind`,
+  kernel: `${LINUX_REPO_ROOT}/kernel-lane`,
+  library: `${LINUX_REPO_ROOT}/self-organizing-library`,
+};
+
+function resolveLaneRoot(rawPath, lane) {
+  if (rawPath && fs.existsSync(rawPath)) return rawPath;
+  const linux = LINUX_LANE_ROOTS[lane];
+  if (linux && fs.existsSync(linux)) return linux;
+  return rawPath;
+}
+
 const C2_SCAN_DIRS = [
   'scripts',
   'src/lane',
@@ -115,6 +130,7 @@ function fileSha256(filePath) {
 }
 
 function getLaneRoots() {
+  let rawRoots;
   if (fs.existsSync(LANE_REGISTRY_PATH)) {
     try {
       const registry = readJson(LANE_REGISTRY_PATH);
@@ -128,12 +144,22 @@ function getLaneRoots() {
       for (const lane of LANE_ORDER) {
         if (!roots[lane]) roots[lane] = FALLBACK_LANE_ROOTS[lane];
       }
-      return roots;
+      rawRoots = roots;
     } catch (err) {
       console.warn(`[WARN] Failed to parse lane registry, using fallback roots: ${err.message}`);
+      rawRoots = { ...FALLBACK_LANE_ROOTS };
+    }
+  } else {
+    rawRoots = { ...FALLBACK_LANE_ROOTS };
+  }
+  const resolved = {};
+  for (const lane of LANE_ORDER) {
+    resolved[lane] = resolveLaneRoot(rawRoots[lane], lane);
+    if (resolved[lane] !== rawRoots[lane]) {
+      console.log(`[PATH] ${lane}: ${rawRoots[lane]} -> ${resolved[lane]}`);
     }
   }
-  return { ...FALLBACK_LANE_ROOTS };
+  return resolved;
 }
 
 function listJsonFilesRecursively(dirPath, baseDir, output) {
