@@ -1,5 +1,16 @@
 # Session Report — 2026-05-07 Ubuntu Headless
 
+OUTPUT_PROVENANCE:
+agent: kilo-ubuntu-headless
+lane: archivist
+target: ubuntu-session-report
+
+## OBSERVABILITY_DOMAIN
+session-ops
+
+## NEXT_SAFE_ACTION
+Review recovery suite results and continue with cross-lane sync
+
 ## Timestamp
 2026-05-07T22:20Z
 

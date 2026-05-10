@@ -1,5 +1,16 @@
 # Discipline Loop (Graph = Map + Debugger)
 
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: discipline-loop-protocol
+
+## OBSERVABILITY_DOMAIN
+governance-protocol
+
+## NEXT_SAFE_ACTION
+Apply discipline contract gates before any new work
+
 Use this every session. If any gate fails, stop.
 
 ## 1. Discipline Contract

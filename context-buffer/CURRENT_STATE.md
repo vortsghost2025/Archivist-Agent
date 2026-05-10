@@ -1,5 +1,16 @@
 # CURRENT STATE SNAPSHOT
 
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: system-state-snapshot
+
+## OBSERVABILITY_DOMAIN
+governance-state
+
+## NEXT_SAFE_ACTION
+Resume solo cleanup: provenance backfill + recovery verification
+
 ## Timestamp
 2026-05-07T21:30:00Z
 

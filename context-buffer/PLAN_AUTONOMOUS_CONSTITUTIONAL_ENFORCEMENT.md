@@ -1,5 +1,16 @@
 # PLAN: Convergence to Autonomous Constitutional Enforcement
 
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: constitutional-enforcement-plan
+
+## OBSERVABILITY_DOMAIN
+governance-enforcement
+
+## NEXT_SAFE_ACTION
+Re-ratify amended proposal through 3-lane convergence
+
 **Author:** Archivist Lane
 **Date:** 2026-04-28
 **Status:** AMENDED PROPOSAL (v3) — requires re-ratification per Library amendments L1–L4
