@@ -23,8 +23,10 @@ Solo agent session. Cross-agent coordination was suspended per operator decision
 - Commit `101269e` pushed: provenance wiring in all 6 scripts
 
 ### Provenance Backfill (Archivist-Agent)
-- 4 high-value files backfilled: `CURRENT_STATE.md`, `SESSION_REPORT_2026-05-07_UBUNTU.md`, `PLAN_AUTONOMOUS_CONSTITUTIONAL_ENFORCEMENT.md`, `discipline-loop.md`
-- Commit `2b2d7fab` pushed to master
+- 4 high-value files backfilled: `CURRENT_STATE.md`, `SESSION_REPORT_2026-05-07_UBUNTU.md`, `LAN_AUTONOMOUS_CONSTITUTIONAL_ENFORCEMENT.md`, `discipline-loop.md` (commit `2b2d7fab`)
+- 10 medium-value files backfilled (commit `d28f20f2`)
+- 29 low-value files backfilled (commit `7917abe1`)
+- All ~52 context-buffer .md files now COMPLETE with provenance blocks
 
 ### Inbox/Outbox Cleanup (Archivist-Agent — local only, gitignored)
 - 9 NACK messages archived to `processed/nack-cleanup-20260510/`
@@ -48,13 +50,20 @@ Solo agent session. Cross-agent coordination was suspended per operator decision
 - All 4 lanes alive
 - No active blocker
 
+### Provenance Backfill — COMPLETE
+
+- 4 high-value files backfilled (commit `2b2d7fab`)
+- 10 medium-value files backfilled (commit `d28f20f2`)
+- 29 low-value files backfilled (commit `7917abe1`)
+- **All ~52 context-buffer .md files now have provenance blocks** — verified via grep (zero MISSING)
+- 3 `.txt` files excluded (book chapter excerpts, not agent outputs)
+- Temp script `tmp-backfill-provenance.ps1` deleted
+
 ## Pending Work (Priority Order)
 
-1. **Medium-value provenance backfill** — ~10 more context-buffer .md files in Archivist could be backfilled (lower priority, enforcement is forward-looking)
-2. **CP context-buffer backfill** — `sync-instructions-20260509.md` (1-line stub, low priority)
-3. **Multi-agent reactivation** — when operator is ready, prepare bounded task assignments for a second agent (headless Ubuntu as worker only)
-4. **`_verify-provenance.ps1`** in CP tools/ — temporary test helper (31 lines), can be deleted once enforcement is stable
-5. **Record `local_sanity_tier_available=true`** in next CP report per operator request
+1. **Record `local_sanity_tier_available=true`** in next CP report per operator request
+2. **Multi-agent reactivation** — when operator is ready, prepare bounded task assignments for a second agent (headless Ubuntu as worker only)
+3. **kernel-lane `.identity/`** — needs provisioning if kernel lane is to have full identity infrastructure (known gap, not blocking)
 
 ## Key Paths
 
