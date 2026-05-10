@@ -2,8 +2,8 @@ OUTPUT_PROVENANCE:
 agent: z-ai/glm-5.1
 lane: archivist
 target: solo cleanup phase checkpoint
-generated_at: 2026-05-10T14:00:00-04:00
-session_id: solo-continuation-20260510b
+generated_at: 2026-05-10T18:24:00-04:00
+session_id: solo-continuation-20260510c
 
 # Final Solo Cleanup Checkpoint
 
@@ -15,11 +15,11 @@ provenance_compliance / recovery_health / lane_cleanup
 ### Archivist-Agent (`master`)
 - **Clean** — only 3 untracked `.txt` files (book chapter excerpts, NOT agent outputs, NOT staged)
 - All commits pushed to `origin/master`
-- Latest commit: `b558b938` — provenance backfill on 9 context-buffer files
+- Latest commit: `0654b8eb` — checkpoint update
 
 ### WE4FREE-Control-Plane (`main`)
 - **Clean** — all committed and pushed
-- Latest commit: `cf850be` — verifier root-exemption fix
+- Latest commit: `5f88fea` — cross-lane historical debt decision in enforcement spec
 
 ## 2. Latest Commits Pushed
 
@@ -27,6 +27,7 @@ provenance_compliance / recovery_health / lane_cleanup
 | Commit | Description |
 |--------|-------------|
 | `cf850be` | [LANE-1] verify-output-contract: exempt ALL root-level .md files, not just hardcoded governance list |
+| `5f88fea` | [LANE-1] Record cross-lane historical debt decision in OUTPUT_CONTRACT_ENFORCEMENT.md |
 | `89ba7df` | Remove _verify-provenance.ps1 temp helper, update SCRIPT_INDEX.md |
 | `e77c326` | Add SCRIPT_INDEX.md, cp-preflight, cp-local-review, cp-logs-cleanup |
 | `101269e` | Wire OUTPUT_CONTRACT_ENFORCEMENT into all 6 CP report scripts |
@@ -34,6 +35,7 @@ provenance_compliance / recovery_health / lane_cleanup
 ### Archivist-Agent
 | Commit | Description |
 |--------|-------------|
+| `0654b8eb` | [LANE-1] Update checkpoint: violations 71→51, all remaining cross-lane |
 | `b558b938` | [LANE-1] Backfill missing provenance fields (target, OBSERVABILITY_DOMAIN, NEXT_SAFE_ACTION) on 9 Archivist context-buffer files |
 | `885bfef4` | Update handoff: provenance backfill complete for all context-buffer .md files |
 | `7917abe1` | Provenance backfill: 29 low-value context-buffer .md files |
@@ -61,13 +63,13 @@ SKIPPED: 147 (31 ROOT_GOVERNANCE_DOC + 116 ROOT_HISTORICAL_DOC)
 | kernel-lane context-buffer | 2 | kernel-lane | 1 partial, 1 full miss |
 | SwarmMind context-buffer | 1 | SwarmMind | Partial (missing `target:`, `OBSERVABILITY_DOMAIN`, `NEXT_SAFE_ACTION`) |
 
-## 4. Operator-Decision Items
+## 4. Operator Decisions (ALL RESOLVED)
 
-| # | Item | Recommendation | Priority |
-|---|------|---------------|----------|
-| 1 | Remaining 51 cross-lane violations | **LIST FOR REVIEW** — all are in Library (48), kernel (2), SwarmMind (1) context-buffer. Backfill requires running agents in those lanes, or operator authorization for cross-lane writes. | Operator decision |
-| 2 | Multi-agent reactivation | **HOLD** — reintroduce one bounded read-only/monitor-only worker first | After checkpoint |
-| 3 | kernel-lane `.identity/` provisioning | **HOLD** — separate bounded task | Medium, separate task |
+| # | Item | Decision | Status | Recorded In |
+|---|------|----------|--------|-------------|
+| 1 | Remaining 51 cross-lane violations | **ACCEPTED HISTORICAL DEBT** — no retroactive Archivist cross-lane edits. Future enforcement: yes. Retroactive backfill: only by bounded lane-owned tasks with explicit authorization. | ✅ Decided | `OUTPUT_CONTRACT_ENFORCEMENT.md` (commit `5f88fea`) |
+| 2 | Multi-agent reactivation | **HOLD** — reintroduce one bounded read-only/monitor-only worker only after this checkpoint is clean | ⬜ On hold | This doc |
+| 3 | kernel-lane `.identity/` provisioning | **HOLD** — separate bounded task with explicit steps: generate identity → update trust store → verify lane consistency → run recovery suite → committed paths only | ⬜ On hold | This doc |
 
 ### Document Classification (Finalized)
 
@@ -91,7 +93,11 @@ ROOT_HISTORICAL_DOCS:
 
 ## NEXT_SAFE_ACTION
 
-Operator decides: whether to request cross-lane backfill for the 51 other-lane context-buffer files (48 Library + 2 kernel + 1 SwarmMind), or mark them as accepted historical debt.
+Solo cleanup phase is **complete**. All owned violations backfilled, cross-lane debt formally classified, enforcement spec updated and committed. Next actions require operator decision:
+
+1. **Reactivate one bounded worker** (read-only/monitor-only) when ready
+2. **Schedule kernel-lane `.identity/` provisioning** as a separate bounded task
+3. **Request cross-lane backfill** from Library/kernel/SwarmMind lane owners when those lanes are active
 
 ## Session Artifacts
 
