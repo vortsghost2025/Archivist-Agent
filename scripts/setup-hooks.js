@@ -1,3 +1,12 @@
+// DEPRECATED — Do not use. This script installs an outdated shell-based hook.
+// The tracked hook in hooks/ provides sovereignty, Gate 2, canonical script guard,
+// NTFS check, lint, secret scan, trust store validation, and journal preflight.
+// Install with: node hooks/install.js
+// See: hooks/README.md
+//
+// This file is retained for reference only and will be removed in a future cleanup.
+// Running this script will OVERWRITE your .git/hooks/pre-commit with the WRONG hook.
+
 const fs = require('fs');
 const path = require('path');
 
