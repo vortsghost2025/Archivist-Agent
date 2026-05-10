@@ -2,8 +2,8 @@ OUTPUT_PROVENANCE:
 agent: z-ai/glm-5.1
 lane: archivist
 target: solo cleanup phase checkpoint
-generated_at: 2026-05-10T13:30:00-04:00
-session_id: solo-continuation-20260510
+generated_at: 2026-05-10T14:00:00-04:00
+session_id: solo-continuation-20260510b
 
 # Final Solo Cleanup Checkpoint
 
@@ -15,6 +15,7 @@ provenance_compliance / recovery_health / lane_cleanup
 ### Archivist-Agent (`master`)
 - **Clean** — only 3 untracked `.txt` files (book chapter excerpts, NOT agent outputs, NOT staged)
 - All commits pushed to `origin/master`
+- Latest commit: `b558b938` — provenance backfill on 9 context-buffer files
 
 ### WE4FREE-Control-Plane (`main`)
 - **Clean** — all committed and pushed
@@ -33,6 +34,7 @@ provenance_compliance / recovery_health / lane_cleanup
 ### Archivist-Agent
 | Commit | Description |
 |--------|-------------|
+| `b558b938` | [LANE-1] Backfill missing provenance fields (target, OBSERVABILITY_DOMAIN, NEXT_SAFE_ACTION) on 9 Archivist context-buffer files |
 | `885bfef4` | Update handoff: provenance backfill complete for all context-buffer .md files |
 | `7917abe1` | Provenance backfill: 29 low-value context-buffer .md files |
 | `d28f20f2` | Provenance backfill: 10 medium-value context-buffer files + delete empty audit report |
@@ -41,33 +43,29 @@ provenance_compliance / recovery_health / lane_cleanup
 
 ```
 FILES_SCANNED: 268
-PASSED: 50
-VIOLATIONS: 71
+PASSED: 70
+VIOLATIONS: 51
 SKIPPED: 147 (31 ROOT_GOVERNANCE_DOC + 116 ROOT_HISTORICAL_DOC)
 ```
 
-### What changed
-- Root-level `.md` files are now ALL exempt (not just hardcoded `$RootGovernanceDocs` list)
-- New skip reason: `ROOT_HISTORICAL_DOC` for root-level files not in the governance list
-- Violations dropped from 187 to 71 — only genuine generated-output files remain
+### What changed since last checkpoint
+- Archivist context-buffer: 9 files backfilled with missing `target:`, `## OBSERVABILITY_DOMAIN`, `## NEXT_SAFE_ACTION` (commit `b558b938`)
+- CP agent-logs + context-buffer + state-cache: 12 files previously backfilled (earlier commits)
+- Violations dropped from 71 → 51
 
-### Remaining 71 violations (operator review needed — NOT being auto-backfilled)
+### Remaining 51 violations (ALL cross-lane — not our write scope)
 
 | Category | Count | Repo | Missing Blocks |
 |----------|-------|------|----------------|
-| Archivist context-buffer | 8 | Archivist-Agent | `target:`, `OBSERVABILITY_DOMAIN`, `NEXT_SAFE_ACTION` (partial provenance) |
+| Library context-buffer | 48 | self-organizing-library | All full miss or near-full miss (never backfilled) |
 | kernel-lane context-buffer | 2 | kernel-lane | 1 partial, 1 full miss |
-| Library context-buffer | 41 | self-organizing-library | All full miss (never backfilled) |
-| SwarmMind context-buffer | 1 | SwarmMind | Partial |
-| CP agent-logs | 10 | WE4FREE-Control-Plane | Various missing blocks |
-| CP context-buffer | 1 | WE4FREE-Control-Plane | Full miss |
-| CP state-cache | 1 | WE4FREE-Control-Plane | Full miss |
+| SwarmMind context-buffer | 1 | SwarmMind | Partial (missing `target:`, `OBSERVABILITY_DOMAIN`, `NEXT_SAFE_ACTION`) |
 
 ## 4. Operator-Decision Items
 
 | # | Item | Recommendation | Priority |
 |---|------|---------------|----------|
-| 1 | Remaining 71 violations — backfill or exempt? | **LIST FOR REVIEW** — backfill the 10 CP agent-logs (our scripts generate them); flag the 41 Library + 2 kernel + 1 SwarmMind context-buffer files as cross-lane backfill work (not our lane's scope) | Operator decision |
+| 1 | Remaining 51 cross-lane violations | **LIST FOR REVIEW** — all are in Library (48), kernel (2), SwarmMind (1) context-buffer. Backfill requires running agents in those lanes, or operator authorization for cross-lane writes. | Operator decision |
 | 2 | Multi-agent reactivation | **HOLD** — reintroduce one bounded read-only/monitor-only worker first | After checkpoint |
 | 3 | kernel-lane `.identity/` provisioning | **HOLD** — separate bounded task | Medium, separate task |
 
@@ -93,7 +91,7 @@ ROOT_HISTORICAL_DOCS:
 
 ## NEXT_SAFE_ACTION
 
-Operator decides: backfill the 10 CP agent-logs files (our lane's output), and whether to request cross-lane backfill for the 51 other-lane context-buffer files.
+Operator decides: whether to request cross-lane backfill for the 51 other-lane context-buffer files (48 Library + 2 kernel + 1 SwarmMind), or mark them as accepted historical debt.
 
 ## Session Artifacts
 
