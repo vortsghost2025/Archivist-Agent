@@ -204,7 +204,7 @@ class RecoveryTestSuite {
 
   test9_multiSourceConsistency() {
     const truth = this.audit.multiSourceTruthReload();
-    const KNOWN_PRE_EXISTING = ['archivist_key_id_mismatch', 'kernel_key_id_mismatch', 'swarmmind_no_identity', 'swarmmind_key_id_mismatch'];
+    const KNOWN_PRE_EXISTING = ['archivist_key_id_mismatch', 'kernel_no_identity', 'swarmmind_key_id_mismatch'];
     const unexpected = truth.contradictions.filter(c => !KNOWN_PRE_EXISTING.includes(c));
     const status = unexpected.length === 0 ? 'consistent' : 'contradicted';
     this.log('multi_source_consistency', status === 'consistent',
