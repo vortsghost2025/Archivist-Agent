@@ -1,4 +1,18 @@
-# Graph Auto Analysis
+﻿# Graph Auto Analysis
+
+
+OUTPUT_PROVENANCE:
+agent: graph-analyst
+lane: archivist
+target: automated graph analysis
+generated_at: 2026-04-30
+session_id: archivist-2026-04-30
+
+## OBSERVABILITY_DOMAIN
+graph-analysis
+
+## NEXT_SAFE_ACTION
+Review analysis findings and update knowledge graph
 
 Source: C:\Users\seand\Downloads\graph-snapshot-FreeAgent-2026-04-30-12-52-02-534.json
 Generated: 2026-04-30T12:53:30.388Z
@@ -19,7 +33,7 @@ Generated: 2026-04-30T12:53:30.388Z
 
 ## Top Conflict/Blocker Nodes
 - 2003e3946c86dbf9 | conflicted | AGENT HANDOFF BRIEF - Current Context
-- bda5d25735663d77 | conflicted | 🎊 PROJECT COMPLETION SUMMARY
+- bda5d25735663d77 | conflicted | ðŸŽŠ PROJECT COMPLETION SUMMARY
 - 339f82f33db3bf86 | conflicted | AGENT OPERATIONAL PROTOCOL
 - 46f72116106c6d55 | conflicted | ALERTING RULES
 - b585750139e20b54 | conflicted | API Test Breakdown - February 9, 2026

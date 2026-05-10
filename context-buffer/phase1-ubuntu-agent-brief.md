@@ -1,4 +1,18 @@
-# Phase 1 — Ubuntu Daemon Infrastructure
+﻿# Phase 1 â€” Ubuntu Daemon Infrastructure
+
+
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: phase 1 ubuntu agent brief
+generated_at: 2026-04-29
+session_id: archivist-2026-04-29
+
+## OBSERVABILITY_DOMAIN
+coordination
+
+## NEXT_SAFE_ACTION
+Confirm ubuntu agent launched with brief parameters
 
 You are operating on the headless Ubuntu machine at `we4free@100.95.40.99` (Tailscale IP). SSH in with: `ssh we4free@100.95.40.99`
 

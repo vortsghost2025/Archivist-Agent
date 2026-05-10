@@ -1,3 +1,18 @@
+﻿# Friday Pre-Read (Full Technical Companion)
+
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: full technical pre-read for friday session
+generated_at: 2026-04-29
+session_id: archivist-2026-04-29
+
+## OBSERVABILITY_DOMAIN
+coordination
+
+## NEXT_SAFE_ACTION
+Confirm pre-read content current with system state.
+
 Subject: Friday pre-read (full technical companion)
 
 Hi [Name],

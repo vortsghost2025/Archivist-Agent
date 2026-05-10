@@ -1,4 +1,18 @@
-# Call Playbook (60 min) - Governance + Lanes Demo
+﻿# Call Playbook (60 min) - Governance + Lanes Demo
+
+
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: call playbook for cross-lane coordination
+generated_at: 2026-04-29
+session_id: archivist-2026-04-29
+
+## OBSERVABILITY_DOMAIN
+coordination
+
+## NEXT_SAFE_ACTION
+Execute next scheduled call per playbook
 
 ## Goal (framing in first 60 seconds)
 - Show progress since initial help session.

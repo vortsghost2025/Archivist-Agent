@@ -1,4 +1,18 @@
 # Peer Delta Merge Template
+
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: peer delta merge results
+generated_at: 2026-04-29
+session_id: archivist-2026-04-29
+
+## OBSERVABILITY_DOMAIN
+coordination
+
+## NEXT_SAFE_ACTION
+Verify merged deltas propagated to all lane graphs.
+
 **Created:** 2026-04-29T10:47:00-04:00  
 **Created By:** archivist-agent-session-20260429T1032  
 **Purpose:** Reconcile peer Archivist-Agent delta-summary.md + mvp-task-list.json with original proposal  

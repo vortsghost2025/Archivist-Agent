@@ -1,4 +1,18 @@
-# Compact Subagent Integration Status (2026-04-29)
+﻿# Compact Subagent Integration Status (2026-04-29)
+
+
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: compact subagent integration plan
+generated_at: 2026-04-29
+session_id: archivist-2026-04-29
+
+## OBSERVABILITY_DOMAIN
+compact-restore
+
+## NEXT_SAFE_ACTION
+Test subagent compact/restore cycle end-to-end
 
 ## What was changed
 

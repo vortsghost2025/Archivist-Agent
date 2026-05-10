@@ -1,3 +1,18 @@
+﻿# Friday Pre-Read (Short Version, 1 Page)
+
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: short pre-read for friday session
+generated_at: 2026-04-29
+session_id: archivist-2026-04-29
+
+## OBSERVABILITY_DOMAIN
+coordination
+
+## NEXT_SAFE_ACTION
+Distribute short pre-read to session participants.
+
 Subject: Friday pre-read (short version, 1 page)
 
 Hi [Name],

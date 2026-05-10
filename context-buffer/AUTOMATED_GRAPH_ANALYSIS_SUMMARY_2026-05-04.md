@@ -1,5 +1,18 @@
 # AUTOMATED GRAPH ANALYSIS SUMMARY
 
+OUTPUT_PROVENANCE:
+agent: graph-analyst
+lane: archivist
+target: automated graph analysis summary
+generated_at: 2026-05-04
+session_id: archivist-2026-05-04
+
+## OBSERVABILITY_DOMAIN
+graph-analysis
+
+## NEXT_SAFE_ACTION
+Review top contradictions by confidence delta.
+
 ## OL-Automated Fix: Purple-on-Purple Contrast + Graph Integration
 ### 2026-05-04
 

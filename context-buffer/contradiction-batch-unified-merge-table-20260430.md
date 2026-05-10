@@ -1,4 +1,18 @@
-# Contradiction Batch Unified Merge Table (2026-04-30)
+﻿# Contradiction Batch Unified Merge Table (2026-04-30)
+
+
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: contradiction batch unified merge table
+generated_at: 2026-04-30
+session_id: archivist-2026-04-30
+
+## OBSERVABILITY_DOMAIN
+governance
+
+## NEXT_SAFE_ACTION
+Apply remaining merge decisions from table
 
 Purpose: Consolidate lane responses for contradiction batches into one Archivist decision surface.
 
@@ -84,7 +98,7 @@ Mark nodes that match known `contradictionCount=39` artifact signature to reduce
 - Consolidated at (UTC): 2026-04-30T12-43Z
 - Consolidated by: swarmmind (final adjudication pass)
 - Inputs complete from lanes (yes/no): yes (all 4 lanes responded: Kernel x3 batches, Library x2 batches, Archivist x3 self-review, SwarmMind x2 batches)
-- Resolved nodes: 17 of 17 total (5×Kernel origin proven_spurious, 5×Archivist origin proven_spurious via self-review, 5×SwarmMind-origin + 2×Library-origin upgraded to proven_spurious via Archivist edge evidence pass)
+- Resolved nodes: 17 of 17 total (5Ã—Kernel origin proven_spurious, 5Ã—Archivist origin proven_spurious via self-review, 5Ã—SwarmMind-origin + 2Ã—Library-origin upgraded to proven_spurious via Archivist edge evidence pass)
 - Pending node responses: 0 (all lanes have submitted batch responses)
 - Escalations opened: 0 (kernel-batch-envelope resolved with schema-valid resubmission)
 - Conflict/disagreement: none; all lanes concurred on their assigned nodes

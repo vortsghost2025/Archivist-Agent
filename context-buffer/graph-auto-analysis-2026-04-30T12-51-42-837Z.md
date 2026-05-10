@@ -1,4 +1,18 @@
-# Graph Auto Analysis
+﻿# Graph Auto Analysis
+
+
+OUTPUT_PROVENANCE:
+agent: graph-analyst
+lane: archivist
+target: automated graph analysis
+generated_at: 2026-04-30
+session_id: archivist-2026-04-30
+
+## OBSERVABILITY_DOMAIN
+graph-analysis
+
+## NEXT_SAFE_ACTION
+Review analysis findings and update knowledge graph
 
 Source: S:\Archivist-Agent\context-buffer\graph-roadmap-extraction-result-2026-04-29T17-28-57-999Z.json
 Generated: 2026-04-30T12:51:42.829Z

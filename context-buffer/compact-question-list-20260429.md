@@ -1,11 +1,25 @@
-# Questions to Ask About the Compact/Restore System
+﻿# Questions to Ask About the Compact/Restore System
 
-The following list captures the key questions you should consider when working with the compact/restore pipeline, the orchestrator, and the sub‑agent integration. These questions cover purpose, configuration, operation, recovery, and cross‑lane considerations.
 
-## Purpose & High‑Level Design
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: compact question list
+generated_at: 2026-04-29
+session_id: archivist-2026-04-29
+
+## OBSERVABILITY_DOMAIN
+compact-restore
+
+## NEXT_SAFE_ACTION
+Update questions for current system state
+
+The following list captures the key questions you should consider when working with the compact/restore pipeline, the orchestrator, and the subâ€‘agent integration. These questions cover purpose, configuration, operation, recovery, and crossâ€‘lane considerations.
+
+## Purpose & Highâ€‘Level Design
 1. What is the overall purpose of the compact routine in the Archivist lane?
 2. How does the compact routine act as a phenotype checkpoint for the Library lane?
-3. Why is a staged, crash‑safe write order important?
+3. Why is a staged, crashâ€‘safe write order important?
 
 ## Configuration & Triggering
 4. What token budget is used and how is the trigger threshold defined?
@@ -16,7 +30,7 @@ The following list captures the key questions you should consider when working w
 ## Execution Flow
 8. What are the exact stages executed by `subcompact_worker.js`?
 9. What does each stage write to disk (handoff hash log, recovery test, audit)?
-10. How does the orchestrator create request/response files and invoke the sub‑agent?
+10. How does the orchestrator create request/response files and invoke the subâ€‘agent?
 11. What files are produced by a successful compact run?
 
 ## Recovery & Verification
@@ -32,7 +46,7 @@ The following list captures the key questions you should consider when working w
 19. How does the `fallback_attempted` flag work and when is it set?
 20. How does the system ensure the handoff hash persists across restarts?
 
-## Cross‑Lane & Phenotype Integration
+## Crossâ€‘Lane & Phenotype Integration
 21. How does the Library lane treat a compact as a phenotype?
 22. What steps are needed to reload the last known phenotype after a compact?
 23. How does the system filter user noise and undeed information after reload?

@@ -1,4 +1,18 @@
-# Graph Roadmap Extraction Result
+﻿# Graph Roadmap Extraction Result
+
+
+OUTPUT_PROVENANCE:
+agent: graph-analyst
+lane: archivist
+target: graph roadmap extraction
+generated_at: 2026-04-30
+session_id: archivist-2026-04-30
+
+## OBSERVABILITY_DOMAIN
+graph-analysis
+
+## NEXT_SAFE_ACTION
+Merge roadmap updates with existing extraction results
 
 Generated: 2026-04-30T17:19:48.196Z
 

@@ -1,4 +1,18 @@
-# Graph Auto Analysis
+﻿# Graph Auto Analysis
+
+
+OUTPUT_PROVENANCE:
+agent: graph-analyst
+lane: archivist
+target: automated graph analysis
+generated_at: 2026-05-03
+session_id: archivist-2026-05-03
+
+## OBSERVABILITY_DOMAIN
+graph-analysis
+
+## NEXT_SAFE_ACTION
+Review analysis findings and update knowledge graph
 
 Source: C:\Users\seand\AppData\Local\Temp\cec-weight-smoke-graph-alt-shapes.json
 Generated: 2026-05-03T03:41:13.690Z

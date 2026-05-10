@@ -1,4 +1,18 @@
-# Conflicts Focus Burndown (Archivist)
+﻿# Conflicts Focus Burndown (Archivist)
+
+
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: conflicts focus burndown tracking
+generated_at: 2026-04-29
+session_id: archivist-2026-04-29
+
+## OBSERVABILITY_DOMAIN
+governance
+
+## NEXT_SAFE_ACTION
+Update burndown with latest contradiction resolutions
 
 Snapshot reference: `C:/Users/seand/Downloads/graph-snapshot-2026-04-29-19-14-01-599.json`  
 Mode: `conflicts` focus  
