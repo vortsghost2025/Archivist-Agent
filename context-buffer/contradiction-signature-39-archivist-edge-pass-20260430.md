@@ -3,8 +3,15 @@
 OUTPUT_PROVENANCE:
 agent: codex-5.3
 lane: archivist
+target: contradiction-signature-39-archivist-edge-pass
 generated_at: 2026-04-30T13:10:30Z
 session_id: unknown
+
+## OBSERVABILITY_DOMAIN
+governance_contradiction_resolution
+
+## NEXT_SAFE_ACTION
+Apply Archivist-side evidence to remaining needs_lane_review nodes
 
 ## Scope
 

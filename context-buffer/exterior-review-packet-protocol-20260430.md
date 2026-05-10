@@ -3,8 +3,15 @@
 OUTPUT_PROVENANCE:
 agent: codex-5.3
 lane: archivist
+target: exterior-review-packet-protocol
 generated_at: 2026-04-30T13:43:00Z
 session_id: unknown
+
+## OBSERVABILITY_DOMAIN
+governance_review_protocol
+
+## NEXT_SAFE_ACTION
+Test exterior review packet with a bounded external reviewer
 
 ## 1. Problem Statement
 

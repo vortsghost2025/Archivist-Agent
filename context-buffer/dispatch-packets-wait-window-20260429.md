@@ -3,8 +3,15 @@
 OUTPUT_PROVENANCE:
 agent: codex-5.3
 lane: archivist
+target: dispatch-packets-wait-window
 generated_at: 2026-04-29T16:50:00Z
 session_id: unknown
+
+## OBSERVABILITY_DOMAIN
+cross_lane_messaging
+
+## NEXT_SAFE_ACTION
+Send dispatch JSON files to target lane inboxes
 
 Use the JSON files below as outbound lane messages during the wait window.
 

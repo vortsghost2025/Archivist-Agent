@@ -3,8 +3,15 @@
 OUTPUT_PROVENANCE:
 agent: codex-5.3
 lane: archivist
+target: wait-window-productivity-plan
 generated_at: 2026-04-29T16:48:00Z
 session_id: unknown
+
+## OBSERVABILITY_DOMAIN
+cross_lane_coordination
+
+## NEXT_SAFE_ACTION
+Complete high-leverage artifacts before lane outputs arrive
 
 ## Goal
 Use the waiting window to produce high-leverage artifacts so incoming lane outputs can be processed in one fast pass.

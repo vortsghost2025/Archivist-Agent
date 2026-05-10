@@ -3,8 +3,15 @@
 OUTPUT_PROVENANCE:
 agent: codex-5.3
 lane: archivist
+target: waiting-lanes-verification-packet
 generated_at: 2026-04-29T16:53:00Z
 session_id: unknown
+
+## OBSERVABILITY_DOMAIN
+cross_lane_coordination
+
+## NEXT_SAFE_ACTION
+Process incoming lane outputs when wait window ends
 
 ## 1) Current Waiting State
 - Kernel: active long-running task.

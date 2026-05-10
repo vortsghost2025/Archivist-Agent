@@ -1,11 +1,17 @@
 # TASK ASSIGNMENT: Build blocked-remediator.js (Phase 3.2)
 
 OUTPUT_PROVENANCE:
-  agent: z-ai/glm5 (Windows Archivist session)
-  lane: archivist
-  target: archivist-agent-headless
-  generated_at: 2026-05-07T22:15:00Z
-  session_id: windows-archivist-20260507
+agent: z-ai/glm5 (Windows Archivist session)
+lane: archivist
+target: blocked-remediator-design
+generated_at: 2026-05-07T22:15:00Z
+session_id: windows-archivist-20260507
+
+## OBSERVABILITY_DOMAIN
+governance_blocked_task_recovery
+
+## NEXT_SAFE_ACTION
+Implement blocked-remediator.js per task spec
 
 ## Task
 

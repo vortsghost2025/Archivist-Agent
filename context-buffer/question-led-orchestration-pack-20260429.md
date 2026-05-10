@@ -3,8 +3,15 @@
 OUTPUT_PROVENANCE:
 agent: codex-5.3
 lane: archivist
+target: question-led-orchestration-pack
 generated_at: 2026-04-29T16:33:00Z
 session_id: unknown
+
+## OBSERVABILITY_DOMAIN
+cross_lane_coordination
+
+## NEXT_SAFE_ACTION
+Answer high-leverage questions and prioritize blockers
 
 ## 1) Questions You Should Be Asking Me
 

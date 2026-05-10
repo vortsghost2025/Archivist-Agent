@@ -3,8 +3,15 @@
 OUTPUT_PROVENANCE:
 agent: codex-5.3
 lane: archivist
+target: runbook-compact-archive
 generated_at: 2026-04-29T17:48:00Z
 session_id: unknown
+
+## OBSERVABILITY_DOMAIN
+system_operations
+
+## NEXT_SAFE_ACTION
+Run compact with archive enabled and verify checksum evidence
 
 ## Purpose
 Optionally archive graph snapshot packs during compact and record checksum evidence in compact audit outputs.
