@@ -1,5 +1,18 @@
 # Tasks for the Current Archivist Agent (Compact Integration)
 
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: compact integration task list
+generated_at: 2026-04-29
+session_id: archivist-20260429
+
+## OBSERVABILITY_DOMAIN
+compact-restore
+
+## NEXT_SAFE_ACTION
+Validate COMPACT_COMMAND env var on orchestrator host.
+
 Based on the answers above, the following concrete actions should be performed by this Archivist instance to finalize the compact/restore integration and keep the system healthy.
 
 1. **Validate and Document `COMPACT_COMMAND`**

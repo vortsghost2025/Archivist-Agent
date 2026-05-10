@@ -1,5 +1,18 @@
 # Truth Anchor: Authority Contradiction (2026-04-29)
 
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: authority truth anchor analysis
+generated_at: 2026-04-29T00:00:00Z
+session_id: retroactive-backfill-20260510
+
+## OBSERVABILITY_DOMAIN
+governance
+
+## NEXT_SAFE_ACTION
+Review for ongoing relevance; archive if stale
+
 ## Why your mind is circling
 
 You are not failing to understand. You are seeing a real tension in the model:

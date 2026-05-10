@@ -1,5 +1,18 @@
 # Agent Health Snapshot
 
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: agent health snapshot
+generated_at: 2026-04-30T18:29:27Z
+session_id: retroactive-backfill-20260510
+
+## OBSERVABILITY_DOMAIN
+observability
+
+## NEXT_SAFE_ACTION
+Regenerate snapshot for current session
+
 Generated: 2026-04-30T18:29:27.267Z
 
 ## Lane Status

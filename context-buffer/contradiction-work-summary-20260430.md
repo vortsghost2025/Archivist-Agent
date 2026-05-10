@@ -1,5 +1,18 @@
 # CONTRADICTION_SIGNATURE_39 – Post‑E2E Work Summary (2026‑04‑30)
 
+OUTPUT_PROVENANCE:
+agent: archivist-lane
+lane: archivist
+target: contradiction signature 39 work summary
+generated_at: 2026-04-30T00:00:00Z
+session_id: retroactive-backfill-20260510
+
+## OBSERVABILITY_DOMAIN
+governance
+
+## NEXT_SAFE_ACTION
+Review for ongoing relevance; archive if stale
+
 ## What was done
 
 1. **Cross‑lane RS256 signing enforced** – all inbound/outbound messages now require a valid RS256 JWS. Verified via monitor‑signed‑messages.js.

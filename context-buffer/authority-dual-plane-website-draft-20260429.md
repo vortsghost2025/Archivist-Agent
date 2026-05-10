@@ -1,5 +1,18 @@
 # Website Draft: Dual-Plane Authority
 
+OUTPUT_PROVENANCE:
+agent: authority-lane
+lane: authority
+target: dual-plane authority website draft
+generated_at: 2026-04-29
+session_id: authority-20260429
+
+## OBSERVABILITY_DOMAIN
+governance
+
+## NEXT_SAFE_ACTION
+Finalize website copy and publish to dual-plane authority page.
+
 ## Title
 
 Dual-Plane Authority: Why Override Intent Is Not Execution Permission
