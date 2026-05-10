@@ -103,11 +103,13 @@ context-buffer/Here's the full map of your codebas.txt
 
 # Lane runtime artifacts
 lanes/broadcast/last-recovery.json
+lanes/broadcast/journal/
 lanes/*/receipts/
 lanes/*/state/active-owner.json
 lanes/*/state/worker-audit.log
 lanes/*/state/traces/
 lanes/*/state/sovereignty-report-*.json
+lanes/*/state/*-report-*.md
 lanes/*/reports/
 lanes/archivist/journal/
 lanes/kernel/journal/
