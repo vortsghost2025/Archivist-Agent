@@ -89,8 +89,8 @@ function testRawCryptoSignVerify(laneId) {
 
   const keyId = deriveKeyId(pubPem);
   const trustStore = loadTrustStore();
-  const laneEntry = trustStore[laneId] || trustStore.keys?.[laneId];
-  assert(laneEntry?.key_id === keyId, `${laneId}: key_id matches trust store (${laneEntry?.key_id} vs ${keyId})`);
+  const laneEntry = trustStore[laneId] || (trustStore.keys && trustStore.keys[laneId]);
+  assert(laneEntry && laneEntry.key_id === keyId, `${laneId}: key_id matches trust store (${laneEntry && laneEntry.key_id} vs ${keyId})`);
 }
 
 function testCreateSignedMessage(laneId) {
@@ -119,8 +119,8 @@ function testCreateSignedMessage(laneId) {
   assert(!!signed.key_id, `${laneId}: signed message has key_id`);
 
   const trustStore = loadTrustStore();
-  const laneEntry = trustStore[laneId] || trustStore.keys?.[laneId];
-  assert(signed.key_id === laneEntry?.key_id, `${laneId}: signed key_id matches trust store`);
+  const laneEntry = trustStore[laneId] || (trustStore.keys && trustStore.keys[laneId]);
+  assert(signed.key_id === (laneEntry && laneEntry.key_id), `${laneId}: signed key_id matches trust store`);
 
   const jwsParts = signed.signature.split('.');
   assert(jwsParts.length === 3, `${laneId}: JWS has 3 parts`);
@@ -213,8 +213,8 @@ function testEnforcerLookupArchivedKeys() {
   for (const [keyId, archived] of Object.entries(loadTrustStore().archived_keys || {})) {
     const result = enforcer._getPublicKeyByKeyId(keyId);
     assert(!!result, `enforcer finds archived key ${keyId} (${archived.lane_id})`);
-    assert(result?.archived === true, `enforcer marks ${keyId} as archived`);
-    assert(result?.publicKey?.includes('BEGIN PUBLIC KEY'), `enforcer returns valid PEM for ${keyId}`);
+  assert(result && result.archived === true, `enforcer marks ${keyId} as archived`);
+  assert(result && result.publicKey && result.publicKey.includes('BEGIN PUBLIC KEY'), `enforcer returns valid PEM for ${keyId}`);
   }
 }
 
