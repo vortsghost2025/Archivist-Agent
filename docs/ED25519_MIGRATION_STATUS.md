@@ -34,11 +34,14 @@ session_id: ed25519-migration-final
 **Windows (Node v25.9.0): 122/122 PASS ✅**
 - Full suite including create-signed-message, enforcer verification, cross-lane, tamper rejection
 
-**Ubuntu Headless (Node v12.22.9): 47 pass, 1 fail**
-- 3/4 lanes pass Ed25519 sign/verify
-- archivist: `loadPrivateKey` fails with OpenSSL DSO error (Node 12 limitation)
-- RSA backward compatibility: 16/16 pass
-- create-signed-message tests: correctly skipped (Node < 14)
+**Ubuntu Headless (Node v18.20.8 LTS): 122/122 PASS ✅**
+- All 4 lanes fully pass including Archivist (DSO error eliminated by Node upgrade)
+- RSA backward compatibility: all pass
+- Full E2E suite including create-signed-message, enforcer, cross-lane
+
+**Previous Ubuntu results (Node v12.22.9 — superseded by upgrade):**
+- 47 pass, 1 fail (Archivist DSO error)
+- create-signed-message tests correctly skipped on Node < 14
 
 ### Known Issue: Node 12 OpenSSL DSO Error
 
@@ -51,8 +54,8 @@ System OpenSSL is 3.0.2 but Node 12 doesn't use it.
 **Impact:** Only affects the Archivist lane's Ed25519 private key on Node 12. The other 3 lanes
 work because the bug is key-byte-dependent (intermittent). All 4 lanes work on Node 14+.
 
-**Fix:** Upgrade Node.js on Ubuntu headless to v14+ (preferably v18 LTS). This is the only
-permanent solution. No code workaround exists for Node 12's bundled OpenSSL.
+**Fix:** ✅ DONE — Node.js upgraded to v18.20.8 LTS on Ubuntu headless via nvm.
+All 4 lanes now pass full E2E test suite.
 
 **Workaround:** If Archivist signing is needed on Ubuntu Node 12 before upgrade, the Archivist
 key can be regenerated with different random bytes that don't trigger the DSO bug. However,
@@ -71,6 +74,13 @@ this would change the key_id and require trust store updates.
 
 4. **`.identity/` is gitignored** — Discovered that `git pull` doesn't update Ed25519 keys.
    Manual `scp` required for key deployment to Ubuntu headless.
+
+### Additional Milestones
+
+- **Node.js Ubuntu upgrade** — v18.20.8 LTS via nvm (`nvm alias default 18`) ✅
+- **GitHub branch protection** — All 4 repos: 1 approving review, no force push, no deletion ✅
+- **kernel-lane Ubuntu branch fix** — Switched from diverged `master` to `main`, deleted stale branch ✅
+- **Protection plan document** — `docs/AGENT_REACTIVATION_PROTECTION_PLAN.md` ✅
 
 ### Commit History (per lane)
 
@@ -125,7 +135,7 @@ Rationale:
 1. Library (simplest, fewest cross-dependencies)
 2. SwarmMind
 3. Kernel
-4. Archivist (most complex, Node 12 issue on Ubuntu)
+4. Archivist (most complex, most files)
 
 **Required before activation:**
 - Operator should monitor first message signing/verification per lane
@@ -141,7 +151,9 @@ Existing protections:
 4. **Git push** — All changes pushed to GitHub; local system wipe is recoverable
 
 Recommended additional protections:
-1. **Upgrade Ubuntu Node to v18 LTS** — Eliminates DSO error and enables full E2E tests
-2. **Protected branches** — Consider GitHub branch protection on `main`/`master` for signing scripts
-3. **CI check** — Add GitHub Action that runs `test-e2e-signing.js` on push
+1. ~~Upgrade Ubuntu Node to v18 LTS~~ ✅ DONE — v18.20.8 LTS via nvm
+2. ~~Protected branches~~ ✅ DONE — All 4 repos have branch protection
+3. **CI check** — Add GitHub Action running `test-e2e-signing.js` on push (see docs/AGENT_REACTIVATION_PROTECTION_PLAN.md)
 4. **Key rotation policy** — Document in `rotation_policy` field of trust-store.json
+5. **Trust store mutation guard** — Script to detect trust store tampering
+6. **File permissions** — `chmod 444` on trust-store.json, `chmod 400` on private keys
