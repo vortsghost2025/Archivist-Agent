@@ -190,7 +190,7 @@ class Heartbeat {
     compaction_suspend_reason: activeContradictions.length > 0 ? 'Active contradictions present' : null
   };
 
-  // Attempt real RS256 signing; emit unsigned diagnostic if keys are missing
+  // Attempt real signing; emit unsigned diagnostic if keys are missing
   let message;
   try {
     message = createSignedMessage(baseMessage, this.config.laneName);
@@ -201,7 +201,7 @@ class Heartbeat {
       identity_status: 'ratified'
     });
   } catch (err) {
-    // Keys not available — emit unsigned diagnostic heartbeat (no fake JWS, no fake RS256)
+    // Keys not available — emit unsigned diagnostic heartbeat (no fake JWS, no fake signature)
     message = {
       ...baseMessage,
       signature: null,

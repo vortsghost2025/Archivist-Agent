@@ -5,13 +5,28 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { IdentityEnforcer } = require('./identity-enforcer');
-
-const KEY_SIZE = 2048;
+const {
+  loadPrivateKey: loadPrivateKeyHelper,
+  getAlgorithmParams,
+  sign: algoSign,
+  isPassphraseRequired,
+  generateKeyPair,
+  SUPPORTED_ALGORITHMS,
+  getAlgorithmForLane
+} = require(path.join(__dirname, '..', '.global', 'algorithm-helpers.js'));
+const { deriveKeyId } = require(path.join(__dirname, '..', '.global', 'deriveKeyId.js'));
 const PASSFILE_SEARCH = [
   'S:/Archivist-Agent/.runtime/lane-passphrases.json',
   'S:/self-organizing-library/.runtime/lane-passphrases.json',
   'S:/SwarmMind/.runtime/lane-passphrases.json',
   'S:/kernel-lane/.runtime/lane-passphrases.json',
+];
+
+const TRUST_STORE_SEARCH_PATHS = [
+  'S:/Archivist-Agent/lanes/broadcast/trust-store.json',
+  'S:/kernel-lane/lanes/broadcast/trust-store.json',
+  'S:/self-organizing-library/lanes/broadcast/trust-store.json',
+  'S:/SwarmMind/lanes/broadcast/trust-store.json',
 ];
 
 const LANE_IDENTITY_DIRS = {
@@ -53,7 +68,7 @@ class IdentitySelfHealing {
     if (result.keysPresent) {
       try {
         const pub = fs.readFileSync(pubPath, 'utf8');
-        result.keyId = crypto.createHash('sha256').update(pub).digest('hex').substring(0, 16);
+        result.keyId = deriveKeyId(pub);
         this._log('INFO', `keys present: ${this.laneId} keyId=${result.keyId}`);
       } catch (e) {
         result.error = `KEY_READ_FAILED: ${e.message}`;
@@ -79,49 +94,72 @@ class IdentitySelfHealing {
   }
 
   _regenerate() {
-    const passphrase = this._findPassphrase();
-    if (!passphrase) {
-      this._log('ERROR', `no passphrase found for ${this.laneId} — cannot self-heal`);
-      return { error: 'NO_PASSPHRASE' };
+    let passphrase = null;
+    const algorithm = this._getAlgorithm();
+
+    if (algorithm === 'RS256') {
+      passphrase = this._findPassphrase();
+      if (!passphrase) {
+        this._log('ERROR', `no passphrase found for ${this.laneId} — cannot self-heal RSA key`);
+        return { error: 'NO_PASSPHRASE' };
+      }
     }
 
     try {
       fs.mkdirSync(this.identityDir, { recursive: true });
 
-      const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-        modulusLength: KEY_SIZE,
-        publicKeyEncoding: { type: 'spki', format: 'pem' },
-        privateKeyEncoding: {
-          type: 'pkcs8',
-          format: 'pem',
-          cipher: 'aes-256-cbc',
-          passphrase: passphrase,
-        },
-      });
+      const { publicKey, privateKey } = generateKeyPair(algorithm);
 
       fs.writeFileSync(path.join(this.identityDir, 'public.pem'), publicKey);
       fs.writeFileSync(path.join(this.identityDir, 'private.pem'), privateKey);
 
-      const keyId = crypto.createHash('sha256').update(publicKey).digest('hex').substring(0, 16);
+      const keyId = deriveKeyId(publicKey);
 
+      const algLabel = algorithm === 'EdDSA' ? 'EdDSA' : 'RS256';
       const meta = {
         lane_id: this.laneId,
         key_id: keyId,
-        algorithm: 'RS256',
+        algorithm: algLabel,
         generated_at: new Date().toISOString(),
         self_healed: true,
       };
       fs.writeFileSync(path.join(this.identityDir, 'meta.json'), JSON.stringify(meta, null, 2));
 
-      this._log('INFO', `keys regenerated: ${this.laneId} keyId=${keyId}`);
+      this._log('INFO', `keys regenerated: ${this.laneId} keyId=${keyId} algorithm=${algLabel}`);
 
-      const trustStoreUpdated = this._updateTrustStores(publicKey, keyId);
+      const trustStoreUpdated = this._updateTrustStores(publicKey, keyId, algLabel);
 
-      return { keyId, passphraseSource: this._passphraseSource, trustStoreUpdated };
+      return { keyId, passphraseSource: algorithm === 'RS256' ? this._passphraseSource : 'none-ed25519', trustStoreUpdated };
     } catch (e) {
       this._log('ERROR', `regeneration failed for ${this.laneId}: ${e.message}`);
       return { error: `REGENERATION_ERROR: ${e.message}` };
     }
+  }
+
+  _getAlgorithm() {
+    const tsPath = path.join(
+      path.dirname(this.identityDir),
+      'lanes', 'broadcast', 'trust-store.json'
+    );
+    try {
+      if (fs.existsSync(tsPath)) {
+        const ts = JSON.parse(fs.readFileSync(tsPath, 'utf8'));
+        const stored = getAlgorithmForLane(ts, this.laneId);
+        if (stored) return stored === 'EdDSA' ? 'EdDSA' : 'RS256';
+      }
+    } catch (_) {}
+
+    for (const dir of TRUST_STORE_SEARCH_PATHS) {
+      try {
+        if (!fs.existsSync(dir)) continue;
+        const ts = JSON.parse(fs.readFileSync(dir, 'utf8'));
+        const stored = getAlgorithmForLane(ts, this.laneId);
+        if (stored) return stored === 'EdDSA' ? 'EdDSA' : 'RS256';
+      } catch (_) {}
+    }
+
+    this._log('INFO', `no trust store algorithm found for ${this.laneId} — defaulting to EdDSA`);
+    return 'EdDSA';
   }
 
   _findPassphrase() {
@@ -152,7 +190,7 @@ class IdentitySelfHealing {
     return null;
   }
 
-  _updateTrustStores(publicKey, keyId) {
+  _updateTrustStores(publicKey, keyId, algorithm) {
     const trustStoreDirs = [
       'S:/Archivist-Agent/lanes/broadcast',
       'S:/self-organizing-library/lanes/broadcast',
@@ -168,10 +206,12 @@ class IdentitySelfHealing {
       try {
         if (!fs.existsSync(tsPath)) continue;
         const ts = JSON.parse(fs.readFileSync(tsPath, 'utf8'));
-        if (ts[this.laneId]) {
-          ts[this.laneId].public_key_pem = publicKey;
-          ts[this.laneId].key_id = keyId;
-          ts[this.laneId].registered_at = new Date().toISOString();
+        const entry = ts.keys?.[this.laneId] || ts[this.laneId];
+        if (entry) {
+          entry.public_key_pem = publicKey;
+          entry.key_id = keyId;
+          entry.algorithm = algorithm || 'EdDSA';
+          entry.registered_at = new Date().toISOString();
           IdentityEnforcer.writeTrustStoreStrict(tsPath, ts, { actorLane: this.laneId });
           updated++;
         }

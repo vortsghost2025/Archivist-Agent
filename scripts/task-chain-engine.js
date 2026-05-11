@@ -234,7 +234,7 @@ class TaskChainEngine {
       evidence: { required: true, evidence_path: '', verified: false, verified_by: this.lane },
       heartbeat: { interval_seconds: 300, last_heartbeat_at: new Date().toISOString(), status: 'active' },
       signature: 'eyJ1bmludmVyaWZpZWQifQ.eyJmcm9tIjoi' + this.lane + 'IiwidGFza19raW5kIjoicmV2aWV3In0.unsigned',
-      signature_alg: 'RS256',
+      signature_alg: 'EdDSA',
       key_id: 'self'
     };
   }
@@ -264,7 +264,7 @@ class TaskChainEngine {
       evidence: { required: true, evidence_path: '', verified: false, verified_by: 'archivist' },
       heartbeat: { interval_seconds: 300, last_heartbeat_at: new Date().toISOString(), status: 'active' },
       signature: 'eyJ1bmludmVyaWZpZWQifQ.eyJmcm9tIjoiYXJjaGl2aXN0IiwidGFza19raW5kIjoicmF0aWZpY2F0aW9uIn0.unsigned',
-      signature_alg: 'RS256',
+      signature_alg: 'EdDSA',
       key_id: 'self'
     };
   }

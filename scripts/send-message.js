@@ -70,7 +70,7 @@ function validateMessage(msg) {
   }
 
   if (msg.signature && !JWS_PATTERN.test(msg.signature)) {
-    errors.push('Invalid signature format. Expected compact JWS (RS256).');
+    errors.push('Invalid signature format. Expected compact JWS (RS256 or EdDSA).');
   }
 
   if (msg.key_id && !KEY_ID_PATTERN.test(msg.key_id)) {

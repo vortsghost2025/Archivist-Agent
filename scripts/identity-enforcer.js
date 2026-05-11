@@ -4,6 +4,13 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const {
+  getVerifyParamsFromPem,
+  verify: algoVerify,
+  SUPPORTED_ALGORITHMS,
+  getAlgorithmParams,
+  sign: algoSign
+} = require(path.join(__dirname, '..', '.global', 'algorithm-helpers.js'));
 
 const LOCAL_TRUST_STORE = path.join(__dirname, '..', 'lanes', 'broadcast', 'trust-store.json');
 const TRUST_STORE_SEARCH_PATHS = [
@@ -95,6 +102,19 @@ class IdentityEnforcer {
     return entry.public_key_pem;
   }
 
+  _getPublicKeyByKeyId(keyId) {
+    for (const [laneId, entry] of Object.entries(this.trustStore?.keys || {})) {
+      if (entry.key_id === keyId && !entry.revoked_at) {
+        return { publicKey: entry.public_key_pem, laneId, archived: false };
+      }
+    }
+    const archived = this.trustStore?.archived_keys?.[keyId];
+    if (archived?.public_key_pem) {
+      return { publicKey: archived.public_key_pem, laneId: archived.lane_id, archived: true };
+    }
+    return null;
+  }
+
   verifyJWS(jws, expectedLaneId) {
     if (!this.trustStore) {
       return { valid: false, error: 'NO_TRUST_STORE', authenticated: false };
@@ -105,7 +125,7 @@ class IdentityEnforcer {
       return { valid: false, error: 'JWS_PARSE_FAILED', authenticated: false };
     }
 
-    if (parsed.header.alg !== 'RS256') {
+    if (!SUPPORTED_ALGORITHMS.includes(parsed.header.alg)) {
       return { valid: false, error: 'UNSUPPORTED_ALGORITHM', authenticated: false };
     }
 
@@ -122,34 +142,46 @@ class IdentityEnforcer {
       };
     }
 
-    const laneId = parsed.payload.lane || expectedLaneId;
-    if (!laneId) {
-      return { valid: false, error: 'NO_LANE_ID', authenticated: false };
+  const laneId = parsed.payload.lane || expectedLaneId;
+  if (!laneId) {
+    return { valid: false, error: 'NO_LANE_ID', authenticated: false };
+  }
+
+  let publicKeyPem = this._getPublicKey(laneId);
+  let archived = false;
+
+  if (!publicKeyPem && parsed.header.kid) {
+    const keyById = this._getPublicKeyByKeyId(parsed.header.kid);
+    if (keyById) {
+      publicKeyPem = keyById.publicKey;
+      archived = keyById.archived;
     }
+  }
 
-    const publicKey = this._getPublicKey(laneId);
-    if (!publicKey) {
-      return { valid: false, error: 'KEY_NOT_FOUND', lane: laneId, authenticated: false };
-    }
+  if (!publicKeyPem) {
+    return { valid: false, error: 'KEY_NOT_FOUND', lane: laneId, authenticated: false };
+  }
 
-    try {
-      const signature = this._base64UrlDecode(parsed.signature);
-      const verified = crypto.verify(
-        'RSA-SHA256',
-        Buffer.from(parsed.signingInput),
-        { key: publicKey, format: 'pem' },
-        signature
-      );
+  try {
+    const signature = this._base64UrlDecode(parsed.signature);
+    const verifyParams = getVerifyParamsFromPem(publicKeyPem);
+    const verified = algoVerify(
+      verifyParams.verifyAlg,
+      Buffer.from(parsed.signingInput),
+      publicKeyPem,
+      signature
+    );
 
-      if (verified) {
-        return {
-          valid: true,
-          authenticated: true,
-          lane: laneId,
-          key_id: parsed.header.kid,
-          payload: parsed.payload,
-          mode: 'JWS_VERIFIED'
-        };
+    if (verified) {
+      return {
+        valid: true,
+        authenticated: true,
+        lane: laneId,
+        key_id: parsed.header.kid,
+        payload: parsed.payload,
+        mode: 'JWS_VERIFIED',
+        archived_key: archived
+      };
       } else {
         return { valid: false, error: 'SIGNATURE_MISMATCH', lane: laneId, authenticated: false };
       }
@@ -241,22 +273,25 @@ class IdentityEnforcer {
     };
   }
 
-  static signMessage(msg, privateKey, keyId) {
-const { stableStringify } = require(path.join(
-  fs.existsSync('S:/SwarmMind/src/attestation/stableStringify.js')
-  ? 'S:/SwarmMind/src/attestation'
-  : fs.existsSync('S:/self-organizing-library/src/attestation/stableStringify.js')
-  ? 'S:/self-organizing-library/src/attestation'
-  : 'S:/kernel-lane/src/attestation',
-  'stableStringify.js'
-));
+  static signMessage(msg, privateKey, keyId, algoParams) {
+    const { stableStringify } = require(path.join(
+      fs.existsSync('S:/SwarmMind/src/attestation/stableStringify.js')
+        ? 'S:/SwarmMind/src/attestation'
+        : fs.existsSync('S:/self-organizing-library/src/attestation/stableStringify.js')
+        ? 'S:/self-organizing-library/src/attestation'
+        : 'S:/kernel-lane/src/attestation',
+      'stableStringify.js'
+    ));
 
-    const header = { alg: 'RS256', typ: 'JWT', kid: keyId };
+    const alg = algoParams ? algoParams.alg : 'RS256';
+    const signAlg = algoParams ? algoParams.signAlg : 'RSA-SHA256';
+
+    const header = { alg, typ: 'JWT', kid: keyId };
     const headerB64 = Buffer.from(JSON.stringify(header)).toString('base64')
       .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
-  const signablePayload = {
-  id: msg.id || msg.task_id || 'unknown',
+    const signablePayload = {
+      id: msg.id || msg.task_id || 'unknown',
       lane: msg.from || msg.from_lane || msg.lane,
       from: msg.from || msg.from_lane,
       to: msg.to || msg.to_lane,
@@ -271,14 +306,14 @@ const { stableStringify } = require(path.join(
       .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
     const signingInput = `${headerB64}.${payloadB64}`;
-    const signature = crypto.sign('RSA-SHA256', Buffer.from(signingInput), privateKey);
+    const signature = algoSign(signAlg, Buffer.from(signingInput), privateKey);
     const signatureB64 = signature.toString('base64')
       .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
     return {
       ...msg,
       signature: `${headerB64}.${payloadB64}.${signatureB64}`,
-      signature_alg: 'RS256',
+      signature_alg: alg,
       key_id: keyId
     };
   }
