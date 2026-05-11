@@ -5,11 +5,17 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 
-const LANE_ROOTS = {
+const IS_WINDOWS = process.platform === 'win32';
+const LANE_ROOTS = IS_WINDOWS ? {
   archivist: 'S:/Archivist-Agent',
   kernel: 'S:/kernel-lane',
   swarmmind: 'S:/SwarmMind',
   library: 'S:/self-organizing-library',
+} : {
+  archivist: '/home/we4free/agent/repos/Archivist-Agent',
+  kernel: '/home/we4free/agent/repos/kernel-lane',
+  swarmmind: '/home/we4free/agent/repos/SwarmMind',
+  library: '/home/we4free/agent/repos/self-organizing-library',
 };
 
 const TRUST_STORE_PATH = path.join(LANE_ROOTS.archivist, 'lanes/broadcast/trust-store.json');
