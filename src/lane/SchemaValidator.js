@@ -381,7 +381,7 @@ function createMessage(template = {}) {
   message.delivery_verification = {
     verified: false,
     verified_at: null,
-    retries: template.delivery_verification?.retries || 0,
+    retries: (template.delivery_verification && template.delivery_verification.retries) || 0,
   };
 
   // Recompute idempotency_key if not explicitly provided
