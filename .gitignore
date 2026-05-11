@@ -136,5 +136,4 @@ context-buffer/this.txt
 # Blocked-remediator reports (generated every cycle)
 context-buffer/blocked-remediation-report-*.json
 
-S:/
-JOURNAL_SESSION_ID
+
