@@ -86,7 +86,7 @@ class IdentitySelfHealing {
         result.keyId = healed.keyId;
         result.keysPresent = true;
       } else {
-        result.error = healed?.error || 'REGENERATION_FAILED';
+        result.error = (healed && healed.error) || 'REGENERATION_FAILED';
       }
     }
 
@@ -206,7 +206,7 @@ class IdentitySelfHealing {
       try {
         if (!fs.existsSync(tsPath)) continue;
         const ts = JSON.parse(fs.readFileSync(tsPath, 'utf8'));
-        const entry = ts.keys?.[this.laneId] || ts[this.laneId];
+        const entry = (ts.keys && ts.keys[this.laneId]) || ts[this.laneId];
         if (entry) {
           entry.public_key_pem = publicKey;
           entry.key_id = keyId;
