@@ -118,6 +118,18 @@ lanes/swarmmind/journal/
 lanes/opencode/journal/
 lanes/authority/journal/
 
+# OpenClaw bootstrap templates (not project artifacts)
+.openclaw/
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+
+# Operator scratch notes
+context-buffer/# Beyond Prohibition Why Constituti.txt
+context-buffer/this.txt
+
 # Temp files
 *.local
 
