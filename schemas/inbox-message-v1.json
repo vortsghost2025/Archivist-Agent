@@ -400,69 +400,70 @@
     },
     "signature": {
       "type": "string",
-      "description": "v1.2: JWS compact signature (RS256). All outbound messages MUST be signed.",
+      "description": "v1.2: JWS compact signature. EdDSA (Ed25519) preferred; RS256 legacy.",
       "minLength": 1,
       "pattern": "^eyJ[A-Za-z0-9_-]+\\.eyJ[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$"
     },
-    "signature_alg": {
-      "type": "string",
-      "description": "v1.2: Signature algorithm. Must be RS256.",
-      "enum": [
-        "RS256"
-      ],
-      "default": "RS256"
-    },
-  "key_id": {
+  "signature_alg": {
     "type": "string",
-    "description": "v1.2: Key identifier (first 16 hex chars of SHA-256 of public key). MUST match trust store.",
-    "minLength": 16,
-    "maxLength": 16,
-    "pattern": "^[a-f0-9]{16}$"
-  },
-  "uncertainty": {
-    "type": "object",
-    "description": "v1.4: Uncertainty packet (UNCERTAINTY_PACKET_V1). Surfaces stalled/uncertain work. Recommended for all task/response/escalation types. See schemas/uncertainty-packet-v1.json.",
-    "properties": {
-      "level": {
-        "type": "string",
-        "enum": ["low", "medium", "high"]
+    "description": "v1.2: Signature algorithm. EdDSA preferred (Ed25519). RS256 legacy.",
+    "enum": [
+      "RS256",
+      "EdDSA"
+    ],
+"default": "EdDSA"
       },
-      "type": {
-        "type": "array",
-        "items": {
+      "key_id": {
+        "type": "string",
+        "description": "v1.2: Key identifier (first 16 hex chars of SHA-256 of public key). MUST match trust store.",
+        "minLength": 16,
+        "maxLength": 16,
+        "pattern": "^[a-f0-9]{16}$"
+      },
+"uncertainty": {
+      "type": "object",
+      "description": "v1.4: Uncertainty packet (UNCERTAINTY_PACKET_V1). Surfaces stalled/uncertain work. Recommended for all task/response/escalation types. See schemas/uncertainty-packet-v1.json.",
+      "properties": {
+        "level": {
           "type": "string",
-          "enum": ["missing_evidence", "conflicting_sources", "tool_failure", "stale_state", "ambiguous_intent", "blocked_by_permission", "implementation_unknown", "runtime_not_verified", "dependency_unresolved", "partial_completion"]
+          "enum": ["low", "medium", "high"]
         },
-        "minItems": 1
-      },
-      "why": {
-        "type": "string",
-        "minLength": 1
-      },
-      "evidence_needed": {
-        "type": "array",
-        "items": {
+        "type": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["missing_evidence", "conflicting_sources", "tool_failure", "stale_state", "ambiguous_intent", "blocked_by_permission", "implementation_unknown", "runtime_not_verified", "dependency_unresolved", "partial_completion"]
+          },
+          "minItems": 1
+        },
+        "why": {
           "type": "string",
           "minLength": 1
+        },
+        "evidence_needed": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "operator_decision_needed": {
+          "type": "boolean",
+          "default": false
+        },
+        "next_safe_check": {
+          "type": "string"
+        },
+        "detected_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "detected_by": {
+          "type": "string"
         }
       },
-      "operator_decision_needed": {
-        "type": "boolean",
-        "default": false
-      },
-      "next_safe_check": {
-        "type": "string"
-      },
-      "detected_at": {
-        "type": "string",
-        "format": "date-time"
-      },
-      "detected_by": {
-        "type": "string"
-      }
+      "required": ["level", "type", "why", "evidence_needed", "operator_decision_needed", "next_safe_check"]
     },
-    "required": ["level", "type", "why", "evidence_needed", "operator_decision_needed", "next_safe_check"]
-  },
   "review": {
     "type": "object",
     "description": "v1.4: Review round protocol (REVIEW_ROUND_PROTOCOL_V1). Iterative review loop for convergence and implementation. See schemas/review-round-protocol-v1.json.",
