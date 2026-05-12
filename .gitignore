@@ -133,6 +133,13 @@ context-buffer/this.txt
 # Temp files
 *.local
 
+# Stale debug/test scripts from previous sessions
+fix-heartbeat.js
+gen-heartbeat.js
+test-sign*.js
+scripts/debug-heartbeat-signing.js
+scripts/test-hb-ubuntu.js
+
 # Blocked-remediator reports (generated every cycle)
 context-buffer/blocked-remediation-report-*.json
 
