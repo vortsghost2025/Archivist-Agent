@@ -29,6 +29,7 @@ const PASSFILE_CANDIDATES = [
 
 const LANE_IDENTITY_DIRS = {
   archivist: _resolve('S:/Archivist-Agent/.identity'),
+  authority: _resolve('S:/Archivist-Agent/.identity/authority'),
   library: _resolve('S:/self-organizing-library/.identity'),
   swarmmind: _resolve('S:/SwarmMind/.identity'),
   kernel: _resolve('S:/kernel-lane/.identity'),

@@ -31,6 +31,7 @@ const TRUST_STORE_SEARCH_PATHS = [
 
 const LANE_IDENTITY_DIRS = {
   archivist: 'S:/Archivist-Agent/.identity',
+  authority: 'S:/Archivist-Agent/.identity/authority',
   library: 'S:/self-organizing-library/.identity',
   swarmmind: 'S:/SwarmMind/.identity',
   kernel: 'S:/kernel-lane/.identity',
