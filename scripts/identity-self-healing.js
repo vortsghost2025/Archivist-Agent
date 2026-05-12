@@ -15,26 +15,35 @@ const {
   getAlgorithmForLane
 } = require(path.join(__dirname, '..', '.global', 'algorithm-helpers.js'));
 const { deriveKeyId } = require(path.join(__dirname, '..', '.global', 'deriveKeyId.js'));
+
+const isWin32 = process.platform === 'win32';
+const UBUNTU_ROOT = path.join(require('os').homedir(), 'agent', 'repos');
+function _resolve(winPath) {
+  if (isWin32) return winPath;
+  const m = winPath.match(/^S:\/(.+)$/);
+  return m ? path.join(UBUNTU_ROOT, m[1]) : winPath;
+}
+
 const PASSFILE_SEARCH = [
-  'S:/Archivist-Agent/.runtime/lane-passphrases.json',
-  'S:/self-organizing-library/.runtime/lane-passphrases.json',
-  'S:/SwarmMind/.runtime/lane-passphrases.json',
-  'S:/kernel-lane/.runtime/lane-passphrases.json',
+  _resolve('S:/Archivist-Agent/.runtime/lane-passphrases.json'),
+  _resolve('S:/self-organizing-library/.runtime/lane-passphrases.json'),
+  _resolve('S:/SwarmMind/.runtime/lane-passphrases.json'),
+  _resolve('S:/kernel-lane/.runtime/lane-passphrases.json'),
 ];
 
 const TRUST_STORE_SEARCH_PATHS = [
-  'S:/Archivist-Agent/lanes/broadcast/trust-store.json',
-  'S:/kernel-lane/lanes/broadcast/trust-store.json',
-  'S:/self-organizing-library/lanes/broadcast/trust-store.json',
-  'S:/SwarmMind/lanes/broadcast/trust-store.json',
+  _resolve('S:/Archivist-Agent/lanes/broadcast/trust-store.json'),
+  _resolve('S:/kernel-lane/lanes/broadcast/trust-store.json'),
+  _resolve('S:/self-organizing-library/lanes/broadcast/trust-store.json'),
+  _resolve('S:/SwarmMind/lanes/broadcast/trust-store.json'),
 ];
 
 const LANE_IDENTITY_DIRS = {
-  archivist: 'S:/Archivist-Agent/.identity',
-  authority: 'S:/Archivist-Agent/.identity/authority',
-  library: 'S:/self-organizing-library/.identity',
-  swarmmind: 'S:/SwarmMind/.identity',
-  kernel: 'S:/kernel-lane/.identity',
+  archivist: _resolve('S:/Archivist-Agent/.identity'),
+  authority: _resolve('S:/Archivist-Agent/.identity/authority'),
+  library: _resolve('S:/self-organizing-library/.identity'),
+  swarmmind: _resolve('S:/SwarmMind/.identity'),
+  kernel: _resolve('S:/kernel-lane/.identity'),
 };
 
 class IdentitySelfHealing {

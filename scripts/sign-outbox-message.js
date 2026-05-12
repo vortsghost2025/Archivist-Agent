@@ -11,8 +11,16 @@ const { loadPrivateKey, getAlgorithmParams, sign: algoSign, isPassphraseRequired
 // LEASE + ATOMIC WRITE: Use local copy to avoid cross-lane require()
 const { atomicWriteJson, atomicWriteWithLease } = require('./atomic-write-util');
 
+const isWin32 = process.platform === 'win32';
+const UBUNTU_ROOT = path.join(require('os').homedir(), 'agent', 'repos');
+function _resolve(winPath) {
+  if (isWin32) return winPath;
+  const m = winPath.match(/^S:\/(.+)$/);
+  return m ? path.join(UBUNTU_ROOT, m[1]) : winPath;
+}
+
 const PASSFILE_CANDIDATES = [
-path.join(__dirname, '..', '.runtime', 'lane-passphrases.json'),
+  path.join(__dirname, '..', '.runtime', 'lane-passphrases.json'),
 ];
 
 function parseArgs(argv) {
@@ -52,11 +60,11 @@ function base64UrlEncode(input) {
 }
 
 const LANE_IDENTITY_DIRS = {
-  archivist: 'S:/Archivist-Agent/.identity',
-  authority: 'S:/Archivist-Agent/.identity/authority',
-  library: 'S:/self-organizing-library/.identity',
-  swarmmind: 'S:/SwarmMind/.identity',
-  kernel: 'S:/kernel-lane/.identity',
+  archivist: _resolve('S:/Archivist-Agent/.identity'),
+  authority: _resolve('S:/Archivist-Agent/.identity/authority'),
+  library: _resolve('S:/self-organizing-library/.identity'),
+  swarmmind: _resolve('S:/SwarmMind/.identity'),
+  kernel: _resolve('S:/kernel-lane/.identity'),
 };
 
 function resolvePassphrase(lane) {
