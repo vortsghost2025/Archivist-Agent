@@ -33,7 +33,7 @@ const ENUM_CONSTRAINTS = {
   // v1.3 adds support for schema_version 1.3
   schema_version: ['1.0', '1.1', '1.2', '1.3'],
   // Updated canonical target name for kernel lane
-  to: ['archivist', 'library', 'swarmmind', 'kernel'],
+  to: ['archivist', 'library', 'swarmmind', 'kernel', 'authority'],
   type: ['task', 'response', 'heartbeat', 'escalation', 'handoff', 'ack', 'alert', 'notification', 'status'],
   // NFM-019 fix: extend task_kind to cover task lifecycle + alert + notification + heartbeat
   // Governance process: proposal, review, amendment, ratification
