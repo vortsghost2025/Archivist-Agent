@@ -3,10 +3,10 @@ const fs = require('fs');
 const path = require('path');
 
 const LANES = {
-  archivist: 'S:/Archivist-Agent',
-  kernel: 'S:/kernel-lane',
-  library: 'S:/self-organizing-library',
-  swarmmind: 'S:/SwarmMind'
+  archivist: path.join(__dirname, '..'),
+  kernel: path.join(__dirname, '..', '..', 'kernel-lane'),
+  library: path.join(__dirname, '..', '..', 'self-organizing-library'),
+  swarmmind: path.join(__dirname, '..', '..', 'SwarmMind')
 };
 
 function checkLane(name, root) {

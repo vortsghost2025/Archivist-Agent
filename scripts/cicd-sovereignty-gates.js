@@ -15,7 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const { consensusCheck, routeMessage, loadPolicy: loadConsensusPolicy } = require('./consensus-check');
 
-const LANE_ROOT = 'S:/Archivist-Agent';
+const LANE_ROOT = path.join(__dirname, '..');
 const LANE_NAME = 'Archivist';
 const SCHEMA_DIR = path.join(LANE_ROOT, 'schemas');
 const INBOX_MESSAGE_SCHEMA = 'inbox-message-v1.json';
