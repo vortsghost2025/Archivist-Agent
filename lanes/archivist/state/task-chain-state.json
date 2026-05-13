@@ -1,5 +1,16 @@
 {
-  "active_chains": {},
+  "active_chains": {
+    "response-key-id-convergence-proposal": {
+      "chain_id": "response-key-id-convergence-proposal",
+      "origin_task": "response-key-id-convergence-proposal",
+      "origin_priority": "P0",
+      "depth": 1,
+      "followups": [],
+      "started_at": "2026-05-13T13:10:04.654Z",
+      "last_task": "response-key-id-convergence-proposal",
+      "last_updated": "2026-05-13T13:10:04.654Z"
+    }
+  },
   "completed_chains": [],
-  "last_run": "2026-05-13T13:05:40.794Z"
+  "last_run": "2026-05-13T13:10:04.655Z"
 }
