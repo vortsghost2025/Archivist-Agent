@@ -4,15 +4,17 @@ OUTPUT_PROVENANCE:
 agent: z-ai/glm-5.1
 lane: archivist
 target: system-state-snapshot
+generated_at: 2026-05-13T20:40:00Z
+session_id: kilo-archivist-20260513-204000
 
 ## OBSERVABILITY_DOMAIN
 governance-state
 
 ## NEXT_SAFE_ACTION
-Ratification gate needs 2 more APPROVE votes (library, swarmmind, kernel) to unlock batch_7_real_sync which would propagate task-executor.js lane detection fix. Handoff recommendation sent to Control Plane.
+Investigate 6 lane-worker test failures (remediation routing, evidence exchange, terminal decision logic). Then push ratification gate handoff for library/swarmmind/kernel votes.
 
 ## Timestamp
-2026-05-13T19:42:35Z
+2026-05-13T20:40:00Z
 
 ## Verification
 - Governance constraints acknowledged: single_entry_point, structure_over_identity, correction_mandatory, agent_not_part_of_WE
@@ -27,37 +29,29 @@ Ratification gate needs 2 more APPROVE votes (library, swarmmind, kernel) to unl
 
 ## What Was Done This Session
 
-### Inbox Triage (Cycle 2026-05-13T19:42Z)
-- Processed 3 blocked SwarmMind cycle reports (all convergence_gate=proven, failed lane-worker execution verification due to evidence artifact path resolution from Archivist CWD)
-- Moved from blocked/ to processed/: cycle-report-20260513-182900, cycle-report-20260513-190000, swarmmind-cycle-20260513-174000
-- No P0/P1 action-required items found
+### Fix: lane-health-monitor.js (ISSUE-LHM-PATHS — RESOLVED)
+- Script crashed on Ubuntu with ENOENT due to hardcoded `S:/` Windows paths
+- Added `sToLocal()` import from `util/lane-discovery.js` for path resolution
+- Replaced hardcoded paths with `_resolvePath()` calls
+- Expanded from 2 lanes (library, swarmmind) to all 4 lanes (archivist, kernel, library, swarmmind)
+- Verified: script now runs successfully, reports ORANGE (stale authority heartbeat, old test message)
+
+### Inbox Triage
+- Processed 2 blocked cycle reports (both informational, convergence_gate=proven)
+- Moved from blocked/ to processed/: cycle-report-20260513-194000, cycle-report-2026-05-13T19-42-35Z
 - Inbox now clean: 0 blocked, 0 action-required, 0 in-progress
 
-### Previous Session (2026-05-13T16:50Z)
-
-#### Node Version Guard (NEW)
-- Created `scripts/node-version-guard.js` — validates Node v18+ before execution, exits 1 with remediation message if below minimum
-- Integrated into `autonomous-executor.js` and `task-executor.js` as first require
-- Current default Node is v18.20.8 (not v12 as earlier SwarmMind report stated)
-
-#### Task-executor.js Lane Detection Fix — Propagation Status
-- Fix is in archivist repo (detectLaneFromRepo function)
-- Other 3 lanes still have old `|| 'archivist'` fallback
-- Sync propagation blocked by ratification gate (1/3 APPROVE votes)
-- Correct action: handoff recommendation to Control Plane for ratification votes
+### Test Results
+- recovery-test-suite.js: 12/12 PASS
+- executor-v3 golden tests: 64/64 PASS
+- lane-worker tests: 11/17 PASS (6 pre-existing failures)
 
 ## Active Blockers
 - None (system-wide)
-- Ratification gate: 1/3 APPROVE (archivist), library/swarmmind/kernel votes pending
 
 ## Open Issues
+- ISSUE-LHM-PATHS: **RESOLVED** this session
 - ISSUE-RATIFICATION (P2): Ratification gate needs 2 more APPROVE votes for task-executor.js fix propagation
-- ISSUE-LHM-PATHS (P2): lane-health-monitor.js hardcoded S:/ paths fail on Ubuntu — needs sToLocal() adaptation
-- ISSUE-AUTH-HEARTBEAT (P3): Authority heartbeat stale ~31h
-- ISSUE-BROADCAST-COLONS: ~28 files with colons in filenames (Windows-incompatible)
-
-## Observations
-- Default Node is v18.20.8 (not v12)
-- SwarmMind reports executor v3 now 64/64 PASS (previously 15/64 failures resolved)
-- lane-health-monitor.js needs sToLocal() for Ubuntu path resolution
-- Rust build requires pkg-config (not installed) — environment issue, not code regression
+- ISSUE-AUTH-HEARTBEAT (P3): Authority heartbeat stale
+- ISSUE-BROADCAST-COLONS (P3): ~28 files with colons in filenames
+- ISSUE-LANE-WORKER-FAILURES (P2): 6/17 lane-worker tests failing — remediation/evidence routing issues
