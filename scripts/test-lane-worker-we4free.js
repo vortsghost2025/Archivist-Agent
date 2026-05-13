@@ -540,9 +540,10 @@ test('remediated message includes schema_remediation audit metadata', (tmpRoot) 
     type: 'ack',
     priority: 'P2',
     requires_action: false,
-    subject: 'Audit metadata',
-    body: 'Expect schema_remediation in metadata',
-  };
+  subject: 'Audit metadata',
+  body: 'Expect schema_remediation in metadata',
+  confidence: 8,
+};
   writeMsg(config.queues.inbox, '2026-01-01_signed_remediation_audit.json', msg);
 
   worker.processOnce();
