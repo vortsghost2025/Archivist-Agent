@@ -68,6 +68,7 @@ Key scripts agents should know about:
 | Script | Purpose | When to Use |
 |--------|---------|-------------|
 | `sync-all-lanes.js` | Sync shared scripts + broadcast across all 4 lane repos | After changes to shared scripts |
+| `node-version-guard.js` | Validate Node v18+ before script execution; exits 1 if too old | Required by autonomous-executor.js, task-executor.js |
 | `post-compact-audit.js` | Verify system state after context compaction | After any context compact |
 | `recovery-test-suite.js` | Run 11-test recovery verification | After crash/reboot/compact |
 | `heartbeat.js` | Lane heartbeat with --once flag | Cron-managed, don't run manually |
