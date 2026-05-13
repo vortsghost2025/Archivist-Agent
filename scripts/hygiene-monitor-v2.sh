@@ -7,7 +7,8 @@ set -euo pipefail
 
 AGENT_ROOT="${HOME}/agent"
 REPOS_DIR="${AGENT_ROOT}/repos"
-TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+TIMESTAMP=$(date -u +"%Y%m%dT%H%M%SZ")
+TIMESTAMP_ISO=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 LOG_DIR="${AGENT_ROOT}/logs"
 BROADCAST_DIR="${REPOS_DIR}/kernel-lane/lanes/broadcast"
 
@@ -71,7 +72,7 @@ QUEUE_JSON=$(to_json_array "${QUEUE_PRESSURE[@]}")
 STALE_JSON=$(to_json_array "$STALE_HEARTBEATS}")
 
 REPORT=$(jq -n \
-  --arg ts "$TIMESTAMP" \
+  --arg ts "$TIMESTAMP_ISO" \
   --argjson path_issues "$PATH_JSON" \
   --argjson secret_issues "$SECRET_JSON" \
   --argjson dirty_repos "$DIRTY_JSON" \

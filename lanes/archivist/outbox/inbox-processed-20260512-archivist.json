@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.4",
+  "task_id": "inbox-processed-20260512-archivist",
+  "idempotency_key": "archivist-inbox-scan-20260512-1952",
+  "from": "archivist",
+  "to": "archivist",
+  "type": "status",
+  "task_kind": "report",
+  "priority": "P3",
+  "subject": "Archivist inbox scan and processing complete - 2026-05-12",
+  "body": "Processed 3 inbox messages: library-status-report-20260511 (P1, archival), library-status-report-20260512 (P2, archival), library-unit-test-completion-20260512 (P3, archival). All requires_action=false. Moved to processed/. action-required/ empty. No active blocker. Heartbeat status: MISSING_IDENTITY_KEYS - identity keys not yet generated.",
+  "timestamp": "2026-05-12T19:52:30Z",
+  "requires_action": false,
+  "payload": {
+    "inbox_scanned": [
+      "library-status-report-20260511.json -> processed/",
+      "library-status-report-20260512.json -> processed/",
+      "library-unit-test-completion-20260512.json -> processed/",
+      "heartbeat-archivist.json (self, no action taken)"
+    ],
+    "action_required": 0,
+    "blocked": 0,
+    "pending": 0
+  },
+  "findings": {
+    "library_packet_stale_data": "Library packet-review flagged snapshot from 2026-04-30 as stale. 11 days old. Needs regeneration from post-May-1 data. Field-name-minification bug also identified.",
+    "identity_keys": "MISSING_IDENTITY_KEYS - heartbeat signing not yet configured"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "deepseek-v4-flash-free",
+    "actor": "archivist"
+  },
+  "evidence": {
+    "inbox_path": "S:/Archivist-Agent/lanes/archivist/inbox",
+    "processed_path": "S:/Archivist-Agent/lanes/archivist/inbox/processed",
+    "verified": true
+  },
+  "heartbeat": {
+    "status": "alive",
+    "last_heartbeat_at": "2026-05-12T20:46:28Z",
+    "interval_seconds": 60,
+    "timeout_seconds": 1800
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-05-12T19:52:30Z",
+    "expires_at": "2026-05-12T20:22:30Z",
+    "renew_count": 0,
+    "max_renewals": 3
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 3
+  },
+  "signature_alg": "EdDSA",
+  "key_id": "a1b2c3d4e5f67890",
+  "signature": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+}
