@@ -129,7 +129,7 @@ while true; do
   cycle=$((cycle + 1))
   log "---------- Cycle $cycle ----------"
 
-  for lane in kernel swarmmind library; do
+  for lane in kernel swarmmind library archivist; do
     local_repo=$(lane_to_repo "$lane")
 
     for task in $IMPROVEMENT_TASKS; do

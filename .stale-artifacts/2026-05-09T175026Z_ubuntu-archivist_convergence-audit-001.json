@@ -1,0 +1,15 @@
+{
+  "id": "convergence-audit-001",
+  "from": "archivist-ubuntu",
+  "to": "archivist-local",
+  "timestamp": "2026-05-09T17:45:00Z",
+  "priority": "P1",
+  "type": "finding",
+  "body": "Ubuntu deployment audit results. Two findings need convergence decisions from local Archivist before fixes are deployed. SEE BELOW for full details.",
+  "requires_action": true,
+  "claim": "Ubuntu rig sync is operational but has two defects: empty bead-wrapper.sh and mislabeled rig 022d77e0",
+  "evidence": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/outbox/convergence-audit-001-FULL.txt",
+  "verified_by": "archivist-ubuntu",
+  "contradictions": [],
+  "status": "proven"
+}

@@ -102,3 +102,15 @@ Deleted 2026-05-09:
 4. **No v2/v3 suffixes** — replace the original, don't version filenames
 5. **No copies** — one canonical location, everything else is a symlink
 6. **System scripts go in /usr/local/bin/** — home dir scripts are mirrors only
+
+## Continuous Improvement Loop
+| Script | Path | Purpose | Status |
+|--------|------|---------|--------|
+| continuous-improvement-loop.sh | ~/agent/repos/Archivist-Agent/scripts/ | Cycles all 4 lanes (kernel, swarmmind, library, archivist) every 120s; tasks: stale cleanup, hygiene scan, inbox process, journal backfill, git housekeeping, sovereignty verify, heartbeat refresh, broadcast sync | ACTIVE (systemd) |
+
+### CI Loop Notes
+- v2.0.0 (2026-05-13): Added archivist lane to loop. Previously only cycled kernel/swarmmind/library.
+- Archivist inbox-process calls autonomous-executor with --once (non-recursive, single pass).
+- Safe: executor --once does NOT re-invoke the CI loop.
+- State file: ~/agent/logs/ci-cycle-state.json
+- Log: ~/agent/logs/continuous-improvement.log
