@@ -76,6 +76,7 @@ task_git_housekeeping() {
   fi
   local branch
   branch=$(git -C "$dir" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+    git -C "$dir" pull --rebase origin "$branch" 2>/dev/null || log "[CI:$lane] Pull rebase failed (may need manual fix)"
   git -C "$dir" push origin "$branch" 2>/dev/null || log "[CI:$lane] Push failed (may need manual fix)"
 }
 
