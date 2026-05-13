@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "state_updated_at": "2026-05-13T01:46:56.000Z",
+  "current_focus_areas": [
+    "sovereignty",
+    "autonomous agents",
+    "task chains",
+    "provenance",
+    "self-healing",
+    "graph reasoning",
+    "safety gates",
+    "CI loops",
+    "multi-agent orchestration",
+    "evals",
+    "open-source agent frameworks"
+  ],
+  "relevance_threshold": 0.65,
+  "min_confidence": 0.6,
+  "auto_approval_enabled": false,
+  "pending_review_count": 0,
+  "last_scan_completed": null,
+  "next_scan_scheduled": null,
+  "statistics": {
+    "total_packets_ingested": 0,
+    "total_approved": 0,
+    "total_rejected": 0,
+    "total_expired": 0,
+    "average_relevance_score": 0.0,
+    "high_risk_items": 0
+  }
+}

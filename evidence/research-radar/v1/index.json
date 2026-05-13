@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "index_generated_at": "2026-05-13T01:46:56.000Z",
+  "description": "Global index of all Research Radar evidence packets. Maps packet_id to metadata for fast lookup.",
+  "packets": {},
+  "counters": {
+    "total_packets": 0,
+    "by_source": {},
+    "by_risk_level": {},
+    "by_verification_status": {}
+  }
+}
