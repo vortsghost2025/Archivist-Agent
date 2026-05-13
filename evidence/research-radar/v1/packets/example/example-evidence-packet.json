@@ -1,0 +1,40 @@
+{
+  "packet_id": "123e4567-e89b-12d3-a456-426614174000",
+  "version": "1.0.0",
+  "source": "arxiv",
+  "url": "https://arxiv.org/abs/2405.12345",
+  "author": "Smith, J., Chen, L., & Patel, R.",
+  "published_at": "2026-05-10T14:30:00Z",
+  "license": "CC-BY-NC-4.0",
+  "raw_text": "Full extracted text from the arXiv paper would appear here...",
+  "summary": "A new approach to constitutional AI that enforces governance constraints through formal verification of agent behavior, with applications to multi-agent systems.",
+  "claims": [
+    "Constitutional guardrails can be enforced through formal verification",
+    "Agent behavior can be bounded by runtime monitors",
+    "Multi-agent coordination improves under governance constraints"
+  ],
+  "code_links": [
+    "https://github.com/example/constitutional-verification"
+  ],
+  "paper_links": [
+    "https://arxiv.org/abs/2405.12345",
+    "https://doi.org/10.48550/arXiv.2405.12345"
+  ],
+  "confidence": 0.87,
+  "relevance_score": 0.92,
+  "risk_level": "medium",
+  "proposed_action": "Evaluate formal verification tools for runtime guardrail enforcement; prototype monitor integration in test environment.",
+  "provenance": {
+    "retrieved_at": "2026-05-13T01:45:00Z",
+    "source_checksum": "sha256:a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef",
+    "processing_version": "1.0.0",
+    "agent_id": "research-radar-connector-arxiv-001",
+    "verified": false,
+    "verified_by": null,
+    "verified_at": null,
+    "processing_notes": [
+      "Extracted abstract and key claims using NLP pipeline",
+      "Licensed content - attribution required"
+    ]
+  }
+}

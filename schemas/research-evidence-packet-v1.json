@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://research-radar.example/schemas/evidence-packet-v1.json",
+  "title": "Research Radar Evidence Packet Schema v1",
+  "description": "Schema for evidence packets produced by Research Radar from internet sources. Compatible with lane evidence exchange protocol.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "packet_id",
+    "version",
+    "source",
+    "url",
+    "author",
+    "published_at",
+    "license",
+    "raw_text",
+    "summary",
+    "claims",
+    "code_links",
+    "paper_links",
+    "confidence",
+    "relevance_score",
+    "risk_level",
+    "proposed_action",
+    "provenance"
+  ],
+  "properties": {
+    "packet_id": {
+      "type": "string",
+      "description": "Unique identifier for this evidence packet (UUID v4 or ULID)",
+      "pattern": "^[a-fA-F0-9-]{36}$|^[0-9A-Za-z]{26}$"
+    },
+    "version": {
+      "type": "string",
+      "description": "Schema version following semantic versioning",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "default": "1.0.0"
+    },
+    "source": {
+      "type": "string",
+      "enum": ["arxiv", "openalex", "semantic_scholar", "github", "bluesky", "hacker_news", "youtube", "rss", "other"],
+      "description": "Origin system from which the item was retrieved"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Permanent URL to the original source item"
+    },
+    "author": {
+      "type": ["string", "array"],
+      "description": "Author name(s) as string or array of strings",
+      "items": { "type": "string" }
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Public ISO 8601 timestamp when the source item was published"
+    },
+    "license": {
+      "type": ["string", "null"],
+      "description": "SPDX license identifier or URL; null if unknown or ineligible"
+    },
+    "raw_text": {
+      "type": "string",
+      "description": "Full extracted text content from the source (may be truncated for size)"
+    },
+    "summary": {
+      "type": "string",
+      "description": "AI-generated concise summary of the source content (1-3 sentences)"
+    },
+    "claims": {
+      "type": "array",
+      "description": "Key assertions, findings, or claims extracted from the source",
+      "items": { "type": "string" },
+      "minItems": 0
+    },
+    "code_links": {
+      "type": "array",
+      "description": "URLs pointing to code repositories, gists, or code snippets",
+      "items": { "type": "string", "format": "uri" },
+      "minItems": 0
+    },
+    "paper_links": {
+      "type": "array",
+      "description": "URLs to related academic papers, preprints, or citations",
+      "items": { "type": "string", "format": "uri" },
+      "minItems": 0
+    },
+    "confidence": {
+      "type": "number",
+      "description": "Model confidence in relevance assessment (0.0 to 1.0)",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "relevance_score": {
+      "type": "number",
+      "description": "Computed relevance to project focus areas (0.0 to 1.0)",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "description": "Estimated risk of implementing changes based on this evidence"
+    },
+    "proposed_action": {
+      "type": "string",
+      "description": "Description of experiment, test, or system change suggested by this packet"
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Chain of custody and processing metadata for this packet",
+      "additionalProperties": false,
+      "required": ["retrieved_at", "source_checksum", "processing_version", "agent_id"],
+      "properties": {
+        "retrieved_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the source was fetched"
+        },
+        "source_checksum": {
+          "type": "string",
+          "description": "SHA-256 hash of the original source content (raw feed or API response)",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "processing_version": {
+          "type": "string",
+          "description": "Version of the Research Radar processing pipeline that created this packet",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "agent_id": {
+          "type": "string",
+          "description": "Identifier of the agent or connector that produced this packet"
+        },
+        "verified": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this packet has been manually reviewed and approved"
+        },
+        "verified_by": {
+          "type": ["string", "null"],
+          "description": "Agent or human identifier who verified this packet"
+        },
+        "verified_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "Timestamp of manual verification"
+        },
+        "processing_notes": {
+          "type": "array",
+          "description": "Optional diagnostic or transformation notes from processing",
+          "items": { "type": "string" },
+          "minItems": 0
+        }
+      }
+    }
+  }
+}
