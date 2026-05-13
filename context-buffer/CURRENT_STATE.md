@@ -1,7 +1,7 @@
 # CURRENT STATE SNAPSHOT
 
 OUTPUT_PROVENANCE:
-agent: archivist-lane
+agent: z-ai/glm-5.1
 lane: archivist
 target: system-state-snapshot
 
@@ -9,131 +9,34 @@ target: system-state-snapshot
 governance-state
 
 ## NEXT_SAFE_ACTION
-Resume solo cleanup: provenance backfill + recovery verification
+Propagate task-executor.js lane detection fix to other 3 lanes via sync
 
 ## Timestamp
-2026-05-07T21:30:00Z
+2026-05-13T15:12:24Z
 
 ## Verification
-- BOOTSTRAP.md read and verified
 - Governance constraints acknowledged: single_entry_point, structure_over_identity, correction_mandatory, agent_not_part_of_WE
 - Verification lane: **L** (Implementation lane)
-- Recovery suite: **12/12 PASS** on both Windows and Ubuntu (RECOVERY PROVEN)
+- Recovery suite: **12/12 PASS** (RECOVERY PROVEN)
 - Sovereignty: **4/4 lanes sovereign**
-- Services: **10/10 active running** (4 relay-daemons, 4 lane-workers, 2 heartbeats)
+- Services: rig-sync-all.timer **active**
 
 ## Drift Baseline
 - CPS score: **19** (STRUCTURE_OVER_IDENTITY 5, CORRECTION_MANDATORY 4, SINGLE_ENTRY_POINT 5, OPERATOR_ACCOUNTABILITY 5)
 - No active drift signals
 
----
+## What Was Done This Session
+### task-executor.js Lane Detection Fix (REGRESSION RESOLVED)
+- Replaced hardcoded `LANE = process.env.LANE_ID || 'archivist'` with `detectLaneFromRepo()`
+- Maps repo directory names to correct lane IDs (Archivist-Agent->archivist, kernel-lane->kernel, SwarmMind->swarmmind, self-organizing-library->library)
+- Fuzzy fallback for non-canonical directory names
+- Tested: all 4 lanes detect correctly
+- Fix is in archivist repo; sync will propagate to other lanes
 
-## What Was Done This Session (Full)
+## Active Blockers
+- None (system-wide)
+- P2: Node 12 on Ubuntu doesn't support `??`/`?.` syntax in some scripts (output-provenance.js, sync-all-lanes.js)
 
-### 1. Claim-Commit-Guard Deployed to All 4 Lanes (Phase 2.6 — COMPLETE)
-- `scripts/claim-commit-guard.js` — deployed to Archivist, kernel-lane, SwarmMind, self-organizing-library
-- Integrated into `scripts/relay-daemon.js` `deliverOutbox()` on all 4 lanes
-- Self-referential outbox evidence allowed, `deleted_tracked` files count as verified claims
-
-### 2. Ubuntu Phase 1 — Daemon Infrastructure (VERIFIED COMPLETE)
-- 10/10 services active (4 relay-daemons + 4 lane-workers + 2 heartbeats)
-- `Restart=always` on all services (was `Restart=on-failure` — missed SIGTERM exits)
-- Log rotation at `/etc/logrotate.d/lane-daemons`
-- Tailscale watchdog timer (60s)
-- `loginctl enable-linger we4free` — survives reboot
-
-### 3. Kernel Heartbeat Fix (COMPLETE)
-- `lane-discovery.js` missing exports (`LANES`, `ROOTS`, `getRoots`) — synced from Archivist copy
-- `kernel-heartbeat.service` created (was missing entirely) — enabled and running
-- Worker restart policy fixed to `Restart=always`
-
-### 4. Ubuntu Repo Sync (COMPLETE)
-- All 4 repos: ahead=0, behind=0, tracked_dirty=0
-- `.gitignore` updated on all 4 repos for `.compact-audit/`, `COMPACT_CONTEXT_HANDOFF.md`, runtime state files
-- Stale tracked files (COMPACT_RESTORE_PACKET.json, old outbox messages) untracked
-
-### 5. Library Convergence Response (RECEIVED)
-- `library-to-archivist-convergence-response-2026-05-07.json` in inbox
-- Maps Archivist's 7 gaps to Library's 5 layers
-- Unified 5-phase roadmap proposed (Phase 1 headless infra = DONE, Phase 2-5 remaining)
-- Work split: Archivist owns infrastructure/tooling, Library owns graph/analysis
-
-### 6. Contradiction Adjudicator (Phase 4.1 — COMPLETE)
-- `scripts/contradiction-adjudicator.js` — auto-adjudicates CONTRADICTS edges per playbook
-- Rules: K(40)+ tag-group artifacts → proven_spurious, UNVERIFIED vs VERIFIED → proven_spurious, everything else → needs_lane_review
-- Complies with CONTRADICTION_RESOLUTION_PLAYBOOK (no auto-resolve by count/confidence/similarity)
-- Generates full evidence records with domain classification
-- Current state: 0 contradictions in system (clean)
-
-### 7. Task Chain Engine (Phase 4.2 — COMPLETE)
-- `scripts/task-chain-engine.js` — turns executor from one-shot into loop
-- Chain tracking: active chains, depth limits (max 5), followup generation
-- Followup types: verification followup (for tasks/amendments), consensus followup (for reviews/ratifications)
-- Review/ratification tasks do NOT generate more verification followups (prevents chain explosion)
-- Dedup: tasks processed per-run tracked, no re-processing
-- Inbox scan: files only (no recursive scan into processed/ subdirs)
-
-### 8. Compact Restore Bridge (COMPLETE — from prior work)
-- `scripts/compact-restore-bridge.js` — bridges COMPACT_RESTORE_PACKET.json into .compact-audit/ pipeline
-- `scripts/post-compact-audit.js` — restore packet cross-verification
-- `scripts/recovery-test-suite.js` — 12/12 tests including test11 restore_packet_cross_verify
-- `scripts/runner-v3.sh` — pre/post compact hooks
-- `scripts/recovery-hourly.sh` — hourly systemd timer
-
----
-
-## Known Issues
-
-1. **S:/ path leaks** — Lane-workers write S:/ paths on Ubuntu (cross-platform path resolution). Gitignored, not committed, regenerated by workers. Will persist until lane-worker path resolution is fully fixed.
-2. **Sovereignty violations** — Archivist-Agent has 1 cross-lane import, self-organizing-library has 1 cross-lane import. SwarmMind and kernel-lane are clean.
-
----
-
-## Next Actions (Priority Order)
-
-### P1 — Do Next
-1. **Deploy contradiction-adjudicator.js + task-chain-engine.js to other 3 lanes** — currently only in Archivist-Agent
-2. **Build blocked-remediator.js** (Phase 3.2) — auto-fix known patterns in blocked/quarantine
-3. **Fix lane-worker path resolution** — stop S:/ path leaks on Ubuntu
-4. **Process Library convergence response** — finalize unified roadmap, write response back to Library
-
-### P2 — When Ready
-5. **Sovereignty violation cleanup** — 2 remaining cross-lane imports
-6. **Canonicalization sprint** — authority registry, schema enum unification, shared script consolidation
-7. **Windows Scheduled Task** — daemon auto-start on Windows (Library's Phase 1 gap 7)
-
----
-
-## Canonical Lane Registry
-
-| Lane | Local Directory (Win) | Local Directory (Ubuntu) | GitHub Repo | Inbox Path | Outbox Path |
-|------|----------------------|--------------------------|-------------|------------|-------------|
-| Archivist | `S:/Archivist-Agent` | `/home/we4free/agent/repos/Archivist-Agent` | vortsghost2025/Archivist-Agent | `lanes/archivist/inbox` | `lanes/archivist/outbox` |
-| Kernel | `S:/kernel-lane` | `/home/we4free/agent/repos/kernel-lane` | vortsghost2025/kernel-lane | `lanes/kernel/inbox` | `lanes/kernel/outbox` |
-| SwarmMind | `S:/SwarmMind` | `/home/we4free/agent/repos/SwarmMind` | vortsghost2025/SwarmMind | `lanes/swarmmind/inbox` | `lanes/swarmmind/outbox` |
-| Library | `S:/self-organizing-library` | `/home/we4free/agent/repos/self-organizing-library` | vortsghost2025/self-organizing-library | `lanes/library/inbox` | `lanes/library/outbox` |
-
----
-
-## Key File Locations (Ubuntu)
-
-| File | Path |
-|------|------|
-| Bootstrap | `/home/we4free/agent/repos/Archivist-Agent/BOOTSTRAP.md` |
-| AGENTS.md | `/home/we4free/agent/repos/Archivist-Agent/AGENTS.md` |
-| Contradiction adjudicator | `/home/we4free/agent/repos/Archivist-Agent/scripts/contradiction-adjudicator.js` |
-| Task chain engine | `/home/we4free/agent/repos/Archivist-Agent/scripts/task-chain-engine.js` |
-| Claim-commit guard | All 4 repos: `scripts/claim-commit-guard.js` |
-| Relay daemon | All 4 repos: `scripts/relay-daemon.js` (with ClaimCommitGuard) |
-| Compact restore bridge | `/home/we4free/agent/repos/Archivist-Agent/scripts/compact-restore-bridge.js` |
-| Post-compact audit | `/home/we4free/agent/repos/Archivist-Agent/scripts/post-compact-audit.js` |
-| Recovery test suite | `/home/we4free/agent/repos/Archivist-Agent/scripts/recovery-test-suite.js` |
-| Runner v3 | `/home/we4free/agent/bin/runner-v3.sh` (also `runner.sh`) |
-| Recovery hourly | `/home/we4free/agent/scripts/recovery-hourly.sh` |
-| Node binary | `/home/we4free/.nvm/versions/node/v20.20.2/bin/node` (NOT system v12) |
-
-## Git Protocol Reminder
-- COMMIT + PUSH AS ONE ACTION — never leave commits local-only
-- Check for secrets before push
-- Use `[LANE-X]` prefix in commit messages (Archivist = LANE-1)
-- 4/4 repos fully synced with origin as of 2026-05-07T21:30Z
+## Observations
+- Authority heartbeat stale (~27h old) — may need restart
+- No P0/P1 inbox items pending
