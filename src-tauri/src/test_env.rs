@@ -13,6 +13,7 @@ use std::path::PathBuf;
 thread_local! {
     pub static TEST_CONSTRAINTS_PATH: RefCell<Option<PathBuf>> = RefCell::new(None);
     pub static TEST_FORCE_RECOMPUTE: RefCell<bool> = RefCell::new(false);
+    pub static TEST_CPS_LOG_PATH: RefCell<Option<PathBuf>> = RefCell::new(None);
 }
 
 pub fn get_constraints_path() -> Option<PathBuf> {
@@ -37,6 +38,18 @@ pub fn set_force_recompute(value: bool) {
 
 pub fn clear_force_recompute() {
     TEST_FORCE_RECOMPUTE.with(|f| *f.borrow_mut() = false);
+}
+
+pub fn get_cps_log_path() -> Option<PathBuf> {
+    TEST_CPS_LOG_PATH.with(|p| p.borrow().clone())
+}
+
+pub fn set_cps_log_path(path: PathBuf) {
+    TEST_CPS_LOG_PATH.with(|p| *p.borrow_mut() = Some(path));
+}
+
+pub fn clear_cps_log_path() {
+    TEST_CPS_LOG_PATH.with(|p| *p.borrow_mut() = None);
 }
 
 #[cfg(test)]
