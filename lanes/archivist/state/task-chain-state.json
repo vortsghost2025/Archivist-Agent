@@ -1,6 +1,7 @@
 {
-  "active_chains": {
-    "response-key-id-convergence-proposal": {
+  "active_chains": {},
+  "completed_chains": [
+    {
       "chain_id": "response-key-id-convergence-proposal",
       "origin_task": "response-key-id-convergence-proposal",
       "origin_priority": "P0",
@@ -8,9 +9,9 @@
       "followups": [],
       "started_at": "2026-05-13T13:10:04.654Z",
       "last_task": "response-key-id-convergence-proposal",
-      "last_updated": "2026-05-13T13:10:04.654Z"
+      "completed_at": "2026-05-13T17:57:32.000Z",
+      "resolution": "convergence proposal processed, key alignment confirmed for archivist/library/swarmmind, kernel key_id mismatch handed off to kernel lane"
     }
-  },
-  "completed_chains": [],
-  "last_run": "2026-05-13T17:04:20.433Z"
+  ],
+  "last_run": "2026-05-13T18:43:11.027Z"
 }
