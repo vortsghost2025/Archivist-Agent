@@ -1,0 +1,16 @@
+[Unit]
+Description=Continuous Improvement Loop for kernel/swarmmind/library lanes
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/home/we4free/agent/bin/continuous-improvement-loop.sh
+Restart=always
+RestartSec=30
+Environment=CI_CYCLE_INTERVAL=120
+Environment=NODE_ENV=production
+StandardOutput=append:/home/we4free/agent/logs/ci-loop-stdout.log
+StandardError=append:/home/we4free/agent/logs/ci-loop-stderr.log
+
+[Install]
+WantedBy=default.target
