@@ -105,8 +105,8 @@ if [ -f "$last_file" ]; then
 local last_ts
 last_ts=$(cat "$last_file" 2>/dev/null || echo 0)
 local diff=$((now_ts - last_ts))
-if [ "$diff" -lt 1800 ]; then
-log "[CI:$lane] Commit throttle: ${diff}s < 1800s minimum, skipping commit"
+if [ "$diff" -lt 86400 ]; then
+log "[CI:$lane] Commit throttle: ${diff}s < 86400s minimum, skipping commit"
 return 1
 fi
 fi
@@ -124,7 +124,7 @@ git -C "$dir" add -A 2>/dev/null || true
 git -C "$dir" commit -m "[CI:$lane] Auto-commit: housekeeping cycle $(date +%Y%m%d-%H%M%S)" 2>/dev/null || true
 echo "$(date +%s)" > "$LAST_COMMIT_DIR/$lane"
 elif min_commit_interval_met "$lane"; then
-log "[CI:$lane] Housekeeping-only changes, throttled commit (30min min interval)..."
+log "[CI:$lane] Housekeeping-only changes, throttled commit (24h min interval)..."
 git -C "$dir" add -A 2>/dev/null || true
 git -C "$dir" commit -m "[CI:$lane] Auto-commit: housekeeping cycle $(date +%Y%m%d-%H%M%S)" 2>/dev/null || true
 echo "$(date +%s)" > "$LAST_COMMIT_DIR/$lane"
@@ -183,7 +183,7 @@ printf '{"cycle":%s,"current_task":"%s","current_lane":"%s","timestamp":"%s","pi
 }
 
 cycle=0
-log "========== Continuous Improvement Loop starting (interval=${CYCLE_INTERVAL_SEC}s, commit throttle=1800s) =========="
+log "========== Continuous Improvement Loop starting (interval=${CYCLE_INTERVAL_SEC}s, commit throttle=86400s (24h)) =========="
 
 while true; do
 cycle=$((cycle + 1))
