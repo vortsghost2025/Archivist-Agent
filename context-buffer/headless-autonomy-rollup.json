@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-15T16:42:40.621Z",
+  "generated_at": "2026-05-15T17:14:28.129Z",
   "window_hours": 24,
-  "cycle_count": 53,
+  "cycle_count": 54,
   "topology_stability_pct": 98,
   "drift_incidents": 27,
   "broadcast_proof_pass_rate": 80,
   "dependency_validation_pass_rate": 100,
   "cognition_needed_count": 27,
-  "cognition_needed_pct": 51,
+  "cognition_needed_pct": 50,
   "cognition_handoff_emitted_count": 0,
   "cognition_handoff_emitted_pct": 0,
   "cognition_handoff_suppressed_count": 8,
@@ -35,7 +35,7 @@
     }
   ],
   "last_cycle_summary": "All invariants OK. Substrate healthy, no agent cognition needed.",
-  "substrate_status": "Degraded — cognition frequently needed",
+  "substrate_status": "Healthy — substrate autonomous and stable",
   "recommendation_metrics": {
     "new_24h": 2,
     "resolved_24h": 2,
