@@ -117,3 +117,18 @@ is PASS.
 
 PASS for "always-on four-lane headless substrate with conditional agent
 activation" as the default operating doctrine.
+
+## Verification Gate Status (as of 2026-05-15T04:10Z)
+
+- **Housekeeping commit throttle (24h):** Window closes 2026-05-15T22:22Z. Not yet verified.
+  - Last substantive commit: 2026-05-15T02:51Z (Phase 2 self-audit)
+  - No housekeeping-only commits observed since throttle application
+  - **Status: OPEN** — cannot claim closure until 22:22Z passes with zero housekeeping-only commits
+
+- **Phase 2 proof debt (as of 2026-05-15T04:13Z):**
+  - Kernel push: VERIFIED — headless-self-audit.js on origin/main
+  - SwarmMind push: VERIFIED
+  - Library push: VERIFIED
+  - Ledger JSONL: VERIFIED — 14 entries, v2 format, monotonic, no duplicates
+  - Audit-trail.jsonl: PENDING — not yet created by supervision cycle
+  - All 4 repos in sync with GitHub
