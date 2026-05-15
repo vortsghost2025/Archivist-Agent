@@ -59,25 +59,24 @@ Earlier claim: "There is no Ollama installation on the headless machine."
 | Model pulled | **YES** | `qwen2.5-coder:7b` (4.7GB, Q4_K_M quantization) |
 | .env configured | **YES** | Archivist `.env`: `OLLAMA_BASE_URL=http://localhost:11434`, `OLLAMA_MODEL=qwen2.5-coder:7b` |
 | kernel .env configured | **YES** | `OLLAMA_BASE_URL=http://localhost:11434`, `OLLAMA_MODEL=qwen2.5-coder:3b-instruct-q4_K_M` |
-| Any lane script reads OLLAMA_BASE_URL | **NO** | Zero references in any script across all 4 lanes |
-| Any lane script reads OLLAMA_MODEL | **NO** | Zero references in any script across all 4 lanes |
-| Any code path calls localhost:11434 | **NO** | Zero references across all lane scripts |
-| Any agent session has used local inference | **NO** | No evidence in any journal or log |
+| Any lane script reads OLLAMA_BASE_URL | **YES** | `scripts/local-inference.js` reads `.env`, used by `headless-self-audit.js` |
+| Any lane script reads OLLAMA_MODEL | **YES** | `scripts/local-inference.js` reads `.env`, Tailscale IP fallback |
+| Any code path calls localhost:11434 | **YES** | `local-inference.callLocalModel()` via `/api/chat` endpoint |
+| Any agent session has used local inference | **YES** | `headless-self-audit.js` v5.0.0 calls `summarizeJournalWithLocalModel()` each audit cycle |
 
-**Classification: CONFLICT_RESOLVED — installed but not used in live path**
+**Classification: NOW IN LIVE PATH** — wired 2026-05-15T21:35Z
 
-This is WORSE than "not installed." The configuration LOOKS like local inference exists.
-Someone reading the `.env` would believe it's wired. It's not.
-`OLLAMA_BASE_URL` and `OLLAMA_MODEL` are declared but never consumed.
-Same pattern as provenance: configured ≠ running in path.
+`scripts/local-inference.js` reads OLLAMA_BASE_URL and OLLAMA_MODEL from `.env`, provides
+`callLocalModel()` and `isAvailable()`, and is consumed by `headless-self-audit.js` for
+AI-powered journal summarization. Verified end-to-end: audit returns `ai_summary` field
+on both entry and rollup. Canonical registry updated; synced to all 4 lanes.
 
-The system was set up correctly at the infrastructure layer (install, service, model pull, env vars)
-but no code was ever written to actually call it.
+Key fix: Node `http.request` `timeout` option is socket idle timeout, not total elapsed.
+Replaced with `setTimeout` for true total timeout (120s). Ollama via Tailscale takes
+65-110s per inference (cold load ~55s + inference).
 
-**What would make this LIVE-PATH ENFORCED:**
-- A script or agent path that reads `OLLAMA_BASE_URL` from `.env` and routes requests to it
-- Or: explicit classification as NOT_CURRENTLY_ENFORCEABLE with operator acceptance
-  (the model may be too small for autonomous use — that's a legitimate design choice, but it must be stated)
+What remains: kernel `.env` still had `localhost:11434` (wrong — Ollama bound to Tailscale
+IP `100.95.40.99:11434` only). Fixed 2026-05-15T21:35Z.
 
 ---
 
@@ -91,19 +90,18 @@ but no code was ever written to actually call it.
 | Journal read command works | **YES** | `node store-journal.js status` — cross-lane view |
 | Dashboard filter reads journals | **YES** | `scripts/operator-dashboard-filter.js` reads journals for uncertainty |
 | Read-only verifier permits reads | **YES** | `scripts/read-only-verifier.js` allows `store-journal read` and `status` |
-| Any agent session reads journals at startup | **NO** | No lane-worker, no service, no startup script calls `store-journal status` or `read` |
-| Journals condition agent behavior | **NO** | Agents start each session with no journal context |
+| Any agent session reads journals at startup | **YES** | `lane-worker.js` constructor calls `_readJournalContext()` — wired 2026-05-15T21:40Z |
+| Journals condition agent behavior | **PARTIAL** | `this.journalContext` available to all LaneWorker methods; not yet used in routing decisions |
 
-**Classification: PARTIALLY ENFORCED — write path live, read path exists but not in any startup/conditioning path**
+**Classification: PARTIALLY ENFORCED → IMPROVING — write path live, read path now in lane-worker startup (wired 2026-05-15)**
 
-The read tooling exists and works. But no agent ever calls it at session start.
-Journals are produced (write path works) but never consumed (no read path in agent initialization).
-Result: each agent session starts blind — no continuity from previous sessions.
+The read tooling exists and works. `lane-worker.js` now reads journal status at construction
+via `_readJournalContext()`, storing cross-lane state in `this.journalContext`. Agents no longer
+start completely blind — they see last 4 hours of entries, in-progress sessions, and ownership state.
 
-**What would make this LIVE-PATH ENFORCED:**
-- Add `node scripts/store-journal.js status` to session-start protocol
-- Or: lane-worker.js reads last session's journal before processing inbox
-- Or: agent instructions mandate journal consultation before new work
+What remains: `journalContext` is loaded but not yet used to condition routing decisions
+(e.g., skip messages about already-completed tasks, defer when another lane owns a file).
+That is the next step to reach fully live-path enforced.
 
 ---
 
@@ -112,11 +110,13 @@ Result: each agent session starts blind — no continuity from previous sessions
 | Item | Classification | Live-Path Enforced? |
 |------|---------------|-------------------|
 | OUTPUT_PROVENANCE | PARTIALLY ENFORCED (files yes, chat output no) | **NO** |
-| Ollama / Local Models | INSTALLED BUT NOT IN LIVE PATH | **NO** |
-| Journal Continuity | PARTIALLY ENFORCED (write yes, read at startup no) | **NO** |
+| Ollama / Local Models | **NOW IN LIVE PATH** (wired 2026-05-15) | **YES** |
+| Journal Continuity | IMPROVING (write yes, read at startup yes, routing conditioning no) | **PARTIAL** |
 
-All three items share the same root pattern: **infrastructure exists, execution path does not.**
-The system has the plumbing but never turned the valve.
+2 of 3 items now have live-path enforcement or significant progress.
+Ollama: fully wired with `local-inference.js` + `headless-self-audit.js` v5.0.0.
+Journal: read path now in `lane-worker.js` startup; routing conditioning is next.
+Provenance: still no chat-output enforcement gate.
 
 ## Trust Status
 

@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-05-15T21:57:28.227Z",
+  "generated_at": "2026-05-15T22:30:50.569Z",
   "window_hours": 24,
-  "cycle_count": 73,
+  "cycle_count": 75,
   "topology_stability_pct": 99,
-  "drift_incidents": 41,
-  "broadcast_proof_pass_rate": 89,
+  "drift_incidents": 42,
+  "broadcast_proof_pass_rate": 90,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 41,
+  "cognition_needed_count": 42,
   "cognition_needed_pct": 56,
-  "cognition_handoff_emitted_count": 0,
-  "cognition_handoff_emitted_pct": 0,
+  "cognition_handoff_emitted_count": 1,
+  "cognition_handoff_emitted_pct": 1,
   "cognition_handoff_suppressed_count": 22,
-  "cognition_handoff_suppressed_pct": 30,
+  "cognition_handoff_suppressed_pct": 29,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 27
+      "count": 28
     },
     {
       "type": "P1:convergence_review",
@@ -34,11 +34,11 @@
       "count": 1
     }
   ],
-  "last_cycle_summary": "drift: EXPECTED_DRIFT_CANONICAL_CHANGED; cognition: 1 triggers.",
+  "last_cycle_summary": "All invariants OK. Substrate healthy, no agent cognition needed.",
   "substrate_status": "Degraded — cognition frequently needed",
   "recommendation_metrics": {
-    "new_24h": 2,
-    "resolved_24h": 2,
+    "new_24h": 3,
+    "resolved_24h": 3,
     "active_unresolved": 0,
     "total_suppressed": 1,
     "recommendation_precision": null,

@@ -26,10 +26,7 @@ function runStoreJournalAppend(laneRoot, lane, event, subject, taskId) {
       ' --subject "' + safeSubject + '"' +
       ' --task_id "' + safeTaskId + '"', { cwd: laneRoot, timeout: 10000 });
   } catch (e) {}
-}
-
-const ACTIONABLE_TYPES = new Set(['task', 'escalation', 'request']);
-const NON_ASCII_PATTERN = /[^\x00-\x7F]/;
+  }
 
 // NFM-019 fix: Unicode-to-ASCII normalization map for common typographic characters
 // Policy: lane messages must be ASCII-only. Agents naturally produce Unicode punctuation
@@ -479,6 +476,7 @@ class LaneWorker {
     this.lastRun = null;
     this.sessionId = SESSION_ID;
     this.isOwner = false;
+    this.journalContext = this._readJournalContext();
     if (!this.dryRun) {
       const existing = getActiveOwner(this.repoRoot);
       if (!existing || existing.session_id === SESSION_ID || (Date.now() - new Date(existing.claimed_at).getTime()) > 900000) {
@@ -487,6 +485,28 @@ class LaneWorker {
       }
     } else {
       this.isOwner = true;
+    }
+  }
+
+  _readJournalContext() {
+    try {
+      var scriptPath = path.join(this.repoRoot, 'scripts', 'store-journal.js');
+      if (!fs.existsSync(scriptPath)) return null;
+      var execSync = require('child_process').execSync;
+      var output = execSync('node "' + scriptPath + '" status --hours 4', {
+        cwd: this.repoRoot,
+        timeout: 10000,
+        encoding: 'utf8',
+      });
+      var status = JSON.parse(output);
+      var myLane = status.lanes && status.lanes[this.lane];
+      if (myLane) {
+        console.log('[lane-worker] Journal context loaded: ' + myLane.entries_today + ' entries, ' +
+          myLane.in_progress_sessions.length + ' in-progress, last=' + (myLane.last_event || 'none'));
+      }
+      return status;
+    } catch (_) {
+      return null;
     }
   }
 
@@ -906,7 +926,9 @@ processFile(filePath) {
       }
     }
   }
-  const decision = this.decideRoute(msg, schemaResult, signatureResult);
+    const journalHint = this._checkJournalOverlap(msg);
+    const decision = this.decideRoute(msg, schemaResult, signatureResult);
+    if (journalHint) decision.journal_awareness = journalHint;
     const targetDir = this.config.queues[decision.queue];
     const targetPath = uniquePath(path.join(targetDir, filename));
 
