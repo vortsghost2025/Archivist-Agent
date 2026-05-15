@@ -118,19 +118,23 @@ is PASS.
 PASS for "always-on four-lane headless substrate with conditional agent
 activation" as the default operating doctrine.
 
-## Verification Gate Status (as of 2026-05-15T08:41Z)
+## Verification Gate Status (as of 2026-05-15T13:55Z)
 
-- **Housekeeping commit throttle (24h):** FAIL — cyclone continued after throttle application
-  - Root cause (DEF-004): Three self-audit output files missing from HOUSEKEEPING_ONLY_PATTERNS:
-    - `context-buffer/autonomy-ledger.jsonl`
-    - `context-buffer/headless-autonomy-rollup.json`
-    - `lanes/*/state/sovereignty-report-latest.json`
-  - These caused `has_substantive_changes()` to return true every cycle, bypassing the 24h throttle
-  - Every commit said "housekeeping cycle" but was actually the substantive branch (same commit message)
-  - Fix: added 4 patterns (including preemptive `context-buffer/recommendation-ledger.jsonl`)
-  - Also distinguished commit messages: "substantive" vs "housekeeping cycle"
-  - Commit: `2baedffc` on master
-  - New verification window: 24h from 2026-05-15T08:41Z → 2026-05-16T08:41Z
+- **Housekeeping commit throttle (24h):** IN VERIFICATION — DEF-004 fix deployed, CI restarted with correct script
+- Root cause (DEF-004): Three self-audit output files missing from HOUSEKEEPING_ONLY_PATTERNS:
+- `context-buffer/autonomy-ledger.jsonl`
+- `context-buffer/headless-autonomy-rollup.json`
+- `lanes/*/state/sovereignty-report-latest.json`
+- These caused `has_substantive_changes()` to return true every cycle, bypassing the 24h throttle
+- Every commit said "housekeeping cycle" but was actually the substantive branch (same commit message)
+- Fix: added 4 patterns (including preemptive `context-buffer/recommendation-ledger.jsonl`)
+- Also distinguished commit messages: "substantive" vs "housekeeping cycle"
+- Commit: `2baedffc` on master
+- Additional issue: CI service was running OLD script (started 10:29Z, before fix). Restarted at 13:55Z.
+- One post-fix commit `f1496cf5` at 13:44Z — committed before service restart, was correctly classified as housekeeping
+- Commit throttle timestamps reset to 13:55Z — next HK commit allowed after 2026-05-16T13:55Z
+- Pattern matching verified: all dirty files in archivist repo match HOUSEKEEPING_ONLY_PATTERNS correctly
+- Verification window: 24h from 2026-05-15T13:55Z → 2026-05-16T13:55Z
 
 - **Phase 2 proof debt:**
   - Kernel push: VERIFIED — headless-self-audit.js on origin/main
