@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-05-15T06:59:45.023Z",
+  "generated_at": "2026-05-15T07:17:11.156Z",
   "window_hours": 24,
-  "cycle_count": 33,
+  "cycle_count": 34,
   "topology_stability_pct": 97,
   "drift_incidents": 27,
   "broadcast_proof_pass_rate": 80,
   "dependency_validation_pass_rate": 100,
   "cognition_needed_count": 27,
-  "cognition_needed_pct": 82,
+  "cognition_needed_pct": 79,
   "cognition_handoff_emitted_count": 0,
   "cognition_handoff_emitted_pct": 0,
   "cognition_handoff_suppressed_count": 8,
@@ -34,27 +34,18 @@
       "count": 1
     }
   ],
-  "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
+  "last_cycle_summary": "All invariants OK. Substrate healthy, no agent cognition needed.",
   "substrate_status": "Degraded — cognition frequently needed",
   "recommendation_metrics": {
     "new_24h": 2,
-    "resolved_24h": 1,
-    "active_unresolved": 1,
+    "resolved_24h": 2,
+    "active_unresolved": 0,
     "total_suppressed": 1,
     "recommendation_precision": null,
     "false_positive_rate": null,
     "operator_attention_required": 0,
     "archivist_action_yield": null,
-    "top_unresolved": [
-      {
-        "type": "REVIEW_DRIFT",
-        "lanes": [
-          "swarmmind"
-        ],
-        "state": "ONGOING_MONITORED",
-        "count": 16
-      }
-    ]
+    "top_unresolved": []
   },
-  "verdict": "Substrate stable — minor issues monitored, no cognition pressure"
+  "verdict": "Substrate stable — all invariants green, autonomous operation normal"
 }
