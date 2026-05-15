@@ -82,12 +82,14 @@ function syncAndGuard(dryRun) {
   var registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
   var sharedScripts = registry.shared_scripts || [];
   var sharedSchemas = registry.shared_schemas || [];
+  var sharedUtilModules = registry.shared_util_modules || [];
   var targets = ['kernel', 'swarmmind', 'library'];
 
   var results = { synced: [], already_aligned: [], regression_failures: [], missing_canonical: [] };
 
   var allFiles = sharedScripts.map(function(s) { return { name: s, dir: 'scripts' }; })
-    .concat(sharedSchemas.map(function(s) { return { name: s, dir: '' }; }));
+    .concat(sharedSchemas.map(function(s) { return { name: s, dir: '' }; }))
+    .concat(sharedUtilModules.map(function(s) { return { name: path.basename(s), dir: path.dirname(s) }; }));
 
   for (var f = 0; f < allFiles.length; f++) {
     var file = allFiles[f];

@@ -23,7 +23,7 @@ archivist) echo "Archivist-Agent" ;;
 esac
 }
 
-IMPROVEMENT_TASKS="stale-file-cleanup hygiene-scan inbox-process journal-backfill git-housekeeping sovereignty-verify heartbeat-refresh broadcast-sync"
+IMPROVEMENT_TASKS="stale-file-cleanup hygiene-scan inbox-process journal-backfill git-housekeeping sovereignty-verify heartbeat-refresh broadcast-sync self-audit"
 
 HOUSEKEEPING_ONLY_PATTERNS="lanes/.*/journal/.*.jsonl lanes/.*/state/task-chain-state.json lanes/.*/state/active-owner.json lanes/.*/inbox/heartbeat-.*.json lanes/.*/outbox/.*-cycle-report-.*.json lanes/broadcast/hygiene/latest.json lanes/broadcast/system_state.json lanes/broadcast/operator_alert_latest.json context-buffer/sync-reports/.*.json logs/.* .lane-watch-timestamp"
 
@@ -156,10 +156,19 @@ fi
 }
 
 task_broadcast_sync() {
-log "[CI:broadcast] Sync broadcast artifacts..."
-if [ -f "$REPOS_DIR/Archivist-Agent/scripts/sync-all-lanes.js" ]; then
-$NODE "$REPOS_DIR/Archivist-Agent/scripts/sync-all-lanes.js" --dry-run 2>&1 | tail -5 >> "$CYCLE_LOG" || true
-fi
+  log "[CI:broadcast] Sync broadcast artifacts..."
+  if [ -f "$REPOS_DIR/Archivist-Agent/scripts/sync-all-lanes.js" ]; then
+    $NODE "$REPOS_DIR/Archivist-Agent/scripts/sync-all-lanes.js" --dry-run 2>&1 | tail -5 >> "$CYCLE_LOG" || true
+  fi
+}
+
+task_self_audit() {
+  local lane="$1" repo="$2" dir="$REPOS_DIR/$repo"
+  if [ "$lane" != "archivist" ]; then return 0; fi
+  log "[CI:self-audit] Running self-audit cycle..."
+  if [ -f "$dir/scripts/headless-self-audit.js" ]; then
+    timeout 120 $NODE "$dir/scripts/headless-self-audit.js" --once --skip-broadcast-test --quiet 2>&1 | tail -3 >> "$CYCLE_LOG" || true
+  fi
 }
 
 run_task() {
@@ -172,8 +181,9 @@ journal-backfill) task_journal_backfill "$lane" "$repo" ;;
 git-housekeeping) task_git_housekeeping "$lane" "$repo" ;;
 sovereignty-verify) task_sovereignty_verify "$lane" "$repo" ;;
 heartbeat-refresh) task_heartbeat_refresh "$lane" "$repo" ;;
-broadcast-sync) task_broadcast_sync ;;
-esac
+  broadcast-sync) task_broadcast_sync ;;
+  self-audit) task_self_audit "$lane" "$repo" ;;
+  esac
 }
 
 write_state() {

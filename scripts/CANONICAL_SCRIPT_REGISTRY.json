@@ -13,11 +13,18 @@
     "blocked-remediator.js",
     "store-journal.js",
     "executor-watcher.js",
-    "post-compact-audit.js"
+    "post-compact-audit.js",
+    "headless-self-audit.js",
+    "node-version-guard.js"
   ],
   "shared_schemas": [
     "schemas/inbox-message-v1.json",
     "schemas/context-restore.json"
+  ],
+  "shared_util_modules": [
+    "scripts/util/lane-discovery.js",
+    "scripts/util/atomic-write.js",
+    "scripts/util/sanitize-filename.js"
   ],
   "sync_rules": {
     "direction": "archivist -> kernel, swarmmind, library",
