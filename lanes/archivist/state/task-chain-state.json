@@ -19,6 +19,26 @@
       "started_at": "2026-05-15T07:36:50.429Z",
       "last_task": "cycle-report-2026-05-15T07-31-41Z",
       "last_updated": "2026-05-15T07:36:50.429Z"
+    },
+    "cycle-report-20260515T112932Z": {
+      "chain_id": "cycle-report-20260515T112932Z",
+      "origin_task": "cycle-report-20260515T112932Z",
+      "origin_priority": "P2",
+      "depth": 1,
+      "followups": [],
+      "started_at": "2026-05-15T11:39:34.592Z",
+      "last_task": "cycle-report-20260515T112932Z",
+      "last_updated": "2026-05-15T11:39:34.592Z"
+    },
+    "cycle-report-20260515T114800Z": {
+      "chain_id": "cycle-report-20260515T114800Z",
+      "origin_task": "cycle-report-20260515T114800Z",
+      "origin_priority": "P2",
+      "depth": 2,
+      "followups": [],
+      "started_at": "2026-05-15T11:49:54.043Z",
+      "last_task": "cycle-report-20260515T114800Z",
+      "last_updated": "2026-05-15T11:49:54.043Z"
     }
   },
   "completed_chains": [
@@ -34,5 +54,5 @@
       "resolution": "convergence proposal processed, key alignment confirmed for archivist/library/swarmmind, kernel key_id mismatch handed off to kernel lane"
     }
   ],
-  "last_run": "2026-05-15T11:34:12.595Z"
+  "last_run": "2026-05-15T12:07:52.493Z"
 }
