@@ -119,9 +119,9 @@ log "[CI:$lane] Git housekeeping..."
 
 if ! git -C "$dir" diff-index --quiet HEAD 2>/dev/null; then
 if has_substantive_changes "$dir"; then
-log "[CI:$lane] Substantive changes found, committing immediately..."
-git -C "$dir" add -A 2>/dev/null || true
-git -C "$dir" commit -m "[CI:$lane] Auto-commit: housekeeping cycle $(date +%Y%m%d-%H%M%S)" 2>/dev/null || true
+            log "[CI:$lane] Substantive changes found, committing immediately..."
+            git -C "$dir" add -A 2>/dev/null || true
+            git -C "$dir" commit -m "[CI:$lane] Auto-commit: substantive $(date +%Y%m%d-%H%M%S)" 2>/dev/null || true
 echo "$(date +%s)" > "$LAST_COMMIT_DIR/$lane"
 elif min_commit_interval_met "$lane"; then
 log "[CI:$lane] Housekeeping-only changes, throttled commit (24h min interval)..."
