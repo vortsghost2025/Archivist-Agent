@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-05-15T18:50:30.130Z",
+  "generated_at": "2026-05-15T19:22:17.181Z",
   "window_hours": 24,
-  "cycle_count": 57,
+  "cycle_count": 58,
   "topology_stability_pct": 98,
   "drift_incidents": 27,
   "broadcast_proof_pass_rate": 80,
