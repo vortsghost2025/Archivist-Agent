@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-05-15T23:04:16.887Z",
+  "generated_at": "2026-05-15T23:21:24.459Z",
   "window_hours": 24,
-  "cycle_count": 77,
+  "cycle_count": 78,
   "topology_stability_pct": 99,
-  "drift_incidents": 44,
+  "drift_incidents": 45,
   "broadcast_proof_pass_rate": 91,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 44,
-  "cognition_needed_pct": 57,
+  "cognition_needed_count": 45,
+  "cognition_needed_pct": 58,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 1,
-  "cognition_handoff_suppressed_count": 24,
-  "cognition_handoff_suppressed_pct": 31,
+  "cognition_handoff_suppressed_count": 25,
+  "cognition_handoff_suppressed_pct": 32,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
@@ -19,7 +19,7 @@
     },
     {
       "type": "P1:convergence_review",
-      "count": 16
+      "count": 17
     },
     {
       "type": "P2:stale_task",
@@ -47,5 +47,6 @@
     "archivist_action_yield": 100,
     "top_unresolved": []
   },
-  "verdict": "Substrate stable — all invariants green, autonomous operation normal"
+  "verdict": "Substrate stable — all invariants green, autonomous operation normal",
+  "ai_summary": "The system is operating at a high level of autonomy with 99% topology coverage and minimal cognitive load. However, it remains degraded due to frequent need for operator intervention, indicating potential areas for improvement in the cognitive algorithms."
 }
