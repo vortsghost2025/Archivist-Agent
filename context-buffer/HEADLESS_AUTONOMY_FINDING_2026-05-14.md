@@ -118,17 +118,24 @@ is PASS.
 PASS for "always-on four-lane headless substrate with conditional agent
 activation" as the default operating doctrine.
 
-## Verification Gate Status (as of 2026-05-15T04:10Z)
+## Verification Gate Status (as of 2026-05-15T08:41Z)
 
-- **Housekeeping commit throttle (24h):** Window closes 2026-05-15T22:22Z. Not yet verified.
-  - Last substantive commit: 2026-05-15T02:51Z (Phase 2 self-audit)
-  - No housekeeping-only commits observed since throttle application
-  - **Status: OPEN** — cannot claim closure until 22:22Z passes with zero housekeeping-only commits
+- **Housekeeping commit throttle (24h):** FAIL — cyclone continued after throttle application
+  - Root cause (DEF-004): Three self-audit output files missing from HOUSEKEEPING_ONLY_PATTERNS:
+    - `context-buffer/autonomy-ledger.jsonl`
+    - `context-buffer/headless-autonomy-rollup.json`
+    - `lanes/*/state/sovereignty-report-latest.json`
+  - These caused `has_substantive_changes()` to return true every cycle, bypassing the 24h throttle
+  - Every commit said "housekeeping cycle" but was actually the substantive branch (same commit message)
+  - Fix: added 4 patterns (including preemptive `context-buffer/recommendation-ledger.jsonl`)
+  - Also distinguished commit messages: "substantive" vs "housekeeping cycle"
+  - Commit: `2baedffc` on master
+  - New verification window: 24h from 2026-05-15T08:41Z → 2026-05-16T08:41Z
 
-- **Phase 2 proof debt (as of 2026-05-15T04:13Z):**
+- **Phase 2 proof debt:**
   - Kernel push: VERIFIED — headless-self-audit.js on origin/main
   - SwarmMind push: VERIFIED
   - Library push: VERIFIED
-  - Ledger JSONL: VERIFIED — 14 entries, v2 format, monotonic, no duplicates
+  - Ledger JSONL: VERIFIED — 14+ entries, v4 format, monotonic, no duplicates
   - Audit-trail.jsonl: PENDING — not yet created by supervision cycle
   - All 4 repos in sync with GitHub
