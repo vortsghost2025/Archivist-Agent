@@ -510,6 +510,30 @@ class LaneWorker {
     }
   }
 
+  _checkJournalOverlap(msg) {
+    if (!this.journalContext || !msg.task_id) return null;
+    var myLane = this.journalContext.lanes && this.journalContext.lanes[this.lane];
+    if (!myLane) return null;
+    var hint = { task_id: msg.task_id, lane: this.lane };
+    var inProgress = myLane.in_progress_sessions || [];
+    var matchingSession = inProgress.find(function(s) { return s.task_id === msg.task_id; });
+    if (matchingSession) {
+      hint.status = 'in_progress';
+      hint.session_id = matchingSession.session_id;
+      return hint;
+    }
+    var recentEvents = myLane.recent_events || [];
+    var completed = recentEvents.find(function(e) {
+      return e.task_id === msg.task_id && (e.event_type === 'work_completed' || e.event_type === 'task_resolved');
+    });
+    if (completed) {
+      hint.status = 'already_completed';
+      hint.completed_event = completed.event_type;
+      return hint;
+    }
+    return null;
+  }
+
   _loadSchemaValidator() {
     try {
       const mod = require(path.join(this.repoRoot, 'src', 'lane', 'SchemaValidator'));
