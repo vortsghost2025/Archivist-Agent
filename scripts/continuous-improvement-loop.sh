@@ -25,7 +25,7 @@ esac
 
 IMPROVEMENT_TASKS="stale-file-cleanup hygiene-scan inbox-process journal-backfill git-housekeeping sovereignty-verify heartbeat-refresh broadcast-sync"
 
-HOUSEKEEPING_ONLY_PATTERNS="lanes/.*/journal/.*.jsonl lanes/.*/state/task-chain-state.json lanes/.*/state/active-owner.json lanes/.*/inbox/heartbeat-.*.json lanes/.*/outbox/.*-cycle-report-.*.json lanes/broadcast/hygiene/latest.json lanes/broadcast/system_state.json lanes/broadcast/operator_alert_latest.json context-buffer/sync-reports/.*.json logs/contradiction-adjudicator.json .lane-watch-timestamp"
+HOUSEKEEPING_ONLY_PATTERNS="lanes/.*/journal/.*.jsonl lanes/.*/state/task-chain-state.json lanes/.*/state/active-owner.json lanes/.*/inbox/heartbeat-.*.json lanes/.*/outbox/.*-cycle-report-.*.json lanes/broadcast/hygiene/latest.json lanes/broadcast/system_state.json lanes/broadcast/operator_alert_latest.json context-buffer/sync-reports/.*.json logs/.* .lane-watch-timestamp"
 
 task_stale_file_cleanup() {
 local lane="$1" repo="$2" dir="$REPOS_DIR/$repo"
