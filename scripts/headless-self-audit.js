@@ -366,7 +366,7 @@ function testBroadcastDelivery() {
       return results;
     }
 
-    runCmd(`node ${relayScript} --lane archivist --once 2>&1`, { cwd: LANE_ROOTS.archivist, timeout: 30000 });
+    runCmd(`node ${relayScript} --lane archivist --apply --once 2>&1`, { cwd: LANE_ROOTS.archivist, timeout: 30000 });
 
     const targetLanes = SERVICED_LANES.filter(l => l !== 'archivist');
     results.expected_count = targetLanes.length;
