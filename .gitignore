@@ -81,6 +81,9 @@ lanes/*/outbox/
 # Cursor IDE settings
 .cursor/settings.json
 
+# Generated sync snapshots (accumulated tool output, not canonical state)
+context-buffer/sync-reports/
+
 # Ubuntu error artifacts
 context-buffer/I'm on Ubuntu and can't write direc.txt
 
