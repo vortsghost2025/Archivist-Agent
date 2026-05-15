@@ -15,7 +15,8 @@
     "executor-watcher.js",
     "post-compact-audit.js",
     "headless-self-audit.js",
-    "node-version-guard.js"
+    "node-version-guard.js",
+    "sync-canonical-scripts.js"
   ],
   "shared_schemas": [
     "schemas/inbox-message-v1.json",
