@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-05-15T05:12:39.377Z",
+  "generated_at": "2026-05-15T05:29:11.030Z",
   "window_hours": 24,
-  "cycle_count": 17,
-  "topology_stability_pct": 94,
-  "drift_incidents": 12,
+  "cycle_count": 19,
+  "topology_stability_pct": 95,
+  "drift_incidents": 14,
   "broadcast_proof_pass_rate": 80,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 12,
-  "cognition_needed_pct": 71,
+  "cognition_needed_count": 14,
+  "cognition_needed_pct": 74,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 12
+      "count": 14
     },
     {
       "type": "P2:stale_task",
@@ -33,24 +33,24 @@
   "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
   "substrate_status": "Degraded — cognition frequently needed",
   "recommendation_metrics": {
-    "new_24h": 1,
-    "resolved_24h": 0,
+    "new_24h": 2,
+    "resolved_24h": 1,
     "active_unresolved": 1,
-    "total_suppressed": 0,
+    "total_suppressed": 1,
     "recommendation_precision": null,
     "false_positive_rate": null,
-    "operator_attention_required": 0,
+    "operator_attention_required": 1,
     "archivist_action_yield": null,
     "top_unresolved": [
       {
-        "type": "REVIEW_DRIFT",
+        "type": "CRASH_LOOP_DETECTED",
         "lanes": [
-          "swarmmind"
+          "kernel"
         ],
         "state": "NEW",
         "count": 1
       }
     ]
   },
-  "verdict": "Under pressure — cognition frequently requested, review escalation policy"
+  "verdict": "Attention required — P0 or operator-targeted issues unresolved"
 }

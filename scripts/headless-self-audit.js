@@ -708,9 +708,14 @@ function buildDedupeKey(rec) {
   return `${reasonClass}:${laneKey}`;
 }
 
+function getRecLedgerPath() {
+  return process.env.REC_LEDGER || path.join(__dirname, '..', 'context-buffer', 'recommendation-ledger.jsonl');
+}
+
 function loadRecommendationLedger() {
-  if (!fs.existsSync(REC_LEDGER_PATH)) return [];
-  const lines = fs.readFileSync(REC_LEDGER_PATH, 'utf8').split('\n').filter(Boolean);
+  const ledgerPath = getRecLedgerPath();
+  if (!fs.existsSync(ledgerPath)) return [];
+  const lines = fs.readFileSync(ledgerPath, 'utf8').split('\n').filter(Boolean);
   const entries = [];
   for (const line of lines) {
     try { entries.push(JSON.parse(line)); } catch (_) { /* skip malformed */ }
@@ -719,9 +724,10 @@ function loadRecommendationLedger() {
 }
 
 function writeRecommendationLedger(entries) {
-  const dir = path.dirname(REC_LEDGER_PATH);
+  const ledgerPath = getRecLedgerPath();
+  const dir = path.dirname(ledgerPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(REC_LEDGER_PATH, entries.map(e => JSON.stringify(e)).join('\n') + '\n', 'utf8');
+  fs.writeFileSync(ledgerPath, entries.map(e => JSON.stringify(e)).join('\n') + '\n', 'utf8');
 }
 
 function updateRecommendationLedger(newPackets, cycleId) {
@@ -948,7 +954,7 @@ function runFullAudit(opts) {
   });
   auditResults.cognition_handoff = emitCognitionHandoff(unsuppressedRecs, cycleId);
 
-  auditResults.rollup = buildEnhancedRollup(LEDGER_PATH, REC_LEDGER_PATH, 24);
+  auditResults.rollup = buildEnhancedRollup(LEDGER_PATH, getRecLedgerPath(), 24);
 
   if (!opts.quiet) {
     if (opts.json) {
@@ -1026,7 +1032,7 @@ module.exports = {
   checkAgentActivationNeeded, testBroadcastDelivery, checkExecutorDependencies,
   buildRecommendationPackets, buildRollup, buildEnhancedRollup,
   emitCognitionHandoff, buildDedupeKey, updateRecommendationLedger,
-  recordDisposition, loadRecommendationLedger,
+  recordDisposition, loadRecommendationLedger, getRecLedgerPath,
   SERVICED_LANES, VIRTUAL_LANES, REQUIRED_EXECUTOR_FILES,
   RECOMMENDATION_TYPES, REC_LIFECYCLE_STATES, REC_DISPOSITIONS,
   REC_LEDGER_PATH, DEDUPE_SUPPRESS_CYCLES, AUDIT_VERSION
