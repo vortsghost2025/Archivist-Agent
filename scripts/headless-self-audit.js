@@ -934,7 +934,7 @@ async function summarizeJournalWithLocalModel(rollup) {
       maxTokens: 80,
       temperature: 0.2,
       system: 'You summarize autonomous infrastructure status in 1-2 concise sentences. Focus on what matters for the operator.',
-      timeoutMs: 90000,
+      timeoutMs: 120000,
     });
     return result.content || null;
   } catch (_) { return null; }

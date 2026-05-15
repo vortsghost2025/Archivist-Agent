@@ -81,14 +81,19 @@ async function callLocalModel(prompt, opts = {}) {
       'Content-Type': 'application/json',
       'Content-Length': Buffer.byteLength(body),
     },
-    timeout: timeoutMs,
   };
 
   return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      req.destroy();
+      reject(new Error(`Ollama request timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+
     const req = httpModule.request(reqOptions, (res) => {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => {
+        clearTimeout(timer);
         if (res.statusCode !== 200) {
           return reject(new Error(`Ollama ${res.statusCode}: ${data.slice(0, 500)}`));
         }
@@ -108,12 +113,8 @@ async function callLocalModel(prompt, opts = {}) {
       });
     });
 
-    req.on('timeout', () => {
-      req.destroy();
-      reject(new Error(`Ollama request timed out after ${timeoutMs}ms`));
-    });
-
     req.on('error', (e) => {
+      clearTimeout(timer);
       reject(new Error(`Ollama connection error: ${e.message}`));
     });
 
