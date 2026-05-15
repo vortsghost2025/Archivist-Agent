@@ -9,7 +9,7 @@ const { syncAndGuard } = require('./sync-canonical-scripts');
 const { LaneDiscovery } = require('./util/lane-discovery');
 
 let localInference = null;
-try { localInference = require('./local-inference'); } catch (_) {}
+try { localInference = require('./local-inference'); } catch (e) { if (process.env.DEBUG_LOCAL_INFERENCE) console.error('[AUDIT] local-inference load failed:', e.message); }
 const AUDIT_VERSION = '5.0.0';
 const LEDGER_PATH = process.env.AUTONOMY_LEDGER || path.join(__dirname, '..', 'context-buffer', 'autonomy-ledger.jsonl');
 const ROLLUP_PATH = process.env.AUTONOMY_ROLLUP || path.join(__dirname, '..', 'context-buffer', 'headless-autonomy-rollup.json');
@@ -934,7 +934,7 @@ async function summarizeJournalWithLocalModel(rollup) {
       maxTokens: 80,
       temperature: 0.2,
       system: 'You summarize autonomous infrastructure status in 1-2 concise sentences. Focus on what matters for the operator.',
-      timeoutMs: 60000,
+      timeoutMs: 90000,
     });
     return result.content || null;
   } catch (_) { return null; }
@@ -1037,6 +1037,10 @@ auditResults.rollup = buildEnhancedRollup(LEDGER_PATH, getRecLedgerPath(), 24);
   if (auditResults.ai_summary) {
     auditResults.rollup.ai_summary = auditResults.ai_summary;
     try { fs.writeFileSync(ROLLUP_PATH, JSON.stringify(auditResults.rollup, null, 2), 'utf8'); } catch (_) {}
+  }
+
+  if (auditResults.ai_summary) {
+    entry.ai_summary = auditResults.ai_summary;
   }
 
   if (!opts.quiet) {

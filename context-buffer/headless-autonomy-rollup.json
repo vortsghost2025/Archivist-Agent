@@ -1,21 +1,25 @@
 {
-  "generated_at": "2026-05-15T21:01:04.795Z",
+  "generated_at": "2026-05-15T21:29:17.724Z",
   "window_hours": 24,
-  "cycle_count": 66,
-  "topology_stability_pct": 98,
-  "drift_incidents": 34,
+  "cycle_count": 70,
+  "topology_stability_pct": 99,
+  "drift_incidents": 38,
   "broadcast_proof_pass_rate": 89,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 34,
-  "cognition_needed_pct": 52,
+  "cognition_needed_count": 38,
+  "cognition_needed_pct": 54,
   "cognition_handoff_emitted_count": 0,
   "cognition_handoff_emitted_pct": 0,
-  "cognition_handoff_suppressed_count": 15,
-  "cognition_handoff_suppressed_pct": 23,
+  "cognition_handoff_suppressed_count": 19,
+  "cognition_handoff_suppressed_pct": 27,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
       "count": 27
+    },
+    {
+      "type": "P1:convergence_review",
+      "count": 11
     },
     {
       "type": "P2:stale_task",
@@ -24,10 +28,6 @@
     {
       "type": "P0:stale_task",
       "count": 8
-    },
-    {
-      "type": "P1:convergence_review",
-      "count": 7
     },
     {
       "type": "P1:service_topology_violation",
