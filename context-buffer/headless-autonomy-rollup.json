@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-05-15T22:47:14.682Z",
+  "generated_at": "2026-05-15T23:04:16.887Z",
   "window_hours": 24,
-  "cycle_count": 76,
+  "cycle_count": 77,
   "topology_stability_pct": 99,
-  "drift_incidents": 43,
-  "broadcast_proof_pass_rate": 90,
+  "drift_incidents": 44,
+  "broadcast_proof_pass_rate": 91,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 43,
+  "cognition_needed_count": 44,
   "cognition_needed_pct": 57,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 1,
-  "cognition_handoff_suppressed_count": 23,
-  "cognition_handoff_suppressed_pct": 30,
+  "cognition_handoff_suppressed_count": 24,
+  "cognition_handoff_suppressed_pct": 31,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
@@ -19,7 +19,7 @@
     },
     {
       "type": "P1:convergence_review",
-      "count": 15
+      "count": 16
     },
     {
       "type": "P2:stale_task",
@@ -41,10 +41,10 @@
     "resolved_24h": 3,
     "active_unresolved": 0,
     "total_suppressed": 1,
-    "recommendation_precision": null,
-    "false_positive_rate": null,
+    "recommendation_precision": 100,
+    "false_positive_rate": 0,
     "operator_attention_required": 0,
-    "archivist_action_yield": null,
+    "archivist_action_yield": 100,
     "top_unresolved": []
   },
   "verdict": "Substrate stable — all invariants green, autonomous operation normal"
