@@ -23,7 +23,7 @@ archivist) echo "Archivist-Agent" ;;
 esac
 }
 
-IMPROVEMENT_TASKS="stale-file-cleanup hygiene-scan inbox-process journal-backfill git-housekeeping sovereignty-verify heartbeat-refresh broadcast-sync self-audit"
+IMPROVEMENT_TASKS="stale-file-cleanup hygiene-scan inbox-process inbox-retention journal-backfill git-housekeeping sovereignty-verify heartbeat-refresh broadcast-sync self-audit"
 
 HOUSEKEEPING_ONLY_PATTERNS="lanes/.*/journal/.*.jsonl lanes/.*/state/task-chain-state.json lanes/.*/state/active-owner.json lanes/.*/state/sovereignty-report-latest.json lanes/.*/inbox/heartbeat-.*.json lanes/.*/outbox/.*-cycle-report-.*.json lanes/broadcast/hygiene/latest.json lanes/broadcast/system_state.json lanes/broadcast/operator_alert_latest.json context-buffer/autonomy-ledger.jsonl context-buffer/headless-autonomy-rollup.json context-buffer/recommendation-ledger.jsonl context-buffer/sync-reports/.*.json logs/.* .lane-watch-timestamp"
 
@@ -60,9 +60,17 @@ log "[CI:$lane] Inbox processing..."
 timeout 60 $NODE "$dir/scripts/autonomous-executor.js" "$lane" --apply --once 2>&1 | tail -3 >> "$CYCLE_LOG" || true
 }
 
+task_inbox_retention() {
+ local lane="$1" repo="$2" dir="$REPOS_DIR/$repo"
+ log "[CI:$lane] Inbox retention..."
+ if [ -f "$dir/scripts/inbox-retention.sh" ]; then
+  timeout 30 bash "$dir/scripts/inbox-retention.sh" 24 2>&1 | tail -1 >> "$CYCLE_LOG" || true
+ fi
+}
+
 task_journal_backfill() {
-local lane="$1" repo="$2" dir="$REPOS_DIR/$repo"
-log "[CI:$lane] Journal backfill..."
+ local lane="$1" repo="$2" dir="$REPOS_DIR/$repo"
+ log "[CI:$lane] Journal backfill..."
 if [ -f "$dir/scripts/store-journal.js" ]; then
 timeout 30 $NODE "$dir/scripts/store-journal.js" daily 2>&1 | tail -1 >> "$CYCLE_LOG" || true
 fi

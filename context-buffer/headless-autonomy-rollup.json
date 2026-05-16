@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-05-16T00:29:26.319Z",
+  "generated_at": "2026-05-16T01:03:27.853Z",
   "window_hours": 24,
   "cycle_count": 80,
-  "topology_stability_pct": 99,
+  "topology_stability_pct": 100,
   "drift_incidents": 47,
   "broadcast_proof_pass_rate": 91,
   "dependency_validation_pass_rate": 100,
@@ -10,28 +10,20 @@
   "cognition_needed_pct": 59,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 1,
-  "cognition_handoff_suppressed_count": 27,
-  "cognition_handoff_suppressed_pct": 34,
+  "cognition_handoff_suppressed_count": 28,
+  "cognition_handoff_suppressed_pct": 35,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 28
+      "count": 27
     },
     {
       "type": "P1:convergence_review",
-      "count": 19
-    },
-    {
-      "type": "P2:stale_task",
-      "count": 9
+      "count": 20
     },
     {
       "type": "P0:stale_task",
       "count": 8
-    },
-    {
-      "type": "P1:service_topology_violation",
-      "count": 1
     }
   ],
   "last_cycle_summary": "drift: EXPECTED_DRIFT_CANONICAL_CHANGED; cognition: 1 triggers.",
