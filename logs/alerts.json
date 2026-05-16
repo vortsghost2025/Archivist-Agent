@@ -1,3 +1,16 @@
 {
-  "history": []
+  "history": [
+    {
+      "id": "ALERT-1778893503743-ac9476e1",
+      "timestamp": "2026-05-16T01:05:03.743Z",
+      "type": "auto_resolve_rate_drop",
+      "severity": "MEDIUM",
+      "message": "Auto-resolve rate < threshold: 0.00 < 50",
+      "metric_value": 0,
+      "threshold": 50,
+      "comparison": "below",
+      "acknowledged": false,
+      "resolved_at": null
+    }
+  ]
 }
