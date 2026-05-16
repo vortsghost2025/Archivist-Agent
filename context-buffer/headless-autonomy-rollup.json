@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-05-16T07:16:12.970Z",
+  "generated_at": "2026-05-16T07:49:00.266Z",
   "window_hours": 24,
   "cycle_count": 65,
   "topology_stability_pct": 100,
-  "drift_incidents": 38,
+  "drift_incidents": 40,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 38,
-  "cognition_needed_pct": 58,
+  "cognition_needed_count": 40,
+  "cognition_needed_pct": 62,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 2,
-  "cognition_handoff_suppressed_count": 37,
-  "cognition_handoff_suppressed_pct": 57,
+  "cognition_handoff_suppressed_count": 39,
+  "cognition_handoff_suppressed_pct": 60,
   "top_recommendation_types": [
     {
       "type": "P1:convergence_review",
-      "count": 37
+      "count": 39
     },
     {
       "type": "P1:canonical_drift",
@@ -26,7 +26,7 @@
   "substrate_status": "Degraded — cognition frequently needed",
   "recommendation_metrics": {
     "new_24h": 1,
-    "resolved_24h": 2,
+    "resolved_24h": 1,
     "active_unresolved": 0,
     "total_suppressed": 1,
     "recommendation_precision": 100,
