@@ -1,35 +1,48 @@
 {
-  "generated_at": "2026-05-16T22:15:00.385Z",
+  "generated_at": "2026-05-16T22:48:24.506Z",
   "window_hours": 24,
   "cycle_count": 79,
   "topology_stability_pct": 100,
-  "drift_incidents": 78,
+  "drift_incidents": 79,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 78,
-  "cognition_needed_pct": 99,
-  "cognition_handoff_emitted_count": 0,
-  "cognition_handoff_emitted_pct": 0,
-  "cognition_handoff_suppressed_count": 78,
-  "cognition_handoff_suppressed_pct": 99,
+  "cognition_needed_count": 79,
+  "cognition_needed_pct": 100,
+  "cognition_handoff_emitted_count": 2,
+  "cognition_handoff_emitted_pct": 3,
+  "cognition_handoff_suppressed_count": 77,
+  "cognition_handoff_suppressed_pct": 97,
   "top_recommendation_types": [
     {
       "type": "P1:convergence_review",
-      "count": 78
+      "count": 77
+    },
+    {
+      "type": "P1:canonical_drift",
+      "count": 2
     }
   ],
-  "last_cycle_summary": "drift: EXPECTED_DRIFT_CANONICAL_CHANGED; cognition: 1 triggers.",
+  "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
   "substrate_status": "Degraded — cognition frequently needed",
   "recommendation_metrics": {
-    "new_24h": 0,
-    "resolved_24h": 1,
-    "active_unresolved": 0,
+    "new_24h": 1,
+    "resolved_24h": 0,
+    "active_unresolved": 1,
     "total_suppressed": 1,
     "recommendation_precision": 100,
     "false_positive_rate": 0,
     "operator_attention_required": 0,
     "archivist_action_yield": 100,
-    "top_unresolved": []
+    "top_unresolved": [
+      {
+        "type": "REVIEW_DRIFT",
+        "lanes": [
+          "library"
+        ],
+        "state": "ONGOING_MONITORED",
+        "count": 2
+      }
+    ]
   },
-  "verdict": "Substrate stable — all invariants green, autonomous operation normal"
+  "verdict": "Substrate stable — minor issues monitored, no cognition pressure"
 }
