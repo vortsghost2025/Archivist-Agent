@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-16T02:11:32.318Z",
+  "generated_at": "2026-05-16T02:45:20.246Z",
   "window_hours": 24,
   "cycle_count": 75,
   "topology_stability_pct": 100,
@@ -10,15 +10,15 @@
   "cognition_needed_pct": 60,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 1,
-  "cognition_handoff_suppressed_count": 30,
-  "cognition_handoff_suppressed_pct": 40,
+  "cognition_handoff_suppressed_count": 31,
+  "cognition_handoff_suppressed_pct": 41,
   "top_recommendation_types": [
     {
-      "type": "P1:canonical_drift",
+      "type": "P1:convergence_review",
       "count": 23
     },
     {
-      "type": "P1:convergence_review",
+      "type": "P1:canonical_drift",
       "count": 22
     }
   ],
