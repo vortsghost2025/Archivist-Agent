@@ -472,6 +472,17 @@ function getLaneHealth() {
 }
 
 // === INBOX/OUTBOX MOVEMENT ===
+function countJsonRecursive(dir) {
+  let count = 0;
+  try {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isFile() && entry.name.endsWith('.json')) count++;
+      else if (entry.isDirectory()) count += countJsonRecursive(path.join(dir, entry.name));
+    }
+  } catch (_) {}
+  return count;
+}
+
 function getInboxOutboxMovement() {
   const movement = {};
   for (const lane of ALL_LANES) {
@@ -485,7 +496,7 @@ function getInboxOutboxMovement() {
       inbox_pending: fs.existsSync(inboxDir) ? fs.readdirSync(inboxDir).filter(f => f.endsWith('.json') && !f.startsWith('heartbeat-')).length : 0,
       outbox_pending: fs.existsSync(outboxDir) ? fs.readdirSync(outboxDir).filter(f => f.endsWith('.json')).length : 0,
       outbox_delivered: fs.existsSync(deliveredDir) ? fs.readdirSync(deliveredDir).filter(f => f.endsWith('.json')).length : 0,
-      inbox_processed: fs.existsSync(processedDir) ? fs.readdirSync(processedDir).filter(f => f.endsWith('.json')).length : 0
+      inbox_processed: fs.existsSync(processedDir) ? countJsonRecursive(processedDir) : 0
     };
   }
   return movement;

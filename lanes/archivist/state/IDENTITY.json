@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "emitted_at": "2026-05-16T01:04:57.753Z",
+  "emitted_at": "2026-05-16T01:51:46.727Z",
   "generator": "emit-identity.js",
   "whoami": {
     "lane_id": "archivist",
@@ -19,22 +19,22 @@
     "will_process": true
   },
   "last_activity": {
-    "commit": "93e9d926",
-    "commit_subject": "[CI:archivist] Auto-commit: housekeeping cycle 20260515-213728",
-    "commit_time": "2026-05-15T21:37:30Z",
+    "commit": "2978d5a2",
+    "commit_subject": "[LANE-1] fix: remove sync-reports from git tracking (CP Rec #1 complete)",
+    "commit_time": "2026-05-15T21:21:51-04:00",
     "branch": "master",
-    "dirty_files": 9,
+    "dirty_files": 6,
     "unpushed_commits": 0
   },
   "health": {
     "inbox_unread": 0,
     "outbox_pending": 0,
-    "heartbeat_age_sec": 19108,
-    "garbage_collect": false
+    "heartbeat_age_sec": 17490,
+    "garbage_collect": true
   },
   "inbox": {
-    "unprocessed": 4,
-    "processed": 16,
+    "unprocessed": 3,
+    "processed": 31,
     "invalid": 3
   },
   "governance": {
@@ -44,9 +44,9 @@
   "system": {
     "topology_ok": true,
     "drift_status": "EXPECTED_DRIFT_CANONICAL_CHANGED",
-    "drift_aligned": 57,
+    "drift_aligned": 60,
     "drift_count": 3,
     "drift_regressions": null,
-    "ledger_time": "2026-05-15T21:29:17.699Z"
+    "ledger_time": "2026-05-16T00:29:26.313Z"
   }
 }

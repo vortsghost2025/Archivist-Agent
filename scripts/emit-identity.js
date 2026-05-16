@@ -47,14 +47,25 @@ function latestLedgerEntry() {
   } catch (_) { return null; }
 }
 
+function countJsonRecursive(dir) {
+  let count = 0;
+  try {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isFile() && entry.name.endsWith('.json')) count++;
+      else if (entry.isDirectory()) count += countJsonRecursive(path.join(dir, entry.name));
+    }
+  } catch (_) {}
+  return count;
+}
+
 function countInbox(root, lane) {
   const inboxDir = path.join(root, 'lanes', lane, 'inbox');
   let unprocessed = 0;
-  try { unprocessed = fs.readdirSync(inboxDir).filter(f => f.endsWith('.json')).length; } catch (_) {}
+  try { unprocessed = fs.readdirSync(inboxDir).filter(f => f.endsWith('.json') && !f.startsWith('heartbeat-')).length; } catch (_) {}
   let processed = 0;
-  try { processed = fs.readdirSync(path.join(inboxDir, 'processed')).filter(f => f.endsWith('.json')).length; } catch (_) {}
+  try { processed = countJsonRecursive(path.join(inboxDir, 'processed')); } catch (_) {}
   let invalid = 0;
-  try { invalid = fs.readdirSync(path.join(inboxDir, 'quarantine')).filter(f => f.endsWith('.json')).length; } catch (_) {}
+  try { invalid = countJsonRecursive(path.join(inboxDir, 'quarantine')); } catch (_) {}
   return { unprocessed, processed, invalid };
 }
 

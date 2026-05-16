@@ -46,26 +46,38 @@ if (!fs.existsSync(inboxDir) || !fs.statSync(inboxDir).isDirectory()) {
   process.exit(2);
 }
 
-const identityPath = path.join(repoRoot, ".identity", "keys.json");
-if (!fs.existsSync(identityPath)) {
-  console.error(`FAIL: missing identity file: ${identityPath}`);
-  process.exit(2);
+const identityDir = path.join(repoRoot, ".identity");
+const identityPath = path.join(identityDir, "keys.json");
+let keyId = null;
+let identity = null;
+
+if (fs.existsSync(identityPath)) {
+  identity = JSON.parse(fs.readFileSync(identityPath, "utf8"));
+  keyId =
+    identity?.key_id ||
+    identity?.public_key?.key_id ||
+    identity?.identity?.key_id ||
+    identity?.identity?.key_fingerprint;
+} else {
+  const pubPath = path.join(identityDir, "public.pem");
+  const privPath = path.join(identityDir, "private.pem");
+  if (!fs.existsSync(pubPath) || !fs.existsSync(privPath)) {
+    console.error(`FAIL: no keys.json and no .pem pair in ${identityDir}`);
+    process.exit(2);
+  }
+  keyId = crypto.createHash("sha256").update(fs.readFileSync(pubPath)).digest("hex").slice(0, 16);
 }
 
-const identity = JSON.parse(fs.readFileSync(identityPath, "utf8"));
-const km = new KeyManager({ laneId, identityDir: path.join(repoRoot, ".identity") });
+const km = new KeyManager({ laneId, identityDir });
 const signer = new Signer();
 const privateKey = km.loadPrivateKey(process.env.LANE_KEY_PASSPHRASE);
 
-const keyId =
-  (km.getPublicKeyInfo && km.getPublicKeyInfo() && km.getPublicKeyInfo().key_id) ||
-  identity?.key_id ||
-  identity?.public_key?.key_id ||
-  identity?.identity?.key_id ||
-  identity?.identity?.key_fingerprint;
+if (!keyId) {
+  keyId = (km.getPublicKeyInfo && km.getPublicKeyInfo() && km.getPublicKeyInfo().key_id) || null;
+}
 
 if (!keyId) {
-  console.error("FAIL: no key_id/key_fingerprint found in .identity/keys.json");
+  console.error("FAIL: no key_id/key_fingerprint found in .identity/");
   process.exit(2);
 }
 
