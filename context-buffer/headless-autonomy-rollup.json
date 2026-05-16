@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-05-16T01:37:47.961Z",
+  "generated_at": "2026-05-16T02:11:32.318Z",
   "window_hours": 24,
-  "cycle_count": 78,
+  "cycle_count": 75,
   "topology_stability_pct": 100,
-  "drift_incidents": 46,
+  "drift_incidents": 45,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 46,
-  "cognition_needed_pct": 59,
+  "cognition_needed_count": 45,
+  "cognition_needed_pct": 60,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 1,
-  "cognition_handoff_suppressed_count": 29,
-  "cognition_handoff_suppressed_pct": 37,
+  "cognition_handoff_suppressed_count": 30,
+  "cognition_handoff_suppressed_pct": 40,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 25
+      "count": 23
     },
     {
       "type": "P1:convergence_review",
-      "count": 21
+      "count": 22
     }
   ],
   "last_cycle_summary": "drift: EXPECTED_DRIFT_CANONICAL_CHANGED; cognition: 1 triggers.",
