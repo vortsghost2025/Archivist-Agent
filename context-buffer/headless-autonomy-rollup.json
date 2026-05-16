@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-05-16T15:22:28.805Z",
+  "generated_at": "2026-05-16T15:55:46.466Z",
   "window_hours": 24,
-  "cycle_count": 78,
+  "cycle_count": 79,
   "topology_stability_pct": 100,
-  "drift_incidents": 68,
+  "drift_incidents": 70,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 68,
-  "cognition_needed_pct": 87,
+  "cognition_needed_count": 70,
+  "cognition_needed_pct": 89,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 1,
-  "cognition_handoff_suppressed_count": 67,
-  "cognition_handoff_suppressed_pct": 86,
+  "cognition_handoff_suppressed_count": 69,
+  "cognition_handoff_suppressed_pct": 87,
   "top_recommendation_types": [
     {
       "type": "P1:convergence_review",
-      "count": 67
+      "count": 69
     },
     {
       "type": "P1:canonical_drift",
