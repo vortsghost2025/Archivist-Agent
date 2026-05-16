@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-05-16T08:22:26.430Z",
+  "generated_at": "2026-05-16T08:54:38.691Z",
   "window_hours": 24,
-  "cycle_count": 66,
+  "cycle_count": 67,
   "topology_stability_pct": 100,
-  "drift_incidents": 42,
+  "drift_incidents": 44,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 42,
-  "cognition_needed_pct": 64,
+  "cognition_needed_count": 44,
+  "cognition_needed_pct": 66,
   "cognition_handoff_emitted_count": 1,
-  "cognition_handoff_emitted_pct": 2,
-  "cognition_handoff_suppressed_count": 41,
-  "cognition_handoff_suppressed_pct": 62,
+  "cognition_handoff_emitted_pct": 1,
+  "cognition_handoff_suppressed_count": 43,
+  "cognition_handoff_suppressed_pct": 64,
   "top_recommendation_types": [
     {
       "type": "P1:convergence_review",
-      "count": 41
+      "count": 43
     },
     {
       "type": "P1:canonical_drift",
@@ -35,6 +35,5 @@
     "archivist_action_yield": 100,
     "top_unresolved": []
   },
-  "verdict": "Substrate stable — all invariants green, autonomous operation normal",
-  "ai_summary": "The system is operating at a high level of autonomy with 64% cognitive load and no active unresolved incidents. However, it remains in a degraded state due to frequent need for operator intervention."
+  "verdict": "Substrate stable — all invariants green, autonomous operation normal"
 }
