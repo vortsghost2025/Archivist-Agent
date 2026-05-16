@@ -72,6 +72,19 @@
         "outbox": "S:/self-organizing-library/lanes/library/outbox",
         "processed": "S:/self-organizing-library/lanes/library/inbox/processed"
       }
+    },
+    "kucoin": {
+      "lane_id": "kucoin",
+      "role": "trading",
+      "local_path": "S:/kucoin-lane",
+      "repo": "https://github.com/vortsghost2025/kucoin-lane",
+      "branch": "main",
+      "mailboxes": {
+        "inbox": "S:/Archivist-Agent/lanes/kucoin/inbox",
+        "outbox": "S:/Archivist-Agent/lanes/kucoin/outbox",
+        "processed": "S:/Archivist-Agent/lanes/kucoin/inbox/processed"
+      },
+      "notes": "Lane 4: KuCoin margin trading bot. Extracted from Deliberate-AI-Ensemble. Fail-safe=FLAT."
     }
   },
   "broadcast": {
