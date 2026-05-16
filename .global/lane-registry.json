@@ -84,7 +84,7 @@
         "outbox": "S:/Archivist-Agent/lanes/kucoin/outbox",
         "processed": "S:/Archivist-Agent/lanes/kucoin/inbox/processed"
       },
-      "notes": "Lane 4: KuCoin margin trading bot. Extracted from Deliberate-AI-Ensemble. Fail-safe=FLAT."
+      "notes": "KuCoin margin trading bot. Extracted from Deliberate-AI-Ensemble. Fail-safe=FLAT. Lane number governed by Control Plane registry."
     }
   },
   "broadcast": {
