@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-05-17T20:51:37.461Z",
+  "generated_at": "2026-05-17T21:22:03.665Z",
   "window_hours": 24,
-  "cycle_count": 106,
+  "cycle_count": 107,
   "topology_stability_pct": 100,
-  "drift_incidents": 106,
+  "drift_incidents": 107,
   "broadcast_proof_pass_rate": null,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 106,
+  "cognition_needed_count": 107,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 2,
   "cognition_handoff_emitted_pct": 2,
-  "cognition_handoff_suppressed_count": 104,
+  "cognition_handoff_suppressed_count": 105,
   "cognition_handoff_suppressed_pct": 98,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 100
+      "count": 103
     },
     {
       "type": "P1:convergence_review",
-      "count": 6
+      "count": 4
     }
   ],
   "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
@@ -40,10 +40,10 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 100
+        "count": 103
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The autonomous infrastructure is operating at a high level of stability with minimal drift incidents and suppressed issues. However, it remains in a degraded state due to frequent cognitive needs, which may impact performance if not addressed promptly."
+  "ai_summary": "The autonomous infrastructure is experiencing frequent drift incidents and requires significant cognitive intervention, leading to a degraded status. Despite the substrate being stable with minor issues monitored, the lack of resolved recommendations indicates ongoing operational challenges."
 }
