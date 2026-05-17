@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17T18:18:52.669Z",
+  "generated_at": "2026-05-17T18:33:23.198Z",
   "window_hours": 24,
   "cycle_count": 100,
   "topology_stability_pct": 100,
@@ -15,11 +15,11 @@
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 85
+      "count": 86
     },
     {
       "type": "P1:convergence_review",
-      "count": 15
+      "count": 14
     }
   ],
   "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
@@ -40,10 +40,10 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 85
+        "count": 86
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The autonomous infrastructure is operating at full capacity with minimal cognitive input required. However, it is experiencing drift incidents and a single unresolved issue, indicating some degradation that requires monitoring. Overall, the substrate remains stable with only minor issues being suppressed."
+  "ai_summary": "The system is experiencing frequent drift incidents and requires constant cognitive intervention to maintain stability. While the substrate remains stable with minimal issues, the high need for cognition indicates ongoing operational challenges that require immediate attention."
 }

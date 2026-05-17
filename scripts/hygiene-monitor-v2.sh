@@ -38,7 +38,7 @@ done
 
 # 4. Failed systemd services
 FAILED_SERVICES_RAW=$(systemctl --user list-units --type=service --state=failed 2>/dev/null || true)
-FAILED_SERVICES=$(echo "$FAILED_SERVICES_RAW" | grep -Ev "^$|^ UNIT LOAD|^[0-9]+ loaded units listed" || true)
+FAILED_SERVICES=$(echo "$FAILED_SERVICES_RAW" | grep -Ev "^$|^\s*UNIT LOAD|^[0-9]+ loaded units listed" || true)
 
 # 5. Queue pressure detection
 declare -a QUEUE_PRESSURE
