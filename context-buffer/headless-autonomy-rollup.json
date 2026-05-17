@@ -1,25 +1,25 @@
 {
-  "generated_at": "2026-05-17T13:38:52.063Z",
+  "generated_at": "2026-05-17T14:10:50.837Z",
   "window_hours": 24,
-  "cycle_count": 90,
+  "cycle_count": 91,
   "topology_stability_pct": 100,
-  "drift_incidents": 90,
+  "drift_incidents": 91,
   "broadcast_proof_pass_rate": null,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 90,
+  "cognition_needed_count": 91,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 2,
   "cognition_handoff_emitted_pct": 2,
-  "cognition_handoff_suppressed_count": 88,
+  "cognition_handoff_suppressed_count": 89,
   "cognition_handoff_suppressed_pct": 98,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 58
+      "count": 61
     },
     {
       "type": "P1:convergence_review",
-      "count": 32
+      "count": 30
     }
   ],
   "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
@@ -40,10 +40,10 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 58
+        "count": 61
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The system is operating at 90 cycles per hour with full topology and dependency coverage. However, it requires frequent cognition due to drift incidents and unresolved issues, indicating a degraded status despite the substrate being stable."
+  "ai_summary": "The autonomous infrastructure is operating at a high level of stability with minimal issues. However, it requires frequent cognitive intervention to address drift incidents and new recommendations, indicating ongoing challenges that need attention."
 }
