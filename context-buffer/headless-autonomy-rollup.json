@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-17T06:00:17.358Z",
+  "generated_at": "2026-05-17T06:34:43.977Z",
   "window_hours": 24,
   "cycle_count": 87,
   "topology_stability_pct": 100,
@@ -15,11 +15,11 @@
   "top_recommendation_types": [
     {
       "type": "P1:convergence_review",
-      "count": 60
+      "count": 58
     },
     {
       "type": "P1:canonical_drift",
-      "count": 27
+      "count": 29
     }
   ],
   "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
@@ -40,7 +40,7 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 27
+        "count": 29
       }
     ]
   },
