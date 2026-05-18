@@ -35,6 +35,15 @@
     "expires_at": null,
     "revoked_at": null
   },
+  "control_plane": {
+    "lane_id": "control_plane",
+    "key_id": "bc7e06b864676199",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA0yQ75AywXUfSN/tW4UaIB2ZLJ9BWuUAIuEFb1vb5LOI=\n-----END PUBLIC KEY-----",
+    "algorithm": "EdDSA",
+    "registered_at": "2026-05-18T16:31:15.000Z",
+    "expires_at": null,
+    "revoked_at": null
+  },
   "key_lineage": {
     "reconciled_at": "2026-05-06T00:44:26.725Z",
     "reconciled_by": "archivist",
@@ -64,6 +73,12 @@
         "current_key_id": "2effb49ea02dff5b",
         "reason": "Ed25519 migration (Option D). Previous RSA key archived.",
         "rotated_at": "2026-05-11"
+      },
+      "control_plane": {
+        "previous_key_id": null,
+        "current_key_id": "bc7e06b864676199",
+        "reason": "Initial key registration. Control Plane identity established per P10 governance decision (DEFER pending key registration).",
+        "rotated_at": "2026-05-18"
       }
     }
   },
@@ -113,6 +128,6 @@
     "rotation_days": 90,
     "warning_days": 14,
     "grace_days": 7,
-    "last_rotated": "2026-05-11"
+    "last_rotated": "2026-05-18"
   }
 }
