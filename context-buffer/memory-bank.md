@@ -18,6 +18,8 @@ session_id: continuity-2026-05-18
 8. **Governance doc paths**: All governance docs live under `S:/.global/`. The path `S:/BOOTSTRAP.md` is WRONG; correct is `S:/Archivist-Agent/BOOTSTRAP.md` or `S:/.global/BOOTSTRAP.md`.
 9. **Prior-self verification matters**: 5 of 8 SwarmMind checkpoint results from a prior session were declared-not-measured. This is the canonical example of why evidence chains matter.
 10. **Continuity experiment hypothesis is NOT confirmed**: The experiment runs 4–5 days. Any early claim of success is meaning inflation. Label all continuity claims as observation/hypothesis/confirmed-evidence.
+11. **Authority grants require registered identity in trust-store**: No lane can exercise cross-lane authority without a registered key pair in `trust-store.json` and valid JWS RS256 signature. Unsigned proposals are structurally unverifiable regardless of content merit. [VERIFIED_NOW — P10 decision, operator concurred]
+12. **Self-asserted authority metadata is circular authorization**: A message containing `_control_plane_authorized_write: true` is the proposal granting itself the authority it is requesting. Invalid regardless of proposal merit. [VERIFIED_NOW — P10 finding F2]
 
 ## Current Working State (as of 2026-05-18T02:20)
 
@@ -28,6 +30,8 @@ session_id: continuity-2026-05-18
 - **CPS log**: Only 1 test entry. No real drift trend data.
 - **Lane infrastructure**: All lane directories exist. No active blockers. Broadcast active-blocker.json is inactive.
 - **No compaction has occurred yet** in this continuity session.
+- **P10 authority expansion decision**: DEFER PENDING KEY REGISTRATION. Operator concurred. Response written to outbox. Control Plane must register key pair + re-submit with valid signature.
+- **P9 status truth check**: COMPLETE. 13 findings. IDENTITY.json refreshed.
 
 ## Unresolved Constitutional Questions
 
@@ -35,6 +39,7 @@ session_id: continuity-2026-05-18
 2. **What governance nuance will compaction degrade?** Unknown until first compact event. Memory bank is designed to survive compaction — untested.
 3. **RESOLVED**: Lane-worker confidence enforcement (2026-05-13) vs CONFIDENCE_DERIVATION_CONTRACT — reconciled. Added `confidence_derivation` check to lane-worker.js (lines 640-663): if confidence >= 7 and no valid `confidence_derivation` object → PERFORMATIVE_CONFIDENCE flag + cps_log entry. Graduated enforcement (flag only, no block yet). SchemaValidator.js updated to recognize `confidence_derivation: 'object'`. 6 tests pass. Also fixed pre-existing bug: `NON_ASCII_PATTERN` was undefined (line 362 reference without definition — added `const NON_ASCII_PATTERN = /[^\x20-\x7E]/;` before `isEnglishOnly`).
 4. **CPS enforcement loop**: After every response, score correction check, alignment check, drift check. But no real CPS data exists yet. Is the loop ceremonial until a real drift case arises?
+5. **What happens if Control Plane never registers a key pair?** The authority expansion proposal is well-designed but blocked on identity verification. If Control Plane cannot or does not register, the proposal stays deferred indefinitely. Is there a governance mechanism for identity bootstrapping without operator manual intervention?
 
 ## Rejected / Disproven Assumptions
 
