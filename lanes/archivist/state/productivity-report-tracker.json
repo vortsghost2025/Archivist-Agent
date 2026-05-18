@@ -6,10 +6,32 @@
       "category": "incoming_messages",
       "impact": "medium",
       "requested_at": "2026-04-30T13:35:49.848Z",
+      "status": "resolved",
+      "lane": "archivist",
+      "resolved_at": "2026-05-18T16:38:00Z",
+      "resolution": "Quarantined files addressed during P9 remediation. Blocked files reviewed and archived where schema-nonconforming. See commit 75df1718."
+    },
+    {
+      "request_id": "p9-remediation-2026-05-18",
+      "description": "5 EXPIRED_ACK items in governance-verification-registry; productivity tracker 18+ days stale",
+      "category": "governance_drift",
+      "impact": "high",
+      "requested_at": "2026-05-18T16:37:00Z",
+      "status": "completed",
+      "lane": "archivist",
+      "resolved_at": "2026-05-18T16:38:00Z",
+      "resolution": "All 5 PENDING_ACK items escalated to EXPIRED_ACK with documented reasons. Productivity tracker updated. Autonomous lanes not processing (CP operator finding 2026-05-14). Rulings stand unilateral pending lane reactivation."
+    },
+    {
+      "request_id": "cp-key-registration-2026-05-18",
+      "description": "Control Plane key registration in trust-store.json — operator authorized, awaiting CP timestamped message",
+      "category": "key_management",
+      "impact": "high",
+      "requested_at": "2026-05-18T16:38:00Z",
       "status": "pending",
       "lane": "archivist"
     }
   ],
-  "last_report_date": "2026-04-30T14:15:09.976Z",
-  "report_cycle": 2
+  "last_report_date": "2026-05-18T16:38:00Z",
+  "report_cycle": 3
 }
