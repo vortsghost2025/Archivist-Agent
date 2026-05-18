@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-05-18T03:32:00.483Z",
+  "generated_at": "2026-05-18T04:02:20.813Z",
   "window_hours": 24,
-  "cycle_count": 121,
+  "cycle_count": 122,
   "topology_stability_pct": 100,
-  "drift_incidents": 121,
+  "drift_incidents": 122,
   "broadcast_proof_pass_rate": null,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 121,
+  "cognition_needed_count": 122,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 0,
   "cognition_handoff_emitted_pct": 0,
-  "cognition_handoff_suppressed_count": 121,
+  "cognition_handoff_suppressed_count": 122,
   "cognition_handoff_suppressed_pct": 100,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 121
+      "count": 122
     }
   ],
   "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
@@ -36,10 +36,10 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 138
+        "count": 141
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The system is operating at full capacity with 100% topology and dependency coverage, but it's experiencing frequent drift incidents that require operator intervention. Despite this, the substrate remains stable with minimal issues being monitored."
+  "ai_summary": "The system is currently operating at a high level of autonomy with 100% topology and dependency coverage. However, it is experiencing frequent drift incidents (122 in 24 hours), with one unresolved issue remaining. The substrate remains stable, but there are minor issues being monitored that require occasional cognition input."
 }
