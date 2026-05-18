@@ -70,6 +70,7 @@ const TYPE_CHECKS = {
   evidence: 'object',
   evidence_exchange: 'object',
   heartbeat: 'object',
+  confidence_derivation: 'object',
 };
 
 const ISO8601_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;

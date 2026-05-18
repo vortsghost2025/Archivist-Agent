@@ -113,6 +113,10 @@ lanes/*/state/worker-audit.log
 lanes/*/state/traces/
 lanes/*/state/sovereignty-report-*.json
 lanes/*/state/*-report-*.md
+lanes/*/state/task-chain-state.json
+lanes/*/state/heartbeat.json
+lanes/*/state/heartbeat-*.json
+lanes/*/logs/heartbeat*.log
 lanes/*/reports/
 lanes/archivist/journal/
 lanes/kernel/journal/
