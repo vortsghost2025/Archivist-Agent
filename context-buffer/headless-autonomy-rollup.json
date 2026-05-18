@@ -1,21 +1,21 @@
 {
-  "generated_at": "2026-05-18T06:35:21.583Z",
+  "generated_at": "2026-05-18T07:05:48.467Z",
   "window_hours": 24,
-  "cycle_count": 127,
+  "cycle_count": 130,
   "topology_stability_pct": 100,
-  "drift_incidents": 127,
+  "drift_incidents": 130,
   "broadcast_proof_pass_rate": null,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 127,
+  "cognition_needed_count": 130,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 0,
   "cognition_handoff_emitted_pct": 0,
-  "cognition_handoff_suppressed_count": 127,
+  "cognition_handoff_suppressed_count": 130,
   "cognition_handoff_suppressed_pct": 100,
   "top_recommendation_types": [
     {
       "type": "P1:canonical_drift",
-      "count": 127
+      "count": 130
     }
   ],
   "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
@@ -36,7 +36,7 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 156
+        "count": 159
       }
     ]
   },
