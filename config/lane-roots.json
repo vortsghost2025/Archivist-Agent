@@ -1,0 +1,14 @@
+{
+  "lanes": {
+    "archivist": "Archivist-Agent",
+    "kernel": "kernel-lane",
+    "library": "self-organizing-library",
+    "swarmmind": "SwarmMind"
+  },
+  "base_paths": {
+    "windows": "S:/",
+    "unix": "/home/we4free/agent/repos",
+    "relative": ""
+  },
+  "description": "Lane root directories. JS scripts resolve paths using: base_paths[platform] + lanes[lane_id]"
+}

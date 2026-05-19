@@ -1,0 +1,33 @@
+{
+  "name": "archivist-agent",
+  "version": "1.0.0",
+  "description": "Governance root and orchestration lane for the multi-lane constitutional system.",
+  "main": "load-context.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node scripts/run-tests.js",
+    "test:playwright": "playwright test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vortsghost2025/Archivist-Agent.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vortsghost2025/Archivist-Agent/issues"
+  },
+  "homepage": "https://github.com/vortsghost2025/Archivist-Agent#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
+  }
+}

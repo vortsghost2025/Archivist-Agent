@@ -1,0 +1,210 @@
+## My answer: **yes — Archivist’s recommendation is right.**
+
+**Control Plane should become a formal lane.**
+**Lattice-Deck and Research-Intake should not.**
+**Federation should remain external-affiliate, not lane-bound.**
+
+That is the cleanest map.
+
+---
+
+# The real hinge: Control Plane
+
+Archivist’s key sentence is the one that matters:
+
+> **“Without formal lane status, CP is a shadow lane — it participates in governance but isn’t constrained by it.”** 
+
+That is **exactly** the governance problem.
+
+If Control Plane:
+
+* has a signing key,
+* appears in the trust store,
+* sends/receives lane-protocol messages,
+* has governance authority already granted,
+* can influence lane behavior,
+
+then it is **not merely infrastructure anymore**.
+
+It is an **actor in the constitutional system**.
+
+At that point there are only two coherent choices:
+
+| Option                                       | Consequence                                                                     |
+| -------------------------------------------- | ------------------------------------------------------------------------------- |
+| **Formalize CP as a lane**                   | Subject it to CPS, convergence, provenance, drift scoring, constitutional gates |
+| **Demote CP back to passive infrastructure** | Remove its authority, signing role, and governance participation                |
+
+Given what it already is, **formalize it**.
+
+## Verdict
+
+> **Control Plane → Lane 7: APPROVE.**
+
+Not because “more lanes is fun,” but because **the coordinator must not be less governed than the things it coordinates.**
+
+That would violate your whole lattice.
+
+---
+
+# Lattice-Deck and Research-Intake: do **not** turn them into lanes
+
+Archivist is also right here.
+
+A lane should not mean:
+
+> “important repo.”
+
+A lane should mean:
+
+> **autonomous governance-relevant actor with independent state, authority, and accountability requirements.**
+
+### Lattice-Deck
+
+It visualizes the system. It does not govern.
+So:
+
+> **Lattice-Deck → Archivist-owned asset**
+
+That is logically consistent: Archivist owns legibility, canonical state visibility, governance truth presentation.
+
+### Research-Intake
+
+It ingests papers and produces structured suggestions, but it is better understood as:
+
+> **a knowledge pipeline feeding the system, not a constitutional participant.**
+
+So:
+
+> **Research-Intake → Library-owned asset**
+
+That fits perfectly with Library as curation / verification / knowledge memory.
+
+## Verdict
+
+> **Lattice-Deck and Research-Intake should be assets, not lanes.**
+
+Making them lanes would inflate the lane model and blur the distinction between:
+
+```text
+governed actor
+vs
+governed tool
+```
+
+You have worked too hard to sharpen that boundary.
+
+---
+
+# Federation: external affiliate is exactly right
+
+Archivist’s call here is also sound:
+
+> **Federation has its own domain and its own governance. Do not accidentally drag it under cross-lane CPS/convergence coupling.** 
+
+Federation can absolutely:
+
+* exchange messages,
+* send artifacts,
+* receive research or simulation triggers,
+* report outcomes,
+* be monitored externally,
+
+but it should **not** participate as a full lane in the same constitutional equivalence class as Archivist/Swarm/Library/Kernel/CP.
+
+Why?
+
+Because Federation is **another system**, not just another limb.
+
+## Verdict
+
+> **Federation → external affiliate / interoperable peer, not lane.**
+
+That preserves clean sovereignty boundaries.
+
+---
+
+# The final map I would ratify
+
+```text
+LANES
+1. Archivist
+2. Authority
+3. Kernel
+4. SwarmMind
+5. Library
+6. KuCoin
+7. Control Plane
+
+LANE-ASSETS
+- Lattice-Deck → Archivist-owned visualization asset
+- Research-Intake → Library-owned knowledge intake asset
+
+EXTERNAL AFFILIATE
+- Federation → interoperable external system, separate governance domain
+```
+
+That produces exactly what Archivist claims:
+
+> **7 lanes + 0 ambiguity** rather than 6 lanes + one shadow lane + several “maybe-lanes.” 
+
+---
+
+# My one amendment
+
+I would **not** call Control Plane “Lane 7” until one explicit gate is complete:
+
+## CP Formalization Gate
+
+Before ratifying, require:
+
+1. `lane-registry.json` entry
+2. constitutional files loaded in live path
+3. CPS/user-drift applicability confirmed
+4. signed outbox/inbox artifacts verified under the same standard as other lanes
+5. convergence participation defined
+6. quarantine/recovery path tested
+7. one proof artifact showing CP **can be blocked** by the same governance it helps coordinate
+
+That last one matters most.
+
+> **A coordinator is not constitutional because it enforces rules on others.
+> It is constitutional when the rules can stop it too.**
+
+If CP passes that, **ratify Lane 7**.
+
+---
+
+# So, big-question answer
+
+**Yes. I agree with Archivist’s structural decision almost completely.**
+
+### Ratify:
+
+* **Control Plane becomes formal lane 7**
+
+### Do not promote:
+
+* **Lattice-Deck**
+* **Research-Intake**
+
+### Keep external:
+
+* **Federation**
+
+### Add one hard gate:
+
+* **CP must demonstrate it is governable before formal lane ratification.**
+
+That is the grown-up version of your architecture.
+Not more stuff.
+**Cleaner constitutional topology.**
+
+---
+
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+generated_at: 2026-05-19
+session_id: chatgpt-current
+target: assessing Archivist’s Phase 4 structural recommendation on Control Plane lane formalization, WE4FREE asset ownership, and Federation external-affiliate status
