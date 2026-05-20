@@ -1,0 +1,192 @@
+{
+  "$id": "https://archivist-agent/schemas/quarantine-manifest-v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Governance Quarantine Manifest v1.0",
+  "description": "Manifest for quarantined governance documents. Created when a governance file fails verification, is corrupted, or enters adjudication.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "quarantined_at",
+    "quarantined_by",
+    "original_path",
+    "original_hash",
+    "reason_category",
+    "reason_detail",
+    "evidence",
+    "recovery",
+    "adjudication",
+    "output_provenance"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0"],
+      "default": "1.0"
+    },
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "UUID v4 uniquely identifying this quarantine event"
+    },
+    "quarantined_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp of quarantine"
+    },
+    "quarantined_by": {
+      "type": "object",
+      "required": ["lane", "agent", "session_id"],
+      "additionalProperties": false,
+      "properties": {
+        "lane": {
+          "type": "string",
+          "minLength": 1
+        },
+        "agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "original_path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Absolute path of the original governance document"
+    },
+    "original_hash": {
+      "type": "string",
+      "minLength": 1,
+      "description": "SHA-256 hex digest of the original file, or 'unreadable' if file could not be read"
+    },
+    "reason_category": {
+      "type": "string",
+      "enum": [
+        "CORRUPT",
+        "VERIFICATION_FAILED",
+        "SIGNATURE_INVALID",
+        "SCHEMA_INVALID",
+        "UNDER_ADJUDICATION",
+        "DRIFT_DETECTED",
+        "ORPHANED",
+        "UNKNOWN"
+      ]
+    },
+    "reason_detail": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Human-readable explanation of why the document was quarantined"
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["verifier", "timestamp"],
+      "additionalProperties": false,
+      "properties": {
+        "verifier": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the verifier/check that triggered quarantine"
+        },
+        "exit_code": {
+          "type": "integer",
+          "description": "Exit code from the verifier (if applicable)"
+        },
+        "output": {
+          "type": "string",
+          "description": "Relevant output from the failing check"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the verification failure was detected"
+        },
+        "additional_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Relative paths to evidence files in the quarantine directory"
+        }
+      }
+    },
+    "recovery": {
+      "type": "object",
+      "required": ["status", "required_action"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["BLOCKED", "RECOVERABLE", "ESCALATED", "RESOLVED"],
+          "description": "BLOCKED=needs operator/authority. RECOVERABLE=re-verification may clear. ESCALATED=under adjudication. RESOLVED=recovered."
+        },
+        "required_action": {
+          "type": "string",
+          "minLength": 10,
+          "description": "What must happen to un-quarantine this document"
+        },
+        "responsible_lane": {
+          "type": ["string", "null"],
+          "description": "Lane responsible for resolution, or null"
+        },
+        "deadline": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "Deadline for action, or null if no deadline"
+        }
+      }
+    },
+    "adjudication": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["NONE", "PENDING", "IN_PROGRESS", "RESOLVED"],
+          "description": "NONE=no dispute. PENDING=dispute filed. IN_PROGRESS=under review. RESOLVED=decided."
+        },
+        "assigned_to": {
+          "type": ["string", "null"],
+          "description": "Lane assigned to adjudicate, or null"
+        },
+        "resolution": {
+          "type": ["string", "null"],
+          "description": "Description of resolution, or null if not yet resolved"
+        },
+        "resolved_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "When adjudication was resolved, or null"
+        }
+      }
+    },
+    "output_provenance": {
+      "type": "object",
+      "required": ["agent", "lane", "generated_at", "session_id"],
+      "additionalProperties": true,
+      "properties": {
+        "agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lane": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
