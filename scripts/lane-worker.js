@@ -1151,7 +1151,17 @@ async function runCli() {
     return;
   }
 
-  while (true) {
+  let shuttingDown = false;
+  process.on("SIGTERM", () => {
+    console.log("[lane-worker] SIGTERM received, shutting down gracefully");
+    shuttingDown = true;
+  });
+  process.on("SIGINT", () => {
+    console.log("[lane-worker] SIGINT received, shutting down gracefully");
+    shuttingDown = true;
+  });
+
+  while (!shuttingDown) {
     const summary = worker.processOnce();
     if (args.json) {
       console.log(JSON.stringify(summary, null, 2));
