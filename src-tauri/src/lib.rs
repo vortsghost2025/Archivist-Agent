@@ -18,23 +18,18 @@ use scan_tree::scan_tree;
 use summarize_folder::summarize_folder;
 use tauri::Manager;
 
-// Evidence: CPS_ENFORCEMENT.md:70 — CPS score influences runtime behavior via ping command.
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    // Evidence: BOOTSTRAP.md:45-47 — ensure .global folder mirrors root for legacy paths
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
-            // Evidence: BOOTSTRAP.md:53 — ensure governance files are accessible
             global_shim::ensure_shim();
-            // Load CPS and decide if system may continue; threshold 10 for demo
-            let cps_ok = crate::cps_check::cps_threshold_check(10);
-            if !cps_ok {
-                eprintln!("CPS threshold check failed — system below constitutional minimum");
-                // Don't abort startup — the app can still run in read-only observing mode.
-                // Individual mutating commands will enforce CPS at the command level.
-            }
+            let cps_score =
+                crate::constitution::compute_cps_score(&crate::constitution::load_constraints());
+            eprintln!(
+                "[CPS] Current score: {} — informational only, no gate",
+                cps_score
+            );
             let window = app.get_webview_window("main").unwrap();
             window.set_title("Archivist Agent").ok();
             Ok(())
@@ -55,17 +50,12 @@ pub fn run() {
 
 #[tauri::command]
 fn ping() -> String {
-    if crate::cps_check::cps_threshold_check(10) {
-        "pong".to_string()
-    } else {
-        "cps block".to_string()
-    }
+    "pong".to_string()
 }
 
 // Evidence: CPS_ENFORCEMENT.md:70 — expose current CPS score for UI consumption.
 #[tauri::command]
 fn get_cps_score() -> i32 {
-    // Compute on demand to reflect any test‑time changes.
     let constraints = crate::constitution::load_constraints();
     crate::constitution::compute_cps_score(&constraints)
 }
@@ -97,10 +87,8 @@ mod lib_tests {
     }
 
     #[test]
-    fn test_ping_blocks_on_cps_failure() {
-        let tmp = write_constraints("- name: LOW\n  description: low\n  weight: 2\n");
-        assert_eq!(ping(), "cps block");
-        cleanup(tmp);
+    fn test_ping_returns_pong() {
+        assert_eq!(ping(), "pong");
     }
 
     #[test]

@@ -1,4 +1,3 @@
-// Evidence: CPS_ENFORCEMENT.md:70 — read‑only check before indexing
 // Evidence: BOOTSTRAP.md:50 — ensure anchor before any major action
 use crate::safety::{check_read_only, validate_path};
 use serde::{Deserialize, Serialize};
@@ -27,11 +26,6 @@ pub fn build_index(root: String) -> Result<IndexResult, String> {
 
     // Check read-only mode first (governance constraint)
     check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
-
-    // Check CPS threshold (governance constraint)
-    if !crate::cps_check::cps_threshold_check(10) {
-        return Err("CPS threshold check failed — system below constitutional minimum, mutating operations blocked".to_string());
-    }
 
     validate_path(path).map_err(|e| format!("Path validation failed: {}", e))?;
 

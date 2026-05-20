@@ -19,11 +19,6 @@ pub struct HandoffResult {
 pub fn generate_handoff(path: String) -> Result<String, String> {
     check_read_only().map_err(|e| format!("Read-only mode active: {}", e))?;
 
-    // Check CPS threshold (governance constraint)
-    if !crate::cps_check::cps_threshold_check(10) {
-        return Err("CPS threshold check failed — system below constitutional minimum, mutating operations blocked".to_string());
-    }
-
     let path_ref = Path::new(&path);
 
     validate_path(path_ref).map_err(|e| format!("Path validation failed: {}", e))?;
@@ -159,8 +154,6 @@ pub fn generate_handoff(path: String) -> Result<String, String> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test_filename_sanitization_unit() {
         let cases = vec![

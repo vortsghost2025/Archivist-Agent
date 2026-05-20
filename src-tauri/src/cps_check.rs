@@ -42,8 +42,6 @@ fn append_cps_block_event(score: i32, threshold: i32, caller: &str) {
         "threshold": threshold,
         "caller": caller,
         "components": {},
-        "dynamic_adjustments": 0,
-        "drift_signals": []
     });
     let line = match serde_json::to_string(&entry) {
         Ok(s) => s,
