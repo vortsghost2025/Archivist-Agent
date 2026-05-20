@@ -11,7 +11,7 @@
   },
   "library": {
     "lane_id": "library",
-    "lane_state": "DORMANT",
+    "lane_state": "ACTIVE",
     "key_id": "42e853d4ec37955d",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAw9w42sDe8qPJ1LKRsFcQ+2/ptA/N+grOA3TGz+xQPpU=\n-----END PUBLIC KEY-----",
     "algorithm": "EdDSA",
@@ -21,7 +21,7 @@
   },
   "swarmmind": {
     "lane_id": "swarmmind",
-    "lane_state": "DORMANT",
+    "lane_state": "ACTIVE",
     "key_id": "c707d41a7bb96d96",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEATXheIcdwPQANHCUydfYbhWX32ZOFsANZKcoTYHOiJFM=\n-----END PUBLIC KEY-----",
     "algorithm": "EdDSA",
@@ -31,7 +31,7 @@
   },
   "kernel": {
     "lane_id": "kernel",
-    "lane_state": "DORMANT",
+    "lane_state": "ACTIVE",
     "key_id": "2effb49ea02dff5b",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEADf1gv/zNKaVskjPiIdzoyL6OBrmJRH+HHzSoRTjFEi8=\n-----END PUBLIC KEY-----",
     "algorithm": "EdDSA",
@@ -49,11 +49,22 @@
     "expires_at": null,
     "revoked_at": null
   },
+  "kucoin": {
+    "lane_id": "kucoin",
+    "lane_state": "DORMANT",
+    "key_id": null,
+    "public_key_pem": null,
+    "algorithm": "EdDSA",
+    "registered_at": null,
+    "expires_at": null,
+    "revoked_at": null,
+    "activation_notes": "DORMANT per operator ratification 2026-05-20. Key generation and VPS process deployment pending pre-June-7 activation. Lane has existing test trail and journal from prior work."
+  },
   "key_lineage": {
-    "reconciled_at": "2026-05-06T00:44:26.725Z",
-    "reconciled_by": "archivist",
-    "source_machine": "windows-desktop-S-drive",
-    "reason": "Key convergence ratification 2026-05-05. All 4 lanes now aligned with fresh working key pairs. Library passphrase was lost - generated fresh key pair. SwarmMind/Kernel keys from Ubuntu headless. Archivist key already aligned.",
+"reconciled_at": "2026-05-20T22:28:00Z",
+  "reconciled_by": "archivist",
+  "source_machine": "windows-desktop-S-drive",
+  "reason": "Lane ratification 2026-05-20. Promoted kernel/swarmmind/library from DORMANT to ACTIVE (running on VPS). Added kucoin as DORMANT (key pending). control_plane already ACTIVE. authority archived as archivist sub-role. 5 operational lanes + 1 dormant (kucoin).",
     "rotations": {
       "archivist": {
         "previous_key_id": "65ae05b2a9e749cb",

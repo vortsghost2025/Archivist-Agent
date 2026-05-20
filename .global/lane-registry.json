@@ -29,7 +29,8 @@
         "outbox": "S:/Archivist-Agent/lanes/authority/outbox",
         "processed": "S:/Archivist-Agent/lanes/authority/inbox/processed"
       },
-      "notes": "Authority shares repo with Archivist (same codebase, different lane identity)"
+      "lane_state": "ARCHIVED",
+      "notes": "Authority is a governance role WITHIN Archivist, not a separate operational lane. Archived as standalone lane 2026-05-20 per operator ratification. Authority functions continue as archivist sub-role."
     },
     "kernel": {
       "lane_id": "kernel",
@@ -73,8 +74,22 @@
         "processed": "S:/self-organizing-library/lanes/library/inbox/processed"
       }
     },
+    "control_plane": {
+      "lane_id": "control_plane",
+      "role": "supervisor",
+      "local_path": "S:/WE4FREE-Control-Plane",
+      "repo": "https://github.com/vortsghost2025/WE4FREE-Control-Plane",
+      "branch": "main",
+      "mailboxes": {
+        "inbox": "S:/WE4FREE-Control-Plane/lanes/control_plane/inbox",
+        "outbox": "S:/WE4FREE-Control-Plane/lanes/control_plane/outbox",
+        "processed": "S:/WE4FREE-Control-Plane/lanes/control_plane/inbox/processed"
+      },
+      "notes": "Control Plane supervisor lane. Manages runtime isolation, launcher, and cross-lane orchestration. Identity established 2026-05-18 per P10 governance decision."
+    },
     "kucoin": {
       "lane_id": "kucoin",
+      "lane_state": "DORMANT",
       "role": "trading",
       "local_path": "S:/kucoin-lane",
       "repo": "https://github.com/vortsghost2025/kucoin-lane",
