@@ -1,13 +1,13 @@
 {
   "$id": "https://example.com/schemas/inbox-message-v1.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
-"title": "Inbox Message Schema v1.6",
-"description": "Cross-lane inbox message format. v1.6: control-plane in 'to' enum, governance_decision in task_kind, canonical path for control-plane, confidence_derivation optional property. v1.5: vote/vote-tally in task_kind enum for convergence voting. v1.4: uncertainty packet, review round protocol, prior_attempts. v1.3: idempotency_key relaxed to any non-empty string, task_kind optional for alert/ack/heartbeat. v1.2: signature/key_id REQUIRED, ack+alert in type enum. v1.1: payload.compression, execution.parent_id, watcher block, canonical_paths, delivery_verification.",
+  "title": "Inbox Message Schema v1.7",
+"description": "Cross-lane inbox message format. v1.7: Earned-complexity audit. lease/retry/evidence/heartbeat demoted from required to optional. confidence_derivation conditionally required when confidence >= 7. v1.6: control-plane in 'to' enum, governance_decision in task_kind, canonical path for control-plane, confidence_derivation optional property. v1.5: vote/vote-tally in task_kind enum for convergence voting. v1.4: uncertainty packet, review round protocol, prior_attempts. v1.3: idempotency_key relaxed to any non-empty string, task_kind optional for alert/ack/heartbeat. v1.2: signature/key_id REQUIRED, ack+alert in type enum. v1.1: payload.compression, execution.parent_id, watcher block, canonical_paths, delivery_verification.",
   "type": "object",
   "properties": {
  "schema_version": {
   "type": "string",
-  "default": "1.3",
+    "default": "1.7",
   "enum": [
   "1.0",
   "1.1",
@@ -15,7 +15,8 @@
   "1.3",
   "1.4",
   "1.5",
-    "1.6"
+    "1.6",
+    "1.7"
   ]
  },
     "task_id": {
@@ -576,10 +577,6 @@
     "requires_action",
     "payload",
     "execution",
-    "lease",
-    "retry",
-    "evidence",
-    "heartbeat",
     "signature",
     "key_id"
   ],
@@ -602,6 +599,21 @@
       "then": {
         "required": [
           "task_kind"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "confidence": {
+            "type": "integer",
+            "minimum": 7
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "confidence_derivation"
         ]
       }
     }

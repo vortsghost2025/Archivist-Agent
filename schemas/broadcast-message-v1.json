@@ -41,7 +41,7 @@
     },
     "from": {
       "type": "string",
-      "enum": ["archivist", "library", "swarmmind", "kernel"]
+      "enum": ["archivist", "library", "swarmmind", "kernel", "control-plane"]
     },
     "to": {
       "type": "string",
@@ -196,10 +196,11 @@
     "signature": {
       "type": "string"
     },
-    "signature_alg": {
-      "type": "string",
-      "enum": ["RS256"]
-    },
+  "signature_alg": {
+    "type": "string",
+    "enum": ["RS256", "EdDSA"],
+    "default": "EdDSA"
+  },
     "key_id": {
       "type": "string"
     }

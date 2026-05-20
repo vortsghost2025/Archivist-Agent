@@ -4,19 +4,14 @@
   "title": "User Quarantine State",
   "description": "Runtime-enforceable schema for user quarantine and release. Source: RECIPROCAL_ACCOUNTABILITY.md",
   "type": "object",
-  "required": ["status", "uds_score", "trigger_signals", "timestamp", "release_condition"],
+  "required": ["status", "trigger_signals", "timestamp", "release_condition"],
   "properties": {
     "status": {
       "type": "string",
       "enum": ["STABLE", "ELEVATED", "HIGH", "CRITICAL", "COLLAPSE"],
       "description": "Current user drift state"
     },
-    "uds_score": {
-      "type": "integer",
-      "minimum": 0,
-      "maximum": 100,
-      "description": "Current User Drift Score"
-    },
+
     "trigger_signals": {
       "type": "array",
       "items": {

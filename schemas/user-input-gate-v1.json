@@ -76,10 +76,9 @@
     },
     "quarantine_check": {
       "type": "object",
-      "required": ["is_quarantined", "uds_score"],
-      "properties": {
-        "is_quarantined": { "type": "boolean" },
-        "uds_score": { "type": "integer" },
+    "required": ["is_quarantined"],
+    "properties": {
+      "is_quarantined": { "type": "boolean" },
         "quarantine_can_self_unblock": {
           "type": "boolean",
           "const": false,
