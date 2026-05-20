@@ -75,10 +75,7 @@ function validateUserInputGate(input) {
       const r = validateField(input.quarantine_check.quarantine_can_self_unblock, qcProps.quarantine_can_self_unblock);
       if (!r.valid) errors.push(`quarantine_can_self_unblock: ${r.error} — USER CANNOT SELF-UNBLOCK`);
     }
-    if (input.quarantine_check.uds_score !== undefined) {
-      const r = validateField(input.quarantine_check.uds_score, qcProps.uds_score);
-      if (!r.valid) errors.push(`uds_score: ${r.error}`);
-    }
+
   }
   
   return errors.length > 0 ? { valid: false, errors } : { valid: true };
@@ -106,10 +103,7 @@ function validateUserQuarantine(state) {
     if (!r.valid) errors.push(`status: ${r.error}`);
   }
   
-  if (state.uds_score !== undefined) {
-    const r = validateField(state.uds_score, props.uds_score);
-    if (!r.valid) errors.push(`uds_score: ${r.error}`);
-  }
+
   
   if (state.trigger_signals) {
     for (const sig of state.trigger_signals) {
@@ -246,12 +240,10 @@ function evaluateUserInput(text, sessionId) {
 }
 
 function gateDecision(bypassSignals, udsScore, isStateChanging, isQuarantined) {
-  if (isQuarantined) return 'SESSION_FREEZE';
-  if (udsScore > 60) return 'HARD_STOP';
-  if (bypassSignals.length > 0 && isStateChanging) return 'HARD_STOP';
-  if (udsScore > 40 && isStateChanging) return 'QUEUE_FOR_CONVERGENCE';
-  if (isStateChanging && udsScore <= 40) return 'QUEUE_FOR_CONVERGENCE';
-  return 'PASS';
+    if (isQuarantined) return 'SESSION_FREEZE';
+    if (bypassSignals.length > 0 && isStateChanging) return 'HARD_STOP';
+    if (isStateChanging) return 'QUEUE_FOR_CONVERGENCE';
+    return 'PASS';
 }
 
 module.exports = {
