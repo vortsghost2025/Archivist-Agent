@@ -250,12 +250,20 @@ class InboxWatcher {
           msg._sourcePath = filePath;
           const idResult = this.identityEnforcer.enforceMessage(msg);
           msg._identity = idResult;
-      if (idResult.decision === 'reject') {
-        console.log(`[watcher] IDENTITY_REJECT: ${filename} from ${idResult.from} — ${idResult.reason}`);
-        await this.moveToExpired(filename, filePath);
-        continue;
-      }
-      if (!isEnglishOnly(msg)) {
+        if (idResult.decision === 'reject') {
+          console.log(`[watcher] IDENTITY_REJECT: ${filename} from ${idResult.from} — ${idResult.reason}`);
+          await this.moveToExpired(filename, filePath);
+          continue;
+        }
+        const fromLane = msg.from || msg.from_lane;
+        const laneState = this.identityEnforcer.getLaneState(fromLane);
+        if (laneState === 'ARCHIVED') {
+          console.log(`[watcher] LANE_ARCHIVED: skipping message from ARCHIVED lane ${fromLane} — ${filename}`);
+          await this.moveToExpired(filename, filePath);
+          continue;
+        }
+        msg._lane_state = laneState;
+        if (!isEnglishOnly(msg)) {
         console.log(`[watcher] FORMAT_VIOLATION: ${filename} — non-ASCII content detected, marking format_violation=true`);
         msg.format_violation = true;
         msg.format_violation_reason = 'Non-ASCII content detected in message fields per English-only constraint';
@@ -276,7 +284,10 @@ class InboxWatcher {
     messages.sort((a, b) => {
       const pa = PRIORITY_ORDER[a.priority] ?? 3;
       const pb = PRIORITY_ORDER[b.priority] ?? 3;
-      return pa - pb;
+      if (pa !== pb) return pa - pb;
+      const sa = (a._lane_state === 'DORMANT') ? 1 : 0;
+      const sb = (b._lane_state === 'DORMANT') ? 1 : 0;
+      return sa - sb;
     });
 
     return messages;

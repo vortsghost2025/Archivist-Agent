@@ -1,6 +1,7 @@
 {
   "archivist": {
     "lane_id": "archivist",
+    "lane_state": "ACTIVE",
     "key_id": "6ed65c18a0afca45",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA5DRX8RTimrz1XgnAsIqHyjw4OFcMOCeNpoofoo6EYj8=\n-----END PUBLIC KEY-----",
     "algorithm": "EdDSA",
@@ -10,6 +11,7 @@
   },
   "library": {
     "lane_id": "library",
+    "lane_state": "DORMANT",
     "key_id": "42e853d4ec37955d",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAw9w42sDe8qPJ1LKRsFcQ+2/ptA/N+grOA3TGz+xQPpU=\n-----END PUBLIC KEY-----",
     "algorithm": "EdDSA",
@@ -19,6 +21,7 @@
   },
   "swarmmind": {
     "lane_id": "swarmmind",
+    "lane_state": "DORMANT",
     "key_id": "c707d41a7bb96d96",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEATXheIcdwPQANHCUydfYbhWX32ZOFsANZKcoTYHOiJFM=\n-----END PUBLIC KEY-----",
     "algorithm": "EdDSA",
@@ -28,6 +31,7 @@
   },
   "kernel": {
     "lane_id": "kernel",
+    "lane_state": "DORMANT",
     "key_id": "2effb49ea02dff5b",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEADf1gv/zNKaVskjPiIdzoyL6OBrmJRH+HHzSoRTjFEi8=\n-----END PUBLIC KEY-----",
     "algorithm": "EdDSA",
@@ -37,6 +41,7 @@
   },
   "control_plane": {
     "lane_id": "control_plane",
+    "lane_state": "ACTIVE",
     "key_id": "bc7e06b864676199",
     "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEA0yQ75AywXUfSN/tW4UaIB2ZLJ9BWuUAIuEFb1vb5LOI=\n-----END PUBLIC KEY-----",
     "algorithm": "EdDSA",

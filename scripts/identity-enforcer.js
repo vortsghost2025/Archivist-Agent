@@ -96,11 +96,17 @@ class IdentityEnforcer {
   }
 
   _getPublicKey(laneId) {
-  const entry = this.trustStore && this.trustStore.keys && this.trustStore.keys[laneId];
-  if (!entry) return null;
-  if (entry.revoked_at) return null;
-  return entry.public_key_pem;
-}
+    const entry = this.trustStore && this.trustStore.keys && this.trustStore.keys[laneId];
+    if (!entry) return null;
+    if (entry.revoked_at) return null;
+    return entry.public_key_pem;
+  }
+
+  getLaneState(laneId) {
+    const entry = this.trustStore && this.trustStore.keys && this.trustStore.keys[laneId];
+    if (!entry || !entry.lane_state) return 'ACTIVE';
+    return entry.lane_state;
+  }
 
   _getPublicKeyByKeyId(keyId) {
   for (const [laneId, entry] of Object.entries((this.trustStore && this.trustStore.keys) || {})) {
@@ -231,6 +237,20 @@ class IdentityEnforcer {
     result.key_id = verifyResult.key_id;
 
     if (verifyResult.valid) {
+      const laneState = this.getLaneState(fromLane);
+      if (laneState === 'ARCHIVED') {
+        result.decision = this.enforcementMode === 'enforce' ? 'reject' : 'pass';
+        result.reason = 'lane_archived';
+        if (this.enforcementMode === 'warn') {
+          console.log(`[identity] WARN: message from ARCHIVED lane ${fromLane} — ${msg.id || msg._sourceFile}`);
+        }
+        this._log(result);
+        return result;
+      }
+      if (laneState === 'DORMANT' && (this.enforcementMode === 'warn' || this.enforcementMode === 'audit')) {
+        console.log(`[identity] WARN: message from DORMANT lane ${fromLane} — ${msg.id || msg._sourceFile}`);
+      }
+      result.lane_state = laneState;
       result.decision = 'accept';
       result.reason = 'identity_verified';
     } else {
@@ -431,7 +451,7 @@ if (require.main === module) {
 
   if (enforcer.trustStore) {
     for (const [laneId, entry] of Object.entries(enforcer.trustStore.keys || {})) {
-      console.log(`  ${laneId}: keyId=${entry.key_id} algorithm=${entry.algorithm} revoked=${!!entry.revoked_at}`);
+      console.log(`  ${laneId}: keyId=${entry.key_id} algorithm=${entry.algorithm} revoked=${!!entry.revoked_at} lane_state=${entry.lane_state || 'ACTIVE'}`);
     }
   } else {
     console.log('  NO TRUST STORE LOADED');
