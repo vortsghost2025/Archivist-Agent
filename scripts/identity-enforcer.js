@@ -26,13 +26,16 @@ const TRUST_STORE_PRECOMMIT_CHECKS = [
   'key_id_matches_trust_store_entry',
   'lane_id_invariant'
 ];
-const CONVERGED_STATUSES = new Set(['proven', 'approved', 'ratified', 'accept', 'accepted']);
+const { CONVERGED_STATUS_SET, ENFORCEMENT_MODE_SET, EnforcementMode } = require('./governance-types');
 
 class IdentityEnforcer {
   constructor(options = {}) {
     this.trustStore = null;
     this.trustStorePath = options.trustStorePath || this._findTrustStore();
-    this.enforcementMode = options.enforcementMode || 'enforce'; // 'enforce' | 'warn' | 'audit'
+        this.enforcementMode = options.enforcementMode || 'enforce';
+        if (!ENFORCEMENT_MODE_SET.has(this.enforcementMode)) {
+            throw new Error(`IDENTITY_INVALID_MODE: "${this.enforcementMode}" is not a valid EnforcementMode. Must be one of: ${[...ENFORCEMENT_MODE_SET].join(', ')}`);
+        }
     this.verificationLog = [];
     this._loadTrustStore();
   }
@@ -394,7 +397,7 @@ class IdentityEnforcer {
       const lane = typeof entry.lane === 'string' ? entry.lane.trim().toLowerCase() : '';
       const status = typeof entry.status === 'string' ? entry.status.trim().toLowerCase() : '';
       const signature = typeof entry.signature === 'string' ? entry.signature.trim() : '';
-      if (!lane || !CONVERGED_STATUSES.has(status) || signature.length < 20) continue;
+      if (!lane || !CONVERGED_STATUS_SET.has(status) || signature.length < 20) continue;
       if (seen.has(lane)) continue;
       seen.add(lane);
       accepted.push({ lane, status, signature });

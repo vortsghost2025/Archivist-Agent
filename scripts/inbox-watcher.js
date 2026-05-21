@@ -27,6 +27,7 @@ const { sendMessage, sendToAll } = require('./send-message');
 const { consensusCheck, routeMessage, loadPolicy: loadConsensusPolicy } = require('./consensus-check');
 const { logTransfer } = require('./transfer-log');
 const { validateUncertaintyPacket, validateReviewRound } = require('./schema-validator');
+const { MessageType, CONVERGED_STATUS_SET, DISPOSITION_SET } = require('./governance-types');
 
 const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
 const PREEMPTION_CYCLE_LIMIT = 2;
@@ -39,7 +40,7 @@ const SKIP_FILENAMES = new Set([
 const HEARTBEAT_PATTERN = /^heartbeat-.+\.json$/i;
 const INBOX_MSG_PATTERN = /^\d{4}-/;
 const UUID_PATTERN = /^\d{8}-\d{4}-\d{4}-\d{4}-\d{12}\.json$/i;
-  const ACTION_REQUIRED_TYPES = new Set(['task', 'escalation', 'request']);
+  const ACTION_REQUIRED_TYPES = new Set([MessageType.TASK, MessageType.ESCALATION, MessageType.REQUEST]);
   const COMPLETION_PROOF_FIELDS = [
     'completion_artifact_path',
     'completion_message_id',
@@ -47,7 +48,7 @@ const UUID_PATTERN = /^\d{8}-\d{4}-\d{4}-\d{4}-\d{12}\.json$/i;
     'terminal_decision',
     'disposition'
   ];
-  const VALID_DISPOSITIONS = new Set(['completed', 'declined', 'superseded', 'expired', 'quarantined']);
+  const VALID_DISPOSITIONS = DISPOSITION_SET;
 
 function hasCompletionProof(msg) {
   if (!msg) return false;
@@ -58,7 +59,7 @@ function hasCompletionProof(msg) {
   // Check convergence_gate status
   if (msg.convergence_gate && msg.convergence_gate.status) {
     const status = String(msg.convergence_gate.status).toLowerCase();
-    if (['proven', 'approved', 'ratified', 'accepted'].includes(status)) return true;
+    if (CONVERGED_STATUS_SET.has(status)) return true;
   }
   // Check disposition field
   if (msg.disposition && VALID_DISPOSITIONS.has(String(msg.disposition).toLowerCase())) return true;

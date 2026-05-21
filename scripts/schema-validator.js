@@ -3,6 +3,15 @@
 const fs = require('fs');
 const path = require('path');
 
+const {
+  CONVERGENCE_STATUSES,
+  VERIFIED_BY,
+  UNCERTAINTY_LEVELS,
+  UNCERTAINTY_TYPES,
+  REVIEW_STATUSES,
+  validateEnum,
+} = require('./governance-types');
+
 const SCHEMAS_DIR = path.join(__dirname, '..', 'schemas');
 const GOVERNANCE_DIR = path.join(__dirname, '..');
 
@@ -125,14 +134,14 @@ function validateConvergenceGate(output) {
     }
   }
 
-  const validStatuses = ['proven', 'unproven', 'conflicted', 'blocked'];
-  if (output.status && !validStatuses.includes(output.status)) {
-    errors.push(`Invalid status: ${output.status}. Must be: ${validStatuses.join(', ')}`);
+  if (output.status) {
+    const r = validateEnum(output.status, CONVERGENCE_STATUSES, 'ConvergenceStatus');
+    if (!r.ok) errors.push(r.error);
   }
 
-  const validVerifiers = ['archivist', 'library', 'swarmmind', 'codex', 'self', 'user'];
-  if (output.verified_by && !validVerifiers.includes(output.verified_by)) {
-    errors.push(`Invalid verified_by: ${output.verified_by}. Must be: ${validVerifiers.join(', ')}`);
+  if (output.verified_by) {
+    const r = validateEnum(output.verified_by, VERIFIED_BY, 'VerifiedBy');
+    if (!r.ok) errors.push(r.error);
   }
 
   if (output.verified_by === 'user' && output.status === 'proven') {
@@ -149,16 +158,14 @@ function validateUncertaintyPacket(input) {
   for (const field of required) {
     if (!(field in input)) errors.push('Missing required field: ' + field);
   }
-  const validLevels = ['low', 'medium', 'high', 'critical'];
-  if (input.level && !validLevels.includes(input.level)) {
-    errors.push('Invalid level: ' + input.level + '. Must be: ' + validLevels.join(', '));
+  if (input.level) {
+    const r = validateEnum(input.level, UNCERTAINTY_LEVELS, 'UncertaintyLevel');
+    if (!r.ok) errors.push(r.error);
   }
-  const validTypes = ['missing_evidence', 'conflicting_sources', 'tool_failure', 'execution_failure', 'stale_state', 'ambiguous_intent', 'blocked_by_permission', 'implementation_unknown', 'runtime_not_verified', 'dependency_unresolved', 'partial_completion', 'escalated_review'];
   if (Array.isArray(input.type)) {
     for (var i = 0; i < input.type.length; i++) {
-      if (!validTypes.includes(input.type[i])) {
-        errors.push('Invalid uncertainty type: ' + input.type[i] + '. Must be: ' + validTypes.join(', '));
-      }
+      const r = validateEnum(input.type[i], UNCERTAINTY_TYPES, 'UncertaintyType');
+      if (!r.ok) errors.push(r.error);
     }
   } else if (input.type) {
     errors.push('uncertainty.type must be an array');
@@ -176,9 +183,9 @@ function validateReviewRound(input) {
   for (const field of required) {
     if (!(field in input)) errors.push('Missing required field: ' + field);
   }
-  const validStatuses = ['draft', 'needs_repair', 'verified_partial', 'verified_accept', 'rejected', 'escalated'];
-  if (input.status && !validStatuses.includes(input.status)) {
-    errors.push('Invalid review status: ' + input.status + '. Must be: ' + validStatuses.join(', '));
+  if (input.status) {
+    const r = validateEnum(input.status, REVIEW_STATUSES, 'ReviewStatus');
+    if (!r.ok) errors.push(r.error);
   }
   if (typeof input.round === 'number' && typeof input.max_rounds === 'number') {
     if (input.round >= input.max_rounds && input.status === 'needs_repair') {
