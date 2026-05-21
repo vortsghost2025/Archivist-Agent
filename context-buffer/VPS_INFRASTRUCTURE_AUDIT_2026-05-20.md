@@ -1,8 +1,8 @@
 OUTPUT_PROVENANCE:
 agent: archivist
 lane: archivist
-generated_at: "2026-05-20T17:36:35-04:00"
-session_id: archivist-2026-05-20-continuation
+generated_at: "2026-05-21T00:14:05-04:00"
+session_id: archivist-2026-05-21-finalization
 
 # VPS Infrastructure Audit Report — FINAL
 
@@ -35,7 +35,7 @@ The headless VPS runs a well-structured systemd service architecture for 4 auton
 | 5 | Kill orphan bash process (PID 3940840) running standalone CI loop | ✓ DONE | Process killed |
 | 6 | Prune sync-reports/ | ✓ DONE | 7.7GB/2311 files → 174MB/50 files |
 | 7 | Stop + disable non-`.lane` duplicate lane-worker instances | ✓ DONE | 4 non-`.lane` instances stopped, disabled, reset-failed |
-| 8 | Stop + disable lane-relay-watcher.service | ✓ DONE | Redundant (targets /mnt/s/ paths that don't exist on headless) |
+| 8 | Stop + disable lane-relay-watcher.service (system-level) | ✓ DONE | Was incorrectly stopped as "redundant" — /mnt/s/ DOES exist and is mounted via SSHFS. Re-enabled as user-level service (see CORRECTION below) |
 
 ### P1 — COMPLETE ✓
 
@@ -81,7 +81,7 @@ The headless VPS runs a well-structured systemd service architecture for 4 auton
 
 ## Current Process State (Final — ALL VERIFIED ✓)
 
-**18 of 18 expected processes running, 0 duplicates:**
+**19 of 19 expected processes running, 0 duplicates:**
 
 | Daemon | Count | Status |
 |--------|-------|--------|
@@ -91,6 +91,7 @@ The headless VPS runs a well-structured systemd service architecture for 4 auton
 | relay-daemon.js | 4 (all lanes) | ✓ Running |
 | continuous-improvement-loop.sh | 1 | ✓ Running |
 | cp-headless-supervision.sh | 1 | ✓ Running |
+| lane-relay-watcher.sh | 1 | ✓ Running (user-level, re-enabled) |
 
 **Enabled lane-worker systemd instances (ONLY these):**
 - `we4free-lane-worker@archivist.lane.service` — active running ✓
@@ -133,7 +134,7 @@ The headless VPS runs a well-structured systemd service architecture for 4 auton
 
 ### STOPPED + DISABLED
 - `rig-sync-all.timer` — was firing every 30s with HTTPS auth failure
-- `lane-relay-watcher.service` — redundant, targets non-existent /mnt/s/ paths
+- `lane-relay-watcher.service` — **CORRECTION: NOT redundant.** Re-enabled as user-level unit. See Cross-Machine Relay section below.
 - All user-level duplicate lane services (55 unit files deleted)
 - All non-`.lane` lane-worker instances (4 instances stopped + disabled + reset-failed)
 
@@ -159,13 +160,39 @@ The CP headless-supervision service (`cp-headless-supervision.sh`) still runs as
 
 ---
 
+## Cross-Machine Relay Architecture
+
+The VPS has two distinct relay mechanisms that serve different purposes:
+
+### 1. relay-daemon.js — Within-VPS Cross-Lane Relay
+- Runs as `we4free-relay-daemon@<lane>.lane.service` (4 instances, one per lane)
+- Watches each lane's **outbox** for messages addressed to *other local lanes*
+- Delivers messages to the target lane's **inbox** on the same VPS
+- Does NOT interact with `/mnt/s/` or the Windows S: drive
+- Example: Archivist outbox message to Kernel → relay-daemon copies to Kernel inbox (both local)
+
+### 2. lane-relay-watcher.sh — Cross-Machine Sync (VPS ↔ Windows)
+- Runs as `~/.config/systemd/user/lane-relay-watcher.service` (1 instance)
+- Syncs all 4 lanes' `inbox/` and `outbox/` directories between VPS local storage and `/mnt/s/` (SSHFS mount of `seand@100.95.92.117:/S:`)
+- Polls every 2 seconds using `rsync`
+- **This is the ONLY mechanism that propagates messages between the VPS and the Windows workstation**
+- Without it, messages written on VPS are invisible on Windows and vice versa
+
+### CORRECTION — Audit Error in Prior Session
+The original audit (P0 #8) incorrectly stopped `lane-relay-watcher.service`, labeling it "redundant" and claiming "/mnt/s/ paths don't exist on headless." Both claims were false:
+- `/mnt/s/` IS mounted via SSHFS and is fully functional
+- relay-watcher and relay-daemon serve completely different purposes (cross-machine vs. within-VPS)
+
+**Remediation:** Re-enabled as user-level systemd service at `~/.config/systemd/user/lane-relay-watcher.service`. System-level unit at `/etc/systemd/system/lane-relay-watcher.service` remains disabled (requires sudo to re-enable; user-level unit achieves the same result).
+
+---
+
 ## Known Remaining Items (Low Priority)
 
 | Item | Priority | Notes |
 |------|----------|-------|
 | context-buffer/ archival beyond sync-reports | P3 | Could prune old audit/handoff files but no immediate disk pressure |
 | CP supervision PID tracking accuracy | P3 | Currently no-op on headless; if CP is ever used to manage lanes again, needs rewrite |
-| relay-daemon vs lane-relay-watcher overlap | P3 | lane-relay-watcher is now disabled; relay-daemon instances handle all relay |
 | rig-sync-all HTTPS auth failure | P3 | Timer disabled; if rigs are needed again, convert HTTPS remote to SSH |
 
 ---
@@ -189,9 +216,10 @@ The CP headless-supervision service (`cp-headless-supervision.sh`) still runs as
 - [x] Stale log files truncated (~22MB freed)
 - [x] Stale CP PID files deleted
 - [x] SwarmMind merge conflict fixed
-- [x] lane-relay-watcher.service stopped + disabled
-- [x] **Final: 18 processes running, 0 duplicates, all services active running**
+- [x] lane-relay-watcher.service stopped + disabled (system-level)
+- [x] **CORRECTION: lane-relay-watcher re-enabled as user-level service** — it is NOT redundant; it's the ONLY mechanism that syncs local lane inbox/outbox to /mnt/s/ (SSHFS mount of Windows S: drive). relay-daemon.js only handles within-VPS lane relay, NOT cross-machine sync. User-level unit at `~/.config/systemd/user/lane-relay-watcher.service`, active running ✓
+- [x] **Final: 19 processes running, 0 duplicates, all services active running**
 
 ---
 
-*End of report. All remediations verified complete as of 2026-05-20T17:36:35-04:00.*
+*End of report. All remediations verified complete as of 2026-05-21T00:14:05-04:00.*

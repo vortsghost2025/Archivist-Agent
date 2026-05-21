@@ -14,7 +14,7 @@
       "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArd4C1Oque2JfqCxxA5hk\nx0Kdca74VFzNe0hFy7bFNXZFpm6zOI7g4mxh6sw+o2yhH2O0qKnLhW8raZbljCYW\n5kHV9tFIKIQ+czZIo3pWhCQQkL4Y1vS371k4XtM0G9P/c88bS+apOS2eW7ylsJRj\nDc/ngj8sB7DK5WWH3HfzOYEXdJ5pEb00AutUuLt2lHKQODM23Jjs/8acLtnGslhh\n6Y6BLmzfBxQ393i7yXbUVgSwIXWA5d3LaQ9J2dTYQ32egup8c8C+GnUXs4d4cd8M\nf56qhZkm7uJlI+AN6IRzXQ5Oy/t8WekOGyDYNge2JK9LN+RFnLAd1PSn9qkn1JVn\nEwIDAQAB\n-----END PUBLIC KEY-----\n"
     },
     "kucoin": {
-      "key_id": "c15cf1ffe861c23fc198aec249c9c4d3",
+      "key_id": "0d60dbaef2343bf5",
       "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEATbulCqxWlHIyd2v10IR4KdoRQkcu+zmvw+K5yOsULCs=\n-----END PUBLIC KEY-----\n",
       "private_key_pem": "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIGvnbfo3PBEHX03mTrnfbjpWKl4GmzRz720F7DCGtOWp\n-----END PRIVATE KEY-----\n",
       "algorithm": "EdDSA",
