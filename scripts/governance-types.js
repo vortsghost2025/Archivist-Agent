@@ -30,6 +30,13 @@ const ConvergenceStatus = Object.freeze({
 /**
  * Superset of convergence-positive statuses used across scripts.
  * Includes legacy aliases from identity-enforcer and inbox-watcher.
+ *
+ * ACCEPT_ALIAS ('accept') is a legacy alias for ACCEPTED ('accepted').
+ * identity-enforcer.js line 257 outputs decision='accept' at runtime,
+ * and historical artifacts use convergence_gate.status='accept'.
+ * Both 'accepted' and 'accept' are valid; 'accept' is deprecated but
+ * must remain in the set for backward compatibility.
+ *
  * @enum {string}
  */
 const ConvergedStatus = Object.freeze({
@@ -37,6 +44,7 @@ const ConvergedStatus = Object.freeze({
   APPROVED: 'approved',
   RATIFIED: 'ratified',
   ACCEPTED: 'accepted',
+  ACCEPT_ALIAS: 'accept',
 });
 
 // ─── Lane Identity ──────────────────────────────────────────────────
@@ -71,6 +79,10 @@ const BroadcastSender = Object.freeze({
 /**
  * @enum {string}
  * Source: schemas/inbox-message-v1.json → type
+ *
+ * Note: REQUEST is a governance extension not present in the schema's
+ * type enum. inbox-watcher.js uses 'request' in ACTION_REQUIRED_TYPES.
+ * The governance enum is a superset of the schema enum at this point.
  */
 const MessageType = Object.freeze({
   TASK: 'task',

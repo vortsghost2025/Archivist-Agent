@@ -25,6 +25,7 @@
   "homepage": "https://github.com/vortsghost2025/Archivist-Agent#readme",
   "devDependencies": {
     "@playwright/test": "^1.59.1",
+    "@types/node": "^22.0.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
