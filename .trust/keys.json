@@ -1,9 +1,34 @@
 {
-  "lane_id": "archivist",
-  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAioUuIML5htVflMTmn4o9\nLYMPy7ahijrk4Io2iGJdARqBIv+aDHNT6Vn2mIyFbGmTNraWun4cZKhkQLB7WNbJ\nbVTTyRBomhKxp6pKNS/EpgBGeVKUpXqNFSpb9Mir2wkIGgKui7gSMRYLGoVcUSA6\n5iTqXcYTTXsNzBjpKCBu6aCqYlOcRGvrD39hfvq7rLNETBfy/syWIR50f0W6WdFa\n89lSAVJMog1JEtcAwVwcQb8bDZV61dK1zFUMUm7Z1bxvFq8Dp5D4l6emX0BBgb9/\nB25GFBm/zwvz6CRX+xX9qy3U9nlszMNeq3QMLdFoxNgMhnUfdn5id091M0M1Pt2z\nCwIDAQAB\n-----END PUBLIC KEY-----\n",
-  "algorithm": "RS256",
-  "key_id": "65ae05b2a9e749cb",
-  "expires_at": null,
-  "revoked_at": null,
-  "note": "Synced from canonical key convergence 2026-05-05. previous_key_id: 506c2d0838b6862c"
+  "version": "1.0",
+  "keys": {
+    "archivist": {
+      "key_id": "archivist-test-key",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuwqbGL1QZAeoZdUYA0mT\ntX5a1uR5jvl32c42ZUJhJegh0R8Dz/LfYNRVLE6cfCBA2c6bKwQi1cBdMOkkaSHL\nlu4UA0grS4/oy16MaDlZ3VsvWlkskQJIqVMPPSLRoInoxkKRj0hVx/HlY62PeKOq\nB78Vg1iJqxJ1id7+9ZxO4Jtbaz+15ogXPyQ6EXasbHl85QIlSuayjaxpi4AX57Wd\nW3hXM0VRNxMVdSL6d04VPQPKMZ+w1RoRcbRo+8tBLwo1DJnHfCKtC7swGMuoGDLo\nQZtrVM7NMPc0hbrT1P5p4FKwTWpNNuy7t4SjMG5DlUMWqKb5fQGysix9pESLfBIQ\nfwIDAQAB\n-----END PUBLIC KEY-----\n"
+    },
+    "swarmmind": {
+      "key_id": "swarmmind-test-key",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz/NjjoM2E6qy0NbGYKiK\nm3BxXvdvp5cnQq+AHRnEqKi0977zoiPhEPiIoSOxoUUZ6lWbiHhXmcpc0jDllPck\nFtIwiBBzVNfod29aaNXLM0AeF/zXJjvN3+CkF47n8VJiBiEAiLXrrHTEI0GwpKQd\nBAt8qc8CYh19Q1BWI38bdIbrOwP0CPPpqph/SuBkXnmaVrr7tVdvNP4bTvx1ElnF\n6lvZE5QC+tvT3SQbS4kthDOaUPKhorG77is+MpxNgWYTpCunGxwjEc6zlj2uK9H5\nVkhdgjvsYJtRG3vHy22NrxTKqdBggiKzCMnhm/LOUzpURgNiz0fvWowxJiLdCWRD\nlQIDAQAB\n-----END PUBLIC KEY-----\n"
+    },
+    "library": {
+      "key_id": "library-test-key",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArd4C1Oque2JfqCxxA5hk\nx0Kdca74VFzNe0hFy7bFNXZFpm6zOI7g4mxh6sw+o2yhH2O0qKnLhW8raZbljCYW\n5kHV9tFIKIQ+czZIo3pWhCQQkL4Y1vS371k4XtM0G9P/c88bS+apOS2eW7ylsJRj\nDc/ngj8sB7DK5WWH3HfzOYEXdJ5pEb00AutUuLt2lHKQODM23Jjs/8acLtnGslhh\n6Y6BLmzfBxQ393i7yXbUVgSwIXWA5d3LaQ9J2dTYQ32egup8c8C+GnUXs4d4cd8M\nf56qhZkm7uJlI+AN6IRzXQ5Oy/t8WekOGyDYNge2JK9LN+RFnLAd1PSn9qkn1JVn\nEwIDAQAB\n-----END PUBLIC KEY-----\n"
+    },
+    "kucoin": {
+      "key_id": "c15cf1ffe861c23fc198aec249c9c4d3",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEATbulCqxWlHIyd2v10IR4KdoRQkcu+zmvw+K5yOsULCs=\n-----END PUBLIC KEY-----\n",
+      "private_key_pem": "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIGvnbfo3PBEHX03mTrnfbjpWKl4GmzRz720F7DCGtOWp\n-----END PRIVATE KEY-----\n",
+      "algorithm": "EdDSA",
+      "registered_at": "2026-05-20T23:32:52.000Z"
+    }
+  },
+  "phenotypes": {
+    "archivist": {
+      "hash": "sha256:c894dad1744d89b9",
+      "last_sync": "2026-05-19T22:12:15.303Z",
+      "state_summary": "lane,verified_at,key_id"
+    }
+  },
+  "migration": {
+    "jws_only_start": "2026-05-19T00:00:00Z"
+  }
 }

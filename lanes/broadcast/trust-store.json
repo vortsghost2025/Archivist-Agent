@@ -51,20 +51,20 @@
   },
   "kucoin": {
     "lane_id": "kucoin",
-    "lane_state": "DORMANT",
-    "key_id": null,
-    "public_key_pem": null,
+    "lane_state": "ACTIVE",
+    "key_id": "0d60dbaef2343bf5",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEATbulCqxWlHIyd2v10IR4KdoRQkcu+zmvw+K5yOsULCs=\n-----END PUBLIC KEY-----\n",
     "algorithm": "EdDSA",
-    "registered_at": null,
+    "registered_at": "2026-05-20T23:32:52.000Z",
     "expires_at": null,
     "revoked_at": null,
-    "activation_notes": "DORMANT per operator ratification 2026-05-20. Key generation and VPS process deployment pending pre-June-7 activation. Lane has existing test trail and journal from prior work."
+    "activation_notes": "Promoted DORMANT→ACTIVE 2026-05-20. Ed25519 key registered. VPS process deployment and CircuitBreaker wiring pending. Lane has existing test trail and journal from prior work."
   },
   "key_lineage": {
 "reconciled_at": "2026-05-20T22:28:00Z",
   "reconciled_by": "archivist",
   "source_machine": "windows-desktop-S-drive",
-  "reason": "Lane ratification 2026-05-20. Promoted kernel/swarmmind/library from DORMANT to ACTIVE (running on VPS). Added kucoin as DORMANT (key pending). control_plane already ACTIVE. authority archived as archivist sub-role. 5 operational lanes + 1 dormant (kucoin).",
+    "reason": "Key activation 2026-05-20. Kucoin promoted DORMANT→ACTIVE with Ed25519 key 0d60dbaef2343bf5. All 6 operational lanes now ACTIVE. VPS process deployment and CircuitBreaker wiring still pending.",
     "rotations": {
       "archivist": {
         "previous_key_id": "65ae05b2a9e749cb",
@@ -94,9 +94,15 @@
         "previous_key_id": null,
         "current_key_id": "bc7e06b864676199",
         "reason": "Initial key registration. Control Plane identity established per P10 governance decision (DEFER pending key registration).",
-        "rotated_at": "2026-05-18"
-      }
+      "rotated_at": "2026-05-18"
+    },
+    "kucoin": {
+      "previous_key_id": null,
+      "current_key_id": "0d60dbaef2343bf5",
+      "reason": "Initial Ed25519 key registration. Kucoin lane promoted DORMANT to ACTIVE.",
+      "rotated_at": "2026-05-20"
     }
+  }
   },
   "archived_keys": {
     "65ae05b2a9e749cb": {

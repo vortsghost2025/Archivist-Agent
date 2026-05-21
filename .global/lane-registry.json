@@ -89,8 +89,8 @@
     },
     "kucoin": {
       "lane_id": "kucoin",
-      "lane_state": "DORMANT",
-      "role": "trading",
+"lane_state": "ACTIVE",
+  "role": "trading",
       "local_path": "S:/kucoin-lane",
       "repo": "https://github.com/vortsghost2025/kucoin-lane",
       "branch": "main",
