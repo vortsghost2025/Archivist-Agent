@@ -187,6 +187,37 @@ The original audit (P0 #8) incorrectly stopped `lane-relay-watcher.service`, lab
 
 ---
 
+## Post-Power-Outage User-Level Systemd Cleanup (2026-05-21)
+
+After a power outage and VPS reboot, the user-level systemd duplicate lane services did NOT come back (they had been stopped/disabled before the outage). However, their **unit files** remained on disk, creating risk of re-enablement. Final cleanup performed:
+
+### Files Removed from `~/.config/systemd/user/`
+
+| Category | Files | Count |
+|----------|-------|-------|
+| Duplicate lane service units | `we4free-heartbeat@*.service`, `we4free-autonomous-executor@*.service`, `we4free-lane-worker@*.service`, `we4free-relay-daemon@*.service` (4 lanes × 4 daemons) | 16 |
+| Authority phantom services | `we4free-heartbeat@authority.service`, `we4free-autonomous-executor@authority.service` | 2 |
+| Kucoin timer files | `kucoin-*.timer`, `kucoin-*.service` | 4 |
+| Stale symlinks | `default.target.wants/` (16) + `timers.target.wants/` (4) | 20 |
+| **Total** | | **42** |
+
+### User-Level Systemd — Final State
+
+Only 3 unique services remain (no lane duplicates, no phantom lanes):
+
+1. `continuous-improvement.service` — CI loop for sync-reports rotation
+2. `headless-supervision.service` — CP monitoring (harmless no-op for lane management)
+3. `lane-relay-watcher.service` — Cross-machine relay sync to /mnt/s/ (SSHFS)
+
+### Reboot Resilience
+
+- User-level duplicate lane services: **stopped + disabled + files removed** — will NOT come back after reboot
+- Authority phantom services: **files removed** — will NOT respawn
+- System-level services (16): **unchanged** — active and running correctly via template units
+- Crontab: **2 entries only** — overseer-health-check + tailscale-health-check (sticky through reboot)
+
+---
+
 ## Known Remaining Items (Low Priority)
 
 | Item | Priority | Notes |
@@ -219,7 +250,10 @@ The original audit (P0 #8) incorrectly stopped `lane-relay-watcher.service`, lab
 - [x] lane-relay-watcher.service stopped + disabled (system-level)
 - [x] **CORRECTION: lane-relay-watcher re-enabled as user-level service** — it is NOT redundant; it's the ONLY mechanism that syncs local lane inbox/outbox to /mnt/s/ (SSHFS mount of Windows S: drive). relay-daemon.js only handles within-VPS lane relay, NOT cross-machine sync. User-level unit at `~/.config/systemd/user/lane-relay-watcher.service`, active running ✓
 - [x] **Final: 19 processes running, 0 duplicates, all services active running**
+- [x] **Post-outage: user-level systemd duplicate unit files removed (42 files total: 16 lane duplicates, 2 authority phantoms, 4 kucoin timers, 20 stale symlinks)**
+- [x] **Post-outage: user-level systemd clean — only 3 unique services remain**
+- [x] **Post-outage: reboot resilience confirmed — duplicates do NOT respawn**
 
 ---
 
-*End of report. All remediations verified complete as of 2026-05-21T00:14:05-04:00.*
+*End of report. All remediations verified complete as of 2026-05-21T12:55:00-04:00. Post-power-outage cleanup added 2026-05-21.*
