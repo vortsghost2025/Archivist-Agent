@@ -20,17 +20,23 @@ function log(message, level = 'info') {
   console.log(`${LOG[level] || ''} ${message}`);
 }
 
+const REPO_ROOT = path.resolve(__dirname, '..');
+const LANE_ROOTS = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'config', 'lane-roots.json'), 'utf8'));
+const isWin32 = process.platform === 'win32';
+const BASE = isWin32 ? LANE_ROOTS.base_paths.windows : LANE_ROOTS.base_paths.unix;
+function laneRoot(id) { return path.join(BASE, LANE_ROOTS.lanes[id]); }
+
 const LANES = {
   'archivist-agent': {
-    root: 'S:\\Archivist-Agent',
+    root: laneRoot('archivist'),
     role: 'governance-root'
   },
   'swarmmind': {
-    root: 'S:\\SwarmMind',
+    root: laneRoot('swarmmind'),
     role: 'trace-layer'
   },
   'library': {
-    root: 'S:\\self-organizing-library',
+    root: laneRoot('library'),
     role: 'memory-layer'
   }
 };

@@ -87,10 +87,8 @@ context-buffer/sync-reports/
 # Ubuntu error artifacts
 context-buffer/I'm on Ubuntu and can't write direc.txt
 
-# Node.js runtime (not a Node project)
+# Node.js runtime (JS scripts used for automation — package.json is canonical)
 node_modules/
-package.json
-package-lock.json
 
 # Playwright test artifacts
 test-results/

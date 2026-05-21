@@ -11,10 +11,10 @@
       "swarmmind"
     ],
     "protected_shared_paths": [
-      "S:/Archivist-Agent/lanes/broadcast",
-      "S:/Archivist-Agent/lanes/broadcast/trust-store.json",
-      "S:/Archivist-Agent/lanes/broadcast/system_state.json",
-      "S:/Archivist-Agent/scripts"
+      "Archivist-Agent/lanes/broadcast",
+      "Archivist-Agent/lanes/broadcast/trust-store.json",
+      "Archivist-Agent/lanes/broadcast/system_state.json",
+      "Archivist-Agent/scripts"
     ]
   },
   "rule_of_thumb": "If two agents can touch the same file tree within 10 minutes, drift risk is high.",
