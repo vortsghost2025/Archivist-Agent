@@ -496,12 +496,9 @@ function exhaustiveSwitch(value, enumName) {
  */
 function validateEnum(value, enumValues, enumName) {
   if (enumValues.includes(value)) {
-    return /** @type {ValidateEnumOk} */({ ok: true, value });
+    return { ok: true, value };
   }
-  return /** @type {ValidateEnumErr} */({
-    ok: false,
-    error: `Invalid ${enumName}: "${value}". Must be one of: ${enumValues.join(', ')}`,
-  });
+  return { ok: false, error: `Invalid ${enumName}: "${value}". Must be one of: ${enumValues.join(', ')}` };
 }
 
 module.exports = {

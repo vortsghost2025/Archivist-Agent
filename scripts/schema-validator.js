@@ -135,13 +135,13 @@ function validateConvergenceGate(output) {
   }
 
   if (output.status) {
-    const r = validateEnum(output.status, CONVERGENCE_STATUSES, 'ConvergenceStatus');
-    if (!r.ok) errors.push(r.error);
+	const r = validateEnum(output.status, CONVERGENCE_STATUSES, 'ConvergenceStatus');
+	if ('error' in r) errors.push(r.error);
   }
 
   if (output.verified_by) {
     const r = validateEnum(output.verified_by, VERIFIED_BY, 'VerifiedBy');
-    if (!r.ok) errors.push(r.error);
+    if ('error' in r) errors.push(r.error);
   }
 
   if (output.verified_by === 'user' && output.status === 'proven') {
@@ -160,12 +160,12 @@ function validateUncertaintyPacket(input) {
   }
   if (input.level) {
     const r = validateEnum(input.level, UNCERTAINTY_LEVELS, 'UncertaintyLevel');
-    if (!r.ok) errors.push(r.error);
+    if ('error' in r) errors.push(r.error);
   }
   if (Array.isArray(input.type)) {
     for (var i = 0; i < input.type.length; i++) {
       const r = validateEnum(input.type[i], UNCERTAINTY_TYPES, 'UncertaintyType');
-      if (!r.ok) errors.push(r.error);
+      if ('error' in r) errors.push(r.error);
     }
   } else if (input.type) {
     errors.push('uncertainty.type must be an array');
@@ -185,7 +185,7 @@ function validateReviewRound(input) {
   }
   if (input.status) {
     const r = validateEnum(input.status, REVIEW_STATUSES, 'ReviewStatus');
-    if (!r.ok) errors.push(r.error);
+    if ('error' in r) errors.push(r.error);
   }
   if (typeof input.round === 'number' && typeof input.max_rounds === 'number') {
     if (input.round >= input.max_rounds && input.status === 'needs_repair') {
