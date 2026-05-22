@@ -432,6 +432,8 @@ class IdentityEnforcer {
   }
 
   static writeTrustStoreStrict(trustStorePath, trustStore, options = {}) {
+    const { enforceMutation } = require('./mode-check');
+    enforceMutation('trust_store_write', trustStorePath);
     IdentityEnforcer.assertTrustStoreWriteAuthorized(options);
     const serialized = { ...trustStore };
     if (!Array.isArray(serialized.preCommitChecks)) {

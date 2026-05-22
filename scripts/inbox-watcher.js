@@ -519,6 +519,8 @@ class InboxWatcher {
     }
   }
 
+  const { enforceMutation } = require('./mode-check');
+
   async processMessage(msg) {
     const filename = msg._sourceFile;
     const sourcePath = msg._sourcePath;

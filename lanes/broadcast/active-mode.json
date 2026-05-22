@@ -1,0 +1,10 @@
+{
+  "mode": "OBSERVE",
+  "set_by": "operator",
+  "set_at": "2026-05-22T10:18:00-04:00",
+  "reason": "Initial creation. Operator recovering. No active build work.",
+  "expires_at": null,
+  "allowed_operations": ["read", "log", "summarize", "measure", "report"],
+  "previous_mode": null,
+  "version": 1
+}

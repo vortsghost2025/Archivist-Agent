@@ -360,6 +360,19 @@ const LaneState = Object.freeze({
   ARCHIVED: 'ARCHIVED',
 });
 
+// ─── Operational Mode ──────────────────────────────────────────────
+
+/**
+ * @enum {string}
+ * Source: lanes/broadcast/active-mode.json mode gate
+ */
+const OperationalMode = Object.freeze({
+  OBSERVE: 'OBSERVE',
+  BUILD: 'BUILD',
+  CHAOS_LAB: 'CHAOS_LAB',
+  RECOVERY: 'RECOVERY',
+});
+
 // ─── Verified By ────────────────────────────────────────────────────
 
 /**
@@ -401,6 +414,7 @@ const PAYLOAD_MODES = Object.freeze(Object.values(PayloadMode));
 const PAYLOAD_COMPRESSIONS = Object.freeze(Object.values(PayloadCompression));
 const SIGNATURE_ALGORITHMS = Object.freeze(Object.values(SignatureAlgorithm));
 const RECOVERY_TRIGGERS = Object.freeze(Object.values(RecoveryTrigger));
+const OPERATIONAL_MODES = Object.freeze(Object.values(OperationalMode));
 const LANE_STATES = Object.freeze(Object.values(LaneState));
 const BROADCAST_SENDERS = Object.freeze(Object.values(BroadcastSender));
 
@@ -438,6 +452,8 @@ const VERIFIED_BY_SET = Object.freeze(new Set(VERIFIED_BY));
 const HEARTBEAT_STATUS_SET = Object.freeze(new Set(HEARTBEAT_STATUSES));
 /** @type {Set<string>} */
 const ENFORCEMENT_MODE_SET = Object.freeze(new Set(ENFORCEMENT_MODES));
+/** @type {Set<string>} */
+const OPERATIONAL_MODE_SET = Object.freeze(new Set(OPERATIONAL_MODES));
 /** @type {Set<string>} */
 const LANE_STATE_SET = Object.freeze(new Set(LANE_STATES));
 
@@ -526,6 +542,7 @@ module.exports = {
   Disposition,
   EnforcementMode,
   RecoveryTrigger,
+  OperationalMode,
   LaneState,
   VerifiedBy,
   CONVERGENCE_STATUSES,
@@ -545,6 +562,7 @@ module.exports = {
   HEARTBEAT_STATUSES,
   BROADCAST_HEARTBEAT_STATUSES,
   ENFORCEMENT_MODES,
+  OPERATIONAL_MODES,
   EXECUTION_MODES,
   EXECUTION_ENGINES,
   EXECUTION_ACTORS,
@@ -570,6 +588,7 @@ module.exports = {
   VERIFIED_BY_SET,
   HEARTBEAT_STATUS_SET,
   ENFORCEMENT_MODE_SET,
+  OPERATIONAL_MODE_SET,
   LANE_STATE_SET,
   exhaustiveSwitch,
   validateEnum,
