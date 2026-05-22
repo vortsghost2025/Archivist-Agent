@@ -19,6 +19,13 @@
       "private_key_pem": "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIGvnbfo3PBEHX03mTrnfbjpWKl4GmzRz720F7DCGtOWp\n-----END PRIVATE KEY-----\n",
       "algorithm": "EdDSA",
       "registered_at": "2026-05-20T23:32:52.000Z"
+    },
+    "authority": {
+      "key_id": "2d7b8cb8371b239a",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk1RttwnJ1Vgy1IxmkBo9\nGons37UYBd5ZYcKTOhtsrNvY7h21uQLSWUMXicp2IeTBN3d5FcfcsXxZWqRsPk3j\noiOqMqEilhWrsSRNSNDytMBYDmCNsnqrH64PJTn8isCWEMDgoCtL8Dhqq/GBzdKg\nRQHktLs20EV7pFThsN5MpAFoDNKh4arKTcTJZbXcb+pyzFg2AMwvnpdI8ShhcxtB\nSHYQ8akbr/Q8wDhV1ONwhdBZXsb8GIQjIGdrSZOkPHYqqawzrgI1NTazWCh2R00c\nJieNDc24e658bEkoLflfq0hCPsY4EMBMoD5+ge+Rc7YGYHGdyQOM13af5QC1krUh\nSQIDAQAB\n-----END PUBLIC KEY-----\n",
+      "algorithm": "RS256",
+      "registered_at": "2026-05-22T01:33:28Z",
+      "note": "DER fingerprint standard: sha256(SPKI DER of public key), first 16 hex chars"
     }
   },
   "phenotypes": {

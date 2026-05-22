@@ -60,10 +60,20 @@
     "revoked_at": null,
     "activation_notes": "Promoted DORMANT→ACTIVE 2026-05-20. Ed25519 key registered. VPS process deployment and CircuitBreaker wiring pending. Lane has existing test trail and journal from prior work."
   },
+  "authority": {
+    "lane_id": "authority",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk1RttwnJ1Vgy1IxmkBo9\nGons37UYBd5ZYcKTOhtsrNvY7h21uQLSWUMXicp2IeTBN3d5FcfcsXxZWqRsPk3j\noiOqMqEilhWrsSRNSNDytMBYDmCNsnqrH64PJTn8isCWEMDgoCtL8Dhqq/GBzdKg\nRQHktLs20EV7pFThsN5MpAFoDNKh4arKTcTJZbXcb+pyzFg2AMwvnpdI8ShhcxtB\nSHYQ8akbr/Q8wDhV1ONwhdBZXsb8GIQjIGdrSZOkPHYqqawzrgI1NTazWCh2R00c\nJieNDc24e658bEkoLflfq0hCPsY4EMBMoD5+ge+Rc7YGYHGdyQOM13af5QC1krUh\nSQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "algorithm": "RS256",
+    "key_id": "2d7b8cb8371b239a",
+    "registered_at": "2026-05-22T01:33:28Z",
+    "expires_at": null,
+    "revoked_at": null,
+    "note": "DER fingerprint standard: sha256(SPKI DER of public key), first 16 hex chars"
+  },
   "key_lineage": {
-"reconciled_at": "2026-05-20T22:28:00Z",
-  "reconciled_by": "archivist",
-  "source_machine": "windows-desktop-S-drive",
+    "reconciled_at": "2026-05-20T22:28:00Z",
+    "reconciled_by": "archivist",
+    "source_machine": "windows-desktop-S-drive",
     "reason": "Key activation 2026-05-20. Kucoin promoted DORMANT→ACTIVE with Ed25519 key 0d60dbaef2343bf5. All 6 operational lanes now ACTIVE. VPS process deployment and CircuitBreaker wiring still pending.",
     "rotations": {
       "archivist": {
@@ -94,15 +104,15 @@
         "previous_key_id": null,
         "current_key_id": "bc7e06b864676199",
         "reason": "Initial key registration. Control Plane identity established per P10 governance decision (DEFER pending key registration).",
-      "rotated_at": "2026-05-18"
-    },
-    "kucoin": {
-      "previous_key_id": null,
-      "current_key_id": "0d60dbaef2343bf5",
-      "reason": "Initial Ed25519 key registration. Kucoin lane promoted DORMANT to ACTIVE.",
-      "rotated_at": "2026-05-20"
+        "rotated_at": "2026-05-18"
+      },
+      "kucoin": {
+        "previous_key_id": null,
+        "current_key_id": "0d60dbaef2343bf5",
+        "reason": "Initial Ed25519 key registration. Kucoin lane promoted DORMANT to ACTIVE.",
+        "rotated_at": "2026-05-20"
+      }
     }
-  }
   },
   "archived_keys": {
     "65ae05b2a9e749cb": {
