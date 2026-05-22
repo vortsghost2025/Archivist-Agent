@@ -9,81 +9,112 @@
 <body>
     <div id="app">
         <header>
-            <span class="header-icon">🗂️</span>
-            <h1>Archivist Agent</h1>
+            <div class="brand-block">
+                <span class="header-icon">🗂️</span>
+                <div>
+                    <h1>Archivist Agent</h1>
+                    <p class="header-copy">Turn a folder into a readable map you can actually use.</p>
+                </div>
+            </div>
             <span class="version">v0.1.0</span>
             <div class="spacer"></div>
-            <button class="btn btn-ghost" id="btn-diag">🔬 Diagnostics</button>
+            <button class="btn btn-ghost" id="btn-diag">Diagnostics</button>
         </header>
 
         <main>
             <aside id="sidebar">
-                <div>
+                <section class="section-card">
                     <div class="section-label">Target Folder</div>
                     <div class="path-group">
                         <label for="folder-path">Path to scan</label>
                         <input type="text" id="folder-path" placeholder="C:\Projects\MyProject" aria-label="Path to scan" />
+                        <p class="helper-text">Paste a folder path, then run one analysis to scan, classify, and prep fast retrieval.</p>
                     </div>
-                </div>
+                </section>
 
                 <div id="status-bar" role="status" aria-live="polite">
                     <div class="status-dot idle" id="status-dot"></div>
                     <span id="status-text">Ready</span>
                 </div>
 
-                <div>
-                    <div class="section-label">Actions</div>
+                <section class="section-card">
+                    <div class="section-label">Main Flow</div>
                     <div class="action-buttons">
-                        <button class="btn btn-primary" id="btn-scan">📁 Scan Folder</button>
-                        <button class="btn btn-secondary" id="btn-classify">🏷️ Classify Files</button>
-                        <button class="btn btn-secondary" id="btn-index">📋 Build Index</button>
-                        <button class="btn btn-secondary" id="btn-registry">🗄️ Build Registry</button>
-                        <button class="btn btn-secondary" id="btn-handoff">📤 Generate Handoff</button>
+                        <button class="btn btn-primary" id="btn-analyze">Analyze Folder</button>
+                        <button class="btn btn-secondary" id="btn-scan">Tree Only</button>
+                        <button class="btn btn-secondary" id="btn-classify">Refresh Classification</button>
                     </div>
-                </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-label">Artifacts</div>
+                    <div class="action-buttons compact-actions">
+                        <button class="btn btn-secondary" id="btn-index">Build Index</button>
+                        <button class="btn btn-secondary" id="btn-registry">Build Registry</button>
+                        <button class="btn btn-secondary" id="btn-handoff">Generate Handoff</button>
+                    </div>
+                </section>
+
+                <section class="section-card">
+                    <div class="section-label">Recent Folders</div>
+                    <div id="recent-folders" class="recent-folders" aria-live="polite"></div>
+                </section>
             </aside>
 
             <div id="content">
                 <nav id="tab-bar" role="tablist" aria-label="Main content tabs">
                     <div class="tab active" data-tab="overview" role="tab" aria-selected="true" tabindex="0">Overview</div>
-                    <div class="tab" data-tab="tree" role="tab" aria-selected="false" tabindex="0">Tree View</div>
-                    <div class="tab" data-tab="buckets" role="tab" aria-selected="false" tabindex="0">Buckets</div>
-                    <div class="tab" data-tab="output" role="tab" aria-selected="false" tabindex="0">Output Log</div>
+                    <div class="tab" data-tab="retrieve" role="tab" aria-selected="false" tabindex="0">Retrieve</div>
+                    <div class="tab" data-tab="tree" role="tab" aria-selected="false" tabindex="0">Tree</div>
+                    <div class="tab" data-tab="output" role="tab" aria-selected="false" tabindex="0">Activity</div>
                 </nav>
 
                 <div id="tab-content">
                     <div id="welcome">
                         <div class="icon">🗂️</div>
-                        <h2>Archivist Agent</h2>
-                        <p>Enter a folder path in the sidebar and click <strong>Scan Folder</strong> to begin.</p>
-                        <button class="btn btn-primary" id="btn-scan-welcome">📁 Scan a Folder</button>
+                        <h2>Start with one folder</h2>
+                        <p>Analyze a folder to get structure, classifications, and a searchable file list in one pass.</p>
+                        <button class="btn btn-primary" id="btn-analyze-welcome">Analyze a Folder</button>
                     </div>
 
                     <div id="tab-overview" class="hidden" role="tabpanel">
                         <div id="diag-panel" class="hidden">
-                            <h3>🔬 System Diagnostics</h3>
+                            <h3>System Diagnostics</h3>
                             <div class="diag-grid">
                                 <div class="diag-item"><div class="diag-status unknown" id="diag-tauri"></div><span>Tauri API available</span></div>
                                 <div class="diag-item"><div class="diag-status unknown" id="diag-invoke"></div><span>invoke() callable</span></div>
                                 <div class="diag-item"><div class="diag-status unknown" id="diag-ping"></div><span>ping command responds</span></div>
                                 <div class="diag-item"><div class="diag-status unknown" id="diag-scan"></div><span>scan_tree registered</span></div>
                             </div>
-                            <div class="diag-detail" id="diag-detail">Click "🔬 Diagnostics" to run checks...</div>
+                            <div class="diag-detail" id="diag-detail">Click Diagnostics to run checks.</div>
                         </div>
-                        <div id="overview-content"><p class="text-muted">Run a scan to see overview here.</p></div>
+                        <div id="overview-content"></div>
+                    </div>
+
+                    <div id="tab-retrieve" class="hidden" role="tabpanel">
+                        <div class="retrieve-toolbar">
+                            <div class="search-block">
+                                <label for="search-query">Find a file</label>
+                                <div class="search-row">
+                                    <input type="search" id="search-query" placeholder="Search by name, path, bucket, or reason" aria-label="Search analyzed files" />
+                                    <button class="btn btn-ghost" id="btn-clear-search">Clear</button>
+                                </div>
+                                <p class="helper-text">Use search plus bucket filters to jump straight to what matters.</p>
+                            </div>
+                            <div class="results-snapshot" id="results-snapshot">No results loaded yet.</div>
+                        </div>
+                        <div id="bucket-filters" class="bucket-filters"></div>
+                        <div id="search-results" class="results-grid"></div>
                     </div>
 
                     <div id="tab-tree" class="hidden" role="tabpanel">
+                        <div id="tree-summary" class="tree-summary"></div>
                         <pre id="tree-output" class="tree-output"></pre>
-                    </div>
-
-                    <div id="tab-buckets" class="hidden" role="tabpanel">
-                        <div id="bucket-stats"></div>
                     </div>
 
                     <div id="tab-output" class="hidden" role="tabpanel">
                         <div class="output-header">
-                            <h3>Output Log</h3>
+                            <h3>Activity Log</h3>
                             <button class="btn btn-ghost" id="btn-clear-log">Clear</button>
                         </div>
                         <div id="log-output" aria-live="polite"></div>
