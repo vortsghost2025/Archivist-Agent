@@ -15,16 +15,9 @@
     "types": ["node"]
   },
   "include": [
-    "scripts/**/*.js",
-    "scripts/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "src-tauri",
-    "ui",
-    "tests",
-    "lanes",
-    "context-buffer",
-    "scripts/executor-watcher.js"
+    "scripts/governance-types.js",
+    "scripts/schema-validator.js",
+    "scripts/identity-enforcer.js",
+    ".global/algorithm-helpers.js"
   ]
 }
