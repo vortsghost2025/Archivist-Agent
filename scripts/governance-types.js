@@ -406,22 +406,39 @@ const BROADCAST_SENDERS = Object.freeze(Object.values(BroadcastSender));
 
 // ─── Frozen enum value Sets (for .has() checks) ─────────────────────
 
+/** @type {Set<string>} */
 const CONVERGENCE_STATUS_SET = Object.freeze(new Set(CONVERGENCE_STATUSES));
+/** @type {Set<string>} */
 const CONVERGED_STATUS_SET = Object.freeze(new Set(CONVERGED_STATUSES));
+/** @type {Set<string>} */
 const LANE_ID_SET = Object.freeze(new Set(LANE_IDS));
+/** @type {Set<string>} */
 const MESSAGE_TYPE_SET = Object.freeze(new Set(MESSAGE_TYPES));
+/** @type {Set<string>} */
 const TASK_KIND_SET = Object.freeze(new Set(TASK_KINDS));
+/** @type {Set<string>} */
 const PRIORITY_SET = Object.freeze(new Set(PRIORITIES));
+/** @type {Set<string>} */
 const UNCERTAINTY_LEVEL_SET = Object.freeze(new Set(UNCERTAINTY_LEVELS));
+/** @type {Set<string>} */
 const UNCERTAINTY_TYPE_SET = Object.freeze(new Set(UNCERTAINTY_TYPES));
+/** @type {Set<string>} */
 const REVIEW_STATUS_SET = Object.freeze(new Set(REVIEW_STATUSES));
+/** @type {Set<string>} */
 const QUARANTINE_REASON_SET = Object.freeze(new Set(QUARANTINE_REASONS));
+/** @type {Set<string>} */
 const RECOVERY_STATUS_SET = Object.freeze(new Set(RECOVERY_STATUSES));
+/** @type {Set<string>} */
 const ADJUDICATION_STATUS_SET = Object.freeze(new Set(ADJUDICATION_STATUSES));
+/** @type {Set<string>} */
 const DISPOSITION_SET = Object.freeze(new Set(DISPOSITIONS));
+/** @type {Set<string>} */
 const VERIFIED_BY_SET = Object.freeze(new Set(VERIFIED_BY));
+/** @type {Set<string>} */
 const HEARTBEAT_STATUS_SET = Object.freeze(new Set(HEARTBEAT_STATUSES));
+/** @type {Set<string>} */
 const ENFORCEMENT_MODE_SET = Object.freeze(new Set(ENFORCEMENT_MODES));
+/** @type {Set<string>} */
 const LANE_STATE_SET = Object.freeze(new Set(LANE_STATES));
 
 // ─── Exhaustive Switch Enforcement ──────────────────────────────────
@@ -457,13 +474,25 @@ function exhaustiveSwitch(value, enumName) {
 }
 
 /**
+ * @typedef {Object} ValidateEnumOk
+ * @property {true} ok
+ * @property {string} value
+ */
+
+/**
+ * @typedef {Object} ValidateEnumErr
+ * @property {false} ok
+ * @property {string} error
+ */
+
+/**
  * Validate that a value belongs to a governance enum.
  * Returns a Result-style object instead of throwing.
  *
  * @param {string} value
  * @param {ReadonlyArray<string>} enumValues
  * @param {string} enumName
- * @returns {{ ok: true, value: string } | { ok: false, error: string }}
+ * @returns {ValidateEnumOk | ValidateEnumErr}
  */
 function validateEnum(value, enumValues, enumName) {
   if (enumValues.includes(value)) {

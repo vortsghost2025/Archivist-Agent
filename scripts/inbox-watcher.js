@@ -40,7 +40,8 @@ const SKIP_FILENAMES = new Set([
 const HEARTBEAT_PATTERN = /^heartbeat-.+\.json$/i;
 const INBOX_MSG_PATTERN = /^\d{4}-/;
 const UUID_PATTERN = /^\d{8}-\d{4}-\d{4}-\d{4}-\d{12}\.json$/i;
-  const ACTION_REQUIRED_TYPES = new Set([MessageType.TASK, MessageType.ESCALATION, MessageType.REQUEST]);
+  /** @type {Set<string>} */
+const ACTION_REQUIRED_TYPES = new Set([MessageType.TASK, MessageType.ESCALATION, MessageType.REQUEST]);
   const COMPLETION_PROOF_FIELDS = [
     'completion_artifact_path',
     'completion_message_id',
