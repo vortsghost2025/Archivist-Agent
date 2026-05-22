@@ -1,0 +1,24 @@
+{
+  "name": "archivist-e2e-tests",
+  "version": "1.0.0",
+  "description": "End-to-end integration tests for the 4-lane governance system",
+  "type": "module",
+  "scripts": {
+    "test": "node run-tests.js",
+    "test:cross-lane": "node run-tests.js",
+    "test:governance": "node run-tests.js",
+    "test:evidence": "node run-tests.js",
+    "test:heartbeat": "node run-tests.js",
+    "test:provenance": "node run-tests.js",
+    "test:errors": "node run-tests.js",
+    "test:full": "node run-tests.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "bin": {
+    "run-e2e": "./run-tests.js"
+  }
+}
