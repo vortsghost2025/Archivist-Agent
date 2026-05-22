@@ -16,9 +16,15 @@
                     <p class="header-copy">Turn a folder into a readable map you can actually use.</p>
                 </div>
             </div>
-            <span class="version">v0.1.0</span>
-            <div class="spacer"></div>
-            <button class="btn btn-ghost" id="btn-diag">Diagnostics</button>
+<span class="version">v0.1.0</span>
+<div class="spacer"></div>
+<div class="zoom-controls" role="group" aria-label="Zoom">
+  <button class="btn btn-ghost zoom-btn" id="btn-zoom-out" title="Zoom out (Ctrl+-)">−</button>
+  <span class="zoom-level" id="zoom-level">100%</span>
+  <button class="btn btn-ghost zoom-btn" id="btn-zoom-in" title="Zoom in (Ctrl++)">+</button>
+  <button class="btn btn-ghost zoom-btn" id="btn-zoom-reset" title="Reset zoom (Ctrl+0)">↺</button>
+</div>
+<button class="btn btn-ghost" id="btn-diag">Diagnostics</button>
         </header>
 
         <main>

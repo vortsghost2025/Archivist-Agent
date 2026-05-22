@@ -90,7 +90,29 @@ header h1 {
 }
 
 .spacer {
-    flex: 1;
+  flex: 1;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.zoom-btn {
+  min-width: 30px;
+  padding: 4px 8px;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 8px;
+}
+
+.zoom-level {
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 38px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 main {

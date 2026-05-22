@@ -262,18 +262,21 @@ function setStatus(text, type = 'idle') {
 }
 
 function switchTab(tabName) {
-    state.activeTab = tabName;
-    document.querySelectorAll('.tab').forEach(tab => {
-        const isActive = tab.dataset.tab === tabName;
-        tab.classList.toggle('active', isActive);
-        tab.setAttribute('aria-selected', String(isActive));
-    });
-    TAB_NAMES.forEach(name => {
-        $(`tab-${name}`).classList.toggle('hidden', name !== tabName);
-    });
-    if (state.scanResult || state.summaryResult) {
-        $('welcome').classList.add('hidden');
-    }
+  state.activeTab = tabName;
+  document.querySelectorAll('.tab').forEach(tab => {
+    const isActive = tab.dataset.tab === tabName;
+    tab.classList.toggle('active', isActive);
+    tab.setAttribute('aria-selected', String(isActive));
+  });
+  TAB_NAMES.forEach(name => {
+    $(`tab-${name}`).classList.toggle('hidden', name !== tabName);
+  });
+  if (state.scanResult || state.summaryResult) {
+    $('welcome').classList.add('hidden');
+  }
+  if (tabName === 'tree') renderTreePanel();
+  if (tabName === 'overview') renderOverview();
+  if (tabName === 'retrieve') renderRetrieve();
 }
 
 function getValidPath() {
@@ -930,6 +933,35 @@ function setDiagStatus(id, status) {
     }
 }
 
+const ZOOM_STEP = 0.1;
+const ZOOM_MIN = 0.5;
+const ZOOM_MAX = 2.0;
+const ZOOM_DEFAULT = 1.0;
+
+function getZoomLevel() {
+	const saved = localStorage.getItem('archivist-zoom');
+	return saved ? parseFloat(saved) : ZOOM_DEFAULT;
+}
+
+function applyZoom(level) {
+	const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
+	const app = $('app');
+	if (app) app.style.transform = `scale(${clamped})`;
+	const display = $('zoom-level');
+	if (display) display.textContent = `${Math.round(clamped * 100)}%`;
+	localStorage.setItem('archivist-zoom', clamped.toString());
+}
+
+function zoomIn() { applyZoom(getZoomLevel() + ZOOM_STEP); }
+function zoomOut() { applyZoom(getZoomLevel() - ZOOM_STEP); }
+function zoomReset() { applyZoom(ZOOM_DEFAULT); }
+
+document.addEventListener('keydown', (e) => {
+	if (e.ctrlKey && (e.key === '=' || e.key === '+')) { e.preventDefault(); zoomIn(); }
+	if (e.ctrlKey && e.key === '-') { e.preventDefault(); zoomOut(); }
+	if (e.ctrlKey && e.key === '0') { e.preventDefault(); zoomReset(); }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     renderRecentPaths();
 
@@ -961,11 +993,16 @@ document.addEventListener('DOMContentLoaded', () => {
         renderRetrieve();
     });
 
-    $('folder-path').addEventListener('keydown', event => {
-        if (event.key === 'Enter') {
-            runAnalyzeFolder();
-        }
-    });
+$('btn-zoom-in').addEventListener('click', zoomIn);
+$('btn-zoom-out').addEventListener('click', zoomOut);
+$('btn-zoom-reset').addEventListener('click', zoomReset);
+applyZoom(getZoomLevel());
+
+$('folder-path').addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        runAnalyzeFolder();
+    }
+});
 
     $('recent-folders').addEventListener('click', event => {
         const button = event.target.closest('[data-path]');
