@@ -32,6 +32,7 @@ const MODE_ALLOWED_OPERATIONS = Object.freeze({
   [OperationalMode.BUILD]: Object.freeze([
     'read', 'log', 'summarize', 'measure', 'report',
     'mutate_scoped', 'commit', 'test',
+    'outbox_write', 'trust_store_write', 'inbox_mutation',
   ]),
   [OperationalMode.CHAOS_LAB]: Object.freeze([
     'read', 'log', 'summarize', 'measure', 'report',
@@ -40,6 +41,7 @@ const MODE_ALLOWED_OPERATIONS = Object.freeze({
   [OperationalMode.RECOVERY]: Object.freeze([
     'read', 'log', 'summarize', 'measure', 'report',
     'restore', 'verify', 'compare', 'unblock',
+    'outbox_write', 'trust_store_write', 'inbox_mutation',
   ]),
 });
 
@@ -96,17 +98,20 @@ function checkMutation(operation, targetPath) {
   const mode = modeData.mode;
   const allowed = MODE_ALLOWED_OPERATIONS[mode] || [];
 
-  if (allowed.includes(operation)) {
-    return { allowed: true, reason: `Operation "${operation}" permitted in ${mode} mode.` };
-  }
-
-  if (MUTATION_OPERATIONS.has(operation) && !allowed.includes(operation)) {
+  if (!allowed.includes(operation)) {
+    if (MUTATION_OPERATIONS.has(operation)) {
+      return {
+        allowed: false,
+        reason: `MODE_GATE_BLOCKED: Operation "${operation}" is not allowed in ${mode} mode. ` +
+        `Allowed: ${allowed.join(', ')}. ` +
+        `Mode set by ${modeData.set_by || 'unknown'} at ${modeData.set_at || 'unknown'}. ` +
+        `Reason: ${modeData.reason || 'none'}.`,
+      };
+    }
     return {
       allowed: false,
-      reason: `MODE_GATE_BLOCKED: Operation "${operation}" is not allowed in ${mode} mode. ` +
-              `Allowed: ${allowed.join(', ')}. ` +
-              `Mode set by ${modeData.set_by || 'unknown'} at ${modeData.set_at || 'unknown'}. ` +
-              `Reason: ${modeData.reason || 'none'}.`,
+      reason: `MODE_GATE_BLOCKED: Operation "${operation}" not recognized for mode ${mode}. ` +
+      `Allowed: ${allowed.join(', ')}.`,
     };
   }
 
@@ -122,7 +127,7 @@ function checkMutation(operation, targetPath) {
         return {
           allowed: false,
           reason: `MODE_GATE_BLOCKED: Cannot mutate stable governance file in BUILD mode. ` +
-                  `Path: ${targetPath}. Switch to CHAOS_LAB or get operator approval.`,
+          `Path: ${targetPath}. Switch to CHAOS_LAB or get operator approval.`,
         };
       }
     }
@@ -135,17 +140,13 @@ function checkMutation(operation, targetPath) {
         return {
           allowed: false,
           reason: `MODE_GATE_BLOCKED: Cannot write to main/master paths in CHAOS_LAB mode. ` +
-                  `Path: ${targetPath}. Use a branch or staging path.`,
+          `Path: ${targetPath}. Use a branch or staging path.`,
         };
       }
     }
   }
 
-  return {
-    allowed: false,
-    reason: `MODE_GATE_BLOCKED: Operation "${operation}" not recognized for mode ${mode}. ` +
-            `Allowed: ${allowed.join(', ')}.`,
-  };
+  return { allowed: true, reason: `Operation "${operation}" permitted in ${mode} mode.` };
 }
 
 function transitionMode(newMode, setBy, reason, expiresAt) {

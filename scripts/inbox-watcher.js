@@ -28,6 +28,7 @@ const { consensusCheck, routeMessage, loadPolicy: loadConsensusPolicy } = requir
 const { logTransfer } = require('./transfer-log');
 const { validateUncertaintyPacket, validateReviewRound } = require('./schema-validator');
 const { MessageType, CONVERGED_STATUS_SET, DISPOSITION_SET } = require('./governance-types');
+const { enforceMutation } = require('./mode-check');
 
 const PRIORITY_ORDER = { P0: 0, P1: 1, P2: 2, P3: 3 };
 const PREEMPTION_CYCLE_LIMIT = 2;
@@ -519,12 +520,11 @@ class InboxWatcher {
     }
   }
 
-  const { enforceMutation } = require('./mode-check');
-
-  async processMessage(msg) {
+        async processMessage(msg) {
     const filename = msg._sourceFile;
-    const sourcePath = msg._sourcePath;
-    const priority = msg.priority || 'P3';
+        const sourcePath = msg._sourcePath;
+        enforceMutation('inbox_mutation', sourcePath);
+        const priority = msg.priority || 'P3';
     const type = msg.type || 'unknown';
     const from = msg.from || msg.from_lane || 'unknown';
     const body = typeof msg.body === 'string' ? msg.body : JSON.stringify(msg.body || '');
