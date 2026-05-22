@@ -1,9 +1,21 @@
-{
-  "lane_id": "archivist",
-  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkin4b+B58POUXVKLcKrQ\nC5JNn3k6991C1dScmyC8w8/pR8uPmhAtiu3G3dS6zt59qGVmgys2TnFM8493ztBE\nw/ZEVlNKiOJkIhpx1Q/6pnJI7lu4icoTdymVX/4uqVujMUNJyu1nFP/DKc2/NDnV\nUDLqthEY1LXyztdFeS/Qz+MH+ykXLFPZ/lA2X1Z18mm6fPCp9xlJRhdjn//zqzzK\nrBif1jmp+pfRVsvS1FVqDs43+/sQFmXq3Tul4I1KG9CNLqxH2dnk8YPZYztEi2yp\nQpqDPjpTtBN+Zl70S7ZoZ0cXvBV1W9bedZoSdVy8rITpSRFJxCc+jc7wrxF3iYgH\n8QIDAQAB\n-----END PUBLIC KEY-----\n",
-  "algorithm": "RS256",
-  "key_id": "147c5c2bb7d8941f",
-  "registered_at": "2026-04-22T01:05:00Z",
-  "expires_at": null,
-  "revoked_at": null
-}
+[
+  {
+    "lane_id": "archivist",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkin4b+B58POUXVKLcKrQ\nC5JNn3k6991C1dScmyC8w8/pR8uPmhAtiu3G3dS6zt59qGVmgys2TnFM8493ztBE\nw/ZEVlNKiOJkIhpx1Q/6pnJI7lu4icoTdymVX/4uqVujMUNJyu1nFP/DKc2/NDnV\nUDLqthEY1LXyztdFeS/Qz+MH+ykXLFPZ/lA2X1Z18mm6fPCp9xlJRhdjn//zqzzK\nrBif1jmp+pfRVsvS1FVqDs43+/sQFmXq3Tul4I1KG9CNLqxH2dnk8YPZYztEi2yp\nQpqDPjpTtBN+Zl70S7ZoZ0cXvBV1W9bedZoSdVy8rITpSRFJxCc+jc7wrxF3iYgH\n8QIDAQAB\n-----END PUBLIC KEY-----\n",
+    "algorithm": "RS256",
+    "key_id": "147c5c2bb7d8941f",
+    "registered_at": "2026-04-22T01:05:00Z",
+    "expires_at": null,
+    "revoked_at": null
+  },
+  {
+    "lane_id": "authority",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk1RttwnJ1Vgy1IxmkBo9\nGons37UYBd5ZYcKTOhtsrNvY7h21uQLSWUMXicp2IeTBN3d5FcfcsXxZWqRsPk3j\noiOqMqEilhWrsSRNSNDytMBYDmCNsnqrH64PJTn8isCWEMDgoCtL8Dhqq/GBzdKg\nRQHktLs20EV7pFThsN5MpAFoDNKh4arKTcTJZbXcb+pyzFg2AMwvnpdI8ShhcxtB\nSHYQ8akbr/Q8wDhV1ONwhdBZXsb8GIQjIGdrSZOkPHYqqawzrgI1NTazWCh2R00c\nJieNDc24e658bEkoLflfq0hCPsY4EMBMoD5+ge+Rc7YGYHGdyQOM13af5QC1krUh\nSQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "algorithm": "RS256",
+    "key_id": "2d7b8cb8371b239a",
+    "registered_at": "2026-05-22T01:33:28Z",
+    "expires_at": null,
+    "revoked_at": null,
+    "note": "DER fingerprint standard: sha256(SPKI DER of public key), first 16 hex chars"
+  }
+]

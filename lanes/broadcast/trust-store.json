@@ -35,5 +35,15 @@
     "expires_at": null,
     "revoked_at": null,
     "note": "DER fingerprint standard (Option A): sha256(SPKI DER of public key), first 16 hex chars"
+  },
+  "authority": {
+    "lane_id": "authority",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk1RttwnJ1Vgy1IxmkBo9\nGons37UYBd5ZYcKTOhtsrNvY7h21uQLSWUMXicp2IeTBN3d5FcfcsXxZWqRsPk3j\noiOqMqEilhWrsSRNSNDytMBYDmCNsnqrH64PJTn8isCWEMDgoCtL8Dhqq/GBzdKg\nRQHktLs20EV7pFThsN5MpAFoDNKh4arKTcTJZbXcb+pyzFg2AMwvnpdI8ShhcxtB\nSHYQ8akbr/Q8wDhV1ONwhdBZXsb8GIQjIGdrSZOkPHYqqawzrgI1NTazWCh2R00c\nJieNDc24e658bEkoLflfq0hCPsY4EMBMoD5+ge+Rc7YGYHGdyQOM13af5QC1krUh\nSQIDAQAB\n-----END PUBLIC KEY-----\n",
+    "algorithm": "RS256",
+    "key_id": "2d7b8cb8371b239a",
+    "registered_at": "2026-05-22T01:33:28Z",
+    "expires_at": null,
+    "revoked_at": null,
+    "note": "DER fingerprint standard: sha256(SPKI DER of public key), first 16 hex chars"
   }
 }
