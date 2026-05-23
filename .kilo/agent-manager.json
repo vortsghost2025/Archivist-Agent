@@ -1,42 +1,9 @@
 {
-  "worktrees": {
-    "wt-1778867803763-1": {
-      "branch": "best-dungeon",
-      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\best-dungeon",
-      "parentBranch": "master",
-      "createdAt": "2026-04-27T22:08:18.950Z",
-      "remote": "origin"
-    },
-    "wt-1778867803763-2": {
-      "branch": "brief-cloth",
-      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\brief-cloth",
-      "parentBranch": "master",
-      "createdAt": "2026-04-28T15:26:26.999Z",
-      "remote": "origin"
-    },
-    "wt-1778867803763-3": {
-      "branch": "humorous-bactrosaurus",
-      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\humorous-bactrosaurus",
-      "parentBranch": "master",
-      "createdAt": "2026-04-29T18:01:58.136Z",
-      "remote": "origin"
-    },
-    "wt-1778867803763-4": {
-      "branch": "thoughtful-almandine",
-      "path": "s:\\Archivist-Agent\\.kilo\\worktrees\\thoughtful-almandine",
-      "parentBranch": "master",
-      "createdAt": "2026-04-29T13:04:52.602Z",
-      "remote": "origin"
-    }
-  },
+  "worktrees": {},
   "sessions": {
     "ses_20c8d778fffeX8CTjjQQ7Um1xP": {
       "worktreeId": null,
       "createdAt": "2026-05-09T18:11:20.071Z"
-    },
-    "ses_1d90e6912ffeZ6D7sgM2etxf6e": {
-      "worktreeId": "wt-1778867803763-1",
-      "createdAt": "2026-05-15T17:56:43.763Z"
     }
   },
   "tabOrder": {
@@ -44,11 +11,6 @@
       "pending:1"
     ]
   },
-  "worktreeOrder": [
-    "wt-1778867803763-1",
-    "wt-1778867803763-2",
-    "wt-1778867803763-3",
-    "wt-1778867803763-4"
-  ],
+  "worktreeOrder": [],
   "sessionsCollapsed": true
 }

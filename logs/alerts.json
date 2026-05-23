@@ -11,6 +11,18 @@
       "comparison": "below",
       "acknowledged": false,
       "resolved_at": null
+    },
+    {
+      "id": "ALERT-1779414276521-af51943b",
+      "timestamp": "2026-05-22T01:44:36.521Z",
+      "type": "auto_resolve_rate_drop",
+      "severity": "MEDIUM",
+      "message": "Auto-resolve rate < threshold: 0.00 < 50",
+      "metric_value": 0,
+      "threshold": 50,
+      "comparison": "below",
+      "acknowledged": false,
+      "resolved_at": null
     }
   ]
 }

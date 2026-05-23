@@ -1,10 +1,16 @@
 {
   "mode": "OBSERVE",
-  "set_by": "operator",
-  "set_at": "2026-05-22T10:18:00-04:00",
-  "reason": "Initial creation. Operator recovering. No active build work.",
+  "set_by": "verify-test",
+  "set_at": "2026-05-22T16:22:34.213Z",
+  "reason": "restore",
   "expires_at": null,
-  "allowed_operations": ["read", "log", "summarize", "measure", "report"],
-  "previous_mode": null,
-  "version": 1
+  "allowed_operations": [
+    "read",
+    "log",
+    "summarize",
+    "measure",
+    "report"
+  ],
+  "previous_mode": "BUILD",
+  "version": 5
 }

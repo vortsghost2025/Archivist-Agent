@@ -1,0 +1,152 @@
+🗂️
+Archivist Agent
+Turn a folder into a readable map you can actually use.
+
+v0.1.0
+Diagnostics
+Target Folder
+Path to scan
+"S:\Archivist-Agent"
+Paste a folder path, then run one analysis to scan, classify, and prep fast retrieval.
+
+Analysis ready
+Main Flow
+Analyze Folder
+Tree Only
+Refresh Classification
+Artifacts
+Build Index
+Build Registry
+Generate Handoff
+Recent Folders
+
+Archivist-Agent"
+"S:\Archivist-Agent"
+Overview
+Retrieve
+Tree
+Activity
+Current Readout
+Archivist-Agent"
+2 files still need a stronger rule. Start in Retrieve to review the unknown bucket and close the gaps.
+
+📍 "S:\Archivist-Agent"
+Files
+13
+Classified files in scope
+Folders
+6
+Tree nodes above file level
+Top Bucket
+Runtime
+Executable code, scripts, and app logic.
+Needs Review
+2
+Unknown classification count
+Average Confidence
+73%
+Across currently classified files
+Last Refresh
+12:51 PM
+0 surfaced warnings
+Retrieve faster
+Search by file name, path fragment, bucket, or classification reason in the Retrieve tab.
+
+What changed the most
+Runtime is the largest slice right now, which is usually where the best shortcuts and cleanup wins hide.
+
+What needs judgment
+2 files are still Unknown.
+
+Bucket Map
+Click a bucket to jump into filtered retrieval results.
+
+
+⚙️
+3
+Runtime
+Executable code, scripts, and app logic.
+23% of files
+
+🪟
+2
+Interface
+Frontend, UI, or presentation surfaces.
+15% of files
+
+🧠
+2
+Memory
+Docs, config, notes, and durable context.
+15% of files
+
+🧪
+2
+Verification
+Tests, checks, and proof artifacts.
+15% of files
+
+🔎
+2
+Research
+Papers, decks, experiments, and source material.
+15% of files
+
+❓
+2
+Unknown
+Needs a better rule or a human pass.
+15% of files
+Useful Starting Points
+Quick entries chosen to help you orient, verify, or clean up faster.
+
+❓ Unknown
+model.onnx
+315 KB · 35% confidence
+Copy path
+"S:\Archivist-Agent"\data\model.onnx
+
+No classification rule matched .onnx
+
+🧪 Verification
+scan_tree.test.js
+2.1 KB · 88% confidence
+Copy path
+"S:\Archivist-Agent"\tests\scan_tree.test.js
+
+Filename or path contains test/spec indicators
+
+🪟 Interface
+index.html
+4.0 KB · 96% confidence
+Copy path
+"S:\Archivist-Agent"\ui\index.html
+
+.html is a UI/frontend file type
+
+⚙️ Runtime
+main.rs
+1.8 KB · 92% confidence
+Copy path
+"S:\Archivist-Agent"\src-tauri\main.rs
+
+.rs is a runtime/executable file type
+
+⚙️ Runtime
+build_index.js
+2.9 KB · 81% confidence
+Copy path
+"S:\Archivist-Agent"\scripts\build_index.js
+
+.js is a runtime/executable file type
+
+⚙️ Runtime
+classifier.py
+3.9 KB · 78% confidence
+Copy path
+"S:\Archivist-Agent"\src\classifier.py
+
+.py is a runtime/executable file type
+
+Archivist Agent — Tauri 2.x
+Archivist-Agent" · 13 files · Unknown 2

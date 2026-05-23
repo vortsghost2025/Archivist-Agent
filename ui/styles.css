@@ -865,6 +865,200 @@ footer {
     border-radius: 999px;
 }
 
+.gov-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.gov-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.gov-card h3 {
+  margin: 0 0 12px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.gov-card-wide {
+  grid-column: 1 / -1;
+}
+
+.gov-status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.gov-status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.gov-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gov-status-dot.ok { background: #4caf50; }
+.gov-status-dot.warn { background: #ff9800; }
+.gov-status-dot.err { background: #f44336; }
+.gov-status-dot.idle { background: var(--muted); }
+
+.gov-mode-box {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  padding: 12px 0;
+  letter-spacing: 2px;
+}
+
+.gov-mode-observe { color: #4caf50; }
+.gov-mode-build { color: #2196f3; }
+.gov-mode-chaos { color: #ff9800; }
+.gov-mode-recovery { color: #f44336; }
+
+.gov-cps-box {
+  text-align: center;
+  padding: 8px 0;
+}
+
+.gov-cps-value {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.gov-cps-value.healthy { color: #4caf50; }
+.gov-cps-value.warning { color: #ff9800; }
+.gov-cps-value.critical { color: #f44336; }
+
+.gov-cps-label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.gov-readonly-box {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.gov-readonly-flag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.gov-readonly-flag.active {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.gov-readonly-flag.inactive {
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.gov-script-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.gov-script-output {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 300px;
+  overflow-y: auto;
+  min-height: 40px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.gov-script-output:empty::before {
+  content: 'Script output will appear here.';
+  color: var(--muted);
+  font-style: italic;
+}
+
+.gov-now-md {
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 400px;
+  overflow-y: auto;
+  color: var(--text);
+}
+
+.gov-now-md:empty::before {
+  content: 'Loading NOW.md...';
+  color: var(--muted);
+  font-style: italic;
+}
+
+.gov-git-box {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.gov-git-summary {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.gov-git-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gov-git-stat .num {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.gov-git-stat .num.clean { color: #4caf50; }
+.gov-git-stat .num.dirty { color: #ff9800; }
+
+.gov-git-raw {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow-y: auto;
+  color: var(--text);
+}
+
 @media (max-width: 1080px) {
     main {
         grid-template-columns: 1fr;

@@ -5,6 +5,7 @@ mod constitution;
 mod cps_check;
 mod generate_handoff;
 mod global_shim;
+mod governance;
 mod safety;
 mod scan_tree;
 mod summarize_folder;
@@ -14,6 +15,7 @@ mod test_env;
 use build_index::build_index;
 use build_registry::build_registry;
 use generate_handoff::generate_handoff;
+use governance::{check_read_only, git_status, read_governance_file, run_script};
 use scan_tree::scan_tree;
 use summarize_folder::summarize_folder;
 use tauri::Manager;
@@ -43,6 +45,10 @@ pub fn run() {
             build_index,
             build_registry,
             generate_handoff,
+            read_governance_file,
+            run_script,
+            git_status,
+            check_read_only,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

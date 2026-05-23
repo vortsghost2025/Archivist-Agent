@@ -2,7 +2,7 @@
 
 const RECENT_PATHS_KEY = 'archivist.recentPaths.v1';
 const MAX_RECENT_PATHS = 6;
-const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output'];
+const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'governance'];
 const TREE_LINE_LIMIT = 420;
 
 const BUCKET_ORDER = ['Runtime', 'Interface', 'Memory', 'Verification', 'Research', 'Unknown'];
@@ -158,15 +158,39 @@ const invoke = (() => {
 
     return async (cmd, args = {}) => {
         const root = args.root_path || args.root || args.path || 'C:\\Demo\\Archivist';
-        const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder'];
+  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard'];
 
-        if (readOnlyCommands.includes(cmd)) {
-            console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
-            if (cmd === 'ping') return 'pong';
-            if (cmd === 'scan_tree') return createMockScanResult(root);
-            if (cmd === 'summarize_folder') return createMockSummary(root);
-            return null;
-        }
+  if (readOnlyCommands.includes(cmd)) {
+    console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
+    if (cmd === 'ping') return 'pong';
+    if (cmd === 'scan_tree') return createMockScanResult(root);
+    if (cmd === 'summarize_folder') return createMockSummary(root);
+    if (cmd === 'get_cps_score') return { score: 19, threshold: 10, passing: true };
+    if (cmd === 'cps_guard') return true;
+    if (cmd === 'read_governance_file') {
+      const fileMap = {
+        'active-mode': { mode: 'OBSERVE', version: 5, set_at: '2026-05-22T10:00:00Z', set_by: 'archivist' },
+        'active-blocker': null,
+        'system-state': { status: 'consistent', last_check: '2026-05-22T12:00:00Z' },
+        'trust-store': { archivist: { key_id: 'archivist-001' }, kernel: { key_id: 'kernel-001' } },
+        'last-recovery': { verdict: 'PASSED', tests_passed: 12, tests_total: 12, timestamp: '2026-05-22T09:00:00Z' },
+        'allowed-roots': { allowed_roots: ['S:/Archivist-Agent', 'S:/kernel-lane', 'S:/SwarmMind', 'S:/self-organizing-library'], blocked_roots: [], read_only_mode: true },
+        'constitutional-constraints': { constraints: [{ name: 'STRUCTURE_OVER_IDENTITY', weight: 5 }, { name: 'CORRECTION_MANDATORY', weight: 4 }, { name: 'SINGLE_ENTRY_POINT', weight: 5 }, { name: 'OPERATOR_ACCOUNTABILITY', weight: 5 }] },
+        'now-md': '# NOW.md\n\nMode: OBSERVE\nSession: browser-mock\n\n## Active Focus\n- None (mock data)\n\n## Blockers\n- None\n'
+      };
+      return fileMap[args.file] || null;
+    }
+    if (cmd === 'run_script') {
+      return { stdout: '[MOCK] Script executed successfully.\nAll checks passed.', stderr: '', exit_code: 0 };
+    }
+    if (cmd === 'git_status') {
+      return { raw: 'M src-tauri/src/governance.rs\n?? ui/governance-mock.txt', modified: 1, untracked: 1, clean: false };
+    }
+    if (cmd === 'check_read_only') {
+      return { read_only: true, allowed_roots: ['S:/Archivist-Agent', 'S:/kernel-lane', 'S:/SwarmMind', 'S:/self-organizing-library'], blocked_roots: [] };
+    }
+    return null;
+  }
 
         const mutatingCommands = ['build_index', 'generate_handoff', 'build_registry'];
         if (mutatingCommands.includes(cmd)) {
@@ -188,8 +212,9 @@ const state = {
     isWorking: false,
     searchQuery: '',
     bucketFilter: 'all',
-    recentPaths: loadRecentPaths(),
-    lastAnalyzedAt: null
+  recentPaths: loadRecentPaths(),
+  lastAnalyzedAt: null,
+  governanceLoaded: false
 };
 
 const $ = id => document.getElementById(id);
@@ -277,6 +302,117 @@ function switchTab(tabName) {
   if (tabName === 'tree') renderTreePanel();
   if (tabName === 'overview') renderOverview();
   if (tabName === 'retrieve') renderRetrieve();
+  if (tabName === 'governance') renderGovernance();
+}
+
+async function renderGovernance() {
+  if (state.governanceLoaded && state.activeTab === 'governance') return;
+  try {
+    const [cps, modeData, systemState, blocker, recovery, readonlyReport, gitData, nowMd] = await Promise.all([
+      invoke('get_cps_score').catch(() => ({ score: 0, threshold: 10, passing: false })),
+      invoke('read_governance_file', { file: 'active-mode' }).catch(() => null),
+      invoke('read_governance_file', { file: 'system-state' }).catch(() => null),
+      invoke('read_governance_file', { file: 'active-blocker' }).catch(() => null),
+      invoke('read_governance_file', { file: 'last-recovery' }).catch(() => null),
+      invoke('check_read_only').catch(() => ({ read_only: false, allowed_roots: [], blocked_roots: [] })),
+      invoke('git_status').catch(() => ({ raw: 'unavailable', modified: 0, untracked: 0, clean: true })),
+      invoke('read_governance_file', { file: 'now-md' }).catch(() => null)
+    ]);
+
+    renderGovSystemState(systemState, blocker, recovery);
+    renderGovMode(modeData);
+    renderGovCps(cps);
+    renderGovReadonly(readonlyReport);
+    renderGovGit(gitData);
+    renderGovNowMd(nowMd);
+    state.governanceLoaded = true;
+  } catch (e) {
+    log('Governance load failed: ' + e.message, 'err');
+  }
+}
+
+function renderGovSystemState(systemState, blocker, recovery) {
+  const el = $('gov-system-state');
+  const items = [];
+  items.push(govStatusItem('System', systemState?.status === 'consistent' ? 'ok' : 'warn', systemState?.status || 'unknown'));
+  items.push(govStatusItem('Blocker', blocker ? 'err' : 'ok', blocker ? blocker.subject || 'Active' : 'None'));
+  const rv = recovery?.verdict || 'unknown';
+  items.push(govStatusItem('Recovery', rv === 'PASSED' ? 'ok' : rv === 'CONFLICTED' ? 'err' : 'warn', rv));
+  items.push(govStatusItem('Tests', recovery ? 'ok' : 'idle', recovery ? `${recovery.tests_passed}/${recovery.tests_total}` : 'N/A'));
+  el.innerHTML = items.join('');
+}
+
+function govStatusItem(label, status, value) {
+  return `<div class="gov-status-item"><div class="gov-status-dot ${status}"></div><span>${escapeHtml(label)}: ${escapeHtml(String(value))}</span></div>`;
+}
+
+function renderGovMode(modeData) {
+  const el = $('gov-mode-display');
+  if (!modeData) {
+    el.innerHTML = '<span style="color:var(--muted)">Unavailable</span>';
+    return;
+  }
+  const mode = (modeData.mode || 'unknown').toUpperCase();
+  const modeClass = { OBSERVE: 'observe', BUILD: 'build', 'CHAOS-LAB': 'chaos', RECOVERY: 'recovery' }[mode] || 'observe';
+  el.innerHTML = `<span class="gov-mode-${modeClass}">${escapeHtml(mode)}</span><div style="font-size:11px;color:var(--muted);margin-top:6px">v${modeData.version || '?'} &middot; ${escapeHtml(modeData.set_by || '?')}</div>`;
+}
+
+function renderGovCps(cps) {
+  const el = $('gov-cps-display');
+  const score = cps?.score ?? 0;
+  const threshold = cps?.threshold ?? 10;
+  const cls = score >= threshold ? 'healthy' : score >= threshold - 2 ? 'warning' : 'critical';
+  el.innerHTML = `<div class="gov-cps-value ${cls}">${score}</div><div class="gov-cps-label">threshold: ${threshold} &middot; ${score >= threshold ? 'PASSING' : 'BLOCKED'}</div>`;
+}
+
+function renderGovReadonly(report) {
+  const el = $('gov-readonly-report');
+  if (!report) { el.innerHTML = '<span style="color:var(--muted)">Unavailable</span>'; return; }
+  const flagCls = report.read_only ? 'active' : 'inactive';
+  const flagText = report.read_only ? 'READ-ONLY ENFORCED' : 'READ-ONLY OFF';
+  let html = `<div class="gov-readonly-flag ${flagCls}">${flagText}</div>`;
+  if (report.allowed_roots?.length) {
+    html += '<div><strong>Allowed:</strong></div>';
+    report.allowed_roots.forEach(r => { html += `<div style="padding-left:12px">${escapeHtml(r)}</div>`; });
+  }
+  if (report.blocked_roots?.length) {
+    html += '<div style="margin-top:6px"><strong>Blocked:</strong></div>';
+    report.blocked_roots.forEach(r => { html += `<div style="padding-left:12px;color:#f44336">${escapeHtml(r)}</div>`; });
+  }
+  el.innerHTML = html;
+}
+
+function renderGovGit(gitData) {
+  const el = $('gov-git-status');
+  if (!gitData) { el.innerHTML = '<span style="color:var(--muted)">Unavailable</span>'; return; }
+  const modCls = gitData.modified > 0 ? 'dirty' : 'clean';
+  const untCls = gitData.untracked > 0 ? 'dirty' : 'clean';
+  let html = `<div class="gov-git-summary"><div class="gov-git-stat"><span class="num ${modCls}">${gitData.modified}</span><span>modified</span></div><div class="gov-git-stat"><span class="num ${untCls}">${gitData.untracked}</span><span>untracked</span></div></div>`;
+  if (gitData.raw) {
+    html += `<div class="gov-git-raw">${escapeHtml(gitData.raw)}</div>`;
+  }
+  el.innerHTML = html;
+}
+
+function renderGovNowMd(content) {
+  const el = $('gov-now-md');
+  if (!content) { el.textContent = 'NOW.md not available.'; return; }
+  if (typeof content === 'string') { el.textContent = content; return; }
+  if (typeof content === 'object' && content.content) { el.textContent = content.content; return; }
+  el.textContent = JSON.stringify(content, null, 2);
+}
+
+async function runGovScript(scriptName) {
+  const outputEl = $('gov-script-output');
+  outputEl.textContent = `Running ${scriptName}...\n`;
+  try {
+    const result = await invoke('run_script', { script_name: scriptName });
+    outputEl.textContent = result.stdout || '(no stdout)';
+    if (result.stderr) { outputEl.textContent += '\n--- STDERR ---\n' + result.stderr; }
+    if (result.exit_code !== 0) { outputEl.textContent += `\n--- EXIT CODE: ${result.exit_code} ---`; }
+  } catch (e) {
+    outputEl.textContent = 'Error: ' + e.message;
+  }
 }
 
 function getValidPath() {
@@ -982,6 +1118,13 @@ document.addEventListener('DOMContentLoaded', () => {
     $('btn-registry').addEventListener('click', runBuildRegistry);
     $('btn-handoff').addEventListener('click', runGenerateHandoff);
     $('btn-diag').addEventListener('click', runDiagnostics);
+    $('btn-gov-health').addEventListener('click', () => runGovScript('health-check'));
+    $('btn-gov-recovery').addEventListener('click', () => runGovScript('recovery-test-suite'));
+    $('btn-gov-mode').addEventListener('click', () => runGovScript('mode-check'));
+    $('btn-gov-consensus').addEventListener('click', () => runGovScript('consensus-check'));
+    $('btn-gov-status').addEventListener('click', () => runGovScript('system-status'));
+    $('btn-gov-sovereignty').addEventListener('click', () => runGovScript('sovereignty-enforcer'));
+    $('btn-gov-audit').addEventListener('click', () => runGovScript('headless-self-audit'));
     $('btn-clear-log').addEventListener('click', () => {
         state.logEntries = [];
         $('log-output').innerHTML = '';
