@@ -74,6 +74,7 @@
                     <div class="tab" data-tab="tree" role="tab" aria-selected="false" tabindex="0">Tree</div>
       <div class="tab" data-tab="output" role="tab" aria-selected="false" tabindex="0">Activity</div>
       <div class="tab" data-tab="governance" role="tab" aria-selected="false" tabindex="0">Governance</div>
+      <div class="tab" data-tab="chat" role="tab" aria-selected="false" tabindex="0">Chat</div>
       </nav>
 
                 <div id="tab-content">
@@ -172,6 +173,70 @@
             <h3>Git Status</h3>
             <div id="gov-git-status" class="gov-git-box"></div>
           </section>
+        </div>
+
+      <div id="tab-chat" class="hidden" role="tabpanel">
+        <div class="chat-layout">
+          <div class="chat-settings" id="chat-settings">
+            <div class="chat-settings-header">
+              <h3>Agent Settings</h3>
+              <button class="btn btn-ghost" id="btn-chat-settings-close" title="Close settings">✕</button>
+            </div>
+            <div class="chat-settings-body">
+              <div class="setting-group">
+                <label for="chat-api-key">API Key</label>
+                <input type="password" id="chat-api-key" placeholder="sk-..." autocomplete="off" />
+              </div>
+              <div class="setting-group">
+                <label for="chat-endpoint">Endpoint</label>
+                <input type="text" id="chat-endpoint" placeholder="https://integrate.api.nvidia.com/v1" />
+              </div>
+              <div class="setting-group">
+                <label for="chat-model">Model</label>
+                <input type="text" id="chat-model" placeholder="meta/llama-3.3-70b-instruct" />
+              </div>
+              <div class="setting-row">
+                <div class="setting-group">
+                  <label for="chat-temperature">Temperature</label>
+                  <input type="number" id="chat-temperature" min="0" max="2" step="0.1" value="0.7" />
+                </div>
+                <div class="setting-group">
+                  <label for="chat-max-tokens">Max Tokens</label>
+                  <input type="number" id="chat-max-tokens" min="1" max="16384" step="1" value="2048" />
+                </div>
+              </div>
+              <div class="chat-settings-actions">
+                <button class="btn btn-primary" id="btn-chat-save-settings">Save Settings</button>
+                <span id="chat-settings-status" class="chat-settings-status"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chat-main">
+            <div class="chat-toolbar">
+              <div class="chat-toolbar-left">
+                <button class="btn btn-ghost" id="btn-chat-toggle-settings" title="Open settings">⚙️ Settings</button>
+                <span id="chat-model-label" class="chat-model-label">No model configured</span>
+              </div>
+              <div class="chat-toolbar-right">
+                <button class="btn btn-ghost" id="btn-chat-clear" title="Clear conversation">🗑️ Clear</button>
+              </div>
+            </div>
+
+            <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat conversation">
+              <div class="chat-welcome">
+                <div class="chat-welcome-icon">💬</div>
+                <h3>Agent Chat</h3>
+                <p>Configure your API key in Settings, then send a message to start a conversation with the AI agent.</p>
+                <p class="chat-welcome-hint">This runs through the Rust backend with CPS governance enforcement.</p>
+              </div>
+            </div>
+
+            <div class="chat-input-area">
+              <textarea id="chat-input" class="chat-input" rows="3" placeholder="Type a message…" aria-label="Chat message input"></textarea>
+              <button class="btn btn-primary chat-send-btn" id="btn-chat-send" title="Send message">Send</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 const RECENT_PATHS_KEY = 'archivist.recentPaths.v1';
 const MAX_RECENT_PATHS = 6;
-const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'governance'];
+const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'governance', 'chat'];
 const TREE_LINE_LIMIT = 420;
 
 const BUCKET_ORDER = ['Runtime', 'Interface', 'Memory', 'Verification', 'Research', 'Unknown'];
@@ -172,8 +172,8 @@ const invoke = (() => {
     console.error('[SECURITY] Safety validation layer is NOT active');
 
     return async (cmd, args = {}) => {
-        const root = args.root_path || args.root || args.path || 'C:\\Demo\\Archivist';
-  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard'];
+        const root = args.rootPath || args.root || args.path || 'C:\\Demo\\Archivist';
+  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd'];
 
   if (readOnlyCommands.includes(cmd)) {
     console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
@@ -193,7 +193,7 @@ const invoke = (() => {
         'constitutional-constraints': { constraints: [{ name: 'STRUCTURE_OVER_IDENTITY', weight: 5 }, { name: 'CORRECTION_MANDATORY', weight: 4 }, { name: 'SINGLE_ENTRY_POINT', weight: 5 }, { name: 'OPERATOR_ACCOUNTABILITY', weight: 5 }] },
         'now-md': '# NOW.md\n\nMode: OBSERVE\nSession: browser-mock\n\n## Active Focus\n- None (mock data)\n\n## Blockers\n- None\n'
       };
-      return fileMap[args.file] || null;
+      return fileMap[args.fileName] || null;
     }
     if (cmd === 'run_script') {
       return { stdout: '[MOCK] Script executed successfully.\nAll checks passed.', stderr: '', exit_code: 0 };
@@ -203,6 +203,42 @@ const invoke = (() => {
     }
     if (cmd === 'check_read_only') {
       return { read_only: true, allowed_roots: ['S:/Archivist-Agent', 'S:/kernel-lane', 'S:/SwarmMind', 'S:/self-organizing-library'], blocked_roots: [] };
+    }
+    if (cmd === 'chat_send') {
+      const userMsg = args.request?.messages?.filter(m => m.role === 'user').pop();
+      const question = userMsg?.content || '(empty)';
+      return {
+        reply: `[Browser Mock] You said: "${question}"\n\nThis is a mock response. The real backend requires Tauri + an API key to call the AI model.`,
+        model: args.request?.model || 'mock-model',
+        usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+        governance: {
+          cps_passing: true,
+          mode: 'OBSERVE',
+          chat_allowed: true,
+          warnings: ['Running in browser mock mode — no governance enforcement.']
+        }
+      };
+    }
+    if (cmd === 'save_agent_config') {
+      try {
+        window.localStorage.setItem('archivist.chatConfig.mock', JSON.stringify(args));
+      } catch (_) { /* ignore */ }
+      return 'Config saved (browser mock).';
+    }
+    if (cmd === 'load_agent_config_cmd') {
+      let mockConfig = { chat_endpoint: null, chat_model: null, temperature: 0.7, max_tokens: 2048, has_api_key: false };
+      try {
+        const saved = window.localStorage.getItem('archivist.chatConfig.mock');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          mockConfig.chat_endpoint = parsed.endpoint || null;
+          mockConfig.chat_model = parsed.model || null;
+          mockConfig.temperature = parsed.temperature || 0.7;
+          mockConfig.max_tokens = parsed.maxTokens || 2048;
+          mockConfig.has_api_key = !!parsed.apiKey;
+        }
+      } catch (_) { /* ignore */ }
+      return mockConfig;
     }
     return null;
   }
@@ -229,7 +265,11 @@ const state = {
     bucketFilter: 'all',
   recentPaths: loadRecentPaths(),
   lastAnalyzedAt: null,
-  governanceLoaded: false
+  governanceLoaded: false,
+  chatMessages: [],
+  chatConfig: null,
+  chatLoading: false,
+  chatSettingsOpen: false
 };
 
 const $ = id => document.getElementById(id);
@@ -318,6 +358,7 @@ function switchTab(tabName) {
   if (tabName === 'overview') renderOverview();
   if (tabName === 'retrieve') renderRetrieve();
   if (tabName === 'governance') renderGovernance();
+  if (tabName === 'chat') renderChat();
 }
 
 async function renderGovernance() {
@@ -325,13 +366,13 @@ async function renderGovernance() {
   try {
     const [cps, modeData, systemState, blocker, recovery, readonlyReport, gitData, nowMd] = await Promise.all([
       invoke('get_cps_score').catch(() => ({ score: 0, threshold: 10, passing: false })),
-      invoke('read_governance_file', { file: 'active-mode' }).catch(() => null),
-      invoke('read_governance_file', { file: 'system-state' }).catch(() => null),
-      invoke('read_governance_file', { file: 'active-blocker' }).catch(() => null),
-      invoke('read_governance_file', { file: 'last-recovery' }).catch(() => null),
+      invoke('read_governance_file', { fileName: 'active-mode' }).catch(() => null),
+      invoke('read_governance_file', { fileName: 'system-state' }).catch(() => null),
+      invoke('read_governance_file', { fileName: 'active-blocker' }).catch(() => null),
+      invoke('read_governance_file', { fileName: 'last-recovery' }).catch(() => null),
       invoke('check_read_only').catch(() => ({ read_only: false, allowed_roots: [], blocked_roots: [] })),
       invoke('git_status').catch(() => ({ raw: 'unavailable', modified: 0, untracked: 0, clean: true })),
-      invoke('read_governance_file', { file: 'now-md' }).catch(() => null)
+      invoke('read_governance_file', { fileName: 'now-md' }).catch(() => null)
     ]);
 
     renderGovSystemState(systemState, blocker, recovery);
@@ -417,11 +458,229 @@ function renderGovNowMd(content) {
   el.textContent = JSON.stringify(content, null, 2);
 }
 
+// ─── Chat UI ──────────────────────────────────────────────────────
+
+function renderChat() {
+  const messagesEl = $('chat-messages');
+  if (!messagesEl) return;
+
+  // Load config if not yet loaded
+  if (!state.chatConfig) {
+    loadChatConfig();
+  }
+
+  // Settings panel visibility
+  const settingsEl = $('chat-settings');
+  if (settingsEl) {
+    settingsEl.classList.toggle('visible', state.chatSettingsOpen);
+  }
+
+  // Model label in toolbar
+  const modelLabel = $('chat-model-label');
+  if (modelLabel && state.chatConfig) {
+    modelLabel.textContent = state.chatConfig.chat_model || 'No model configured';
+  }
+
+  // Render messages
+  if (!state.chatMessages.length) {
+    // Show welcome if no messages, but only show it if we're not loading
+    if (!state.chatLoading) {
+      messagesEl.innerHTML = `
+        <div class="chat-welcome">
+          <div class="chat-welcome-icon">💬</div>
+          <h3>Agent Chat</h3>
+          <p>Configure your API key in Settings, then send a message to start a conversation with the AI agent.</p>
+          <p class="chat-welcome-hint">This runs through the Rust backend with CPS governance enforcement.</p>
+        </div>
+      `;
+    }
+    return;
+  }
+
+  let html = '';
+  for (const msg of state.chatMessages) {
+    const isUser = msg.role === 'user';
+    const isSystem = msg.role === 'system';
+    const timeStr = msg.timestamp
+      ? new Date(msg.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+      : '';
+
+    if (isSystem) {
+      html += `<div class="chat-msg-system">${escapeHtml(msg.content)}</div>`;
+    } else {
+      html += `
+        <div class="chat-msg ${isUser ? 'chat-msg-user' : 'chat-msg-assistant'}">
+          <div class="chat-msg-avatar">${isUser ? '👤' : '🤖'}</div>
+          <div class="chat-msg-body">
+            <div class="chat-msg-content">${escapeHtml(msg.content)}</div>
+            <div class="chat-msg-time">${escapeHtml(timeStr)}</div>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  if (state.chatLoading) {
+    html += `
+      <div class="chat-msg chat-msg-assistant">
+        <div class="chat-msg-avatar">🤖</div>
+        <div class="chat-msg-body">
+          <div class="chat-msg-thinking">
+            <span class="thinking-dot"></span>
+            <span class="thinking-dot"></span>
+            <span class="thinking-dot"></span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  messagesEl.innerHTML = html;
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+async function loadChatConfig() {
+  try {
+    const config = await invoke('load_agent_config_cmd');
+    state.chatConfig = config;
+    // Populate settings fields
+    if ($('chat-endpoint')) $('chat-endpoint').value = config.chat_endpoint || '';
+    if ($('chat-model')) $('chat-model').value = config.chat_model || '';
+    if ($('chat-temperature')) $('chat-temperature').value = config.temperature ?? 0.7;
+    if ($('chat-max-tokens')) $('chat-max-tokens').value = config.max_tokens ?? 2048;
+    if ($('chat-api-key')) $('chat-api-key').value = config.has_api_key ? '••••••••' : '';
+    // Update model label
+    const modelLabel = $('chat-model-label');
+    if (modelLabel) {
+      modelLabel.textContent = config.chat_model || 'No model configured';
+    }
+    log('Chat config loaded.', 'info');
+  } catch (e) {
+    log('Failed to load chat config: ' + e.message, 'warn');
+  }
+}
+
+async function saveChatConfig() {
+  const endpoint = $('chat-endpoint')?.value.trim() || null;
+  const apiKeyRaw = $('chat-api-key')?.value.trim() || null;
+  const model = $('chat-model')?.value.trim() || null;
+  const temperature = parseFloat($('chat-temperature')?.value) || null;
+  const maxTokens = parseInt($('chat-max-tokens')?.value, 10) || null;
+
+  // Only send API key if it was actually typed (not the placeholder dots)
+  const apiKey = (apiKeyRaw && apiKeyRaw !== '••••••••') ? apiKeyRaw : null;
+
+  const statusEl = $('chat-settings-status');
+  if (statusEl) statusEl.textContent = 'Saving…';
+
+  try {
+    await invoke('save_agent_config', {
+      endpoint: endpoint || null,
+      apiKey: apiKey || null,
+      model: model || null,
+      temperature: temperature,
+      maxTokens: maxTokens
+    });
+    // Reload config from backend to get clean state
+    state.chatConfig = null;
+    await loadChatConfig();
+    if (statusEl) {
+      statusEl.textContent = '✓ Saved';
+      setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 3000);
+    }
+    log('Agent settings saved.', 'ok');
+  } catch (e) {
+    if (statusEl) statusEl.textContent = '✗ ' + e.message;
+    log('Failed to save settings: ' + e.message, 'err');
+  }
+}
+
+async function sendChatMessage() {
+  const inputEl = $('chat-input');
+  if (!inputEl) return;
+
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  if (state.chatLoading) {
+    log('Already waiting for a response.', 'warn');
+    return;
+  }
+
+  // Add user message
+  addChatMessage('user', text);
+  inputEl.value = '';
+  state.chatLoading = true;
+  renderChat();
+
+  try {
+    const apiKey = $('chat-api-key')?.value.trim();
+    const endpoint = $('chat-endpoint')?.value.trim() || null;
+    const model = $('chat-model')?.value.trim() || null;
+
+    // Build messages array (include system prompt if first message, then all messages)
+    const messages = state.chatMessages
+      .filter(m => m.role !== 'system')
+      .map(m => ({ role: m.role, content: m.content }));
+
+    const result = await invoke('chat_send', {
+      request: {
+        messages: messages,
+        model: model || null,
+        apiKey: (apiKey && apiKey !== '••••••••') ? apiKey : null,
+        endpoint: endpoint || null
+      }
+    });
+
+    const reply = result.reply || '(empty response)';
+    const modelUsed = result.model || 'unknown';
+    const governance = result.governance || {};
+
+    addChatMessage('assistant', reply);
+    log(`Chat response received (model: ${modelUsed})`, 'ok');
+
+    // Show governance warnings if any
+    const warnings = governance.warnings;
+    if (Array.isArray(warnings) && warnings.length > 0) {
+      warnings.forEach(w => log('Governance: ' + w, 'info'));
+    }
+  } catch (e) {
+    addChatMessage('system', 'Error: ' + e.message);
+    log('Chat failed: ' + e.message, 'err');
+  } finally {
+    state.chatLoading = false;
+    renderChat();
+  }
+}
+
+function addChatMessage(role, content) {
+  state.chatMessages.push({
+    role,
+    content,
+    timestamp: new Date().toISOString()
+  });
+  renderChat();
+}
+
+function clearChat() {
+  state.chatMessages = [];
+  renderChat();
+  log('Conversation cleared.', 'info');
+}
+
+function toggleChatSettings() {
+  state.chatSettingsOpen = !state.chatSettingsOpen;
+  const settingsEl = $('chat-settings');
+  if (settingsEl) {
+    settingsEl.classList.toggle('visible', state.chatSettingsOpen);
+  }
+}
+
 async function runGovScript(scriptName) {
   const outputEl = $('gov-script-output');
   outputEl.textContent = `Running ${scriptName}...\n`;
   try {
-    const result = await invoke('run_script', { script_name: scriptName });
+    const result = await invoke('run_script', { scriptName: scriptName });
     outputEl.textContent = result.stdout || '(no stdout)';
     if (result.stderr) { outputEl.textContent += '\n--- STDERR ---\n' + result.stderr; }
     if (result.exit_code !== 0) { outputEl.textContent += `\n--- EXIT CODE: ${result.exit_code} ---`; }
@@ -484,8 +743,8 @@ async function runAnalyzeFolder() {
         log(`→ analyze_folder("${path}")`, 'info');
         setStatus('Analyzing folder…', 'working');
         const [scanResult, summaryResult] = await Promise.all([
-            invoke('scan_tree', { root_path: path }),
-            invoke('summarize_folder', { root_path: path })
+            invoke('scan_tree', { rootPath: path }),
+            invoke('summarize_folder', { rootPath: path })
         ]);
         state.lastAnalyzedAt = new Date().toISOString();
         state.scanResult = scanResult;
@@ -519,7 +778,7 @@ async function runScanTree() {
     if (!path) return;
     state.currentPath = path;
     rememberPath(path);
-    const result = await callCommand('scan_tree', { root_path: path });
+    const result = await callCommand('scan_tree', { rootPath: path });
     if (!result) return;
     state.scanResult = result;
     state.lastAnalyzedAt = new Date().toISOString();
@@ -532,7 +791,7 @@ async function runClassify() {
     if (!path) return;
     state.currentPath = path;
     rememberPath(path);
-    const result = await callCommand('summarize_folder', { root_path: path });
+    const result = await callCommand('summarize_folder', { rootPath: path });
     if (!result) return;
     state.summaryResult = result;
     state.lastAnalyzedAt = new Date().toISOString();
@@ -1066,7 +1325,7 @@ async function runDiagnostics() {
 
     setDiagStatus('diag-scan', 'check');
     try {
-        await invoke('scan_tree', { root_path: 'DIAGNOSTIC_CHECK' });
+        await invoke('scan_tree', { rootPath: 'DIAGNOSTIC_CHECK' });
         setDiagStatus('diag-scan', 'ok');
         log('scan_tree: registered', 'ok');
     } catch (error) {
@@ -1140,6 +1399,20 @@ document.addEventListener('DOMContentLoaded', () => {
     $('btn-gov-status').addEventListener('click', () => runGovScript('system-status'));
     $('btn-gov-sovereignty').addEventListener('click', () => runGovScript('sovereignty-enforcer'));
     $('btn-gov-audit').addEventListener('click', () => runGovScript('headless-self-audit'));
+
+    // Chat event handlers
+    $('btn-chat-send').addEventListener('click', sendChatMessage);
+    $('chat-input').addEventListener('keydown', event => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendChatMessage();
+      }
+    });
+    $('btn-chat-clear').addEventListener('click', clearChat);
+    $('btn-chat-toggle-settings').addEventListener('click', toggleChatSettings);
+    $('btn-chat-settings-close').addEventListener('click', toggleChatSettings);
+    $('btn-chat-save-settings').addEventListener('click', saveChatConfig);
+
     $('btn-clear-log').addEventListener('click', () => {
         state.logEntries = [];
         $('log-output').innerHTML = '';

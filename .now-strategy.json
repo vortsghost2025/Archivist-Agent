@@ -1,0 +1,23 @@
+{
+  "what_is_next": [
+    "Make Archivist genuinely useful day-to-day (not just governance audits)",
+    "Ship one concrete thing that proves the infrastructure was worth building",
+    "Define what 'Archivist as partner' actually does in daily practice"
+  ],
+  "stable_modules": [
+    "scripts/governance-types.js",
+    "scripts/schema-validator.js",
+    "scripts/identity-enforcer.js",
+    "tsconfig.ci.json",
+    ".github/workflows/ci.yml",
+    "src-tauri/",
+    "scripts/mode-check.js",
+    "lanes/broadcast/active-mode.json"
+  ],
+  "sandbox_ideas": [
+    "Headless Tauri testing strategy (WebView2 headless?)",
+    "Multi-agent orchestration when other lanes come online",
+    "Mobile/remote access to Archivist via Tailscale",
+    "NOW.md auto-update hook on mode transitions"
+  ]
+}

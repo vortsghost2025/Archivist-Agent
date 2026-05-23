@@ -62,3 +62,9 @@
 {"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:27:00.744411800+00:00"}
 {"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:28:50.180730500+00:00"}
 {"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:30:53.931467800+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:45:55.029307100+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:48:27.576968200+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T23:11:34.785034200+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T23:27:08.472105900+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T23:28:16.388848600+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T23:31:21.518791200+00:00"}

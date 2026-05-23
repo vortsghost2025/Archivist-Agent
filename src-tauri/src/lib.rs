@@ -1,5 +1,6 @@
 mod build_index;
 mod build_registry;
+mod chat;
 mod consensus_check;
 mod constants;
 mod constitution;
@@ -17,6 +18,7 @@ mod test_env;
 
 use build_index::build_index;
 use build_registry::build_registry;
+use chat::{chat_send, load_agent_config_cmd, save_agent_config};
 use generate_handoff::generate_handoff;
 use governance::{
     check_read_only, git_status, read_governance_file, run_script, run_sovereignty_enforcer,
@@ -57,6 +59,9 @@ pub fn run() {
             check_read_only,
             run_sovereignty_enforcer,
             sign_message,
+            chat_send,
+            save_agent_config,
+            load_agent_config_cmd,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

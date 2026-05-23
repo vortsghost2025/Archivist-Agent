@@ -31,6 +31,11 @@ pub struct ReadOnlyReport {
     pub source: String,
 }
 
+/// Public wrapper so other modules (chat.rs) can resolve the project root.
+pub fn resolve_project_root_static() -> Result<PathBuf, String> {
+    resolve_project_root()
+}
+
 fn resolve_project_root() -> Result<PathBuf, String> {
     let candidates = [
         PathBuf::from("config/allowed_roots.json"),
@@ -64,8 +69,231 @@ fn governance_file_path(file_name: &str) -> Result<PathBuf, String> {
     Ok(root.join(relative))
 }
 
+/// Generate a dynamic NOW.md from live machine state.
+///
+/// Sources:
+/// - `lanes/broadcast/active-mode.json` — current mode
+/// - `lanes/broadcast/active-blocker.json` — active blockers (or null)
+/// - `lanes/broadcast/last-recovery.json` — last recovery verdict (optional)
+/// - `git rev-parse HEAD` + `git status --short` — commit + working tree state
+/// - `.now-strategy.json` — human-authored sections (optional overlay)
+fn generate_now_md(root: &Path) -> Result<String, String> {
+    use chrono::Utc;
+    use std::process::Command;
+
+    let mut out = String::new();
+
+    // ---- Header ----
+    out.push_str("# NOW.md — Session Control Surface\n\n");
+    out.push_str(&format!("**Generated:** {}\n\n", Utc::now().to_rfc3339()));
+    let mode_line = format!(
+        "**Machine sources:** {}{}{}\n\n",
+        "`lanes/broadcast/active-mode.json`",
+        ", `active-blocker.json`",
+        ", git HEAD + working tree",
+    );
+    out.push_str(&mode_line);
+    out.push_str("---\n\n");
+
+    // ---- 1. Active Mode ----
+    let mode_path = root.join("lanes/broadcast/active-mode.json");
+    if mode_path.exists() {
+        if let Ok(content) = std::fs::read_to_string(&mode_path) {
+            if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
+                let mode = json.get("mode").and_then(|v| v.as_str()).unwrap_or("unknown");
+                let set_at = json.get("set_at").and_then(|v| v.as_str()).unwrap_or("unknown");
+                let set_by = json.get("set_by").and_then(|v| v.as_str()).unwrap_or("unknown");
+                out.push_str(&format!("## Current Mode: {}\n\n", mode));
+                out.push_str(&format!("- **Set at:** {}\n", set_at));
+                out.push_str(&format!("- **Set by:** {}\n", set_by));
+                out.push_str("- **Source:** `lanes/broadcast/active-mode.json`\n\n");
+                out.push_str("Mode gates:\n");
+                out.push_str("- **OBSERVE** — agents may read, log, summarize, measure, report. No production mutations.\n");
+                out.push_str("- **BUILD** — agents may mutate scoped files after verification plan. Tests must pass before commit.\n");
+                out.push_str("- **CHAOS-LAB** — agents may mutate only sandbox/branch/staging paths. Never main/master.\n");
+                out.push_str("- **RECOVERY** — stop feature work. Restore, verify, compare, then unblock.\n\n");
+            }
+        }
+    } else {
+        out.push_str("## Current Mode: UNKNOWN\n\n");
+        out.push_str("No `active-mode.json` found.\n\n");
+    }
+
+    // ---- 2. Last Known Good (git) ----
+    let head = Command::new("git")
+        .args(["rev-parse", "--short", "HEAD"])
+        .current_dir(root)
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .and_then(|o| {
+            String::from_utf8(o.stdout)
+                .ok()
+                .map(|s| s.trim().to_string())
+        })
+        .unwrap_or_else(|| "unknown".to_string());
+
+    let branch = Command::new("git")
+        .args(["rev-parse", "--abbrev-ref", "HEAD"])
+        .current_dir(root)
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .and_then(|o| {
+            String::from_utf8(o.stdout)
+                .ok()
+                .map(|s| s.trim().to_string())
+        })
+        .unwrap_or_else(|| "unknown".to_string());
+
+    let porcelain = Command::new("git")
+        .args(["status", "--short"])
+        .current_dir(root)
+        .output()
+        .ok()
+        .filter(|o| o.status.success())
+        .and_then(|o| String::from_utf8(o.stdout).ok())
+        .unwrap_or_default();
+
+    let is_clean = porcelain.trim().is_empty();
+    let modified_count = porcelain.lines().filter(|l| l.len() >= 3 && l.as_bytes()[1] == b'M').count();
+    let untracked_count = porcelain.lines().filter(|l| l.starts_with('?')).count();
+    let staged_count = porcelain.lines().filter(|l| l.len() >= 3 && l.as_bytes()[0] != b' ' && l.as_bytes()[0] != b'?').count();
+
+    out.push_str("## Last Known Good\n\n");
+    out.push_str(&format!("- **Commit:** `{}`\n", head));
+    out.push_str(&format!("- **Branch:** `{}`\n", branch));
+    out.push_str(&format!(
+        "- **Working tree:** {}",
+        if is_clean { "clean\n" } else { "dirty\n" }
+    ));
+    if !is_clean {
+        out.push_str("  - ");
+        let mut parts = Vec::new();
+        if modified_count > 0 { parts.push(format!("{} modified", modified_count)); }
+        if untracked_count > 0 { parts.push(format!("{} untracked", untracked_count)); }
+        if staged_count > 0 { parts.push(format!("{} staged", staged_count)); }
+        out.push_str(&parts.join(", "));
+        out.push('\n');
+    }
+    out.push('\n');
+
+    // ---- 3. Active Blockers ----
+    let blocker_path = root.join("lanes/broadcast/active-blocker.json");
+    out.push_str("## Active Blockers\n\n");
+    if blocker_path.exists() {
+        if let Ok(content) = std::fs::read_to_string(&blocker_path) {
+            if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
+                if json.is_null() {
+                    out.push_str("None.\n\n");
+                } else {
+                    let desc = json.get("description").and_then(|v| v.as_str()).unwrap_or("(no description)");
+                    let owner = json.get("owner").and_then(|v| v.as_str()).unwrap_or("unknown");
+                    out.push_str(&format!("- **{}** — {}\n", owner, desc));
+                    if let Some(blocked_at) = json.get("blocked_at").and_then(|v| v.as_str()) {
+                        out.push_str(&format!("  - Blocked at: {}\n", blocked_at));
+                    }
+                    out.push('\n');
+                    out.push_str("> Only the owning lane may work on the active blocker. See `active-blocker.json`.\n\n");
+                }
+            } else {
+                out.push_str("None.\n\n");
+            }
+        } else {
+            out.push_str("None.\n\n");
+        }
+    } else {
+        out.push_str("None (no `active-blocker.json`).\n\n");
+    }
+
+    // ---- 4. Last Recovery (optional) ----
+    let recovery_path = root.join("lanes/broadcast/last-recovery.json");
+    if recovery_path.exists() {
+        if let Ok(content) = std::fs::read_to_string(&recovery_path) {
+            if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
+                let verdict = json.get("verdict").and_then(|v| v.as_str()).unwrap_or("unknown");
+                let ts = json.get("timestamp").and_then(|v| v.as_str()).unwrap_or("unknown");
+                let passed = json.get("tests_passed").and_then(|v| v.as_u64()).map(|v| v.to_string()).unwrap_or_else(|| "?".to_string());
+                let total = json.get("tests_total").and_then(|v| v.as_u64()).map(|v| v.to_string()).unwrap_or_else(|| "?".to_string());
+                out.push_str("## Last Recovery\n\n");
+                out.push_str(&format!("- **Verdict:** {}\n", verdict));
+                out.push_str(&format!("- **Tests:** {}/{}\n", passed, total));
+                out.push_str(&format!("- **Timestamp:** {}\n\n", ts));
+            }
+        }
+    }
+
+    // ---- 5. Live Systems ----
+    out.push_str("## Live Systems\n\n");
+    out.push_str("| System | Status | Notes |\n");
+    out.push_str("|--------|--------|-------|\n");
+    out.push_str("| Archivist agent | RUNNING | Tauri 2.x desktop app |\n");
+    out.push_str("| CI pipeline (GitHub Actions) | LIVE | `ci.yml` on master — tsc gate + recovery suite + health check |\n");
+    out.push_str("| Signing integrity check | LIVE | `signing-integrity.yml` on master |\n\n");
+
+    // ---- 6. Strategy Overlay (optional .now-strategy.json) ----
+    let strategy_path = root.join(".now-strategy.json");
+    if strategy_path.exists() {
+        if let Ok(content) = std::fs::read_to_string(&strategy_path) {
+            if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
+                // What Is Next
+                if let Some(next) = json.get("what_is_next").and_then(|v| v.as_array()) {
+                    if !next.is_empty() {
+                        out.push_str("## What Is Next\n\n");
+                        for item in next {
+                            if let Some(text) = item.as_str() {
+                                out.push_str(&format!("1. {}\n", text));
+                            }
+                        }
+                        out.push('\n');
+                    }
+                }
+
+                // What Should Not Be Touched
+                if let Some(stable) = json.get("stable_modules").and_then(|v| v.as_array()) {
+                    if !stable.is_empty() {
+                        out.push_str("## What Should Not Be Touched\n\n");
+                        for item in stable {
+                            if let Some(text) = item.as_str() {
+                                out.push_str(&format!("- `{}`\n", text));
+                            }
+                        }
+                        out.push('\n');
+                    }
+                }
+
+                // Sandbox Ideas
+                if let Some(ideas) = json.get("sandbox_ideas").and_then(|v| v.as_array()) {
+                    if !ideas.is_empty() {
+                        out.push_str("## Sandbox Ideas (CHAOS-LAB Only)\n\n");
+                        for item in ideas {
+                            if let Some(text) = item.as_str() {
+                                out.push_str(&format!("- {}\n", text));
+                            }
+                        }
+                        out.push('\n');
+                    }
+                }
+            }
+        }
+    }
+
+    // ---- Footer ----
+    out.push_str("---\n\n");
+    out.push_str("> Auto-generated by `governance.rs::generate_now_md()` on every read.\n");
+    out.push_str("> Human-authored strategy sections from `.now-strategy.json` (optional).\n");
+
+    Ok(out)
+}
+
 #[tauri::command]
 pub fn read_governance_file(file_name: String) -> Result<String, String> {
+    // Dynamic generation for now-md — no static file read.
+    if file_name == "now-md" {
+        let root = resolve_project_root()?;
+        return generate_now_md(&root);
+    }
+
     let path = governance_file_path(&file_name)?;
     if !path.exists() {
         return Err(format!("File not found: {}", file_name));
@@ -409,6 +637,24 @@ mod tests {
         if let Err(msg) = result {
             assert!(msg.contains("File not found") || msg.contains("Cannot find project root"));
         }
+    }
+
+    #[test]
+    fn test_generate_now_md_produces_output() {
+        // generate_now_md should always produce content regardless of
+        // environment state (resilient to missing files, no git, etc.)
+        let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .parent()
+            .unwrap()
+            .to_path_buf();
+        let result = generate_now_md(&root);
+        assert!(result.is_ok());
+        let md = result.unwrap();
+        assert!(md.contains("NOW.md"), "Should contain the title");
+        assert!(md.contains("Current Mode"), "Should contain mode section");
+        assert!(md.contains("Last Known Good"), "Should contain git section");
+        assert!(md.contains("Active Blockers"), "Should contain blockers");
+        assert!(md.contains("Live Systems"), "Should contain live systems");
     }
 
     #[test]

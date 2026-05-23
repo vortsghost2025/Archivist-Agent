@@ -10,6 +10,8 @@ pub struct AllowedRoots {
     pub allowed_roots: Vec<String>,
     pub blocked_roots: Vec<String>,
     pub read_only_mode: Option<bool>,
+    #[serde(default)]
+    pub base_paths: Option<std::collections::HashMap<String, String>>,
 }
 
 static CACHED_CONFIG: Lazy<AllowedRoots> =
@@ -21,6 +23,7 @@ impl Default for AllowedRoots {
             allowed_roots: vec![],
             blocked_roots: vec!["C:\\Windows".to_string(), "C:\\Program Files".to_string()],
             read_only_mode: Some(false),
+            base_paths: None,
         }
     }
 }
@@ -80,6 +83,19 @@ pub fn check_read_only() -> Result<(), SafetyError> {
     }
 }
 
+/// Strips Windows `\\?\` long-path prefix from a path string for comparison.
+/// `canonicalize()` on Windows returns paths like `\\?\S:\...` but our
+/// allowed roots are stored as `S:\...`. Stripping the prefix lets
+/// `starts_with` comparisons work correctly.
+fn strip_verbatim_prefix(s: &str) -> String {
+    let lowered = s.to_lowercase();
+    if lowered.starts_with("\\\\?\\") {
+        s[4..].to_string()
+    } else {
+        s.to_string()
+    }
+}
+
 /// Validates a path for security issues.
 ///
 /// # Security
@@ -110,8 +126,8 @@ pub fn validate_path(path: &Path) -> Result<(), SafetyError> {
     // Get canonical path, handling non-existent paths safely
     let canonical = get_canonical_path_safe(path)?;
 
-    // Check against blocked roots first
-    let canonical_str = canonical.to_string_lossy();
+    // Normalize OS path prefixes (e.g. Windows `\\?\` verbatim prefix)
+    let canonical_str = strip_verbatim_prefix(&canonical.to_string_lossy());
     for blocked in &config.blocked_roots {
         if canonical_str
             .to_lowercase()
@@ -121,12 +137,12 @@ pub fn validate_path(path: &Path) -> Result<(), SafetyError> {
         }
     }
 
-    // Check against allowed roots
-    let canonical_str = canonical.to_string_lossy().to_lowercase();
-    let is_allowed = config
-        .allowed_roots
+    // Check against allowed roots (with platform base path prepended)
+    let allowed_full_paths = build_allowed_full_paths(&config);
+    let canonical_lower = canonical_str.to_lowercase();
+    let is_allowed = allowed_full_paths
         .iter()
-        .any(|root| canonical_str.starts_with(&root.to_lowercase()));
+        .any(|root| canonical_lower.starts_with(&root.to_lowercase()));
 
     if is_allowed {
         Ok(())
@@ -167,6 +183,39 @@ fn get_canonical_path_safe(path: &Path) -> Result<PathBuf, SafetyError> {
     }
 }
 
+/// Returns the full allowed root paths by prepending the platform base path.
+/// Uses the `base_paths` config for the current OS (windows/unix).
+/// Falls back to bare folder names if no base_paths is configured.
+fn build_allowed_full_paths(config: &AllowedRoots) -> Vec<String> {
+    let base = config
+        .base_paths
+        .as_ref()
+        .and_then(|bp| {
+            if cfg!(windows) {
+                bp.get("windows")
+            } else {
+                bp.get("unix")
+            }
+        })
+        .map(|s| {
+            let s = s.replace('/', "\\");
+            if !s.ends_with('\\') {
+                format!("{}\\", s)
+            } else {
+                s
+            }
+        });
+
+    match base {
+        Some(base_path) => config
+            .allowed_roots
+            .iter()
+            .map(|root| format!("{}{}", base_path, root))
+            .collect(),
+        None => config.allowed_roots.clone(),
+    }
+}
+
 pub fn load_config() -> Result<AllowedRoots, SafetyError> {
     let config_paths = [
         PathBuf::from("config/allowed_roots.json"),
@@ -189,7 +238,8 @@ pub fn load_config() -> Result<AllowedRoots, SafetyError> {
 }
 
 pub fn is_path_allowed(path: &str, config: &AllowedRoots) -> bool {
-    let path_lower = path.to_lowercase();
+    let cleaned = strip_verbatim_prefix(path);
+    let path_lower = cleaned.to_lowercase();
 
     for blocked in &config.blocked_roots {
         if path_lower.starts_with(&blocked.to_lowercase()) {
@@ -201,7 +251,8 @@ pub fn is_path_allowed(path: &str, config: &AllowedRoots) -> bool {
         return true;
     }
 
-    for allowed in &config.allowed_roots {
+    let allowed_full_paths = build_allowed_full_paths(config);
+    for allowed in &allowed_full_paths {
         if path_lower.starts_with(&allowed.to_lowercase()) {
             return true;
         }
@@ -271,5 +322,69 @@ mod tests {
             let result = validate_path(&link);
             let _ = result;
         }
+    }
+
+    #[test]
+    fn test_strip_verbatim_prefix_with_prefix() {
+        assert_eq!(
+            strip_verbatim_prefix(r"\\?\S:\Archivist-Agent"),
+            r"S:\Archivist-Agent"
+        );
+    }
+
+    #[test]
+    fn test_strip_verbatim_prefix_without_prefix() {
+        assert_eq!(
+            strip_verbatim_prefix(r"S:\Archivist-Agent"),
+            r"S:\Archivist-Agent"
+        );
+    }
+
+    #[test]
+    fn test_strip_verbatim_prefix_unc() {
+        // UNC paths with verbatim prefix
+        assert_eq!(
+            strip_verbatim_prefix(r"\\?\UNC\server\share"),
+            r"UNC\server\share"
+        );
+    }
+
+    #[test]
+    fn test_strip_verbatim_prefix_case_insensitive() {
+        assert_eq!(
+            strip_verbatim_prefix(r"\\?\s:\archivist-agent"),
+            r"s:\archivist-agent"
+        );
+    }
+
+    #[test]
+    fn test_strip_verbatim_prefix_empty() {
+        assert_eq!(strip_verbatim_prefix(""), "");
+    }
+
+    #[test]
+    fn test_allowed_root_with_verbatim_canonical_path() {
+        // Simulate the Windows canonical path with \\?\ prefix
+        // The allowed root without prefix should still match
+        let config = AllowedRoots {
+            allowed_roots: vec!["S:\\Archivist-Agent".into()],
+            blocked_roots: vec![],
+            read_only_mode: Some(false),
+            base_paths: None,
+        };
+        let result = is_path_allowed(r"\\?\S:\Archivist-Agent\subdir\file.txt", &config);
+        assert!(result, "Verbatim path should match allowed root");
+    }
+
+    #[test]
+    fn test_allowed_root_normal_path() {
+        let config = AllowedRoots {
+            allowed_roots: vec!["S:\\Archivist-Agent".into()],
+            blocked_roots: vec![],
+            read_only_mode: Some(false),
+            base_paths: None,
+        };
+        let result = is_path_allowed(r"S:\Archivist-Agent\subdir\file.txt", &config);
+        assert!(result, "Normal path should match allowed root");
     }
 }
