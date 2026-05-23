@@ -1,11 +1,11 @@
-sk-AayISOLM1pKs2mXHLPpRTyfdWpyyJ6M2avWKahD5VFA1Cwey
+sk-REDACTED_SECRET
 
 import os
 from openai import OpenAI
 
 # Initialize client
 client = OpenAI(
-    api_key="sk-AayISOLM1pKs2mXHLPpRTyfdWpyyJ6M2avWKahD5VFA1Cwey",
+    api_key="sk-REDACTED_SECRET",
     base_url="https://api.morphllm.com/v1"
 )
 
@@ -36,7 +36,7 @@ import OpenAI from "openai";
 
 // Initialize client
 const openai = new OpenAI({
-  apiKey: "sk-AayISOLM1pKs2mXHLPpRTyfdWpyyJ6M2avWKahD5VFA1Cwey",
+  apiKey: "sk-REDACTED_SECRET",
   baseURL: "https://api.morphllm.com/v1",
 });
 
@@ -66,7 +66,7 @@ const mergedCode = response.choices[0].message.content;
 console.log(mergedCode);
 
 # Set your API key
-export MORPH_API_KEY="sk-AayISOLM1pKs2mXHLPpRTyfdWpyyJ6M2avWKahD5VFA1Cwey"
+export MORPH_API_KEY="sk-REDACTED_SECRET"
 
 # Apply code edit
 curl -X POST "https://api.morphllm.com/v1/chat/completions" \

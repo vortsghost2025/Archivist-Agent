@@ -42,3 +42,23 @@
 {"timestamp":"2026-05-19T07:19:28.672Z","event":"PERFORMATIVE_CONFIDENCE","agent":"library","task_id":"unknown","confidence":8,"has_derivation":false,"detail":"confidence >= 7 without confidence_derivation object — performative confidence per CONFIDENCE_DERIVATION_CONTRACT Rule 1"}
 {"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-20T05:06:49.605726700+00:00"}
 {"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-20T05:10:39.525612900+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T20:09:11.570116200+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T20:40:46.003883800+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T20:44:44.733514600+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T20:50:58.211785300+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:09:54.765687+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:11:43.703108100+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:16:32.218335700+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:44:28.112250300+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:45:29.377808800+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:49:42.689637700+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:53:42.045171500+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:55:08.548969200+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T21:57:46.657615300+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:10:54.939986900+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:12:03.046529700+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:13:10.469315+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:15:15.691721100+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:27:00.744411800+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:28:50.180730500+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T22:30:53.931467800+00:00"}

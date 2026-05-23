@@ -147,8 +147,7 @@ mod tests {
         let content = std::fs::read_to_string(&log_path).unwrap_or_default();
         let last_line = content
             .lines()
-            .filter(|l| !l.trim().is_empty())
-            .last()
+            .rfind(|l| !l.trim().is_empty())
             .unwrap_or("")
             .to_string();
         let parsed: serde_json::Value = serde_json::from_str(&last_line)

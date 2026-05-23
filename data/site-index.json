@@ -67528,7 +67528,7 @@
       "modified": "2026-04-23T01:13:32.754Z",
       "size_bytes": 4740698,
       "description": "COPILOT SYSTEM EXPORT\\nGenerated: 2026-02-05 15:09:35-05:00\\nRoot: C:\\workspace\\n",
-      "content_snippet": "COPILOT SYSTEM EXPORT\\nGenerated: 2026-02-05 15:09:35-05:00\\nRoot: C:\\workspace\\n\n\\n----- FILE START: .env -----\\n\nKUCOINAPIKEY=6982867f76a75f0001f4910a\nKUCOINAPISECRET=310f657a-e297-4f34-b9ad-23c92de1121d\nKUCOINAPIPASSPHRASE=134679Rosebud!\nEXCHANGE=kucoin\nLIVEMODE=false\nCONTINUOUSMODE=true\nCYCLEINTERVALSECONDS=300\nORDERTYPE=limit\nSLIPPAGETOLERANCEPERCENT=0.5\nMAXPOSITIONSIZEUSD=1000\nMAXTRADELOSSUSD=50\nMAXDAILYLOSSUSD=200\nMAXOPENPOSITIONS=3\nMINBALANCEUSD=500\n\\n----- FILE END: .env"
+      "content_snippet": "COPILOT SYSTEM EXPORT\\nGenerated: 2026-02-05 15:09:35-05:00\\nRoot: C:\\workspace\\n\n\\n----- FILE START: .env -----\\n\nKUCOINAPIKEY=REDACTED_SECRET\nKUCOINAPISECRET=REDACTED_SECRET\nKUCOINAPIPASSPHRASE=REDACTED_SECRET\nEXCHANGE=kucoin\nLIVEMODE=false\nCONTINUOUSMODE=true\nCYCLEINTERVALSECONDS=300\nORDERTYPE=limit\nSLIPPAGETOLERANCEPERCENT=0.5\nMAXPOSITIONSIZEUSD=1000\nMAXTRADELOSSUSD=50\nMAXDAILYLOSSUSD=200\nMAXOPENPOSITIONS=3\nMINBALANCEUSD=500\n\\n----- FILE END: .env"
     },
     {
       "id": "1a671ae1c9c68fe9",
@@ -74064,7 +74064,7 @@
       "modified": "2026-04-28T03:53:24.292Z",
       "size_bytes": 2088,
       "description": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:",
-      "content_snippet": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:\n1. Go to your Netlify dashboard: https://app.netlify.com\n2. Select your we4free site\n3. Click Site settings (in the top navigation)\n4. In the left sidebar, click Environment variables\n5. Click Add a variable\n   - Key: BITLYTOKEN\n   - Value: cfaed30fff4feeb3bf6282ee9abc4161497e9eb3\n6. Click Save\n1. Open File Explorer (Windows Explorer)\n2. Navigate to c:\\workspace\\connectionbridge\n3. Go to"
+      "content_snippet": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:\n1. Go to your Netlify dashboard: https://app.netlify.com\n2. Select your we4free site\n3. Click Site settings (in the top navigation)\n4. In the left sidebar, click Environment variables\n5. Click Add a variable\n   - Key: BITLYTOKEN\n   - Value: REDACTED_SECRET\n6. Click Save\n1. Open File Explorer (Windows Explorer)\n2. Navigate to c:\\workspace\\connectionbridge\n3. Go to"
     },
     {
       "id": "0df132ae6c589a18",
@@ -74113,7 +74113,7 @@
       "modified": "2026-04-23T01:13:34.507Z",
       "size_bytes": 2088,
       "description": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:",
-      "content_snippet": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:\n1. Go to your Netlify dashboard: https://app.netlify.com\n2. Select your we4free site\n3. Click Site settings (in the top navigation)\n4. In the left sidebar, click Environment variables\n5. Click Add a variable\n   - Key: BITLYTOKEN\n   - Value: cfaed30fff4feeb3bf6282ee9abc4161497e9eb3\n6. Click Save\n1. Open File Explorer (Windows Explorer)\n2. Navigate to c:\\workspace\\connectionbridge\n3. Go to"
+      "content_snippet": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:\n1. Go to your Netlify dashboard: https://app.netlify.com\n2. Select your we4free site\n3. Click Site settings (in the top navigation)\n4. In the left sidebar, click Environment variables\n5. Click Add a variable\n   - Key: BITLYTOKEN\n   - Value: REDACTED_SECRET\n6. Click Save\n1. Open File Explorer (Windows Explorer)\n2. Navigate to c:\\workspace\\connectionbridge\n3. Go to"
     },
     {
       "id": "8ceca728df0fe84b",
@@ -83065,7 +83065,7 @@
       "modified": "2026-04-24T18:31:15.149Z",
       "size_bytes": 2088,
       "description": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:",
-      "content_snippet": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:\n1. Go to your Netlify dashboard: https://app.netlify.com\n2. Select your we4free site\n3. Click Site settings (in the top navigation)\n4. In the left sidebar, click Environment variables\n5. Click Add a variable\n   - Key: BITLYTOKEN\n   - Value: cfaed30fff4feeb3bf6282ee9abc4161497e9eb3\n6. Click Save\n1. Open File Explorer (Windows Explorer)\n2. Navigate to c:\\workspace\\connectionbridge\n3. Go to"
+      "content_snippet": "To enable Bitly link shortening on the live site, you need to add your Bitly token to Netlify:\n1. Go to your Netlify dashboard: https://app.netlify.com\n2. Select your we4free site\n3. Click Site settings (in the top navigation)\n4. In the left sidebar, click Environment variables\n5. Click Add a variable\n   - Key: BITLYTOKEN\n   - Value: REDACTED_SECRET\n6. Click Save\n1. Open File Explorer (Windows Explorer)\n2. Navigate to c:\\workspace\\connectionbridge\n3. Go to"
     },
     {
       "id": "40a76834210bb960",
@@ -96302,7 +96302,7 @@
       "modified": "2026-04-16T23:08:13.994Z",
       "size_bytes": 4740698,
       "description": "COPILOT SYSTEM EXPORT\\nGenerated: 2026-02-05 15:09:35-05:00\\nRoot: C:\\workspace\\n",
-      "content_snippet": "COPILOT SYSTEM EXPORT\\nGenerated: 2026-02-05 15:09:35-05:00\\nRoot: C:\\workspace\\n\n\\n----- FILE START: .env -----\\n\nKUCOINAPIKEY=6982867f76a75f0001f4910a\nKUCOINAPISECRET=310f657a-e297-4f34-b9ad-23c92de1121d\nKUCOINAPIPASSPHRASE=134679Rosebud!\nEXCHANGE=kucoin\nLIVEMODE=false\nCONTINUOUSMODE=true\nCYCLEINTERVALSECONDS=300\nORDERTYPE=limit\nSLIPPAGETOLERANCEPERCENT=0.5\nMAXPOSITIONSIZEUSD=1000\nMAXTRADELOSSUSD=50\nMAXDAILYLOSSUSD=200\nMAXOPENPOSITIONS=3\nMINBALANCEUSD=500\n\\n----- FILE END: .env"
+      "content_snippet": "COPILOT SYSTEM EXPORT\\nGenerated: 2026-02-05 15:09:35-05:00\\nRoot: C:\\workspace\\n\n\\n----- FILE START: .env -----\\n\nKUCOINAPIKEY=REDACTED_SECRET\nKUCOINAPISECRET=REDACTED_SECRET\nKUCOINAPIPASSPHRASE=REDACTED_SECRET\nEXCHANGE=kucoin\nLIVEMODE=false\nCONTINUOUSMODE=true\nCYCLEINTERVALSECONDS=300\nORDERTYPE=limit\nSLIPPAGETOLERANCEPERCENT=0.5\nMAXPOSITIONSIZEUSD=1000\nMAXTRADELOSSUSD=50\nMAXDAILYLOSSUSD=200\nMAXOPENPOSITIONS=3\nMINBALANCEUSD=500\n\\n----- FILE END: .env"
     },
     {
       "id": "44e99332dfc3ffd1",

@@ -736,6 +736,316 @@ pub fn recovery_test_suite(root: Option<&Path>) -> ScriptResult {
     }
 }
 
+// ---------------------------------------------------------------------------
+// 5. sovereignty_enforcer
+// ---------------------------------------------------------------------------
+
+/// Port of scripts/sovereignty-enforcer.js
+/// Scans a lane's scripts directory for cross-lane require() calls.
+/// Rule: NO CROSS-LANE require() — only flag actual require() calls, not string literals.
+#[derive(Debug, Serialize, Clone)]
+pub struct SovereigntyViolation {
+    pub line: usize,
+    pub code: String,
+    pub violation: String,
+    pub violation_type: String,
+}
+
+#[derive(Debug, Serialize, Clone)]
+pub struct SovereigntyFileViolation {
+    pub file: String,
+    pub violations: Vec<SovereigntyViolation>,
+}
+
+#[derive(Debug, Serialize, Clone)]
+pub struct SovereigntyReport {
+    pub lane_id: String,
+    pub timestamp: String,
+    pub scanner: String,
+    pub rule: String,
+    pub total_violations: usize,
+    pub violations: Vec<SovereigntyFileViolation>,
+    pub summary: serde_json::Value,
+    pub enforcement: serde_json::Value,
+    pub recommendations: Vec<String>,
+}
+
+fn load_lane_roots(root: &Path) -> Result<HashMap<String, PathBuf>, String> {
+    // Try to read from config/lane-roots.json
+    let config_path = root.join("config/lane-roots.json");
+    if !config_path.exists() {
+        // Fallback: use hardcoded roots relative to project root
+        let mut map = HashMap::new();
+        map.insert("archivist".into(), root.to_path_buf());
+        map.insert(
+            "kernel".into(),
+            root.parent()
+                .map(|p| p.join("kernel-lane"))
+                .unwrap_or_else(|| {
+                    let mut r = root.to_path_buf();
+                    r.pop();
+                    r.join("kernel-lane")
+                }),
+        );
+        map.insert(
+            "library".into(),
+            root.parent()
+                .map(|p| p.join("self-organizing-library"))
+                .unwrap_or_else(|| {
+                    let mut r = root.to_path_buf();
+                    r.pop();
+                    r.join("self-organizing-library")
+                }),
+        );
+        map.insert(
+            "swarmmind".into(),
+            root.parent()
+                .map(|p| p.join("SwarmMind"))
+                .unwrap_or_else(|| {
+                    let mut r = root.to_path_buf();
+                    r.pop();
+                    r.join("SwarmMind")
+                }),
+        );
+        return Ok(map);
+    }
+
+    let config = read_json_file(&config_path)?;
+    let base_path = config
+        .get("base_paths")
+        .and_then(|b| b.get("windows"))
+        .and_then(|v| v.as_str())
+        .unwrap_or("");
+    let lanes = config
+        .get("lanes")
+        .and_then(|v| v.as_object())
+        .ok_or_else(|| "lanes field not found in lane-roots.json".to_string())?;
+
+    let mut map = HashMap::new();
+    let relevant_lanes = ["archivist", "kernel", "library", "swarmmind"];
+    for name in &relevant_lanes {
+        if let Some(lane_name) = lanes.get(*name).and_then(|v| v.as_str()) {
+            let full_path = PathBuf::from(format!("{}{}", base_path, lane_name));
+            map.insert(name.to_string(), full_path);
+        }
+    }
+    Ok(map)
+}
+
+fn check_for_cross_lane_violation(
+    content: &str,
+    _file_path: &Path,
+    lane_roots: &HashMap<String, PathBuf>,
+    current_lane: &str,
+) -> Vec<SovereigntyViolation> {
+    let mut violations = Vec::new();
+    // Match require('...') / require("...") / require(`...`)
+    let re = regex::Regex::new(r#"require\s*\(\s*['"`]([^'"`]+)['"`]\s*\)"#).unwrap();
+
+    for (idx, line) in content.lines().enumerate() {
+        let line_num = idx + 1;
+        let trimmed = line.trim();
+
+        // Skip comment lines
+        if trimmed.starts_with("//") || trimmed.starts_with("/*") {
+            continue;
+        }
+
+        if let Some(caps) = re.captures(line) {
+            let import_path = caps.get(1).map(|m| m.as_str()).unwrap_or("");
+
+            for (lane_name, lane_root) in lane_roots {
+                if lane_name.as_str() == current_lane {
+                    continue;
+                }
+                let lane_path_str = lane_root.to_string_lossy().replace('\\', "/");
+                let import_normalized = import_path.replace('\\', "/");
+                if import_normalized.starts_with(&lane_path_str)
+                    || import_normalized.starts_with(lane_name.as_str())
+                {
+                    violations.push(SovereigntyViolation {
+                        line: line_num,
+                        code: trimmed.to_string(),
+                        violation: format!("Cross-lane import from {}", lane_name),
+                        violation_type: "cross_lane_require".into(),
+                    });
+                }
+            }
+        }
+    }
+
+    violations
+}
+
+fn scan_directory(
+    dir_path: &Path,
+    lane_root: &Path,
+    lane_roots: &HashMap<String, PathBuf>,
+    current_lane: &str,
+    excluded_dirs: &[&str],
+) -> Vec<SovereigntyFileViolation> {
+    let mut violations = Vec::new();
+    let entries = match std::fs::read_dir(dir_path) {
+        Ok(e) => e,
+        Err(_) => return violations,
+    };
+
+    for entry in entries.flatten() {
+        let name = entry.file_name().to_string_lossy().to_string();
+        if excluded_dirs.contains(&name.as_str()) {
+            continue;
+        }
+        if name == "sovereignty-enforcer.js" {
+            continue;
+        }
+
+        let full_path = entry.path();
+        if entry.file_type().map(|t| t.is_dir()).unwrap_or(false) {
+            violations.extend(scan_directory(
+                &full_path,
+                lane_root,
+                lane_roots,
+                current_lane,
+                excluded_dirs,
+            ));
+        } else if name.ends_with(".js") || name.ends_with(".ts") {
+            let content = match std::fs::read_to_string(&full_path) {
+                Ok(c) => c,
+                Err(_) => continue,
+            };
+            let file_violations =
+                check_for_cross_lane_violation(&content, &full_path, lane_roots, current_lane);
+            if !file_violations.is_empty() {
+                let relative = full_path
+                    .strip_prefix(lane_root)
+                    .unwrap_or(&full_path)
+                    .to_string_lossy()
+                    .to_string();
+                violations.push(SovereigntyFileViolation {
+                    file: relative,
+                    violations: file_violations,
+                });
+            }
+        }
+    }
+
+    violations
+}
+
+/// Port of scripts/sovereignty-enforcer.js
+/// Scans scripts directory for cross-lane require() violations.
+/// `target_lane` defaults to "archivist" if None.
+/// `strict_mode` causes the function to return error status if violations found.
+pub fn sovereignty_enforcer(
+    root: Option<&Path>,
+    target_lane: Option<&str>,
+    strict_mode: bool,
+) -> ScriptResult {
+    let root = match root {
+        Some(p) => p.to_path_buf(),
+        None => match resolve_project_root() {
+            Ok(p) => p,
+            Err(e) => return ScriptResult::err(e),
+        },
+    };
+
+    let lane_roots = match load_lane_roots(&root) {
+        Ok(m) => m,
+        Err(e) => return ScriptResult::err(e),
+    };
+
+    let current_lane = target_lane.unwrap_or("archivist");
+    let current_root = match lane_roots.get(current_lane) {
+        Some(p) => p.clone(),
+        None => return ScriptResult::err(format!("Unknown lane: {}", current_lane)),
+    };
+
+    let scripts_dir = current_root.join("scripts");
+    if !scripts_dir.exists() {
+        return ScriptResult::ok(format!(
+            "No scripts directory in lane {} — nothing to scan",
+            current_lane
+        ));
+    }
+
+    let excluded_dirs = ["node_modules", ".git", "processed", "quarantine", "expired"];
+
+    let file_violations = scan_directory(
+        &scripts_dir,
+        &current_root,
+        &lane_roots,
+        current_lane,
+        &excluded_dirs,
+    );
+
+    let total_violations: usize = file_violations.iter().map(|f| f.violations.len()).sum();
+
+    // Generate report
+    let timestamp = chrono::Utc::now().to_rfc3339();
+    let safe_time = timestamp.replace(':', "-").replace(['+', 'Z'], "");
+
+    let report = SovereigntyReport {
+        lane_id: current_lane.to_string(),
+        timestamp: timestamp.clone(),
+        scanner: "sovereignty-enforcer-fine-tuned".into(),
+        rule: "NO_CROSS_LANE_REQUIRE".into(),
+        total_violations,
+        violations: file_violations.clone(),
+        summary: serde_json::json!({
+            "files_scanned": scripts_dir.to_string_lossy(),
+            "violations_found": total_violations
+        }),
+        enforcement: serde_json::json!({
+            "pre_commit_hook": true,
+            "block_on_violation": true,
+            "strict_mode": strict_mode
+        }),
+        recommendations: vec![
+            "Move cross-lane dependencies to local scripts/util/ implementations".into(),
+            "Replace absolute paths with relative local imports".into(),
+            "Document utility origins with ORIGIN: comments".into(),
+        ],
+    };
+
+    // Write report to state directory
+    let report_dir = root.join("lanes/archivist/state");
+    std::fs::create_dir_all(&report_dir).ok();
+
+    let report_path = report_dir.join(format!("sovereignty-report-{}.json", safe_time));
+    let report_json = serde_json::to_string_pretty(&report).unwrap_or_default();
+    std::fs::write(&report_path, &report_json).ok();
+
+    let latest_path = report_dir.join("sovereignty-report-latest.json");
+    std::fs::write(&latest_path, &report_json).ok();
+
+    let report_data = serde_json::json!({
+        "total_violations": total_violations,
+        "violations": file_violations,
+        "report_path": report_path.to_string_lossy(),
+        "latest_path": latest_path.to_string_lossy()
+    });
+
+    if total_violations == 0 {
+        ScriptResult::ok_with_data(
+            format!(
+                "SOVEREIGNTY CHECK PASSED — no cross-lane require() violations in {} lane",
+                current_lane
+            ),
+            report_data,
+        )
+    } else {
+        let msg = format!(
+            "SOVEREIGNTY CHECK FAILED — {} violation(s) detected in {} lane",
+            total_violations, current_lane
+        );
+        if strict_mode {
+            ScriptResult::err(msg)
+        } else {
+            ScriptResult::ok_with_data(msg, report_data)
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -946,6 +1256,320 @@ mod tests {
             let map = read_yaml_key_values(&yaml_path).unwrap();
             assert_eq!(map.get("STRUCTURE_OVER_IDENTITY"), Some(&5));
             assert_eq!(map.get("CORRECTION_MANDATORY"), Some(&4));
+        });
+    }
+
+    // -----------------------------------------------------------------------
+    // sovereignty_enforcer tests
+    // -----------------------------------------------------------------------
+
+    /// Helper: set up a temp project structure with lane-roots.json and
+    /// sibling lane directories, so the enforcer can resolve all 4 lanes.
+    fn setup_sovereignty_test_env(root: &Path) -> (PathBuf, PathBuf, PathBuf, PathBuf) {
+        // Create sibling lane directories
+        let kernel_dir = root.join("../kernel-lane");
+        let library_dir = root.join("../self-organizing-library");
+        let swarmmind_dir = root.join("../SwarmMind");
+        std::fs::create_dir_all(&kernel_dir).ok();
+        std::fs::create_dir_all(&library_dir).ok();
+        std::fs::create_dir_all(&swarmmind_dir).ok();
+
+        // Create scripts dir in root
+        std::fs::create_dir_all(root.join("scripts")).ok();
+
+        // Create a simple lane-roots.json
+        let lane_config = serde_json::json!({
+            "base_paths": { "windows": "" },
+            "lanes": {
+                "archivist": root.to_string_lossy(),
+                "kernel": kernel_dir.to_string_lossy(),
+                "library": library_dir.to_string_lossy(),
+                "swarmmind": swarmmind_dir.to_string_lossy()
+            }
+        });
+        create_json(&root.join("config/lane-roots.json"), &lane_config);
+
+        (kernel_dir, library_dir, swarmmind_dir, root.to_path_buf())
+    }
+
+    #[test]
+    fn test_sovereignty_no_scripts_dir() {
+        with_temp_dir(|root| {
+            // No scripts directory at all
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            assert_eq!(result.status, "ok");
+            assert!(result.message.contains("No scripts directory"));
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_empty_scripts_dir() {
+        with_temp_dir(|root| {
+            let (_k, _l, _s, _) = setup_sovereignty_test_env(root);
+            // scripts dir exists but empty
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            assert_eq!(result.status, "ok");
+            assert!(result.message.contains("PASSED"));
+            let data = result.data.unwrap();
+            assert_eq!(data["total_violations"], 0);
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_detects_cross_lane_require() {
+        with_temp_dir(|root| {
+            let (kernel_dir, _l, _s, _) = setup_sovereignty_test_env(root);
+            let kernel_path = kernel_dir.to_string_lossy().replace('\\', "/");
+            // Script with cross-lane require to kernel
+            create_file(
+                &root.join("scripts/bad.js"),
+                &format!("const kv = require('{}/scripts/util.js');\n", kernel_path),
+            );
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            assert_eq!(result.status, "ok");
+            let data = result.data.unwrap();
+            assert_eq!(data["total_violations"], 1);
+
+            let violations = data["violations"].as_array().unwrap();
+            assert_eq!(violations.len(), 1);
+            assert_eq!(
+                violations[0]["violations"][0]["violation_type"],
+                "cross_lane_require"
+            );
+            assert!(violations[0]["violations"][0]["violation"]
+                .as_str()
+                .unwrap()
+                .contains("kernel"));
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_scans_multiple_files() {
+        with_temp_dir(|root| {
+            let (kernel_dir, _l, swarmmind_dir, _) = setup_sovereignty_test_env(root);
+            let kernel_path = kernel_dir.to_string_lossy().replace('\\', "/");
+            let swarmmind_path = swarmmind_dir.to_string_lossy().replace('\\', "/");
+            // Multiple files with violations
+            create_file(
+                &root.join("scripts/file1.js"),
+                &format!("const x = require('{}/conf.js');\n", kernel_path),
+            );
+            create_file(
+                &root.join("scripts/file2.js"),
+                &format!("const y = require('{}/api.js');\n", swarmmind_path),
+            );
+            create_file(&root.join("scripts/clean.js"), "const z = require('fs');\n");
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            assert_eq!(result.status, "ok");
+            let data = result.data.unwrap();
+            assert_eq!(data["total_violations"], 2);
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_ignores_comment_lines() {
+        with_temp_dir(|root| {
+            let (_k, _l, _s, _) = setup_sovereignty_test_env(root);
+            // Cross-lane path in a comment - should be ignored
+            create_file(
+                &root.join("scripts/commented.js"),
+                "// const x = require('S:/kernel-lane/util.js');\n /* const y = require('S:/SwarmMind/lib.js'); */\nconst ok = require('fs');\n",
+            );
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            assert_eq!(result.status, "ok");
+            let data = result.data.unwrap();
+            assert_eq!(data["total_violations"], 0);
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_strict_mode_with_violations() {
+        with_temp_dir(|root| {
+            let (kernel_dir, _l, _s, _) = setup_sovereignty_test_env(root);
+            let kpath = kernel_dir.to_string_lossy().replace('\\', "/");
+            create_file(
+                &root.join("scripts/bad.ts"),
+                &format!("const y = require('{}/util');\n", kpath),
+            );
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), true);
+            assert_eq!(result.status, "error");
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_strict_mode_clean() {
+        with_temp_dir(|root| {
+            let (_k, _l, _s, _) = setup_sovereignty_test_env(root);
+            create_file(
+                &root.join("scripts/clean.js"),
+                "const fs = require('fs');\n",
+            );
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), true);
+            assert_eq!(result.status, "ok");
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_unknown_lane() {
+        with_temp_dir(|root| {
+            let result = sovereignty_enforcer(Some(root), Some("nonexistent"), false);
+            assert_eq!(result.status, "error");
+            assert!(result.message.contains("Unknown lane"));
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_check_ts_and_js_files() {
+        with_temp_dir(|root| {
+            let (kernel_dir, _l, swarmmind_dir, _) = setup_sovereignty_test_env(root);
+            let kpath = kernel_dir.to_string_lossy().replace('\\', "/");
+            let spath = swarmmind_dir.to_string_lossy().replace('\\', "/");
+            // Both .ts and .js should be scanned
+            create_file(
+                &root.join("scripts/module.ts"),
+                &format!("const k = require('{}/tools.ts');\n", kpath),
+            );
+            create_file(
+                &root.join("scripts/module.js"),
+                &format!("const s = require('{}/helper.js');\n", spath),
+            );
+            create_file(
+                &root.join("scripts/readme.md"),
+                &format!("const k = require('{}/tools.ts');\n", kpath),
+            );
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            let data = result.data.unwrap();
+            // Only .ts and .js files are scanned, .md should be ignored
+            assert_eq!(data["total_violations"], 2);
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_excluded_dirs() {
+        with_temp_dir(|root| {
+            let (_k, _l, _s, _) = setup_sovereignty_test_env(root);
+            // Create scripts inside excluded dirs
+            std::fs::create_dir_all(root.join("scripts/node_modules/dep")).ok();
+            create_file(
+                &root.join("scripts/node_modules/dep/bad.js"),
+                "const x = require('S:/kernel-lane/util.js');\n",
+            );
+            std::fs::create_dir_all(root.join("scripts/.git/hooks")).ok();
+            create_file(
+                &root.join("scripts/.git/hooks/pre-commit.js"),
+                "const x = require('S:/kernel-lane/hook.js');\n",
+            );
+            // And a real violation outside excluded dirs
+            create_file(&root.join("scripts/real.js"), "const x = require('fs');\n");
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            assert_eq!(result.status, "ok");
+            let data = result.data.unwrap();
+            assert_eq!(data["total_violations"], 0);
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_report_files_created() {
+        with_temp_dir(|root| {
+            let (_k, _l, _s, _) = setup_sovereignty_test_env(root);
+            create_file(
+                &root.join("scripts/clean.js"),
+                "const fs = require('fs');\n",
+            );
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            assert_eq!(result.status, "ok");
+
+            // Check that report files were created
+            let state_dir = root.join("lanes/archivist/state");
+            assert!(state_dir.exists());
+            assert!(state_dir.join("sovereignty-report-latest.json").exists());
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_default_lane() {
+        with_temp_dir(|root| {
+            // When no target_lane is specified, it defaults to "archivist"
+            let (_k, _l, _s, _) = setup_sovereignty_test_env(root);
+            create_file(&root.join("scripts/util.js"), "const fs = require('fs');\n");
+            let result = sovereignty_enforcer(Some(root), None, false);
+            assert_eq!(result.status, "ok");
+            let data = result.data.unwrap();
+            assert_eq!(data["total_violations"], 0);
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_detects_swarmmind_cross_import() {
+        with_temp_dir(|root| {
+            let (_kernel_dir, _l, swarmmind_dir, _) = setup_sovereignty_test_env(root);
+            // Create a scripts dir in SwarmMind
+            std::fs::create_dir_all(swarmmind_dir.join("scripts")).ok();
+            let archivist_path = root.to_string_lossy().replace('\\', "/");
+            create_file(
+                &swarmmind_dir.join("scripts/import_from_archivist.js"),
+                &format!(
+                    "const x = require('{}/config/lane-roots.json');\n",
+                    archivist_path
+                ),
+            );
+            // Test scanning the swarmmind lane
+            let result = sovereignty_enforcer(Some(root), Some("swarmmind"), false);
+            assert_eq!(result.status, "ok");
+            let data = result.data.unwrap();
+            assert_eq!(data["total_violations"], 1);
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_skips_self() {
+        with_temp_dir(|root| {
+            let (_k, _l, _s, _) = setup_sovereignty_test_env(root);
+            // File named sovereignty-enforcer.js should be skipped
+            create_file(
+                &root.join("scripts/sovereignty-enforcer.js"),
+                "const x = require('S:/kernel-lane/util.js');\n",
+            );
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            assert_eq!(result.status, "ok");
+            let data = result.data.unwrap();
+            assert_eq!(data["total_violations"], 0);
+        });
+    }
+
+    #[test]
+    fn test_sovereignty_verify_report_structure() {
+        with_temp_dir(|root| {
+            let (_k, _l, _s, _) = setup_sovereignty_test_env(root);
+            create_file(
+                &root.join("scripts/violation.js"),
+                "const x = require('S:/kernel-lane/util.js');\n",
+            );
+            let result = sovereignty_enforcer(Some(root), Some("archivist"), false);
+            let data = result.data.unwrap();
+
+            // Verify report metadata in the returned data
+            assert!(data.get("report_path").is_some());
+            assert!(data.get("latest_path").is_some());
+            assert!(data.get("violations").is_some());
+
+            // Read the written report file and verify its structure
+            let latest_path = data["latest_path"].as_str().unwrap();
+            let report_content = std::fs::read_to_string(latest_path).unwrap();
+            let report: serde_json::Value = serde_json::from_str(&report_content).unwrap();
+            assert_eq!(report["lane_id"], "archivist");
+            assert_eq!(report["rule"], "NO_CROSS_LANE_REQUIRE");
+            assert!(report.get("enforcement").is_some());
+            assert!(report.get("recommendations").is_some());
+            assert!(
+                report
+                    .get("recommendations")
+                    .unwrap()
+                    .as_array()
+                    .unwrap()
+                    .len()
+                    >= 3
+            );
         });
     }
 }

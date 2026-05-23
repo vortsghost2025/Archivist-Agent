@@ -1,8 +1,10 @@
 use serde::Serialize;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 
+use crate::consensus_check;
 use crate::governance_scripts;
+use crate::sign_message;
 
 #[derive(Serialize, Clone)]
 pub struct ScriptOutput {
@@ -105,9 +107,8 @@ pub async fn run_script(script_name: String) -> Result<ScriptOutput, String> {
             "health-check" => ("node", vec!["scripts/health-check.js"]),
             "recovery-test-suite" => ("node", vec!["scripts/recovery-test-suite.js"]),
             "mode-check" => ("node", vec!["scripts/mode-check.js", "--once"]),
-            "consensus-check" => ("node", vec!["scripts/consensus-check.js"]),
+            // consensus-check is now handled natively — see run_native_governance_script
             "system-status" => ("node", vec!["scripts/system-status.js"]),
-            "sovereignty-enforcer" => ("node", vec!["scripts/sovereignty-enforcer.js"]),
             "headless-self-audit" => ("node", vec!["scripts/headless-self-audit.js"]),
             _ => return Err(format!("Unknown script: {}", script_name)),
         };
@@ -194,6 +195,28 @@ pub async fn git_status() -> Result<GitStatusOutput, String> {
     })
 }
 
+/// Run the sovereignty enforcer scanner with explicit parameters.
+/// Scans a lane's scripts/ directory for cross-lane require() calls.
+#[tauri::command]
+pub fn run_sovereignty_enforcer(
+    target_lane: Option<String>,
+    strict_mode: Option<bool>,
+) -> Result<ScriptOutput, String> {
+    let root = resolve_project_root()?;
+    let lane = target_lane.as_deref().unwrap_or("archivist");
+    let strict = strict_mode.unwrap_or(false);
+
+    let result =
+        governance_scripts::sovereignty_enforcer(Some(&root), Some(lane), strict);
+
+    Ok(ScriptOutput {
+        stdout: format!("[{}] {}", result.status, result.message),
+        stderr: String::new(),
+        exit_code: if result.status == "ok" { 0 } else { 1 },
+        success: result.status == "ok",
+    })
+}
+
 #[tauri::command]
 pub fn check_read_only() -> ReadOnlyReport {
     let config = crate::safety::load_config().unwrap_or_else(|_| crate::safety::AllowedRoots::default());
@@ -216,9 +239,145 @@ pub fn run_native_governance_script(
         "mode-check" => governance_scripts::mode_check(Some(root)),
         "system-status" => governance_scripts::system_status(Some(root)),
         "recovery-test-suite" => governance_scripts::recovery_test_suite(Some(root)),
+        "sovereignty-enforcer" => governance_scripts::sovereignty_enforcer(Some(root), None, false),
+        "consensus-check" => run_native_consensus_check(root),
+        "sign-message" => run_native_sign_message(root),
         _ => return None,
     };
     Some(result)
+}
+
+/// Bridge: calls consensus_check::consensus_check() on the first
+/// unprocessed inbox message and converts the result to ScriptResult.
+fn run_native_consensus_check(root: &Path) -> governance_scripts::ScriptResult {
+    let inbox = root.join("lanes/archivist/inbox");
+    if !inbox.exists() {
+        return governance_scripts::ScriptResult::err("No inbox directory found");
+    }
+
+    let entries = match std::fs::read_dir(&inbox) {
+        Ok(e) => e,
+        Err(e) => {
+            return governance_scripts::ScriptResult::err(format!(
+                "Cannot read inbox: {}",
+                e
+            ))
+        }
+    };
+
+    let first_msg: Option<PathBuf> = entries
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .filter(|p| {
+            let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
+            name.ends_with(".json") && !name.starts_with("heartbeat")
+        })
+        .min();
+
+    let msg_path = match first_msg {
+        Some(p) => p,
+        None => {
+            return governance_scripts::ScriptResult::ok(
+                "No unprocessed inbox messages to check",
+            )
+        }
+    };
+
+    let content = match std::fs::read_to_string(&msg_path) {
+        Ok(c) => c,
+        Err(e) => {
+            return governance_scripts::ScriptResult::err(format!(
+                "Cannot read {}: {}",
+                msg_path.display(),
+                e
+            ))
+        }
+    };
+
+    let msg: serde_json::Value = match serde_json::from_str(&content) {
+        Ok(v) => v,
+        Err(e) => {
+            return governance_scripts::ScriptResult::err(format!(
+                "Cannot parse {}: {}",
+                msg_path.display(),
+                e
+            ))
+        }
+    };
+
+    let result = consensus_check::consensus_check(&msg, None);
+    let data = serde_json::json!(result);
+
+    let status_str = match result.status.as_str() {
+        "proven" => "ok",
+        "proven_with_drift_warning" => "ok",
+        "conflicted" => "error",
+        "blocked" => "error",
+        "unproven" => "error",
+        other => other,
+    };
+
+    governance_scripts::ScriptResult {
+        status: status_str.to_string(),
+        message: format!(
+            "consensus-check: status={}, score={}, routing={}",
+            result.status, result.weighted_score, result.routing_action
+        ),
+        data: Some(data),
+    }
+}
+
+/// Bridge: calls sign_message::sign_message() on the first unprocessed
+/// inbox message for the given lane (defaults to archivist).
+fn run_native_sign_message(root: &Path) -> governance_scripts::ScriptResult {
+    // Find the first unprocessed message in archivist inbox
+    let inbox = root.join("lanes/archivist/inbox");
+    if !inbox.exists() {
+        return governance_scripts::ScriptResult::err("No inbox directory found");
+    }
+
+    let entries = match std::fs::read_dir(&inbox) {
+        Ok(e) => e,
+        Err(e) => {
+            return governance_scripts::ScriptResult::err(format!(
+                "Cannot read inbox: {}",
+                e
+            ))
+        }
+    };
+
+    let first_msg: Option<PathBuf> = entries
+        .filter_map(|e| e.ok())
+        .map(|e| e.path())
+        .filter(|p| {
+            let name = p.file_name().and_then(|n| n.to_str()).unwrap_or("");
+            name.ends_with(".json") && !name.starts_with("heartbeat")
+        })
+        .min();
+
+    let msg_path = match first_msg {
+        Some(p) => p,
+        None => {
+            return governance_scripts::ScriptResult::ok(
+                "No unprocessed inbox messages to sign",
+            )
+        }
+    };
+
+    let result = sign_message::sign_message_file(&msg_path, Some("archivist"), false);
+
+    if result.status == "ok" {
+        governance_scripts::ScriptResult::ok_with_data(
+            format!("Signed {} with key_id={}", msg_path.display(), result.key_id.as_deref().unwrap_or("unknown")),
+            serde_json::json!({
+                "path": msg_path.to_string_lossy(),
+                "key_id": result.key_id,
+                "signature": result.signature,
+            }),
+        )
+    } else {
+        governance_scripts::ScriptResult::err(result.message)
+    }
 }
 
 #[cfg(test)]
@@ -255,6 +414,11 @@ mod tests {
     #[test]
     fn test_check_read_only_returns_report() {
         let report = check_read_only();
-        assert!(report.read_only_mode || !report.read_only_mode);
+        // Verify the report struct is constructible and fields are present.
+        // read_only_mode is whatever the config says; just confirm the field exists.
+        assert!(
+            report.source == "config/allowed_roots.json",
+            "source should point to the config file"
+        );
     }
 }

@@ -1,28 +1,17 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
-  "model": "kilo/kilo-auto/free",
   "agent": {
-    "orchestrator": {
-      "model": "kilo/kilo-auto/free"
-    },
+    "orchestrator": {},
     "plan": {
       "model": "nvidia/openai/gpt-oss-120b"
     },
-    "code": {
-      "model": "nvidia/z-ai/glm-5.1"
-    },
-    "build": {
-      "model": "kilo/kilo-auto/free"
-    },
+    "code": {},
+    "build": {},
     "debug": {
       "model": "nvidia/openai/gpt-oss-120b"
     },
-    "ask": {
-      "model": "kilo/kilo-auto/free"
-    },
-    "general": {
-      "model": "kilo/kilo-auto/free"
-    },
+    "ask": {},
+    "general": {},
     "code-reviewer": {
       "model": "nvidia/openai/gpt-oss-120b"
     }

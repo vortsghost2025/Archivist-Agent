@@ -143,13 +143,28 @@ function createMockSummary(root) {
     };
 }
 
+function resolveTauriInvoke() {
+    if (typeof window.__TAURI__?.core?.invoke === 'function') {
+        return window.__TAURI__.core.invoke.bind(window.__TAURI__.core);
+    }
+    if (typeof window.__TAURI__?.invoke === 'function') {
+        return window.__TAURI__.invoke.bind(window.__TAURI__);
+    }
+    if (typeof window.__TAURI_INTERNALS__?.invoke === 'function') {
+        return window.__TAURI_INTERNALS__.invoke.bind(window.__TAURI_INTERNALS__);
+    }
+    return null;
+}
+
+function hasTauriRuntime() {
+    return Boolean(window.__TAURI__ || window.__TAURI_INTERNALS__ || resolveTauriInvoke());
+}
+
 // Tauri invoke helper with explicit safety-mode fallback for browser mode.
 const invoke = (() => {
-    if (window.__TAURI__?.core?.invoke) {
-        return window.__TAURI__.core.invoke;
-    }
-    if (window.__TAURI__?.invoke) {
-        return window.__TAURI__.invoke;
+    const tauriInvoke = resolveTauriInvoke();
+    if (tauriInvoke) {
+        return tauriInvoke;
     }
 
     console.error('[SECURITY] No Tauri API found - running in browser mode');
@@ -1031,11 +1046,11 @@ async function runDiagnostics() {
     switchTab('overview');
     $('welcome').classList.add('hidden');
 
-    const hasTauri = !!window.__TAURI__;
+    const hasTauri = hasTauriRuntime();
     setDiagStatus('diag-tauri', hasTauri ? 'ok' : 'fail');
     log(`Tauri API: ${hasTauri ? '✓' : '✗'}`, hasTauri ? 'ok' : 'warn');
 
-    const hasInvoke = !!(window.__TAURI__?.core?.invoke || window.__TAURI__?.invoke);
+    const hasInvoke = !!resolveTauriInvoke();
     setDiagStatus('diag-invoke', hasInvoke ? 'ok' : 'fail');
     log(`invoke(): ${hasInvoke ? '✓' : '✗'}`, hasInvoke ? 'ok' : 'warn');
 
@@ -1212,7 +1227,7 @@ $('folder-path').addEventListener('keydown', event => {
     updateFooterInfo();
 
     setTimeout(() => {
-        const inTauri = !!window.__TAURI__;
+        const inTauri = hasTauriRuntime();
         log(inTauri ? '✓ Running inside Tauri' : '⚠ Running in browser mode with mock read-only data', inTauri ? 'ok' : 'warn');
     }, 100);
 

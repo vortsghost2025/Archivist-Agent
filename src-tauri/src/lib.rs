@@ -1,5 +1,6 @@
 mod build_index;
 mod build_registry;
+mod consensus_check;
 mod constants;
 mod constitution;
 mod cps_check;
@@ -9,6 +10,7 @@ mod governance;
 mod governance_scripts;
 mod safety;
 mod scan_tree;
+mod sign_message;
 mod summarize_folder;
 #[cfg(test)]
 mod test_env;
@@ -16,8 +18,11 @@ mod test_env;
 use build_index::build_index;
 use build_registry::build_registry;
 use generate_handoff::generate_handoff;
-use governance::{check_read_only, git_status, read_governance_file, run_script};
+use governance::{
+    check_read_only, git_status, read_governance_file, run_script, run_sovereignty_enforcer,
+};
 use scan_tree::scan_tree;
+use sign_message::sign_message;
 use summarize_folder::summarize_folder;
 use tauri::Manager;
 
@@ -50,6 +55,8 @@ pub fn run() {
             run_script,
             git_status,
             check_read_only,
+            run_sovereignty_enforcer,
+            sign_message,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

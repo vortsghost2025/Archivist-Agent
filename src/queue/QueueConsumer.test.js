@@ -59,6 +59,7 @@ function createTestApproval(overrides = {}) {
 
 console.log('=== QueueConsumer Tests ===\n');
 
+(async () => {
 try {
 	console.log('Test 1: Classify incident by severity');
 	setupTestQueue();
@@ -95,7 +96,7 @@ try {
 	const incident1 = createTestIncident({ payload: { classification: 'persistent_dependency' } });
 	const incident2 = createTestIncident({ payload: { classification: 'transient_error' } });
 	fs.writeFileSync(path.join(TEST_QUEUE_DIR, 'incident.log'), JSON.stringify(incident1) + '\n' + JSON.stringify(incident2) + '\n');
-	const processResult = consumer.processQueue('INCIDENT');
+	const processResult = await consumer.processQueue('INCIDENT');
 	assert.strictEqual(processResult.processed, 2, 'Should process 2 items');
 	assert.strictEqual(processResult.escalated, 0, 'P2/P3 should not escalate');
 	console.log('  ✓ Queue processed correctly\n');
@@ -131,3 +132,4 @@ try {
 	console.error(err.stack);
 	process.exit(1);
 }
+})();

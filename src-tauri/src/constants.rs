@@ -52,6 +52,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(clippy::assertions_on_constants)]
     fn test_constants_are_reasonable() {
         assert!(MAX_SCAN_DEPTH > 0);
         assert!(MAX_SCAN_DEPTH <= 50); // Reasonable upper bound
@@ -60,6 +61,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::assertions_on_constants)]
     fn test_confidence_values_in_range() {
         assert!(confidence::HIGH > confidence::MEDIUM);
         assert!(confidence::MEDIUM > confidence::LOW);

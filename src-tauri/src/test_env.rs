@@ -6,6 +6,10 @@
 //
 // Paper D states agents should run CPS independently. Global env vars
 // violate this by sharing state across threads. Thread-locals restore independence.
+//
+// clippy: `const { ... }` initializers require Rust 1.79+ but this project targets 1.77.2
+
+#![allow(clippy::missing_const_for_thread_local)]
 
 use std::cell::RefCell;
 use std::path::PathBuf;

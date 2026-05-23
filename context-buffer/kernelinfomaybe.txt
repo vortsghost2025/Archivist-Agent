@@ -17,7 +17,7 @@ JSON
 curl -sS -N \
   --request POST \
   --url "$invoke_url" \
-  --header "Authorization: Bearer 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" \
+  --header "Authorization: Bearer nvapi-REDACTED_SECRET" \
   --header "Content-Type: application/json" \
   --data "$payload"
 
@@ -26,7 +26,7 @@ curl -sS -N \
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: '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',
+  apiKey: 'nvapi-REDACTED_SECRET',
   baseURL: 'https://integrate.api.nvidia.com/v1',
 })
 
