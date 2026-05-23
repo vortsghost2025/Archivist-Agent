@@ -2,6 +2,8 @@ use serde::Serialize;
 use std::path::PathBuf;
 use std::time::Duration;
 
+use crate::governance_scripts;
+
 #[derive(Serialize, Clone)]
 pub struct ScriptOutput {
     pub stdout: String,
@@ -82,10 +84,24 @@ pub fn read_governance_file(file_name: String) -> Result<String, String> {
         .map_err(|e| format!("Read error for {}: {}", file_name, e))
 }
 
+/// Run a governance script — uses Rust-native implementation for ported
+/// scripts, falls back to Node.js for scripts not yet ported.
 #[tauri::command]
 pub async fn run_script(script_name: String) -> Result<ScriptOutput, String> {
     let root = resolve_project_root()?;
-        let (cmd, args) = match script_name.as_str() {
+
+    // Rust-native scripts — no Node.js dependency
+    if let Some(result) = run_native_governance_script(&script_name, &root) {
+        return Ok(ScriptOutput {
+            stdout: format!("[{}] {}", result.status, result.message),
+            stderr: String::new(),
+            exit_code: if result.status == "ok" { 0 } else { 1 },
+            success: result.status == "ok",
+        });
+    }
+
+    // Fallback to Node.js for scripts still in JS
+    let (cmd, args) = match script_name.as_str() {
             "health-check" => ("node", vec!["scripts/health-check.js"]),
             "recovery-test-suite" => ("node", vec!["scripts/recovery-test-suite.js"]),
             "mode-check" => ("node", vec!["scripts/mode-check.js", "--once"]),
@@ -187,6 +203,22 @@ pub fn check_read_only() -> ReadOnlyReport {
         blocked_roots: config.blocked_roots,
         source: "config/allowed_roots.json".to_string(),
     }
+}
+
+/// Dispatch to Rust-native governance script implementations.
+/// Returns `Some(result)` if the script was handled natively, `None` to fall back to Node.js.
+pub fn run_native_governance_script(
+    script_name: &str,
+    root: &std::path::Path,
+) -> Option<governance_scripts::ScriptResult> {
+    let result = match script_name {
+        "health-check" => governance_scripts::health_check(Some(root)),
+        "mode-check" => governance_scripts::mode_check(Some(root)),
+        "system-status" => governance_scripts::system_status(Some(root)),
+        "recovery-test-suite" => governance_scripts::recovery_test_suite(Some(root)),
+        _ => return None,
+    };
+    Some(result)
 }
 
 #[cfg(test)]

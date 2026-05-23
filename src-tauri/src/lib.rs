@@ -6,6 +6,7 @@ mod cps_check;
 mod generate_handoff;
 mod global_shim;
 mod governance;
+mod governance_scripts;
 mod safety;
 mod scan_tree;
 mod summarize_folder;
