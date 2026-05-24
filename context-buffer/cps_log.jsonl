@@ -68,3 +68,5 @@
 {"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T23:27:08.472105900+00:00"}
 {"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T23:28:16.388848600+00:00"}
 {"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-23T23:31:21.518791200+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-24T00:05:12.274260600+00:00"}
+{"caller":"cps_threshold_check(test_recompute)","components":{},"cps_score":2,"event":"BLOCK","threshold":5,"timestamp":"2026-05-24T00:21:27.242266400+00:00"}
