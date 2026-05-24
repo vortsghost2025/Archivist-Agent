@@ -47,7 +47,9 @@ fn resolve_project_root() -> Result<PathBuf, String> {
                 .parent()
                 .and_then(|p| p.parent())
                 .ok_or_else(|| "Cannot resolve project root".to_string())?;
-            return Ok(parent.canonicalize().unwrap_or_else(|_| parent.to_path_buf()));
+            return Ok(parent
+                .canonicalize()
+                .unwrap_or_else(|_| parent.to_path_buf()));
         }
     }
     Err("Cannot find project root: config/allowed_roots.json not found".to_string())
@@ -100,9 +102,18 @@ fn generate_now_md(root: &Path) -> Result<String, String> {
     if mode_path.exists() {
         if let Ok(content) = std::fs::read_to_string(&mode_path) {
             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
-                let mode = json.get("mode").and_then(|v| v.as_str()).unwrap_or("unknown");
-                let set_at = json.get("set_at").and_then(|v| v.as_str()).unwrap_or("unknown");
-                let set_by = json.get("set_by").and_then(|v| v.as_str()).unwrap_or("unknown");
+                let mode = json
+                    .get("mode")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("unknown");
+                let set_at = json
+                    .get("set_at")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("unknown");
+                let set_by = json
+                    .get("set_by")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("unknown");
                 out.push_str(&format!("## Current Mode: {}\n\n", mode));
                 out.push_str(&format!("- **Set at:** {}\n", set_at));
                 out.push_str(&format!("- **Set by:** {}\n", set_by));
@@ -156,9 +167,15 @@ fn generate_now_md(root: &Path) -> Result<String, String> {
         .unwrap_or_default();
 
     let is_clean = porcelain.trim().is_empty();
-    let modified_count = porcelain.lines().filter(|l| l.len() >= 3 && l.as_bytes()[1] == b'M').count();
+    let modified_count = porcelain
+        .lines()
+        .filter(|l| l.len() >= 3 && l.as_bytes()[1] == b'M')
+        .count();
     let untracked_count = porcelain.lines().filter(|l| l.starts_with('?')).count();
-    let staged_count = porcelain.lines().filter(|l| l.len() >= 3 && l.as_bytes()[0] != b' ' && l.as_bytes()[0] != b'?').count();
+    let staged_count = porcelain
+        .lines()
+        .filter(|l| l.len() >= 3 && l.as_bytes()[0] != b' ' && l.as_bytes()[0] != b'?')
+        .count();
 
     out.push_str("## Last Known Good\n\n");
     out.push_str(&format!("- **Commit:** `{}`\n", head));
@@ -170,9 +187,15 @@ fn generate_now_md(root: &Path) -> Result<String, String> {
     if !is_clean {
         out.push_str("  - ");
         let mut parts = Vec::new();
-        if modified_count > 0 { parts.push(format!("{} modified", modified_count)); }
-        if untracked_count > 0 { parts.push(format!("{} untracked", untracked_count)); }
-        if staged_count > 0 { parts.push(format!("{} staged", staged_count)); }
+        if modified_count > 0 {
+            parts.push(format!("{} modified", modified_count));
+        }
+        if untracked_count > 0 {
+            parts.push(format!("{} untracked", untracked_count));
+        }
+        if staged_count > 0 {
+            parts.push(format!("{} staged", staged_count));
+        }
         out.push_str(&parts.join(", "));
         out.push('\n');
     }
@@ -187,8 +210,14 @@ fn generate_now_md(root: &Path) -> Result<String, String> {
                 if json.is_null() {
                     out.push_str("None.\n\n");
                 } else {
-                    let desc = json.get("description").and_then(|v| v.as_str()).unwrap_or("(no description)");
-                    let owner = json.get("owner").and_then(|v| v.as_str()).unwrap_or("unknown");
+                    let desc = json
+                        .get("description")
+                        .and_then(|v| v.as_str())
+                        .unwrap_or("(no description)");
+                    let owner = json
+                        .get("owner")
+                        .and_then(|v| v.as_str())
+                        .unwrap_or("unknown");
                     out.push_str(&format!("- **{}** — {}\n", owner, desc));
                     if let Some(blocked_at) = json.get("blocked_at").and_then(|v| v.as_str()) {
                         out.push_str(&format!("  - Blocked at: {}\n", blocked_at));
@@ -211,10 +240,24 @@ fn generate_now_md(root: &Path) -> Result<String, String> {
     if recovery_path.exists() {
         if let Ok(content) = std::fs::read_to_string(&recovery_path) {
             if let Ok(json) = serde_json::from_str::<serde_json::Value>(&content) {
-                let verdict = json.get("verdict").and_then(|v| v.as_str()).unwrap_or("unknown");
-                let ts = json.get("timestamp").and_then(|v| v.as_str()).unwrap_or("unknown");
-                let passed = json.get("tests_passed").and_then(|v| v.as_u64()).map(|v| v.to_string()).unwrap_or_else(|| "?".to_string());
-                let total = json.get("tests_total").and_then(|v| v.as_u64()).map(|v| v.to_string()).unwrap_or_else(|| "?".to_string());
+                let verdict = json
+                    .get("verdict")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("unknown");
+                let ts = json
+                    .get("timestamp")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("unknown");
+                let passed = json
+                    .get("tests_passed")
+                    .and_then(|v| v.as_u64())
+                    .map(|v| v.to_string())
+                    .unwrap_or_else(|| "?".to_string());
+                let total = json
+                    .get("tests_total")
+                    .and_then(|v| v.as_u64())
+                    .map(|v| v.to_string())
+                    .unwrap_or_else(|| "?".to_string());
                 out.push_str("## Last Recovery\n\n");
                 out.push_str(&format!("- **Verdict:** {}\n", verdict));
                 out.push_str(&format!("- **Tests:** {}/{}\n", passed, total));
@@ -302,16 +345,13 @@ pub fn read_governance_file(file_name: String) -> Result<String, String> {
         .canonicalize()
         .map_err(|e| format!("Cannot resolve path: {}", e))?;
     let root = resolve_project_root()?;
-    let root_canonical = root
-        .canonicalize()
-        .unwrap_or_else(|_| root.clone());
+    let root_canonical = root.canonicalize().unwrap_or_else(|_| root.clone());
     let path_str = canonical_path.to_string_lossy().to_lowercase();
     let root_str = root_canonical.to_string_lossy().to_lowercase();
     if !path_str.starts_with(&root_str) {
         return Err(format!("Path escapes project root: {}", file_name));
     }
-    std::fs::read_to_string(&path)
-        .map_err(|e| format!("Read error for {}: {}", file_name, e))
+    std::fs::read_to_string(&path).map_err(|e| format!("Read error for {}: {}", file_name, e))
 }
 
 /// Run a governance script — uses Rust-native implementation for ported
@@ -332,14 +372,14 @@ pub async fn run_script(script_name: String) -> Result<ScriptOutput, String> {
 
     // Fallback to Node.js for scripts still in JS
     let (cmd, args) = match script_name.as_str() {
-            "health-check" => ("node", vec!["scripts/health-check.js"]),
-            "recovery-test-suite" => ("node", vec!["scripts/recovery-test-suite.js"]),
-            "mode-check" => ("node", vec!["scripts/mode-check.js", "--once"]),
-            // consensus-check is now handled natively — see run_native_governance_script
-            "system-status" => ("node", vec!["scripts/system-status.js"]),
-            "headless-self-audit" => ("node", vec!["scripts/headless-self-audit.js"]),
-            _ => return Err(format!("Unknown script: {}", script_name)),
-        };
+        "health-check" => ("node", vec!["scripts/health-check.js"]),
+        "recovery-test-suite" => ("node", vec!["scripts/recovery-test-suite.js"]),
+        "mode-check" => ("node", vec!["scripts/mode-check.js", "--once"]),
+        // consensus-check is now handled natively — see run_native_governance_script
+        "system-status" => ("node", vec!["scripts/system-status.js"]),
+        "headless-self-audit" => ("node", vec!["scripts/headless-self-audit.js"]),
+        _ => return Err(format!("Unknown script: {}", script_name)),
+    };
 
     let root_str = root.to_string_lossy().to_string();
     let result = tauri::async_runtime::spawn_blocking(move || {
@@ -351,12 +391,13 @@ pub async fn run_script(script_name: String) -> Result<ScriptOutput, String> {
             .output()
     });
 
-    let output: std::process::Output = match tokio::time::timeout(Duration::from_secs(60), result).await {
-        Ok(Ok(Ok(o))) => o,
-        Ok(Ok(Err(e))) => return Err(format!("Failed to execute {}: {}", script_name, e)),
-        Ok(Err(e)) => return Err(format!("Task join error: {}", e)),
-        Err(_) => return Err(format!("Timeout: {} exceeded 60s limit", script_name)),
-    };
+    let output: std::process::Output =
+        match tokio::time::timeout(Duration::from_secs(60), result).await {
+            Ok(Ok(Ok(o))) => o,
+            Ok(Ok(Err(e))) => return Err(format!("Failed to execute {}: {}", script_name, e)),
+            Ok(Err(e)) => return Err(format!("Task join error: {}", e)),
+            Err(_) => return Err(format!("Timeout: {} exceeded 60s limit", script_name)),
+        };
 
     Ok(ScriptOutput {
         stdout: String::from_utf8_lossy(&output.stdout).to_string(),
@@ -434,8 +475,7 @@ pub fn run_sovereignty_enforcer(
     let lane = target_lane.as_deref().unwrap_or("archivist");
     let strict = strict_mode.unwrap_or(false);
 
-    let result =
-        governance_scripts::sovereignty_enforcer(Some(&root), Some(lane), strict);
+    let result = governance_scripts::sovereignty_enforcer(Some(&root), Some(lane), strict);
 
     Ok(ScriptOutput {
         stdout: format!("[{}] {}", result.status, result.message),
@@ -447,7 +487,8 @@ pub fn run_sovereignty_enforcer(
 
 #[tauri::command]
 pub fn check_read_only() -> ReadOnlyReport {
-    let config = crate::safety::load_config().unwrap_or_else(|_| crate::safety::AllowedRoots::default());
+    let config =
+        crate::safety::load_config().unwrap_or_else(|_| crate::safety::AllowedRoots::default());
     ReadOnlyReport {
         read_only_mode: crate::safety::is_read_only(),
         allowed_roots: config.allowed_roots,
@@ -486,10 +527,7 @@ fn run_native_consensus_check(root: &Path) -> governance_scripts::ScriptResult {
     let entries = match std::fs::read_dir(&inbox) {
         Ok(e) => e,
         Err(e) => {
-            return governance_scripts::ScriptResult::err(format!(
-                "Cannot read inbox: {}",
-                e
-            ))
+            return governance_scripts::ScriptResult::err(format!("Cannot read inbox: {}", e))
         }
     };
 
@@ -505,9 +543,7 @@ fn run_native_consensus_check(root: &Path) -> governance_scripts::ScriptResult {
     let msg_path = match first_msg {
         Some(p) => p,
         None => {
-            return governance_scripts::ScriptResult::ok(
-                "No unprocessed inbox messages to check",
-            )
+            return governance_scripts::ScriptResult::ok("No unprocessed inbox messages to check")
         }
     };
 
@@ -567,10 +603,7 @@ fn run_native_sign_message(root: &Path) -> governance_scripts::ScriptResult {
     let entries = match std::fs::read_dir(&inbox) {
         Ok(e) => e,
         Err(e) => {
-            return governance_scripts::ScriptResult::err(format!(
-                "Cannot read inbox: {}",
-                e
-            ))
+            return governance_scripts::ScriptResult::err(format!("Cannot read inbox: {}", e))
         }
     };
 
@@ -586,9 +619,7 @@ fn run_native_sign_message(root: &Path) -> governance_scripts::ScriptResult {
     let msg_path = match first_msg {
         Some(p) => p,
         None => {
-            return governance_scripts::ScriptResult::ok(
-                "No unprocessed inbox messages to sign",
-            )
+            return governance_scripts::ScriptResult::ok("No unprocessed inbox messages to sign")
         }
     };
 
@@ -596,7 +627,11 @@ fn run_native_sign_message(root: &Path) -> governance_scripts::ScriptResult {
 
     if result.status == "ok" {
         governance_scripts::ScriptResult::ok_with_data(
-            format!("Signed {} with key_id={}", msg_path.display(), result.key_id.as_deref().unwrap_or("unknown")),
+            format!(
+                "Signed {} with key_id={}",
+                msg_path.display(),
+                result.key_id.as_deref().unwrap_or("unknown")
+            ),
             serde_json::json!({
                 "path": msg_path.to_string_lossy(),
                 "key_id": result.key_id,

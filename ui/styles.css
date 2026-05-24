@@ -1200,6 +1200,38 @@ footer {
   flex: 1;
 }
 
+.model-select-row {
+  display: flex;
+  gap: 12px;
+}
+.model-select-row select {
+  flex: 1;
+}
+.btn-fetch-models {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.helper-text {
+  margin: 4px 0 0;
+  font-size: 0.8em;
+  color: var(--muted);
+}
+.helper-text.error {
+  color: var(--accent-strong);
+}
+.helper-text.success {
+  color: #4caf50;
+}
+.model-select-row select {
+  flex: 1;
+}
+.btn-fetch-models {
+  white-space: nowrap;
+  flex-shrink: 0;
+} {
+  flex: 1;
+}
+
 .chat-settings-actions {
   display: flex;
   align-items: center;

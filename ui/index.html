@@ -191,10 +191,16 @@
                 <label for="chat-endpoint">Endpoint</label>
                 <input type="text" id="chat-endpoint" placeholder="https://integrate.api.nvidia.com/v1" />
               </div>
-              <div class="setting-group">
-                <label for="chat-model">Model</label>
-                <input type="text" id="chat-model" placeholder="meta/llama-3.3-70b-instruct" />
-              </div>
+      <div class="setting-group">
+        <label for="chat-model">Model</label>
+        <div class="model-select-row">
+          <select id="chat-model" aria-label="Select AI model">
+            <option value="">— click Fetch Models —</option>
+          </select>
+          <button class="btn btn-secondary btn-fetch-models" id="btn-fetch-models" type="button">Fetch Models</button>
+        </div>
+        <p class="helper-text" id="model-fetch-status"></p>
+      </div>
               <div class="setting-row">
                 <div class="setting-group">
                   <label for="chat-temperature">Temperature</label>

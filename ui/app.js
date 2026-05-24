@@ -173,7 +173,7 @@ const invoke = (() => {
 
     return async (cmd, args = {}) => {
         const root = args.rootPath || args.root || args.path || 'C:\\Demo\\Archivist';
-  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd'];
+  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models'];
 
   if (readOnlyCommands.includes(cmd)) {
     console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
@@ -225,21 +225,30 @@ const invoke = (() => {
       } catch (_) { /* ignore */ }
       return 'Config saved (browser mock).';
     }
-    if (cmd === 'load_agent_config_cmd') {
-      let mockConfig = { chat_endpoint: null, chat_model: null, temperature: 0.7, max_tokens: 2048, has_api_key: false };
-      try {
-        const saved = window.localStorage.getItem('archivist.chatConfig.mock');
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          mockConfig.chat_endpoint = parsed.endpoint || null;
-          mockConfig.chat_model = parsed.model || null;
-          mockConfig.temperature = parsed.temperature || 0.7;
-          mockConfig.max_tokens = parsed.maxTokens || 2048;
-          mockConfig.has_api_key = !!parsed.apiKey;
-        }
-      } catch (_) { /* ignore */ }
-      return mockConfig;
-    }
+          if (cmd === 'load_agent_config_cmd') {
+            let mockConfig = { chat_endpoint: null, chat_model: null, temperature: 0.7, max_tokens: 2048, has_api_key: false };
+            try {
+              const saved = window.localStorage.getItem('archivist.chatConfig.mock');
+              if (saved) {
+                const parsed = JSON.parse(saved);
+                mockConfig.chat_endpoint = parsed.endpoint || null;
+                mockConfig.chat_model = parsed.model || null;
+                mockConfig.temperature = parsed.temperature || 0.7;
+                mockConfig.max_tokens = parsed.maxTokens || 2048;
+                mockConfig.has_api_key = !!parsed.apiKey;
+              }
+            } catch (_) { /* ignore */ }
+            return mockConfig;
+          }
+          if (cmd === 'fetch_models') {
+            return [
+              { id: 'meta/llama-3.3-70b-instruct', owned_by: 'meta' },
+              { id: 'meta/llama-3.1-8b-instruct', owned_by: 'meta' },
+              { id: 'nvidia/llama-3.1-nemotron-70b-instruct', owned_by: 'nvidia' },
+              { id: 'mistralai/mixtral-8x7b-instruct-v0.1', owned_by: 'mistralai' },
+              { id: 'google/gemma-2-9b-it', owned_by: 'google' },
+            ];
+          }
     return null;
   }
 
@@ -543,7 +552,25 @@ async function loadChatConfig() {
     state.chatConfig = config;
     // Populate settings fields
     if ($('chat-endpoint')) $('chat-endpoint').value = config.chat_endpoint || '';
-    if ($('chat-model')) $('chat-model').value = config.chat_model || '';
+    if ($('chat-model')) {
+      const selectEl = $('chat-model');
+      // Clear existing options
+      selectEl.innerHTML = '';
+      if (config.chat_model) {
+        // Add saved model as selected option
+        const opt = document.createElement('option');
+        opt.value = config.chat_model;
+        opt.textContent = config.chat_model;
+        opt.selected = true;
+        selectEl.appendChild(opt);
+      }
+      // Add placeholder
+      const placeholder = document.createElement('option');
+      placeholder.value = '';
+      placeholder.textContent = '— click Fetch Models to list available models —';
+      if (!config.chat_model) placeholder.selected = true;
+      selectEl.insertBefore(placeholder, selectEl.firstChild);
+    }
     if ($('chat-temperature')) $('chat-temperature').value = config.temperature ?? 0.7;
     if ($('chat-max-tokens')) $('chat-max-tokens').value = config.max_tokens ?? 2048;
     if ($('chat-api-key')) $('chat-api-key').value = config.has_api_key ? '••••••••' : '';
@@ -558,10 +585,67 @@ async function loadChatConfig() {
   }
 }
 
+async function fetchModels() {
+  const statusEl = $('model-fetch-status');
+  const btnEl = $('btn-fetch-models');
+  const selectEl = $('chat-model');
+  if (!selectEl) return;
+
+  const endpoint = $('chat-endpoint')?.value.trim() || null;
+  const apiKeyRaw = $('chat-api-key')?.value.trim() || null;
+  const apiKey = (apiKeyRaw && apiKeyRaw !== '••••••••') ? apiKeyRaw : null;
+
+  if (statusEl) { statusEl.textContent = 'Fetching models…'; statusEl.className = 'helper-text'; }
+  if (btnEl) btnEl.disabled = true;
+
+  try {
+    const models = await invoke('fetch_models', { endpoint, apiKey });
+    if (!Array.isArray(models) || models.length === 0) {
+      if (statusEl) { statusEl.textContent = 'No models found at this endpoint.'; statusEl.className = 'helper-text error'; }
+      return;
+    }
+
+    // Remember current selection
+    const currentModel = selectEl.value;
+
+    // Clear and rebuild
+    selectEl.innerHTML = '';
+
+    // Placeholder
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = `— ${models.length} models available —`;
+    selectEl.appendChild(placeholder);
+
+    // Add each model
+    let matched = false;
+    for (const m of models) {
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = m.id + (m.owned_by ? ` (${m.owned_by})` : '');
+      if (m.id === currentModel) { opt.selected = true; matched = true; }
+      selectEl.appendChild(opt);
+    }
+
+    // If no match, select first real model
+    if (!matched && models.length > 0) {
+      selectEl.selectedIndex = 1;
+    }
+
+    if (statusEl) { statusEl.textContent = `✓ ${models.length} models loaded.`; statusEl.className = 'helper-text success'; }
+    log(`Fetched ${models.length} models from endpoint.`, 'ok');
+  } catch (e) {
+    if (statusEl) { statusEl.textContent = '✗ ' + e.message; statusEl.className = 'helper-text error'; }
+    log('Failed to fetch models: ' + e.message, 'err');
+  } finally {
+    if (btnEl) btnEl.disabled = false;
+  }
+}
+
 async function saveChatConfig() {
   const endpoint = $('chat-endpoint')?.value.trim() || null;
   const apiKeyRaw = $('chat-api-key')?.value.trim() || null;
-  const model = $('chat-model')?.value.trim() || null;
+    const model = $('chat-model')?.value || null;
   const temperature = parseFloat($('chat-temperature')?.value) || null;
   const maxTokens = parseInt($('chat-max-tokens')?.value, 10) || null;
 
@@ -614,7 +698,7 @@ async function sendChatMessage() {
   try {
     const apiKey = $('chat-api-key')?.value.trim();
     const endpoint = $('chat-endpoint')?.value.trim() || null;
-    const model = $('chat-model')?.value.trim() || null;
+  const model = $('chat-model')?.value || null;
 
     // Build messages array (include system prompt if first message, then all messages)
     const messages = state.chatMessages
@@ -1410,6 +1494,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('btn-chat-toggle-settings').addEventListener('click', toggleChatSettings);
     $('btn-chat-settings-close').addEventListener('click', toggleChatSettings);
     $('btn-chat-save-settings').addEventListener('click', saveChatConfig);
+  $('btn-fetch-models').addEventListener('click', fetchModels);
 
     $('btn-clear-log').addEventListener('click', () => {
         state.logEntries = [];

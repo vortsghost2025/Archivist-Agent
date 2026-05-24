@@ -278,11 +278,7 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
 
     // ---- Call API ----
     let client = reqwest::Client::new();
-    let api_url = format!(
-        "{}{}",
-        endpoint.trim_end_matches('/'),
-        "/chat/completions"
-    );
+    let api_url = format!("{}{}", endpoint.trim_end_matches('/'), "/chat/completions");
 
     let http_response = client
         .post(&api_url)
@@ -333,8 +329,7 @@ pub fn save_agent_config(
     temperature: Option<f64>,
     max_tokens: Option<u32>,
 ) -> Result<String, String> {
-    let root =
-        crate::governance::resolve_project_root_static().map_err(|e| format!("{}", e))?;
+    let root = crate::governance::resolve_project_root_static().map_err(|e| e.to_string())?;
     let config_path = root.join("config/agent_config.json");
 
     let mut config = if config_path.exists() {
@@ -364,8 +359,7 @@ pub fn save_agent_config(
 
     let json = serde_json::to_string_pretty(&config)
         .map_err(|e| format!("Failed to serialize config: {}", e))?;
-    std::fs::write(&config_path, &json)
-        .map_err(|e| format!("Failed to write config: {}", e))?;
+    std::fs::write(&config_path, &json).map_err(|e| format!("Failed to write config: {}", e))?;
 
     // Clear cache so next load picks up changes
     if let Ok(mut cache) = CONFIG_CACHE.lock() {
@@ -378,8 +372,7 @@ pub fn save_agent_config(
 /// Load the current agent configuration (without exposing the API key value).
 #[tauri::command]
 pub fn load_agent_config_cmd() -> Result<serde_json::Value, String> {
-    let root =
-        crate::governance::resolve_project_root_static().map_err(|e| format!("{}", e))?;
+    let root = crate::governance::resolve_project_root_static().map_err(|e| e.to_string())?;
     let config = load_agent_config(&root);
 
     Ok(serde_json::json!({
@@ -389,4 +382,85 @@ pub fn load_agent_config_cmd() -> Result<serde_json::Value, String> {
         "max_tokens": config.max_tokens,
         "has_api_key": config.chat_api_key.is_some() && config.chat_api_key.as_deref() != Some(""),
     }))
+}
+
+/// A model listed by the /v1/models endpoint.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ModelInfo {
+    pub id: String,
+    pub owned_by: Option<String>,
+}
+
+/// Response from the OpenAI-compatible /v1/models endpoint.
+#[derive(Debug, Deserialize)]
+struct ModelsResponse {
+    data: Vec<ModelEntry>,
+}
+
+#[derive(Debug, Deserialize)]
+struct ModelEntry {
+    id: String,
+    owned_by: Option<String>,
+}
+
+/// Fetch available models from the configured endpoint.
+///
+/// Uses the same resolution chain as `chat_send`:
+///   API key: arg > config > env var
+///   Endpoint: arg > config > default NVIDIA
+///
+/// Returns a sorted list of `{ id, owned_by }` objects.
+#[tauri::command]
+pub async fn fetch_models(
+    endpoint: Option<String>,
+    api_key: Option<String>,
+) -> Result<Vec<ModelInfo>, String> {
+    let root = crate::governance::resolve_project_root_static()
+        .map_err(|e| format!("Cannot resolve project root: {}", e))?;
+    let config = load_agent_config(&root);
+
+    let resolved_key = resolve_api_key(api_key, &config)
+        .ok_or_else(|| "No API key available. Set NVIDIA_API_KEY env var, configure config/agent_config.json, or pass it in the request.".to_string())?;
+
+    let resolved_endpoint = resolve_endpoint(endpoint, &config);
+
+    let models_url = format!("{}/models", resolved_endpoint.trim_end_matches('/'));
+
+    let client = reqwest::Client::new();
+    let http_response = client
+        .get(&models_url)
+        .header("Authorization", format!("Bearer {}", resolved_key))
+        .send()
+        .await
+        .map_err(|e| format!("Failed to fetch models: {}", e))?;
+
+    if !http_response.status().is_success() {
+        let status = http_response.status();
+        let body = http_response
+            .text()
+            .await
+            .unwrap_or_else(|_| "(no body)".to_string());
+        return Err(format!(
+            "API returned {} when fetching models: {}",
+            status, body
+        ));
+    }
+
+    let models_resp: ModelsResponse = http_response
+        .json()
+        .await
+        .map_err(|e| format!("Failed to parse models response: {}", e))?;
+
+    let mut models: Vec<ModelInfo> = models_resp
+        .data
+        .into_iter()
+        .map(|m| ModelInfo {
+            id: m.id,
+            owned_by: m.owned_by,
+        })
+        .collect();
+
+    models.sort_by(|a, b| a.id.cmp(&b.id));
+
+    Ok(models)
 }
