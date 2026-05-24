@@ -258,7 +258,7 @@ const state = {
     currentPath: '',
     scanResult: null,
     summaryResult: null,
-    activeTab: 'overview',
+    activeTab: 'chat',
     logEntries: [],
     isWorking: false,
     searchQuery: '',
@@ -351,9 +351,7 @@ function switchTab(tabName) {
   TAB_NAMES.forEach(name => {
     $(`tab-${name}`).classList.toggle('hidden', name !== tabName);
   });
-  if (state.scanResult || state.summaryResult) {
-    $('welcome').classList.add('hidden');
-  }
+  $('welcome').classList.add('hidden');
   if (tabName === 'tree') renderTreePanel();
   if (tabName === 'overview') renderOverview();
   if (tabName === 'retrieve') renderRetrieve();
@@ -1494,12 +1492,13 @@ $('folder-path').addEventListener('keydown', event => {
         state.currentPath = state.recentPaths[0];
     }
 
-    renderOverview();
-    renderRetrieve();
-    renderTreePanel();
-    updateFooterInfo();
+  renderChat();
+  renderOverview();
+  renderRetrieve();
+  renderTreePanel();
+  updateFooterInfo();
 
-    setTimeout(() => {
+  setTimeout(() => {
         const inTauri = hasTauriRuntime();
         log(inTauri ? '✓ Running inside Tauri' : '⚠ Running in browser mode with mock read-only data', inTauri ? 'ok' : 'warn');
     }, 100);
