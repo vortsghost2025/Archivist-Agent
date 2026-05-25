@@ -1,3 +1,4 @@
+use crate::classification::classify_directory;
 use crate::safety::{check_read_only, validate_path};
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -32,61 +33,12 @@ pub fn generate_handoff(path: String) -> Result<String, String> {
         .map(|n| n.to_string_lossy().to_string())
         .unwrap_or_else(|| "Unknown".to_string());
 
-    // Classify
-    let path_str = path_ref.to_string_lossy().to_lowercase();
-    let mut has_code = false;
-    let mut key_files: Vec<String> = Vec::new();
+    // Classify using shared classification module
+    let dir_class = classify_directory(path_ref, 20);
+    let classification = dir_class.bucket;
+    let summary = dir_class.summary;
+    let key_files = dir_class.key_files;
     let mut concerns: Vec<String> = Vec::new();
-
-    if let Ok(entries) = fs::read_dir(path_ref) {
-        for entry in entries.filter_map(|e| e.ok()).take(20) {
-            let name = entry.file_name().to_string_lossy().to_string();
-            if entry.path().is_file() {
-                if name.ends_with(".js")
-                    || name.ends_with(".ts")
-                    || name.ends_with(".rs")
-                    || name.ends_with(".py")
-                    || name.ends_with(".go")
-                    || name.ends_with(".html")
-                {
-                    has_code = true;
-                }
-                if name.to_lowercase().contains("readme")
-                    || name.ends_with(".md")
-                    || name.ends_with(".json")
-                    || name.ends_with(".toml")
-                {
-                    key_files.push(name);
-                }
-            }
-        }
-    }
-
-    let (classification, summary) = if path_str.contains("test") || path_str.contains("spec") {
-        (
-            "Verification".to_string(),
-            "Tests or benchmarks".to_string(),
-        )
-    } else if path_str.contains("logs") || path_str.contains("cache") {
-        ("Memory".to_string(), "Logs or temporary files".to_string())
-    } else if path_str.contains("ui") || path_str.contains("frontend") {
-        (
-            "Interface".to_string(),
-            "User interface or web frontend".to_string(),
-        )
-    } else if path_str.contains("research") {
-        (
-            "Research".to_string(),
-            "Experiments or theoretical work".to_string(),
-        )
-    } else if has_code {
-        (
-            "Runtime".to_string(),
-            "Executable code or project".to_string(),
-        )
-    } else {
-        ("Unknown".to_string(), "Unclassified folder".to_string())
-    };
 
     // Check for potential concerns
     if key_files.is_empty() {

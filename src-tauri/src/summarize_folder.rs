@@ -1,42 +1,9 @@
-use crate::constants::{bucket, confidence};
+use crate::classification::{classify_file, ClassifiedFile};
+use crate::constants::bucket;
 use crate::safety::validate_path;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::path::PathBuf;
-
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
-pub enum FileBucket {
-    Runtime,
-    Interface,
-    Memory,
-    Verification,
-    Research,
-    Unknown,
-}
-
-impl FileBucket {
-    pub fn as_str(&self) -> &'static str {
-        match self {
-            FileBucket::Runtime => bucket::RUNTIME,
-            FileBucket::Interface => bucket::INTERFACE,
-            FileBucket::Memory => bucket::MEMORY,
-            FileBucket::Verification => bucket::VERIFICATION,
-            FileBucket::Research => bucket::RESEARCH,
-            FileBucket::Unknown => bucket::UNKNOWN,
-        }
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ClassifiedFile {
-    pub path: String,
-    pub name: String,
-    pub bucket: String,
-    pub confidence: f32,
-    pub reason: String,
-    pub size_bytes: u64,
-    pub extension: String,
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FolderSummary {
@@ -133,230 +100,31 @@ fn collect_files(dir: &PathBuf, files: &mut Vec<PathBuf>, errors: &mut Vec<Strin
     }
 }
 
-fn classify_file(path: &PathBuf) -> ClassifiedFile {
-    let name = path
-        .file_name()
-        .map(|n| n.to_string_lossy().to_string())
-        .unwrap_or_default();
-
-    let extension = path
-        .extension()
-        .map(|e| e.to_string_lossy().to_lowercase())
-        .unwrap_or_default();
-
-    let size_bytes = std::fs::metadata(path).map(|m| m.len()).unwrap_or(0);
-
-    let name_lower = name.to_lowercase();
-
-    let (bucket, conf, reason) = if is_verification_file(&name_lower, &extension) {
-        (
-            FileBucket::Verification,
-            confidence::MEDIUM,
-            "Filename or path contains test/spec indicators".to_string(),
-        )
-    } else if is_interface_file(&extension) {
-        (
-            FileBucket::Interface,
-            confidence::HIGH,
-            format!(".{} is a UI/frontend file type", extension),
-        )
-    } else if is_research_file(&extension, &name_lower) {
-        (
-            FileBucket::Research,
-            confidence::MEDIUM,
-            format!(".{} is a research/document file type", extension),
-        )
-    } else if is_memory_file(&extension, &name_lower) {
-        (
-            FileBucket::Memory,
-            confidence::LOW,
-            format!("{} is a project memory/config file", name),
-        )
-    } else if is_runtime_file(&extension) {
-        (
-            FileBucket::Runtime,
-            confidence::MEDIUM,
-            format!(".{} is a runtime/executable file type", extension),
-        )
-    } else {
-        (
-            FileBucket::Unknown,
-            confidence::DEFAULT,
-            format!("No classification rule matched .{}", extension),
-        )
-    };
-
-    ClassifiedFile {
-        path: path.to_string_lossy().to_string(),
-        name,
-        bucket: bucket.as_str().to_string(),
-        confidence: conf,
-        reason,
-        size_bytes,
-        extension,
-    }
-}
-
-fn is_verification_file(name_lower: &str, ext: &str) -> bool {
-    name_lower.contains("test")
-        || name_lower.contains("spec")
-        || name_lower.contains("_test.")
-        || name_lower.contains(".test.")
-        || name_lower.contains(".spec.")
-        || ext == "feature"
-        || (ext == "py" && name_lower.starts_with("test_"))
-        || (ext == "py" && name_lower.ends_with("_test.py"))
-}
-
-fn is_interface_file(ext: &str) -> bool {
-    matches!(
-        ext,
-        "html"
-            | "htm"
-            | "css"
-            | "scss"
-            | "sass"
-            | "less"
-            | "jsx"
-            | "tsx"
-            | "vue"
-            | "svelte"
-            | "astro"
-            | "hbs"
-            | "handlebars"
-            | "ejs"
-            | "pug"
-    )
-}
-
-fn is_research_file(ext: &str, name_lower: &str) -> bool {
-    matches!(
-        ext,
-        "pdf" | "docx" | "doc" | "pptx" | "ppt" | "xlsx" | "xls"
-    ) || ext == "ipynb"
-        || name_lower.ends_with(".nb")
-        || matches!(ext, "tex" | "bib")
-        || matches!(ext, "epub" | "mobi")
-}
-
-fn is_memory_file(ext: &str, name_lower: &str) -> bool {
-    matches!(ext, "md" | "mdx" | "rst" | "txt" | "org")
-        || matches!(
-            ext,
-            "json" | "yaml" | "yml" | "toml" | "ini" | "cfg" | "conf"
-        )
-        || matches!(
-            name_lower,
-            "readme"
-                | "changelog"
-                | "license"
-                | "contributing"
-                | "makefile"
-                | "dockerfile"
-                | ".env"
-                | ".gitignore"
-                | "spec.md"
-                | "handoff.md"
-        )
-        || name_lower.ends_with(".lock")
-        || name_lower == "cargo.lock"
-        || name_lower == "package-lock.json"
-}
-
-fn is_runtime_file(ext: &str) -> bool {
-    matches!(
-        ext,
-        "rs" | "c"
-            | "cpp"
-            | "cc"
-            | "h"
-            | "hpp"
-            | "java"
-            | "kt"
-            | "scala"
-            | "clj"
-            | "py"
-            | "rb"
-            | "lua"
-            | "pl"
-            | "php"
-            | "js"
-            | "mjs"
-            | "cjs"
-            | "ts"
-            | "sh"
-            | "bash"
-            | "zsh"
-            | "fish"
-            | "ps1"
-            | "bat"
-            | "cmd"
-            | "go"
-            | "swift"
-            | "dart"
-            | "zig"
-            | "exe"
-            | "dll"
-            | "so"
-            | "dylib"
-            | "wasm"
-            | "class"
-            | "pyc"
-            | "o"
-    )
-}
+// Classification logic moved to crate::classification module.
+// This file uses classify_file() and ClassifiedFile from there.
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::classification::{classify_file, is_verification_file};
+    use std::path::PathBuf;
 
     #[test]
-    fn test_classify_rust_file() {
+    fn test_summarize_folder_uses_shared_classify_file() {
         let path = PathBuf::from("src/main.rs");
         let result = classify_file(&path);
         assert_eq!(result.bucket, "Runtime");
     }
 
     #[test]
-    fn test_classify_test_file_overrides_runtime() {
+    fn test_summarize_folder_verification_override() {
         let path = PathBuf::from("src/safety_test.rs");
         let result = classify_file(&path);
         assert_eq!(result.bucket, "Verification");
     }
 
     #[test]
-    fn test_classify_html() {
-        let path = PathBuf::from("ui/index.html");
-        let result = classify_file(&path);
-        assert_eq!(result.bucket, "Interface");
-    }
-
-    #[test]
-    fn test_classify_markdown() {
-        let path = PathBuf::from("README.md");
-        let result = classify_file(&path);
-        assert_eq!(result.bucket, "Memory");
-    }
-
-    #[test]
-    fn test_classify_pdf() {
-        let path = PathBuf::from("docs/paper.pdf");
-        let result = classify_file(&path);
-        assert_eq!(result.bucket, "Research");
-    }
-
-    #[test]
-    fn test_classify_unknown() {
-        let path = PathBuf::from("data/model.onnx");
-        let result = classify_file(&path);
-        assert_eq!(result.bucket, "Unknown");
-    }
-
-    #[test]
-    fn test_verification_patterns() {
+    fn test_summarize_folder_predicate_reexport() {
         assert!(is_verification_file("test_safety.rs", "rs"));
         assert!(is_verification_file("safety.test.js", "js"));
-        assert!(is_verification_file("safety.spec.ts", "ts"));
-        assert!(is_verification_file("test_main.py", "py"));
     }
 }

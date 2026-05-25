@@ -1,3 +1,4 @@
+use crate::classification::classify_directory;
 use crate::safety::{check_read_only, is_path_allowed, load_config};
 use chrono::Utc;
 use serde::{Deserialize, Serialize};
@@ -23,52 +24,7 @@ pub struct Registry {
     pub projects: Vec<ProjectInfo>,
 }
 
-fn classify_path(path: &Path) -> (String, String) {
-    let path_str = path.to_string_lossy().to_lowercase();
-    let mut has_code = false;
-
-    if let Ok(entries) = fs::read_dir(path) {
-        for entry in entries.filter_map(|e| e.ok()).take(20) {
-            let name = entry.file_name().to_string_lossy().to_lowercase();
-            if entry.path().is_file()
-                && (name.ends_with(".js")
-                    || name.ends_with(".ts")
-                    || name.ends_with(".rs")
-                    || name.ends_with(".py")
-                    || name.ends_with(".go")
-                    || name.ends_with(".html"))
-            {
-                has_code = true;
-            }
-        }
-    }
-
-    if path_str.contains("test") || path_str.contains("spec") {
-        (
-            "Verification".to_string(),
-            "Tests or benchmarks".to_string(),
-        )
-    } else if path_str.contains("logs") || path_str.contains("cache") || path_str.contains("temp") {
-        ("Memory".to_string(), "Logs or temporary files".to_string())
-    } else if path_str.contains("ui") || path_str.contains("frontend") || path_str.contains("web") {
-        (
-            "Interface".to_string(),
-            "User interface or web frontend".to_string(),
-        )
-    } else if path_str.contains("research") || path_str.contains("experiment") {
-        (
-            "Research".to_string(),
-            "Experiments or theoretical work".to_string(),
-        )
-    } else if has_code {
-        (
-            "Runtime".to_string(),
-            "Executable code or project".to_string(),
-        )
-    } else {
-        ("Unknown".to_string(), "Unclassified folder".to_string())
-    }
-}
+// Classification logic moved to crate::classification::classify_directory().
 
 #[tauri::command]
 pub fn build_registry() -> Result<String, String> {
@@ -108,8 +64,9 @@ pub fn build_registry() -> Result<String, String> {
                     continue;
                 }
 
-                let (classification, summary) = classify_path(&entry_path);
+                let dir_class = classify_directory(&entry_path, 20);
 
+                // Key files are collected separately with a smaller sample limit
                 let mut key_files: Vec<String> = Vec::new();
                 if let Ok(files) = fs::read_dir(&entry_path) {
                     for f in files.filter_map(|e| e.ok()).take(5) {
@@ -135,8 +92,8 @@ pub fn build_registry() -> Result<String, String> {
                 projects.push(ProjectInfo {
                     name,
                     path: entry_path.to_string_lossy().to_string(),
-                    classification,
-                    summary,
+                    classification: dir_class.bucket,
+                    summary: dir_class.summary,
                     key_files,
                     cross_links: vec![],
                     last_modified,

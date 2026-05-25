@@ -2,6 +2,7 @@ mod agent_fs;
 mod build_index;
 mod build_registry;
 mod chat;
+mod classification;
 mod consensus_check;
 mod constants;
 mod constitution;

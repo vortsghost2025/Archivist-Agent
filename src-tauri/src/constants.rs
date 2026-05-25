@@ -44,9 +44,8 @@ pub const SKIP_DIRS: &[&str] = &[
     "env",
 ];
 
-// Extension constants removed — classification.rs was the sole consumer.
-// Inline classification in summarize_folder.rs, build_index.rs, build_registry.rs,
-// and generate_handoff.rs maintains their own extension lists.
+// Extension constants removed — classification.rs is the single source of truth
+// for file-level and directory-level classification predicates and buckets.
 
 #[cfg(test)]
 mod tests {
