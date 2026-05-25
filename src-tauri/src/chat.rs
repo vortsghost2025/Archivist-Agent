@@ -54,7 +54,10 @@ struct CompletionRequest {
 #[derive(Debug, Serialize)]
 struct OpenAIMessage {
     role: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    // Always serialize content — even as null. The NVIDIA/OpenAI API
+    // requires the content field to be present on assistant messages
+    // with tool_calls. Omitting it (skip_serializing_if) causes 400 errors
+    // on the second iteration of the tool-call loop.
     content: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     tool_calls: Option<Vec<ToolCall>>,
@@ -460,7 +463,9 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
     })
 }
 
-/// Save agent configuration to file for future sessions.
+/// Save agent configuration — returns the JSON content for JS to write via Tauri's
+/// scope-checked `writeTextFile`. This avoids `std::fs::write()` which bypasses
+/// Tauri's security sandbox and can cause process aborts on desktop.
 #[tauri::command]
 pub fn save_agent_config(
     endpoint: Option<String>,
@@ -469,7 +474,7 @@ pub fn save_agent_config(
     temperature: Option<f64>,
     max_tokens: Option<u32>,
     system_prompt: Option<String>,
-) -> Result<String, String> {
+) -> Result<serde_json::Value, String> {
     let root = crate::governance::resolve_project_root_static().map_err(|e| e.to_string())?;
     let config_path = root.join("config/agent_config.json");
 
@@ -503,14 +508,20 @@ pub fn save_agent_config(
 
     let json = serde_json::to_string_pretty(&config)
         .map_err(|e| format!("Failed to serialize config: {}", e))?;
-    std::fs::write(&config_path, &json).map_err(|e| format!("Failed to write config: {}", e))?;
 
     // Clear cache so next load picks up changes
     if let Ok(mut cache) = CONFIG_CACHE.lock() {
         *cache = None;
     }
 
-    Ok(format!("Config saved to {}", config_path.display()))
+    // Return the content for JS to write via scope-checked writeTextFile.
+    // This matches the apply_patch pattern: Rust validates, JS writes.
+    Ok(serde_json::json!({
+        "filePath": config_path.to_string_lossy(),
+        "content": json,
+        "parentDir": config_path.parent().map(|p| p.to_string_lossy()).unwrap_or_default(),
+        "needsMkdir": !config_path.parent().map(|p| p.exists()).unwrap_or(false),
+    }))
 }
 
 /// Load the current agent configuration (without exposing the API key value).

@@ -221,12 +221,12 @@ const invoke = (() => {
       }
     };
   }
-    if (cmd === 'save_agent_config') {
-      try {
-        window.localStorage.setItem('archivist.chatConfig.mock', JSON.stringify(args));
-      } catch (_) { /* ignore */ }
-      return 'Config saved (browser mock).';
-    }
+            if (cmd === 'save_agent_config') {
+                try {
+                    window.localStorage.setItem('archivist.chatConfig.mock', JSON.stringify(args));
+                } catch (_) { /* ignore */ }
+                return { filePath: 'config/agent_config.json', content: JSON.stringify(args), parentDir: 'config', needsMkdir: false };
+            }
           if (cmd === 'load_agent_config_cmd') {
             let mockConfig = { chat_endpoint: null, chat_model: null, temperature: 0.7, max_tokens: 2048, has_api_key: false };
             try {
@@ -829,26 +829,43 @@ async function saveChatConfig() {
   const statusEl = $('chat-settings-status');
   if (statusEl) statusEl.textContent = 'Saving…';
 
-  try {
-    await invoke('save_agent_config', {
-      endpoint: endpoint || null,
-      apiKey: apiKey || null,
-      model: model || null,
-      temperature: temperature,
-      maxTokens: maxTokens
-    });
-    // Reload config from backend to get clean state
-    state.chatConfig = null;
-    await loadChatConfig();
-    if (statusEl) {
-      statusEl.textContent = '✓ Saved';
-      setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 3000);
+    try {
+        const result = await invoke('save_agent_config', {
+            endpoint: endpoint || null,
+            apiKey: apiKey || null,
+            model: model || null,
+            temperature: temperature,
+            maxTokens: maxTokens
+        });
+        // save_agent_config now returns {filePath, content, needsMkdir, parentDir}
+        // instead of writing directly — we use Tauri's scope-checked writeTextFile,
+        // same pattern as apply_patch to avoid std::fs::write() process aborts.
+        try {
+            if (result.needsMkdir && result.parentDir) {
+                const { mkdir } = window.__TAURI__.fs;
+                await mkdir(result.parentDir, { recursive: true });
+            }
+            const { writeTextFile } = window.__TAURI__.fs;
+            await writeTextFile(result.filePath, result.content);
+        } catch (writeErr) {
+            const writeErrMsg = (typeof writeErr === 'string') ? writeErr : (writeErr?.message || String(writeErr));
+            log('Config write failed: ' + writeErrMsg, 'err');
+            if (statusEl) statusEl.textContent = '✗ Write failed: ' + writeErrMsg;
+            return;
+        }
+        // Reload config from backend to get clean state
+        state.chatConfig = null;
+        await loadChatConfig();
+        if (statusEl) {
+            statusEl.textContent = '✓ Saved';
+            setTimeout(() => { if (statusEl) statusEl.textContent = ''; }, 3000);
+        }
+        log('Agent settings saved.', 'ok');
+    } catch (e) {
+        const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
+        if (statusEl) statusEl.textContent = '✗ ' + errMsg;
+        log('Failed to save settings: ' + errMsg, 'err');
     }
-    log('Agent settings saved.', 'ok');
-  } catch (e) {
-    if (statusEl) statusEl.textContent = '✗ ' + e.message;
-    log('Failed to save settings: ' + e.message, 'err');
-  }
 }
 
 async function sendChatMessage() {
@@ -881,38 +898,49 @@ async function sendChatMessage() {
     // or we hit the max iteration guard.
     const MAX_TOOL_ITERATIONS = 10;
 
-    for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
-      // Build messages array from current conversation state.
-      // The system prompt is prepended by the Rust backend.
-      const messages = state.chatMessages.map(m => {
-        const msg = { role: m.role, content: m.content || null };
-        // Forward toolCalls for assistant messages that had tool calls.
-        // The Rust ChatMessage.tool_calls is Option<String> (JSON-encoded),
-        // so we serialize the array to a string.
-        if (m.role === 'assistant' && m.toolCalls) {
-          msg.toolCalls = JSON.stringify(m.toolCalls);
-        }
-        // Forward toolCallId for tool-result messages
-        if (m.role === 'tool' && m.toolCallId) {
-          msg.toolCallId = m.toolCallId;
-        }
-        return msg;
-      });
+        for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
+            // Build messages array from current conversation state.
+            // The system prompt is prepended by the Rust backend.
+            const messages = state.chatMessages.map(m => {
+                // For assistant messages with tool_calls, use null content
+                // (not empty string) to match OpenAI API format.
+                // The Rust side serializes content: null explicitly in the API request.
+                let content = m.content || null;
+                if (m.role === 'assistant' && m.toolCalls && !content) {
+                    content = null;
+                }
+                const msg = { role: m.role, content };
+                // Forward toolCalls for assistant messages that had tool calls.
+                // The Rust ChatMessage.tool_calls is Option<String> (JSON-encoded),
+                // so we serialize the array to a string.
+                if (m.role === 'assistant' && m.toolCalls) {
+                    msg.toolCalls = JSON.stringify(m.toolCalls);
+                }
+                // Forward toolCallId for tool-result messages
+                if (m.role === 'tool' && m.toolCallId) {
+                    msg.toolCallId = m.toolCallId;
+                }
+                return msg;
+            });
 
-      const result = await invoke('chat_send', {
-        request: {
-          messages: messages,
-          model: model || null,
-          apiKey: (apiKey && apiKey !== '••••••••') ? apiKey : null,
-          endpoint: endpoint || null
-        }
-      });
+            log(`Chat loop iteration ${iteration + 1}: sending ${messages.length} messages to model`, 'info');
 
-      const reply = result.reply || '';
-      const toolCalls = result.toolCalls || [];
-      const finishReason = result.finishReason || result.finish_reason || '';
-      const modelUsed = result.model || 'unknown';
-      const governance = result.governance || {};
+            const result = await invoke('chat_send', {
+                request: {
+                    messages: messages,
+                    model: model || null,
+                    apiKey: (apiKey && apiKey !== '••••••••') ? apiKey : null,
+                    endpoint: endpoint || null
+                }
+            });
+
+            const reply = result.reply || '';
+            const toolCalls = result.toolCalls || [];
+            const finishReason = result.finishReason || result.finish_reason || '';
+            const modelUsed = result.model || 'unknown';
+            const governance = result.governance || {};
+
+            log(`API response: reply=${reply.length} chars, toolCalls=${toolCalls.length}, finishReason=${finishReason}, model=${modelUsed}`, 'info');
 
       // Show governance warnings if any
       const warnings = governance.warnings;
@@ -920,14 +948,20 @@ async function sendChatMessage() {
         warnings.forEach(w => log('Governance: ' + w, 'info'));
       }
 
-      // ── No tool calls → final text reply, display and done ──
-      if (!toolCalls || toolCalls.length === 0) {
-        if (reply) {
-          addChatMessage('assistant', reply);
+        // ── No tool calls → final text reply, display and done ──
+        if (!toolCalls || toolCalls.length === 0) {
+            if (reply) {
+                addChatMessage('assistant', reply);
+            } else {
+                // Empty response from model — this can happen if the API
+                // rejects the message format or returns a malformed response.
+                // Show a diagnostic message so the user knows something went wrong.
+                addChatMessage('system', `⚠ Agent returned an empty response (iteration ${iteration + 1}, model: ${modelUsed}). This usually means the message format was rejected by the API. Check the log for details.`);
+                log(`Empty model response on iteration ${iteration + 1} — possible API format error`, 'warn');
+            }
+            log(`Chat response received (model: ${modelUsed}, iterations: ${iteration + 1})`, 'ok');
+            return; // loop exit
         }
-        log(`Chat response received (model: ${modelUsed}, iterations: ${iteration + 1})`, 'ok');
-        return; // loop exit
-      }
 
       // ── Model requested tool calls → execute them ──
       // Add the assistant message with tool_calls to conversation
@@ -998,9 +1032,10 @@ addChatMessage('tool', resultStr, { toolCallId: callId, ...patchOpts });
     // If we hit the max iteration guard, add a warning
     addChatMessage('system', `Agent loop reached maximum ${MAX_TOOL_ITERATIONS} iterations. The agent may still have work to do.`);
     log('Tool-call loop hit iteration limit.', 'warn');
-  } catch (e) {
-    const errMsg = (typeof e === 'string') ? e : (e?.message || e?.toString?.() || 'Unknown error');
-    addChatMessage('system', 'Error: ' + errMsg);
+        } catch (e) {
+            const errMsg = (typeof e === 'string') ? e : (e?.message || e?.toString?.() || 'Unknown error');
+            addChatMessage('system', '⚠ Chat error: ' + errMsg);
+            log('Chat failed: ' + errMsg, 'err');
     log('Chat failed: ' + errMsg, 'err');
   } finally {
     state.chatLoading = false;
@@ -1106,7 +1141,7 @@ async function applyPatch(proposalId) {
         // errors gracefully (never aborts the process).
         try {
             const { writeTextFile } = window.__TAURI__.fs;
-            await writeTextFile({ path: result.filePath, contents: result.content });
+            await writeTextFile(result.filePath, result.content);
             log(`Patch applied: ${result.filePath} — ${result.detail}`, 'ok');
             addChatMessage('system', `✓ Patch applied to ${result.filePath}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
 

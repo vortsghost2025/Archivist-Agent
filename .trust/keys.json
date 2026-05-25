@@ -3,21 +3,21 @@
   "keys": {
     "archivist": {
       "key_id": "archivist-test-key",
-      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqSUW/AAtkB74N3cUNm28\nEewY0OhDTSU6ugRBEoBplFgA3T1logEbT7RbLk41x8G1CyEzDCJRwLHipqqIN6JC\no759pT8WaihA+SXC9TaSL+j9L0SnVhZ0WC6Py3oq1tJHGZbKSesAI0Vq4ywGH4x7\nDrxY9UWcucS5XTTCOedmtJ/KOFtRQx6wQjCWiqYl+J9O6s4oyIBeRgn074qHyHi6\nBK5gA7tT1iVZJ9XBKYPq2h548OeZQCjODFFas3f+9PQhf4CZdvY9bUW9KLG6tUaI\nv2P+7Pq5xJLbxYI+YxpQQEegaRjjKjtTlzmdGsJSrgGX4EajWpv6d6X/cjh3Q5u5\nMQIDAQAB\n-----END PUBLIC KEY-----\n"
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxnajrfxTrXhPmdU9Pi+0\n9n6eY4hE5JlVILt4kYZ33AS1FhHPaybQSzGnYALnD08bZ7lAXUdStpR4BzplXaSe\nNOLhUOS9VGqQD7CSSvTQTPusCIvZna8jlx0Xtb3a2pf1CmqMibWyj6oTRfmIMXgi\nmdJjdh7VNp6jMvWF+858HEEv7/xFYAfmyCL39uQU43d43P4xXp00UtM36+RgCZjk\n156wQYGBOZZXUfaOSOPOVTCejjDFHkmjNTb2bP4OuxptwoHm1ZfhNE5VnqQH6SGt\nxe1w3iwhf9lB4Qx+wLFNNUXP/agUUJQUeQBp8bWI/7J2jodooFIfMdpjEkN2bEPs\nawIDAQAB\n-----END PUBLIC KEY-----\n"
     },
     "swarmmind": {
       "key_id": "swarmmind-test-key",
-      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsUjPObBK3Zga023XYMfK\nwJitu+ZhmvmmToxTglGpWtxJC2R0W96RvhtGOA3Q4mF+QzIJeNLsezfWLbnUaKTF\n0E1WZitH5VrYP1bd55G/MubhX0vgZLCD/aRiErrR9QF2SP+nA7cc3fX8m2IDDmKI\nR97t0lWBXkR47t9geNOI/P9DrvTcLBk36dHuAQHcMjpmKOM+LDIeZSJVr2lVqlOD\nFG9vSHnb2LA2x4To8owonLgfl8yhTci3cFgP/v/xG8AosFsp6ME3KaYKKnJqI37Y\n5ttu7XI9V2hAazDfSGvAeWjdLBDzWReD3OOURynLy2ye6Omcp/OvSSd81uR8y7SA\nYwIDAQAB\n-----END PUBLIC KEY-----\n"
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtccwKT5wYOzqijiEPSxK\nkZ1Qxofl4ZACcFojBsF4JF7K7STtebPD/AKH5cTqpb53GvyL6BDGbrYUXgtY2Qtt\nfQtW9IYvnmyftbVyuThcBg6MB1CDD4XYPiF2MIsGuvJd2oJ8VCkn6rvqft31POZc\nRe5kwygdEKhi4gVK+TCX2mPx6pU5gk/WDkBvo23hRDGARzFc4PN/DT7CuLzm2jqs\nS+wB4Rp6gWgBPWTlH7BG/mIvOOzHIzwbiGPyd7Vk4a2StjphzJgIoegYdY3VgUhg\ntKnijj6ngLnj/En64DzI5xQ2Z48FhxllzJbhENUieDzKdjMXZYlD0uA0gonv0sR5\nYwIDAQAB\n-----END PUBLIC KEY-----\n"
     },
     "library": {
       "key_id": "library-test-key",
-      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs250nO/BXEm6i2sjCFi/\nqYwCj4WSilkYcejrV2TcOjbLEoadR3iTqXQ2wQixRXJxHC4O2Pi6+E0B5AlBbIjb\ngHcseJGAXDQMt9Aazdeb9jSaYEDM55nuVT7r64iXZfKoELh1nslBpLsI3q7vrUHk\nLrxymY7sJk86XaRjGNhMYh0wo0RUbT5iO+qRlqlDR7BP+OjptDrPeza+DonikOlL\noD0c533v5x9bb58Bw+0eOBsqQ1u1TZYLwZaikgoJm6G3UHZHHPxaN11XGwdXKeEY\ndw4hIg8XNBQepvV+SZ/82bhjx7VGIDtfSrZi5SG3sxHFuLHk0/wmo9XRPOc9eYKQ\nDwIDAQAB\n-----END PUBLIC KEY-----\n"
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo4zWjH4TTqxp/2qSZBiJ\nNsPSl0gVvF0CZmIFcUByp1Exj81o91416Cjn00kuPe6iY4Z85+S3DfKNe5VVk1K/\nOsIGDkD0KtskC677JL2MV2SMlkaJLFZwkSqCzqMcmNXQVwkrJWz+qIDPOh0Bq8Ja\n2Vn3b8SDZyZF2x9NNnp/xexIkw8RwwqXgfLbVnIu7BWG7FJBCaZANJahaE5bHN9c\nxDzmDQG+ORMOKl+pZhEFvheISF9M9aaY2wFYsq49CQpLogAc0gJwhGIhOVVpDipw\nAAMwkd5wtyPYHAlSk6it2PZegHbwiSkFiVqeA8JurmSYlD35/PBChq1iLGHECtUX\n7QIDAQAB\n-----END PUBLIC KEY-----\n"
     }
   },
   "phenotypes": {
     "archivist": {
-      "hash": "sha256:d456682c3c8d2b7f",
-      "last_sync": "2026-05-25T00:34:04.730Z",
+      "hash": "sha256:c5504e330c4307ac",
+      "last_sync": "2026-05-25T02:49:06.972Z",
       "state_summary": "lane,verified_at,key_id"
     }
   },
