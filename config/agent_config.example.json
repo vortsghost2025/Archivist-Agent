@@ -1,0 +1,8 @@
+{
+  "chat_endpoint": null,
+  "chat_api_key": "nvapi-YOUR_API_KEY_HERE",
+  "chat_model": "z-ai/glm-5.1",
+  "temperature": 0.7,
+  "max_tokens": 2048,
+  "system_prompt": null
+}
