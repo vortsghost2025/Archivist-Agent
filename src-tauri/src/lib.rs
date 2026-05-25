@@ -10,6 +10,7 @@ mod generate_handoff;
 mod global_shim;
 mod governance;
 mod governance_scripts;
+mod lane;
 mod patch;
 mod safety;
 mod scan_tree;
@@ -29,6 +30,7 @@ use generate_handoff::generate_handoff;
 use governance::{
     check_read_only, git_status, read_governance_file, run_script, run_sovereignty_enforcer,
 };
+use lane::get_lane_status;
 use patch::{
     apply_patch, clear_patch_audit_log, confirm_patch_applied, get_patch_audit_log, propose_patch,
     reject_patch,
@@ -85,6 +87,7 @@ pub fn run() {
             confirm_patch_applied,
             get_patch_audit_log,
             clear_patch_audit_log,
+            get_lane_status,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

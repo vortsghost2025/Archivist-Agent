@@ -26,10 +26,20 @@
 </div>
   <button class="btn btn-ghost" id="btn-diag">Diagnostics</button>
   <button class="btn btn-ghost" id="btn-sidebar-toggle" title="Toggle sidebar (Ctrl+B)">☰ Sidebar</button>
+  <button class="btn btn-ghost" id="btn-evidence-toggle-header" title="Toggle evidence panel (Ctrl+E)">📋 Evidence</button>
   </header>
 
   <main>
+    <!-- ═══ LEFT: Lane-aware sidebar ═══ -->
     <aside id="sidebar">
+      <!-- Lane navigator (new) -->
+      <section class="section-card">
+        <div class="section-label">Lanes</div>
+        <div id="lane-list" class="lane-list" aria-live="polite">
+          <div class="lane-empty">Loading lane status…</div>
+        </div>
+      </section>
+
       <section class="section-card">
         <div class="section-label">Target Folder</div>
         <div class="path-group">
@@ -68,212 +78,315 @@
       </section>
     </aside>
 
-    <!-- Primary: Chat panel (always visible, fills right side) -->
-    <div id="chat-panel">
-      <div class="chat-layout">
-        <div class="chat-settings" id="chat-settings">
-          <div class="chat-settings-header">
-            <h3>Agent Settings</h3>
-            <button class="btn btn-ghost" id="btn-chat-settings-close" title="Close settings">✕</button>
+    <!-- ═══ CENTER: Chat panel (primary view) ═══ -->
+    <div id="center-panel">
+      <div id="chat-panel">
+        <div class="chat-layout">
+          <div class="chat-settings" id="chat-settings">
+            <div class="chat-settings-header">
+              <h3>Agent Settings</h3>
+              <button class="btn btn-ghost" id="btn-chat-settings-close" title="Close settings">✕</button>
+            </div>
+            <div class="chat-settings-body">
+              <div class="setting-group">
+                <label for="chat-api-key">API Key</label>
+                <input type="password" id="chat-api-key" placeholder="sk-..." autocomplete="off" />
+              </div>
+              <div class="setting-group">
+                <label for="chat-endpoint">Endpoint</label>
+                <input type="text" id="chat-endpoint" placeholder="https://integrate.api.nvidia.com/v1" />
+              </div>
+              <div class="setting-group">
+                <label for="chat-model">Model</label>
+                <div class="model-select-row">
+                  <select id="chat-model" aria-label="Select AI model">
+                    <option value="">— click Fetch Models —</option>
+                  </select>
+                  <button class="btn btn-secondary btn-fetch-models" id="btn-fetch-models" type="button">Fetch Models</button>
+                </div>
+                <p class="helper-text" id="model-fetch-status"></p>
+              </div>
+              <div class="setting-row">
+                <div class="setting-group">
+                  <label for="chat-temperature">Temperature</label>
+                  <input type="number" id="chat-temperature" min="0" max="2" step="0.1" value="0.7" />
+                </div>
+                <div class="setting-group">
+                  <label for="chat-max-tokens">Max Tokens</label>
+                  <input type="number" id="chat-max-tokens" min="1" max="16384" step="1" value="2048" />
+                </div>
+              </div>
+              <div class="chat-settings-actions">
+                <button class="btn btn-primary" id="btn-chat-save-settings">Save Settings</button>
+                <span id="chat-settings-status" class="chat-settings-status"></span>
+              </div>
+            </div>
           </div>
-          <div class="chat-settings-body">
-            <div class="setting-group">
-              <label for="chat-api-key">API Key</label>
-              <input type="password" id="chat-api-key" placeholder="sk-..." autocomplete="off" />
-            </div>
-            <div class="setting-group">
-              <label for="chat-endpoint">Endpoint</label>
-              <input type="text" id="chat-endpoint" placeholder="https://integrate.api.nvidia.com/v1" />
-            </div>
-            <div class="setting-group">
-              <label for="chat-model">Model</label>
-              <div class="model-select-row">
-                <select id="chat-model" aria-label="Select AI model">
-                  <option value="">— click Fetch Models —</option>
-                </select>
-                <button class="btn btn-secondary btn-fetch-models" id="btn-fetch-models" type="button">Fetch Models</button>
+
+          <div class="chat-main">
+            <div class="chat-toolbar">
+              <div class="chat-toolbar-left">
+                <button class="btn btn-ghost" id="btn-chat-toggle-settings" title="Open settings">⚙️ Settings</button>
+                <button class="btn btn-ghost" id="btn-chat-toggle-audit" title="Toggle read audit log">🔍 Audit</button>
+                <span id="chat-model-label" class="chat-model-label">No model configured</span>
               </div>
-              <p class="helper-text" id="model-fetch-status"></p>
-            </div>
-            <div class="setting-row">
-              <div class="setting-group">
-                <label for="chat-temperature">Temperature</label>
-                <input type="number" id="chat-temperature" min="0" max="2" step="0.1" value="0.7" />
-              </div>
-              <div class="setting-group">
-                <label for="chat-max-tokens">Max Tokens</label>
-                <input type="number" id="chat-max-tokens" min="1" max="16384" step="1" value="2048" />
+              <div class="chat-toolbar-right">
+                <button class="btn btn-ghost" id="btn-chat-clear" title="Clear conversation">🗑️ Clear</button>
               </div>
             </div>
-            <div class="chat-settings-actions">
-              <button class="btn btn-primary" id="btn-chat-save-settings">Save Settings</button>
-              <span id="chat-settings-status" class="chat-settings-status"></span>
+
+            <div id="read-audit-panel" class="read-audit-panel hidden">
+              <div class="read-audit-header">
+                <h4>File Read Audit Log</h4>
+                <div class="read-audit-actions">
+                  <span id="read-audit-count" class="read-audit-count">0 reads</span>
+                  <button class="btn btn-ghost btn-sm" id="btn-clear-audit" type="button" title="Clear audit log">Clear</button>
+                  <button class="btn btn-ghost btn-sm" id="btn-refresh-audit" type="button" title="Refresh audit log">Refresh</button>
+                </div>
+              </div>
+              <div id="read-audit-entries" class="read-audit-entries">
+                <p class="read-audit-empty">No file reads recorded yet.</p>
+              </div>
+            </div>
+
+            <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat conversation">
+              <div class="chat-welcome">
+                <div class="chat-welcome-icon">💬</div>
+                <h3>Agent Chat</h3>
+                <p>Configure your API key in Settings, then send a message to start a conversation with the AI agent.</p>
+                <p class="chat-welcome-hint">This runs through the Rust backend with CPS governance enforcement.</p>
+              </div>
+            </div>
+
+            <div class="chat-input-area">
+              <textarea id="chat-input" class="chat-input" rows="3" placeholder="Type a message…" aria-label="Chat message input"></textarea>
+              <button class="btn btn-primary chat-send-btn" id="btn-chat-send" title="Send message">Send</button>
             </div>
           </div>
         </div>
-
-        <div class="chat-main">
-          <div class="chat-toolbar">
-      <div class="chat-toolbar-left">
-        <button class="btn btn-ghost" id="btn-chat-toggle-settings" title="Open settings">⚙️ Settings</button>
-        <button class="btn btn-ghost" id="btn-chat-toggle-audit" title="Toggle read audit log">🔍 Audit</button>
-        
-        <span id="chat-model-label" class="chat-model-label">No model configured</span>
       </div>
-            <div class="chat-toolbar-right">
-              <button class="btn btn-ghost" id="btn-chat-clear" title="Clear conversation">🗑️ Clear</button>
-            </div>
+
+      <!-- Overlay: Tools panel (slides over chat when a non-chat tab is active) -->
+      <div id="tools-panel" class="hidden">
+        <div class="tools-panel-header">
+          <nav id="tab-bar" role="tablist" aria-label="Tools tabs">
+            <div class="tab" data-tab="overview" role="tab" aria-selected="false" tabindex="0">Overview</div>
+            <div class="tab" data-tab="retrieve" role="tab" aria-selected="false" tabindex="0">Retrieve</div>
+            <div class="tab" data-tab="tree" role="tab" aria-selected="false" tabindex="0">Tree</div>
+            <div class="tab" data-tab="output" role="tab" aria-selected="false" tabindex="0">Activity</div>
+            <div class="tab" data-tab="governance" role="tab" aria-selected="false" tabindex="0">Governance</div>
+          </nav>
+          <button class="btn btn-ghost tools-close-btn" id="btn-tools-close" title="Close tools and return to chat">✕ Back to Chat</button>
+        </div>
+
+        <div id="tab-content">
+          <div id="welcome" class="hidden">
+            <div class="icon">🗂️</div>
+            <h2>Start with one folder</h2>
+            <p>Analyze a folder to get structure, classifications, and a searchable file list in one pass.</p>
+            <button class="btn btn-primary" id="btn-analyze-welcome">Analyze a Folder</button>
           </div>
 
-          <div id="read-audit-panel" class="read-audit-panel hidden">
-            <div class="read-audit-header">
-              <h4>File Read Audit Log</h4>
-              <div class="read-audit-actions">
-                <span id="read-audit-count" class="read-audit-count">0 reads</span>
-                <button class="btn btn-ghost btn-sm" id="btn-clear-audit" type="button" title="Clear audit log">Clear</button>
-                <button class="btn btn-ghost btn-sm" id="btn-refresh-audit" type="button" title="Refresh audit log">Refresh</button>
+          <div id="tab-overview" class="hidden" role="tabpanel"> <div id="diag-panel" class="hidden">
+            <h3>System Diagnostics</h3>
+            <div class="diag-grid">
+              <div class="diag-item"><div class="diag-status unknown" id="diag-tauri"></div><span>Tauri API available</span></div>
+              <div class="diag-item"><div class="diag-status unknown" id="diag-invoke"></div><span>invoke() callable</span></div>
+              <div class="diag-item"><div class="diag-status unknown" id="diag-ping"></div><span>ping command responds</span></div>
+              <div class="diag-item"><div class="diag-status unknown" id="diag-scan"></div><span>scan_tree registered</span></div>
+            </div>
+            <div class="diag-detail" id="diag-detail">Click Diagnostics to run checks.</div>
+          </div>
+          <div id="overview-content"></div>
+          </div>
+
+          <div id="tab-retrieve" class="hidden" role="tabpanel">
+            <div class="retrieve-toolbar">
+              <div class="search-block">
+                <label for="search-query">Find a file</label>
+                <div class="search-row">
+                  <input type="search" id="search-query" placeholder="Search by name, path, bucket, or reason" aria-label="Search analyzed files" />
+                  <button class="btn btn-ghost" id="btn-clear-search">Clear</button>
+                </div>
+                <p class="helper-text">Use search plus bucket filters to jump straight to what matters.</p>
               </div>
+              <div class="results-snapshot" id="results-snapshot">No results loaded yet.</div>
             </div>
-            <div id="read-audit-entries" class="read-audit-entries">
-              <p class="read-audit-empty">No file reads recorded yet.</p>
-            </div>
+            <div id="bucket-filters" class="bucket-filters"></div>
+            <div id="search-results" class="results-grid"></div>
           </div>
 
-          <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat conversation">
-            <div class="chat-welcome">
-              <div class="chat-welcome-icon">💬</div>
-              <h3>Agent Chat</h3>
-              <p>Configure your API key in Settings, then send a message to start a conversation with the AI agent.</p>
-              <p class="chat-welcome-hint">This runs through the Rust backend with CPS governance enforcement.</p>
-            </div>
+          <div id="tab-tree" class="hidden" role="tabpanel">
+            <div id="tree-summary" class="tree-summary"></div>
+            <pre id="tree-output" class="tree-output"></pre>
           </div>
 
-          <div class="chat-input-area">
-            <textarea id="chat-input" class="chat-input" rows="3" placeholder="Type a message…" aria-label="Chat message input"></textarea>
-            <button class="btn btn-primary chat-send-btn" id="btn-chat-send" title="Send message">Send</button>
+          <div id="tab-output" class="hidden" role="tabpanel">
+            <div class="output-header">
+              <h3>Activity Log</h3>
+              <button class="btn btn-ghost" id="btn-clear-log">Clear</button>
+            </div>
+            <div id="log-output" aria-live="polite"></div>
+          </div>
+
+          <div id="tab-governance" class="hidden" role="tabpanel">
+            <div class="gov-grid">
+              <section class="gov-card">
+                <h3>System State</h3>
+                <div id="gov-system-state" class="gov-status-grid"></div>
+              </section>
+
+              <section class="gov-card">
+                <h3>Mode</h3>
+                <div id="gov-mode-display" class="gov-mode-box"></div>
+              </section>
+
+              <section class="gov-card">
+                <h3>CPS Score</h3>
+                <div id="gov-cps-display" class="gov-cps-box"></div>
+              </section>
+
+              <section class="gov-card">
+                <h3>Read-Only Proof</h3>
+                <div id="gov-readonly-report" class="gov-readonly-box"></div>
+              </section>
+
+              <section class="gov-card gov-card-wide">
+                <h3>Run Governance Scripts</h3>
+                <div class="gov-script-buttons">
+                  <button class="btn btn-primary" id="btn-gov-health">Run Health Check</button>
+                  <button class="btn btn-primary" id="btn-gov-recovery">Run Recovery Suite</button>
+                  <button class="btn btn-primary" id="btn-gov-mode">Run Mode Check</button>
+                  <button class="btn btn-primary" id="btn-gov-consensus">Run Consensus Check</button>
+                  <button class="btn btn-primary" id="btn-gov-status">Run System Status</button>
+                  <button class="btn btn-primary" id="btn-gov-sovereignty">Run Sovereignty Enforcer</button>
+                  <button class="btn btn-primary" id="btn-gov-audit">Run Headless Self-Audit</button>
+                </div>
+                <div id="gov-script-output" class="gov-script-output"></div>
+              </section>
+
+              <section class="gov-card gov-card-wide">
+                <h3>NOW.md</h3>
+                <div id="gov-now-md" class="gov-now-md"></div>
+              </section>
+
+              <section class="gov-card gov-card-wide">
+                <h3>Git Status</h3>
+                <div id="gov-git-status" class="gov-git-box"></div>
+              </section>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Overlay: Tools panel (slides over chat when a non-chat tab is active) -->
-    <div id="tools-panel" class="hidden">
-      <div class="tools-panel-header">
-        <nav id="tab-bar" role="tablist" aria-label="Tools tabs">
-          <div class="tab" data-tab="overview" role="tab" aria-selected="false" tabindex="0">Overview</div>
-          <div class="tab" data-tab="retrieve" role="tab" aria-selected="false" tabindex="0">Retrieve</div>
-          <div class="tab" data-tab="tree" role="tab" aria-selected="false" tabindex="0">Tree</div>
-          <div class="tab" data-tab="output" role="tab" aria-selected="false" tabindex="0">Activity</div>
-          <div class="tab" data-tab="governance" role="tab" aria-selected="false" tabindex="0">Governance</div>
-        </nav>
-        <button class="btn btn-ghost tools-close-btn" id="btn-tools-close" title="Close tools and return to chat">✕ Back to Chat</button>
+    <!-- ═══ RIGHT: Evidence panel ═══ -->
+    <aside id="evidence-panel">
+      <div class="evidence-header">
+        <h3>Evidence</h3>
+        <button class="btn btn-ghost" id="btn-evidence-toggle" title="Toggle evidence panel (Ctrl+E)">📋</button>
       </div>
 
-      <div id="tab-content">
-        <div id="welcome" class="hidden">
-          <div class="icon">🗂️</div>
-          <h2>Start with one folder</h2>
-          <p>Analyze a folder to get structure, classifications, and a searchable file list in one pass.</p>
-          <button class="btn btn-primary" id="btn-analyze-welcome">Analyze a Folder</button>
-        </div>
-
-        <div id="tab-overview" class="hidden" role="tabpanel"> <div id="diag-panel" class="hidden">
-          <h3>System Diagnostics</h3>
-          <div class="diag-grid">
-            <div class="diag-item"><div class="diag-status unknown" id="diag-tauri"></div><span>Tauri API available</span></div>
-            <div class="diag-item"><div class="diag-status unknown" id="diag-invoke"></div><span>invoke() callable</span></div>
-            <div class="diag-item"><div class="diag-status unknown" id="diag-ping"></div><span>ping command responds</span></div>
-            <div class="diag-item"><div class="diag-status unknown" id="diag-scan"></div><span>scan_tree registered</span></div>
+      <div class="evidence-sections">
+        <!-- Governance state summary (quick view) -->
+        <section class="evidence-section" id="ev-governance">
+          <div class="evidence-section-header" data-toggle="ev-governance-body">
+            <span class="evidence-section-icon">🛡️</span>
+            <span class="evidence-section-title">Governance</span>
+            <span class="evidence-section-badge" id="ev-cps-badge">—</span>
           </div>
-          <div class="diag-detail" id="diag-detail">Click Diagnostics to run checks.</div>
-        </div>
-        <div id="overview-content"></div>
-        </div>
+          <div class="evidence-section-body" id="ev-governance-body">
+            <div id="ev-system-state" class="ev-status-row"></div>
+            <div id="ev-mode-display" class="ev-mode-row"></div>
+            <div id="ev-cps-display" class="ev-cps-row"></div>
+            <div id="ev-readonly-display" class="ev-readonly-row"></div>
+          </div>
+        </section>
 
-        <div id="tab-retrieve" class="hidden" role="tabpanel">
-          <div class="retrieve-toolbar">
-            <div class="search-block">
-              <label for="search-query">Find a file</label>
-              <div class="search-row">
-                <input type="search" id="search-query" placeholder="Search by name, path, bucket, or reason" aria-label="Search analyzed files" />
-                <button class="btn btn-ghost" id="btn-clear-search">Clear</button>
-              </div>
-              <p class="helper-text">Use search plus bucket filters to jump straight to what matters.</p>
+        <!-- Patch audit log -->
+        <section class="evidence-section" id="ev-patches">
+          <div class="evidence-section-header" data-toggle="ev-patches-body">
+            <span class="evidence-section-icon">📝</span>
+            <span class="evidence-section-title">Patches</span>
+            <span class="evidence-section-badge" id="ev-patch-count">0</span>
+          </div>
+          <div class="evidence-section-body" id="ev-patches-body">
+            <div id="ev-patch-log" class="ev-patch-log">
+              <p class="ev-empty">No patches proposed yet.</p>
             </div>
-            <div class="results-snapshot" id="results-snapshot">No results loaded yet.</div>
+            <div class="ev-patch-actions">
+              <button class="btn btn-ghost btn-sm" id="btn-ev-refresh-patches" type="button">Refresh</button>
+              <button class="btn btn-ghost btn-sm" id="btn-ev-clear-patches" type="button">Clear</button>
+            </div>
           </div>
-          <div id="bucket-filters" class="bucket-filters"></div>
-          <div id="search-results" class="results-grid"></div>
-        </div>
+        </section>
 
-        <div id="tab-tree" class="hidden" role="tabpanel">
-          <div id="tree-summary" class="tree-summary"></div>
-          <pre id="tree-output" class="tree-output"></pre>
-        </div>
-
-        <div id="tab-output" class="hidden" role="tabpanel">
-          <div class="output-header">
-            <h3>Activity Log</h3>
-            <button class="btn btn-ghost" id="btn-clear-log">Clear</button>
+        <!-- Read audit log -->
+        <section class="evidence-section" id="ev-reads">
+          <div class="evidence-section-header" data-toggle="ev-reads-body">
+            <span class="evidence-section-icon">🔍</span>
+            <span class="evidence-section-title">File Reads</span>
+            <span class="evidence-section-badge" id="ev-read-count">0</span>
           </div>
-          <div id="log-output" aria-live="polite"></div>
-        </div>
-
-        <div id="tab-governance" class="hidden" role="tabpanel">
-          <div class="gov-grid">
-            <section class="gov-card">
-              <h3>System State</h3>
-              <div id="gov-system-state" class="gov-status-grid"></div>
-            </section>
-
-            <section class="gov-card">
-              <h3>Mode</h3>
-              <div id="gov-mode-display" class="gov-mode-box"></div>
-            </section>
-
-            <section class="gov-card">
-              <h3>CPS Score</h3>
-              <div id="gov-cps-display" class="gov-cps-box"></div>
-            </section>
-
-            <section class="gov-card">
-              <h3>Read-Only Proof</h3>
-              <div id="gov-readonly-report" class="gov-readonly-box"></div>
-            </section>
-
-            <section class="gov-card gov-card-wide">
-              <h3>Run Governance Scripts</h3>
-              <div class="gov-script-buttons">
-                <button class="btn btn-primary" id="btn-gov-health">Run Health Check</button>
-                <button class="btn btn-primary" id="btn-gov-recovery">Run Recovery Suite</button>
-                <button class="btn btn-primary" id="btn-gov-mode">Run Mode Check</button>
-                <button class="btn btn-primary" id="btn-gov-consensus">Run Consensus Check</button>
-                <button class="btn btn-primary" id="btn-gov-status">Run System Status</button>
-                <button class="btn btn-primary" id="btn-gov-sovereignty">Run Sovereignty Enforcer</button>
-                <button class="btn btn-primary" id="btn-gov-audit">Run Headless Self-Audit</button>
-              </div>
-              <div id="gov-script-output" class="gov-script-output"></div>
-            </section>
-
-            <section class="gov-card gov-card-wide">
-              <h3>NOW.md</h3>
-              <div id="gov-now-md" class="gov-now-md"></div>
-            </section>
-
-            <section class="gov-card gov-card-wide">
-              <h3>Git Status</h3>
-              <div id="gov-git-status" class="gov-git-box"></div>
-            </section>
+          <div class="evidence-section-body" id="ev-reads-body">
+            <div id="ev-read-log" class="ev-read-log">
+              <p class="ev-empty">No file reads recorded yet.</p>
+            </div>
+            <div class="ev-read-actions">
+              <button class="btn btn-ghost btn-sm" id="btn-ev-refresh-reads" type="button">Refresh</button>
+              <button class="btn btn-ghost btn-sm" id="btn-ev-clear-reads" type="button">Clear</button>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <!-- Activity log -->
+        <section class="evidence-section" id="ev-activity">
+          <div class="evidence-section-header" data-toggle="ev-activity-body">
+            <span class="evidence-section-icon">📊</span>
+            <span class="evidence-section-title">Activity</span>
+            <span class="evidence-section-badge" id="ev-activity-count">0</span>
+          </div>
+          <div class="evidence-section-body" id="ev-activity-body">
+            <div id="ev-activity-log" class="ev-activity-log"></div>
+          </div>
+        </section>
+
+        <!-- Git status -->
+        <section class="evidence-section" id="ev-git">
+          <div class="evidence-section-header" data-toggle="ev-git-body">
+            <span class="evidence-section-icon">🔀</span>
+            <span class="evidence-section-title">Git</span>
+            <span class="evidence-section-badge" id="ev-git-badge">—</span>
+          </div>
+          <div class="evidence-section-body" id="ev-git-body">
+            <div id="ev-git-status" class="ev-git-status">
+              <p class="ev-empty">Git status not loaded.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- NOW.md quick view -->
+        <section class="evidence-section" id="ev-now">
+          <div class="evidence-section-header" data-toggle="ev-now-body">
+            <span class="evidence-section-icon">📄</span>
+            <span class="evidence-section-title">NOW.md</span>
+          </div>
+          <div class="evidence-section-body" id="ev-now-body">
+            <div id="ev-now-md-content" class="ev-now-md">
+              <p class="ev-empty">Not loaded.</p>
+            </div>
+          </div>
+        </section>
       </div>
-    </div>
+    </aside>
   </main>
 
-        <footer>
-            <span>Archivist Agent — Tauri 2.x</span>
-            <span id="footer-info">No scan performed yet</span>
-        </footer>
+  <footer>
+    <span>Archivist Agent — Tauri 2.x</span>
+    <span id="footer-mode" class="footer-mode">—</span>
+    <span id="footer-info">No scan performed yet</span>
+    <span id="footer-lane-status" class="footer-lanes"></span>
+  </footer>
     </div>
 
     <script src="app.js"></script>

@@ -1,0 +1,77 @@
+[![Yaak by @GregorySchier • Built with Tauri • BuildWith.app](https://tse2.mm.bing.net/th/id/OIP.maLM-thJFL-Xc6Fegkyy8AHaEo?pid=Api)](https://buildwith.app/apps/yaak?utm_source=chatgpt.com)
+
+## Real Tauri / Rust UI builds worth looking at
+
+### **1. Yaak — API client**
+
+Dark, polished, dev-tool layout. Looks like a serious Postman/Insomnia competitor: sidebar collections, request editor, response panel, tabs, syntax highlighting. Built with Tauri; BuildWith lists it as a Tauri app, and Yaak’s own troubleshooting docs describe the Rust backend + webview frontend split. ([Build With][1])
+
+**Good inspiration for you:** cockpit/dashboard tools, lane control panels, request/response inspectors, agent consoles.
+
+---
+
+### **2. GitButler — Git client**
+
+Probably one of the best “real product” Tauri UIs. GitButler says its desktop app is Tauri-based, with **Svelte + TypeScript UI** and a **Rust backend**. It has branch cards, drag/drop commit management, split panes, sidebars, status surfaces, and agentic workflow features. ([GitHub][2])
+
+**Good inspiration for you:** multi-lane governance UI, task cards, branch/claim ownership, timeline/undo, evidence panels.
+
+---
+
+### **3. ApiArk — API client**
+
+A newer open-source Tauri v2 + Rust + React API client. The author describes it as local-first, zero-login, zero-telemetry, YAML-file based, with REST/GraphQL/gRPC/WebSocket/SSE/MQTT in one interface. Reported around **50–60 MB RAM** and under 2-second startup in the Reddit posts, though treat those as author claims. ([Reddit][3])
+
+**Good inspiration for you:** local-first dev tooling, file-backed workspaces, protocol inspectors.
+
+---
+
+### **4. Cap — screen recording**
+
+Listed in the official/community Awesome Tauri collection as an open-source Loom alternative for shareable screen recordings. ([GitHub][4])
+
+**Good inspiration for you:** clean capture UI, desktop utility UX, background worker + polished frontend.
+
+---
+
+### **5. DevTools-X**
+
+Also listed in Awesome Tauri as a collection of 30+ cross-platform development utilities. ([GitHub][4])
+
+**Good inspiration for you:** utility grid, many small tools inside one shell, command-center style UX.
+
+---
+
+### **6. OneKeePass**
+
+Listed in Awesome Tauri under security as a secure, modern, cross-platform KeePass-compatible password manager. ([GitHub][4])
+
+**Good inspiration for you:** secure local vault patterns, settings screens, locked/unlocked states.
+
+---
+
+## What I’d steal for **your** Tauri builds
+
+For your governance/agent cockpit stuff, I’d copy the **GitButler + Yaak pattern**:
+
+| UI area           | Pattern to steal                                                      |
+| ----------------- | --------------------------------------------------------------------- |
+| Left sidebar      | lanes, repos, machines, trust stores                                  |
+| Middle panel      | active task / compact / claim / packet                                |
+| Right panel       | evidence, logs, diff, attestation                                     |
+| Top bar           | environment, health, current model/router                             |
+| Bottom/status bar | watcher state, queue depth, quarantine count                          |
+| Cards             | branch cards become “lane/task/claim cards”                           |
+| Timeline          | GitButler undo timeline becomes phenotype / compact / restore history |
+
+The big lesson: the best Tauri UIs do **not** look “Rusty.” They look like good web apps with a local-native backend. Tauri is just the shell.
+
+OUTPUT_PROVENANCE:
+agent: ChatGPT GPT-5.5 Thinking
+lane: exterior-synthesis
+target: Rust/Tauri UI build examples for comparison
+
+[1]: https://buildwith.app/apps/yaak?utm_source=chatgpt.com "Yaak by @GregorySchier • Built with Tauri • BuildWith.app"
+[2]: https://github.com/gitbutlerapp/gitbutler?utm_source=chatgpt.com "GitHub - gitbutlerapp/gitbutler: The GitButler version control client, backed by Git, powered by Tauri/Rust/Svelte · GitHub"
+[3]: https://www.reddit.com/r/tauri/comments/1rt3jvq/i_built_an_open_source_api_client_in_tauri_rust/?utm_source=chatgpt.com "I built an open source API client in Tauri + Rust because Postman uses 800MB of RAM"
+[4]: https://github.com/tauri-apps/awesome-tauri?utm_source=chatgpt.com "GitHub - tauri-apps/awesome-tauri: 🚀 Awesome Tauri Apps, Plugins and Resources · GitHub"

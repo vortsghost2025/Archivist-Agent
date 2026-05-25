@@ -3,6 +3,7 @@
 const RECENT_PATHS_KEY = 'archivist.recentPaths.v1';
 const MAX_RECENT_PATHS = 6;
 const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'governance'];
+const LANE_IDS = ['archivist', 'kernel', 'swarmmind', 'library', 'kucoin'];
 const TREE_LINE_LIMIT = 420;
 
 const BUCKET_ORDER = ['Runtime', 'Interface', 'Memory', 'Verification', 'Research', 'Unknown'];
@@ -173,7 +174,7 @@ const invoke = (() => {
 
     return async (cmd, args = {}) => {
         const root = args.rootPath || args.root || args.path || 'C:\\Demo\\Archivist';
-  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log'];
+  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log', 'get_lane_status'];
 
   if (readOnlyCommands.includes(cmd)) {
     console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
@@ -302,10 +303,21 @@ if (cmd === 'get_read_audit_log') {
           if (cmd === 'get_patch_audit_log') {
             return state.patchAuditLog || [];
           }
-          if (cmd === 'clear_patch_audit_log') {
-            state.patchAuditLog = [];
-            return true;
-          }
+      if (cmd === 'clear_patch_audit_log') {
+        state.patchAuditLog = [];
+        return true;
+      }
+      if (cmd === 'get_lane_status') {
+        const laneId = args.laneId || 'archivist';
+      const mockLanes = {
+        archivist: { laneId: 'archivist', healthy: true, inboxCount: 3, outboxCount: 8, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T22:00:00Z' },
+        kernel: { laneId: 'kernel', healthy: true, inboxCount: 1, outboxCount: 4, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:45:00Z' },
+        swarmmind: { laneId: 'swarmmind', healthy: true, inboxCount: 0, outboxCount: 2, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:30:00Z' },
+        library: { laneId: 'library', healthy: true, inboxCount: 0, outboxCount: 1, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:00:00Z' },
+        kucoin: { laneId: 'kucoin', healthy: false, inboxCount: 0, outboxCount: 0, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: null }
+      };
+        return mockLanes[laneId] || { laneId, healthy: false, inboxCount: 0, outboxCount: 0, quarantineCount: 0, actionRequiredCount: 0 };
+      }
           return null;
         }
 
@@ -338,7 +350,9 @@ const state = {
   chatSettingsOpen: false,
   readAuditOpen: false,
   readAuditLog: [],
-  patchAuditLog: []
+  patchAuditLog: [],
+  laneStatuses: {},
+  evidencePanelOpen: true
 };
 
 const $ = id => document.getElementById(id);
@@ -396,13 +410,15 @@ function getPathLabel(path) {
 }
 
 function log(message, level = 'info') {
-    const time = new Date().toLocaleTimeString('en-US', { hour12: false });
-    state.logEntries.push({ time, message, level });
-    const div = document.createElement('div');
-    div.className = 'log-entry';
-    div.innerHTML = `<span class="log-time">${escapeHtml(time)}</span><span class="log-${level}">${escapeHtml(message)}</span>`;
-    $('log-output').appendChild(div);
-    $('log-output').scrollTop = $('log-output').scrollHeight;
+  const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+  state.logEntries.push({ time, message, level });
+  const div = document.createElement('div');
+  div.className = 'log-entry';
+  div.innerHTML = `<span class="log-time">${escapeHtml(time)}</span><span class="log-${level}">${escapeHtml(message)}</span>`;
+  $('log-output').appendChild(div);
+  $('log-output').scrollTop = $('log-output').scrollHeight;
+  // Mirror into evidence panel activity section
+  renderEvidenceActivity();
 }
 
 function setStatus(text, type = 'idle') {
@@ -554,6 +570,242 @@ function renderGovNowMd(content) {
   if (typeof content === 'string') { el.textContent = content; return; }
   if (typeof content === 'object' && content.content) { el.textContent = content.content; return; }
   el.textContent = JSON.stringify(content, null, 2);
+}
+
+// ─── Lane-Aware Sidebar ───────────────────────────────────────────
+
+async function loadLaneStatuses() {
+  try {
+    const results = await Promise.all(
+      LANE_IDS.map(id => invoke('get_lane_status', { laneId: id }).catch(() => null))
+    );
+    LANE_IDS.forEach((id, i) => {
+      state.laneStatuses[id] = results[i] || { laneId: id, healthy: false, inboxCount: 0, outboxCount: 0, quarantineCount: 0, actionRequiredCount: 0 };
+    });
+  } catch (_) {
+    // Fallback: build from broadcast data
+    LANE_IDS.forEach(id => {
+      state.laneStatuses[id] = { laneId: id, healthy: false, inboxCount: 0, outboxCount: 0, quarantineCount: 0, actionRequiredCount: 0 };
+    });
+  }
+  renderLaneList();
+}
+
+function renderLaneList() {
+  const container = $('lane-list');
+  if (!container) return;
+
+  const entries = LANE_IDS.map(id => {
+    const s = state.laneStatuses[id] || {};
+    const healthy = s.healthy !== false;
+    const dotCls = healthy ? 'healthy' : 'offline';
+    const inboxCount = s.inboxCount || 0;
+    const quarantineCount = s.quarantineCount || 0;
+    const actionRequiredCount = s.actionRequiredCount || 0;
+
+    let badgeHtml = '';
+    if (actionRequiredCount > 0) {
+      badgeHtml = `<span class="lane-badge action-required">${actionRequiredCount} action</span>`;
+    } else if (quarantineCount > 0) {
+      badgeHtml = `<span class="lane-badge quarantine">${quarantineCount} quar</span>`;
+    } else if (inboxCount > 0) {
+      badgeHtml = `<span class="lane-badge">${inboxCount}</span>`;
+    }
+
+    const displayName = id.replace(/_/g, ' ');
+    return `<div class="lane-item" data-lane="${escapeHtml(id)}">
+      <div class="lane-health-dot ${dotCls}"></div>
+      <span class="lane-name">${escapeHtml(displayName)}</span>
+      ${badgeHtml}
+    </div>`;
+  });
+
+  container.innerHTML = entries.join('');
+}
+
+// ─── Evidence Panel ────────────────────────────────────────────────
+
+function toggleEvidencePanel() {
+  const main = document.querySelector('main');
+  if (!main) return;
+  main.classList.toggle('evidence-collapsed');
+  state.evidencePanelOpen = !main.classList.contains('evidence-collapsed');
+  localStorage.setItem('archivist-evidence-collapsed', state.evidencePanelOpen ? '0' : '1');
+}
+
+async function loadEvidencePanel() {
+  try {
+    const [cps, modeData, systemState, blocker, recovery, readonlyReport, gitData, nowMd, patchLog, readLog] = await Promise.all([
+      invoke('get_cps_score').catch(() => ({ score: 0, threshold: 10, passing: false })),
+      invoke('read_governance_file', { fileName: 'active-mode' }).catch(() => null),
+      invoke('read_governance_file', { fileName: 'system-state' }).catch(() => null),
+      invoke('read_governance_file', { fileName: 'active-blocker' }).catch(() => null),
+      invoke('read_governance_file', { fileName: 'last-recovery' }).catch(() => null),
+      invoke('check_read_only').catch(() => ({ read_only: false, allowed_roots: [], blocked_roots: [] })),
+      invoke('git_status').catch(() => ({ raw: 'unavailable', modified: 0, untracked: 0, clean: true })),
+      invoke('read_governance_file', { fileName: 'now-md' }).catch(() => null),
+      invoke('get_patch_audit_log').catch(() => []),
+      invoke('get_read_audit_log').catch(() => [])
+    ]);
+
+    renderEvidenceGovernance(systemState, blocker, recovery, modeData, cps, readonlyReport);
+    renderEvidencePatches(patchLog);
+    renderEvidenceReads(readLog);
+    renderEvidenceGit(gitData);
+    renderEvidenceNowMd(nowMd);
+    updateFooterMode(modeData);
+  } catch (e) {
+    log('Evidence panel load failed: ' + (typeof e === 'string' ? e : e?.message || String(e)), 'err');
+  }
+}
+
+function renderEvidenceGovernance(systemState, blocker, recovery, modeData, cps, readonlyReport) {
+  // System state
+  const ssEl = $('ev-system-state');
+  if (ssEl) {
+    const status = systemState?.status === 'consistent' ? 'ok' : 'warn';
+    ssEl.innerHTML = `<div class="ev-status-dot ${status}"></div><span class="ev-label">System</span><span class="ev-value">${escapeHtml(systemState?.status || 'unknown')}</span>`;
+  }
+
+  // Mode
+  const modeEl = $('ev-mode-display');
+  if (modeEl) {
+    const mode = (modeData?.mode || 'unknown').toUpperCase();
+    const modeClass = { OBSERVE: 'observe', BUILD: 'build', 'CHAOS-LAB': 'chaos', RECOVERY: 'recovery' }[mode] || 'observe';
+    modeEl.innerHTML = `<span class="ev-mode-badge ${modeClass}">${escapeHtml(mode)}</span>`;
+  }
+
+  // CPS
+  const cpsEl = $('ev-cps-display');
+  const cpsBadge = $('ev-cps-badge');
+  const score = cps?.score ?? 0;
+  const threshold = cps?.threshold ?? 10;
+  const cls = score >= threshold ? 'healthy' : score >= threshold - 2 ? 'warning' : 'critical';
+  if (cpsEl) {
+    cpsEl.innerHTML = `<span class="ev-cps-value ${cls}">${score}</span><span class="ev-cps-label">/ ${threshold} ${score >= threshold ? 'PASS' : 'BLOCK'}</span>`;
+  }
+  if (cpsBadge) {
+    cpsBadge.textContent = String(score);
+    cpsBadge.className = 'evidence-section-badge ' + cls;
+  }
+
+  // Read-only
+  const roEl = $('ev-readonly-display');
+  if (roEl && readonlyReport) {
+    const flagCls = readonlyReport.read_only ? 'active' : 'inactive';
+    const flagText = readonlyReport.read_only ? 'RO' : 'RW';
+    roEl.innerHTML = `<span class="ev-readonly-flag ${flagCls}">${flagText}</span>`;
+  }
+}
+
+function renderEvidencePatches(patchLog) {
+  const container = $('ev-patch-log');
+  const badge = $('ev-patch-count');
+  const entries = Array.isArray(patchLog) ? patchLog : [];
+  if (badge) badge.textContent = String(entries.length);
+
+  if (!container) return;
+  if (!entries.length) {
+    container.innerHTML = '<p class="ev-empty">No patches proposed yet.</p>';
+    return;
+  }
+
+  container.innerHTML = entries.slice(-20).reverse().map(e => {
+    const time = e.timestamp ? new Date(e.timestamp).toLocaleTimeString('en-US', { hour12: false }) : '?';
+    const path = e.file_path || e.filePath || 'unknown';
+    const status = (e.status || 'proposed').toLowerCase();
+    return `<div class="ev-patch-entry">
+      <span class="ev-patch-time">${escapeHtml(time)}</span>
+      <span class="ev-patch-path">${escapeHtml(path)}</span>
+      <span class="ev-patch-status ${status}">${escapeHtml(status)}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderEvidenceReads(readLog) {
+  const container = $('ev-read-log');
+  const badge = $('ev-read-count');
+  const entries = Array.isArray(readLog) ? readLog : [];
+  if (badge) badge.textContent = String(entries.length);
+
+  if (!container) return;
+  if (!entries.length) {
+    container.innerHTML = '<p class="ev-empty">No file reads recorded yet.</p>';
+    return;
+  }
+
+  container.innerHTML = entries.slice(-20).reverse().map(e => {
+    const time = e.timestamp ? new Date(e.timestamp).toLocaleTimeString('en-US', { hour12: false }) : '?';
+    const path = e.file_path || e.filePath || e.path || 'unknown';
+    return `<div class="ev-read-entry">
+      <span class="ev-read-time">${escapeHtml(time)}</span>
+      <span class="ev-read-path">${escapeHtml(path)}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderEvidenceGit(gitData) {
+  const container = $('ev-git-status');
+  const badge = $('ev-git-badge');
+  if (!container) return;
+
+  const modified = gitData?.modified || 0;
+  const untracked = gitData?.untracked || 0;
+  const modCls = modified > 0 ? 'dirty' : 'clean';
+  const untCls = untracked > 0 ? 'dirty' : 'clean';
+
+  if (badge) {
+    badge.textContent = modified + untracked > 0 ? `${modified + untracked}` : 'clean';
+    badge.className = 'evidence-section-badge ' + (modified + untracked > 0 ? 'warning' : 'healthy');
+  }
+
+  container.innerHTML = `<div class="ev-git-row">
+    <div class="ev-git-stat"><span class="num ${modCls}">${modified}</span><span>modified</span></div>
+    <div class="ev-git-stat"><span class="num ${untCls}">${untracked}</span><span>untracked</span></div>
+  </div>`;
+}
+
+function renderEvidenceNowMd(content) {
+  const container = $('ev-now-md-content');
+  if (!container) return;
+  if (!content) { container.innerHTML = '<p class="ev-empty">Not loaded.</p>'; return; }
+  if (typeof content === 'string') { container.textContent = content; return; }
+  if (typeof content === 'object' && content.content) { container.textContent = content.content; return; }
+  container.textContent = JSON.stringify(content, null, 2);
+}
+
+function renderEvidenceActivity() {
+  const container = $('ev-activity-log');
+  const badge = $('ev-activity-count');
+  const entries = state.logEntries || [];
+  if (badge) badge.textContent = String(entries.length);
+  if (!container) return;
+
+  container.innerHTML = entries.slice(-30).reverse().map(e => {
+    return `<div class="ev-activity-entry">
+      <span class="ev-activity-time">${escapeHtml(e.time || '')}</span>
+      <span class="ev-activity-msg ${e.level || 'info'}">${escapeHtml(e.message || '')}</span>
+    </div>`;
+  }).join('');
+}
+
+function updateFooterMode(modeData) {
+  const el = $('footer-mode');
+  if (!el || !modeData) return;
+  const mode = (modeData.mode || 'unknown').toUpperCase();
+  el.textContent = mode;
+  const cls = { OBSERVE: 'observe', BUILD: 'build', 'CHAOS-LAB': 'chaos', RECOVERY: 'recovery' }[mode] || 'observe';
+  el.className = 'footer-mode ev-mode-badge ' + cls;
+}
+
+function setupEvidenceSectionToggles() {
+  document.querySelectorAll('.evidence-section-header[data-toggle]').forEach(header => {
+    header.addEventListener('click', () => {
+      const targetId = header.dataset.toggle;
+      const body = document.getElementById(targetId);
+      if (body) body.classList.toggle('open');
+    });
+  });
 }
 
 // ─── Chat UI ──────────────────────────────────────────────────────
@@ -1994,13 +2246,21 @@ document.addEventListener('DOMContentLoaded', () => {
   $('btn-diag').addEventListener('click', runDiagnostics);
   $('btn-sidebar-toggle').addEventListener('click', toggleSidebar);
   $('btn-tools-close').addEventListener('click', closeToolsPanel);
+  $('btn-evidence-toggle-header').addEventListener('click', toggleEvidencePanel);
+  if ($('btn-evidence-toggle')) $('btn-evidence-toggle').addEventListener('click', toggleEvidencePanel);
   $('btn-gov-health').addEventListener('click', () => runGovScript('health-check'));
     $('btn-gov-recovery').addEventListener('click', () => runGovScript('recovery-test-suite'));
     $('btn-gov-mode').addEventListener('click', () => runGovScript('mode-check'));
     $('btn-gov-consensus').addEventListener('click', () => runGovScript('consensus-check'));
     $('btn-gov-status').addEventListener('click', () => runGovScript('system-status'));
-    $('btn-gov-sovereignty').addEventListener('click', () => runGovScript('sovereignty-enforcer'));
-    $('btn-gov-audit').addEventListener('click', () => runGovScript('headless-self-audit'));
+  $('btn-gov-sovereignty').addEventListener('click', () => runGovScript('sovereignty-enforcer'));
+  $('btn-gov-audit').addEventListener('click', () => runGovScript('headless-self-audit'));
+
+  // Evidence panel button handlers
+  if ($('btn-ev-refresh-patches')) $('btn-ev-refresh-patches').addEventListener('click', () => { invoke('get_patch_audit_log').then(renderEvidencePatches).catch(() => {}); });
+  if ($('btn-ev-clear-patches')) $('btn-ev-clear-patches').addEventListener('click', () => { invoke('clear_patch_audit_log').then(() => { state.patchAuditLog = []; renderEvidencePatches([]); }).catch(() => {}); });
+  if ($('btn-ev-refresh-reads')) $('btn-ev-refresh-reads').addEventListener('click', () => { invoke('get_read_audit_log').then(renderEvidenceReads).catch(() => {}); });
+  if ($('btn-ev-clear-reads')) $('btn-ev-clear-reads').addEventListener('click', () => { invoke('clear_read_audit_log').then(() => { state.readAuditLog = []; renderEvidenceReads([]); }).catch(() => {}); });
 
     // Chat event handlers
     $('btn-chat-send').addEventListener('click', sendChatMessage);
@@ -2100,20 +2360,37 @@ $('folder-path').addEventListener('keydown', event => {
         state.currentPath = state.recentPaths[0];
     }
 
-renderChat();
-renderOverview();
-renderRetrieve();
-renderTreePanel();
-updateFooterInfo();
+  renderChat();
+  renderOverview();
+  renderRetrieve();
+  renderTreePanel();
+  updateFooterInfo();
 
-// Restore sidebar collapse state
-const sidebarCollapsed = localStorage.getItem('archivist-sidebar-collapsed') === '1';
-if (sidebarCollapsed) {
-  const main = document.querySelector('main');
-  if (main) main.classList.add('sidebar-collapsed');
-  const btn = $('btn-sidebar-toggle');
-  if (btn) btn.textContent = '☰ Sidebar';
-}
+  // Initialize lane list and evidence panel
+  loadLaneStatuses();
+  loadEvidencePanel();
+  setupEvidenceSectionToggles();
+
+  // Restore sidebar collapse state
+  const sidebarCollapsed = localStorage.getItem('archivist-sidebar-collapsed') === '1';
+  if (sidebarCollapsed) {
+    const main = document.querySelector('main');
+    if (main) main.classList.add('sidebar-collapsed');
+    const btn = $('btn-sidebar-toggle');
+    if (btn) btn.textContent = '☰ Sidebar';
+  }
+
+  // Restore evidence panel collapse state
+  const evidenceCollapsed = localStorage.getItem('archivist-evidence-collapsed') === '1';
+  if (evidenceCollapsed) {
+    const main = document.querySelector('main');
+    if (main) main.classList.add('evidence-collapsed');
+    state.evidencePanelOpen = false;
+  }
+
+  // Open the governance section in evidence panel by default
+  const govBody = document.getElementById('ev-governance-body');
+  if (govBody) govBody.classList.add('open');
 
   setTimeout(() => {
         const inTauri = hasTauriRuntime();
