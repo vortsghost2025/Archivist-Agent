@@ -2404,16 +2404,11 @@ function getZoomLevel() {
 }
 
 function applyZoom(level) {
-  const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
-  const app = $('app');
-  if (app) {
-    app.style.transform = `scale(${clamped})`;
-    app.style.width = `${100 / clamped}vw`;
-    app.style.height = `${100 / clamped}vh`;
-  }
-  const display = $('zoom-level');
-  if (display) display.textContent = `${Math.round(clamped * 100)}%`;
-  localStorage.setItem('archivist-zoom', clamped.toString());
+const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
+document.documentElement.style.setProperty('--app-zoom', clamped);
+const display = $('zoom-level');
+if (display) display.textContent = `${Math.round(clamped * 100)}%`;
+localStorage.setItem('archivist-zoom', clamped.toString());
 }
 
 function zoomIn() { applyZoom(getZoomLevel() + ZOOM_STEP); }
