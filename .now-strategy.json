@@ -1,23 +1,54 @@
 {
   "what_is_next": [
-    "Make Archivist genuinely useful day-to-day (not just governance audits)",
-    "Ship one concrete thing that proves the infrastructure was worth building",
-    "Define what 'Archivist as partner' actually does in daily practice"
+    "Phase 3: Send signed task — compose UI for drafting lane messages, wire sign_message Rust command, write to target outbox",
+    "User testing of Phase 2 features: resizable panels, lane detail panel click/escape flow, chat scroll bounding with zoom",
+    "Commit Phase 2+pagination changes (accumulated uncommitted work)"
+  ],
+  "current_phase": "Phase 3: Send signed task",
+  "phases": {
+    "phase_0": { "name": "Three-panel cockpit layout", "status": "done" },
+    "phase_0_5": { "name": "Lane status display (trust-store dots)", "status": "done" },
+    "phase_1": { "name": "Agent file read access + patch propose/apply", "status": "done" },
+    "phase_2": { "name": "Active lane switch (read-only)", "status": "done" },
+    "phase_3": { "name": "Send signed task (compose UI + sign_message + outbox)", "status": "in_progress" },
+    "phase_4": { "name": "Response monitor (inbox watcher, P0 alerts)", "status": "not_started" },
+    "phase_5": { "name": "Worktree/subagent runner (branch isolation, agent spawning)", "status": "not_started" }
+  },
+  "completed_this_session": [
+    "agent_read_file pagination (offset/limit params, 7 new tests, tools.json + system prompt updates)",
+    "Chat scroll bounding fix (height:100vh + applyZoom uses height not minHeight)",
+    "Responsive breakpoint fix (5-column grid at 1280px/1080px, hide resize handles)",
+    "switch_lane Rust command + lane detail panel UI + JS wiring (prior session, uncommitted)"
+  ],
+  "pending_user_verification": [
+    "Resizable panels — drag interaction, collapsed state, width restoration",
+    "Lane detail panel — click lane → detail view → close/escape flow",
+    "Chat scroll bounding — height:100vh approach with zoom compensation"
   ],
   "stable_modules": [
+    "src-tauri/src/classification.rs",
+    "src-tauri/src/agent_fs.rs",
+    "src-tauri/src/patch.rs",
+    "src-tauri/src/chat.rs",
+    "src-tauri/src/safety.rs",
+    "src-tauri/src/constitution.rs",
+    "src-tauri/src/lane.rs",
     "scripts/governance-types.js",
     "scripts/schema-validator.js",
     "scripts/identity-enforcer.js",
-    "tsconfig.ci.json",
-    ".github/workflows/ci.yml",
-    "src-tauri/",
-    "scripts/mode-check.js",
-    "lanes/broadcast/active-mode.json"
+    "scripts/sync-all-lanes.js",
+    "e2e-tests/"
+  ],
+  "future_refactoring": [
+    "Split consensus_check.rs (118KB monolith) into focused modules",
+    "Modularize app.js (2700 lines) into lane-ui.js, chat-ui.js, evidence-ui.js, etc.",
+    "Trust store key rotation visualization in UI",
+    "Lane inbox/outbox file viewer in UI"
   ],
   "sandbox_ideas": [
     "Headless Tauri testing strategy (WebView2 headless?)",
-    "Multi-agent orchestration when other lanes come online",
     "Mobile/remote access to Archivist via Tailscale",
-    "NOW.md auto-update hook on mode transitions"
+    "NOW.md auto-update hook on mode transitions",
+    "Ubuntu VPS lane worker auto-restart after reboot"
   ]
 }

@@ -54,13 +54,21 @@
     "type": "function",
     "function": {
       "name": "agent_read_file",
-      "description": "Read the contents of a single file. Files larger than 1MB are blocked. Secret files (API keys, .env, .pem, etc.) are blocked. Returns the file content as a string.",
+      "description": "Read the contents of a single file, optionally paginating by line number. Files larger than 1MB are blocked. Secret files (API keys, .env, .pem, etc.) are blocked. Returns the file content, total line count, and pagination metadata. For files over 1000 lines, use offset and limit to read in chunks of 200 lines to avoid truncation.",
       "parameters": {
         "type": "object",
         "properties": {
           "path": {
             "type": "string",
             "description": "Absolute path to the file to read"
+          },
+          "offset": {
+            "type": "integer",
+            "description": "1-based line number to start reading from. Defaults to 1 (beginning of file). Use this to paginate through large files."
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Maximum number of lines to return. Defaults to 200 when offset is provided, or the entire file when offset is not provided. Recommended: 200 for large files."
           }
         },
         "required": ["path"]

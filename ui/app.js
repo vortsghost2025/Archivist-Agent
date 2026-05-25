@@ -174,7 +174,7 @@ const invoke = (() => {
 
     return async (cmd, args = {}) => {
         const root = args.rootPath || args.root || args.path || 'C:\\Demo\\Archivist';
-  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log', 'get_lane_status'];
+  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log', 'get_lane_status', 'switch_lane'];
 
   if (readOnlyCommands.includes(cmd)) {
     console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
@@ -252,13 +252,13 @@ const invoke = (() => {
     { id: 'google/gemma-2-9b-it', owned_by: 'google' },
     ];
     }
-    if (cmd === 'agent_read_file') {
+  if (cmd === 'agent_read_file') {
     const p = args.path || '';
     if (p.includes('.env') || p.includes('.git') || p.includes('.pem') || p.includes('.key')) {
-    throw new Error('Secret/sensitive path blocked: ' + p);
+      throw new Error('Secret/sensitive path blocked: ' + p);
     }
-    return { path: p, content: '[Browser Mock] File content would appear here.', size_bytes: 42, truncated: false };
-    }
+    return { path: p, content: '[Browser Mock] File content would appear here.', size_bytes: 42, truncated: false, total_lines: 1, offset: 0, lines_returned: 1 };
+  }
     if (cmd === 'agent_list_directory') {
     const p = args.path || 'S:/Archivist-Agent';
     return [
@@ -307,18 +307,30 @@ if (cmd === 'get_read_audit_log') {
         state.patchAuditLog = [];
         return true;
       }
-      if (cmd === 'get_lane_status') {
-        const laneId = args.laneId || 'archivist';
-      const mockLanes = {
-        archivist: { laneId: 'archivist', healthy: true, inboxCount: 3, outboxCount: 8, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T22:00:00Z' },
-        kernel: { laneId: 'kernel', healthy: true, inboxCount: 1, outboxCount: 4, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:45:00Z' },
-        swarmmind: { laneId: 'swarmmind', healthy: true, inboxCount: 0, outboxCount: 2, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:30:00Z' },
-        library: { laneId: 'library', healthy: true, inboxCount: 0, outboxCount: 1, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:00:00Z' },
-        kucoin: { laneId: 'kucoin', healthy: false, inboxCount: 0, outboxCount: 0, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: null }
-      };
-        return mockLanes[laneId] || { laneId, healthy: false, inboxCount: 0, outboxCount: 0, quarantineCount: 0, actionRequiredCount: 0 };
-      }
-          return null;
+if (cmd === 'get_lane_status') {
+    const laneId = args.laneId || 'archivist';
+    const mockLanes = {
+    archivist: { laneId: 'archivist', healthy: true, inboxCount: 3, outboxCount: 8, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T22:00:00Z' },
+    kernel: { laneId: 'kernel', healthy: true, inboxCount: 1, outboxCount: 4, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:45:00Z' },
+    swarmmind: { laneId: 'swarmmind', healthy: true, inboxCount: 0, outboxCount: 2, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:30:00Z' },
+    library: { laneId: 'library', healthy: true, inboxCount: 0, outboxCount: 1, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: '2026-05-24T21:00:00Z' },
+    kucoin: { laneId: 'kucoin', healthy: false, inboxCount: 0, outboxCount: 0, quarantineCount: 0, actionRequiredCount: 0, lastHeartbeat: null }
+    };
+    return mockLanes[laneId] || { laneId, healthy: false, inboxCount: 0, outboxCount: 0, quarantineCount: 0, actionRequiredCount: 0 };
+}
+if (cmd === 'switch_lane') {
+    const laneId = args.laneId || 'archivist';
+    return {
+    laneId, repoRoot: laneId === 'archivist' ? 'S:/Archivist-Agent' : `S:/${laneId}-lane`, repoExists: true,
+    gitBranch: 'main', gitHead: 'abc1234', gitClean: true, gitModified: 0, gitUntracked: 0, gitStaged: 0,
+    inboxMessages: [{ name: '20260525_task_from_kernel.json', timestamp: '2026-05-25T10:00:00Z' }],
+    outboxMessages: [], quarantineMessages: [], actionRequiredMessages: [],
+    journalEntries: [{ fileName: '2026-05-25.jsonl', preview: '{"event":"test"}' }],
+    trustStoreEntry: { lane_id: laneId, lane_state: 'ACTIVE', key_id: 'abc123', algorithm: 'EdDSA', registered_at: '2026-05-11T04:00:00Z' },
+    laneState: 'ACTIVE'
+    };
+}
+return null;
         }
 
         const mutatingCommands = ['build_index', 'generate_handoff', 'build_registry'];
@@ -351,8 +363,10 @@ const state = {
   readAuditOpen: false,
   readAuditLog: [],
   patchAuditLog: [],
-  laneStatuses: {},
-  evidencePanelOpen: true
+    laneStatuses: {},
+    activeLane: null,
+    laneDetail: null,
+    evidencePanelOpen: true
 };
 
 const $ = id => document.getElementById(id);
@@ -472,6 +486,15 @@ function toggleSidebar() {
       btn.textContent = isCollapsed ? '☰ Sidebar' : '☰ Hide';
     }
     localStorage.setItem('archivist-sidebar-collapsed', isCollapsed ? '1' : '0');
+    // Restore saved width when un-collapsing
+    if (!isCollapsed) {
+      const saved = localStorage.getItem('archivist-sidebar-width');
+      if (saved) {
+        const cols = main.style.gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
+        const ew = cols[4] || 380;
+        main.style.gridTemplateColumns = `${parseFloat(saved)}px 5px ${Math.max(200, main.clientWidth - parseFloat(saved) - ew - 10)}px 5px ${ew}px`;
+      }
+    }
   }
 }
 
@@ -613,14 +636,178 @@ function renderLaneList() {
     }
 
     const displayName = id.replace(/_/g, ' ');
-    return `<div class="lane-item" data-lane="${escapeHtml(id)}">
-      <div class="lane-health-dot ${dotCls}"></div>
-      <span class="lane-name">${escapeHtml(displayName)}</span>
-      ${badgeHtml}
-    </div>`;
+        const isActive = state.activeLane === id;
+        const activeCls = isActive ? ' lane-item-active' : '';
+        return `<div class="lane-item${activeCls}" data-lane="${escapeHtml(id)}">
+<div class="lane-health-dot ${dotCls}"></div>
+<span class="lane-name">${escapeHtml(displayName)}</span>
+${badgeHtml}
+</div>`;
   });
 
-  container.innerHTML = entries.join('');
+    container.innerHTML = entries.join('');
+}
+
+/// Handle clicking a lane in the sidebar — loads lane detail and shows it.
+async function handleLaneClick(laneId) {
+    if (state.activeLane === laneId && state.laneDetail) {
+        // Toggle off — return to chat.
+        state.activeLane = null;
+        state.laneDetail = null;
+        renderLaneList();
+        showChatPanel();
+        return;
+    }
+
+    state.activeLane = laneId;
+    renderLaneList();
+    setStatus(`Loading lane: ${laneId}…`, 'busy');
+
+    try {
+        const detail = await invoke('switch_lane', { laneId });
+        state.laneDetail = detail;
+        renderLaneDetail(detail);
+        showLaneDetailPanel();
+        setStatus(`Viewing lane: ${laneId}`, 'idle');
+    } catch (e) {
+        const msg = (typeof e === 'string') ? e : (e?.message || String(e));
+        log(`Failed to load lane ${laneId}: ${msg}`, 'error');
+        setStatus(`Lane ${laneId} load failed`, 'error');
+    }
+}
+
+/// Show the lane detail panel (hides chat/tools).
+function showLaneDetailPanel() {
+    const chatPanel = $('chat-panel');
+    const toolsPanel = $('tools-panel');
+    const lanePanel = $('lane-detail-panel');
+    if (chatPanel) chatPanel.classList.add('hidden');
+    if (toolsPanel) toolsPanel.classList.add('hidden');
+    if (lanePanel) lanePanel.classList.remove('hidden');
+}
+
+/// Show the chat panel (hides lane detail/tools).
+function showChatPanel() {
+    const chatPanel = $('chat-panel');
+    const toolsPanel = $('tools-panel');
+    const lanePanel = $('lane-detail-panel');
+    if (chatPanel) chatPanel.classList.remove('hidden');
+    if (toolsPanel) toolsPanel.classList.add('hidden');
+    if (lanePanel) lanePanel.classList.add('hidden');
+}
+
+/// Render the lane detail view in the center panel.
+function renderLaneDetail(detail) {
+    const container = $('lane-detail-panel');
+    if (!container) return;
+
+    const laneId = detail.laneId || 'unknown';
+    const displayName = laneId.replace(/_/g, ' ');
+    const laneState = detail.laneState || 'UNKNOWN';
+    const stateCls = laneState === 'ACTIVE' ? 'active' : (laneState === 'DORMANT' ? 'dormant' : 'offline');
+
+    // Git section
+    const gitBranch = detail.gitBranch || '—';
+    const gitHead = detail.gitHead || '—';
+    const gitClean = detail.gitClean !== null && detail.gitClean !== undefined
+        ? (detail.gitClean ? '✓ clean' : '⚠ dirty')
+        : '—';
+    const gitModified = detail.gitModified || 0;
+    const gitUntracked = detail.gitUntracked || 0;
+    const gitStaged = detail.gitStaged || 0;
+
+    // Message counts
+    const inboxCount = (detail.inboxMessages || []).length;
+    const outboxCount = (detail.outboxMessages || []).length;
+    const quarantineCount = (detail.quarantineMessages || []).length;
+    const actionCount = (detail.actionRequiredMessages || []).length;
+
+    // Render message file list (compact)
+    const renderFileList = (files, emptyMsg) => {
+        if (!files || files.length === 0) return `<p class="lane-detail-empty">${emptyMsg}</p>`;
+        return '<ul class="lane-detail-msg-list">' + files.map(f =>
+            `<li><span class="lane-msg-name">${escapeHtml(f.name)}</span>${f.timestamp ? ` <span class="lane-msg-ts">${escapeHtml(f.timestamp)}</span>` : ''}</li>`
+        ).join('') + '</ul>';
+    };
+
+    // Render journal entries
+    const renderJournalList = (entries) => {
+        if (!entries || entries.length === 0) return '<p class="lane-detail-empty">No journal entries.</p>';
+        return '<ul class="lane-detail-journal-list">' + entries.map(e =>
+            `<li><span class="lane-journal-name">${escapeHtml(e.fileName)}</span><pre class="lane-journal-preview">${escapeHtml(e.preview)}</pre></li>`
+        ).join('') + '</ul>';
+    };
+
+    container.innerHTML = `
+<div class="lane-detail-header">
+    <div class="lane-detail-title-row">
+        <h2>${escapeHtml(displayName)}</h2>
+        <span class="lane-detail-state-badge ${stateCls}">${escapeHtml(laneState)}</span>
+    </div>
+    <p class="lane-detail-repo-root">${detail.repoRoot ? escapeHtml(detail.repoRoot) : 'Repo root unknown'}</p>
+    <button class="btn btn-ghost" id="btn-lane-detail-close" title="Return to chat">✕ Back to Chat</button>
+</div>
+
+<div class="lane-detail-grid">
+    <section class="lane-detail-card">
+        <h3>Git Status</h3>
+        <div class="lane-detail-kv">
+            <span class="lk">Branch</span><span class="lv">${escapeHtml(gitBranch)}</span>
+            <span class="lk">HEAD</span><span class="lv">${escapeHtml(gitHead)}</span>
+            <span class="lk">Tree</span><span class="lv">${escapeHtml(gitClean)}</span>
+            ${gitModified > 0 ? `<span class="lk">Modified</span><span class="lv">${gitModified}</span>` : ''}
+            ${gitUntracked > 0 ? `<span class="lk">Untracked</span><span class="lv">${gitUntracked}</span>` : ''}
+            ${gitStaged > 0 ? `<span class="lk">Staged</span><span class="lv">${gitStaged}</span>` : ''}
+        </div>
+    </section>
+
+    <section class="lane-detail-card">
+        <h3>Messages</h3>
+        <div class="lane-detail-msg-stats">
+            <span class="lms inbox"><strong>${inboxCount}</strong> inbox</span>
+            <span class="lms outbox"><strong>${outboxCount}</strong> outbox</span>
+            <span class="lms quarantine"><strong>${quarantineCount}</strong> quarantine</span>
+            <span class="lms action"><strong>${actionCount}</strong> action-required</span>
+        </div>
+    </section>
+
+    <section class="lane-detail-card lane-detail-card-wide">
+        <h3>Inbox Messages</h3>
+        ${renderFileList(detail.inboxMessages, 'Inbox is empty.')}
+    </section>
+
+    <section class="lane-detail-card lane-detail-card-wide">
+        <h3>Action Required</h3>
+        ${renderFileList(detail.actionRequiredMessages, 'No action-required messages.')}
+    </section>
+
+    <section class="lane-detail-card lane-detail-card-wide">
+        <h3>Journal</h3>
+        ${renderJournalList(detail.journalEntries)}
+    </section>
+
+    <section class="lane-detail-card">
+        <h3>Trust Store</h3>
+        ${detail.trustStoreEntry ? `
+            <div class="lane-detail-kv">
+                <span class="lk">Key ID</span><span class="lv">${escapeHtml(detail.trustStoreEntry.key_id || '—')}</span>
+                <span class="lk">Algorithm</span><span class="lv">${escapeHtml(detail.trustStoreEntry.algorithm || '—')}</span>
+                <span class="lk">Registered</span><span class="lv">${escapeHtml(detail.trustStoreEntry.registered_at || '—')}</span>
+            </div>
+        ` : '<p class="lane-detail-empty">No trust store entry.</p>'}
+    </section>
+</div>`;
+
+    // Wire up the close button.
+    const closeBtn = $('btn-lane-detail-close');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            state.activeLane = null;
+            state.laneDetail = null;
+            renderLaneList();
+            showChatPanel();
+        });
+    }
 }
 
 // ─── Evidence Panel ────────────────────────────────────────────────
@@ -631,6 +818,15 @@ function toggleEvidencePanel() {
   main.classList.toggle('evidence-collapsed');
   state.evidencePanelOpen = !main.classList.contains('evidence-collapsed');
   localStorage.setItem('archivist-evidence-collapsed', state.evidencePanelOpen ? '0' : '1');
+  // Restore saved width when un-collapsing
+  if (state.evidencePanelOpen) {
+    const saved = localStorage.getItem('archivist-evidence-width');
+    if (saved) {
+      const cols = main.style.gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
+      const sw = cols[0] || 328;
+      main.style.gridTemplateColumns = `${sw}px 5px ${Math.max(200, main.clientWidth - sw - parseFloat(saved) - 10)}px 5px ${parseFloat(saved)}px`;
+    }
+  }
 }
 
 async function loadEvidencePanel() {
@@ -963,7 +1159,12 @@ function renderChat() {
   }
 
   messagesEl.innerHTML = html;
-  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  // Only auto-scroll if user is near the bottom (within 120px)
+  const isNearBottom = messagesEl.scrollHeight - messagesEl.scrollTop - messagesEl.clientHeight < 120;
+  if (isNearBottom) {
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
 
   // Auto-scroll to any patch review card so the Apply/Reject buttons are visible
   const patchCard = messagesEl.querySelector('.patch-review');
@@ -1307,7 +1508,12 @@ async function executeToolCall(funcName, funcArgs) {
     scan_tree:           { cmd: 'scan_tree',           args: a => ({ rootPath: a.rootPath }) },
     summarize_folder:    { cmd: 'summarize_folder',    args: a => ({ rootPath: a.rootPath }) },
     agent_list_directory:{ cmd: 'agent_list_directory', args: a => ({ path: a.path }) },
-    agent_read_file:     { cmd: 'agent_read_file',      args: a => ({ path: a.path }) },
+  agent_read_file: { cmd: 'agent_read_file', args: a => {
+    const result = { path: a.path };
+    if (a.offset !== undefined && a.offset !== null) result.offset = a.offset;
+    if (a.limit !== undefined && a.limit !== null) result.limit = a.limit;
+    return result;
+  }},
     agent_search_files:  { cmd: 'agent_search_files',   args: a => ({ path: a.path, query: a.query }) },
     read_governance_file:{ cmd: 'read_governance_file',  args: a => ({ fileName: a.fileName }) },
     get_cps_score:       { cmd: 'get_cps_score',         args: () => ({}) },
@@ -2198,21 +2404,100 @@ function getZoomLevel() {
 }
 
 function applyZoom(level) {
-	const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
-	const app = $('app');
-	if (app) {
-		app.style.transform = `scale(${clamped})`;
-		app.style.width = `${100 / clamped}vw`;
-		app.style.minHeight = `${100 / clamped}vh`;
-	}
-	const display = $('zoom-level');
-	if (display) display.textContent = `${Math.round(clamped * 100)}%`;
-	localStorage.setItem('archivist-zoom', clamped.toString());
+  const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
+  const app = $('app');
+  if (app) {
+    app.style.transform = `scale(${clamped})`;
+    app.style.width = `${100 / clamped}vw`;
+    app.style.height = `${100 / clamped}vh`;
+  }
+  const display = $('zoom-level');
+  if (display) display.textContent = `${Math.round(clamped * 100)}%`;
+  localStorage.setItem('archivist-zoom', clamped.toString());
 }
 
 function zoomIn() { applyZoom(getZoomLevel() + ZOOM_STEP); }
 function zoomOut() { applyZoom(getZoomLevel() - ZOOM_STEP); }
 function zoomReset() { applyZoom(ZOOM_DEFAULT); }
+
+// ─── Panel Resize Handles ─────────────────────────────────────────
+function initResizeHandles() {
+  const main = document.querySelector('main');
+  if (!main) return;
+
+  const SIDEBAR_MIN = 180;
+  const SIDEBAR_MAX = 600;
+  const EVIDENCE_MIN = 180;
+  const EVIDENCE_MAX = 700;
+
+  function getColumns() {
+    const style = getComputedStyle(main);
+    return style.gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
+  }
+
+  function setColumns(sidebarW, evidenceW) {
+    const centerW = Math.max(200, main.clientWidth - sidebarW - evidenceW - 10); // 10 = two 5px handles
+    main.style.gridTemplateColumns = `${sidebarW}px 5px ${centerW}px 5px ${evidenceW}px`;
+    localStorage.setItem('archivist-sidebar-width', sidebarW);
+    localStorage.setItem('archivist-evidence-width', evidenceW);
+  }
+
+  function setupHandle(handleId, side) {
+    const handle = $(handleId);
+    if (!handle) return;
+
+    let startX = 0;
+    let startWidth = 0;
+
+    handle.addEventListener('mousedown', e => {
+      e.preventDefault();
+      startX = e.clientX;
+      const cols = getColumns();
+      startWidth = side === 'left' ? cols[0] : cols[4];
+      handle.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+
+      function onMove(e2) {
+        const dx = e2.clientX - startX;
+        let newWidth;
+        if (side === 'left') {
+          newWidth = Math.max(SIDEBAR_MIN, Math.min(SIDEBAR_MAX, startWidth + dx));
+          const cols = getColumns();
+          setColumns(newWidth, cols[4]);
+        } else {
+          newWidth = Math.max(EVIDENCE_MIN, Math.min(EVIDENCE_MAX, startWidth - dx));
+          const cols = getColumns();
+          setColumns(cols[0], newWidth);
+        }
+      }
+
+      function onUp() {
+        handle.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  }
+
+  setupHandle('resize-left', 'left');
+  setupHandle('resize-right', 'right');
+
+  // Restore saved widths
+  const savedSidebar = localStorage.getItem('archivist-sidebar-width');
+  const savedEvidence = localStorage.getItem('archivist-evidence-width');
+  if (savedSidebar || savedEvidence) {
+    const cols = getColumns();
+    const sw = savedSidebar ? parseFloat(savedSidebar) : cols[0];
+    const ew = savedEvidence ? parseFloat(savedEvidence) : cols[4];
+    setColumns(sw, ew);
+  }
+}
 
 document.addEventListener('keydown', (e) => {
   if (e.ctrlKey && (e.key === '=' || e.key === '+')) { e.preventDefault(); zoomIn(); }
@@ -2224,6 +2509,14 @@ document.addEventListener('keydown', (e) => {
     const toolsPanel = $('tools-panel');
     if (toolsPanel && !toolsPanel.classList.contains('hidden')) {
       closeToolsPanel();
+    }
+    // Escape from lane detail panel returns to chat
+    const lanePanel = $('lane-detail-panel');
+    if (lanePanel && !lanePanel.classList.contains('hidden')) {
+      state.activeLane = null;
+      state.laneDetail = null;
+      renderLaneList();
+      showChatPanel();
     }
   }
 });
@@ -2260,9 +2553,16 @@ document.addEventListener('DOMContentLoaded', () => {
   if ($('btn-ev-refresh-patches')) $('btn-ev-refresh-patches').addEventListener('click', () => { invoke('get_patch_audit_log').then(renderEvidencePatches).catch(() => {}); });
   if ($('btn-ev-clear-patches')) $('btn-ev-clear-patches').addEventListener('click', () => { invoke('clear_patch_audit_log').then(() => { state.patchAuditLog = []; renderEvidencePatches([]); }).catch(() => {}); });
   if ($('btn-ev-refresh-reads')) $('btn-ev-refresh-reads').addEventListener('click', () => { invoke('get_read_audit_log').then(renderEvidenceReads).catch(() => {}); });
-  if ($('btn-ev-clear-reads')) $('btn-ev-clear-reads').addEventListener('click', () => { invoke('clear_read_audit_log').then(() => { state.readAuditLog = []; renderEvidenceReads([]); }).catch(() => {}); });
+if ($('btn-ev-clear-reads')) $('btn-ev-clear-reads').addEventListener('click', () => { invoke('clear_read_audit_log').then(() => { state.readAuditLog = []; renderEvidenceReads([]); }).catch(() => {}); });
 
-    // Chat event handlers
+// Lane sidebar click handler (delegated event on lane-list container)
+$('lane-list').addEventListener('click', event => {
+  const laneItem = event.target.closest('[data-lane]');
+  if (!laneItem) return;
+  handleLaneClick(laneItem.dataset.lane);
+});
+
+// Chat event handlers
     $('btn-chat-send').addEventListener('click', sendChatMessage);
     $('chat-input').addEventListener('keydown', event => {
       if (event.key === 'Enter' && !event.shiftKey) {
@@ -2397,6 +2697,9 @@ $('folder-path').addEventListener('keydown', event => {
         log(inTauri ? '✓ Running inside Tauri' : '⚠ Running in browser mode with mock read-only data', inTauri ? 'ok' : 'warn');
     }, 100);
 
-    log('UI ready. Analyze a folder to build a working map.', 'info');
-    setStatus('Ready', 'idle');
+log('UI ready. Analyze a folder to build a working map.', 'info');
+setStatus('Ready', 'idle');
+
+// Panel resize handles
+initResizeHandles();
 });

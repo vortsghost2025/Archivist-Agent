@@ -76,9 +76,11 @@
         <div class="section-label">Recent Folders</div>
         <div id="recent-folders" class="recent-folders" aria-live="polite"></div>
       </section>
-    </aside>
+</aside>
 
-    <!-- ═══ CENTER: Chat panel (primary view) ═══ -->
+<div class="resize-handle" id="resize-left" title="Drag to resize sidebar"></div>
+
+<!-- ═══ CENTER: Chat panel (primary view) ═══ -->
     <div id="center-panel">
       <div id="chat-panel">
         <div class="chat-layout">
@@ -166,8 +168,12 @@
         </div>
       </div>
 
-      <!-- Overlay: Tools panel (slides over chat when a non-chat tab is active) -->
-      <div id="tools-panel" class="hidden">
+  <!-- Overlay: Tools panel (slides over chat when a non-chat tab is active) -->
+  <div id="tools-panel" class="hidden">
+
+  <!-- Lane detail view (Phase 2: read-only lane switching) -->
+  <div id="lane-detail-panel" class="hidden">
+  </div>
         <div class="tools-panel-header">
           <nav id="tab-bar" role="tablist" aria-label="Tools tabs">
             <div class="tab" data-tab="overview" role="tab" aria-selected="false" tabindex="0">Overview</div>
@@ -280,8 +286,9 @@
       </div>
     </div>
 
-    <!-- ═══ RIGHT: Evidence panel ═══ -->
-    <aside id="evidence-panel">
+<!-- ═══ RIGHT: Evidence panel ═══ -->
+<div class="resize-handle" id="resize-right" title="Drag to resize evidence panel"></div>
+<aside id="evidence-panel">
       <div class="evidence-header">
         <h3>Evidence</h3>
         <button class="btn btn-ghost" id="btn-evidence-toggle" title="Toggle evidence panel (Ctrl+E)">📋</button>

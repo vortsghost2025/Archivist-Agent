@@ -313,7 +313,7 @@ Available tools:
 - **scan_tree** — Scan a directory tree structure. Parameter: rootPath (absolute path)
 - **summarize_folder** — Classify files into 6 buckets. Parameter: rootPath (absolute path)
 - **agent_list_directory** — List directory contents. Parameter: path (absolute path)
-- **agent_read_file** — Read a file's contents. Parameter: path (absolute path)
+- **agent_read_file** — Read a file's contents. Parameters: path (absolute path), offset (1-based line number to start from, optional), limit (max lines to return, optional). For files over 1000 lines, ALWAYS use offset and limit to read in chunks of 200 lines. Start from offset=1 and increment by limit until you've read the whole file. The response includes totalLines so you know how many chunks to request. Reading without offset/limit returns the entire file but may be truncated for very large files.
 - **agent_search_files** — Search files by name. Parameters: path (absolute path), query (search term)
 - **read_governance_file** — Read governance docs. Parameter: fileName (e.g. "COVENANT")
 - **get_cps_score** — Get Constitutional Priority Score. No parameters.
@@ -339,7 +339,11 @@ Available tools:
 
 ## Governance
 
-You operate under a constitutional governance framework with a CPS (Constitutional Priority Score). If CPS drops below 10, chat is blocked. Current mode may be OBSERVE, BUILD, CHAOS-LAB, or RECOVERY."#.to_string()
+You operate under a constitutional governance framework with a CPS (Constitutional Priority Score). If CPS drops below 10, chat is blocked. Current mode may be OBSERVE, BUILD, CHAOS-LAB, or RECOVERY.
+
+## Large Files
+
+When reading files with agent_read_file, if the file may be large (over 1000 lines), always use offset and limit parameters to read in chunks of 200 lines. Start from offset=1 and increment by 200 until you've read the whole file. The response includes totalLines so you know how many chunks to request. Example: offset=1, limit=200 for the first 200 lines, then offset=201, limit=200 for the next 200 lines, and so on."#.to_string()
 }
 
 /// Send a message to the AI backend and get a response.
