@@ -29,7 +29,10 @@ use generate_handoff::generate_handoff;
 use governance::{
     check_read_only, git_status, read_governance_file, run_script, run_sovereignty_enforcer,
 };
-use patch::{apply_patch, clear_patch_audit_log, get_patch_audit_log, propose_patch, reject_patch};
+use patch::{
+    apply_patch, clear_patch_audit_log, confirm_patch_applied, get_patch_audit_log, propose_patch,
+    reject_patch,
+};
 use scan_tree::scan_tree;
 use sign_message::sign_message;
 use summarize_folder::summarize_folder;
@@ -79,6 +82,7 @@ pub fn run() {
             propose_patch,
             apply_patch,
             reject_patch,
+            confirm_patch_applied,
             get_patch_audit_log,
             clear_patch_audit_log,
         ])

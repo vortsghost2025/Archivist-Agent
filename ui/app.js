@@ -1069,41 +1069,71 @@ function clearChat() {
 // ── Patch Review Actions ──────────────────────────────────────────────
 
 async function applyPatch(proposalId) {
-  if (!proposalId) {
-    log('No proposal ID provided for apply.', 'err');
-    return;
-  }
-  try {
-    // Step 1: Rust validates the proposal, checks hashes, and returns the content to write.
-    // The Rust side does NOT write the file — it returns {filePath, content, success, ...}.
-    const result = await invoke('apply_patch', { proposalId });
-    if (!result.success) {
-      log(`Patch apply validation failed: ${result.detail}`, 'err');
-      addChatMessage('system', `✗ Patch apply failed: ${result.detail}`);
-      renderChat();
-      return;
+    if (!proposalId) {
+        log('No proposal ID provided for apply.', 'err');
+        return;
     }
-
-    // Step 2: Write the file via Tauri's fs plugin from JS.
-    // This goes through Tauri's scope-checking command layer, which returns
-    // errors gracefully (never aborts the process). Direct Rust fs::write()
-    // and Fs::open() both bypass scope checking on desktop and can cause aborts.
     try {
-      const { writeTextFile } = window.__TAURI__.fs;
-      await writeTextFile({ path: result.filePath, contents: result.content });
-      log(`Patch applied: ${result.filePath} — ${result.detail}`, 'ok');
-      addChatMessage('system', `✓ Patch applied to ${result.filePath}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
-    } catch (writeErr) {
-      const writeErrMsg = (typeof writeErr === 'string') ? writeErr : (writeErr?.message || String(writeErr));
-      log(`Patch write failed: ${writeErrMsg}`, 'err');
-      addChatMessage('system', `✗ Patch validated but write failed: ${writeErrMsg}. The file was not modified.`);
+        // Step 1: Rust validates the proposal, checks hashes, and returns the content to write.
+        // The Rust side does NOT write the file — it returns {filePath, content, success, ...}.
+        const result = await invoke('apply_patch', { proposalId });
+        if (!result.success) {
+            log(`Patch apply validation failed: ${result.detail}`, 'err');
+            addChatMessage('system', `✗ Patch apply failed: ${result.detail}`);
+            renderChat();
+            return;
+        }
+
+        // Step 2: Create parent directory if needed (via Tauri's scope-checked mkdir).
+        // Rust no longer calls fs::create_dir_all — that bypasses scope checking
+        // and can cause process aborts (same class of bug as the original fs::write crash).
+        if (result.needsMkdir && result.parentDir) {
+            try {
+                const { mkdir } = window.__TAURI__.fs;
+                await mkdir(result.parentDir, { recursive: true });
+                log(`Created parent directory: ${result.parentDir}`, 'info');
+            } catch (mkdirErr) {
+                const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
+                log(`Patch mkdir failed: ${mkdirErrMsg}`, 'err');
+                addChatMessage('system', `✗ Patch validated but directory creation failed: ${mkdirErrMsg}. The file was not modified.`);
+                renderChat();
+                return;
+            }
+        }
+
+        // Step 3: Write the file via Tauri's fs plugin from JS.
+        // This goes through Tauri's scope-checking command layer, which returns
+        // errors gracefully (never aborts the process).
+        try {
+            const { writeTextFile } = window.__TAURI__.fs;
+            await writeTextFile({ path: result.filePath, contents: result.content });
+            log(`Patch applied: ${result.filePath} — ${result.detail}`, 'ok');
+            addChatMessage('system', `✓ Patch applied to ${result.filePath}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+
+            // Step 4: Confirm the write to Rust for audit trail completion.
+            // This logs "applied" (vs "approved") so we can distinguish
+            // "Rust validated" from "JS actually wrote the file".
+            try {
+                await invoke('confirm_patch_applied', {
+                    proposalId: proposalId,
+                    filePath: result.filePath,
+                    readOnlyOverridden: result.readOnlyOverridden || false
+                });
+            } catch (confirmErr) {
+                // Non-fatal — the file was already written; this is just audit logging
+                log(`Patch applied but audit confirmation failed: ${(typeof confirmErr === 'string') ? confirmErr : (confirmErr?.message || String(confirmErr))}`, 'warn');
+            }
+        } catch (writeErr) {
+            const writeErrMsg = (typeof writeErr === 'string') ? writeErr : (writeErr?.message || String(writeErr));
+            log(`Patch write failed: ${writeErrMsg}`, 'err');
+            addChatMessage('system', `✗ Patch validated but write failed: ${writeErrMsg}. The file was not modified.`);
+        }
+    } catch (e) {
+        const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
+        log(`Patch apply error: ${errMsg}`, 'err');
+        addChatMessage('system', `✗ Patch apply error: ${errMsg}`);
     }
-  } catch (e) {
-    const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
-    log(`Patch apply error: ${errMsg}`, 'err');
-    addChatMessage('system', `✗ Patch apply error: ${errMsg}`);
-  }
-  renderChat();
+    renderChat();
 }
 
 async function rejectPatch(proposalId) {

@@ -355,6 +355,14 @@ pub struct ApplyPatchResponse {
     pub success: bool,
     pub detail: String,
     pub read_only_overridden: bool,
+    /// If true, the parent directory doesn't exist yet and JS must create it
+    /// via window.__TAURI__.fs.mkdir() before calling writeTextFile.
+    /// Rust does NOT create directories directly because std::fs::create_dir_all
+    /// bypasses Tauri's scope-checking command layer and can cause process aborts
+    /// (same class of bug as the original fs::write() crash).
+    pub needs_mkdir: bool,
+    /// The parent directory path that JS must create if needs_mkdir is true.
+    pub parent_dir: Option<String>,
 }
 
 /// Apply a previously proposed patch. This is called when the user clicks
@@ -424,13 +432,19 @@ pub fn apply_patch(proposal_id: String) -> Result<ApplyPatchResponse, String> {
     let read_only = safety::check_read_only().is_err();
     let read_only_overridden = read_only;
 
-    // 6. Ensure parent directory exists
-    if let Some(parent) = path.parent() {
+    // 6. Check if parent directory needs to be created.
+    // We do NOT call fs::create_dir_all here — that bypasses Tauri's scope-checking
+    // command layer and can cause process aborts (same class of bug as fs::write).
+    // Instead, we signal to JS that it needs to call window.__TAURI__.fs.mkdir().
+    let (needs_mkdir, parent_dir) = if let Some(parent) = path.parent() {
         if !parent.exists() {
-            fs::create_dir_all(parent)
-                .map_err(|e| format!("Failed to create parent directory: {}", e))?;
+            (true, Some(parent.to_string_lossy().to_string()))
+        } else {
+            (false, None)
         }
-    }
+    } else {
+        (false, None)
+    };
 
     // 7. Remove from pending (validation passed — content will be written by JS)
     remove_pending_proposal(&proposal_id);
@@ -441,8 +455,9 @@ pub fn apply_patch(proposal_id: String) -> Result<ApplyPatchResponse, String> {
         &proposal.file_path,
         "approved",
         Some(format!(
-            "Validation passed ({} bytes to write) — awaiting JS writeTextFile",
-            proposal.patch_content.len()
+            "Validation passed ({} bytes to write){} — awaiting JS writeTextFile",
+            proposal.patch_content.len(),
+            if needs_mkdir { " [needs mkdir]" } else { "" }
         )),
         read_only_overridden,
     );
@@ -452,8 +467,13 @@ pub fn apply_patch(proposal_id: String) -> Result<ApplyPatchResponse, String> {
         content: proposal.patch_content.clone(),
         success: true,
         detail: format!(
-            "Patch validated ({} bytes to write){}",
+            "Patch validated ({} bytes to write){}{}",
             proposal.patch_content.len(),
+            if needs_mkdir {
+                " [parent dir needs creation]"
+            } else {
+                ""
+            },
             if read_only_overridden {
                 " [read-only override — operator consent]"
             } else {
@@ -461,6 +481,8 @@ pub fn apply_patch(proposal_id: String) -> Result<ApplyPatchResponse, String> {
             }
         ),
         read_only_overridden,
+        needs_mkdir,
+        parent_dir,
     })
 }
 
@@ -481,6 +503,28 @@ pub fn reject_patch(proposal_id: String) -> Result<String, String> {
     remove_pending_proposal(&proposal_id);
 
     Ok(format!("Patch {} rejected and removed.", proposal_id))
+}
+
+/// Confirm that a patch was successfully applied by the JS side.
+/// Called after window.__TAURI__.fs.writeTextFile() succeeds.
+/// This completes the audit trail: "approved" (Rust validation) → "applied" (JS write confirmed).
+#[tauri::command]
+pub fn confirm_patch_applied(
+    proposal_id: String,
+    file_path: String,
+    read_only_overridden: bool,
+) -> Result<String, String> {
+    record_patch_audit(
+        &proposal_id,
+        &file_path,
+        "applied",
+        Some("JS writeTextFile confirmed".to_string()),
+        read_only_overridden,
+    );
+    Ok(format!(
+        "Patch {} applied confirmation recorded.",
+        proposal_id
+    ))
 }
 
 // ── Utility ──────────────────────────────────────────────────────────
