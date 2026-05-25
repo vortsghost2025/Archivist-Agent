@@ -118,19 +118,79 @@ header h1 {
 }
 
 main {
-    display: grid;
-    grid-template-columns: 328px 1fr;
-    min-height: 0;
+  display: grid;
+  grid-template-columns: 328px 1fr;
+  min-height: 0;
+  position: relative;
+  transition: grid-template-columns 0.25s ease;
+}
+
+main.sidebar-collapsed {
+  grid-template-columns: 0px 1fr;
 }
 
 #sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 20px;
-    background: rgba(9, 19, 28, 0.78);
-    border-right: 1px solid var(--border);
-    overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background: rgba(9, 19, 28, 0.78);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  transition: padding 0.25s ease, gap 0.25s ease, overflow 0.25s ease;
+}
+
+main.sidebar-collapsed #sidebar {
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  border-right: none;
+}
+
+/* Chat panel: primary view, fills the right side of main */
+#chat-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Tools panel: overlays the chat panel when a non-chat tab is active */
+#tools-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  min-height: 0;
+  overflow: hidden;
+}
+
+#tools-panel.hidden {
+  display: none;
+}
+
+.tools-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8, 18, 27, 0.7);
+}
+
+.tools-close-btn {
+  margin-right: 18px;
+  white-space: nowrap;
+  font-size: 12px;
 }
 
 .section-card {
@@ -332,19 +392,11 @@ main {
     word-break: break-all;
 }
 
-#content {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    overflow: hidden;
-}
-
 #tab-bar {
-    display: flex;
-    gap: 6px;
-    padding: 14px 20px 0;
-    background: rgba(8, 18, 27, 0.7);
-    border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 6px;
+  padding: 14px 20px 0;
+  background: transparent;
 }
 
 .tab {
@@ -1063,18 +1115,29 @@ footer {
 }
 
 @media (max-width: 1080px) {
-    main {
-        grid-template-columns: 1fr;
-    }
+  main {
+    grid-template-columns: 1fr;
+  }
 
-    #sidebar {
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-    }
+  main.sidebar-collapsed {
+    grid-template-columns: 1fr;
+  }
 
-    .retrieve-toolbar {
-        grid-template-columns: 1fr;
-    }
+  #sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 260px;
+  }
+
+  main.sidebar-collapsed #sidebar {
+    max-height: 0;
+    padding: 0;
+    border-bottom: none;
+  }
+
+  .retrieve-toolbar {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 720px) {
@@ -1105,21 +1168,14 @@ footer {
     }
 }
 
-/* ─── Chat Tab ──────────────────────────────────────────────────── */
-
-#tab-chat {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  padding: 0;
-}
+/* ─── Chat Panel Layout ──────────────────────────────────────── */
+/* #chat-panel rules consolidated at top of file (line ~151) */
 
 .chat-layout {
   display: flex;
   flex-direction: row;
-  height: 100%;
-  min-height: 480px;
+  flex: 1;
+  min-height: 0;
   gap: 0;
 }
 
@@ -1222,15 +1278,6 @@ footer {
 .helper-text.success {
   color: #4caf50;
 }
-.model-select-row select {
-  flex: 1;
-}
-.btn-fetch-models {
-  white-space: nowrap;
-  flex-shrink: 0;
-} {
-  flex: 1;
-}
 
 .chat-settings-actions {
   display: flex;
@@ -1249,6 +1296,7 @@ footer {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  min-height: 0;
   background: linear-gradient(180deg, rgba(12, 28, 39, 0.6), rgba(7, 17, 24, 0.8));
 }
 
@@ -1407,6 +1455,105 @@ footer {
   text-align: right;
 }
 
+/* ── Tool-call UI ────────────────────────────────────────── */
+
+.chat-msg-tool {
+  align-self: flex-start;
+  max-width: 85%;
+}
+
+.chat-tool-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px 8px 0 0;
+  background: rgba(141, 225, 255, 0.06);
+  border: 1px solid rgba(141, 225, 255, 0.15);
+  border-bottom: none;
+  cursor: pointer;
+  font-size: 12px;
+  user-select: none;
+}
+
+.chat-tool-header:hover {
+  background: rgba(141, 225, 255, 0.12);
+}
+
+.chat-tool-label {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.chat-tool-id {
+  color: var(--text-muted);
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 11px;
+}
+
+.chat-tool-toggle {
+  color: var(--text-muted);
+  font-size: 11px;
+  margin-left: auto;
+}
+
+.chat-tool-detail {
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border);
+  border-top: none;
+  overflow-x: auto;
+  max-height: 400px;
+}
+
+.chat-tool-detail.collapsed {
+  display: none;
+}
+
+.chat-tool-detail pre {
+  margin: 0;
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.chat-tool-preview {
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-tool-preview code {
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.chat-tool-calls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  background: rgba(141, 225, 255, 0.04);
+  border: 1px solid rgba(141, 225, 255, 0.1);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.chat-tool-call {
+  color: var(--accent);
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 12px;
+}
+
 .chat-msg-thinking {
   display: flex;
   gap: 6px;
@@ -1473,6 +1620,120 @@ footer {
   font-size: 14px;
 }
 
+/* ─── Read Audit Panel ─────────────────────────────────────────── */
+
+.read-audit-panel {
+  border-bottom: 1px solid var(--border);
+  background: rgba(8, 18, 27, 0.85);
+  max-height: 200px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.read-audit-panel.hidden {
+  display: none;
+}
+
+.read-audit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(4, 14, 22, 0.6);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.read-audit-header h4 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.read-audit-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.read-audit-count {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: "Cascadia Code", "Consolas", monospace;
+}
+
+.btn-sm {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.read-audit-entries {
+  padding: 6px 18px;
+}
+
+.read-audit-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 12px 0;
+  margin: 0;
+}
+
+.read-audit-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 12px;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  line-height: 1.5;
+}
+
+.read-audit-icon {
+  flex-shrink: 0;
+  width: 16px;
+  text-align: center;
+}
+
+.read-audit-time {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 10px;
+  min-width: 70px;
+}
+
+.read-audit-path {
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 400px;
+}
+
+.read-audit-detail {
+  color: var(--text-muted);
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.audit-success .read-audit-icon { color: var(--success); }
+.audit-success .read-audit-path { color: var(--text-primary); }
+
+.audit-blocked .read-audit-icon { color: var(--error); }
+.audit-blocked .read-audit-path { color: var(--error); text-decoration: line-through; opacity: 0.7; }
+.audit-blocked .read-audit-detail { color: var(--error); }
+
+.audit-error .read-audit-icon { color: var(--warning); }
+.audit-error .read-audit-path { color: var(--warning); opacity: 0.8; }
+
 @media (max-width: 1080px) {
   .chat-settings.visible {
     width: 280px;
@@ -1518,6 +1779,141 @@ footer {
   .chat-settings {
     transition: none;
   }
+}
+
+/* ─── Patch Review UI ─────────────────────────────────────────── */
+
+.patch-review {
+  background: rgba(141, 225, 255, 0.06);
+  border: 2px solid rgba(79, 195, 247, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 8px 0;
+  box-shadow: 0 0 16px rgba(79, 195, 247, 0.1);
+  position: relative;
+}
+
+.patch-review-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(79, 195, 247, 0.08);
+  border-bottom: 1px solid rgba(79, 195, 247, 0.2);
+  flex-wrap: wrap;
+}
+
+.patch-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.patch-label {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-strong);
+  text-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
+}
+
+.patch-file-path {
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 14px;
+  color: var(--accent-strong);
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 360px;
+}
+
+.patch-lines-info {
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.patch-diff-view {
+  max-height: 260px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid var(--border);
+}
+
+.patch-diff-view pre {
+  font-family: "Cascadia Code", "Fira Code", monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 12px 16px;
+  margin: 0;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.patch-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(4, 14, 22, 0.5);
+  border-top: 1px solid rgba(79, 195, 247, 0.15);
+}
+
+.patch-btn {
+  padding: 10px 24px;
+  border: 2px solid;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  font-family: "Segoe UI Variable", "Aptos", "Segoe UI", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.patch-btn:active {
+  transform: scale(0.97);
+}
+
+.patch-btn:focus-visible {
+  outline: 3px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+.patch-btn-apply {
+  background: rgba(86, 208, 139, 0.18);
+  color: #56d08b;
+  border-color: rgba(86, 208, 139, 0.5);
+  text-shadow: 0 0 8px rgba(86, 208, 139, 0.3);
+}
+
+.patch-btn-apply:hover {
+  background: rgba(86, 208, 139, 0.3);
+  border-color: rgba(86, 208, 139, 0.7);
+}
+
+.patch-btn-reject {
+  background: rgba(255, 127, 127, 0.12);
+  color: #ff7f7f;
+  border-color: rgba(255, 127, 127, 0.35);
+  text-shadow: 0 0 8px rgba(255, 127, 127, 0.2);
+}
+
+.patch-btn-reject:hover {
+  background: rgba(255, 127, 127, 0.24);
+  border-color: rgba(255, 127, 127, 0.55);
+}
+
+.patch-proposal-id {
+  font-family: "Cascadia Code", "Consolas", monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-left: auto;
+  opacity: 0.5;
 }
 
 /* ─── End Chat Tab ──────────────────────────────────────────────── */

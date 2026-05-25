@@ -2,7 +2,7 @@
 
 const RECENT_PATHS_KEY = 'archivist.recentPaths.v1';
 const MAX_RECENT_PATHS = 6;
-const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'governance', 'chat'];
+const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'governance'];
 const TREE_LINE_LIMIT = 420;
 
 const BUCKET_ORDER = ['Runtime', 'Interface', 'Memory', 'Verification', 'Research', 'Unknown'];
@@ -173,7 +173,7 @@ const invoke = (() => {
 
     return async (cmd, args = {}) => {
         const root = args.rootPath || args.root || args.path || 'C:\\Demo\\Archivist';
-  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models'];
+  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log'];
 
   if (readOnlyCommands.includes(cmd)) {
     console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
@@ -204,21 +204,23 @@ const invoke = (() => {
     if (cmd === 'check_read_only') {
       return { read_only: true, allowed_roots: ['S:/Archivist-Agent', 'S:/kernel-lane', 'S:/SwarmMind', 'S:/self-organizing-library'], blocked_roots: [] };
     }
-    if (cmd === 'chat_send') {
-      const userMsg = args.request?.messages?.filter(m => m.role === 'user').pop();
-      const question = userMsg?.content || '(empty)';
-      return {
-        reply: `[Browser Mock] You said: "${question}"\n\nThis is a mock response. The real backend requires Tauri + an API key to call the AI model.`,
-        model: args.request?.model || 'mock-model',
-        usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
-        governance: {
-          cps_passing: true,
-          mode: 'OBSERVE',
-          chat_allowed: true,
-          warnings: ['Running in browser mock mode — no governance enforcement.']
-        }
-      };
-    }
+  if (cmd === 'chat_send') {
+    const userMsg = args.request?.messages?.filter(m => m.role === 'user').pop();
+    const question = userMsg?.content || '(empty)';
+    return {
+      reply: `[Browser Mock] You said: "${question}"\n\nThis is a mock response. The real backend requires Tauri + an API key to call the AI model.`,
+      model: args.request?.model || 'mock-model',
+      usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+      toolCalls: null,
+      finishReason: 'stop',
+      governance: {
+        cps_passing: true,
+        mode: 'OBSERVE',
+        chat_allowed: true,
+        warnings: ['Running in browser mock mode — no governance enforcement.']
+      }
+    };
+  }
     if (cmd === 'save_agent_config') {
       try {
         window.localStorage.setItem('archivist.chatConfig.mock', JSON.stringify(args));
@@ -240,17 +242,72 @@ const invoke = (() => {
             } catch (_) { /* ignore */ }
             return mockConfig;
           }
-          if (cmd === 'fetch_models') {
-            return [
-              { id: 'meta/llama-3.3-70b-instruct', owned_by: 'meta' },
-              { id: 'meta/llama-3.1-8b-instruct', owned_by: 'meta' },
-              { id: 'nvidia/llama-3.1-nemotron-70b-instruct', owned_by: 'nvidia' },
-              { id: 'mistralai/mixtral-8x7b-instruct-v0.1', owned_by: 'mistralai' },
-              { id: 'google/gemma-2-9b-it', owned_by: 'google' },
-            ];
+    if (cmd === 'fetch_models') {
+    return [
+    { id: 'meta/llama-3.3-70b-instruct', owned_by: 'meta' },
+    { id: 'meta/llama-3.1-8b-instruct', owned_by: 'meta' },
+    { id: 'nvidia/llama-3.1-nemotron-70b-instruct', owned_by: 'nvidia' },
+    { id: 'mistralai/mixtral-8x7b-instruct-v0.1', owned_by: 'mistralai' },
+    { id: 'google/gemma-2-9b-it', owned_by: 'google' },
+    ];
+    }
+    if (cmd === 'agent_read_file') {
+    const p = args.path || '';
+    if (p.includes('.env') || p.includes('.git') || p.includes('.pem') || p.includes('.key')) {
+    throw new Error('Secret/sensitive path blocked: ' + p);
+    }
+    return { path: p, content: '[Browser Mock] File content would appear here.', size_bytes: 42, truncated: false };
+    }
+    if (cmd === 'agent_list_directory') {
+    const p = args.path || 'S:/Archivist-Agent';
+    return [
+    { name: 'src-tauri', path: p + '/src-tauri', is_dir: true, size_bytes: 0, extension: null },
+    { name: 'ui', path: p + '/ui', is_dir: true, size_bytes: 0, extension: null },
+    { name: 'README.md', path: p + '/README.md', is_dir: false, size_bytes: 1244, extension: 'md' },
+    { name: 'BOOTSTRAP.md', path: p + '/BOOTSTRAP.md', is_dir: false, size_bytes: 2800, extension: 'md' },
+    ];
+    }
+    if (cmd === 'agent_search_files') {
+    const q = args.query || '';
+    const p = args.path || 'S:/Archivist-Agent';
+    return [
+    { name: q + '_match.rs', path: p + '/src-tauri/src/' + q + '_match.rs', is_dir: false, size_bytes: 512, extension: 'rs' },
+    ];
+    }
+if (cmd === 'get_read_audit_log') {
+            return state.readAuditLog || [];
           }
-    return null;
-  }
+          if (cmd === 'clear_read_audit_log') {
+            state.readAuditLog = [];
+            return true;
+          }
+          if (cmd === 'propose_patch') {
+            const fp = args.filePath || 'unknown.txt';
+            const fakeId = 'mock-' + Date.now().toString(36);
+            return {
+              proposalId: fakeId,
+              filePath: fp,
+              diff: '--- a/' + fp.split(/[\\/]/).pop() + '\n+++ b/' + fp.split(/[\\/]/).pop() + '\n@@ -1,1 +1,1 @@\n-old line\n+new line',
+              linesAdded: 1,
+              linesRemoved: 1,
+              originalHash: 'deadbeef'
+            };
+          }
+          if (cmd === 'apply_patch') {
+            return { filePath: 'mock.txt', success: true, detail: 'Patch applied (browser mock).', readOnlyOverridden: false };
+          }
+          if (cmd === 'reject_patch') {
+            return true;
+          }
+          if (cmd === 'get_patch_audit_log') {
+            return state.patchAuditLog || [];
+          }
+          if (cmd === 'clear_patch_audit_log') {
+            state.patchAuditLog = [];
+            return true;
+          }
+          return null;
+        }
 
         const mutatingCommands = ['build_index', 'generate_handoff', 'build_registry'];
         if (mutatingCommands.includes(cmd)) {
@@ -264,21 +321,24 @@ const invoke = (() => {
 })();
 
 const state = {
-    currentPath: '',
-    scanResult: null,
-    summaryResult: null,
-    activeTab: 'chat',
-    logEntries: [],
-    isWorking: false,
-    searchQuery: '',
-    bucketFilter: 'all',
+  currentPath: '',
+  scanResult: null,
+  summaryResult: null,
+  activeTab: 'chat',
+  logEntries: [],
+  isWorking: false,
+  searchQuery: '',
+  bucketFilter: 'all',
   recentPaths: loadRecentPaths(),
   lastAnalyzedAt: null,
   governanceLoaded: false,
   chatMessages: [],
   chatConfig: null,
   chatLoading: false,
-  chatSettingsOpen: false
+  chatSettingsOpen: false,
+  readAuditOpen: false,
+  readAuditLog: [],
+  patchAuditLog: []
 };
 
 const $ = id => document.getElementById(id);
@@ -352,20 +412,51 @@ function setStatus(text, type = 'idle') {
 
 function switchTab(tabName) {
   state.activeTab = tabName;
-  document.querySelectorAll('.tab').forEach(tab => {
+
+  const toolsPanel = $('tools-panel');
+  const chatPanel = $('chat-panel');
+
+  if (tabName === 'chat') {
+    // Chat is the primary view — hide the tools overlay
+    if (toolsPanel) toolsPanel.classList.add('hidden');
+    renderChat();
+    return;
+  }
+
+  // Show tools overlay for non-chat tabs
+  if (toolsPanel) toolsPanel.classList.remove('hidden');
+
+  document.querySelectorAll('#tab-bar .tab').forEach(tab => {
     const isActive = tab.dataset.tab === tabName;
     tab.classList.toggle('active', isActive);
     tab.setAttribute('aria-selected', String(isActive));
   });
   TAB_NAMES.forEach(name => {
-    $(`tab-${name}`).classList.toggle('hidden', name !== tabName);
+    const el = $(`tab-${name}`);
+    if (el) el.classList.toggle('hidden', name !== tabName);
   });
   $('welcome').classList.add('hidden');
   if (tabName === 'tree') renderTreePanel();
   if (tabName === 'overview') renderOverview();
   if (tabName === 'retrieve') renderRetrieve();
   if (tabName === 'governance') renderGovernance();
-  if (tabName === 'chat') renderChat();
+}
+
+function closeToolsPanel() {
+  switchTab('chat');
+}
+
+function toggleSidebar() {
+  const main = document.querySelector('main');
+  if (main) {
+    main.classList.toggle('sidebar-collapsed');
+    const isCollapsed = main.classList.contains('sidebar-collapsed');
+    const btn = $('btn-sidebar-toggle');
+    if (btn) {
+      btn.textContent = isCollapsed ? '☰ Sidebar' : '☰ Hide';
+    }
+    localStorage.setItem('archivist-sidebar-collapsed', isCollapsed ? '1' : '0');
+  }
 }
 
 async function renderGovernance() {
@@ -508,21 +599,98 @@ function renderChat() {
   for (const msg of state.chatMessages) {
     const isUser = msg.role === 'user';
     const isSystem = msg.role === 'system';
+    const isTool = msg.role === 'tool';
     const timeStr = msg.timestamp
       ? new Date(msg.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
       : '';
 
     if (isSystem) {
-      html += `<div class="chat-msg-system">${escapeHtml(msg.content)}</div>`;
+      html += `<div class="chat-msg-system">${escapeHtml(msg.content || '')}</div>`;
+ } else if (isTool) {
+      // Tool result message — collapsible block
+      const id = msg.toolCallId || 'unknown';
+      const preview = escapeHtml(msg.content || '').substring(0, 200);
+      const fullContent = escapeHtml(msg.content || '');
+
+        // Check if this is a propose_patch result with a proposalId
+        // Defensive: only render patch card if proposalId is a non-empty string
+        let patchUI = '';
+        try {
+            if (msg.proposalId && typeof msg.proposalId === 'string' && msg.proposalId.length > 0) {
+                const diffHtml = escapeHtml(msg.diff || msg.content || '(no diff available)');
+                const safeProposalId = escapeHtml(msg.proposalId);
+                const safeFilePath = escapeHtml(msg.patchFilePath || 'unknown');
+                const linesInfo = (typeof msg.linesAdded === 'number' && typeof msg.linesRemoved === 'number')
+                    ? `+${msg.linesAdded} -${msg.linesRemoved} lines`
+                    : '';
+                patchUI = `
+                <div class="patch-review" role="region" aria-label="Patch review - apply or reject">
+                    <div class="patch-review-header">
+                        <span class="patch-icon">📝</span>
+                        <strong class="patch-label">PATCH PROPOSAL</strong>
+                        <span class="patch-file-path">${safeFilePath}</span>
+                        <span class="patch-lines-info">${escapeHtml(linesInfo)}</span>
+                    </div>
+                    <div class="patch-diff-view"><pre>${diffHtml}</pre></div>
+                    <div class="patch-actions">
+                        <button class="patch-btn patch-btn-apply" type="button" onclick="applyPatch('${safeProposalId}')">✓ Apply Patch</button>
+                        <button class="patch-btn patch-btn-reject" type="button" onclick="rejectPatch('${safeProposalId}')">✗ Reject</button>
+                        <span class="patch-proposal-id">ID: ${safeProposalId}</span>
+                    </div>
+                </div>
+                `;
+            }
+        } catch (patchRenderErr) {
+            log('Patch review card render error — falling back to generic tool result: ' + patchRenderErr, 'err');
+            patchUI = '';
+        }
+
+        html += `
+<div class="chat-msg chat-msg-tool">
+  <div class="chat-msg-avatar">⚙️</div>
+  <div class="chat-msg-body">
+    ${patchUI ? patchUI : `
+    <div class="chat-tool-header" onclick="this.parentElement.querySelector('.chat-tool-detail').classList.toggle('collapsed')">
+      <span class="chat-tool-label">Tool result</span>
+      <span class="chat-tool-id">${escapeHtml(id.substring(0, 16))}</span>
+      <span class="chat-tool-toggle">▶ click to expand</span>
+    </div>
+    <div class="chat-tool-detail collapsed"><pre>${fullContent}</pre></div>
+    <div class="chat-tool-preview"><code>${preview}${(msg.content || '').length > 200 ? '…' : ''}</code></div>
+    `}
+    <div class="chat-msg-time">${escapeHtml(timeStr)}</div>
+  </div>
+</div>
+`;
+    } else if (msg.toolCalls && msg.toolCalls.length > 0) {
+      // Assistant message with tool invocations
+      const textContent = msg.content || '';
+      const callSummaries = msg.toolCalls.map(tc => {
+        const name = tc.function?.name || 'unknown';
+        const args = tc.function?.arguments || '{}';
+        let shortArgs = args;
+        try { shortArgs = Object.keys(JSON.parse(args)).join(', '); } catch(_) {}
+        return `<div class="chat-tool-call">▸ <strong>${escapeHtml(name)}</strong>(${escapeHtml(shortArgs)})</div>`;
+      }).join('');
+      html += `
+      <div class="chat-msg chat-msg-assistant">
+        <div class="chat-msg-avatar">🤖</div>
+        <div class="chat-msg-body">
+          ${textContent ? `<div class="chat-msg-content">${escapeHtml(textContent)}</div>` : ''}
+          <div class="chat-tool-calls">${callSummaries}</div>
+          <div class="chat-msg-time">${escapeHtml(timeStr)}</div>
+        </div>
+      </div>
+      `;
     } else {
       html += `
-        <div class="chat-msg ${isUser ? 'chat-msg-user' : 'chat-msg-assistant'}">
-          <div class="chat-msg-avatar">${isUser ? '👤' : '🤖'}</div>
-          <div class="chat-msg-body">
-            <div class="chat-msg-content">${escapeHtml(msg.content)}</div>
-            <div class="chat-msg-time">${escapeHtml(timeStr)}</div>
-          </div>
+      <div class="chat-msg ${isUser ? 'chat-msg-user' : 'chat-msg-assistant'}">
+        <div class="chat-msg-avatar">${isUser ? '👤' : '🤖'}</div>
+        <div class="chat-msg-body">
+          <div class="chat-msg-content">${escapeHtml(msg.content || '')}</div>
+          <div class="chat-msg-time">${escapeHtml(timeStr)}</div>
         </div>
+      </div>
       `;
     }
   }
@@ -544,6 +712,12 @@ function renderChat() {
 
   messagesEl.innerHTML = html;
   messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  // Auto-scroll to any patch review card so the Apply/Reject buttons are visible
+  const patchCard = messagesEl.querySelector('.patch-review');
+  if (patchCard) {
+    patchCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 }
 
 async function loadChatConfig() {
@@ -614,7 +788,7 @@ async function fetchModels() {
     // Placeholder
     const placeholder = document.createElement('option');
     placeholder.value = '';
-    placeholder.textContent = `— ${models.length} models available —`;
+        placeholder.textContent = `— ${models.length} chat-ready models —`;
     selectEl.appendChild(placeholder);
 
     // Add each model
@@ -632,8 +806,8 @@ async function fetchModels() {
       selectEl.selectedIndex = 1;
     }
 
-    if (statusEl) { statusEl.textContent = `✓ ${models.length} models loaded.`; statusEl.className = 'helper-text success'; }
-    log(`Fetched ${models.length} models from endpoint.`, 'ok');
+        if (statusEl) { statusEl.textContent = `✓ ${models.length} chat-ready models loaded (filtered from full list).`; statusEl.className = 'helper-text success'; }
+        log(`Fetched ${models.length} chat-ready models from endpoint.`, 'ok');
   } catch (e) {
     if (statusEl) { statusEl.textContent = '✗ ' + e.message; statusEl.className = 'helper-text error'; }
     log('Failed to fetch models: ' + e.message, 'err');
@@ -693,55 +867,197 @@ async function sendChatMessage() {
   addChatMessage('user', text);
   inputEl.value = '';
   state.chatLoading = true;
-  renderChat();
 
   try {
     const apiKey = $('chat-api-key')?.value.trim();
     const endpoint = $('chat-endpoint')?.value.trim() || null;
-  const model = $('chat-model')?.value || null;
+    const model = $('chat-model')?.value || null;
 
-    // Build messages array (include system prompt if first message, then all messages)
-    const messages = state.chatMessages
-      .filter(m => m.role !== 'system')
-      .map(m => ({ role: m.role, content: m.content }));
+    // ── Agentic tool-call loop ──────────────────────────────────
+    // The model may return tool_calls in its response. When it does,
+    // we execute each tool via Tauri invoke(), add the results as
+    // tool-role messages, and call the API again. This repeats until
+    // the model returns a plain text response (finish_reason = "stop")
+    // or we hit the max iteration guard.
+    const MAX_TOOL_ITERATIONS = 10;
 
-    const result = await invoke('chat_send', {
-      request: {
-        messages: messages,
-        model: model || null,
-        apiKey: (apiKey && apiKey !== '••••••••') ? apiKey : null,
-        endpoint: endpoint || null
+    for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
+      // Build messages array from current conversation state.
+      // The system prompt is prepended by the Rust backend.
+      const messages = state.chatMessages.map(m => {
+        const msg = { role: m.role, content: m.content || null };
+        // Forward toolCalls for assistant messages that had tool calls.
+        // The Rust ChatMessage.tool_calls is Option<String> (JSON-encoded),
+        // so we serialize the array to a string.
+        if (m.role === 'assistant' && m.toolCalls) {
+          msg.toolCalls = JSON.stringify(m.toolCalls);
+        }
+        // Forward toolCallId for tool-result messages
+        if (m.role === 'tool' && m.toolCallId) {
+          msg.toolCallId = m.toolCallId;
+        }
+        return msg;
+      });
+
+      const result = await invoke('chat_send', {
+        request: {
+          messages: messages,
+          model: model || null,
+          apiKey: (apiKey && apiKey !== '••••••••') ? apiKey : null,
+          endpoint: endpoint || null
+        }
+      });
+
+      const reply = result.reply || '';
+      const toolCalls = result.toolCalls || [];
+      const finishReason = result.finishReason || result.finish_reason || '';
+      const modelUsed = result.model || 'unknown';
+      const governance = result.governance || {};
+
+      // Show governance warnings if any
+      const warnings = governance.warnings;
+      if (Array.isArray(warnings) && warnings.length > 0) {
+        warnings.forEach(w => log('Governance: ' + w, 'info'));
       }
-    });
 
-    const reply = result.reply || '(empty response)';
-    const modelUsed = result.model || 'unknown';
-    const governance = result.governance || {};
+      // ── No tool calls → final text reply, display and done ──
+      if (!toolCalls || toolCalls.length === 0) {
+        if (reply) {
+          addChatMessage('assistant', reply);
+        }
+        log(`Chat response received (model: ${modelUsed}, iterations: ${iteration + 1})`, 'ok');
+        return; // loop exit
+      }
 
-    addChatMessage('assistant', reply);
-    log(`Chat response received (model: ${modelUsed})`, 'ok');
+      // ── Model requested tool calls → execute them ──
+      // Add the assistant message with tool_calls to conversation
+      addChatMessage('assistant', reply, { toolCalls: toolCalls });
 
-    // Show governance warnings if any
-    const warnings = governance.warnings;
-    if (Array.isArray(warnings) && warnings.length > 0) {
-      warnings.forEach(w => log('Governance: ' + w, 'info'));
+      // Execute each tool call and add results as tool messages
+      for (const tc of toolCalls) {
+        const callId = tc.id || ('tc_' + Date.now());
+        const funcName = tc.function?.name || '';
+        let funcArgs = {};
+        try {
+          funcArgs = JSON.parse(tc.function?.arguments || '{}');
+        } catch (parseErr) {
+          // If arguments aren't valid JSON, report the error back as a tool result
+          addChatMessage('tool', `Error: failed to parse tool arguments: ${parseErr.message}`, { toolCallId: callId });
+          log(`Tool parse error for ${funcName}: ${parseErr.message}`, 'err');
+          continue;
+        }
+
+        log(`Tool call: ${funcName}(${Object.keys(funcArgs).join(', ')})`, 'info');
+
+try {
+				const toolResult = await executeToolCall(funcName, funcArgs);
+				let resultStr = typeof toolResult === 'string'
+            ? toolResult
+            : JSON.stringify(toolResult, null, 2);
+          // Truncate large tool results to avoid exceeding model context limits.
+          // The full result is still shown in the UI (collapsed), but only the
+          // truncated version is sent back to the model in subsequent turns.
+          const MAX_TOOL_RESULT_CHARS = 8000;
+          const wasTruncated = resultStr.length > MAX_TOOL_RESULT_CHARS;
+          if (wasTruncated) {
+            resultStr = resultStr.substring(0, MAX_TOOL_RESULT_CHARS)
+              + `\n\n... [truncated ${resultStr.length - MAX_TOOL_RESULT_CHARS} chars — result too large for context window]`;
+          }
+
+            // Special handling for propose_patch: extract patch metadata for UI
+            const patchOpts = {};
+            if (funcName === 'propose_patch' && typeof toolResult === 'object' && toolResult !== null) {
+                // Defensive: only extract if all expected fields are present and valid
+                if (toolResult.proposalId && typeof toolResult.proposalId === 'string') {
+                    patchOpts.proposalId = toolResult.proposalId;
+                    patchOpts.patchFilePath = toolResult.filePath || '';
+                    patchOpts.diff = toolResult.diff || '';
+                    patchOpts.linesAdded = (typeof toolResult.linesAdded === 'number') ? toolResult.linesAdded : 0;
+                    patchOpts.linesRemoved = (typeof toolResult.linesRemoved === 'number') ? toolResult.linesRemoved : 0;
+                } else {
+                    log('propose_patch returned object without valid proposalId — treating as generic result', 'warn');
+                }
+            }
+
+addChatMessage('tool', resultStr, { toolCallId: callId, ...patchOpts });
+				log(`Tool result: ${funcName} → ${resultStr.length} chars${wasTruncated ? ' (truncated)' : ''}`, 'ok');
+        } catch (toolErr) {
+          const errMsg = (typeof toolErr === 'string') ? toolErr : (toolErr?.message || String(toolErr));
+          addChatMessage('tool', `Error: ${errMsg}`, { toolCallId: callId });
+          log(`Tool error: ${funcName} → ${errMsg}`, 'err');
+        }
+      }
+
+      // Re-render to show tool calls and results before next iteration
+      renderChat();
+
+      // Loop continues — the next iteration will send the full conversation
+      // including tool results back to the model
     }
+
+    // If we hit the max iteration guard, add a warning
+    addChatMessage('system', `Agent loop reached maximum ${MAX_TOOL_ITERATIONS} iterations. The agent may still have work to do.`);
+    log('Tool-call loop hit iteration limit.', 'warn');
   } catch (e) {
-    addChatMessage('system', 'Error: ' + e.message);
-    log('Chat failed: ' + e.message, 'err');
+    const errMsg = (typeof e === 'string') ? e : (e?.message || e?.toString?.() || 'Unknown error');
+    addChatMessage('system', 'Error: ' + errMsg);
+    log('Chat failed: ' + errMsg, 'err');
   } finally {
     state.chatLoading = false;
     renderChat();
   }
 }
 
-function addChatMessage(role, content) {
-  state.chatMessages.push({
+/**
+ * Execute a single tool call by mapping the function name to a Tauri invoke().
+ * Tool arguments come from the model as camelCase (matching tools.json).
+ * Tauri 2.x with rename_all = "camelCase" expects camelCase JS args.
+ */
+async function executeToolCall(funcName, funcArgs) {
+  // Map of tool function names to their Tauri command names and arg mappings.
+  // Most tools.json names match the Tauri command name directly.
+  const TOOL_MAP = {
+    scan_tree:           { cmd: 'scan_tree',           args: a => ({ rootPath: a.rootPath }) },
+    summarize_folder:    { cmd: 'summarize_folder',    args: a => ({ rootPath: a.rootPath }) },
+    agent_list_directory:{ cmd: 'agent_list_directory', args: a => ({ path: a.path }) },
+    agent_read_file:     { cmd: 'agent_read_file',      args: a => ({ path: a.path }) },
+    agent_search_files:  { cmd: 'agent_search_files',   args: a => ({ path: a.path, query: a.query }) },
+    read_governance_file:{ cmd: 'read_governance_file',  args: a => ({ fileName: a.fileName }) },
+    get_cps_score:       { cmd: 'get_cps_score',         args: () => ({}) },
+    ping:                { cmd: 'ping',                  args: () => ({}) },
+    git_status:          { cmd: 'git_status',            args: () => ({}) },
+    check_read_only: { cmd: 'check_read_only', args: () => ({}) },
+    propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patchContent: a.patchContent }) },
+  };
+
+  const mapping = TOOL_MAP[funcName];
+  if (!mapping) {
+    throw new Error(`Unknown tool function: ${funcName}`);
+  }
+
+  const tauriArgs = mapping.args(funcArgs);
+  return await invoke(mapping.cmd, tauriArgs);
+}
+
+function addChatMessage(role, content, opts = {}) {
+  const msg = {
     role,
     content,
-    timestamp: new Date().toISOString()
-  });
+    timestamp: new Date().toISOString(),
+  };
+  // Tool-call support: assistant messages may carry tool_calls,
+  // and tool-result messages carry tool_call_id
+  if (opts.toolCalls) msg.toolCalls = opts.toolCalls;
+  if (opts.toolCallId) msg.toolCallId = opts.toolCallId;
+  // Patch review support: tool messages from propose_patch carry extra metadata
+  if (opts.proposalId) msg.proposalId = opts.proposalId;
+  if (opts.patchFilePath) msg.patchFilePath = opts.patchFilePath;
+  if (opts.diff) msg.diff = opts.diff;
+  if (opts.linesAdded !== undefined) msg.linesAdded = opts.linesAdded;
+  if (opts.linesRemoved !== undefined) msg.linesRemoved = opts.linesRemoved;
+  state.chatMessages.push(msg);
   renderChat();
+  return msg;
 }
 
 function clearChat() {
@@ -750,12 +1066,141 @@ function clearChat() {
   log('Conversation cleared.', 'info');
 }
 
+// ── Patch Review Actions ──────────────────────────────────────────────
+
+async function applyPatch(proposalId) {
+  if (!proposalId) {
+    log('No proposal ID provided for apply.', 'err');
+    return;
+  }
+  try {
+    // Step 1: Rust validates the proposal, checks hashes, and returns the content to write.
+    // The Rust side does NOT write the file — it returns {filePath, content, success, ...}.
+    const result = await invoke('apply_patch', { proposalId });
+    if (!result.success) {
+      log(`Patch apply validation failed: ${result.detail}`, 'err');
+      addChatMessage('system', `✗ Patch apply failed: ${result.detail}`);
+      renderChat();
+      return;
+    }
+
+    // Step 2: Write the file via Tauri's fs plugin from JS.
+    // This goes through Tauri's scope-checking command layer, which returns
+    // errors gracefully (never aborts the process). Direct Rust fs::write()
+    // and Fs::open() both bypass scope checking on desktop and can cause aborts.
+    try {
+      const { writeTextFile } = window.__TAURI__.fs;
+      await writeTextFile({ path: result.filePath, contents: result.content });
+      log(`Patch applied: ${result.filePath} — ${result.detail}`, 'ok');
+      addChatMessage('system', `✓ Patch applied to ${result.filePath}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+    } catch (writeErr) {
+      const writeErrMsg = (typeof writeErr === 'string') ? writeErr : (writeErr?.message || String(writeErr));
+      log(`Patch write failed: ${writeErrMsg}`, 'err');
+      addChatMessage('system', `✗ Patch validated but write failed: ${writeErrMsg}. The file was not modified.`);
+    }
+  } catch (e) {
+    const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
+    log(`Patch apply error: ${errMsg}`, 'err');
+    addChatMessage('system', `✗ Patch apply error: ${errMsg}`);
+  }
+  renderChat();
+}
+
+async function rejectPatch(proposalId) {
+  if (!proposalId) {
+    log('No proposal ID provided for reject.', 'err');
+    return;
+  }
+  try {
+    const result = await invoke('reject_patch', { proposalId });
+    log(`Patch rejected: ${proposalId}`, 'info');
+    addChatMessage('system', `✗ Patch proposal rejected and removed.`);
+  } catch (e) {
+    const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
+    log(`Patch reject error: ${errMsg}`, 'err');
+    addChatMessage('system', `✗ Patch reject error: ${errMsg}`);
+  }
+  renderChat();
+}
+
 function toggleChatSettings() {
   state.chatSettingsOpen = !state.chatSettingsOpen;
   const settingsEl = $('chat-settings');
   if (settingsEl) {
     settingsEl.classList.toggle('visible', state.chatSettingsOpen);
   }
+}
+
+// ── Read Audit Panel ───────────────────────────────────────────────────
+
+function toggleReadAudit() {
+  state.readAuditOpen = !state.readAuditOpen;
+  const panel = $('read-audit-panel');
+  if (panel) {
+    panel.classList.toggle('hidden', !state.readAuditOpen);
+  }
+  if (state.readAuditOpen) {
+    refreshReadAudit();
+  }
+}
+
+async function refreshReadAudit() {
+  try {
+    const entries = await invoke('get_read_audit_log');
+    state.readAuditLog = Array.isArray(entries) ? entries : [];
+    renderReadAudit();
+  } catch (e) {
+    log('Failed to load audit log: ' + e.message, 'warn');
+  }
+}
+
+async function clearReadAudit() {
+  try {
+    await invoke('clear_read_audit_log');
+    state.readAuditLog = [];
+    renderReadAudit();
+    log('Read audit log cleared.', 'info');
+  } catch (e) {
+    log('Failed to clear audit log: ' + e.message, 'err');
+  }
+}
+
+function renderReadAudit() {
+  const entries = state.readAuditLog;
+  const countEl = $('read-audit-count');
+  const entriesEl = $('read-audit-entries');
+
+  if (countEl) {
+    const blocked = entries.filter(e => e.result === 'blocked').length;
+    const success = entries.filter(e => e.result === 'success').length;
+    countEl.textContent = `${success} reads, ${blocked} blocked`;
+  }
+
+  if (!entriesEl) return;
+
+  if (!entries.length) {
+    entriesEl.innerHTML = '<p class="read-audit-empty">No file reads recorded yet.</p>';
+    return;
+  }
+
+  // Show most recent first
+  const reversed = [...entries].reverse();
+  entriesEl.innerHTML = reversed.map(entry => {
+    const timeStr = entry.timestamp
+      ? new Date(entry.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+      : '';
+    const resultClass = entry.result === 'success' ? 'audit-success' : entry.result === 'blocked' ? 'audit-blocked' : 'audit-error';
+    const resultIcon = entry.result === 'success' ? '✓' : entry.result === 'blocked' ? '✗' : '⚠';
+    const detailStr = entry.detail ? ` — ${escapeHtml(entry.detail)}` : '';
+    return `
+      <div class="read-audit-entry ${resultClass}">
+        <span class="read-audit-icon">${resultIcon}</span>
+        <span class="read-audit-time">${escapeHtml(timeStr)}</span>
+        <span class="read-audit-path" title="${escapeHtml(entry.path)}">${escapeHtml(entry.path)}</span>
+        <span class="read-audit-detail">${detailStr}</span>
+      </div>
+    `;
+  }).join('');
 }
 
 async function runGovScript(scriptName) {
@@ -1453,9 +1898,17 @@ function zoomOut() { applyZoom(getZoomLevel() - ZOOM_STEP); }
 function zoomReset() { applyZoom(ZOOM_DEFAULT); }
 
 document.addEventListener('keydown', (e) => {
-	if (e.ctrlKey && (e.key === '=' || e.key === '+')) { e.preventDefault(); zoomIn(); }
-	if (e.ctrlKey && e.key === '-') { e.preventDefault(); zoomOut(); }
-	if (e.ctrlKey && e.key === '0') { e.preventDefault(); zoomReset(); }
+  if (e.ctrlKey && (e.key === '=' || e.key === '+')) { e.preventDefault(); zoomIn(); }
+  if (e.ctrlKey && e.key === '-') { e.preventDefault(); zoomOut(); }
+  if (e.ctrlKey && e.key === '0') { e.preventDefault(); zoomReset(); }
+  if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
+  if (e.key === 'Escape') {
+    // Escape from tools panel returns to chat
+    const toolsPanel = $('tools-panel');
+    if (toolsPanel && !toolsPanel.classList.contains('hidden')) {
+      closeToolsPanel();
+    }
+  }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1473,8 +1926,10 @@ document.addEventListener('DOMContentLoaded', () => {
     $('btn-index').addEventListener('click', runBuildIndex);
     $('btn-registry').addEventListener('click', runBuildRegistry);
     $('btn-handoff').addEventListener('click', runGenerateHandoff);
-    $('btn-diag').addEventListener('click', runDiagnostics);
-    $('btn-gov-health').addEventListener('click', () => runGovScript('health-check'));
+  $('btn-diag').addEventListener('click', runDiagnostics);
+  $('btn-sidebar-toggle').addEventListener('click', toggleSidebar);
+  $('btn-tools-close').addEventListener('click', closeToolsPanel);
+  $('btn-gov-health').addEventListener('click', () => runGovScript('health-check'));
     $('btn-gov-recovery').addEventListener('click', () => runGovScript('recovery-test-suite'));
     $('btn-gov-mode').addEventListener('click', () => runGovScript('mode-check'));
     $('btn-gov-consensus').addEventListener('click', () => runGovScript('consensus-check'));
@@ -1495,6 +1950,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $('btn-chat-settings-close').addEventListener('click', toggleChatSettings);
     $('btn-chat-save-settings').addEventListener('click', saveChatConfig);
   $('btn-fetch-models').addEventListener('click', fetchModels);
+$('btn-chat-toggle-audit').addEventListener('click', toggleReadAudit);
+  $('btn-clear-audit').addEventListener('click', clearReadAudit);
+  $('btn-refresh-audit').addEventListener('click', refreshReadAudit);
 
     $('btn-clear-log').addEventListener('click', () => {
         state.logEntries = [];
@@ -1577,11 +2035,20 @@ $('folder-path').addEventListener('keydown', event => {
         state.currentPath = state.recentPaths[0];
     }
 
-  renderChat();
-  renderOverview();
-  renderRetrieve();
-  renderTreePanel();
-  updateFooterInfo();
+renderChat();
+renderOverview();
+renderRetrieve();
+renderTreePanel();
+updateFooterInfo();
+
+// Restore sidebar collapse state
+const sidebarCollapsed = localStorage.getItem('archivist-sidebar-collapsed') === '1';
+if (sidebarCollapsed) {
+  const main = document.querySelector('main');
+  if (main) main.classList.add('sidebar-collapsed');
+  const btn = $('btn-sidebar-toggle');
+  if (btn) btn.textContent = '☰ Sidebar';
+}
 
   setTimeout(() => {
         const inTauri = hasTauriRuntime();

@@ -3,7 +3,8 @@
     "Archivist-Agent",
     "kernel-lane",
     "self-organizing-library",
-    "SwarmMind"
+    "SwarmMind",
+    "WE4FREE-Control-Plane"
   ],
   "blocked_roots": [
     "C:\\Windows",

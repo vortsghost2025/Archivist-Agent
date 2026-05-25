@@ -1,0 +1,177 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "scan_tree",
+      "description": "Scan a directory tree and return its structure with file/folder counts. The path must be within the allowed roots configured in allowed_roots.json.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "rootPath": {
+            "type": "string",
+            "description": "Absolute path to the directory to scan, e.g. 'S:/Archivist-Agent'"
+          }
+        },
+        "required": ["rootPath"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "summarize_folder",
+      "description": "Classify files in a folder into 6 buckets (runtime, interface, memory, verification, research, unknown) and return counts and key files per bucket.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "rootPath": {
+            "type": "string",
+            "description": "Absolute path to the folder to summarize"
+          }
+        },
+        "required": ["rootPath"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "agent_list_directory",
+      "description": "List contents of a directory. Returns name, path, is_dir, size_bytes, and extension for each entry. Directories listed first, then files, alphabetically.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Absolute path to the directory to list"
+          }
+        },
+        "required": ["path"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "agent_read_file",
+      "description": "Read the contents of a single file. Files larger than 1MB are blocked. Secret files (API keys, .env, .pem, etc.) are blocked. Returns the file content as a string.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Absolute path to the file to read"
+          }
+        },
+        "required": ["path"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "agent_search_files",
+      "description": "Search for files by name within a directory tree. Case-insensitive substring match. Max depth 8, max 100 results.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Absolute path to the root directory to search under"
+          },
+          "query": {
+            "type": "string",
+            "description": "Search query — matches if the query appears in the file or directory name"
+          }
+        },
+        "required": ["path", "query"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "read_governance_file",
+      "description": "Read a governance document by name. Available files: BOOTSTRAP, COVENANT, GOVERNANCE, CPS_ENFORCEMENT, VERIFICATION_LANES, CHECKPOINTS, USER_DRIFT_SCORING, RECIPROCAL_ACCOUNTABILITY, now-md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "description": "Governance file name without extension, e.g. 'COVENANT' or 'now-md'"
+          }
+        },
+        "required": ["fileName"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_cps_score",
+      "description": "Get the current Constitutional Priority Score (CPS). Score >= 10 means the system is healthy. Below 10 blocks operations.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "ping",
+      "description": "Check if the application is responsive. Returns 'pong'.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "git_status",
+      "description": "Get the current git status of the project. Returns branch, staged/unstaged changes, and recent commits.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+{
+      "type": "function",
+      "function": {
+        "name": "check_read_only",
+        "description": "Check if the agent is in read-only mode. In read-only mode, write operations like build_index and build_registry are blocked.",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "propose_patch",
+        "description": "Propose a change to a file. The agent provides the complete new file content, and the system generates a diff for the user to review. The user must click 'Apply' to actually write the file — this command does NOT modify anything on its own. Use this when the user asks you to edit, fix, update, or create a file.",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "filePath": {
+              "type": "string",
+              "description": "Absolute path to the file to modify, e.g. 'S:/Archivist-Agent/ui/app.js'"
+            },
+            "patchContent": {
+              "type": "string",
+              "description": "The complete new content of the file after the proposed change. For new files, this is the full file content."
+            }
+          },
+          "required": ["filePath", "patchContent"]
+        }
+      }
+    }
+  ]

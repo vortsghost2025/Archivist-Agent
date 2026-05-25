@@ -34,6 +34,7 @@ pub enum SafetyError {
     PathTraversal(String),
     ConfigReadError(String),
     InvalidPath(String),
+    SecretPathBlocked(String),
 }
 
 impl std::fmt::Display for SafetyError {
@@ -43,6 +44,9 @@ impl std::fmt::Display for SafetyError {
             SafetyError::PathTraversal(p) => write!(f, "Path traversal detected: {}", p),
             SafetyError::ConfigReadError(e) => write!(f, "Cannot read allowed_roots.json: {}", e),
             SafetyError::InvalidPath(p) => write!(f, "Invalid path: {}", p),
+            SafetyError::SecretPathBlocked(p) => {
+                write!(f, "Secret/sensitive path blocked: {}", p)
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+mod agent_fs;
 mod build_index;
 mod build_registry;
 mod chat;
@@ -9,6 +10,7 @@ mod generate_handoff;
 mod global_shim;
 mod governance;
 mod governance_scripts;
+mod patch;
 mod safety;
 mod scan_tree;
 mod sign_message;
@@ -16,6 +18,10 @@ mod summarize_folder;
 #[cfg(test)]
 mod test_env;
 
+use agent_fs::{
+    agent_list_directory, agent_read_file, agent_search_files, clear_read_audit_log,
+    get_read_audit_log,
+};
 use build_index::build_index;
 use build_registry::build_registry;
 use chat::{chat_send, fetch_models, load_agent_config_cmd, save_agent_config};
@@ -23,6 +29,7 @@ use generate_handoff::generate_handoff;
 use governance::{
     check_read_only, git_status, read_governance_file, run_script, run_sovereignty_enforcer,
 };
+use patch::{apply_patch, clear_patch_audit_log, get_patch_audit_log, propose_patch, reject_patch};
 use scan_tree::scan_tree;
 use sign_message::sign_message;
 use summarize_folder::summarize_folder;
@@ -32,6 +39,7 @@ use tauri::Manager;
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_fs::init())
         .setup(|app| {
             global_shim::ensure_shim();
             let cps_score =
@@ -63,6 +71,16 @@ pub fn run() {
             save_agent_config,
             load_agent_config_cmd,
             fetch_models,
+            agent_read_file,
+            agent_list_directory,
+            agent_search_files,
+            get_read_audit_log,
+            clear_read_audit_log,
+            propose_patch,
+            apply_patch,
+            reject_patch,
+            get_patch_audit_log,
+            clear_patch_audit_log,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -113,14 +131,14 @@ mod lib_tests {
 
     #[test]
     fn test_ping_allows_on_cps_success() {
-        let tmp = write_constraints("- name: HIGH\n  description: high\n  weight: 20\n");
+        let tmp = write_constraints("- name: HIGH\n description: high\n weight: 20\n");
         assert_eq!(ping(), "pong");
         cleanup(tmp);
     }
 
     #[test]
     fn test_get_cps_score_returns_correct_value() {
-        let tmp = write_constraints("- name: TEST\n  description: test\n  weight: 15\n");
+        let tmp = write_constraints("- name: TEST\n description: test\n weight: 15\n");
         assert_eq!(get_cps_score(), 15);
         cleanup(tmp);
     }
