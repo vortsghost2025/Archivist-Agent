@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.3",
+  "task_id": "t-all-1",
+  "idempotency_key": "k1",
+  "from": "archivist",
+  "to": "all",
+  "type": "task",
+  "task_kind": "status",
+  "priority": "P1",
+  "subject": "x",
+  "body": "x",
+  "timestamp": "2026-05-02T23:17:07.0012664Z",
+  "requires_action": false,
+  "payload": {},
+  "execution": {},
+  "lease": {},
+  "retry": {},
+  "evidence": {
+    "required": false
+  },
+  "heartbeat": {}
+}

@@ -148,5 +148,42 @@ scripts/test-hb-ubuntu.js
 # Blocked-remediator reports (generated every cycle)
 context-buffer/blocked-remediation-report-*.json
 
+# ── Conversation dumps & large data blobs ──────────────────
+# Root-level .txt files are conversation dumps — move to scratch/ before committing
+/*.txt
+!/.git-commit-template.txt
+!/.act-prompt.txt
+!plans/*.txt
+!docs/**/*.txt
+!papers/*.txt
+!scripts/*.txt
+!lanes/**/*.txt
+!.global/*.txt
+!.trust/*.txt
+
+# context-buffer conversation dumps and large graph snapshots
+context-buffer/*.txt
+context-buffer/graph-snapshot-*.json
+context-buffer/graph-snapshot-*.json.seal.json
+context-buffer/[0-9].json
+context-buffer/graph-snapshot-packs/
+context-buffer/verification-report-*.json
+context-buffer/archivist-node-verification-report*.json
+context-buffer/graph-patches/
+context-buffer/contradiction-burndown/
+context-buffer/contradiction-hub/
+context-buffer/*-latest.json
+context-buffer/*-pids.json
+context-buffer/combined-dispatch-*.json
+context-buffer/authority-dual-plane-*.json
+
+# Large data files (4MB+ site index, sync packs)
+data/site-index.json
+
+# Scratch is local-only conversation dumps and notes
+scratch/
+
+# Agent config (contains API keys — use .env instead)
+config/agent_config.json
 
 tmp/
