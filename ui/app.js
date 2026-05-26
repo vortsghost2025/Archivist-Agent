@@ -1402,38 +1402,6 @@ async function loadChatConfig() {
           if (rememberChk) rememberChk.checked = false;
         }
       }
-           // When loading a saved key, check the remember box to indicate persistence
-           if (rememberChk) rememberChk.checked = true;
-         } else {
-           // No saved key in localStorage, fallback to backend config
-           if (config.has_api_key) {
-             apiKeyField.value = '••••••••';
-           } else {
-             apiKeyField.value = '';
-           }
-           // Cannot auto-fill endpoint because we don't know the key type
-           if (statusElem) statusElem.style.display = 'none';
-           // Remember box should be unchecked when no key is saved
-           if (rememberChk) rememberChk.checked = false;
-         }
-       }
-          // When loading a saved key, check the remember box to indicate persistence
-          if (rememberChk) rememberChk.checked = true;
-        } else {
-          // No saved key in localStorage, fallback to backend config
-          if (config.has_api_key) {
-            apiKeyField.value = '••••••••';
-          } else {
-            apiKeyField.value = '';
-          }
-          // Cannot auto-fill endpoint because we don't know the key type
-          if (statusElem) statusElem.style.display = 'none';
-          // Remember box should be unchecked when no key is saved
-          if (rememberChk) rememberChk.checked = false;
-        }
-      }
-          // When loading a saved key, check the remember box to indicate persistence
-          if (rememberChk) rememberChk.checked = true;
         } else {
           // No saved key in localStorage, fallback to backend config
           if (config.has_api_key) {
