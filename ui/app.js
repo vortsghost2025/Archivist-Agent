@@ -2572,6 +2572,8 @@ function toggleChatFullscreen() {
   document.body.classList.toggle('chat-fullscreen');
   const isFull = document.body.classList.contains('chat-fullscreen');
   localStorage.setItem('chat-fullscreen', isFull ? '1' : '0');
+  // Also request Tauri to set the native window fullscreen state
+  invoke('set_fullscreen', { fullscreen: isFull }).catch(() => {});
 }
 
 
