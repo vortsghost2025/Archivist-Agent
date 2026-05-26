@@ -173,7 +173,7 @@ const invoke = (() => {
     console.error('[SECURITY] Safety validation layer is NOT active');
 
     return async (cmd, args = {}) => {
-        const root = args.rootPath || args.root || args.path || 'C:\\Demo\\Archivist';
+        const root = args.root_path || args.root || args.path || 'C:\Demo\Archivist';
   const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log', 'get_lane_status', 'switch_lane'];
 
   if (readOnlyCommands.includes(cmd)) {
