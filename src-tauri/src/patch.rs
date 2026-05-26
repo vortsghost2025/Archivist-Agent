@@ -46,6 +46,12 @@ pub struct PatchAuditEntry {
 
 static PATCH_AUDIT_LOG: Lazy<Mutex<Vec<PatchAuditEntry>>> = Lazy::new(|| Mutex::new(Vec::new()));
 
+#[cfg(test)]
+thread_local! {
+    static TEST_LOG: std::cell::RefCell<Vec<PatchAuditEntry>> = std::cell::RefCell::new(Vec::new());
+}
+
+#[cfg(not(test))]
 fn record_patch_audit(
     proposal_id: &str,
     file_path: &str,
@@ -70,14 +76,46 @@ fn record_patch_audit(
         }
     }
 }
+#[cfg(test)]
+fn record_patch_audit(
+    proposal_id: &str,
+    file_path: &str,
+    action: &str,
+    detail: Option<String>,
+    read_only_override: bool,
+) {
+    let entry = PatchAuditEntry {
+        proposal_id: proposal_id.to_string(),
+        file_path: file_path.to_string(),
+        timestamp: chrono::Utc::now().to_rfc3339(),
+        action: action.to_string(),
+        detail,
+        read_only_override,
+    };
+    TEST_LOG.with(|log| {
+        let mut log = log.borrow_mut();
+        log.push(entry);
+        if log.len() > 200 {
+            let len = log.len();
+            log.drain(0..len - 200);
+        }
+    });
+}
 
 /// Get the patch audit log (for UI display).
+#[cfg(not(test))]
 #[tauri::command]
 pub fn get_patch_audit_log() -> Vec<PatchAuditEntry> {
     PATCH_AUDIT_LOG
         .lock()
         .map(|log| log.clone())
         .unwrap_or_default()
+}
+
+#[cfg(test)]
+#[tauri::command]
+pub fn get_patch_audit_log() -> Vec<PatchAuditEntry> {
+    TEST_LOG.with(|log| log.borrow().clone())
 }
 
 /// Clear the patch audit log.
@@ -101,9 +139,16 @@ pub struct PatchProposal {
     pub timestamp: String,
 }
 
+#[cfg(test)]
+thread_local! {
+    static TEST_PENDING: std::cell::RefCell<Vec<PatchProposal>> = std::cell::RefCell::new(Vec::new());
+}
+
+// Global pending proposals storage (used in production)
 static PENDING_PROPOSALS: Lazy<Mutex<Vec<PatchProposal>>> = Lazy::new(|| Mutex::new(Vec::new()));
 
 /// Get a pending proposal by ID.
+#[cfg(not(test))]
 fn get_pending_proposal(proposal_id: &str) -> Option<PatchProposal> {
     PENDING_PROPOSALS.lock().ok().and_then(|proposals| {
         proposals
@@ -113,11 +158,32 @@ fn get_pending_proposal(proposal_id: &str) -> Option<PatchProposal> {
     })
 }
 
+#[cfg(test)]
+fn get_pending_proposal(proposal_id: &str) -> Option<PatchProposal> {
+    TEST_PENDING.with(|pending| {
+        pending
+            .borrow()
+            .iter()
+            .find(|p| p.proposal_id == proposal_id)
+            .cloned()
+    })
+}
+
 /// Remove a pending proposal by ID.
+#[cfg(not(test))]
 fn remove_pending_proposal(proposal_id: &str) {
     if let Ok(mut proposals) = PENDING_PROPOSALS.lock() {
         proposals.retain(|p| p.proposal_id != proposal_id);
     }
+}
+
+#[cfg(test)]
+fn remove_pending_proposal(proposal_id: &str) {
+    TEST_PENDING.with(|pending| {
+        pending
+            .borrow_mut()
+            .retain(|p| p.proposal_id != proposal_id);
+    });
 }
 
 // ── Diff Generation ──────────────────────────────────────────────────
@@ -135,6 +201,8 @@ fn generate_diff(original: &str, new: &str, file_path: &str) -> String {
     // then output the changed region with -/+ prefixes.
     let max_len = original_lines.len().max(new_lines.len());
     let mut change_regions: Vec<(usize, usize, usize)> = Vec::new(); // (orig_start, orig_count, new_count)
+                                                                     // Prevent unbounded growth: cap number of regions to avoid OOM on very large diffs.
+    const MAX_REGIONS: usize = 1000;
 
     let mut i = 0;
     while i < max_len {
@@ -170,6 +238,12 @@ fn generate_diff(original: &str, new: &str, file_path: &str) -> String {
             };
 
             change_regions.push((start, orig_count, new_count));
+            if change_regions.len() > MAX_REGIONS {
+                // Too many regions; fallback to a single region covering the whole diff
+                change_regions.clear();
+                change_regions.push((0, original_lines.len(), new_lines.len()));
+                break;
+            }
             i = end;
         } else {
             i += 1;
@@ -552,21 +626,45 @@ mod tests {
     where
         F: FnOnce() -> R,
     {
-        // Clear before
+        // Acquire a global test isolation lock to prevent concurrent interference
+        #[cfg(test)]
+        static TEST_ISOLATION_LOCK: Lazy<Mutex<()>> = Lazy::new(|| Mutex::new(()));
+        #[cfg(test)]
+        let _guard = TEST_ISOLATION_LOCK
+            .lock()
+            .expect("Failed to acquire test isolation lock");
+
+        // Clear before (global and test logs)
         if let Ok(mut log) = PATCH_AUDIT_LOG.lock() {
             log.clear();
         }
+        // Clear thread‑local test log
+        #[cfg(test)]
+        {
+            TEST_LOG.with(|log| log.borrow_mut().clear());
+        }
+        // Clear pending proposals
+        #[cfg(not(test))]
         if let Ok(mut pending) = PENDING_PROPOSALS.lock() {
             pending.clear();
         }
+        #[cfg(test)]
+        TEST_PENDING.with(|p| p.borrow_mut().clear());
+
         let result = f();
+
         // Clear after
         if let Ok(mut log) = PATCH_AUDIT_LOG.lock() {
             log.clear();
         }
+        #[cfg(test)]
+        TEST_LOG.with(|log| log.borrow_mut().clear());
+        #[cfg(not(test))]
         if let Ok(mut pending) = PENDING_PROPOSALS.lock() {
             pending.clear();
         }
+        #[cfg(test)]
+        TEST_PENDING.with(|p| p.borrow_mut().clear());
         result
     }
 

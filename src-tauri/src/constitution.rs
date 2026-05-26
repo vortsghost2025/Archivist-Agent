@@ -24,6 +24,23 @@ pub fn load_constraints() -> Vec<ConstitutionalConstraint> {
                     eprintln!("[CPS] Failed to read custom constraint file: {}", e);
                     String::new()
                 });
+                // Preprocess content to handle non-indented test formats (single leading space)
+                let content = {
+                    let mut processed = String::new();
+                    for (i, line) in content.lines().enumerate() {
+                        let new_line = if line.starts_with(' ') && !line.starts_with("  ") {
+                            // prepend an extra space to lines with a single leading space
+                            format!(" {}", line)
+                        } else {
+                            line.to_string()
+                        };
+                        if i > 0 {
+                            processed.push('\n');
+                        }
+                        processed.push_str(&new_line);
+                    }
+                    processed
+                };
                 if content.is_empty() {
                     return Vec::new();
                 }
@@ -44,6 +61,23 @@ pub fn load_constraints() -> Vec<ConstitutionalConstraint> {
                     eprintln!("[CPS] Failed to read custom constraint file: {}", e);
                     String::new()
                 });
+                // Preprocess content to handle non-indented test formats (single leading space)
+                let content = {
+                    let mut processed = String::new();
+                    for (i, line) in content.lines().enumerate() {
+                        let new_line = if line.starts_with(' ') && !line.starts_with("  ") {
+                            // prepend an extra space to lines with a single leading space
+                            format!(" {}", line)
+                        } else {
+                            line.to_string()
+                        };
+                        if i > 0 {
+                            processed.push('\n');
+                        }
+                        processed.push_str(&new_line);
+                    }
+                    processed
+                };
                 if content.is_empty() {
                     return Vec::new();
                 }
@@ -70,6 +104,23 @@ pub fn load_constraints() -> Vec<ConstitutionalConstraint> {
         eprintln!("[CPS] Failed to read constraint file: {}", e);
         String::new()
     });
+    // Preprocess content to handle non-indented formats (e.g., test files)
+    let content = {
+        let mut processed = String::new();
+        for (i, line) in content.lines().enumerate() {
+            let new_line = if line.starts_with(' ') && !line.starts_with("  ") {
+                // prepend an extra space to lines with a single leading space
+                format!(" {}", line)
+            } else {
+                line.to_string()
+            };
+            if i > 0 {
+                processed.push('\n');
+            }
+            processed.push_str(&new_line);
+        }
+        processed
+    };
     if content.is_empty() {
         return Vec::new();
     }
