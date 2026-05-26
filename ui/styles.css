@@ -1,4 +1,5 @@
 :root {
+  --chat-text-scale: 16px; /* Fallback for chat-specific scaling */
 --bg-primary: #07131c;
 --bg-secondary: #0f1c27;
 --bg-panel: #122433;
@@ -2050,6 +2051,28 @@ footer {
 }
 
 /* ── Tool-call UI ────────────────────────────────────────── */
+
+/* Chat font scaling – overrides for chat-specific elements */
+.chat-msg-avatar,
+.chat-msg-content,
+.chat-msg-time,
+.chat-tool-header,
+.chat-tool-id,
+.chat-tool-toggle {
+  font-size: var(--chat-text-scale, var(--text-scale, 16px)) !important;
+}
+
+/* Chat fullscreen mode – hide sidebars and resize handles, expand chat */
+body.chat-fullscreen main {
+  grid-template-columns: 0px 0px 1fr 0px 0px !important;
+}
+body.chat-fullscreen #sidebar,
+body.chat-fullscreen #resize-left,
+body.chat-fullscreen #resize-right,
+body.chat-fullscreen .zoom-controls {
+  display: none !important;
+}
+
 
 .chat-msg-tool {
   align-self: flex-start;

@@ -173,7 +173,7 @@ const invoke = (() => {
     console.error('[SECURITY] Safety validation layer is NOT active');
 
     return async (cmd, args = {}) => {
-        const root = args.rootPath || args.root || args.path || 'C:\\Demo\\Archivist';
+        const root = args.root_path || args.root || args.path || 'C:\Demo\Archivist';
   const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log', 'get_lane_status', 'switch_lane'];
 
   if (readOnlyCommands.includes(cmd)) {
@@ -2523,6 +2523,8 @@ function getZoomLevel() {
 }
 
 function applyZoom(level) {
+  // Apply chat font scaling after zoom is set
+  applyChatFont(getChatFontScale());
   // Double-check: if level is NaN/Infinity, fall back to default
   if (!Number.isFinite(level)) level = ZOOM_DEFAULT;
   const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
@@ -2539,6 +2541,35 @@ function applyZoom(level) {
 function zoomIn() { applyZoom(getZoomLevel() + ZOOM_STEP); }
 function zoomOut() { applyZoom(getZoomLevel() - ZOOM_STEP); }
 function zoomReset() { applyZoom(ZOOM_DEFAULT); }
+
+// ─── Chat Font Scaling ───────────────────────────────────────
+const CHAT_FONT_DEFAULT = 1.0; // scale factor (1.0 = 16px)
+const CHAT_FONT_MIN = 0.5;
+const CHAT_FONT_MAX = 2.0;
+const CHAT_FONT_STEP = 0.1;
+function getChatFontScale() {
+  const saved = localStorage.getItem('chat-font-scale');
+  const parsed = saved ? parseFloat(saved) : CHAT_FONT_DEFAULT;
+  if (!Number.isFinite(parsed)) {
+    localStorage.removeItem('chat-font-scale');
+    return CHAT_FONT_DEFAULT;
+  }
+  return parsed;
+}
+function applyChatFont(scale) {
+  if (!Number.isFinite(scale)) scale = CHAT_FONT_DEFAULT;
+  const clamped = Math.max(CHAT_FONT_MIN, Math.min(CHAT_FONT_MAX, scale));
+  document.documentElement.style.setProperty('--chat-text-scale', `${16 * clamped}px`);
+  localStorage.setItem('chat-font-scale', clamped.toString());
+}
+function increaseChatFont() { applyChatFont(getChatFontScale() + CHAT_FONT_STEP); }
+function decreaseChatFont() { applyChatFont(getChatFontScale() - CHAT_FONT_STEP); }
+function toggleChatFullscreen() {
+  document.body.classList.toggle('chat-fullscreen');
+  const isFull = document.body.classList.contains('chat-fullscreen');
+  localStorage.setItem('chat-fullscreen', isFull ? '1' : '0');
+}
+
 
 // ─── Panel Resize Handles ─────────────────────────────────────────
 function initResizeHandles() {
@@ -2736,6 +2767,15 @@ $('btn-zoom-in').addEventListener('click', zoomIn);
 $('btn-zoom-out').addEventListener('click', zoomOut);
 $('btn-zoom-reset').addEventListener('click', zoomReset);
 applyZoom(getZoomLevel());
+// Initialize chat font and fullscreen state
+applyChatFont(getChatFontScale());
+if (localStorage.getItem('chat-fullscreen') === '1') {
+  document.body.classList.add('chat-fullscreen');
+}
+// Add chat font and fullscreen button listeners
+$('btn-font-increase').addEventListener('click', increaseChatFont);
+$('btn-font-decrease').addEventListener('click', decreaseChatFont);
+$('btn-chat-fullscreen').addEventListener('click', toggleChatFullscreen);
 
 $('folder-path').addEventListener('keydown', event => {
     if (event.key === 'Enter') {
