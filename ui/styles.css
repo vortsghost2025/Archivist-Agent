@@ -148,6 +148,7 @@ main.sidebar-collapsed.evidence-collapsed {
 }
 
 #sidebar {
+  grid-column: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -163,6 +164,22 @@ main.sidebar-collapsed #sidebar {
   padding: 0;
   gap: 0;
   overflow: hidden;
+}
+
+#resize-left {
+  grid-column: 2;
+}
+
+#center-panel {
+  grid-column: 3;
+}
+
+#resize-right {
+  grid-column: 4;
+}
+
+#evidence-panel {
+  grid-column: 5;
 }
 
 /* Resize handles between panels */
@@ -1657,15 +1674,30 @@ footer {
         padding-inline: 16px;
     }
 
+    header {
+        padding-block: 10px;
+        gap: 8px;
+    }
+
+    .header-copy {
+        display: none;
+    }
+
     .hero-card h2 {
         font-size: 22px;
     }
 
     .result-head,
-    .hero-topline,
+    .hero-topline {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     footer {
         flex-direction: column;
         align-items: flex-start;
+        gap: 4px;
+        padding-block: 8px;
     }
 
     .search-row {
@@ -1674,6 +1706,47 @@ footer {
 
     #tab-bar {
         overflow-x: auto;
+    }
+}
+
+/* ─── Ultra-narrow: ≤600px ────────────────────────────── */
+@media (max-width: 600px) {
+    .version {
+        display: none;
+    }
+
+    .zoom-controls {
+        gap: 2px;
+    }
+
+    .zoom-btn {
+        min-width: 26px;
+        padding: 2px 4px;
+    }
+
+    /* Compact chat for very short viewports */
+    .chat-toolbar {
+        padding: 6px 12px;
+    }
+
+    .chat-model-label {
+        display: none;
+    }
+
+    .chat-input-area {
+        padding: 8px 12px;
+        gap: 6px;
+    }
+
+    .chat-input {
+        min-height: 44px;
+        height: 44px;
+        flex: none !important;
+    }
+
+    .chat-send-btn {
+        padding: 8px 16px;
+        min-height: 36px;
     }
 }
 
@@ -2265,6 +2338,11 @@ margin: 0;
 @media (max-width: 720px) {
   .chat-layout {
     flex-direction: column;
+  }
+  .chat-settings:not(.visible) {
+    max-height: 0;
+    padding: 0;
+    overflow: hidden;
   }
   .chat-settings.visible {
     width: 100%;
