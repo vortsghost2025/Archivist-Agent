@@ -36,7 +36,7 @@ export const searchFiles = async (path: string, query: string) => {
 
 /** Summarize a folder into classification buckets */
 export const summarizeFolder = async (path: string) => {
-  return await invoke('summarize_folder', { path });
+  return await invoke('summarize_folder', { root_path: path });
 };
 
 /** Simple health check – ping */
