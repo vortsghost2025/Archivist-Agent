@@ -2599,6 +2599,24 @@ document.addEventListener('DOMContentLoaded', () => {
 if ($('btn-ev-clear-reads')) $('btn-ev-clear-reads').addEventListener('click', () => { invoke('clear_read_audit_log').then(() => { state.readAuditLog = []; renderEvidenceReads([]); }).catch(() => {}); });
 
 // Lane sidebar click handler (delegated event on lane-list container)
+// Auto‑populate chat endpoint when a known API key is entered (accessibility aid)
+const apiKeyInput = $('chat-api-key');
+if (apiKeyInput) {
+  apiKeyInput.addEventListener('input', () => {
+    const endpointEl = $('chat-endpoint');
+    if (!endpointEl) return;
+    // Preserve user-specified endpoint.
+    if (endpointEl.value && endpointEl.value.trim()) return;
+    const raw = apiKeyInput.value.trim();
+    // Simple heuristic: OpenAI keys start with "sk-".
+    if (raw && raw.startsWith('sk-')) {
+      endpointEl.value = 'https://api.openai.com/v1/chat/completions';
+      const statusEl = $('chat-endpoint-status');
+      if (statusEl) { statusEl.textContent = '✅ Endpoint auto‑filled for OpenAI key'; statusEl.className = 'helper-text success'; }
+      log('Auto‑filled chat endpoint based on OpenAI key.', 'info');
+    }
+  });
+}
 $('lane-list').addEventListener('click', event => {
   const laneItem = event.target.closest('[data-lane]');
   if (!laneItem) return;
