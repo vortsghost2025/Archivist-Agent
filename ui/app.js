@@ -1460,7 +1460,7 @@ async function sendChatMessage() {
     // tool-role messages, and call the API again. This repeats until
     // the model returns a plain text response (finish_reason = "stop")
     // or we hit the max iteration guard.
-    const MAX_TOOL_ITERATIONS = 10;
+    const MAX_TOOL_ITERATIONS = 500;
 
     for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
       // Build messages array from current conversation state.
