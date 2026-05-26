@@ -1,23 +1,23 @@
 :root {
-  --bg-primary: #07131c;
-  --bg-secondary: #0f1c27;
-  --bg-panel: #122433;
-  --bg-card: #173245;
-  --bg-card-strong: #1c3d54;
-  --border: rgba(148, 184, 213, 0.18);
-  --border-strong: rgba(148, 184, 213, 0.32);
-  --text-primary: #edf6fb;
-  --text-muted: #9cb2c4;
-  --accent: #8de1ff;
-  --accent-strong: #4fc3f7;
-  --success: #56d08b;
-  --warning: #f6c56b;
-  --error: #ff7f7f;
-  --shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
-  --radius: 18px;
-  --app-zoom: 1;
-  --text-scale: calc(16px * var(--app-zoom));
-  font-size: 16px;
+--bg-primary: #07131c;
+--bg-secondary: #0f1c27;
+--bg-panel: #122433;
+--bg-card: #173245;
+--bg-card-strong: #1c3d54;
+--border: rgba(148, 184, 213, 0.18);
+--border-strong: rgba(148, 184, 213, 0.32);
+--text-primary: #edf6fb;
+--text-muted: #9cb2c4;
+--accent: #8de1ff;
+--accent-strong: #4fc3f7;
+--success: #56d08b;
+--warning: #f6c56b;
+--error: #ff7f7f;
+--shadow: 0 18px 48px rgba(0, 0, 0, 0.24);
+--radius: 18px;
+--app-zoom: 1;
+--text-scale: 16px;  /* Fallback: 16px at 1x zoom. JS overrides this via inline style. */
+font-size: 16px;
 }
 
 * {
@@ -70,22 +70,22 @@ header {
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(79, 195, 247, 0.24), rgba(141, 225, 255, 0.12));
   border: 1px solid var(--border);
-  font-size: calc(var(--text-scale) * 1.375);
+  font-size: calc(var(--text-scale, 16px) * 1.375);
 }
 
 header h1 {
-  font-size: calc(var(--text-scale) * 1.25);
+  font-size: calc(var(--text-scale, 16px) * 1.25);
   font-weight: 700;
   letter-spacing: 0.02em;
 }
 
 .header-copy {
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.8125);
+  font-size: calc(var(--text-scale, 16px) * 0.8125);
 }
 
 .version {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   color: var(--text-muted);
   background: rgba(255, 255, 255, 0.03);
   padding: 4px 9px;
@@ -106,13 +106,13 @@ header h1 {
 .zoom-btn {
   min-width: 30px;
   padding: 4px 8px;
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   line-height: 1;
   border-radius: 8px;
 }
 
 .zoom-level {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   color: var(--text-muted);
   min-width: 38px;
   text-align: center;
@@ -255,7 +255,7 @@ main.evidence-collapsed .resize-handle#resize-right {
 .tools-close-btn {
   margin-right: 18px;
   white-space: nowrap;
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
 }
 
 /* ─── Evidence Panel (Right) ──────────────────────────────────────── */
@@ -285,7 +285,7 @@ main.evidence-collapsed #evidence-panel {
 }
 
 .evidence-header h3 {
-  font-size: calc(var(--text-scale) * 0.875);
+  font-size: calc(var(--text-scale, 16px) * 0.875);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -320,19 +320,19 @@ main.evidence-collapsed #evidence-panel {
 }
 
 .evidence-section-icon {
-  font-size: calc(var(--text-scale) * 0.875);
+  font-size: calc(var(--text-scale, 16px) * 0.875);
   flex-shrink: 0;
 }
 
 .evidence-section-title {
-  font-size: calc(var(--text-scale) * 0.8125);
+  font-size: calc(var(--text-scale, 16px) * 0.8125);
   font-weight: 600;
   flex: 1;
   color: var(--text-primary);
 }
 
 .evidence-section-badge {
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
   font-weight: 700;
   min-width: 22px;
   text-align: center;
@@ -373,7 +373,7 @@ main.evidence-collapsed #evidence-panel {
   align-items: center;
   gap: 8px;
   padding: 5px 0;
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
 }
 
 .ev-status-dot {
@@ -403,7 +403,7 @@ main.evidence-collapsed #evidence-panel {
   display: inline-block;
   padding: 2px 8px;
   border-radius: 6px;
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
   font-weight: 700;
   letter-spacing: 0.04em;
 }
@@ -415,7 +415,7 @@ main.evidence-collapsed #evidence-panel {
 
 /* Evidence: CPS score */
 .ev-cps-value {
-  font-size: calc(var(--text-scale) * 1.375);
+  font-size: calc(var(--text-scale, 16px) * 1.375);
   font-weight: 800;
   line-height: 1;
 }
@@ -425,7 +425,7 @@ main.evidence-collapsed #evidence-panel {
 .ev-cps-value.critical { color: var(--error); }
 
 .ev-cps-label {
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
   color: var(--text-muted);
 }
 
@@ -434,7 +434,7 @@ main.evidence-collapsed #evidence-panel {
   display: inline-block;
   padding: 2px 8px;
   border-radius: 6px;
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
   font-weight: 700;
   letter-spacing: 0.03em;
 }
@@ -446,7 +446,7 @@ main.evidence-collapsed #evidence-panel {
 .ev-patch-log, .ev-read-log {
   max-height: 200px;
   overflow-y: auto;
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
 }
 
 .ev-patch-entry, .ev-read-entry {
@@ -472,7 +472,7 @@ main.evidence-collapsed #evidence-panel {
 }
 
 .ev-patch-status {
-  font-size: calc(var(--text-scale) * 0.625);
+  font-size: calc(var(--text-scale, 16px) * 0.625);
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 4px;
@@ -493,7 +493,7 @@ main.evidence-collapsed #evidence-panel {
 .ev-activity-log {
   max-height: 250px;
   overflow-y: auto;
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
 }
 
 .ev-activity-entry {
@@ -505,7 +505,7 @@ main.evidence-collapsed #evidence-panel {
 
 .ev-activity-time {
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.625);
+  font-size: calc(var(--text-scale, 16px) * 0.625);
   font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
   flex-shrink: 0;
 }
@@ -521,7 +521,7 @@ main.evidence-collapsed #evidence-panel {
 
 /* Evidence: git status */
 .ev-git-status {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
 }
 
 .ev-git-row {
@@ -542,7 +542,7 @@ main.evidence-collapsed #evidence-panel {
 
 /* Evidence: NOW.md */
 .ev-now-md {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
   white-space: pre-wrap;
   max-height: 250px;
@@ -553,7 +553,7 @@ main.evidence-collapsed #evidence-panel {
 
 .ev-empty {
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-style: italic;
   padding: 6px 0;
 }
@@ -572,7 +572,7 @@ align-items: center;
 
 /* Evidence: NOW.md */
 .ev-now-md {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
   white-space: pre-wrap;
   max-height: 250px;
@@ -583,7 +583,7 @@ align-items: center;
 
 .ev-empty {
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-style: italic;
   padding: 6px 0;
 }
@@ -597,7 +597,7 @@ align-items: center;
 
 .lane-empty {
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-style: italic;
 }
 
@@ -610,7 +610,7 @@ align-items: center;
   border: 1px solid transparent;
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease;
-  font-size: calc(var(--text-scale) * 0.8125);
+  font-size: calc(var(--text-scale, 16px) * 0.8125);
 }
 
 .lane-item:hover {
@@ -642,7 +642,7 @@ align-items: center;
 }
 
 .lane-badge {
-  font-size: calc(var(--text-scale) * 0.625);
+  font-size: calc(var(--text-scale, 16px) * 0.625);
   padding: 1px 6px;
   border-radius: 8px;
   background: rgba(141, 225, 255, 0.10);
@@ -662,7 +662,7 @@ align-items: center;
 
 /* ─── Footer Status ──────────────────────────────────────────────── */
 .footer-mode {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-weight: 700;
   padding: 2px 8px;
   border-radius: 6px;
@@ -671,7 +671,7 @@ align-items: center;
 }
 
 .footer-lanes {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   color: var(--text-muted);
 }
 
@@ -686,7 +686,7 @@ align-items: center;
 .section-label {
   margin-bottom: 10px;
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -698,7 +698,7 @@ align-items: center;
 }
 
 .path-group label, .search-block label {
-  font-size: calc(var(--text-scale) * 0.8125);
+  font-size: calc(var(--text-scale, 16px) * 0.8125);
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -710,7 +710,7 @@ align-items: center;
   border: 1px solid var(--border);
   background: rgba(4, 14, 22, 0.9);
   color: var(--text-primary);
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   font-family: "Cascadia Code", "Consolas", monospace;
 }
 
@@ -722,7 +722,7 @@ align-items: center;
 
 .helper-text {
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
 }
 
 .btn {
@@ -734,7 +734,7 @@ align-items: center;
   border-radius: 14px;
   border: 1px solid transparent;
   cursor: pointer;
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   font-weight: 600;
   transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease, color 0.14s ease;
   font-family: inherit;
@@ -1698,7 +1698,7 @@ footer {
 }
 
 .chat-settings-header h3 {
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   font-weight: 700;
 }
 
@@ -1717,7 +1717,7 @@ footer {
 }
 
 .setting-group label {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -1732,7 +1732,7 @@ footer {
   border: 1px solid var(--border);
   background: rgba(4, 14, 22, 0.9);
   color: var(--text-primary);
-  font-size: calc(var(--text-scale) * 0.8125);
+  font-size: calc(var(--text-scale, 16px) * 0.8125);
   font-family: "Cascadia Code", "Consolas", monospace;
 }
 
@@ -1782,7 +1782,7 @@ footer {
 }
 
 .chat-settings-status {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   color: var(--text-muted);
 }
 
@@ -1818,7 +1818,7 @@ footer {
 }
 
 .chat-model-label {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   color: var(--text-muted);
   font-family: "Cascadia Code", "Consolas", monospace;
 }
@@ -1832,7 +1832,7 @@ footer {
   flex-direction: column;
   gap: 12px;
   scroll-behavior: smooth;
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
 }
 
 .chat-welcome {
@@ -1844,26 +1844,27 @@ footer {
   gap: 12px;
   padding: 48px 24px;
   flex: 1;
+  font-size: 16px;  /* Safety: always readable even if --text-scale is invalid */
 }
 
 .chat-welcome-icon {
-  font-size: calc(var(--text-scale) * 3);
+  font-size: calc(var(--text-scale, 16px) * 3);
   opacity: 0.6;
 }
 
 .chat-welcome h3 {
-  font-size: calc(var(--text-scale) * 1.375);
+  font-size: calc(var(--text-scale, 16px) * 1.375);
   font-weight: 700;
 }
 
 .chat-welcome p {
   max-width: 480px;
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.875);
+  font-size: calc(var(--text-scale, 16px) * 0.875);
 }
 
 .chat-welcome-hint {
-  font-size: calc(var(--text-scale) * 0.75) !important;
+  font-size: calc(var(--text-scale, 16px) * 0.75) !important;
   opacity: 0.7;
 }
 
@@ -1895,7 +1896,7 @@ footer {
   background: rgba(246, 197, 107, 0.1);
   border: 1px solid rgba(246, 197, 107, 0.2);
   color: var(--warning);
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   text-align: center;
   max-width: 90%;
 }
@@ -1909,7 +1910,7 @@ footer {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border);
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   flex-shrink: 0;
 }
 
@@ -1922,7 +1923,7 @@ footer {
 .chat-msg-content {
   padding: 12px 16px;
   border-radius: 18px;
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   line-height: 1.6;
   white-space: pre-wrap;
   word-break: break-word;
@@ -1943,7 +1944,7 @@ footer {
 }
 
 .chat-msg-time {
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
   color: var(--text-muted);
   padding: 0 4px;
 }
@@ -1969,7 +1970,7 @@ footer {
   border: 1px solid rgba(141, 225, 255, 0.15);
   border-bottom: none;
   cursor: pointer;
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   user-select: none;
 }
 
@@ -1985,12 +1986,12 @@ footer {
 .chat-tool-id {
   color: var(--text-muted);
   font-family: "Cascadia Code", "Fira Code", monospace;
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
 }
 
 .chat-tool-toggle {
   color: var(--text-muted);
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
   margin-left: auto;
 }
 
@@ -2010,7 +2011,7 @@ footer {
 .chat-tool-detail pre {
   margin: 0;
   font-family: "Cascadia Code", "Fira Code", monospace;
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   line-height: 1.5;
   color: var(--text-muted);
   white-space: pre-wrap;
@@ -2030,7 +2031,7 @@ footer {
 
 .chat-tool-preview code {
   font-family: "Cascadia Code", "Fira Code", monospace;
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   color: var(--text-muted);
 }
 
@@ -2042,13 +2043,13 @@ footer {
   background: rgba(141, 225, 255, 0.04);
   border: 1px solid rgba(141, 225, 255, 0.1);
   border-radius: 8px;
-  font-size: calc(var(--text-scale) * 0.8125);
+  font-size: calc(var(--text-scale, 16px) * 0.8125);
 }
 
 .chat-tool-call {
   color: var(--accent);
   font-family: "Cascadia Code", "Fira Code", monospace;
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
 }
 
 .chat-msg-thinking {
@@ -2096,7 +2097,7 @@ footer {
   border: 1px solid var(--border);
   background: rgba(4, 14, 22, 0.9);
   color: var(--text-primary);
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   font-family: "Segoe UI Variable", "Aptos", "Segoe UI", sans-serif;
   line-height: 1.5;
   resize: none;
@@ -2116,7 +2117,7 @@ footer {
 .chat-send-btn {
   align-self: flex-end;
   padding: 12px 24px;
-  font-size: var(--text-scale);
+  font-size: var(--text-scale, 16px);
   min-height: 44px;
 }
 
@@ -2147,7 +2148,7 @@ footer {
 }
 
 .read-audit-header h4 {
-  font-size: calc(var(--text-scale) * 0.75);
+  font-size: calc(var(--text-scale, 16px) * 0.75);
   font-weight: 700;
   text-transform: uppercase;
 letter-spacing: 0.08em;
@@ -2162,13 +2163,13 @@ margin: 0;
 }
 
 .read-audit-count {
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
   color: var(--text-muted);
   font-family: "Cascadia Code", "Consolas", monospace;
 }
 
 .btn-sm {
-  font-size: calc(var(--text-scale) * 0.6875);
+  font-size: calc(var(--text-scale, 16px) * 0.6875);
   padding: 4px 10px;
   border-radius: 8px;
 }

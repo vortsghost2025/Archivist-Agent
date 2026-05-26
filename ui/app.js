@@ -2399,11 +2399,16 @@ const ZOOM_MAX = 2.0;
 const ZOOM_DEFAULT = 1.0;
 
 function getZoomLevel() {
-	const saved = localStorage.getItem('archivist-zoom');
-	return saved ? parseFloat(saved) : ZOOM_DEFAULT;
+  const saved = localStorage.getItem('archivist-zoom');
+  const parsed = saved ? parseFloat(saved) : ZOOM_DEFAULT;
+  // Guard against NaN from corrupt localStorage — NaN would cascade
+  // through applyZoom and set --text-scale to "NaNpx", making ALL text invisible
+  return Number.isFinite(parsed) ? parsed : ZOOM_DEFAULT;
 }
 
 function applyZoom(level) {
+  // Double-check: if level is NaN/Infinity, fall back to default
+  if (!Number.isFinite(level)) level = ZOOM_DEFAULT;
   const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
   document.documentElement.style.setProperty('--app-zoom', clamped);
   // Scale text size only — layout structure stays fixed because :root font-size is 16px
