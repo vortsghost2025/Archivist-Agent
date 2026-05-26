@@ -13,6 +13,7 @@ mod governance;
 mod governance_scripts;
 mod lane;
 mod patch;
+mod window_control;
 mod safety;
 mod scan_tree;
 mod sign_message;
@@ -39,6 +40,7 @@ use patch::{
 use scan_tree::scan_tree;
 use sign_message::sign_message;
 use summarize_folder::summarize_folder;
+use window_control::set_fullscreen;
 use tauri::Manager;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -90,6 +92,7 @@ pub fn run() {
             clear_patch_audit_log,
             get_lane_status,
             switch_lane,
+            set_fullscreen,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
