@@ -1174,189 +1174,23 @@ function renderChat() {
 }
 
 async function loadChatConfig() {
-    try {
-      const config = await invoke('load_agent_config_cmd');
-      state.chatConfig = config;
-      // Populate settings fields
-      if ($('chat-endpoint')) $('chat-endpoint').value = config.chat_endpoint || '';
-      if ($('chat-model')) {
-        const selectEl = $('chat-model');
-        // Clear existing options
-        selectEl.innerHTML = '';
-        if (config.chat_model) {
-          // Add saved model as selected option
-          const opt = document.createElement('option');
-          opt.value = config.chat_model;
-          opt.textContent = config.chat_model;
-          opt.selected = true;
-          selectEl.appendChild(opt);
-        }
-        // Add placeholder
-        const placeholder = document.createElement('option');
-        placeholder.value = '';
-        placeholder.textContent = '— click Fetch Models to list available models —';
-        if (!config.chat_model) placeholder.selected = true;
-        selectEl.insertBefore(placeholder, selectEl.firstChild);
+  try {
+    const config = await invoke('load_agent_config_cmd');
+    state.chatConfig = config;
+    // Populate settings fields
+    if ($('chat-endpoint')) $('chat-endpoint').value = config.chat_endpoint || '';
+    if ($('chat-model')) {
+      const selectEl = $('chat-model');
+      // Clear existing options
+      selectEl.innerHTML = '';
+      if (config.chat_model) {
+        // Add saved model as selected option
+        const opt = document.createElement('option');
+        opt.value = config.chat_model;
+        opt.textContent = config.chat_model;
+        opt.selected = true;
+        selectEl.appendChild(opt);
       }
-      if ($('chat-temperature')) $('chat-temperature').value = config.temperature ?? 0.7;
-      if ($('chat-max-tokens')) $('chat-max-tokens').value = config.max_tokens ?? 2048;
-        // Populate API key field: use remembered key from localStorage if present, else mask stored key.
-        const savedKey = localStorage.getItem('savedApiKey');
-        const apiKeyField = $('chat-api-key');
-        const endpointInput = $('chat-endpoint');
-        const statusElem = $('chat-endpoint-status');
-        const rememberChk = $('remember-api-key');
-        if (apiKeyField) {
-          if (savedKey) {
-            apiKeyField.value = savedKey;
-            // Auto‑fill endpoint based on saved key
-            if (savedKey.startsWith('sk-')) {
-              if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
-              if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-            } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
-              if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
-              if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-            } else {
-              // Assume NVIDIA or other provider
-              if (endpointInput) endpointInput.value = 'https://integrate.api.nvidia.com/v1';
-              if (statusElem) { statusElem.textContent = 'NVIDIA endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-            }
-            // When loading a saved key, check the remember box to indicate persistence
-            if (rememberChk) rememberChk.checked = true;
-          } else {
-            // No saved key in localStorage, fallback to backend config
-            if (config.has_api_key) {
-              apiKeyField.value = '••••••••';
-            } else {
-              apiKeyField.value = '';
-            }
-            // Cannot auto-fill endpoint because we don't know the key type
-            if (statusElem) statusElem.style.display = 'none';
-            // Remember box should be unchecked when no key is saved
-            if (rememberChk) rememberChk.checked = false;
-          }
-        }
-      // Update model label
-      const modelLabel = $('chat-model-label');
-      if (modelLabel) {
-        modelLabel.textContent = config.chat_model || 'No model configured';
-      }
-      log('Chat config loaded.', 'info');
-    } catch (e) {
-      log('Failed to load chat config: ' + e.message, 'warn');
-    }
-  }
-        // Add placeholder
-        const placeholder = document.createElement('option');
-        placeholder.value = '';
-        placeholder.textContent = '— click Fetch Models to list available models —';
-        if (!config.chat_model) placeholder.selected = true;
-        selectEl.insertBefore(placeholder, selectEl.firstChild);
-      }
-      if ($('chat-temperature')) $('chat-temperature').value = config.temperature ?? 0.7;
-      if ($('chat-max-tokens')) $('chat-max-tokens').value = config.max_tokens ?? 2048;
-        // Populate API key field: use remembered key from localStorage if present, else mask stored key.
-        const savedKey = localStorage.getItem('savedApiKey');
-        const apiKeyField = $('chat-api-key');
-        const endpointInput = $('chat-endpoint');
-        const statusElem = $('chat-endpoint-status');
-        const rememberChk = $('remember-api-key');
-        if (apiKeyField) {
-          if (savedKey) {
-            apiKeyField.value = savedKey;
-            // Auto‑fill endpoint based on saved key
-            if (savedKey.startsWith('sk-')) {
-              if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
-              if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-            } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
-              if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
-              if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-            } else {
-              // Assume NVIDIA or other provider
-              if (endpointInput) endpointInput.value = 'https://integrate.api.nvidia.com/v1';
-              if (statusElem) { statusElem.textContent = 'NVIDIA endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-            }
-            // When loading a saved key, check the remember box to indicate persistence
-            if (rememberChk) rememberChk.checked = true;
-          } else {
-            // No saved key in localStorage, fallback to backend config
-            if (config.has_api_key) {
-              apiKeyField.value = '••••••••';
-            } else {
-              apiKeyField.value = '';
-            }
-            // Cannot auto-fill endpoint because we don't know the key type
-            if (statusElem) statusElem.style.display = 'none';
-            // Remember box should be unchecked when no key is saved
-            if (rememberChk) rememberChk.checked = false;
-          }
-        }
-      // Update model label
-      const modelLabel = $('chat-model-label');
-      if (modelLabel) {
-        modelLabel.textContent = config.chat_model || 'No model configured';
-      }
-      log('Chat config loaded.', 'info');
-     } catch (e) {
-       log('Failed to load chat config: ' + e.message, 'warn');
-     }
-   }
-  }
-       // Add placeholder
-       const placeholder = document.createElement('option');
-       placeholder.value = '';
-       placeholder.textContent = '— click Fetch Models to list available models —';
-       if (!config.chat_model) placeholder.selected = true;
-       selectEl.insertBefore(placeholder, selectEl.firstChild);
-     }
-     if ($('chat-temperature')) $('chat-temperature').value = config.temperature ?? 0.7;
-     if ($('chat-max-tokens')) $('chat-max-tokens').value = config.max_tokens ?? 2048;
-       // Populate API key field: use remembered key from localStorage if present, else mask stored key.
-       const savedKey = localStorage.getItem('savedApiKey');
-       const apiKeyField = $('chat-api-key');
-       const endpointInput = $('chat-endpoint');
-       const statusElem = $('chat-endpoint-status');
-       const rememberChk = $('remember-api-key');
-       if (apiKeyField) {
-         if (savedKey) {
-           apiKeyField.value = savedKey;
-           // Auto‑fill endpoint based on saved key
-           if (savedKey.startsWith('sk-')) {
-             if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
-             if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-           } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
-             if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
-             if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-           } else {
-             // Assume NVIDIA or other provider
-             if (endpointInput) endpointInput.value = 'https://integrate.api.nvidia.com/v1';
-             if (statusElem) { statusElem.textContent = 'NVIDIA endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-           }
-           // When loading a saved key, check the remember box to indicate persistence
-           if (rememberChk) rememberChk.checked = true;
-         } else {
-           // No saved key in localStorage, fallback to backend config
-           if (config.has_api_key) {
-             apiKeyField.value = '••••••••';
-           } else {
-             apiKeyField.value = '';
-           }
-           // Cannot auto-fill endpoint because we don't know the key type
-           if (statusElem) statusElem.style.display = 'none';
-           // Remember box should be unchecked when no key is saved
-           if (rememberChk) rememberChk.checked = false;
-         }
-       }
-     // Update model label
-     const modelLabel = $('chat-model-label');
-     if (modelLabel) {
-       modelLabel.textContent = config.chat_model || 'No model configured';
-     }
-     log('Chat config loaded.', 'info');
-   } catch (e) {
-     log('Failed to load chat config: ' + e.message, 'warn');
-   }
- }
       // Add placeholder
       const placeholder = document.createElement('option');
       placeholder.value = '';
@@ -1366,55 +1200,54 @@ async function loadChatConfig() {
     }
     if ($('chat-temperature')) $('chat-temperature').value = config.temperature ?? 0.7;
     if ($('chat-max-tokens')) $('chat-max-tokens').value = config.max_tokens ?? 2048;
-      // Populate API key field: use remembered key from localStorage if present, else mask stored key.
-      const savedKey = localStorage.getItem('savedApiKey');
-      const apiKeyField = $('chat-api-key');
-      const endpointInput = $('chat-endpoint');
-      const statusElem = $('chat-endpoint-status');
-      const rememberChk = $('remember-api-key');
-      if (apiKeyField) {
-        if (savedKey) {
-          apiKeyField.value = savedKey;
-          // Auto‑fill endpoint based on saved key
-          if (savedKey.startsWith('sk-')) {
-            if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
-            if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-          } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
-            if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
-            if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-          } else {
-            // Assume NVIDIA or other provider
-            if (endpointInput) endpointInput.value = 'https://integrate.api.nvidia.com/v1';
-            if (statusElem) { statusElem.textContent = 'NVIDIA endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-          }
-          // When loading a saved key, check the remember box to indicate persistence
-          if (rememberChk) rememberChk.checked = true;
-        } else {
-          // No saved key in localStorage, fallback to backend config
-          if (config.has_api_key) {
-            apiKeyField.value = '••••••••';
-          } else {
-            apiKeyField.value = '';
-          }
-          // Cannot auto-fill endpoint because we don't know the key type
-          if (statusElem) statusElem.style.display = 'none';
-          // Remember box should be unchecked when no key is saved
-          if (rememberChk) rememberChk.checked = false;
-        }
-      }
-        } else {
-          // No saved key in localStorage, fallback to backend config
-          if (config.has_api_key) {
-            apiKeyField.value = '••••••••';
-          } else {
-            apiKeyField.value = '';
-          }
-          // Cannot auto-fill endpoint because we don't know the key type
-          if (statusElem) statusElem.style.display = 'none';
-          // Remember box should be unchecked when no key is saved
-          if (rememberChk) rememberChk.checked = false;
-        }
-      }
+     // Populate API key field: use remembered key from localStorage if present, else mask stored key.
+     const savedKey = localStorage.getItem('savedApiKey');
+     const apiKeyField = $('chat-api-key');
+     const endpointInput = $('chat-endpoint');
+     const statusElem = $('chat-endpoint-status');
+     const rememberChk = $('remember-api-key');
+     if (apiKeyField) {
+       if (savedKey) {
+         apiKeyField.value = savedKey;
+         // Auto‑fill endpoint based on saved key
+         if (savedKey.startsWith('sk-')) {
+           if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
+           if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+         } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
+           if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
+           if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+         } else {
+           // Assume NVIDIA or other provider
+           if (endpointInput) endpointInput.value = 'https://integrate.api.nvidia.com/v1';
+           if (statusElem) { statusElem.textContent = 'NVIDIA endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+         }
+         // When loading a saved key, check the remember box to indicate persistence
+         if (rememberChk) rememberChk.checked = true;
+       } else {
+         // No saved key in localStorage, fallback to backend config
+         if (config.has_api_key) {
+           apiKeyField.value = '••••••••';
+         } else {
+           apiKeyField.value = '';
+         }
+         // Cannot auto-fill endpoint because we don't know the key type
+         if (statusElem) statusElem.style.display = 'none';
+         // Remember box should be unchecked when no key is saved
+         if (rememberChk) rememberChk.checked = false;
+       }
+     }
+       } else {
+         // No saved key in localStorage, fallback to backend config
+         if (config.has_api_key) {
+           apiKeyField.value = '••••••••';
+       } else {
+         apiKeyField.value = config.has_api_key ? '••••••••' : '';
+         if (rememberChk) rememberChk.checked = false;
+       }
+         // Cannot auto-fill endpoint because we don't know the key type
+         if (statusElem) statusElem.style.display = 'none';
+       }
+     }
     // Update model label
     const modelLabel = $('chat-model-label');
     if (modelLabel) {
@@ -2683,13 +2516,6 @@ function setDiagStatus(id, status) {
 }
 
 const ZOOM_STEP = 0.1;
-
-// Retrieve persisted zoom level from localStorage, falling back to default.
-function getZoomLevel() {
-  const saved = window.localStorage.getItem('archivist-zoom');
-  const parsed = saved ? parseFloat(saved) : ZOOM_DEFAULT;
-  return Number.isFinite(parsed) ? parsed : ZOOM_DEFAULT;
-}
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 2.0;
 const ZOOM_DEFAULT = 1.0;

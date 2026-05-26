@@ -90,7 +90,20 @@ fn resolve_identity_dir(project_root: &Path, lane: &str) -> Result<PathBuf, Stri
 // ---------------------------------------------------------------------------
 
 fn resolve_passphrase(project_root: &Path, lane: &str) -> Option<String> {
-    // 1. Check .runtime/lane-passphrases.json
+    // 1. Check env vars
+    if let Ok(val) = std::env::var("LANE_KEY_PASSPHRASE") {
+        if !val.is_empty() {
+            return Some(val);
+        }
+    }
+    let lane_upper = lane.to_uppercase();
+    if let Ok(val) = std::env::var(format!("LANE_KEY_PASSPHRASE_{}", lane_upper)) {
+        if !val.is_empty() {
+            return Some(val);
+        }
+    }
+
+    // 2. Check .runtime/lane-passphrases.json
     let passfile = project_root.join(".runtime/lane-passphrases.json");
     if passfile.exists() {
         if let Ok(content) = std::fs::read_to_string(&passfile) {
@@ -106,19 +119,6 @@ fn resolve_passphrase(project_root: &Path, lane: &str) -> Option<String> {
                     };
                 }
             }
-        }
-    }
-
-    // 2. Check env vars
-    if let Ok(val) = std::env::var("LANE_KEY_PASSPHRASE") {
-        if !val.is_empty() {
-            return Some(val);
-        }
-    }
-    let lane_upper = lane.to_uppercase();
-    if let Ok(val) = std::env::var(format!("LANE_KEY_PASSPHRASE_{}", lane_upper)) {
-        if !val.is_empty() {
-            return Some(val);
         }
     }
 
