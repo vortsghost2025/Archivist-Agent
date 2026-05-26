@@ -2104,6 +2104,8 @@ body.chat-fullscreen #center-panel .chat-tool-toggle {
 }
 
 body.chat-fullscreen main {
+  height: 100vh;
+
   grid-template-columns: 0px 0px 1fr 0px 0px !important;
 }
 body.chat-fullscreen #sidebar,
