@@ -2540,20 +2540,7 @@ function applyZoom(level) {
   if (display) display.textContent = `${Math.round(clamped * 100)}%`;
   localStorage.setItem('archivist-zoom', clamped.toString());
 }
-  // Apply chat font scaling after zoom is set
-  applyChatFont(getChatFontScale());
-  // Double-check: if level is NaN/Infinity, fall back to default
-  if (!Number.isFinite(level)) level = ZOOM_DEFAULT;
-  const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
-  // Update CSS custom properties used throughout UI (may be used elsewhere)
-  document.documentElement.style.setProperty('--app-zoom', clamped);
-  document.documentElement.style.setProperty('--text-scale', `${16 * clamped}px`);
-  // Hard visual zoom for Tauri/WebView: set body zoom property
-  document.body.style.zoom = String(clamped);
-  const display = $('zoom-level');
-  if (display) display.textContent = `${Math.round(clamped * 100)}%`;
-  localStorage.setItem('archivist-zoom', clamped.toString());
-}
+
 
 function zoomIn() { applyZoom(getZoomLevel() + ZOOM_STEP); }
 function zoomOut() { applyZoom(getZoomLevel() - ZOOM_STEP); }
