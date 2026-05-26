@@ -247,8 +247,9 @@ main.evidence-collapsed .resize-handle#resize-right {
   overflow: hidden;
   position: relative;
   z-index: 1;
-  background: linear-gradient(180deg, rgba(12, 28, 39, 0.6), rgba(7, 17, 24, 0.8));
+  background: var(--bg-panel);
   border: 1px solid var(--border);
+  border-radius: var(--radius);
 }
 
 #chat-panel.hidden {
@@ -2032,8 +2033,8 @@ footer {
 }
 
 .chat-msg-assistant .chat-msg-content {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255,255,255,0.2);
   border-bottom-left-radius: 4px;
   color: var(--text-primary);
 }
