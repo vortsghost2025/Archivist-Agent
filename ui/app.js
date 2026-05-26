@@ -485,13 +485,19 @@ function toggleSidebar() {
     btn.textContent = isNowCollapsed ? '☰ Sidebar' : '☰ Hide';
   }
   localStorage.setItem('archivist-sidebar-collapsed', isNowCollapsed ? '1' : '0');
-  // Restore saved width when expanding
-  if (!isNowCollapsed) {
+  const evidenceW = 380; // default evidence panel width if not set
+  // When collapsing, override inline grid columns to hide sidebar (respect current evidence width)
+  if (isNowCollapsed) {
+    const cols = getComputedStyle(main).gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
+    const ew = cols[4] || evidenceW;
+    main.style.gridTemplateColumns = `0px 5px 1fr 5px ${ew}px`;
+  } else {
+    // Restoring saved sidebar width when expanding
     const saved = localStorage.getItem('archivist-sidebar-width');
     if (saved) {
-      const cols = getComputedStyle(main).gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
-      const ew = cols[4] || 380;
       const sw = parseFloat(saved);
+      const cols = getComputedStyle(main).gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
+      const ew = cols[4] || evidenceW;
       const centerW = Math.max(200, main.clientWidth - sw - ew - 10);
       main.style.gridTemplateColumns = `${sw}px 5px ${centerW}px 5px ${ew}px`;
     }
