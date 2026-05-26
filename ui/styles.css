@@ -2065,9 +2065,32 @@ footer {
 /* Chat fullscreen mode – hide sidebars and resize handles, expand chat */
 
 /* Scale layout in fullscreen without affecting chat text */
+
+/* Hide surrounding UI elements when in full‑screen chat mode */
+body.chat-fullscreen header,
+body.chat-fullscreen .zoom-controls,
+body.chat-fullscreen .toolbar,
+body.chat-fullscreen #sidebar,
+body.chat-fullscreen #resize-left,
+body.chat-fullscreen #resize-right {
+  display: none !important;
+}
+
+/* Ensure the chat area takes the full viewport height */
+body.chat-fullscreen #center-panel,
+body.chat-fullscreen #chat-panel {
+  height: 100vh;
+  width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
 body.chat-fullscreen #center-panel {
-  transform: scale(var(--app-zoom));
+  /* Disable transform scaling in full‑screen to avoid blurriness */
+  transform: none !important;
   transform-origin: top left;
+
+
 }
 
 /* Counter‑scale chat text elements to keep font size constant */
