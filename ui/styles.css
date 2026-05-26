@@ -208,8 +208,8 @@ main.sidebar-collapsed #sidebar {
 }
 
 main.sidebar-collapsed .resize-handle#resize-left {
-  cursor: default;
-  pointer-events: none;
+  cursor: col-resize;
+  pointer-events: auto;
 }
 
 main.evidence-collapsed .resize-handle#resize-right {
