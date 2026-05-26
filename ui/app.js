@@ -1216,37 +1216,32 @@ async function loadChatConfig() {
      const apiKeyField = $('chat-api-key');
      const endpointInput = $('chat-endpoint');
      const statusElem = $('chat-endpoint-status');
-     const rememberChk = $('remember-api-key');
-     if (apiKeyField) {
-       if (savedKey) {
-         apiKeyField.value = savedKey;
-         // Auto‑fill endpoint based on saved key
-         if (savedKey.startsWith('sk-')) {
-           if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
-           if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-         } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
-           if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
-           if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-         } else {
-           // Assume NVIDIA or other provider
-           if (endpointInput) endpointInput.value = 'https://integrate.api.nvidia.com/v1';
-           if (statusElem) { statusElem.textContent = 'NVIDIA endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-         }
-         // When loading a saved key, check the remember box to indicate persistence
-         if (rememberChk) rememberChk.checked = true;
-       } else {
-         // No saved key in localStorage, fallback to backend config
-         if (config.has_api_key) {
-           apiKeyField.value = '••••••••';
-         } else {
-           apiKeyField.value = '';
-         }
-         // Cannot auto-fill endpoint because we don't know the key type
-         if (statusElem) statusElem.style.display = 'none';
-         // Remember box should be unchecked when no key is saved
-         if (rememberChk) rememberChk.checked = false;
-       }
-     }
+      if (apiKeyField) {
+        if (savedKey) {
+          apiKeyField.value = savedKey;
+          // Auto‑fill endpoint based on saved key
+          if (savedKey.startsWith('sk-')) {
+            if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
+            if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+          } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
+            if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
+            if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+          } else {
+            // Assume NVIDIA or other provider
+            if (endpointInput) endpointInput.value = 'https://integrate.api.nvidia.com/v1';
+            if (statusElem) { statusElem.textContent = 'NVIDIA endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+          }
+        } else {
+          // No saved key in localStorage, fallback to backend config
+          if (config.has_api_key) {
+            apiKeyField.value = '••••••••';
+          } else {
+            apiKeyField.value = '';
+          }
+          // Cannot auto-fill endpoint because we don't know the key type
+          if (statusElem) statusElem.style.display = 'none';
+        }
+      }
 
      // Update model label
     const modelLabel = $('chat-model-label');
@@ -1359,19 +1354,14 @@ async function saveChatConfig() {
    const endpoint = $('chat-endpoint')?.value.trim() || null;
    const apiKeyRaw = $('chat-api-key')?.value.trim() || null;
    const model = $('chat-model')?.value || null;
-   const rememberChk = $('remember-api-key');
-   // Always store API key in localStorage if provided (not masked)
-   const apiKeyToStore = (apiKeyRaw && apiKeyRaw !== '••••••••') ? apiKeyRaw : null;
-   if (apiKeyToStore) {
-     localStorage.setItem('savedApiKey', apiKeyToStore);
-   } else {
-     // If the field is empty or masked, remove from localStorage
-     localStorage.removeItem('savedApiKey');
-   }
-   // Respect remember checkbox for clearing: if unchecked, ensure we don't persist
-   if (rememberChk && !rememberChk.checked) {
-     localStorage.removeItem('savedApiKey');
-   }
+    // Always store API key in localStorage if provided (not masked)
+    const apiKeyToStore = (apiKeyRaw && apiKeyRaw !== '••••••••') ? apiKeyRaw : null;
+    if (apiKeyToStore) {
+      localStorage.setItem('savedApiKey', apiKeyToStore);
+    } else {
+      // If the field is empty or masked, remove from localStorage
+      localStorage.removeItem('savedApiKey');
+    }
    const temperature = parseFloat($('chat-temperature')?.value) || null;
    const maxTokens = parseInt($('chat-max-tokens')?.value, 10) || null;
 
