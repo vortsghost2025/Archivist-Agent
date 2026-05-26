@@ -2723,7 +2723,8 @@ $('folder-path').addEventListener('keydown', event => {
     const main = document.querySelector('main');
     if (main) {
       const cs = getComputedStyle(main);
-      console.log(`[DIAG] main: grid-columns=${cs.gridTemplateColumns} height=${cs.height} overflow=${cs.overflow}`);
+      const rect = main.getBoundingClientRect();
+      console.log(`[DIAG] main: grid-columns=${cs.gridTemplateColumns} width=${Math.round(rect.width)} height=${cs.height} overflow=${cs.overflow}`);
     }
   }, 500);
 
