@@ -1222,6 +1222,20 @@ async function fetchModels() {
   const apiKeyRaw = $('chat-api-key')?.value.trim() || null;
   const apiKey = (apiKeyRaw && apiKeyRaw !== '••••••••') ? apiKeyRaw : null;
 
+    // Guard: endpoint is required to fetch models.
+    if (!endpoint) {
+      if (statusEl) { statusEl.textContent = '⚠ Endpoint not configured.'; statusEl.className = 'helper-text error'; }
+      log('Attempted to fetch models without endpoint.', 'warn');
+      return;
+    }
+    // Guard: API key is required for authenticated endpoints.
+    if (!apiKey) {
+      if (statusEl) { statusEl.textContent = '⚠ API key not configured.'; statusEl.className = 'helper-text error'; }
+      log('Attempted to fetch models without API key.', 'warn');
+      return;
+    }
+
+
   if (statusEl) { statusEl.textContent = 'Fetching models…'; statusEl.className = 'helper-text'; }
   if (btnEl) btnEl.disabled = true;
 
@@ -1338,10 +1352,32 @@ async function sendChatMessage() {
   inputEl.value = '';
   state.chatLoading = true;
 
+  // Validate configuration before proceeding.
+  const endpoint = $('chat-endpoint')?.value.trim() || null;
+  const apiKeyRaw = $('chat-api-key')?.value.trim() || null;
+  const apiKey = (apiKeyRaw && apiKeyRaw !== '••••••••') ? apiKeyRaw : null;
+  const model = $('chat-model')?.value || null;
+
+  // Guard: endpoint is required.
+  if (!endpoint) {
+    addChatMessage('system', '⚠ No chat endpoint configured. Please set an endpoint in Settings before sending messages.');
+    log('Chat aborted: missing endpoint configuration.', 'warn');
+    state.chatLoading = false;
+    renderChat();
+    return;
+  }
+
+  // Guard: API key is required for most backends.
+  if (!apiKey) {
+    addChatMessage('system', '⚠ No API key configured. Please provide a valid API key in Settings before sending messages.');
+    log('Chat aborted: missing API key configuration.', 'warn');
+    state.chatLoading = false;
+    renderChat();
+    return;
+  }
+
   try {
-    const apiKey = $('chat-api-key')?.value.trim();
-    const endpoint = $('chat-endpoint')?.value.trim() || null;
-    const model = $('chat-model')?.value || null;
+    const apiKeyValue = (apiKey && apiKey !== '••••••••') ? apiKey : null;
 
     // ── Agentic tool-call loop ──────────────────────────────────
     // The model may return tool_calls in its response. When it does,
@@ -1351,49 +1387,49 @@ async function sendChatMessage() {
     // or we hit the max iteration guard.
     const MAX_TOOL_ITERATIONS = 10;
 
-        for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
-            // Build messages array from current conversation state.
-            // The system prompt is prepended by the Rust backend.
-            const messages = state.chatMessages.map(m => {
-                // For assistant messages with tool_calls, use null content
-                // (not empty string) to match OpenAI API format.
-                // The Rust side serializes content: null explicitly in the API request.
-                let content = m.content || null;
-                if (m.role === 'assistant' && m.toolCalls && !content) {
-                    content = null;
-                }
-                const msg = { role: m.role, content };
-                // Forward toolCalls for assistant messages that had tool calls.
-                // The Rust ChatMessage.tool_calls is Option<String> (JSON-encoded),
-                // so we serialize the array to a string.
-                if (m.role === 'assistant' && m.toolCalls) {
-                    msg.toolCalls = JSON.stringify(m.toolCalls);
-                }
-                // Forward toolCallId for tool-result messages
-                if (m.role === 'tool' && m.toolCallId) {
-                    msg.toolCallId = m.toolCallId;
-                }
-                return msg;
-            });
+    for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
+      // Build messages array from current conversation state.
+      // The system prompt is prepended by the Rust backend.
+      const messages = state.chatMessages.map(m => {
+        // For assistant messages with tool_calls, use null content
+        // (not empty string) to match OpenAI API format.
+        // The Rust side serializes content: null explicitly in the API request.
+        let content = m.content || null;
+        if (m.role === 'assistant' && m.toolCalls && !content) {
+          content = null;
+        }
+        const msg = { role: m.role, content };
+        // Forward toolCalls for assistant messages that had tool calls.
+        // The Rust ChatMessage.tool_calls is Option<String> (JSON-encoded),
+        // so we serialize the array to a string.
+        if (m.role === 'assistant' && m.toolCalls) {
+          msg.toolCalls = JSON.stringify(m.toolCalls);
+        }
+        // Forward toolCallId for tool-result messages
+        if (m.role === 'tool' && m.toolCallId) {
+          msg.toolCallId = m.toolCallId;
+        }
+        return msg;
+      });
 
-            log(`Chat loop iteration ${iteration + 1}: sending ${messages.length} messages to model`, 'info');
+      log(`Chat loop iteration ${iteration + 1}: sending ${messages.length} messages to model`, 'info');
 
-            const result = await invoke('chat_send', {
-                request: {
-                    messages: messages,
-                    model: model || null,
-                    apiKey: (apiKey && apiKey !== '••••••••') ? apiKey : null,
-                    endpoint: endpoint || null
-                }
-            });
+      const result = await invoke('chat_send', {
+        request: {
+          messages: messages,
+          model: model || null,
+          apiKey: apiKeyValue,
+          endpoint: endpoint || null
+        }
+      });
 
-            const reply = result.reply || '';
-            const toolCalls = result.toolCalls || [];
-            const finishReason = result.finishReason || result.finish_reason || '';
-            const modelUsed = result.model || 'unknown';
-            const governance = result.governance || {};
+      const reply = result.reply || '';
+      const toolCalls = result.toolCalls || [];
+      const finishReason = result.finishReason || result.finish_reason || '';
+      const modelUsed = result.model || 'unknown';
+      const governance = result.governance || {};
 
-            log(`API response: reply=${reply.length} chars, toolCalls=${toolCalls.length}, finishReason=${finishReason}, model=${modelUsed}`, 'info');
+      log(`API response: reply=${reply.length} chars, toolCalls=${toolCalls.length}, finishReason=${finishReason}, model=${modelUsed}`, 'info');
 
       // Show governance warnings if any
       const warnings = governance.warnings;
@@ -1401,20 +1437,20 @@ async function sendChatMessage() {
         warnings.forEach(w => log('Governance: ' + w, 'info'));
       }
 
-        // ── No tool calls → final text reply, display and done ──
-        if (!toolCalls || toolCalls.length === 0) {
-            if (reply) {
-                addChatMessage('assistant', reply);
-            } else {
-                // Empty response from model — this can happen if the API
-                // rejects the message format or returns a malformed response.
-                // Show a diagnostic message so the user knows something went wrong.
-                addChatMessage('system', `⚠ Agent returned an empty response (iteration ${iteration + 1}, model: ${modelUsed}). This usually means the message format was rejected by the API. Check the log for details.`);
-                log(`Empty model response on iteration ${iteration + 1} — possible API format error`, 'warn');
-            }
-            log(`Chat response received (model: ${modelUsed}, iterations: ${iteration + 1})`, 'ok');
-            return; // loop exit
+      // ── No tool calls → final text reply, display and done ──
+      if (!toolCalls || toolCalls.length === 0) {
+        if (reply) {
+          addChatMessage('assistant', reply);
+        } else {
+          // Empty response from model — this can happen if the API
+          // rejects the message format or returns a malformed response.
+          // Show a diagnostic message so the user knows something went wrong.
+          addChatMessage('system', `⚠ Agent returned an empty response (iteration ${iteration + 1}, model: ${modelUsed}). This usually means the message format was rejected by the API. Check the log for details.`);
+          log(`Empty model response on iteration ${iteration + 1} — possible API format error`, 'warn');
         }
+        log(`Chat response received (model: ${modelUsed}, iterations: ${iteration + 1})`, 'ok');
+        return; // loop exit
+      }
 
       // ── Model requested tool calls → execute them ──
       // Add the assistant message with tool_calls to conversation
@@ -1436,9 +1472,9 @@ async function sendChatMessage() {
 
         log(`Tool call: ${funcName}(${Object.keys(funcArgs).join(', ')})`, 'info');
 
-try {
-				const toolResult = await executeToolCall(funcName, funcArgs);
-				let resultStr = typeof toolResult === 'string'
+        try {
+          const toolResult = await executeToolCall(funcName, funcArgs);
+          let resultStr = typeof toolResult === 'string'
             ? toolResult
             : JSON.stringify(toolResult, null, 2);
           // Truncate large tool results to avoid exceeding model context limits.
@@ -1451,23 +1487,23 @@ try {
               + `\n\n... [truncated ${resultStr.length - MAX_TOOL_RESULT_CHARS} chars — result too large for context window]`;
           }
 
-            // Special handling for propose_patch: extract patch metadata for UI
-            const patchOpts = {};
-            if (funcName === 'propose_patch' && typeof toolResult === 'object' && toolResult !== null) {
-                // Defensive: only extract if all expected fields are present and valid
-                if (toolResult.proposalId && typeof toolResult.proposalId === 'string') {
-                    patchOpts.proposalId = toolResult.proposalId;
-                    patchOpts.patchFilePath = toolResult.filePath || '';
-                    patchOpts.diff = toolResult.diff || '';
-                    patchOpts.linesAdded = (typeof toolResult.linesAdded === 'number') ? toolResult.linesAdded : 0;
-                    patchOpts.linesRemoved = (typeof toolResult.linesRemoved === 'number') ? toolResult.linesRemoved : 0;
-                } else {
-                    log('propose_patch returned object without valid proposalId — treating as generic result', 'warn');
-                }
+          // Special handling for propose_patch: extract patch metadata for UI
+          const patchOpts = {};
+          if (funcName === 'propose_patch' && typeof toolResult === 'object' && toolResult !== null) {
+            // Defensive: only extract if all expected fields are present and valid
+            if (toolResult.proposalId && typeof toolResult.proposalId === 'string') {
+              patchOpts.proposalId = toolResult.proposalId;
+              patchOpts.patchFilePath = toolResult.filePath || '';
+              patchOpts.diff = toolResult.diff || '';
+              patchOpts.linesAdded = (typeof toolResult.linesAdded === 'number') ? toolResult.linesAdded : 0;
+              patchOpts.linesRemoved = (typeof toolResult.linesRemoved === 'number') ? toolResult.linesRemoved : 0;
+            } else {
+              log('propose_patch returned object without valid proposalId — treating as generic result', 'warn');
             }
+          }
 
-addChatMessage('tool', resultStr, { toolCallId: callId, ...patchOpts });
-				log(`Tool result: ${funcName} → ${resultStr.length} chars${wasTruncated ? ' (truncated)' : ''}`, 'ok');
+          addChatMessage('tool', resultStr, { toolCallId: callId, ...patchOpts });
+          log(`Tool result: ${funcName} → ${resultStr.length} chars${wasTruncated ? ' (truncated)' : ''}`, 'ok');
         } catch (toolErr) {
           const errMsg = (typeof toolErr === 'string') ? toolErr : (toolErr?.message || String(toolErr));
           addChatMessage('tool', `Error: ${errMsg}`, { toolCallId: callId });
@@ -1485,16 +1521,17 @@ addChatMessage('tool', resultStr, { toolCallId: callId, ...patchOpts });
     // If we hit the max iteration guard, add a warning
     addChatMessage('system', `Agent loop reached maximum ${MAX_TOOL_ITERATIONS} iterations. The agent may still have work to do.`);
     log('Tool-call loop hit iteration limit.', 'warn');
-        } catch (e) {
-            const errMsg = (typeof e === 'string') ? e : (e?.message || e?.toString?.() || 'Unknown error');
-            addChatMessage('system', '⚠ Chat error: ' + errMsg);
-            log('Chat failed: ' + errMsg, 'err');
+  } catch (e) {
+    const errMsg = (typeof e === 'string') ? e : (e?.message || e?.toString?.() || 'Unknown error');
+    addChatMessage('system', '⚠ Chat error: ' + errMsg);
+    log('Chat failed: ' + errMsg, 'err');
     log('Chat failed: ' + errMsg, 'err');
   } finally {
     state.chatLoading = false;
     renderChat();
   }
 }
+
 
 /**
  * Execute a single tool call by mapping the function name to a Tauri invoke().
