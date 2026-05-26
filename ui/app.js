@@ -478,23 +478,28 @@ function closeToolsPanel() {
 
 function toggleSidebar() {
   const main = document.querySelector('main');
-  if (main) {
-    main.classList.toggle('sidebar-collapsed');
-    const isCollapsed = main.classList.contains('sidebar-collapsed');
-    const btn = $('btn-sidebar-toggle');
-    if (btn) {
-      btn.textContent = isCollapsed ? '☰ Sidebar' : '☰ Hide';
+  if (!main) return;
+  const isNowCollapsed = main.classList.toggle('sidebar-collapsed');
+  const btn = $('btn-sidebar-toggle');
+  if (btn) {
+    btn.textContent = isNowCollapsed ? '☰ Sidebar' : '☰ Hide';
+  }
+  localStorage.setItem('archivist-sidebar-collapsed', isNowCollapsed ? '1' : '0');
+  // Restore saved width when expanding
+  if (!isNowCollapsed) {
+    const saved = localStorage.getItem('archivist-sidebar-width');
+    if (saved) {
+      const cols = getComputedStyle(main).gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
+      const ew = cols[4] || 380;
+      const sw = parseFloat(saved);
+      const centerW = Math.max(200, main.clientWidth - sw - ew - 10);
+      main.style.gridTemplateColumns = `${sw}px 5px ${centerW}px 5px ${ew}px`;
     }
-    localStorage.setItem('archivist-sidebar-collapsed', isCollapsed ? '1' : '0');
-    // Restore saved width when un-collapsing
-    if (!isCollapsed) {
-      const saved = localStorage.getItem('archivist-sidebar-width');
-      if (saved) {
-        const cols = main.style.gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
-        const ew = cols[4] || 380;
-        main.style.gridTemplateColumns = `${parseFloat(saved)}px 5px ${Math.max(200, main.clientWidth - parseFloat(saved) - ew - 10)}px 5px ${ew}px`;
-      }
-    }
+  }
+  // Ensure sidebar element visibility
+  const sidebar = $('#sidebar');
+  if (sidebar) {
+    sidebar.style.display = isNowCollapsed ? 'none' : '';
   }
 }
 
