@@ -2403,7 +2403,11 @@ function getZoomLevel() {
   const parsed = saved ? parseFloat(saved) : ZOOM_DEFAULT;
   // Guard against NaN from corrupt localStorage — NaN would cascade
   // through applyZoom and set --text-scale to "NaNpx", making ALL text invisible
-  return Number.isFinite(parsed) ? parsed : ZOOM_DEFAULT;
+  if (!Number.isFinite(parsed)) {
+    localStorage.removeItem('archivist-zoom');  // Clean up corrupt value
+    return ZOOM_DEFAULT;
+  }
+  return parsed;
 }
 
 function applyZoom(level) {
