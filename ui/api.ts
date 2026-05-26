@@ -34,6 +34,11 @@ export const searchFiles = async (path: string, query: string) => {
   return await invoke('agent_search_files', { path, query });
 };
 
+/** Summarize a folder into classification buckets */
+export const summarizeFolder = async (path: string) => {
+  return await invoke('summarize_folder', { path });
+};
+
 /** Simple health check – ping */
 export const ping = async (): Promise<string> => {
   return await invoke('ping');
