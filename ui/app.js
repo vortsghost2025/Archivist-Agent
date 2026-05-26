@@ -2536,15 +2536,11 @@ function applyZoom(level) {
   // Double-check: if level is NaN/Infinity, fall back to default
   if (!Number.isFinite(level)) level = ZOOM_DEFAULT;
   const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
-  // Update CSS custom properties used throughout UI
+  // Update CSS custom properties used throughout UI (may be used elsewhere)
   document.documentElement.style.setProperty('--app-zoom', clamped);
   document.documentElement.style.setProperty('--text-scale', `${16 * clamped}px`);
-  // Additionally apply a CSS transform to the root app container for a more obvious visual scale
-  const appEl = $('app');
-  if (appEl) {
-    appEl.style.transform = `scale(${clamped})`;
-    appEl.style.transformOrigin = 'top left';
-  }
+  // Hard visual zoom for Tauri/WebView: set body zoom property
+  document.body.style.zoom = String(clamped);
   const display = $('zoom-level');
   if (display) display.textContent = `${Math.round(clamped * 100)}%`;
   localStorage.setItem('archivist-zoom', clamped.toString());
