@@ -1200,7 +1200,19 @@ async function loadChatConfig() {
     }
     if ($('chat-temperature')) $('chat-temperature').value = config.temperature ?? 0.7;
     if ($('chat-max-tokens')) $('chat-max-tokens').value = config.max_tokens ?? 2048;
-    if ($('chat-api-key')) $('chat-api-key').value = config.has_api_key ? '••••••••' : '';
+    // Populate API key field: use remembered key if present, else mask stored key.
+    const savedKey = sessionStorage.getItem('savedApiKey');
+    const apiKeyField = $('chat-api-key');
+    if (apiKeyField) {
+      if (savedKey) {
+        apiKeyField.value = savedKey;
+        // Ensure remember checkbox reflects stored state
+        const rememberChk = $('remember-api-key');
+        if (rememberChk) rememberChk.checked = true;
+      } else {
+        apiKeyField.value = config.has_api_key ? '••••••••' : '';
+      }
+    }
     // Update model label
     const modelLabel = $('chat-model-label');
     if (modelLabel) {
@@ -1210,6 +1222,27 @@ async function loadChatConfig() {
   } catch (e) {
     log('Failed to load chat config: ' + e.message, 'warn');
   }
+}
+
+// Auto‑fill endpoint and remember‑key handling
+const apiKeyElem = $('chat-api-key');
+if (apiKeyElem) {
+  apiKeyElem.addEventListener('input', (e) => {
+    const key = e.target.value.trim();
+    const endpointInput = $('chat-endpoint');
+    const statusElem = $('chat-endpoint-status');
+    if (key.startsWith('sk-')) {
+      endpointInput.value = 'https://api.openai.com/v1';
+      statusElem.textContent = 'OpenAI endpoint auto‑filled.';
+      statusElem.style.display = 'block';
+    } else if (key.startsWith('sk-ant-') || key.startsWith('claude-')) {
+      endpointInput.value = 'https://api.anthropic.com/v1';
+      statusElem.textContent = 'Anthropic endpoint auto‑filled.';
+      statusElem.style.display = 'block';
+    } else {
+      statusElem.style.display = 'none';
+    }
+  });
 }
 
 async function fetchModels() {
@@ -1286,7 +1319,15 @@ async function fetchModels() {
 async function saveChatConfig() {
   const endpoint = $('chat-endpoint')?.value.trim() || null;
   const apiKeyRaw = $('chat-api-key')?.value.trim() || null;
-    const model = $('chat-model')?.value || null;
+  const model = $('chat-model')?.value || null;
+  const rememberChk = $('remember-api-key');
+  if (rememberChk && rememberChk.checked) {
+    if (apiKeyRaw) {
+      sessionStorage.setItem('savedApiKey', apiKeyRaw);
+    }
+  } else {
+    sessionStorage.removeItem('savedApiKey');
+  }
   const temperature = parseFloat($('chat-temperature')?.value) || null;
   const maxTokens = parseInt($('chat-max-tokens')?.value, 10) || null;
 
