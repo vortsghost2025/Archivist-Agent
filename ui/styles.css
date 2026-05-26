@@ -2079,6 +2079,15 @@ body.chat-fullscreen #resize-right {
 /* Ensure the chat area takes the full viewport height */
 body.chat-fullscreen #center-panel,
 body.chat-fullscreen #chat-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+
   height: 100%;
   width: 100%;
   overflow: hidden;
