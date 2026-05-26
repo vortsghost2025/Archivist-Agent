@@ -1211,16 +1211,20 @@ async function loadChatConfig() {
         // Ensure remember checkbox reflects stored state
         const rememberChk = $('remember-api-key');
         if (rememberChk) rememberChk.checked = true;
-        // Auto‑fill endpoint based on saved key
-        if (savedKey.startsWith('sk-')) {
-          if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
-          if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-        } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
-          if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
-          if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
-        } else {
-          if (statusElem) statusElem.style.display = 'none';
-        }
+    // Auto‑fill endpoint based on saved key
+    if (savedKey.startsWith('sk-')) {
+      if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
+      if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+    } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
+      if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
+      if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+    } else if (savedKey) { // Assume NVIDIA or other provider
+      if (endpointInput) endpointInput.value = 'https://integrate.api.nvidia.com/v1';
+      if (statusElem) { statusElem.textContent = 'NVIDIA endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+    } else {
+      if (statusElem) statusElem.style.display = 'none';
+    }
+
       } else {
         apiKeyField.value = config.has_api_key ? '••••••••' : '';
       }
@@ -1244,16 +1248,20 @@ if (apiKeyElem) {
     const endpointInput = $('chat-endpoint');
     const statusElem = $('chat-endpoint-status');
     if (key.startsWith('sk-')) {
-      endpointInput.value = 'https://api.openai.com/v1';
-      statusElem.textContent = 'OpenAI endpoint auto‑filled.';
-      statusElem.style.display = 'block';
-    } else if (key.startsWith('sk-ant-') || key.startsWith('claude-')) {
-      endpointInput.value = 'https://api.anthropic.com/v1';
-      statusElem.textContent = 'Anthropic endpoint auto‑filled.';
-      statusElem.style.display = 'block';
-    } else {
-      statusElem.style.display = 'none';
-    }
+       endpointInput.value = 'https://api.openai.com/v1';
+       statusElem.textContent = 'OpenAI endpoint auto‑filled.';
+       statusElem.style.display = 'block';
+     } else if (key.startsWith('sk-ant-') || key.startsWith('claude-')) {
+       endpointInput.value = 'https://api.anthropic.com/v1';
+       statusElem.textContent = 'Anthropic endpoint auto‑filled.';
+       statusElem.style.display = 'block';
+     } else if (key) { // Assume NVIDIA or other provider
+       endpointInput.value = 'https://integrate.api.nvidia.com/v1';
+       statusElem.textContent = 'NVIDIA endpoint auto‑filled.';
+       statusElem.style.display = 'block';
+     } else {
+       statusElem.style.display = 'none';
+     }
   });
 }
 
