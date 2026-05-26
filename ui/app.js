@@ -1617,8 +1617,8 @@ async function executeToolCall(funcName, funcArgs) {
   // Map of tool function names to their Tauri command names and arg mappings.
   // Most tools.json names match the Tauri command name directly.
   const TOOL_MAP = {
-    scan_tree:           { cmd: 'scan_tree',           args: a => ({ rootPath: a.rootPath }) },
-    summarize_folder:    { cmd: 'summarize_folder',    args: a => ({ rootPath: a.rootPath }) },
+    scan_tree:           { cmd: 'scan_tree',           args: a => ({ root_path: a.rootPath }) },
+    summarize_folder:    { cmd: 'summarize_folder',    args: a => ({ root_path: a.rootPath }) },
     agent_list_directory:{ cmd: 'agent_list_directory', args: a => ({ path: a.path }) },
   agent_read_file: { cmd: 'agent_read_file', args: a => {
     const result = { path: a.path };
@@ -1905,8 +1905,8 @@ async function runAnalyzeFolder() {
         log(`→ analyze_folder("${path}")`, 'info');
         setStatus('Analyzing folder…', 'working');
         const [scanResult, summaryResult] = await Promise.all([
-            invoke('scan_tree', { rootPath: path }),
-            invoke('summarize_folder', { rootPath: path })
+            invoke('scan_tree', { root_path: path }),
+            invoke('summarize_folder', { root_path: path })
         ]);
         state.lastAnalyzedAt = new Date().toISOString();
         state.scanResult = scanResult;
@@ -1940,7 +1940,7 @@ async function runScanTree() {
     if (!path) return;
     state.currentPath = path;
     rememberPath(path);
-    const result = await callCommand('scan_tree', { rootPath: path });
+    const result = await callCommand('scan_tree', { root_path: path });
     if (!result) return;
     state.scanResult = result;
     state.lastAnalyzedAt = new Date().toISOString();
@@ -1953,7 +1953,7 @@ async function runClassify() {
     if (!path) return;
     state.currentPath = path;
     rememberPath(path);
-    const result = await callCommand('summarize_folder', { rootPath: path });
+    const result = await callCommand('summarize_folder', { root_path: path });
     if (!result) return;
     state.summaryResult = result;
     state.lastAnalyzedAt = new Date().toISOString();
@@ -2487,7 +2487,7 @@ async function runDiagnostics() {
 
     setDiagStatus('diag-scan', 'check');
     try {
-        await invoke('scan_tree', { rootPath: 'DIAGNOSTIC_CHECK' });
+        await invoke('scan_tree', { root_path: 'DIAGNOSTIC_CHECK' });
         setDiagStatus('diag-scan', 'ok');
         log('scan_tree: registered', 'ok');
     } catch (error) {
