@@ -200,19 +200,25 @@ main.evidence-collapsed .resize-handle#resize-right {
   pointer-events: none;
 }
 
-/* Center panel: wraps chat-panel and tools-panel overlay */
+/* Center panel: wraps chat-panel and tools-panel overlay
+   NOTE: height is NOT set here — as a grid item with align-self:stretch
+   (default), it fills the 1fr grid row. An explicit height:100% would
+   create a circular dependency (height → grid-row → main → parent → grid-row → height).
+   The grid's stretch behavior provides the fill without the cycle. */
 #center-panel {
   display: flex;
   flex-direction: column;
   width: 100%;
   min-width: 200px;
   min-height: 0;
-  height: 100%;
   position: relative;
   overflow: hidden;
 }
 
-/* Chat panel: primary view, fills the center panel */
+/* Chat panel: primary view, fills the center panel
+   NOTE: height is NOT set here — flex:1 fills the parent flex container
+   (#center-panel). An explicit height:100% is redundant with flex:1 and
+   can interfere with the flex sizing algorithm in constrained viewports. */
 #chat-panel {
   display: flex;
   flex-direction: column;
@@ -220,7 +226,6 @@ main.evidence-collapsed .resize-handle#resize-right {
   width: 100%;
   min-width: 200px;
   min-height: 0;
-  height: 100%;
   padding: 0;
   overflow: hidden;
   position: relative;
