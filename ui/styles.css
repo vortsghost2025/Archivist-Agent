@@ -126,8 +126,6 @@ main {
   min-height: 0;
   overflow: hidden;
   position: relative;
-  /* Ensure main fills the 1fr grid row from #app */
-  height: 0; /* height:0 in a flex/grid child with min-height:0 forces it to respect the parent's allocation */
 }
 
 main.sidebar-collapsed {

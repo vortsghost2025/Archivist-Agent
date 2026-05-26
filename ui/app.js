@@ -2691,11 +2691,34 @@ $('folder-path').addEventListener('keydown', event => {
   if (govBody) govBody.classList.add('open');
 
   setTimeout(() => {
-        const inTauri = hasTauriRuntime();
-        log(inTauri ? '✓ Running inside Tauri' : '⚠ Running in browser mode with mock read-only data', inTauri ? 'ok' : 'warn');
-    }, 100);
+    const inTauri = hasTauriRuntime();
+    log(inTauri ? '✓ Running inside Tauri' : '⚠ Running in browser mode with mock read-only data', inTauri ? 'ok' : 'warn');
+  }, 100);
 
-log('UI ready. Analyze a folder to build a working map.', 'info');
+  // ── DOM DIAGNOSTICS: log key element visibility/size ──
+  setTimeout(() => {
+    const ids = ['app', 'sidebar', 'center-panel', 'chat-panel', 'chat-messages', 'chat-input', 'lane-list', 'evidence-panel'];
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) { console.warn(`[DIAG] #${id} NOT FOUND IN DOM`); return; }
+      const cs = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      console.log(`[DIAG] #${id}: display=${cs.display} visibility=${cs.visibility} width=${Math.round(rect.width)} height=${Math.round(rect.height)} hidden=${el.classList.contains('hidden')} overflow=${cs.overflow}`);
+    });
+    // Check if chat-panel has children
+    const chatPanel = document.getElementById('chat-panel');
+    if (chatPanel) {
+      console.log(`[DIAG] #chat-panel children: ${chatPanel.children.length}`, Array.from(chatPanel.children).map(c => c.id || c.className).join(', '));
+    }
+    // Check main grid
+    const main = document.querySelector('main');
+    if (main) {
+      const cs = getComputedStyle(main);
+      console.log(`[DIAG] main: grid-columns=${cs.gridTemplateColumns} height=${cs.height} overflow=${cs.overflow}`);
+    }
+  }, 500);
+
+  log('UI ready. Analyze a folder to build a working map.', 'info');
 setStatus('Ready', 'idle');
 
 // Panel resize handles
