@@ -1236,19 +1236,8 @@ async function loadChatConfig() {
          if (rememberChk) rememberChk.checked = false;
        }
      }
-       } else {
-         // No saved key in localStorage, fallback to backend config
-         if (config.has_api_key) {
-           apiKeyField.value = '••••••••';
-       } else {
-         apiKeyField.value = config.has_api_key ? '••••••••' : '';
-         if (rememberChk) rememberChk.checked = false;
-       }
-         // Cannot auto-fill endpoint because we don't know the key type
-         if (statusElem) statusElem.style.display = 'none';
-       }
-     }
-    // Update model label
+
+     // Update model label
     const modelLabel = $('chat-model-label');
     if (modelLabel) {
       modelLabel.textContent = config.chat_model || 'No model configured';
