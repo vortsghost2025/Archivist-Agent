@@ -197,8 +197,8 @@ main.evidence-collapsed .resize-handle#resize-right {
 #center-panel {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
+  min-width: 200px;
   min-height: 0;
   height: 100%;
   position: relative;
@@ -210,7 +210,8 @@ main.evidence-collapsed .resize-handle#resize-right {
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-width: 0;
+  width: 100%;
+  min-width: 200px;
   min-height: 0;
   height: 100%;
   padding: 0;
@@ -1670,6 +1671,8 @@ footer {
   display: flex;
   flex-direction: row;
   flex: 1;
+  width: 100%;
+  min-width: 200px;
   min-height: 0;
   gap: 0;
 }
@@ -1790,7 +1793,8 @@ footer {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 0;
+  width: 100%;
+  min-width: 200px;
   min-height: 0;
   background: linear-gradient(180deg, rgba(12, 28, 39, 0.6), rgba(7, 17, 24, 0.8));
 }
