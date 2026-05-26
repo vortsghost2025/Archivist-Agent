@@ -1650,15 +1650,19 @@ footer {
   main,
   main.sidebar-collapsed,
   main.evidence-collapsed {
-    grid-template-columns: 0px 5px 1fr 5px 0px;
+    grid-template-columns: 8rem 5px 1fr 5px 0px; /* keep sidebar minimal */
   }
 
   .resize-handle {
     display: none;
   }
 
+  /* Keep sidebar visible with compact width */
   #sidebar {
-    display: none;
+    display: flex !important;
+    width: 8rem;
+    padding: 10px;
+    overflow-y: auto;
   }
 
   #evidence-panel {
