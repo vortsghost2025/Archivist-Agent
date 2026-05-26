@@ -1203,12 +1203,24 @@ async function loadChatConfig() {
     // Populate API key field: use remembered key if present, else mask stored key.
     const savedKey = sessionStorage.getItem('savedApiKey');
     const apiKeyField = $('chat-api-key');
+    const endpointInput = $('chat-endpoint');
+    const statusElem = $('chat-endpoint-status');
     if (apiKeyField) {
       if (savedKey) {
         apiKeyField.value = savedKey;
         // Ensure remember checkbox reflects stored state
         const rememberChk = $('remember-api-key');
         if (rememberChk) rememberChk.checked = true;
+        // Auto‑fill endpoint based on saved key
+        if (savedKey.startsWith('sk-')) {
+          if (endpointInput) endpointInput.value = 'https://api.openai.com/v1';
+          if (statusElem) { statusElem.textContent = 'OpenAI endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+        } else if (savedKey.startsWith('sk-ant-') || savedKey.startsWith('claude-')) {
+          if (endpointInput) endpointInput.value = 'https://api.anthropic.com/v1';
+          if (statusElem) { statusElem.textContent = 'Anthropic endpoint auto‑filled.'; statusElem.style.display = 'block'; }
+        } else {
+          if (statusElem) statusElem.style.display = 'none';
+        }
       } else {
         apiKeyField.value = config.has_api_key ? '••••••••' : '';
       }
