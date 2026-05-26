@@ -2063,6 +2063,24 @@ footer {
 }
 
 /* Chat fullscreen mode – hide sidebars and resize handles, expand chat */
+
+/* Scale layout in fullscreen without affecting chat text */
+body.chat-fullscreen #center-panel {
+  transform: scale(var(--app-zoom));
+  transform-origin: top left;
+}
+
+/* Counter‑scale chat text elements to keep font size constant */
+body.chat-fullscreen #center-panel .chat-msg-content,
+body.chat-fullscreen #center-panel .chat-msg-avatar,
+body.chat-fullscreen #center-panel .chat-msg-time,
+body.chat-fullscreen #center-panel .chat-tool-header,
+body.chat-fullscreen #center-panel .chat-tool-id,
+body.chat-fullscreen #center-panel .chat-tool-toggle {
+  transform: scale(calc(1 / var(--app-zoom)));
+  transform-origin: top left;
+}
+
 body.chat-fullscreen main {
   grid-template-columns: 0px 0px 1fr 0px 0px !important;
 }

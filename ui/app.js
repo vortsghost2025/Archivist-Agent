@@ -2523,6 +2523,23 @@ function getZoomLevel() {
 }
 
 function applyZoom(level) {
+  // Apply global UI zoom (layout scaling) but keep chat font size stable in fullscreen mode
+  if (!Number.isFinite(level)) level = ZOOM_DEFAULT;
+  const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
+  document.documentElement.style.setProperty('--app-zoom', clamped);
+  const isFullscreen = document.body.classList.contains('chat-fullscreen');
+  // Update font scaling only when not in fullscreen (fonts are managed separately)
+  if (!isFullscreen) {
+    document.documentElement.style.setProperty('--text-scale', `${16 * clamped}px`);
+    document.body.style.zoom = String(clamped);
+  } else {
+    // In fullscreen, avoid body zoom to keep fonts unchanged; layout scaling handled via CSS transform
+    document.body.style.zoom = '1';
+  }
+  const display = $('zoom-level');
+  if (display) display.textContent = `${Math.round(clamped * 100)}%`;
+  localStorage.setItem('archivist-zoom', clamped.toString());
+}
   // Apply chat font scaling after zoom is set
   applyChatFont(getChatFontScale());
   // Double-check: if level is NaN/Infinity, fall back to default
