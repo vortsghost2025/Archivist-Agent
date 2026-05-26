@@ -2724,7 +2724,7 @@ $('folder-path').addEventListener('keydown', event => {
     if (main) {
       const cs = getComputedStyle(main);
       const rect = main.getBoundingClientRect();
-      console.log(`[DIAG] main: grid-columns=${cs.gridTemplateColumns} width=${Math.round(rect.width)} height=${cs.height} overflow=${cs.overflow}`);
+      console.log(`[DIAG] main: grid-columns=${cs.gridTemplateColumns} grid-rows=${cs.gridTemplateRows} width=${Math.round(rect.width)} height=${Math.round(rect.height)} overflow=${cs.overflow}`);
     }
   }, 500);
 

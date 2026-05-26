@@ -125,6 +125,7 @@ header h1 {
 main {
   display: grid;
   grid-template-columns: 15rem 5px 1fr 5px 17.5rem;
+  grid-template-rows: 1fr;
   overflow: hidden;
   position: relative;
   width: 100%;
