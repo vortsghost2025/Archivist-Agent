@@ -7,6 +7,7 @@ target/
 *.key
 *.pem
 keys.json
+.trust/keys.json
 
 # API keys (NEVER commit)
 .env
@@ -101,6 +102,9 @@ context-buffer/Here's the full map of your codebas.txt
 # Compact audit runtime state
 .compact-audit/*.json
 .compact-audit/*.jsonl
+
+# CPS enforcement log (runtime artifact)
+context-buffer/cps_log.jsonl
 
 # Lane runtime artifacts
 lanes/broadcast/last-recovery.json

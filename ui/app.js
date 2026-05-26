@@ -2404,11 +2404,13 @@ function getZoomLevel() {
 }
 
 function applyZoom(level) {
-const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
-document.documentElement.style.setProperty('--app-zoom', clamped);
-const display = $('zoom-level');
-if (display) display.textContent = `${Math.round(clamped * 100)}%`;
-localStorage.setItem('archivist-zoom', clamped.toString());
+  const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
+  document.documentElement.style.setProperty('--app-zoom', clamped);
+  // Scale text size only — layout structure stays fixed because :root font-size is 16px
+  document.documentElement.style.setProperty('--text-scale', `${16 * clamped}px`);
+  const display = $('zoom-level');
+  if (display) display.textContent = `${Math.round(clamped * 100)}%`;
+  localStorage.setItem('archivist-zoom', clamped.toString());
 }
 
 function zoomIn() { applyZoom(getZoomLevel() + ZOOM_STEP); }
@@ -2656,6 +2658,7 @@ $('folder-path').addEventListener('keydown', event => {
     }
 
   renderChat();
+  showChatPanel(); // Ensure chat-panel is visible on init (not .hidden)
   renderOverview();
   renderRetrieve();
   renderTreePanel();
