@@ -60,6 +60,14 @@
     "revoked_at": null,
     "activation_notes": "Promoted DORMANT→ACTIVE 2026-05-20. Ed25519 key registered. VPS process deployment and CircuitBreaker wiring pending. Lane has existing test trail and journal from prior work."
   },
+  "authority": {
+    "lane_id": "authority",
+    "lane_state": "ACTIVE",
+    "key_id": "28ffffbc4b1e63d4",
+    "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAXctTMojya3Xy5Ck56dbb0tTN5waAnn/w4MV5tq63hhk=\n-----END PUBLIC KEY-----",
+    "algorithm": "EdDSA",
+    "registered_at": "2026-05-12T00:00:00.000Z"
+  },
   "key_lineage": {
 "reconciled_at": "2026-05-20T22:28:00Z",
   "reconciled_by": "archivist",

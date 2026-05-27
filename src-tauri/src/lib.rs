@@ -1,4 +1,5 @@
 mod agent_fs;
+mod agent_write;
 mod build_index;
 mod build_registry;
 mod chat;
@@ -13,17 +14,20 @@ mod governance;
 mod governance_scripts;
 mod lane;
 mod patch;
-mod window_control;
 mod safety;
 mod scan_tree;
 mod sign_message;
 mod summarize_folder;
 #[cfg(test)]
 mod test_env;
+mod window_control;
 
 use agent_fs::{
     agent_list_directory, agent_read_file, agent_search_files, clear_read_audit_log,
     get_read_audit_log,
+};
+use agent_write::{
+    clear_write_audit_log, create_directory, create_file, delete_path, get_write_audit_log,
 };
 use build_index::build_index;
 use build_registry::build_registry;
@@ -40,8 +44,8 @@ use patch::{
 use scan_tree::scan_tree;
 use sign_message::sign_message;
 use summarize_folder::summarize_folder;
-use window_control::set_fullscreen;
 use tauri::Manager;
+use window_control::set_fullscreen;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -93,6 +97,11 @@ pub fn run() {
             get_lane_status,
             switch_lane,
             set_fullscreen,
+            create_file,
+            delete_path,
+            create_directory,
+            get_write_audit_log,
+            clear_write_audit_log,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

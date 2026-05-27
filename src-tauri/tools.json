@@ -161,25 +161,92 @@
         }
       }
     },
-    {
-      "type": "function",
-      "function": {
-        "name": "propose_patch",
-        "description": "Propose a change to a file. The agent provides the complete new file content, and the system generates a diff for the user to review. The user must click 'Apply' to actually write the file — this command does NOT modify anything on its own. Use this when the user asks you to edit, fix, update, or create a file.",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "filePath": {
-              "type": "string",
-              "description": "Absolute path to the file to modify, e.g. 'S:/Archivist-Agent/ui/app.js'"
-            },
-            "patchContent": {
-              "type": "string",
-              "description": "The complete new content of the file after the proposed change. For new files, this is the full file content."
-            }
+  {
+    "type": "function",
+    "function": {
+      "name": "propose_patch",
+      "description": "Propose a change to a file. The agent provides the complete new file content, and the system generates a diff for the user to review. The user must click 'Apply' to actually write the file — this command does NOT modify anything on its own. Use this when the user asks you to edit, fix, update, or create a file.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "filePath": {
+            "type": "string",
+            "description": "Absolute path to the file to modify, e.g. 'S:/Archivist-Agent/ui/app.js'"
           },
-          "required": ["filePath", "patchContent"]
-        }
+          "patchContent": {
+            "type": "string",
+            "description": "The complete new content of the file after the proposed change. For new files, this is the full file content."
+          }
+        },
+        "required": ["filePath", "patchContent"]
       }
     }
-  ]
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_file",
+      "description": "Create a new file with the given content. The path must be within allowed roots. When force=true (agent mode), the file is written directly by the backend. When force=false (UI mode, default), the backend validates only and the UI writes the file after operator confirmation. Parent directories are created automatically if needed.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Absolute path for the new file, e.g. 'S:/Archivist-Agent/src/new_module.rs'"
+          },
+          "content": {
+            "type": "string",
+            "description": "The content to write into the new file"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "If true, the backend writes the file directly (agent mode). If false or omitted, the backend validates only and the UI writes after confirmation. Default: false."
+          }
+        },
+        "required": ["path", "content"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "delete_path",
+      "description": "Delete a file or empty directory. The path must be within allowed roots. Directories must be empty to be deleted. When force=true (agent mode), the path is deleted directly by the backend. When force=false (UI mode, default), the backend validates only and the UI deletes after operator confirmation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Absolute path to the file or empty directory to delete, e.g. 'S:/Archivist-Agent/temp.log'"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "If true, the backend deletes directly (agent mode). If false or omitted, the backend validates only and the UI deletes after confirmation. Default: false."
+          }
+        },
+        "required": ["path"]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "create_directory",
+      "description": "Create a directory and any missing parent directories. The path must be within allowed roots. When force=true (agent mode), the directory is created directly by the backend. When force=false (UI mode, default), the backend validates only and the UI creates after operator confirmation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Absolute path for the new directory, e.g. 'S:/Archivist-Agent/src/new_module'"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "If true, the backend creates the directory directly (agent mode). If false or omitted, the backend validates only and the UI creates after confirmation. Default: false."
+          }
+        },
+        "required": ["path"]
+      }
+    }
+  }
+]

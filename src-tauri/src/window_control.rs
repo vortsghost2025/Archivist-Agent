@@ -1,5 +1,5 @@
 // Tauri window control commands
-use tauri::{Manager, Window};
+use tauri::Window;
 
 /// Toggle native OS window fullscreen mode.
 /// Returns Ok(()) on success, otherwise an error string.

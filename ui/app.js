@@ -174,7 +174,7 @@ const invoke = (() => {
 
     return async (cmd, args = {}) => {
         const root = args.root_path || args.root || args.path || 'C:\Demo\Archivist';
-  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log', 'get_lane_status', 'switch_lane'];
+  const readOnlyCommands = ['ping', 'scan_tree', 'summarize_folder', 'read_governance_file', 'run_script', 'git_status', 'check_read_only', 'get_cps_score', 'cps_guard', 'chat_send', 'save_agent_config', 'load_agent_config_cmd', 'fetch_models', 'agent_read_file', 'agent_list_directory', 'agent_search_files', 'get_read_audit_log', 'clear_read_audit_log', 'propose_patch', 'apply_patch', 'reject_patch', 'get_patch_audit_log', 'clear_patch_audit_log', 'get_lane_status', 'switch_lane', 'create_file', 'delete_path', 'create_directory', 'get_write_audit_log', 'clear_write_audit_log'];
 
   if (readOnlyCommands.includes(cmd)) {
     console.warn(`[BROWSER] ${cmd} - returning mock data (no safety validation)`);
@@ -327,11 +327,29 @@ if (cmd === 'switch_lane') {
     outboxMessages: [], quarantineMessages: [], actionRequiredMessages: [],
     journalEntries: [{ fileName: '2026-05-25.jsonl', preview: '{"event":"test"}' }],
     trustStoreEntry: { lane_id: laneId, lane_state: 'ACTIVE', key_id: 'abc123', algorithm: 'EdDSA', registered_at: '2026-05-11T04:00:00Z' },
-    laneState: 'ACTIVE'
-    };
+laneState: 'ACTIVE'
+};
+}
+  if (cmd === 'create_file') {
+    const isForce = !!args.force;
+    return { path: args.path || 'new.txt', content: args.content || '', needsMkdir: false, parentDir: null, requiresConsent: !isForce, readOnlyOverridden: isForce, written: isForce };
+  }
+  if (cmd === 'delete_path') {
+    const isForce = !!args.force;
+    return { path: args.path || 'delete.txt', isDir: false, requiresConsent: !isForce, readOnlyOverridden: isForce, deleted: isForce };
+  }
+  if (cmd === 'create_directory') {
+    const isForce = !!args.force;
+    return { path: args.path || 'new_dir', requiresConsent: !isForce, readOnlyOverridden: isForce, created: isForce };
+  }
+if (cmd === 'get_write_audit_log') {
+return [];
+}
+if (cmd === 'clear_write_audit_log') {
+return true;
 }
 return null;
-        }
+}
 
         const mutatingCommands = ['build_index', 'generate_handoff', 'build_registry'];
         if (mutatingCommands.includes(cmd)) {
@@ -1099,25 +1117,90 @@ function renderChat() {
                 </div>
                 `;
             }
-        } catch (patchRenderErr) {
-            log('Patch review card render error — falling back to generic tool result: ' + patchRenderErr, 'err');
-            patchUI = '';
-        }
+} catch (patchRenderErr) {
+  log('Patch review card render error — falling back to generic tool result: ' + patchRenderErr, 'err');
+  patchUI = '';
+}
 
-        html += `
+// Check if this is a write command result (create_file, delete_path, create_directory)
+// that requires operator confirmation before JS performs the actual write.
+let writeUI = '';
+try {
+  if (msg.writeAction && typeof msg.writeAction === 'string' && msg.writePath) {
+    const safePath = escapeHtml(msg.writePath);
+    const actionLabel = msg.writeAction === 'create_file' ? 'CREATE FILE'
+      : msg.writeAction === 'delete_path' ? 'DELETE PATH'
+      : msg.writeAction === 'create_directory' ? 'CREATE DIRECTORY'
+      : 'WRITE ACTION';
+    const actionIcon = msg.writeAction === 'delete_path' ? '🗑️' : '📄';
+    const consentNote = msg.writeRequiresConsent
+    ? '<span class="write-consent-badge">🔒 Read-only — consent required</span>'
+    : '';
+  const dirNote = msg.writeIsDir ? ' <span class="write-type-badge">directory</span>' : '';
+  const mkdirNote = msg.writeNeedsMkdir
+    ? `<div class="write-mkdir-note">Parent dir will be created: <code>${escapeHtml(msg.writeParentDir || '')}</code></div>`
+    : '';
+  // For create_file, show a content preview
+  let contentPreview = '';
+  if (msg.writeAction === 'create_file' && msg.writeContent) {
+    const shortContent = msg.writeContent.length > 300
+    ? msg.writeContent.substring(0, 300) + '…'
+    : msg.writeContent;
+    contentPreview = `<div class="write-content-preview"><pre>${escapeHtml(shortContent)}</pre></div>`;
+  }
+  // Force-mode: write already completed in Rust — show completed status
+  let actionButtons = '';
+  if (msg.writeCompleted) {
+    const completedLabel = msg.writeAction === 'delete_path' ? 'Deleted' : 'Created';
+    actionButtons = `<div class="write-action-actions"><span class="write-completed-badge">✓ ${completedLabel}</span></div>`;
+  } else {
+    // UI mode: show Confirm/Cancel buttons
+    const handlerCall = msg.writeAction === 'create_file'
+    ? `handleCreateFile('${safePath.replace(/'/g, "\\'")}', ${JSON.stringify(msg.writeContent || '').replace(/</g, '\\x3c')})`
+    : msg.writeAction === 'delete_path'
+    ? `handleDeletePath('${safePath.replace(/'/g, "\\'")}')`
+    : `handleCreateDirectory('${safePath.replace(/'/g, "\\'")}')`;
+    actionButtons = `
+    <div class="write-action-actions">
+    <button class="patch-btn patch-btn-apply" type="button" onclick="${handlerCall}" aria-label="Confirm ${actionLabel}">✓ Confirm</button>
+    <button class="patch-btn patch-btn-reject" type="button" onclick="addChatMessage('system', '✗ ${actionLabel} cancelled for ${safePath}')" aria-label="Cancel ${actionLabel}">✗ Cancel</button>
+    </div>`;
+  }
+
+  writeUI = `
+  <div class="write-action-card" role="region" aria-label="${actionLabel} - ${msg.writeCompleted ? 'completed' : 'confirm or cancel'}">
+    <div class="write-action-header">
+    <span class="write-action-icon">${actionIcon}</span>
+    <strong class="write-action-label">${actionLabel}</strong>
+    <span class="write-action-path">${safePath}</span>
+    ${dirNote}
+    ${consentNote}
+    </div>
+    ${mkdirNote}
+    ${contentPreview}
+    ${actionButtons}
+  </div>
+  `;
+  }
+} catch (writeRenderErr) {
+  log('Write action card render error — falling back to generic tool result: ' + writeRenderErr, 'err');
+  writeUI = '';
+}
+
+html += `
 <div class="chat-msg chat-msg-tool">
   <div class="chat-msg-avatar">⚙️</div>
   <div class="chat-msg-body">
-    ${patchUI ? patchUI : `
-    <div class="chat-tool-header" onclick="this.parentElement.querySelector('.chat-tool-detail').classList.toggle('collapsed')">
-      <span class="chat-tool-label">Tool result</span>
-      <span class="chat-tool-id">${escapeHtml(id.substring(0, 16))}</span>
-      <span class="chat-tool-toggle">▶ click to expand</span>
-    </div>
-    <div class="chat-tool-detail collapsed"><pre>${fullContent}</pre></div>
-    <div class="chat-tool-preview"><code>${preview}${(msg.content || '').length > 200 ? '…' : ''}</code></div>
-    `}
-    <div class="chat-msg-time">${escapeHtml(timeStr)}</div>
+  ${patchUI ? patchUI : writeUI ? writeUI : `
+  <div class="chat-tool-header" onclick="this.parentElement.querySelector('.chat-tool-detail').classList.toggle('collapsed')">
+    <span class="chat-tool-label">Tool result</span>
+    <span class="chat-tool-id">${escapeHtml(id.substring(0, 16))}</span>
+    <span class="chat-tool-toggle">▶ click to expand</span>
+  </div>
+  <div class="chat-tool-detail collapsed"><pre>${fullContent}</pre></div>
+  <div class="chat-tool-preview"><code>${preview}${(msg.content || '').length > 200 ? '…' : ''}</code></div>
+  `}
+  <div class="chat-msg-time">${escapeHtml(timeStr)}</div>
   </div>
 </div>
 `;
@@ -1537,15 +1620,22 @@ async function sendChatMessage() {
         const funcName = tc.function?.name || '';
         let funcArgs = {};
         try {
-          funcArgs = JSON.parse(tc.function?.arguments || '{}');
-        } catch (parseErr) {
-          // If arguments aren't valid JSON, report the error back as a tool result
-          addChatMessage('tool', `Error: failed to parse tool arguments: ${parseErr.message}`, { toolCallId: callId });
-          log(`Tool parse error for ${funcName}: ${parseErr.message}`, 'err');
-          continue;
-        }
+      funcArgs = JSON.parse(tc.function?.arguments || '{}');
+      } catch (parseErr) {
+        // If arguments aren't valid JSON, report the error back as a tool result
+        addChatMessage('tool', `Error: failed to parse tool arguments: ${parseErr.message}`, { toolCallId: callId });
+        log(`Tool parse error for ${funcName}: ${parseErr.message}`, 'err');
+        continue;
+      }
 
-        log(`Tool call: ${funcName}(${Object.keys(funcArgs).join(', ')})`, 'info');
+      // Agent tool-call loop: write commands should use force=true so Rust
+      // performs the actual writes directly. The model cannot interact with
+      // JS UI confirmation dialogs, so force mode is required here.
+      if (['create_file', 'delete_path', 'create_directory'].includes(funcName)) {
+        funcArgs.force = true;
+      }
+
+      log(`Tool call: ${funcName}(${Object.keys(funcArgs).join(', ')})`, 'info');
 
         try {
           const toolResult = await executeToolCall(funcName, funcArgs);
@@ -1562,22 +1652,37 @@ async function sendChatMessage() {
               + `\n\n... [truncated ${resultStr.length - MAX_TOOL_RESULT_CHARS} chars — result too large for context window]`;
           }
 
-          // Special handling for propose_patch: extract patch metadata for UI
-          const patchOpts = {};
-          if (funcName === 'propose_patch' && typeof toolResult === 'object' && toolResult !== null) {
-            // Defensive: only extract if all expected fields are present and valid
-            if (toolResult.proposalId && typeof toolResult.proposalId === 'string') {
-              patchOpts.proposalId = toolResult.proposalId;
-              patchOpts.patchFilePath = toolResult.filePath || '';
-              patchOpts.diff = toolResult.diff || '';
-              patchOpts.linesAdded = (typeof toolResult.linesAdded === 'number') ? toolResult.linesAdded : 0;
-              patchOpts.linesRemoved = (typeof toolResult.linesRemoved === 'number') ? toolResult.linesRemoved : 0;
-            } else {
-              log('propose_patch returned object without valid proposalId — treating as generic result', 'warn');
+            // Special handling for propose_patch: extract patch metadata for UI
+            const patchOpts = {};
+            if (funcName === 'propose_patch' && typeof toolResult === 'object' && toolResult !== null) {
+                // Defensive: only extract if all expected fields are present and valid
+                if (toolResult.proposalId && typeof toolResult.proposalId === 'string') {
+                    patchOpts.proposalId = toolResult.proposalId;
+                    patchOpts.patchFilePath = toolResult.filePath || '';
+                    patchOpts.diff = toolResult.diff || '';
+                    patchOpts.linesAdded = (typeof toolResult.linesAdded === 'number') ? toolResult.linesAdded : 0;
+                    patchOpts.linesRemoved = (typeof toolResult.linesRemoved === 'number') ? toolResult.linesRemoved : 0;
+                } else {
+                    log('propose_patch returned object without valid proposalId — treating as generic result', 'warn');
+                }
             }
-          }
 
-          addChatMessage('tool', resultStr, { toolCallId: callId, ...patchOpts });
+  // Special handling for write commands: extract action metadata for UI cards
+  const writeOpts = {};
+  if (['create_file', 'delete_path', 'create_directory'].includes(funcName)
+    && typeof toolResult === 'object' && toolResult !== null) {
+    writeOpts.writeAction = funcName;
+    writeOpts.writePath = toolResult.path || '';
+    writeOpts.writeRequiresConsent = !!toolResult.requiresConsent;
+    writeOpts.writeIsDir = !!toolResult.isDir;
+    writeOpts.writeNeedsMkdir = !!toolResult.needsMkdir;
+    writeOpts.writeParentDir = toolResult.parentDir || '';
+    writeOpts.writeContent = toolResult.content || '';
+    // Force-mode results: the write already happened in Rust
+    writeOpts.writeCompleted = !!(toolResult.written || toolResult.deleted || toolResult.created);
+  }
+
+            addChatMessage('tool', resultStr, { toolCallId: callId, ...patchOpts, ...writeOpts });
           log(`Tool result: ${funcName} → ${resultStr.length} chars${wasTruncated ? ' (truncated)' : ''}`, 'ok');
         } catch (toolErr) {
           const errMsg = (typeof toolErr === 'string') ? toolErr : (toolErr?.message || String(toolErr));
@@ -1632,8 +1737,23 @@ async function executeToolCall(funcName, funcArgs) {
     ping:                { cmd: 'ping',                  args: () => ({}) },
     git_status:          { cmd: 'git_status',            args: () => ({}) },
     check_read_only: { cmd: 'check_read_only', args: () => ({}) },
-    propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patchContent: a.patchContent }) },
-  };
+propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patchContent: a.patchContent }) },
+    create_file: { cmd: 'create_file', args: a => {
+      const r = { path: a.path, content: a.content };
+      if (a.force !== undefined && a.force !== null) r.force = a.force;
+      return r;
+    }},
+    delete_path: { cmd: 'delete_path', args: a => {
+      const r = { path: a.path };
+      if (a.force !== undefined && a.force !== null) r.force = a.force;
+      return r;
+    }},
+    create_directory: { cmd: 'create_directory', args: a => {
+      const r = { path: a.path };
+      if (a.force !== undefined && a.force !== null) r.force = a.force;
+      return r;
+    }},
+};
 
   const mapping = TOOL_MAP[funcName];
   if (!mapping) {
@@ -1660,6 +1780,15 @@ function addChatMessage(role, content, opts = {}) {
   if (opts.diff) msg.diff = opts.diff;
   if (opts.linesAdded !== undefined) msg.linesAdded = opts.linesAdded;
   if (opts.linesRemoved !== undefined) msg.linesRemoved = opts.linesRemoved;
+  // Write action support: tool messages from create_file/delete_path/create_directory
+  if (opts.writeAction) msg.writeAction = opts.writeAction;
+  if (opts.writePath) msg.writePath = opts.writePath;
+  if (opts.writeRequiresConsent !== undefined) msg.writeRequiresConsent = opts.writeRequiresConsent;
+  if (opts.writeIsDir !== undefined) msg.writeIsDir = opts.writeIsDir;
+  if (opts.writeNeedsMkdir !== undefined) msg.writeNeedsMkdir = opts.writeNeedsMkdir;
+  if (opts.writeParentDir) msg.writeParentDir = opts.writeParentDir;
+  if (opts.writeContent !== undefined) msg.writeContent = opts.writeContent;
+  if (opts.writeCompleted !== undefined) msg.writeCompleted = opts.writeCompleted;
   state.chatMessages.push(msg);
   renderChat();
   return msg;
@@ -1754,6 +1883,141 @@ async function rejectPatch(proposalId) {
     const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
     log(`Patch reject error: ${errMsg}`, 'err');
     addChatMessage('system', `✗ Patch reject error: ${errMsg}`);
+  }
+  renderChat();
+}
+
+// ── Write Command Handlers ──────────────────────────────────────────────
+// These mirror the apply_patch pattern: Rust validates, JS writes via
+// window.__TAURI__.fs to go through Tauri's scope-checking command layer.
+
+async function handleCreateFile(filePath, content) {
+  try {
+    // Step 1: Rust validates the path, checks secrets, checks read-only.
+    const result = await invoke('create_file', { path: filePath, content });
+
+    // Step 2: If read-only mode is active, prompt for operator consent.
+    if (result.requiresConsent) {
+      const consent = confirm(
+        `Create file "${filePath}"?\n\nThe system is in read-only mode. This action requires operator consent.`
+      );
+      if (!consent) {
+        addChatMessage('system', `✗ File creation cancelled — operator consent denied.`);
+        renderChat();
+        return;
+      }
+    }
+
+    // Step 3: Create parent directory if needed (via Tauri's scope-checked mkdir).
+    if (result.needsMkdir && result.parentDir) {
+      try {
+        const { mkdir } = window.__TAURI__.fs;
+        await mkdir(result.parentDir, { recursive: true });
+        log(`Created parent directory: ${result.parentDir}`, 'info');
+      } catch (mkdirErr) {
+        const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
+        log(`Create file mkdir failed: ${mkdirErrMsg}`, 'err');
+        addChatMessage('system', `✗ File validated but directory creation failed: ${mkdirErrMsg}`);
+        renderChat();
+        return;
+      }
+    }
+
+    // Step 4: Write the file via Tauri's fs plugin from JS.
+    try {
+      const { writeTextFile } = window.__TAURI__.fs;
+      await writeTextFile(result.path, result.content);
+      log(`File created: ${result.path}`, 'ok');
+      addChatMessage('system', `✓ File created: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+    } catch (writeErr) {
+      const writeErrMsg = (typeof writeErr === 'string') ? writeErr : (writeErr?.message || String(writeErr));
+      log(`Create file write failed: ${writeErrMsg}`, 'err');
+      addChatMessage('system', `✗ File validated but write failed: ${writeErrMsg}`);
+    }
+  } catch (e) {
+    const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
+    log(`Create file error: ${errMsg}`, 'err');
+    addChatMessage('system', `✗ Create file error: ${errMsg}`);
+  }
+  renderChat();
+}
+
+async function handleDeletePath(filePath) {
+  try {
+    // Step 1: Rust validates the path, checks it exists, checks it's empty (if dir).
+    const result = await invoke('delete_path', { path: filePath });
+
+    // Step 2: If read-only mode is active, prompt for operator consent.
+    if (result.requiresConsent) {
+      const consent = confirm(
+        `Delete "${filePath}" (${result.isDir ? 'directory' : 'file'})?\n\nThe system is in read-only mode. This action requires operator consent.`
+      );
+      if (!consent) {
+        addChatMessage('system', `✗ Delete cancelled — operator consent denied.`);
+        renderChat();
+        return;
+      }
+    } else {
+      // Even in non-read-only mode, confirm destructive operations
+      const confirmDelete = confirm(`Permanently delete "${filePath}"?`);
+      if (!confirmDelete) {
+        addChatMessage('system', `✗ Delete cancelled.`);
+        renderChat();
+        return;
+      }
+    }
+
+    // Step 3: Delete via Tauri's fs plugin from JS.
+    try {
+      const { remove } = window.__TAURI__.fs;
+      await remove(result.path, { dir: result.isDir });
+      log(`Deleted: ${result.path}`, 'ok');
+      addChatMessage('system', `✓ Deleted: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+    } catch (removeErr) {
+      const removeErrMsg = (typeof removeErr === 'string') ? removeErr : (removeErr?.message || String(removeErr));
+      log(`Delete failed: ${removeErrMsg}`, 'err');
+      addChatMessage('system', `✗ Delete validated but removal failed: ${removeErrMsg}`);
+    }
+  } catch (e) {
+    const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
+    log(`Delete path error: ${errMsg}`, 'err');
+    addChatMessage('system', `✗ Delete path error: ${errMsg}`);
+  }
+  renderChat();
+}
+
+async function handleCreateDirectory(dirPath) {
+  try {
+    // Step 1: Rust validates the path, checks it doesn't already exist.
+    const result = await invoke('create_directory', { path: dirPath });
+
+    // Step 2: If read-only mode is active, prompt for operator consent.
+    if (result.requiresConsent) {
+      const consent = confirm(
+        `Create directory "${dirPath}"?\n\nThe system is in read-only mode. This action requires operator consent.`
+      );
+      if (!consent) {
+        addChatMessage('system', `✗ Directory creation cancelled — operator consent denied.`);
+        renderChat();
+        return;
+      }
+    }
+
+    // Step 3: Create directory via Tauri's fs plugin from JS.
+    try {
+      const { mkdir } = window.__TAURI__.fs;
+      await mkdir(result.path, { recursive: true });
+      log(`Directory created: ${result.path}`, 'ok');
+      addChatMessage('system', `✓ Directory created: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+    } catch (mkdirErr) {
+      const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
+      log(`Create directory failed: ${mkdirErrMsg}`, 'err');
+      addChatMessage('system', `✗ Directory validated but creation failed: ${mkdirErrMsg}`);
+    }
+  } catch (e) {
+    const errMsg = (typeof e === 'string') ? e : (e?.message || String(e));
+    log(`Create directory error: ${errMsg}`, 'err');
+    addChatMessage('system', `✗ Create directory error: ${errMsg}`);
   }
   renderChat();
 }

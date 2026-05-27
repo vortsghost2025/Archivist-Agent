@@ -74,7 +74,8 @@ class Verifier {
 	}
 
 	getPublicKey(laneId) {
-		const keyEntry = this.trustStore.keys?.[laneId];
+		// Support both flat and nested trust store formats
+		let keyEntry = this.trustStore.keys?.[laneId] || this.trustStore[laneId];
 		if (!keyEntry) return null;
 		if (keyEntry.revoked_at) return null;
 		return keyEntry.public_key_pem;
@@ -85,7 +86,7 @@ class Verifier {
 			const parsed = this._parseJWS(jws);
 			if (!parsed) return { valid: false, error: 'INVALID_JWS_FORMAT' };
 
-			if (parsed.header.alg !== 'RS256') {
+			if (parsed.header.alg !== 'RS256' && parsed.header.alg !== 'EdDSA') {
 				return { valid: false, error: 'UNSUPPORTED_ALGORITHM' };
 			}
 
@@ -94,8 +95,9 @@ class Verifier {
 			}
 
 			const signature = this._base64UrlDecode(parsed.signature);
+			const verifyAlg = parsed.header.alg === 'EdDSA' ? null : 'RSA-SHA256';
 			const verified = crypto.verify(
-				'RSA-SHA256',
+				verifyAlg,
 				Buffer.from(parsed.signingInput),
 				{ key: publicKey, format: 'pem' },
 				signature
