@@ -12,7 +12,9 @@
             "description": "Absolute path to the directory to scan, e.g. 'S:/Archivist-Agent'"
           }
         },
-        "required": ["rootPath"]
+        "required": [
+          "rootPath"
+        ]
       }
     }
   },
@@ -29,7 +31,9 @@
             "description": "Absolute path to the folder to summarize"
           }
         },
-        "required": ["rootPath"]
+        "required": [
+          "rootPath"
+        ]
       }
     }
   },
@@ -46,7 +50,9 @@
             "description": "Absolute path to the directory to list"
           }
         },
-        "required": ["path"]
+        "required": [
+          "path"
+        ]
       }
     }
   },
@@ -71,7 +77,9 @@
             "description": "Maximum number of lines to return. Defaults to 200 when offset is provided, or the entire file when offset is not provided. Recommended: 200 for large files."
           }
         },
-        "required": ["path"]
+        "required": [
+          "path"
+        ]
       }
     }
   },
@@ -92,7 +100,10 @@
             "description": "Search query — matches if the query appears in the file or directory name"
           }
         },
-        "required": ["path", "query"]
+        "required": [
+          "path",
+          "query"
+        ]
       }
     }
   },
@@ -109,7 +120,9 @@
             "description": "Governance file name without extension, e.g. 'COVENANT' or 'now-md'"
           }
         },
-        "required": ["fileName"]
+        "required": [
+          "fileName"
+        ]
       }
     }
   },
@@ -149,18 +162,18 @@
       }
     }
   },
-{
-      "type": "function",
-      "function": {
-        "name": "check_read_only",
-        "description": "Check if the agent is in read-only mode. In read-only mode, write operations like build_index and build_registry are blocked.",
-        "parameters": {
-          "type": "object",
-          "properties": {},
-          "required": []
-        }
+  {
+    "type": "function",
+    "function": {
+      "name": "check_read_only",
+      "description": "Check if the agent is in read-only mode. In read-only mode, write operations like build_index and build_registry are blocked.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
       }
-    },
+    }
+  },
   {
     "type": "function",
     "function": {
@@ -178,7 +191,10 @@
             "description": "The complete new content of the file after the proposed change. For new files, this is the full file content."
           }
         },
-        "required": ["filePath", "patchContent"]
+        "required": [
+          "filePath",
+          "patchContent"
+        ]
       }
     }
   },
@@ -203,7 +219,10 @@
             "description": "If true, the backend writes the file directly (agent mode). If false or omitted, the backend validates only and the UI writes after confirmation. Default: false."
           }
         },
-        "required": ["path", "content"]
+        "required": [
+          "path",
+          "content"
+        ]
       }
     }
   },
@@ -224,7 +243,9 @@
             "description": "If true, the backend deletes directly (agent mode). If false or omitted, the backend validates only and the UI deletes after confirmation. Default: false."
           }
         },
-        "required": ["path"]
+        "required": [
+          "path"
+        ]
       }
     }
   },
@@ -245,7 +266,40 @@
             "description": "If true, the backend creates the directory directly (agent mode). If false or omitted, the backend validates only and the UI creates after confirmation. Default: false."
           }
         },
-        "required": ["path"]
+        "required": [
+          "path"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "execute_command",
+      "description": "Execute a shell command with safety gates. Allowed prefixes: cargo, npm, npx, node, git, python, rustc, rustfmt, rustup, echo, dir, ls, cat, head, tail, wc, grep, find, which, where, type, pwd, cd, mkdir, cp, mv, touch, chmod, stat, file, du, df, ps, tasklist. Blocked patterns: rm -rf /, format, mkfs, dd, shutdown, reboot, reg, diskpart, etc. Working directory must be within allowed roots. Timeout: 30s default, 120s max. Output capped at 64KB stdout / 32KB stderr.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The shell command to execute, e.g. 'cargo test' or 'git status'"
+          },
+          "workingDir": {
+            "type": "string",
+            "description": "Absolute path for the working directory, must be within allowed roots. Defaults to S:/Archivist-Agent"
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "Timeout in seconds. Default 30, max 120."
+          },
+          "force": {
+            "type": "boolean",
+            "description": "If true (agent mode), Rust validates AND executes. If false (UI mode), Rust validates only and JS spawns via tauri-plugin-shell. Default: false."
+          }
+        },
+        "required": [
+          "command"
+        ]
       }
     }
   }

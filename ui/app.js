@@ -218,7 +218,7 @@ const invoke = (() => {
     const profile = request.profile || 'primary';
     const userMsg = request.messages?.filter(m => m.role === 'user').pop();
     const question = userMsg?.content || '(empty)';
-    const agentNum = profile === 'agent-1' || profile === 'primary' ? '1' : '2';
+    const agentNum = profile === 'primary' ? '1' : '2';
     return {
       reply: `[Browser Mock - Agent ${agentNum}] You said: "${question}"\n\nThis is a mock response. Configure your API key in the Agent Settings sidebar to use the real backend.`,
       model: request.model || 'mock-model',
@@ -395,12 +395,13 @@ const state = {
     },
     'agent-2': {
       messages: loadAgentMessages('agent-2'),
-      config: loadAgentConfig('agent-2'),
-      loading: false
-    }
-  },
-  chatSettingsOpen: false,
-  readAuditOpen: false,
+config: loadAgentConfig('agent-2'),
+       loading: false
+     }
+   },
+   chatSettingsOpen: false,
+   chatLoading: false,
+   readAuditOpen: false,
   readAuditLog: [],
   patchAuditLog: [],
     laneStatuses: {},
@@ -429,9 +430,25 @@ function saveAgentMessages(agentId, messages) {
 function loadAgentConfig(agentId) {
   try {
     const raw = localStorage.getItem(getAgentStorageKey(agentId, 'config'));
-    return raw ? JSON.parse(raw) : { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
+    const parsed = raw ? JSON.parse(raw) : { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
+    // Debug log
+    log(`loadAgentConfig(${agentId}): raw="${raw ? 'EXISTS' : 'MISSING'}", endpoint="${parsed.endpoint || 'MISSING'}", apiKey="${parsed.apiKey ? 'PRESENT' : 'MISSING'}", model="${parsed.model || 'MISSING'}", storageKey="${getAgentStorageKey(agentId, 'config')}"`, 'info');
+    // Auto-fill endpoint if apiKey present but endpoint missing
+    if (parsed.apiKey && (!parsed.endpoint || parsed.endpoint.trim() === '')) {
+      if (parsed.apiKey.startsWith('sk-')) {
+        parsed.endpoint = 'https://api.openai.com/v1';
+      } else if (parsed.apiKey.startsWith('sk-ant-') || parsed.apiKey.startsWith('claude-')) {
+        parsed.endpoint = 'https://api.anthropic.com/v1';
+      } else {
+        parsed.endpoint = 'https://integrate.api.nvidia.com/v1';
+      }
+      // Re-save with fixed endpoint
+      saveAgentConfig(agentId, parsed);
+    }
+    return parsed;
   } catch (_) {
-    return { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
+    const defaultConfig = { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
+    return defaultConfig;
   }
 }
 
@@ -442,10 +459,11 @@ function saveAgentConfig(agentId, config) {
 }
 
 function switchAgent(agentId) {
-  if (state.agents[agentId]) {
+  if (state.agents && state.agents[agentId]) {
     state.activeAgent = agentId;
     localStorage.setItem(ACTIVE_AGENT_KEY, agentId);
     renderAgentTabs();
+    renderAgentSettings(); // Also re-render settings panel when switching agents
     renderChat();
   }
 }
@@ -563,7 +581,7 @@ function toggleSidebar() {
   const isNowCollapsed = main.classList.toggle('sidebar-collapsed');
   const btn = $('btn-sidebar-toggle');
   if (btn) {
-    btn.textContent = isNowCollapsed ? '☰ Sidebar' : '☰ Hide';
+    btn.textContent = isNowCollapsed ? '☰ Show' : '☰ Hide';
   }
   localStorage.setItem('archivist-sidebar-collapsed', isNowCollapsed ? '1' : '0');
   const evidenceW = 380; // default evidence panel width if not set
@@ -573,16 +591,9 @@ function toggleSidebar() {
     const ew = cols[4] || evidenceW;
     main.style.gridTemplateColumns = `0px 5px 1fr 5px ${ew}px`;
   } else {
-    // Restoring saved sidebar width when expanding
-    const saved = localStorage.getItem('archivist-sidebar-width');
-    if (saved) {
-      const sw = parseFloat(saved);
-      const cols = getComputedStyle(main).gridTemplateColumns.split(/\s+/).map(c => parseFloat(c));
-      const ew = cols[4] || evidenceW;
-      const centerW = Math.max(200, main.clientWidth - sw - ew - 10);
-      main.style.gridTemplateColumns = `${sw}px 5px ${centerW}px 5px ${ew}px`;
-    }
-  }
+     // Always restore proper grid layout when expanding
+     main.style.gridTemplateColumns = ""; // Clear inline override to use CSS default
+   }
   // Ensure sidebar element visibility
   const sidebar = $('#sidebar');
   if (sidebar) {
@@ -687,7 +698,7 @@ function renderGovNowMd(content) {
   el.textContent = JSON.stringify(content, null, 2);
 }
 
-// ─── Agent Tabs Sidebar ───────────────────────────────────────────
+// ─── Lane Sidebar Removed (replaced by Agent Tabs) ───────────────────────
 
 // Render agent tabs and their settings
 function renderAgentTabs() {
@@ -718,14 +729,14 @@ function renderAgentTabs() {
 
 // Render agent-specific settings in the sidebar
 function renderAgentSettings() {
-  const container = $('agent-settings-content');
-  if (!container) return;
+   const container = $('agent-settings-content');
+   if (!container) return;
 
-  const agent = state.activeAgent;
-  const savedConfig = loadAgentConfig(agent);
-  const config = savedConfig || { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
+   const agent = state.activeAgent;
+   // loadAgentConfig already auto-fills endpoint if needed
+   const config = loadAgentConfig(agent) || { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
 
-  container.innerHTML = `
+   container.innerHTML = `
     <div class="agent-setting-group">
       <label for="agent-endpoint">Endpoint</label>
       <input type="text" id="agent-endpoint" placeholder="https://integrate.api.nvidia.com/v1" value="${escapeHtml(config.endpoint || '')}" />
@@ -786,30 +797,57 @@ function setupAgentSettingsEvents(agent, config) {
     updateEndpointFromKey(); // Run once on load
   }
 
-  // Save settings button
-  const saveBtn = $('btn-agent-save-settings');
-  if (saveBtn) {
-    saveBtn.addEventListener('click', () => {
-      const newConfig = {
-        endpoint: $('agent-endpoint')?.value.trim() || '',
-        model: $('agent-model')?.value.trim() || '',
-        apiKey: $('agent-api-key')?.value.trim() || '',
-        temperature: parseFloat($('agent-temperature')?.value) || 0.7,
-        maxTokens: parseInt($('agent-max-tokens')?.value, 10) || 2048
-      };
-      saveAgentConfig(agent, newConfig);
-      state.agents[agent] = { ...state.agents[agent], config: newConfig };
-      const status = $('agent-config-status');
-      if (status) {
-        status.textContent = '✓ Saved';
-        status.className = 'agent-config-status success';
-        setTimeout(() => { status.textContent = ''; }, 2000);
-      }
-      renderAgentTabs(); // Update key status indicator
-    });
-  }
+// Save settings button
+   const saveBtn = $('btn-agent-save-settings');
+   if (saveBtn) {
+saveBtn.addEventListener('click', () => {
+        // Ensure endpoint is auto-filled if API key is present but endpoint is empty
+        const apiKeyVal = $('agent-api-key')?.value.trim() || '';
+        let endpointVal = $('agent-endpoint')?.value.trim() || '';
+        if (!endpointVal && apiKeyVal) {
+          if (apiKeyVal.startsWith('sk-')) {
+            endpointVal = 'https://api.openai.com/v1';
+          } else if (apiKeyVal.startsWith('sk-ant-') || apiKeyVal.startsWith('claude-')) {
+            endpointVal = 'https://api.anthropic.com/v1';
+          } else if (apiKeyVal.length > 5) {
+            endpointVal = 'https://integrate.api.nvidia.com/v1';
+          }
+          // Update the input field with auto-filled value
+          if ($('agent-endpoint')) $('agent-endpoint').value = endpointVal;
+        }
+        // Read endpoint again after potential auto-fill
+        endpointVal = $('agent-endpoint')?.value.trim() || '';
+        
+        const newConfig = {
+          endpoint: endpointVal,
+          model: $('agent-model')?.value.trim() || '',
+          apiKey: apiKeyVal,
+          temperature: parseFloat($('agent-temperature')?.value) || 0.7,
+          maxTokens: parseInt($('agent-max-tokens')?.value, 10) || 2048
+        };
+        log(`Saving config: endpoint="${endpointVal}", apiKey="${apiKeyVal ? 'PRESENT(' + apiKeyVal.length + ' chars)' : 'MISSING'}", model="${newConfig.model}"`, 'info');
+        try {
+          saveAgentConfig(agent, newConfig);
+          log(`Config saved successfully to localStorage`, 'ok');
+        } catch (e) {
+          log(`Failed to save config: ${e}`, 'err');
+        }
+        state.agents[agent] = { ...state.agents[agent], config: newConfig };
+        // Verify the save worked
+        const verifyConfig = loadAgentConfig(agent);
+        log(`Verification: endpoint="${verifyConfig.endpoint || 'MISSING'}", apiKey="${verifyConfig.apiKey ? 'PRESENT' : 'MISSING'}", model="${verifyConfig.model || 'MISSING'}", storageKey="${getAgentStorageKey(agent, 'config')}"`, 'info');
+        state.agents[agent] = { ...state.agents[agent], config: newConfig };
+        const status = $('agent-config-status');
+        if (status) {
+          status.textContent = '✓ Saved';
+          status.className = 'agent-config-status success';
+          setTimeout(() => { status.textContent = ''; }, 2000);
+        }
+        renderAgentTabs(); // Update key status indicator
+      });
+   }
 
-  // Fetch models button
+// Fetch models button
   const fetchBtn = $('btn-agent-fetch-models');
   if (fetchBtn) {
     fetchBtn.addEventListener('click', async () => {
@@ -833,13 +871,19 @@ function setupAgentSettingsEvents(agent, config) {
         const models = await invoke('fetch_models', { endpoint, apiKey });
         if (selectEl && Array.isArray(models)) {
           selectEl.innerHTML = '';
+          // Preserve current selection if model exists
+          const currentModel = selectEl.value;
           models.forEach(m => {
             const opt = document.createElement('option');
             opt.value = m.id;
             opt.textContent = m.id + (m.owned_by ? ` (${m.owned_by})` : '');
-            if (m.id === config.model) opt.selected = true;
+            if (m.id === currentModel) opt.selected = true;
             selectEl.appendChild(opt);
           });
+          // If no model selected and we have models, select the first one
+          if (!selectEl.value && models.length > 0) {
+            selectEl.selectedIndex = 0;
+          }
         }
       } catch (e) {
         const status = $('agent-endpoint-status');
@@ -1682,6 +1726,20 @@ async function saveChatConfig() {
    const statusEl = $('chat-settings-status');
    if (statusEl) statusEl.textContent = 'Saving…';
 
+
+   // ALSO save to agent-specific localStorage to sync with sendChatMessage
+   if (state.activeAgent && state.agents[state.activeAgent]) {
+     const agentConfig = {
+       endpoint: endpoint || '',
+       model: model || '',
+       apiKey: apiKey || '',
+       temperature: temperature || 0.7,
+       maxTokens: maxTokens || 2048
+     };
+     log(`sync-saveChatConfig: saving to agent ${state.activeAgent}`, 'info');
+     saveAgentConfig(state.activeAgent, agentConfig);
+     state.agents[state.activeAgent].config = agentConfig;
+   }
      try {
          const result = await invoke('save_agent_config', {
              endpoint: endpoint || null,
@@ -1740,7 +1798,7 @@ async function sendChatMessage() {
     state.agents[agent] = { messages: [], config: loadAgentConfig(agent), loading: false };
   }
   
-  const text = inputEl.value.trim();
+const text = inputEl.value.trim();
   if (!text) return;
 
   if (state.agents[agent].loading) {
@@ -1753,8 +1811,17 @@ async function sendChatMessage() {
   inputEl.value = '';
   state.agents[agent].loading = true;
 
-  // Get configuration from agent settings
+// Get configuration from agent settings
   const config = loadAgentConfig(agent);
+  // Sync state with localStorage to ensure consistency
+  if (state.agents[agent]) {
+    state.agents[agent].config = config;
+  }
+  
+// Debug: log what we're working with
+  log(`Agent config loaded: endpoint="${config.endpoint || 'MISSING'}", apiKey="${config.apiKey ? 'PRESENT(' + config.apiKey.length + ' chars)' : 'MISSING'}", model="${config.model || 'MISSING'}", agent="${agent}"`, 'info');
+  log(`localStorage raw check: key="${getAgentStorageKey(agent, 'config')}", value="${localStorage.getItem(getAgentStorageKey(agent, 'config')) ? 'EXISTS' : 'NOT FOUND'}`, 'info');
+  
   const endpoint = config.endpoint || null;
   const apiKey = config.apiKey || null;
   const model = config.model || null;
@@ -1813,15 +1880,15 @@ async function sendChatMessage() {
 
       log(`Chat loop iteration ${iteration + 1}: sending ${messages.length} messages to model`, 'info');
 
-      const result = await invoke('chat_send', {
-        request: {
-          messages: messages,
-          model: model || null,
-          apiKey: apiKey,
-          endpoint: endpoint,
-          profile: agent // Pass profile to backend (primary or dev)
-        }
-      });
+const result = await invoke('chat_send', {
+         request: {
+           messages: messages,
+           model: model || null,
+           apiKey: apiKey,
+           endpoint: endpoint,
+           profile: agent === 'agent-1' ? 'primary' : 'dev' // Map UI tabs to config profiles
+         }
+       });
 
       const reply = result.reply || '';
       const toolCalls = result.toolCalls || [];
@@ -3240,30 +3307,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if ($('btn-ev-refresh-reads')) $('btn-ev-refresh-reads').addEventListener('click', () => { invoke('get_read_audit_log').then(renderEvidenceReads).catch(() => {}); });
 if ($('btn-ev-clear-reads')) $('btn-ev-clear-reads').addEventListener('click', () => { invoke('clear_read_audit_log').then(() => { state.readAuditLog = []; renderEvidenceReads([]); }).catch(() => {}); });
 
-// Lane sidebar click handler (delegated event on lane-list container)
-// Auto‑populate chat endpoint when a known API key is entered (accessibility aid)
-const apiKeyInput = $('chat-api-key');
-if (apiKeyInput) {
-  apiKeyInput.addEventListener('input', () => {
-    const endpointEl = $('chat-endpoint');
-    if (!endpointEl) return;
-    // Preserve user-specified endpoint.
-    if (endpointEl.value && endpointEl.value.trim()) return;
-    const raw = apiKeyInput.value.trim();
-    // Simple heuristic: OpenAI keys start with "sk-".
-    if (raw && raw.startsWith('sk-')) {
-      endpointEl.value = 'https://api.openai.com/v1/chat/completions';
-      const statusEl = $('chat-endpoint-status');
-      if (statusEl) { statusEl.textContent = '✅ Endpoint auto‑filled for OpenAI key'; statusEl.className = 'helper-text success'; }
-      log('Auto‑filled chat endpoint based on OpenAI key.', 'info');
-    }
-  });
-}
-$('lane-list').addEventListener('click', event => {
-  const laneItem = event.target.closest('[data-lane]');
-  if (!laneItem) return;
-  handleLaneClick(laneItem.dataset.lane);
-});
+// Agent tab click handlers
+// Note: Agent tabs are rendered dynamically and have their own handlers
 
 // Chat event handlers
     $('btn-chat-send').addEventListener('click', sendChatMessage);
@@ -3367,48 +3412,44 @@ $('folder-path').addEventListener('keydown', event => {
         }
     });
 
-    if (state.recentPaths[0]) {
+if (state.recentPaths[0]) {
         $('folder-path').value = state.recentPaths[0];
         state.currentPath = state.recentPaths[0];
     }
 
-  renderChat();
-  showChatPanel(); // Ensure chat-panel is visible on init (not .hidden)
-  renderOverview();
-  renderRetrieve();
-  renderTreePanel();
-  updateFooterInfo();
+    renderChat();
+    showChatPanel(); // Ensure chat-panel is visible on init (not .hidden)
+    renderOverview();
+    renderRetrieve();
+    renderTreePanel();
+    updateFooterInfo();
 
-  // Initialize agent tabs and evidence panel
-  renderAgentTabs();
-  renderAgentSettings();
-  loadEvidencePanel();
-  setupEvidenceSectionToggles();
+    // Initialize agent tabs and settings on load
+    renderAgentTabs();
+    renderAgentSettings();
+    loadEvidencePanel();
+    setupEvidenceSectionToggles();
 
-  // Restore sidebar collapse state
-  const sidebarCollapsed = localStorage.getItem('archivist-sidebar-collapsed') === '1';
-  if (sidebarCollapsed) {
-    const main = document.querySelector('main');
-    if (main) main.classList.add('sidebar-collapsed');
-    const btn = $('btn-sidebar-toggle');
-    if (btn) btn.textContent = '☰ Sidebar';
-  }
+    // Restore sidebar collapse state
+    const sidebarCollapsed = localStorage.getItem('archivist-sidebar-collapsed') === '1';
+    if (sidebarCollapsed) {
+        const main = document.querySelector('main');
+        if (main) main.classList.add('sidebar-collapsed');
+        const btn = $('btn-sidebar-toggle');
+        if (btn) btn.textContent = '☰ Sidebar';
+    }
 
-  // Restore evidence panel collapse state
-  const evidenceCollapsed = localStorage.getItem('archivist-evidence-collapsed') === '1';
-  if (evidenceCollapsed) {
-    const main = document.querySelector('main');
-    if (main) main.classList.add('evidence-collapsed');
-    state.evidencePanelOpen = false;
-  }
+    // Restore evidence panel collapse state
+    const evidenceCollapsed = localStorage.getItem('archivist-evidence-collapsed') === '1';
+    if (evidenceCollapsed) {
+        const main = document.querySelector('main');
+        if (main) main.classList.add('evidence-collapsed');
+        state.evidencePanelOpen = false;
+    }
 
-  // Open the governance section in evidence panel by default
-  // Initialize agent tabs and settings on load
-  renderAgentTabs();
-  renderAgentSettings();
-  
-  const govBody = document.getElementById('ev-governance-body');
-  if (govBody) govBody.classList.add('open');
+    // Open the governance section in evidence panel by default
+    const govBody = document.getElementById('ev-governance-body');
+    if (govBody) govBody.classList.add('open');
 
   setTimeout(() => {
     const inTauri = hasTauriRuntime();

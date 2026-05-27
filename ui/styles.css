@@ -631,9 +631,14 @@ main.evidence-collapsed #evidence-panel {
 }
 
 .agent-tab-name {
-  flex: 1;
-  text-align: left;
-}
+   flex: 1;
+   text-align: left;
+ }
+ 
+ .agent-tab-status {
+   font-size: 0.8em;
+   opacity: 0.7;
+ }
 
 /* Agent-specific settings panel */
 .agent-settings-content {
@@ -707,15 +712,8 @@ main.evidence-collapsed #evidence-panel {
   line-height: 1.4;
 }
 
-.ev-empty {
-  color: var(--text-muted);
-  font-size: calc(var(--text-scale, 16px) * 0.75);
-  font-style: italic;
-  padding: 6px 0;
-}
-
-/* ─── Lane List (Left Sidebar) ────────────────────────────────────── */
-.lane-list {
+/* Lane List styles (kept for potential future use) */
+ .lane-list {
   display: flex;
   flex-direction: column;
   gap: 4px;
