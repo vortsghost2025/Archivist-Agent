@@ -2208,13 +2208,49 @@ body.chat-fullscreen .chat-messages {
   flex: 1;
   min-height: 120px;
   overflow-y: auto !important;
-  max-height: 100%;
+  max-height: calc(100vh - 140px); /* Account for input area */
+}
+
+/* Ensure chat panel fills full height when sidebars hidden */
+body.chat-fullscreen #chat-panel,
+body.chat-fullscreen .chat-layout,
+body.chat-fullscreen .chat-main {
+  height: 100vh !important;
+  min-height: 100vh !important;
 }
 
 body.chat-fullscreen main {
   height: 100vh;
-
   grid-template-columns: 0px 0px 1fr 0px 0px !important;
+}
+
+/* Make chat messages expand to fill remaining space in fullscreen */
+body.chat-fullscreen .chat-messages {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: calc(100vh - 140px) !important;
+  max-height: calc(100vh - 140px) !important;
+  overflow-y: auto !important;
+  padding: 24px;
+}
+
+/* Larger base font for TV viewing distance */
+body.chat-fullscreen {
+  --text-scale-tv: 22px;
+  --chat-text-scale-tv: 22px;
+}
+
+body.chat-fullscreen .chat-msg-content,
+body.chat-fullscreen .chat-input,
+body.chat-fullscreen .chat-send-btn,
+body.chat-fullscreen .chat-toolbar {
+  font-size: var(--text-scale-tv, 22px) !important;
+}
+
+body.chat-fullscreen .chat-msg-avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 22px !important;
 }
 body.chat-fullscreen #sidebar,
 body.chat-fullscreen #resize-left,
