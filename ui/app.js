@@ -2056,6 +2056,13 @@ propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patch
       if (a.force !== undefined && a.force !== null) r.force = a.force;
       return r;
     }},
+    execute_command: { cmd: 'execute_command', args: a => {
+      const r = { command: a.command };
+      if (a.workingDir !== undefined) r.workingDir = a.workingDir;
+      if (a.timeout !== undefined) r.timeout = a.timeout;
+      if (a.force !== undefined) r.force = a.force;
+      return r;
+    }},
     create_directory: { cmd: 'create_directory', args: a => {
       const r = { path: a.path };
       if (a.force !== undefined && a.force !== null) r.force = a.force;
