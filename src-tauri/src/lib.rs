@@ -1,5 +1,6 @@
 mod agent_fs;
 mod agent_write;
+mod backfill;
 mod build_index;
 mod build_registry;
 mod chat;
@@ -30,6 +31,7 @@ use agent_fs::{
 use agent_write::{
     clear_write_audit_log, create_directory, create_file, delete_path, get_write_audit_log,
 };
+use backfill::backfill_signatures;
 use build_index::build_index;
 use build_registry::build_registry;
 use chat::{chat_send, fetch_models, load_agent_config_cmd, save_agent_config};
@@ -107,6 +109,7 @@ pub fn run() {
             execute_command,
             get_exec_audit_log,
             clear_exec_audit_log,
+            backfill_signatures,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

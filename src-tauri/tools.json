@@ -302,5 +302,24 @@
         ]
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "backfill_signatures",
+      "description": "Sign unsigned legacy message JSON files for lanes. Scans for *_unsigned.json files and signs them in place. Requires read-only mode to be OFF.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "root": {
+            "type": "string",
+            "description": "Root directory to scan for unsigned messages, e.g. 'S:/Archivist-Agent'"
+          }
+        },
+        "required": [
+          "root"
+        ]
+      }
+    }
   }
 ]

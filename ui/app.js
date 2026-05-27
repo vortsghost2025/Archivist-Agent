@@ -213,26 +213,29 @@ const invoke = (() => {
     if (cmd === 'check_read_only') {
       return { read_only: true, allowed_roots: ['S:/Archivist-Agent', 'S:/kernel-lane', 'S:/SwarmMind', 'S:/self-organizing-library'], blocked_roots: [] };
     }
-  if (cmd === 'chat_send') {
-    const request = args.request || {};
-    const profile = request.profile || 'primary';
-    const userMsg = request.messages?.filter(m => m.role === 'user').pop();
-    const question = userMsg?.content || '(empty)';
-    const agentNum = profile === 'primary' ? '1' : '2';
-    return {
-      reply: `[Browser Mock - Agent ${agentNum}] You said: "${question}"\n\nThis is a mock response. Configure your API key in the Agent Settings sidebar to use the real backend.`,
-      model: request.model || 'mock-model',
-      usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
-      toolCalls: null,
-      finishReason: 'stop',
-      governance: {
-        cps_passing: true,
-        mode: 'OBSERVE',
-        chat_allowed: true,
-        warnings: ['Running in browser mock mode — no governance enforcement.']
-      }
-    };
-  }
+if (cmd === 'chat_send') {
+     const request = args.request || {};
+     const profile = request.profile || 'primary';
+     const userMsg = request.messages?.filter(m => m.role === 'user').pop();
+     const question = userMsg?.content || '(empty)';
+     const agentNum = profile === 'primary' ? '1' : '2';
+     return {
+       reply: `[Browser Mock - Agent ${agentNum}] You said: "${question}"\n\nThis is a mock response. Configure your API key in the Agent Settings sidebar to use the real backend.`,
+       model: request.model || 'mock-model',
+       usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+       toolCalls: null,
+       finishReason: 'stop',
+       governance: {
+         cps_passing: true,
+         mode: 'OBSERVE',
+         chat_allowed: true,
+         warnings: ['Running in browser mock mode — no governance enforcement.']
+       }
+     };
+   }
+   if (cmd === 'backfill_signatures') {
+     return { report: '[Browser Mock] Found 0 unsigned messages to sign.' };
+   }
             if (cmd === 'save_agent_config') {
                 try {
                     window.localStorage.setItem('archivist.chatConfig.mock', JSON.stringify(args));
@@ -2063,12 +2066,13 @@ propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patch
       if (a.force !== undefined) r.force = a.force;
       return r;
     }},
-    create_directory: { cmd: 'create_directory', args: a => {
-      const r = { path: a.path };
-      if (a.force !== undefined && a.force !== null) r.force = a.force;
-      return r;
-    }},
-};
+create_directory: { cmd: 'create_directory', args: a => {
+       const r = { path: a.path };
+       if (a.force !== undefined && a.force !== null) r.force = a.force;
+       return r;
+     }},
+     backfill_signatures: { cmd: 'backfill_signatures', args: a => ({ root: a.root }) },
+ };
 
   const mapping = TOOL_MAP[funcName];
   if (!mapping) {
