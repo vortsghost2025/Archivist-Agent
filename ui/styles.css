@@ -591,19 +591,112 @@ main.evidence-collapsed #evidence-panel {
   padding: 6px 0;
 }
 
-/* ─── Lane List (Left Sidebar) ────────────────────────────────────── */
-.lane-list {
+/* ─── Agent Tabs (Left Sidebar) ────────────────────────────────────── */
+.agent-tabs {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-align-items: center;
+  gap: 8px;
 }
 
-.ev-git-stat .num { font-weight: 700; }
-.ev-git-stat .num.clean { color: var(--success); }
-.ev-git-stat .num.dirty { color: var(--warning); }
+.agent-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: calc(var(--text-scale, 16px) * 0.875);
+  font-weight: 600;
+  transition: all 0.15s ease;
+  width: 100%;
+}
 
-/* Evidence: NOW.md */
+.agent-tab-btn:hover {
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.agent-tab-btn.active {
+  background: linear-gradient(135deg, rgba(79, 195, 247, 0.18), rgba(79, 195, 247, 0.1));
+  border-color: var(--accent-strong);
+  color: var(--accent);
+  box-shadow: 0 0 12px rgba(79, 195, 247, 0.15);
+}
+
+.agent-tab-icon {
+  font-size: 1.2em;
+}
+
+.agent-tab-name {
+  flex: 1;
+  text-align: left;
+}
+
+/* Agent-specific settings panel */
+.agent-settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.agent-setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agent-setting-group label {
+  font-size: calc(var(--text-scale, 16px) * 0.75);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.agent-setting-group input,
+.agent-setting-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(8, 18, 27, 0.8);
+  color: var(--text-primary);
+  font-size: calc(var(--text-scale, 16px) * 0.8125);
+  font-family: "Cascadia Code", "Consolas", monospace;
+}
+
+.agent-setting-group input:focus,
+.agent-setting-group select:focus {
+  outline: none;
+  border-color: var(--accent-strong);
+  box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.12);
+}
+
+.agent-save-btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.agent-config-status {
+  font-size: calc(var(--text-scale, 16px) * 0.75);
+  color: var(--text-muted);
+  min-height: 18px;
+  text-align: center;
+}
+
+.agent-config-status.success { color: var(--success); }
+.agent-config-status.error { color: var(--error); }
+
+.agent-endpoint-status {
+  font-size: calc(var(--text-scale, 16px) * 0.75);
+  margin-top: 2px;
+  min-height: 16px;
+}
+
+/* ─── Lane List Removed - Replaced by Agent Tabs ───────────────────────── */
 .ev-now-md {
   font-size: calc(var(--text-scale, 16px) * 0.75);
   font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;

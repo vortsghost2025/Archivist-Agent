@@ -8,14 +8,14 @@
 </head>
 <body>
     <div id="app">
-        <header>
-            <div class="brand-block">
-                <span class="header-icon">🗂️</span>
-                <div>
-                    <h1>Archivist Agent</h1>
-                    <p class="header-copy">Turn a folder into a readable map you can actually use.</p>
-                </div>
-            </div>
+<header>
+    <div class="brand-block">
+      <span class="header-icon">🗂️</span>
+      <div>
+        <h1>Archivist Agent</h1>
+        <p class="header-copy">Turn a folder into a readable map you can actually use.</p>
+      </div>
+    </div>
 <span class="version">v0.1.0</span>
 <div class="spacer"></div>
 <div class="zoom-controls" role="group" aria-label="Zoom">
@@ -30,15 +30,32 @@
   </header>
 
   <main>
-    <!-- ═══ LEFT: Lane-aware sidebar ═══ -->
+    <!-- ═══ LEFT: Chat Agent Tabs Sidebar ═══ -->
     <aside id="sidebar">
-      <!-- Lane navigator (new) -->
+      <!-- Chat Agent Tabs -->
       <section class="section-card">
-        <div class="section-label">Lanes</div>
-        <div id="lane-list" class="lane-list" aria-live="polite">
-          <div class="lane-empty">Loading lane status…</div>
+        <div class="section-label">Agents</div>
+        <div id="agent-tabs" class="agent-tabs" role="tablist" aria-label="Chat agent tabs">
+          <button class="agent-tab-btn active" data-tab="agent-1" role="tab" aria-selected="true">
+            <span class="agent-tab-icon">🤖</span>
+            <span class="agent-tab-name">Agent 1</span>
+          </button>
+          <button class="agent-tab-btn" data-tab="agent-2" role="tab" aria-selected="false">
+            <span class="agent-tab-icon">🤖</span>
+            <span class="agent-tab-name">Agent 2</span>
+          </button>
         </div>
       </section>
+
+      <section class="section-card" id="agent-settings-section">
+        <div class="section-label">Agent Settings</div>
+        <div class="agent-settings-content" id="agent-settings-content"></div>
+      </section>
+
+      <div id="status-bar" role="status" aria-live="polite">
+        <div class="status-dot idle" id="status-dot"></div>
+        <span id="status-text">Ready</span>
+      </div>
 
       <section class="section-card">
         <div class="section-label">Target Folder</div>
@@ -48,11 +65,6 @@
           <p class="helper-text">Paste a folder path, then run one analysis to scan, classify, and prep fast retrieval.</p>
         </div>
       </section>
-
-      <div id="status-bar" role="status" aria-live="polite">
-        <div class="status-dot idle" id="status-dot"></div>
-        <span id="status-text">Ready</span>
-      </div>
 
       <section class="section-card">
         <div class="section-label">Main Flow</div>

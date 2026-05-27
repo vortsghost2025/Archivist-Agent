@@ -6,6 +6,14 @@ const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'governance'];
 const LANE_IDS = ['archivist', 'kernel', 'swarmmind', 'library', 'kucoin'];
 const TREE_LINE_LIMIT = 420;
 
+// Dual chat agents support
+const AGENT_TABS = ['agent-1', 'agent-2'];
+const ACTIVE_AGENT_KEY = 'archivist-active-agent';
+const AGENT_PREFIX = 'archivist-agent-';
+
+// Chat state per agent - stored in localStorage
+const getAgentStorageKey = (agentId, key) => `${AGENT_PREFIX}${agentId}-${key}`;
+
 const BUCKET_ORDER = ['Runtime', 'Interface', 'Memory', 'Verification', 'Research', 'Unknown'];
 const BUCKET_META = Object.freeze({
     Runtime: { icon: '⚙️', tone: 'runtime', description: 'Executable code, scripts, and app logic.' },
@@ -206,11 +214,14 @@ const invoke = (() => {
       return { read_only: true, allowed_roots: ['S:/Archivist-Agent', 'S:/kernel-lane', 'S:/SwarmMind', 'S:/self-organizing-library'], blocked_roots: [] };
     }
   if (cmd === 'chat_send') {
-    const userMsg = args.request?.messages?.filter(m => m.role === 'user').pop();
+    const request = args.request || {};
+    const profile = request.profile || 'primary';
+    const userMsg = request.messages?.filter(m => m.role === 'user').pop();
     const question = userMsg?.content || '(empty)';
+    const agentNum = profile === 'agent-1' || profile === 'primary' ? '1' : '2';
     return {
-      reply: `[Browser Mock] You said: "${question}"\n\nThis is a mock response. The real backend requires Tauri + an API key to call the AI model.`,
-      model: args.request?.model || 'mock-model',
+      reply: `[Browser Mock - Agent ${agentNum}] You said: "${question}"\n\nThis is a mock response. Configure your API key in the Agent Settings sidebar to use the real backend.`,
+      model: request.model || 'mock-model',
       usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
       toolCalls: null,
       finishReason: 'stop',
@@ -367,6 +378,7 @@ const state = {
   scanResult: null,
   summaryResult: null,
   activeTab: 'chat',
+  activeAgent: localStorage.getItem(ACTIVE_AGENT_KEY) || 'agent-1',
   logEntries: [],
   isWorking: false,
   searchQuery: '',
@@ -374,9 +386,19 @@ const state = {
   recentPaths: loadRecentPaths(),
   lastAnalyzedAt: null,
   governanceLoaded: false,
-  chatMessages: [],
-  chatConfig: null,
-  chatLoading: false,
+  // Per-agent chat state
+  agents: {
+    'agent-1': {
+      messages: loadAgentMessages('agent-1'),
+      config: loadAgentConfig('agent-1'),
+      loading: false
+    },
+    'agent-2': {
+      messages: loadAgentMessages('agent-2'),
+      config: loadAgentConfig('agent-2'),
+      loading: false
+    }
+  },
   chatSettingsOpen: false,
   readAuditOpen: false,
   readAuditLog: [],
@@ -386,6 +408,47 @@ const state = {
     laneDetail: null,
     evidencePanelOpen: true
 };
+
+// Load/save agent conversations from localStorage
+function loadAgentMessages(agentId) {
+  try {
+    const raw = localStorage.getItem(getAgentStorageKey(agentId, 'messages'));
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function saveAgentMessages(agentId, messages) {
+  try {
+    localStorage.setItem(getAgentStorageKey(agentId, 'messages'), JSON.stringify(messages.slice(-200)));
+  } catch (_) {}
+}
+
+function loadAgentConfig(agentId) {
+  try {
+    const raw = localStorage.getItem(getAgentStorageKey(agentId, 'config'));
+    return raw ? JSON.parse(raw) : { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
+  } catch (_) {
+    return { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
+  }
+}
+
+function saveAgentConfig(agentId, config) {
+  try {
+    localStorage.setItem(getAgentStorageKey(agentId, 'config'), JSON.stringify(config));
+  } catch (_) {}
+}
+
+function switchAgent(agentId) {
+  if (state.agents[agentId]) {
+    state.activeAgent = agentId;
+    localStorage.setItem(ACTIVE_AGENT_KEY, agentId);
+    renderAgentTabs();
+    renderChat();
+  }
+}
 
 const $ = id => document.getElementById(id);
 
@@ -624,7 +687,171 @@ function renderGovNowMd(content) {
   el.textContent = JSON.stringify(content, null, 2);
 }
 
-// ─── Lane-Aware Sidebar ───────────────────────────────────────────
+// ─── Agent Tabs Sidebar ───────────────────────────────────────────
+
+// Render agent tabs and their settings
+function renderAgentTabs() {
+  const container = $('agent-tabs');
+  if (!container) return;
+
+  container.innerHTML = AGENT_TABS.map(id => {
+    const isActive = state.activeAgent === id;
+    const agentNum = id === 'agent-1' ? '1' : '2';
+    const agentConfig = loadAgentConfig(id);
+    const hasKey = agentConfig.apiKey && agentConfig.apiKey.length > 0;
+    return `
+      <button class="agent-tab-btn ${isActive ? 'active' : ''}" data-tab="${id}" role="tab" aria-selected="${isActive}">
+        <span class="agent-tab-icon">🤖</span>
+        <span class="agent-tab-name">Agent ${agentNum}</span>
+        ${hasKey ? '<span class="agent-tab-status" title="API key configured">🔒</span>' : ''}
+      </button>
+    `;
+  }).join('');
+
+  // Add click handlers for agent tabs
+  container.querySelectorAll('.agent-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      switchAgent(btn.dataset.tab);
+    });
+  });
+}
+
+// Render agent-specific settings in the sidebar
+function renderAgentSettings() {
+  const container = $('agent-settings-content');
+  if (!container) return;
+
+  const agent = state.activeAgent;
+  const savedConfig = loadAgentConfig(agent);
+  const config = savedConfig || { endpoint: '', model: '', apiKey: '', temperature: 0.7, maxTokens: 2048 };
+
+  container.innerHTML = `
+    <div class="agent-setting-group">
+      <label for="agent-endpoint">Endpoint</label>
+      <input type="text" id="agent-endpoint" placeholder="https://integrate.api.nvidia.com/v1" value="${escapeHtml(config.endpoint || '')}" />
+      <p class="agent-endpoint-status" id="agent-endpoint-status" style="display: ${config.apiKey ? 'block' : 'none'}"></p>
+    </div>
+    <div class="agent-setting-group">
+      <label for="agent-api-key">API Key</label>
+      <input type="password" id="agent-api-key" placeholder="sk-... or nvapi-..." value="${config.apiKey ? escapeHtml(config.apiKey) : ''}" autocomplete="off" />
+    </div>
+    <div class="agent-setting-group">
+      <label for="agent-model">Model</label>
+      <select id="agent-model">
+        <option value="${escapeHtml(config.model || '')}" ${config.model ? 'selected' : ''}>${config.model || '— select or type model —'}</option>
+      </select>
+      <button class="btn btn-secondary btn-fetch-models" id="btn-agent-fetch-models" type="button">Fetch Models</button>
+    </div>
+    <div class="setting-row">
+      <div class="agent-setting-group">
+        <label for="agent-temperature">Temperature</label>
+        <input type="number" id="agent-temperature" min="0" max="2" step="0.1" value="${config.temperature || 0.7}" />
+      </div>
+      <div class="agent-setting-group">
+        <label for="agent-max-tokens">Max Tokens</label>
+        <input type="number" id="agent-max-tokens" min="1" max="16384" step="1" value="${config.maxTokens || 2048}" />
+      </div>
+    </div>
+    <button class="btn btn-primary agent-save-btn" id="btn-agent-save-settings" type="button">Save Settings</button>
+    <span class="agent-config-status" id="agent-config-status"></span>
+  `;
+
+  // Wire up events for agent settings
+  setupAgentSettingsEvents(agent, config);
+}
+
+function setupAgentSettingsEvents(agent, config) {
+  const apiKeyField = $('agent-api-key');
+  const endpointField = $('agent-endpoint');
+  const statusField = $('agent-endpoint-status');
+
+  // Auto-fill endpoint based on API key
+  if (apiKeyField && endpointField && statusField) {
+    const updateEndpointFromKey = () => {
+      const key = apiKeyField.value.trim();
+      if (key.startsWith('sk-')) {
+        endpointField.value = 'https://api.openai.com/v1';
+        statusField.textContent = 'OpenAI endpoint auto-filled.';
+      } else if (key.startsWith('sk-ant-') || key.startsWith('claude-')) {
+        endpointField.value = 'https://api.anthropic.com/v1';
+        statusField.textContent = 'Anthropic endpoint auto-filled.';
+      } else if (key.length > 5) {
+        endpointField.value = 'https://integrate.api.nvidia.com/v1';
+        statusField.textContent = 'NVIDIA endpoint auto-filled.';
+      }
+      statusField.style.display = key ? 'block' : 'none';
+    };
+
+    apiKeyField.addEventListener('input', updateEndpointFromKey);
+    updateEndpointFromKey(); // Run once on load
+  }
+
+  // Save settings button
+  const saveBtn = $('btn-agent-save-settings');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const newConfig = {
+        endpoint: $('agent-endpoint')?.value.trim() || '',
+        model: $('agent-model')?.value.trim() || '',
+        apiKey: $('agent-api-key')?.value.trim() || '',
+        temperature: parseFloat($('agent-temperature')?.value) || 0.7,
+        maxTokens: parseInt($('agent-max-tokens')?.value, 10) || 2048
+      };
+      saveAgentConfig(agent, newConfig);
+      state.agents[agent] = { ...state.agents[agent], config: newConfig };
+      const status = $('agent-config-status');
+      if (status) {
+        status.textContent = '✓ Saved';
+        status.className = 'agent-config-status success';
+        setTimeout(() => { status.textContent = ''; }, 2000);
+      }
+      renderAgentTabs(); // Update key status indicator
+    });
+  }
+
+  // Fetch models button
+  const fetchBtn = $('btn-agent-fetch-models');
+  if (fetchBtn) {
+    fetchBtn.addEventListener('click', async () => {
+      const endpoint = $('agent-endpoint')?.value.trim();
+      const apiKey = $('agent-api-key')?.value.trim();
+      const selectEl = $('agent-model');
+
+      if (!endpoint) {
+        const status = $('agent-endpoint-status');
+        if (status) { status.textContent = 'Endpoint required'; status.style.color = 'var(--error)'; }
+        return;
+      }
+      if (!apiKey) {
+        const status = $('agent-endpoint-status');
+        if (status) { status.textContent = 'API key required'; status.style.color = 'var(--error)'; }
+        return;
+      }
+
+      try {
+        fetchBtn.disabled = true;
+        const models = await invoke('fetch_models', { endpoint, apiKey });
+        if (selectEl && Array.isArray(models)) {
+          selectEl.innerHTML = '';
+          models.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m.id;
+            opt.textContent = m.id + (m.owned_by ? ` (${m.owned_by})` : '');
+            if (m.id === config.model) opt.selected = true;
+            selectEl.appendChild(opt);
+          });
+        }
+      } catch (e) {
+        const status = $('agent-endpoint-status');
+        if (status) { status.textContent = 'Failed to fetch models'; status.style.color = 'var(--error)'; }
+      } finally {
+        fetchBtn.disabled = false;
+      }
+    });
+  }
+}
+
+// ─── Lane-Aware Sidebar Removed (replaced by Agent Tabs) ─────────────────
 
 async function loadLaneStatuses() {
   try {
@@ -1036,44 +1263,45 @@ function setupEvidenceSectionToggles() {
 // ─── Chat UI ──────────────────────────────────────────────────────
 
 function renderChat() {
-  const messagesEl = $('chat-messages');
-  if (!messagesEl) return;
+   const messagesEl = $('chat-messages');
+   if (!messagesEl) return;
 
-  // Load config if not yet loaded
-  if (!state.chatConfig) {
-    loadChatConfig();
-  }
+   const agent = state.activeAgent;
+   const agentState = state.agents[agent] || { messages: [], config: {}, loading: false };
+   const chatMessages = agentState.messages || [];
+   const chatConfig = agentState.config || {};
 
-  // Settings panel visibility
-  const settingsEl = $('chat-settings');
-  if (settingsEl) {
-    settingsEl.classList.toggle('visible', state.chatSettingsOpen);
-  }
+   // Settings panel visibility
+   const settingsEl = $('chat-settings');
+   if (settingsEl) {
+     settingsEl.classList.toggle('visible', state.chatSettingsOpen);
+   }
 
-  // Model label in toolbar
-  const modelLabel = $('chat-model-label');
-  if (modelLabel && state.chatConfig) {
-    modelLabel.textContent = state.chatConfig.chat_model || 'No model configured';
-  }
+   // Model label in toolbar
+   const modelLabel = $('chat-model-label');
+   if (modelLabel) {
+     const savedConfig = loadAgentConfig(agent);
+     modelLabel.textContent = savedConfig.model || chatConfig.model || 'No model configured';
+   }
 
-  // Render messages
-  if (!state.chatMessages.length) {
-    // Show welcome if no messages, but only show it if we're not loading
-    if (!state.chatLoading) {
-      messagesEl.innerHTML = `
-        <div class="chat-welcome">
-          <div class="chat-welcome-icon">💬</div>
-          <h3>Agent Chat</h3>
-          <p>Configure your API key in Settings, then send a message to start a conversation with the AI agent.</p>
-          <p class="chat-welcome-hint">This runs through the Rust backend with CPS governance enforcement.</p>
-        </div>
-      `;
-    }
-    return;
-  }
+   // Render messages
+   if (!chatMessages.length) {
+     // Show welcome if no messages, but only show it if we're not loading
+     if (!agentState.loading) {
+       messagesEl.innerHTML = `
+         <div class="chat-welcome">
+           <div class="chat-welcome-icon">💬</div>
+           <h3>${agent === 'agent-1' ? 'Agent 1' : 'Agent 2'} Chat</h3>
+           <p>Configure your API key in the left sidebar, then send a message to start a conversation.</p>
+           <p class="chat-welcome-hint">Each agent has its own API endpoint and model configuration.</p>
+         </div>
+       `;
+     }
+     return;
+   }
 
-  let html = '';
-  for (const msg of state.chatMessages) {
+   let html = '';
+   for (const msg of chatMessages) {
     const isUser = msg.role === 'user';
     const isSystem = msg.role === 'system';
     const isTool = msg.role === 'tool';
@@ -1497,10 +1725,15 @@ async function sendChatMessage() {
   const inputEl = $('chat-input');
   if (!inputEl) return;
 
+  const agent = state.activeAgent;
+  if (!state.agents[agent]) {
+    state.agents[agent] = { messages: [], config: loadAgentConfig(agent), loading: false };
+  }
+  
   const text = inputEl.value.trim();
   if (!text) return;
 
-  if (state.chatLoading) {
+  if (state.agents[agent].loading) {
     log('Already waiting for a response.', 'warn');
     return;
   }
@@ -1508,35 +1741,33 @@ async function sendChatMessage() {
   // Add user message
   addChatMessage('user', text);
   inputEl.value = '';
-  state.chatLoading = true;
+  state.agents[agent].loading = true;
 
-  // Validate configuration before proceeding.
-  const endpoint = $('chat-endpoint')?.value.trim() || null;
-  const apiKeyRaw = $('chat-api-key')?.value.trim() || null;
-  const apiKey = (apiKeyRaw && apiKeyRaw !== '••••••••') ? apiKeyRaw : null;
-  const model = $('chat-model')?.value || null;
+  // Get configuration from agent settings
+  const config = loadAgentConfig(agent);
+  const endpoint = config.endpoint || null;
+  const apiKey = config.apiKey || null;
+  const model = config.model || null;
 
   // Guard: endpoint is required.
   if (!endpoint) {
-    addChatMessage('system', '⚠ No chat endpoint configured. Please set an endpoint in Settings before sending messages.');
+    addChatMessage('system', '⚠ No chat endpoint configured. Please set an endpoint in the Agent Settings sidebar.');
     log('Chat aborted: missing endpoint configuration.', 'warn');
-    state.chatLoading = false;
+    state.agents[agent].loading = false;
     renderChat();
     return;
   }
 
   // Guard: API key is required for most backends.
   if (!apiKey) {
-    addChatMessage('system', '⚠ No API key configured. Please provide a valid API key in Settings before sending messages.');
+    addChatMessage('system', '⚠ No API key configured. Please provide a valid API key in the Agent Settings sidebar.');
     log('Chat aborted: missing API key configuration.', 'warn');
-    state.chatLoading = false;
+    state.agents[agent].loading = false;
     renderChat();
     return;
   }
 
   try {
-    const apiKeyValue = (apiKey && apiKey !== '••••••••') ? apiKey : null;
-
     // ── Agentic tool-call loop ──────────────────────────────────
     // The model may return tool_calls in its response. When it does,
     // we execute each tool via Tauri invoke(), add the results as
@@ -1548,7 +1779,7 @@ async function sendChatMessage() {
     for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration++) {
       // Build messages array from current conversation state.
       // The system prompt is prepended by the Rust backend.
-      const messages = state.chatMessages.map(m => {
+      const messages = (state.agents[agent].messages || []).map(m => {
         // For assistant messages with tool_calls, use null content
         // (not empty string) to match OpenAI API format.
         // The Rust side serializes content: null explicitly in the API request.
@@ -1576,8 +1807,9 @@ async function sendChatMessage() {
         request: {
           messages: messages,
           model: model || null,
-          apiKey: apiKeyValue,
-          endpoint: endpoint || null
+          apiKey: apiKey,
+          endpoint: endpoint,
+          profile: agent // Pass profile to backend (primary or dev)
         }
       });
 
@@ -1705,9 +1937,8 @@ async function sendChatMessage() {
     const errMsg = (typeof e === 'string') ? e : (e?.message || e?.toString?.() || 'Unknown error');
     addChatMessage('system', '⚠ Chat error: ' + errMsg);
     log('Chat failed: ' + errMsg, 'err');
-    log('Chat failed: ' + errMsg, 'err');
   } finally {
-    state.chatLoading = false;
+    state.agents[agent].loading = false;
     renderChat();
   }
 }
@@ -1765,6 +1996,11 @@ propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patch
 }
 
 function addChatMessage(role, content, opts = {}) {
+  const agent = state.activeAgent;
+  if (!state.agents[agent]) {
+    state.agents[agent] = { messages: [], config: {}, loading: false };
+  }
+  
   const msg = {
     role,
     content,
@@ -1789,13 +2025,19 @@ function addChatMessage(role, content, opts = {}) {
   if (opts.writeParentDir) msg.writeParentDir = opts.writeParentDir;
   if (opts.writeContent !== undefined) msg.writeContent = opts.writeContent;
   if (opts.writeCompleted !== undefined) msg.writeCompleted = opts.writeCompleted;
-  state.chatMessages.push(msg);
+  
+  state.agents[agent].messages.push(msg);
+  saveAgentMessages(agent, state.agents[agent].messages);
   renderChat();
   return msg;
 }
 
 function clearChat() {
-  state.chatMessages = [];
+  const agent = state.activeAgent;
+  if (state.agents && state.agents[agent]) {
+    state.agents[agent].messages = [];
+    saveAgentMessages(agent, []);
+  }
   renderChat();
   log('Conversation cleared.', 'info');
 }
@@ -3115,8 +3357,9 @@ $('folder-path').addEventListener('keydown', event => {
   renderTreePanel();
   updateFooterInfo();
 
-  // Initialize lane list and evidence panel
-  loadLaneStatuses();
+  // Initialize agent tabs and evidence panel
+  renderAgentTabs();
+  renderAgentSettings();
   loadEvidencePanel();
   setupEvidenceSectionToggles();
 
@@ -3138,6 +3381,10 @@ $('folder-path').addEventListener('keydown', event => {
   }
 
   // Open the governance section in evidence panel by default
+  // Initialize agent tabs and settings on load
+  renderAgentTabs();
+  renderAgentSettings();
+  
   const govBody = document.getElementById('ev-governance-body');
   if (govBody) govBody.classList.add('open');
 
@@ -3148,7 +3395,7 @@ $('folder-path').addEventListener('keydown', event => {
 
   // ── DOM DIAGNOSTICS: log key element visibility/size ──
   setTimeout(() => {
-    const ids = ['app', 'sidebar', 'center-panel', 'chat-panel', 'chat-messages', 'chat-input', 'lane-list', 'evidence-panel'];
+    const ids = ['app', 'sidebar', 'center-panel', 'chat-panel', 'chat-messages', 'chat-input', 'agent-tabs', 'evidence-panel'];
     ids.forEach(id => {
       const el = document.getElementById(id);
       if (!el) { console.warn(`[DIAG] #${id} NOT FOUND IN DOM`); return; }
