@@ -25,6 +25,8 @@ pub struct ChatSendRequest {
     pub model: Option<String>,
     pub api_key: Option<String>,
     pub endpoint: Option<String>,
+    /// Optional profile name for multi-tab support (e.g., "primary", "dev")
+    pub profile: Option<String>,
 }
 
 /// Response from the chat backend.
@@ -125,12 +127,22 @@ struct ChoiceMessage {
 /// Configuration loaded from `config/agent_config.json`.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct AgentConfig {
+    #[serde(default)]
+    pub profiles: std::collections::HashMap<String, ProfileConfig>,
     pub chat_endpoint: Option<String>,
     pub chat_api_key: Option<String>,
     pub chat_model: Option<String>,
     pub temperature: Option<f64>,
     pub max_tokens: Option<u32>,
     pub system_prompt: Option<String>,
+}
+
+/// Per-profile configuration for multi-tab support.
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct ProfileConfig {
+    pub api_key: Option<String>,
+    pub endpoint: Option<String>,
+    pub model: Option<String>,
 }
 
 // Thread-safe in-memory config cache.
@@ -371,11 +383,53 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
         .map_err(|e| format!("Cannot resolve project root: {}", e))?;
     let config = load_agent_config(&root);
 
-    let api_key = resolve_api_key(request.api_key, &config)
+    // Profile-based overrides: profile > explicit arg > config > env/env
+    let (effective_api_key, effective_endpoint, effective_model) =
+        if let Some(ref profile_name) = request.profile {
+            // Load profile if exists
+            let profile = config.profiles.get(profile_name);
+            let api_key = request.api_key
+                .as_ref()
+                .filter(|s| !s.is_empty())
+                .cloned()
+                .or_else(|| profile.and_then(|p| p.api_key.clone()))
+                .or_else(|| config.chat_api_key.clone())
+                .or_else(|| std::env::var("NVIDIA_API_KEY").ok())
+                .or_else(|| std::env::var("LANE_AGENT_API_KEY").ok())
+                .filter(|s| !s.is_empty());
+
+            let endpoint = request.endpoint
+                .as_ref()
+                .filter(|s| !s.is_empty())
+                .cloned()
+                .or_else(|| profile.and_then(|p| p.endpoint.clone()))
+                .or_else(|| config.chat_endpoint.clone())
+                .unwrap_or_else(|| "https://integrate.api.nvidia.com/v1".to_string());
+
+            let model = request.model
+                .as_ref()
+                .filter(|s| !s.is_empty())
+                .cloned()
+                .or_else(|| profile.and_then(|p| p.model.clone()))
+                .or_else(|| config.chat_model.clone())
+                .unwrap_or_else(|| "meta/llama-3.3-70b-instruct".to_string());
+
+            (api_key, endpoint, model)
+        } else {
+            // No profile: use direct resolution
+            let api_key = resolve_api_key(request.api_key, &config)
+                .filter(|s| !s.is_empty());
+            let endpoint = resolve_endpoint(request.endpoint, &config);
+            let model = resolve_model(request.model, &config);
+            (Some(api_key), endpoint, model)
+        };
+
+    let api_key = effective_api_key
+        .filter(|s| !s.is_empty())
         .ok_or_else(|| "No API key available. Set NVIDIA_API_KEY env var, configure config/agent_config.json, or pass it in the request.".to_string())?;
 
-    let endpoint = resolve_endpoint(request.endpoint, &config);
-    let model = resolve_model(request.model, &config);
+    let endpoint = effective_endpoint;
+    let model = effective_model;
 
     // ---- Build API request ----
     // Build the system prompt from config or use the built-in default
