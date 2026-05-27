@@ -164,7 +164,7 @@ mod lib_tests {
 
     #[test]
     fn test_get_cps_score_returns_correct_value() {
-        let tmp = write_constraints("- name: TEST\n description: test\n weight: 15\n");
+        let tmp = write_constraints("- name: TEST\n  description: test\n  weight: 15\n");
         assert_eq!(get_cps_score(), 15);
         cleanup(tmp);
     }

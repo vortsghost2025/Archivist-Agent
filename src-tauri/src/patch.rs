@@ -146,15 +146,21 @@ fn generate_diff(original: &str, new: &str, file_path: &str) -> String {
             let start = i;
             let mut end = i;
 
-            // Find end of change region (where lines match again)
+            // Find end of change region (where lines match again, or end of file)
+            let mut found_match = false;
             for j in (i + 1)..max_len {
                 let o = original_lines.get(j);
                 let n = new_lines.get(j);
                 if o == n {
                     end = j;
+                    found_match = true;
                     break;
                 }
                 end = j + 1;
+            }
+            // If no matching lines found, change region extends to end of file
+            if !found_match {
+                end = max_len;
             }
 
             // Determine how many lines were removed vs added
