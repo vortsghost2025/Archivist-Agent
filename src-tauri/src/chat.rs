@@ -388,7 +388,7 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
         if let Some(ref profile_name) = request.profile {
             // Load profile if exists
             let profile = config.profiles.get(profile_name);
-            let api_key = request.api_key
+            let api_key: Option<String> = request.api_key
                 .as_ref()
                 .filter(|s| !s.is_empty())
                 .cloned()
@@ -398,30 +398,36 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
                 .or_else(|| std::env::var("LANE_AGENT_API_KEY").ok())
                 .filter(|s| !s.is_empty());
 
-            let endpoint = request.endpoint
+            let endpoint: String = request.endpoint
                 .as_ref()
                 .filter(|s| !s.is_empty())
                 .cloned()
-                .or_else(|| profile.and_then(|p| p.endpoint.clone()))
-                .or_else(|| config.chat_endpoint.clone())
-                .unwrap_or_else(|| "https://integrate.api.nvidia.com/v1".to_string());
+                .unwrap_or_else(|| {
+                    profile
+                        .and_then(|p| p.endpoint.clone())
+                        .or_else(|| config.chat_endpoint.clone())
+                        .unwrap_or_else(|| "https://integrate.api.nvidia.com/v1".to_string())
+                });
 
-            let model = request.model
+            let model: String = request.model
                 .as_ref()
                 .filter(|s| !s.is_empty())
                 .cloned()
-                .or_else(|| profile.and_then(|p| p.model.clone()))
-                .or_else(|| config.chat_model.clone())
-                .unwrap_or_else(|| "meta/llama-3.3-70b-instruct".to_string());
+                .unwrap_or_else(|| {
+                    profile
+                        .and_then(|p| p.model.clone())
+                        .or_else(|| config.chat_model.clone())
+                        .unwrap_or_else(|| "meta/llama-3.3-70b-instruct".to_string())
+                });
 
             (api_key, endpoint, model)
         } else {
             // No profile: use direct resolution
-            let api_key = resolve_api_key(request.api_key, &config)
+            let api_key: Option<String> = resolve_api_key(request.api_key, &config)
                 .filter(|s| !s.is_empty());
-            let endpoint = resolve_endpoint(request.endpoint, &config);
-            let model = resolve_model(request.model, &config);
-            (Some(api_key), endpoint, model)
+            let endpoint: String = resolve_endpoint(request.endpoint, &config);
+            let model: String = resolve_model(request.model, &config);
+            (api_key, endpoint, model)
         };
 
     let api_key = effective_api_key
