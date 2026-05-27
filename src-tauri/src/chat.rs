@@ -388,7 +388,8 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
         if let Some(ref profile_name) = request.profile {
             // Load profile if exists
             let profile = config.profiles.get(profile_name);
-            let api_key: Option<String> = request.api_key
+            let api_key: Option<String> = request
+                .api_key
                 .as_ref()
                 .filter(|s| !s.is_empty())
                 .cloned()
@@ -398,7 +399,8 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
                 .or_else(|| std::env::var("LANE_AGENT_API_KEY").ok())
                 .filter(|s| !s.is_empty());
 
-            let endpoint: String = request.endpoint
+            let endpoint: String = request
+                .endpoint
                 .as_ref()
                 .filter(|s| !s.is_empty())
                 .cloned()
@@ -409,7 +411,8 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
                         .unwrap_or_else(|| "https://integrate.api.nvidia.com/v1".to_string())
                 });
 
-            let model: String = request.model
+            let model: String = request
+                .model
                 .as_ref()
                 .filter(|s| !s.is_empty())
                 .cloned()
@@ -423,8 +426,8 @@ pub async fn chat_send(request: ChatSendRequest) -> Result<ChatResponse, String>
             (api_key, endpoint, model)
         } else {
             // No profile: use direct resolution
-            let api_key: Option<String> = resolve_api_key(request.api_key, &config)
-                .filter(|s| !s.is_empty());
+            let api_key: Option<String> =
+                resolve_api_key(request.api_key, &config).filter(|s| !s.is_empty());
             let endpoint: String = resolve_endpoint(request.endpoint, &config);
             let model: String = resolve_model(request.model, &config);
             (api_key, endpoint, model)
