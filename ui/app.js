@@ -2369,6 +2369,10 @@ function toggleChatSettings() {
   const settingsEl = $('chat-settings');
   if (settingsEl) {
     settingsEl.classList.toggle('visible', state.chatSettingsOpen);
+    // Load config when opening settings to populate endpoint/model fields
+    if (state.chatSettingsOpen) {
+      loadChatConfig();
+    }
   }
 }
 
@@ -3357,6 +3361,9 @@ $('btn-zoom-in').addEventListener('click', zoomIn);
 $('btn-zoom-out').addEventListener('click', zoomOut);
 $('btn-zoom-reset').addEventListener('click', zoomReset);
 applyZoom(getZoomLevel());
+applyChatFont(getChatFontScale());
+// Initialize chat config on page load (populates endpoint/model for Fetch Models button)
+loadChatConfig();
 // Initialize chat font and fullscreen state
 applyChatFont(getChatFontScale());
 if (localStorage.getItem('chat-fullscreen') === '1') {
