@@ -66,6 +66,15 @@ fn governance_file_path(file_name: &str) -> Result<PathBuf, String> {
         "allowed-roots" => "config/allowed_roots.json",
         "constitutional-constraints" => "constitutional_constraints.yaml",
         "now-md" => "NOW.md",
+        // Governance docs
+        "BOOTSTRAP" => "BOOTSTRAP.md",
+        "GOVERNANCE" => "GOVERNANCE.md",
+        "COVENANT" => "COVENANT.md",
+        "CPS_ENFORCEMENT" => "CPS_ENFORCEMENT.md",
+        "VERIFICATION_LANES" => "VERIFICATION_LANES.md",
+        "CHECKPOINTS" => "CHECKPOINTS.md",
+        "USER_DRIFT_SCORING" => "USER_DRIFT_SCORING.md",
+        "RECIPROCAL_ACCOUNTABILITY" => "RECIPROCAL_ACCOUNTABILITY.md",
         _ => return Err(format!("Unknown governance file: {}", file_name)),
     };
     Ok(root.join(relative))
