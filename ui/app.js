@@ -3186,6 +3186,42 @@ function toggleChatFullscreen() {
   invoke('set_fullscreen', { fullscreen: isFull }).catch(() => {});
 }
 
+// TV fullscreen zoom level (1.0 = 100%, 1.5 = 150% bigger)
+const TV_ZOOM_DEFAULT = 1.5;
+const TV_ZOOM_MIN = 1.0;
+const TV_ZOOM_MAX = 2.5;
+const TV_ZOOM_STEP = 0.1;
+
+function getTVZoom() {
+  const saved = localStorage.getItem('tv-fullscreen-zoom');
+  const parsed = saved ? parseFloat(saved) : TV_ZOOM_DEFAULT;
+  return Number.isFinite(parsed) ? parsed : TV_ZOOM_DEFAULT;
+}
+
+function applyTVZoom(level) {
+  const clamped = Math.max(TV_ZOOM_MIN, Math.min(TV_ZOOM_MAX, level));
+  document.body.style.setProperty('--tv-fullscreen-zoom', `${clamped}`);
+  if (document.body.classList.contains('tv-fullscreen')) {
+    document.body.style.zoom = `${clamped}`;
+  }
+}
+
+function tvZoomIn() { applyTVZoom(getTVZoom() + TV_ZOOM_STEP); }
+function tvZoomOut() { applyTVZoom(getTVZoom() - TV_ZOOM_STEP); }
+
+function toggleTVFullscreen() {
+  const isTV = document.body.classList.toggle('tv-fullscreen');
+  localStorage.setItem('tv-fullscreen', isTV ? '1' : '0');
+  // When entering TV mode, also hide sidebars for maximum chat space
+  if (isTV) {
+    document.body.classList.add('chat-fullscreen');
+    applyTVZoom(getTVZoom());
+  } else {
+    document.body.classList.remove('chat-fullscreen');
+    document.body.style.zoom = '1';
+  }
+}
+
 
 // ─── Panel Resize Handles ─────────────────────────────────────────
 function initResizeHandles() {
@@ -3267,26 +3303,49 @@ function initResizeHandles() {
 }
 
 document.addEventListener('keydown', (e) => {
-  if (e.ctrlKey && (e.key === '=' || e.key === '+')) { e.preventDefault(); zoomIn(); }
-  if (e.ctrlKey && e.key === '-') { e.preventDefault(); zoomOut(); }
-  if (e.ctrlKey && e.key === '0') { e.preventDefault(); zoomReset(); }
-  if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
-  if (e.key === 'Escape') {
-    // Escape from tools panel returns to chat
-    const toolsPanel = $('tools-panel');
-    if (toolsPanel && !toolsPanel.classList.contains('hidden')) {
-      closeToolsPanel();
-    }
-    // Escape from lane detail panel returns to chat
-    const lanePanel = $('lane-detail-panel');
-    if (lanePanel && !lanePanel.classList.contains('hidden')) {
-      state.activeLane = null;
-      state.laneDetail = null;
-      renderLaneList();
-      showChatPanel();
-    }
-  }
-});
+   if (e.ctrlKey && (e.key === '=' || e.key === '+')) { 
+     e.preventDefault(); 
+     // If in TV fullscreen, use TV zoom, otherwise use regular zoom
+     if (document.body.classList.contains('tv-fullscreen')) {
+       tvZoomIn();
+     } else {
+       zoomIn();
+     }
+   }
+   if (e.ctrlKey && e.key === '-') { 
+     e.preventDefault(); 
+     if (document.body.classList.contains('tv-fullscreen')) {
+       tvZoomOut();
+     } else {
+       zoomOut();
+     }
+   }
+   if (e.ctrlKey && e.key === '0') { e.preventDefault(); zoomReset(); }
+   if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
+   if (e.ctrlKey && e.key.toLowerCase() === 't') { e.preventDefault(); toggleTVFullscreen(); }
+   if (e.key === 'Escape') {
+     // Exit TV fullscreen on Escape
+     if (document.body.classList.contains('tv-fullscreen')) {
+       document.body.classList.remove('tv-fullscreen', 'chat-fullscreen');
+       document.body.style.zoom = '1';
+       localStorage.setItem('tv-fullscreen', '0');
+       return;
+     }
+     // Escape from tools panel returns to chat
+     const toolsPanel = $('tools-panel');
+     if (toolsPanel && !toolsPanel.classList.contains('hidden')) {
+       closeToolsPanel();
+     }
+     // Escape from lane detail panel returns to chat
+     const lanePanel = $('lane-detail-panel');
+     if (lanePanel && !lanePanel.classList.contains('hidden')) {
+       state.activeLane = null;
+       state.laneDetail = null;
+       renderLaneList();
+       showChatPanel();
+     }
+   }
+ });
 
 document.addEventListener('DOMContentLoaded', () => {
     renderRecentPaths();
@@ -3369,10 +3428,15 @@ applyChatFont(getChatFontScale());
 if (localStorage.getItem('chat-fullscreen') === '1') {
   document.body.classList.add('chat-fullscreen');
 }
+if (localStorage.getItem('tv-fullscreen') === '1') {
+  document.body.classList.add('tv-fullscreen');
+}
 // Add chat font and fullscreen button listeners
 $('btn-font-increase').addEventListener('click', increaseChatFont);
 $('btn-font-decrease').addEventListener('click', decreaseChatFont);
 $('btn-chat-fullscreen').addEventListener('click', toggleChatFullscreen);
+$('btn-tv-fullscreen').addEventListener('click', toggleTVFullscreen);
+$('btn-tv-fullscreen-exit').addEventListener('click', toggleTVFullscreen);
 
 $('folder-path').addEventListener('keydown', event => {
     if (event.key === 'Enter') {
