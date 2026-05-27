@@ -1693,19 +1693,29 @@ async function saveChatConfig() {
          // save_agent_config now returns {filePath, content, needsMkdir, parentDir}
          // instead of writing directly — we use Tauri's scope-checked writeTextFile,
          // same pattern as apply_patch to avoid std::fs::write() process aborts.
-         try {
-             if (result.needsMkdir && result.parentDir) {
-                 const { mkdir } = window.__TAURI__.fs;
-                 await mkdir(result.parentDir, { recursive: true });
-             }
-             const { writeTextFile } = window.__TAURI__.fs;
-             await writeTextFile(result.filePath, result.content);
-         } catch (writeErr) {
-             const writeErrMsg = (typeof writeErr === 'string') ? writeErr : (writeErr?.message || String(writeErr));
-             log('Config write failed: ' + writeErrMsg, 'err');
-             if (statusEl) statusEl.textContent = '✗ Write failed: ' + writeErrMsg;
-             return;
-         }
+try {
+    const tauriFs = window.__TAURI__?.fs;
+    if (result.needsMkdir && result.parentDir) {
+      if (!tauriFs) throw new Error('Tauri fs plugin not available');
+      try {
+        const { mkdir } = tauriFs;
+        await mkdir(result.parentDir, { recursive: true });
+      } catch (mkdirErr) {
+        const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
+        log('Config mkdir failed: ' + mkdirErrMsg, 'err');
+        if (statusEl) statusEl.textContent = '✗ Directory creation failed: ' + mkdirErrMsg;
+        return;
+      }
+    }
+    if (!tauriFs) throw new Error('Tauri fs plugin not available');
+    const { writeTextFile } = tauriFs;
+    await writeTextFile(result.filePath, result.content);
+  } catch (writeErr) {
+    const writeErrMsg = (typeof writeErr === 'string') ? writeErr : (writeErr?.message || String(writeErr));
+    log('Config write failed: ' + writeErrMsg, 'err');
+    if (statusEl) statusEl.textContent = '✗ Write failed: ' + writeErrMsg;
+    return;
+  }
          // Reload config from backend to get clean state
          state.chatConfig = null;
          await loadChatConfig();
@@ -2060,31 +2070,35 @@ async function applyPatch(proposalId) {
             return;
         }
 
-        // Step 2: Create parent directory if needed (via Tauri's scope-checked mkdir).
-        // Rust no longer calls fs::create_dir_all — that bypasses scope checking
-        // and can cause process aborts (same class of bug as the original fs::write crash).
-        if (result.needsMkdir && result.parentDir) {
-            try {
-                const { mkdir } = window.__TAURI__.fs;
-                await mkdir(result.parentDir, { recursive: true });
-                log(`Created parent directory: ${result.parentDir}`, 'info');
-            } catch (mkdirErr) {
-                const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
-                log(`Patch mkdir failed: ${mkdirErrMsg}`, 'err');
-                addChatMessage('system', `✗ Patch validated but directory creation failed: ${mkdirErrMsg}. The file was not modified.`);
-                renderChat();
-                return;
-            }
-        }
+// Step 2: Create parent directory if needed (via Tauri's scope-checked mkdir).
+  // Rust no longer calls fs::create_dir_all — that bypasses scope checking
+  // and can cause process aborts (same class of bug as the original fs::write crash).
+  if (result.needsMkdir && result.parentDir) {
+    try {
+      const tauriFs = window.__TAURI__?.fs;
+      if (!tauriFs) throw new Error('Tauri fs plugin not available — cannot create directory');
+      const { mkdir } = tauriFs;
+      await mkdir(result.parentDir, { recursive: true });
+      log(`Created parent directory: ${result.parentDir}`, 'info');
+    } catch (mkdirErr) {
+      const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
+      log(`Patch mkdir failed: ${mkdirErrMsg}`, 'err');
+      addChatMessage('system', `✗ Patch validated but directory creation failed: ${mkdirErrMsg}. The file was not modified.`);
+      renderChat();
+      return;
+    }
+  }
 
-        // Step 3: Write the file via Tauri's fs plugin from JS.
-        // This goes through Tauri's scope-checking command layer, which returns
-        // errors gracefully (never aborts the process).
-        try {
-            const { writeTextFile } = window.__TAURI__.fs;
-            await writeTextFile(result.filePath, result.content);
-            log(`Patch applied: ${result.filePath} — ${result.detail}`, 'ok');
-            addChatMessage('system', `✓ Patch applied to ${result.filePath}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+  // Step 3: Write the file via Tauri's fs plugin from JS.
+  // This goes through Tauri's scope-checking command layer, which returns
+  // errors gracefully (never aborts the process).
+  try {
+    const tauriFs = window.__TAURI__?.fs;
+    if (!tauriFs) throw new Error('Tauri fs plugin not available — cannot write file');
+    const { writeTextFile } = tauriFs;
+    await writeTextFile(result.filePath, result.content);
+    log(`Patch applied: ${result.filePath} — ${result.detail}`, 'ok');
+    addChatMessage('system', `✓ Patch applied to ${result.filePath}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
 
             // Step 4: Confirm the write to Rust for audit trail completion.
             // This logs "applied" (vs "approved") so we can distinguish
@@ -2151,27 +2165,31 @@ async function handleCreateFile(filePath, content) {
     }
 
     // Step 3: Create parent directory if needed (via Tauri's scope-checked mkdir).
-    if (result.needsMkdir && result.parentDir) {
-      try {
-        const { mkdir } = window.__TAURI__.fs;
-        await mkdir(result.parentDir, { recursive: true });
-        log(`Created parent directory: ${result.parentDir}`, 'info');
-      } catch (mkdirErr) {
-        const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
-        log(`Create file mkdir failed: ${mkdirErrMsg}`, 'err');
-        addChatMessage('system', `✗ File validated but directory creation failed: ${mkdirErrMsg}`);
-        renderChat();
-        return;
-      }
-    }
-
-    // Step 4: Write the file via Tauri's fs plugin from JS.
+  if (result.needsMkdir && result.parentDir) {
     try {
-      const { writeTextFile } = window.__TAURI__.fs;
-      await writeTextFile(result.path, result.content);
-      log(`File created: ${result.path}`, 'ok');
-      addChatMessage('system', `✓ File created: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
-    } catch (writeErr) {
+      const tauriFs = window.__TAURI__?.fs;
+      if (!tauriFs) throw new Error('Tauri fs plugin not available');
+      const { mkdir } = tauriFs;
+      await mkdir(result.parentDir, { recursive: true });
+      log(`Created parent directory: ${result.parentDir}`, 'info');
+    } catch (mkdirErr) {
+      const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
+      log(`Create file mkdir failed: ${mkdirErrMsg}`, 'err');
+      addChatMessage('system', `✗ File validated but directory creation failed: ${mkdirErrMsg}`);
+      renderChat();
+      return;
+    }
+  }
+
+  // Step 4: Write the file via Tauri's fs plugin from JS.
+  try {
+    const tauriFs = window.__TAURI__?.fs;
+    if (!tauriFs) throw new Error('Tauri fs plugin not available');
+    const { writeTextFile } = tauriFs;
+    await writeTextFile(result.path, result.content);
+    log(`File created: ${result.path}`, 'ok');
+    addChatMessage('system', `✓ File created: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+  } catch (writeErr) {
       const writeErrMsg = (typeof writeErr === 'string') ? writeErr : (writeErr?.message || String(writeErr));
       log(`Create file write failed: ${writeErrMsg}`, 'err');
       addChatMessage('system', `✗ File validated but write failed: ${writeErrMsg}`);
@@ -2210,12 +2228,14 @@ async function handleDeletePath(filePath) {
     }
 
     // Step 3: Delete via Tauri's fs plugin from JS.
-    try {
-      const { remove } = window.__TAURI__.fs;
-      await remove(result.path, { dir: result.isDir });
-      log(`Deleted: ${result.path}`, 'ok');
-      addChatMessage('system', `✓ Deleted: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
-    } catch (removeErr) {
+  try {
+    const tauriFs = window.__TAURI__?.fs;
+    if (!tauriFs) throw new Error('Tauri fs plugin not available');
+    const { remove } = tauriFs;
+    await remove(result.path, { dir: result.isDir });
+    log(`Deleted: ${result.path}`, 'ok');
+    addChatMessage('system', `✓ Deleted: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+  } catch (removeErr) {
       const removeErrMsg = (typeof removeErr === 'string') ? removeErr : (removeErr?.message || String(removeErr));
       log(`Delete failed: ${removeErrMsg}`, 'err');
       addChatMessage('system', `✗ Delete validated but removal failed: ${removeErrMsg}`);
@@ -2246,12 +2266,14 @@ async function handleCreateDirectory(dirPath) {
     }
 
     // Step 3: Create directory via Tauri's fs plugin from JS.
-    try {
-      const { mkdir } = window.__TAURI__.fs;
-      await mkdir(result.path, { recursive: true });
-      log(`Directory created: ${result.path}`, 'ok');
-      addChatMessage('system', `✓ Directory created: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
-    } catch (mkdirErr) {
+  try {
+    const tauriFs = window.__TAURI__?.fs;
+    if (!tauriFs) throw new Error('Tauri fs plugin not available');
+    const { mkdir } = tauriFs;
+    await mkdir(result.path, { recursive: true });
+    log(`Directory created: ${result.path}`, 'ok');
+    addChatMessage('system', `✓ Directory created: ${result.path}${result.readOnlyOverridden ? ' (read-only override — operator consent)' : ''}`);
+  } catch (mkdirErr) {
       const mkdirErrMsg = (typeof mkdirErr === 'string') ? mkdirErr : (mkdirErr?.message || String(mkdirErr));
       log(`Create directory failed: ${mkdirErrMsg}`, 'err');
       addChatMessage('system', `✗ Directory validated but creation failed: ${mkdirErrMsg}`);
