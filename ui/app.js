@@ -2032,23 +2032,23 @@ const result = await invoke('chat_send', {
 async function executeToolCall(funcName, funcArgs) {
   // Map of tool function names to their Tauri command names and arg mappings.
   // Most tools.json names match the Tauri command name directly.
-  const TOOL_MAP = {
-    scan_tree:           { cmd: 'scan_tree',           args: a => ({ root_path: a.rootPath }) },
-    summarize_folder:    { cmd: 'summarize_folder',    args: a => ({ root_path: a.rootPath }) },
-    agent_list_directory:{ cmd: 'agent_list_directory', args: a => ({ path: a.path }) },
-  agent_read_file: { cmd: 'agent_read_file', args: a => {
-    const result = { path: a.path };
-    if (a.offset !== undefined && a.offset !== null) result.offset = a.offset;
-    if (a.limit !== undefined && a.limit !== null) result.limit = a.limit;
-    return result;
-  }},
-    agent_search_files:  { cmd: 'agent_search_files',   args: a => ({ path: a.path, query: a.query }) },
-    read_governance_file:{ cmd: 'read_governance_file',  args: a => ({ fileName: a.fileName }) },
-    get_cps_score:       { cmd: 'get_cps_score',         args: () => ({}) },
-    ping:                { cmd: 'ping',                  args: () => ({}) },
-    git_status:          { cmd: 'git_status',            args: () => ({}) },
+const TOOL_MAP = {
+    scan_tree: { cmd: 'scan_tree', args: a => ({ rootPath: a.rootPath }) },
+    summarize_folder: { cmd: 'summarize_folder', args: a => ({ rootPath: a.rootPath }) },
+    agent_list_directory: { cmd: 'agent_list_directory', args: a => ({ path: a.path }) },
+    agent_read_file: { cmd: 'agent_read_file', args: a => {
+      const result = { path: a.path };
+      if (a.offset !== undefined && a.offset !== null) result.offset = a.offset;
+      if (a.limit !== undefined && a.limit !== null) result.limit = a.limit;
+      return result;
+    }},
+    agent_search_files: { cmd: 'agent_search_files', args: a => ({ path: a.path, query: a.query }) },
+    read_governance_file: { cmd: 'read_governance_file', args: a => ({ fileName: a.fileName }) },
+    get_cps_score: { cmd: 'get_cps_score', args: () => ({}) },
+    ping: { cmd: 'ping', args: () => ({}) },
+    git_status: { cmd: 'git_status', args: () => ({}) },
     check_read_only: { cmd: 'check_read_only', args: () => ({}) },
-propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patchContent: a.patchContent }) },
+    propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patchContent: a.patchContent }) },
     create_file: { cmd: 'create_file', args: a => {
       const r = { path: a.path, content: a.content };
       if (a.force !== undefined && a.force !== null) r.force = a.force;
@@ -2066,13 +2066,13 @@ propose_patch: { cmd: 'propose_patch', args: a => ({ filePath: a.filePath, patch
       if (a.force !== undefined) r.force = a.force;
       return r;
     }},
-create_directory: { cmd: 'create_directory', args: a => {
-       const r = { path: a.path };
-       if (a.force !== undefined && a.force !== null) r.force = a.force;
-       return r;
-     }},
-     backfill_signatures: { cmd: 'backfill_signatures', args: a => ({ root: a.root }) },
- };
+    create_directory: { cmd: 'create_directory', args: a => {
+      const r = { path: a.path };
+      if (a.force !== undefined && a.force !== null) r.force = a.force;
+      return r;
+    }},
+    backfill_signatures: { cmd: 'backfill_signatures', args: a => ({ root: a.root }) },
+  };
 
   const mapping = TOOL_MAP[funcName];
   if (!mapping) {
