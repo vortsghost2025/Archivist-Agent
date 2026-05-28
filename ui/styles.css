@@ -2154,12 +2154,15 @@ footer {
 }
 
 /* Chat fullscreen mode – hide sidebars and resize handles, expand chat */
-body.chat-fullscreen header,
-body.chat-fullscreen .zoom-controls,
-body.chat-fullscreen .toolbar,
 body.chat-fullscreen #sidebar,
+body.chat-fullscreen .zoom-controls,
 body.chat-fullscreen #resize-left,
 body.chat-fullscreen #resize-right {
+  display: none !important;
+}
+
+/* Hide header but keep chat toolbar visible */
+body.chat-fullscreen header {
   display: none !important;
 }
 
@@ -2173,7 +2176,7 @@ body.chat-fullscreen #chat-panel {
   width: 100vw;
   height: 100vh;
   z-index: 9999;
-  overflow: hidden;
+  overflow: visible;
 }
 
 body.chat-fullscreen .chat-layout,
@@ -2208,12 +2211,13 @@ body.chat-fullscreen .chat-msg-avatar {
 }
 
 /* FULLY EXPANDED CHAT FOR TV VIEWING
- * Hide sidebars, zoom entire UI uniformly
+ * Uses same fullscreen logic but applies body zoom for uniform scaling
  */
 body.tv-fullscreen {
   background: #000;
 }
 
+/* TV mode inherits chat-fullscreen rules but adds zoom control */
 body.tv-fullscreen #sidebar,
 body.tv-fullscreen .zoom-controls,
 body.tv-fullscreen #resize-left,
@@ -2222,29 +2226,14 @@ body.tv-fullscreen header {
   display: none !important;
 }
 
-body.tv-fullscreen #center-panel {
-  width: 100vw !important;
-}
-
-body.tv-fullscreen .chat-layout {
-  height: 100vh;
-}
-
-body.tv-fullscreen .chat-messages {
-  flex: 1 1 auto;
-  min-height: 0;
-  height: calc(100vh - 140px) !important;
-  max-height: calc(100vh - 140px) !important;
-}
-
 /* TV viewing mode button visibility */
-body:not(.tv-fullscreen) .btn-tv-toggle,
-body.tv-fullscreen .btn-tv-fullscreen {
+body:not(.tv-fullscreen) #btn-tv-fullscreen,
+body.tv-fullscreen #btn-tv-fullscreen-exit {
   display: inline-flex;
 }
 
-body.tv-fullscreen .btn-tv-toggle,
-body:not(.tv-fullscreen) .btn-tv-fullscreen {
+body.tv-fullscreen #btn-tv-fullscreen,
+body:not(.tv-fullscreen) #btn-tv-fullscreen-exit {
   display: none;
 }
 
