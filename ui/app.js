@@ -3212,13 +3212,16 @@ function tvZoomOut() { applyTVZoom(getTVZoom() - TV_ZOOM_STEP); }
 function toggleTVFullscreen() {
   const isTV = document.body.classList.toggle('tv-fullscreen');
   localStorage.setItem('tv-fullscreen', isTV ? '1' : '0');
-  // When entering TV mode, also hide sidebars for maximum chat space
+  // TV mode uses JavaScript zoom on body - scales everything uniformly
   if (isTV) {
+    // Hide sidebars
     document.body.classList.add('chat-fullscreen');
+    // Apply zoom (scales entire body including fonts)
     applyTVZoom(getTVZoom());
   } else {
-    document.body.classList.remove('chat-fullscreen');
+    // Reset zoom and remove fullscreen
     document.body.style.zoom = '1';
+    document.body.classList.remove('chat-fullscreen');
   }
 }
 
