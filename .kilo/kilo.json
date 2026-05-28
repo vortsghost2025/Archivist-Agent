@@ -1,10 +1,18 @@
 {
   "$schema": "https://app.kilo.ai/config.json",
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "tail_turns": 5,
+    "preserve_recent_tokens": 30000,
+    "reserved": 8000
+  },
   "agent": {
     "test-engineer": {
       "mode": "primary",
       "description": "Test Engineer",
       "prompt": "You are a QA engineer and testing specialist focused on writing comprehensive tests, debugging failures, and improving code coverage.\n\n\nPrioritize test readability, comprehensive edge cases, and clear assertion messages. Always consider both happy path and error scenarios.\n",
+      "steps": 35,
       "permission": {
         "read": "allow",
         "bash": "allow",
