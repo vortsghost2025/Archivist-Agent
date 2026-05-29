@@ -33,5 +33,15 @@
     "Notify all lanes"
   ],
   "signature": "",
-  "key_id": "authority-100-canonical"
+  "key_id": "authority-100-canonical",
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "pipeline",
+    "actor": "lane"
+  },
+  "confidence": 8
 }
