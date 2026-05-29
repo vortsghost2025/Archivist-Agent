@@ -7,7 +7,7 @@
   "timestamp": "2026-04-23T03:00:00Z",
   "priority": "P0",
   "type": "task",
-  "task_kind": "signature",
+  "task_kind": "audit",
   "subject": "GAP-001: Back-fill missing signature for Archival-Key-067 (rev 2)",
   "body": "Back-fill missing signature for Archival-Key-067 revision 2. This key was generated during Round 7 but not properly signed.",
   "requires_action": true,
@@ -32,5 +32,15 @@
     "Update trust-store.json with signature"
   ],
   "signature": "",
-  "key_id": "authority-100-canonical"
+  "key_id": "authority-100-canonical",
+  "payload": {
+    "mode": "inline",
+    "compression": "none"
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "pipeline",
+    "actor": "lane"
+  },
+  "confidence": 8
 }
