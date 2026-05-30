@@ -52,11 +52,16 @@ const BLOCKED_COMMAND_PATTERNS: &[&str] = &[
 ];
 
 const ALLOWED_COMMAND_PREFIXES: &[&str] = &[
+    "kilo ",
+    "kilo>",
+    "opencode ",
+    "opencode>",
     "cargo ",
     "cargo>",
     "npm ",
     "npm>",
     "npx ",
+    "npx>",
     "node ",
     "node>",
     "git ",
@@ -103,6 +108,8 @@ const ALLOWED_COMMAND_PREFIXES: &[&str] = &[
     "rustc",
     "rustfmt",
     "rustup",
+    "kilo",
+    "opencode",
 ];
 
 // ── Audit Log ──────────────────────────────────────────────────────────

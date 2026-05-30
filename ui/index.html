@@ -44,6 +44,10 @@
             <span class="agent-tab-icon">🤖</span>
             <span class="agent-tab-name">Agent 2</span>
           </button>
+          <button class="agent-tab-btn" data-tab="terminal" role="tab" aria-selected="false">
+            <span class="agent-tab-icon">💻</span>
+            <span class="agent-tab-name">Wave Terminal</span>
+          </button>
         </div>
       </section>
 
@@ -252,6 +256,24 @@
               <button class="btn btn-ghost" id="btn-clear-log">Clear</button>
             </div>
             <div id="log-output" aria-live="polite"></div>
+          </div>
+
+          <div id="tab-terminal" class="hidden" role="tabpanel">
+            <div class="terminal-layout">
+              <div id="terminal-blocks" class="terminal-blocks">
+                <div class="terminal-welcome">
+                  <span class="terminal-icon">💻</span>
+                  <h3>Wave-style Terminal</h3>
+                  <p>Type a command below. Each execution creates a block.</p>
+                  <p class="helper-text">Try: <code>kilo status</code> or <code>opencode --version</code></p>
+                </div>
+              </div>
+              <div class="terminal-input-bar">
+                <span class="terminal-prompt">></span>
+                <input type="text" id="terminal-input" placeholder="Type a command..." autocomplete="off" />
+                <button class="btn btn-primary" id="btn-terminal-run">Run</button>
+              </div>
+            </div>
           </div>
 
           <div id="tab-governance" class="hidden" role="tabpanel">

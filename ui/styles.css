@@ -3081,6 +3081,114 @@ margin: 0;
   padding-left: 9px !important;
 }
 
+/* ─── Terminal (Wave-style) ────────────────────────────────── */
+.terminal-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #050a0f;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.terminal-blocks {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.terminal-welcome {
+  text-align: center;
+  padding: 40px 20px;
+  opacity: 0.7;
+}
+
+.terminal-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.terminal-block {
+  background: rgba(15, 25, 35, 0.8);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-command {
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.terminal-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.terminal-block-body {
+  padding: 12px 14px;
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 400px;
+  overflow-y: auto;
+  color: var(--text-primary);
+}
+
+.terminal-block-body.error {
+  color: var(--error);
+}
+
+.terminal-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: rgba(10, 20, 30, 0.95);
+  border-top: 1px solid var(--border);
+}
+
+.terminal-prompt {
+  color: var(--accent);
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  font-weight: 700;
+}
+
+#terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+  font-size: 14px;
+}
+
+#terminal-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
 /* ─── End Chat Tab ──────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

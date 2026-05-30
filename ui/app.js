@@ -7,7 +7,7 @@ const LANE_IDS = ['archivist', 'kernel', 'swarmmind', 'library', 'kucoin'];
 const TREE_LINE_LIMIT = 420;
 
 // Dual chat agents support
-const AGENT_TABS = ['agent-1', 'agent-2'];
+const AGENT_TABS = ['agent-1', 'agent-2', 'terminal'];
 const ACTIVE_AGENT_KEY = 'archivist-active-agent';
 const AGENT_PREFIX = 'archivist-agent-';
 
@@ -410,7 +410,8 @@ config: loadAgentConfig('agent-2'),
     laneStatuses: {},
     activeLane: null,
     laneDetail: null,
-    evidencePanelOpen: true
+    evidencePanelOpen: true,
+    terminalBlocks: [] // Wave-style blocks
 };
 
 // Load/save agent conversations from localStorage
@@ -553,6 +554,14 @@ function switchTab(tabName) {
     if (toolsPanel) toolsPanel.classList.add('hidden');
     renderChat();
     return;
+  }
+
+  if (tabName === 'terminal') {
+      if (toolsPanel) toolsPanel.classList.remove('hidden');
+      document.querySelectorAll('#tab-content > div').forEach(div => div.classList.add('hidden'));
+      $('tab-terminal').classList.remove('hidden');
+      renderTerminalBlocks();
+      return;
   }
 
   // Show tools overlay for non-chat tabs
@@ -709,7 +718,15 @@ function renderAgentTabs() {
   if (!container) return;
 
   container.innerHTML = AGENT_TABS.map(id => {
-    const isActive = state.activeAgent === id;
+    const isActive = (id === 'terminal' && state.activeTab === 'terminal') || (id !== 'terminal' && state.activeTab !== 'terminal' && state.activeAgent === id);
+    if (id === 'terminal') {
+        return `
+          <button class="agent-tab-btn ${isActive ? 'active' : ''}" data-tab="terminal" role="tab" aria-selected="${isActive}">
+            <span class="agent-tab-icon">💻</span>
+            <span class="agent-tab-name">Wave Terminal</span>
+          </button>
+        `;
+    }
     const agentNum = id === 'agent-1' ? '1' : '2';
     const agentConfig = loadAgentConfig(id);
     const hasKey = agentConfig.apiKey && agentConfig.apiKey.length > 0;
@@ -725,10 +742,18 @@ function renderAgentTabs() {
   // Add click handlers for agent tabs
   container.querySelectorAll('.agent-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      switchAgent(btn.dataset.tab);
+      const tabId = btn.dataset.tab;
+      if (tabId === 'terminal') {
+          switchTab('terminal');
+      } else {
+          switchAgent(tabId);
+          switchTab('chat');
+      }
     });
   });
 }
+
+
 
 // Render agent-specific settings in the sidebar
 function renderAgentSettings() {
@@ -3350,6 +3375,88 @@ document.addEventListener('keydown', (e) => {
    }
  });
 
+async function runTerminalCommand() {
+    const input = $('terminal-input');
+    const command = input.value.trim();
+    if (!command) return;
+
+    input.value = '';
+    const blockId = 'block-' + Date.now();
+    const block = {
+        id: blockId,
+        command: command,
+        timestamp: new Date().toLocaleTimeString(),
+        output: 'Running...',
+        status: 'working'
+    };
+    state.terminalBlocks.push(block);
+    renderTerminalBlocks();
+
+    try {
+        const result = await invoke('execute_command', {
+            command: command,
+            workingDir: $('folder-path').value || null,
+            force: true // Allow kilo/opencode commands
+        });
+
+        const blockIndex = state.terminalBlocks.findIndex(b => b.id === blockId);
+        if (blockIndex !== -1) {
+            state.terminalBlocks[blockIndex].output = result.stdout || result.stderr || '(No output)';
+            if (result.stderr && !result.stdout) {
+                state.terminalBlocks[blockIndex].status = 'error';
+            } else {
+                state.terminalBlocks[blockIndex].status = 'success';
+            }
+            renderTerminalBlocks();
+        }
+    } catch (err) {
+        const blockIndex = state.terminalBlocks.findIndex(b => b.id === blockId);
+        if (blockIndex !== -1) {
+            state.terminalBlocks[blockIndex].output = err.message || String(err);
+            state.terminalBlocks[blockIndex].status = 'error';
+            renderTerminalBlocks();
+        }
+    }
+}
+
+function renderTerminalBlocks() {
+    const container = $('terminal-blocks');
+    if (!container) return;
+
+    if (state.terminalBlocks.length === 0) {
+        container.innerHTML = `
+            <div class="terminal-welcome">
+                <span class="terminal-icon">💻</span>
+                <h3>Wave-style Terminal</h3>
+                <p>Type a command below. Each execution creates a block.</p>
+                <p class="helper-text">Try: <code>kilo status</code> or <code>opencode --version</code></p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = state.terminalBlocks.map(block => `
+        <div class="terminal-block" id="${block.id}">
+            <div class="terminal-block-header">
+                <span class="terminal-command">> ${escapeHtml(block.command)}</span>
+                <span class="terminal-meta">${block.timestamp}</span>
+            </div>
+            <div class="terminal-block-body ${block.status === 'error' ? 'error' : ''}">${escapeHtml(block.output)}</div>
+        </div>
+    `).join('');
+    
+    container.scrollTop = container.scrollHeight;
+}
+
+function escapeHtml(unsafe) {
+    return unsafe
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     renderRecentPaths();
 
@@ -3570,4 +3677,9 @@ setStatus('Ready', 'idle');
 
 // Panel resize handles
 initResizeHandles();
+
+    $('btn-terminal-run').addEventListener('click', runTerminalCommand);
+    $('terminal-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') runTerminalCommand();
+    });
 });
