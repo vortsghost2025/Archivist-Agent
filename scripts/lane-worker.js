@@ -944,6 +944,7 @@ processFile(filePath) {
   }
 
   let msg = rawRead.value;
+  this.logEvent(msg);
 
   if (!this.isOwner && msg.requires_action === true) {
     const needsReviewDir = this.config.queues.needsReview || path.join(path.dirname(filePath), 'needs-review');
@@ -1139,6 +1140,46 @@ _routeRaw(filePath, queueKey, meta) {
     this.lastRun = summary;
     return summary;
   }
+
+  logEvent(event) {
+    try {
+      const laneRoot = path.resolve(this.config.queues.inbox, '..', '..', '..');
+      const logDir = path.join(laneRoot, 'lanes', this.lane, 'state');
+      if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+      const logFile = path.join(logDir, 'events.log');
+      const entry = {
+        timestamp: nowIso(),
+        lane: this.lane,
+        event,
+      };
+      fs.appendFileSync(logFile, JSON.stringify(entry) + '\n', 'utf8');
+    } catch (err) {
+      process.stderr.write(`[lane-worker] Event logging failed: ${err.message}\n`);
+    }
+  }
+  logResourceMetrics() {
+    try {
+      const metricsDir = path.join(this.repoRoot, 'lanes', this.lane, 'metrics');
+      if (!fs.existsSync(metricsDir)) fs.mkdirSync(metricsDir, { recursive: true });
+      const metricsFile = path.join(metricsDir, 'resource_usage.jsonl');
+      const cpu = process.cpuUsage();
+      const mem = process.memoryUsage();
+      const entry = {
+        timestamp: nowIso(),
+        lane: this.lane,
+        pid: process.pid,
+        cpu: { user: cpu.user, system: cpu.system },
+        memory: {
+          rss: mem.rss,
+          heapTotal: mem.heapTotal,
+          heapUsed: mem.heapUsed,
+        },
+      };
+      fs.appendFileSync(metricsFile, JSON.stringify(entry) + '\n', 'utf8');
+    } catch (err) {
+      process.stderr.write(`[lane-worker] Resource metrics logging failed: ${err.message}\n`);
+    }
+  }
 }
 
 async function sleep(ms) {
@@ -1168,6 +1209,7 @@ async function runCli() {
 
   if (!args.watch) {
     const summary = worker.processOnce();
+    worker.logResourceMetrics();
     if (args.json) {
       console.log(JSON.stringify(summary, null, 2));
     } else {
@@ -1192,6 +1234,7 @@ async function runCli() {
 
   while (!shuttingDown) {
     const summary = worker.processOnce();
+    worker.logResourceMetrics();
     if (args.json) {
       console.log(JSON.stringify(summary, null, 2));
     } else {
