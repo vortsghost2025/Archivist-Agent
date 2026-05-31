@@ -1138,6 +1138,7 @@ _routeRaw(filePath, queueKey, meta) {
     };
 
     this.lastRun = summary;
+    this.writeSnapshot();
     return summary;
   }
 
@@ -1178,6 +1179,21 @@ _routeRaw(filePath, queueKey, meta) {
       fs.appendFileSync(metricsFile, JSON.stringify(entry) + '\n', 'utf8');
     } catch (err) {
       process.stderr.write(`[lane-worker] Resource metrics logging failed: ${err.message}\n`);
+    }
+  }
+
+  writeSnapshot() {
+    try {
+      const snapshotDir = path.join(this.repoRoot, 'lanes', this.lane, 'state', 'snapshots');
+      if (!fs.existsSync(snapshotDir)) fs.mkdirSync(snapshotDir, { recursive: true });
+      const snapshotFile = path.join(snapshotDir, 'latest.json');
+      const snapshot = {
+        timestamp: nowIso(),
+        lastRun: this.lastRun,
+      };
+      fs.writeFileSync(snapshotFile, JSON.stringify(snapshot, null, 2), 'utf8');
+    } catch (err) {
+      process.stderr.write(`[lane-worker] Snapshot write failed: ${err.message}\n`);
     }
   }
 }
