@@ -583,16 +583,18 @@ class LaneWorker {
     return () => ({ valid: false, reason: 'IDENTITY_ENFORCER_UNAVAILABLE_FAIL_CLOSED', details: null });
   }
 
-  _loadAdaptiveAlertConfig() {
-    try {
-      const configPath = path.join(this.repoRoot, 'config', 'adaptive-cpu-alerts.json');
-      if (fs.existsSync(configPath)) {
-        const raw = fs.readFileSync(configPath, 'utf8');
-        return JSON.parse(raw);
-      }
-    } catch (_) {}
-    return {};
-  }
+    _loadAdaptiveAlertConfig() {
+     try {
+       const configPath = path.join(this.repoRoot, 'config', 'adaptive-alerts.json');
+       if (fs.existsSync(configPath)) {
+         const raw = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+         return Object.assign({}, AdaptiveCpuAlerts.DEFAULT_CONFIG, raw);
+       }
+     } catch (e) {
+       process.stderr.write(`[lane-worker] Failed to load adaptive alert config: ${e.message}\n`);
+     }
+     return {};
+   }
 
   ensureQueues() {
     const q = this.config.queues;
