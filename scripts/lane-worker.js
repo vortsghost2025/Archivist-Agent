@@ -11,6 +11,7 @@ const { evaluateVerificationDomain } = require('./verification-domain-gate');
 const { getCodeVersionHash } = require('./code-version-hash');
 const { getRoots } = require('./util/lane-discovery');
 const { verifyOutputProvenance } = require('./output-provenance');
+const { AdaptiveCpuAlerts } = require('./adaptive-cpu-alerts');
 
 function runStoreJournalAppend(laneRoot, lane, event, subject, taskId) {
   var scriptPath = path.join(laneRoot, 'scripts', 'store-journal.js');
@@ -479,6 +480,11 @@ class LaneWorker {
     this.sessionId = SESSION_ID;
     this.isOwner = false;
     this.journalContext = this._readJournalContext();
+    this.adaptiveAlerts = new AdaptiveCpuAlerts({
+      lane: this.lane,
+      stateDir: path.join(this.repoRoot, 'lanes', this.lane, 'state'),
+      config: this._loadAdaptiveAlertConfig(),
+    });
     if (!this.dryRun) {
       const existing = getActiveOwner(this.repoRoot);
       if (!existing || existing.session_id === SESSION_ID || (Date.now() - new Date(existing.claimed_at).getTime()) > 900000) {
@@ -575,6 +581,17 @@ class LaneWorker {
     } catch (_) {}
 
     return () => ({ valid: false, reason: 'IDENTITY_ENFORCER_UNAVAILABLE_FAIL_CLOSED', details: null });
+  }
+
+  _loadAdaptiveAlertConfig() {
+    try {
+      const configPath = path.join(this.repoRoot, 'config', 'adaptive-cpu-alerts.json');
+      if (fs.existsSync(configPath)) {
+        const raw = fs.readFileSync(configPath, 'utf8');
+        return JSON.parse(raw);
+      }
+    } catch (_) {}
+    return {};
   }
 
   ensureQueues() {
