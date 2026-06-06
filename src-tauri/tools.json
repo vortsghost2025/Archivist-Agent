@@ -321,5 +321,36 @@
         ]
       }
     }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "generate_image",
+      "description": "Generate an image from a text prompt using DALL-E. Use this when the user asks you to create, design, or generate images — logos, banners, icons, illustrations, graphic designs, photos, art, or any visual content. Returns the image URL for display. Supports DALL-E 3 and DALL-E 2 models. The prompt should be detailed and specific for best results. Example prompts: 'A professional minimalist logo for a tech startup called Archivist, dark navy and cyan color scheme, flat design, vector style', 'A wide banner image for a software product landing page, dark theme with glowing cyan accents, geometric abstract pattern'.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Detailed description of the image to generate. Be specific about style, colors, composition, and subject. For logos: specify style (flat, 3D, minimalist, etc), colors, and text. For banners: specify dimensions mood, and visual elements. For illustrations: specify art style, composition, and details."
+          },
+          "size": {
+            "type": "string",
+            "description": "Image size. DALL-E 3 supports: '1024x1024' (square, default), '1792x1024' (landscape), '1024x1792' (portrait). DALL-E 2 supports: '256x256', '512x512', '1024x1024'. Use landscape for banners/headers, portrait for stories/posts, square for logos/icons."
+          },
+          "model": {
+            "type": "string",
+            "description": "Model to use: 'dall-e-3' (default, highest quality, supports HD quality) or 'dall-e-2' (faster, cheaper, smaller sizes). Use dall-e-3 for professional/graphic design work."
+          },
+          "quality": {
+            "type": "string",
+            "description": "Image quality for DALL-E 3: 'standard' (default) or 'hd' (higher detail, better for print/professional use). Only applies to dall-e-3."
+          }
+        },
+        "required": [
+          "prompt"
+        ]
+      }
+    }
   }
 ]

@@ -2,7 +2,7 @@
 
 const RECENT_PATHS_KEY = 'archivist.recentPaths.v1';
 const MAX_RECENT_PATHS = 6;
-const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'governance'];
+const TAB_NAMES = ['overview', 'retrieve', 'tree', 'output', 'terminal', 'governance'];
 const LANE_IDS = ['archivist', 'kernel', 'swarmmind', 'library', 'kucoin'];
 const TREE_LINE_LIMIT = 420;
 
@@ -580,6 +580,7 @@ function switchTab(tabName) {
   if (tabName === 'tree') renderTreePanel();
   if (tabName === 'overview') renderOverview();
   if (tabName === 'retrieve') renderRetrieve();
+  if (tabName === 'terminal') initTerminalPanel();
   if (tabName === 'governance') renderGovernance();
 }
 
@@ -3464,6 +3465,17 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => switchTab(tab.dataset.tab));
         tab.addEventListener('keydown', handleTabKeyboard);
     });
+
+    // Zoom controls
+    let uiScale = 1.0;
+    const applyZoom = () => {
+      document.body.style.zoom = String(uiScale);
+      const zl = $('zoom-level');
+      if (zl) zl.textContent = Math.round(uiScale * 100) + '%';
+    };
+    $('btn-zoom-out')?.addEventListener('click', () => { uiScale = Math.max(0.5, uiScale - 0.1); applyZoom(); });
+    $('btn-zoom-in')?.addEventListener('click', () => { uiScale = Math.min(2.0, uiScale + 0.1); applyZoom(); });
+    $('btn-zoom-reset')?.addEventListener('click', () => { uiScale = 1.0; applyZoom(); });
 
     $('btn-analyze').addEventListener('click', runAnalyzeFolder);
     $('btn-analyze-welcome').addEventListener('click', handleWelcomeAnalyze);

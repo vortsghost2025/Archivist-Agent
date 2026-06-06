@@ -203,6 +203,7 @@
             <div class="tab" data-tab="retrieve" role="tab" aria-selected="false" tabindex="0">Retrieve</div>
             <div class="tab" data-tab="tree" role="tab" aria-selected="false" tabindex="0">Tree</div>
             <div class="tab" data-tab="output" role="tab" aria-selected="false" tabindex="0">Activity</div>
+            <div class="tab" data-tab="terminal" role="tab" aria-selected="false" tabindex="0">Terminal</div>
             <div class="tab" data-tab="governance" role="tab" aria-selected="false" tabindex="0">Governance</div>
           </nav>
           <button class="btn btn-ghost tools-close-btn" id="btn-tools-close" title="Close tools and return to chat">✕ Back to Chat</button>
@@ -258,23 +259,16 @@
             <div id="log-output" aria-live="polite"></div>
           </div>
 
-          <div id="tab-terminal" class="hidden" role="tabpanel">
-            <div class="terminal-layout">
-              <div id="terminal-blocks" class="terminal-blocks">
-                <div class="terminal-welcome">
-                  <span class="terminal-icon">💻</span>
-                  <h3>Wave-style Terminal</h3>
-                  <p>Type a command below. Each execution creates a block.</p>
-                  <p class="helper-text">Try: <code>kilo status</code> or <code>opencode --version</code></p>
-                </div>
-              </div>
-              <div class="terminal-input-bar">
-                <span class="terminal-prompt">></span>
-                <input type="text" id="terminal-input" placeholder="Type a command..." autocomplete="off" />
-                <button class="btn btn-primary" id="btn-terminal-run">Run</button>
-              </div>
-            </div>
-          </div>
+<div id="tab-terminal" class="hidden" role="tabpanel">
+<div class="terminal-toolbar">
+<div id="terminal-tabs" class="terminal-tabs"></div>
+<div class="terminal-toolbar-actions">
+<button class="btn btn-sm" id="btn-new-terminal" title="New terminal">+ New</button>
+<button class="btn btn-sm" id="btn-kill-terminal" title="Kill terminal">Kill</button>
+</div>
+</div>
+<div id="terminal-host" class="terminal-host"></div>
+</div>
 
           <div id="tab-governance" class="hidden" role="tabpanel">
             <div class="gov-grid">
@@ -434,9 +428,18 @@
     <span id="footer-mode" class="footer-mode">—</span>
     <span id="footer-info">No scan performed yet</span>
     <span id="footer-lane-status" class="footer-lanes"></span>
+    <span class="zoom-controls">
+      <button class="btn btn-sm" id="btn-zoom-out" title="Zoom out">−</button>
+      <span id="zoom-level">100%</span>
+      <button class="btn btn-sm" id="btn-zoom-in" title="Zoom in">+</button>
+      <button class="btn btn-sm" id="btn-zoom-reset" title="Reset zoom">↺</button>
+    </span>
   </footer>
     </div>
 
+    <link rel="stylesheet" href="terminal.css">
+    <link rel="stylesheet" href="vendor/xterm.min.css">
+    <script src="terminal.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

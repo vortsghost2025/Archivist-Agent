@@ -20,6 +20,7 @@ mod safety;
 mod scan_tree;
 mod sign_message;
 mod summarize_folder;
+mod terminal;
 #[cfg(test)]
 mod test_env;
 mod window_control;
@@ -49,6 +50,10 @@ use scan_tree::scan_tree;
 use sign_message::sign_message;
 use summarize_folder::summarize_folder;
 use tauri::Manager;
+use terminal::{
+    clear_terminal_audit_log, get_terminal_audit_log, kill_terminal, list_terminals, resize_pty,
+    spawn_terminal, terminal_input,
+};
 use window_control::set_fullscreen;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -110,6 +115,13 @@ pub fn run() {
             get_exec_audit_log,
             clear_exec_audit_log,
             backfill_signatures,
+            spawn_terminal,
+            terminal_input,
+            resize_pty,
+            kill_terminal,
+            list_terminals,
+            get_terminal_audit_log,
+            clear_terminal_audit_log,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -167,7 +179,7 @@ mod lib_tests {
 
     #[test]
     fn test_get_cps_score_returns_correct_value() {
-        let tmp = write_constraints("- name: TEST\n  description: test\n  weight: 15\n");
+        let tmp = write_constraints("- name: TEST\n description: test\n weight: 15\n");
         assert_eq!(get_cps_score(), 15);
         cleanup(tmp);
     }

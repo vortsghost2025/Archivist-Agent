@@ -36,6 +36,9 @@ rsa = { version = "0.9", features = ["pem"] }
 base64 = "0.22"
 pkcs8 = { version = "0.10", features = ["pem", "alloc"] }
 rand = "0.8"
+portable-pty = "0.8"
+dirs = "5"
+which = "6"
 
 [dev-dependencies]
 tempfile = "3"
