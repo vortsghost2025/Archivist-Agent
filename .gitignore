@@ -191,3 +191,8 @@ scratch/
 config/agent_config.json
 
 tmp/
+
+# Qwen cache
+.qwen/
+# Screenshots
+tauri-screenshot.png

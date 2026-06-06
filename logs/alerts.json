@@ -47,6 +47,30 @@
       "comparison": "below",
       "acknowledged": false,
       "resolved_at": null
+    },
+    {
+      "id": "ALERT-1780756864766-94d2f992",
+      "timestamp": "2026-06-06T14:41:04.766Z",
+      "type": "auto_resolve_rate_drop",
+      "severity": "MEDIUM",
+      "message": "Auto-resolve rate < threshold: 0.00 < 50",
+      "metric_value": 0,
+      "threshold": 50,
+      "comparison": "below",
+      "acknowledged": false,
+      "resolved_at": null
+    },
+    {
+      "id": "ALERT-1780757672541-e4150a50",
+      "timestamp": "2026-06-06T14:54:32.541Z",
+      "type": "auto_resolve_rate_drop",
+      "severity": "MEDIUM",
+      "message": "Auto-resolve rate < threshold: 0.00 < 50",
+      "metric_value": 0,
+      "threshold": 50,
+      "comparison": "below",
+      "acknowledged": false,
+      "resolved_at": null
     }
   ]
 }
