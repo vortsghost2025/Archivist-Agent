@@ -5,6 +5,9 @@
     "ENFORCED: Follow the governance constraints from CHECKPOINTS.md - all 7 checkpoints must pass before major actions",
     "ENFORCED: Maintain agent/user separation - use 'you' for user, 'I' for agent, avoid 'we' for decisions",
     "ENFORCED: If governance is unclear or user request conflicts with governance, ask for clarification before proceeding",
+    "MANDATORY: Follow .kilo/instructions/agent-orchestration.md — brainstorm first, skill scan second, delegate third. NEVER carry 10+ file reads or 50+ lines of code in main context. ALWAYS use the task tool for multi-step work.",
+    "MANDATORY: Before any creative or architectural decision, invoke the brainstorming or simple skill via the skill tool. NEVER skip straight to implementation.",
+    "MANDATORY: If a matching subagent exists for the work type, delegate via task tool. Forbidden: reading 10+ files in main context, writing 50+ lines in main context, running 3+ sequential steps in main context. Delegate instead.",
     "MANUAL: Use /governance command to reload governance constraints at any time",
     "MANUAL: Use /checkpoints command to run full checkpoint verification",
     "MANUAL: Use /drift-check to assess current conversation for drift signals"
