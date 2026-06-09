@@ -1,0 +1,69 @@
+{
+  "generated_at": "2026-06-08T23:18:42-04:00",
+  "agent": "kilo-archivist",
+  "lane": "archivist",
+  "session_id": "lane-sync-check",
+  "note": "Working tree cleanliness could not be determined - bash execution blocked by permission deny rule. Run scripts/_lane_sync_v2.js manually to complete.",
+  "lanes": [
+    {
+      "name": "Archivist-Agent",
+      "dir": "S:/Archivist-Agent",
+      "branch": "master",
+      "head_full": "a8624692e6c5769d78c63e17443993d70012fd0a",
+      "head_short": "a862469",
+      "origin_synced": true,
+      "working_tree": "unknown",
+      "uncommitted": "unknown"
+    },
+    {
+      "name": "Kernel",
+      "dir": "S:/kernel-lane",
+      "branch": "main",
+      "head_full": "af6d033d76a6cd9ea4ac3a5dc12d6fa926a88570",
+      "head_short": "af6d033",
+      "origin_synced": true,
+      "working_tree": "unknown",
+      "uncommitted": "unknown"
+    },
+    {
+      "name": "SwarmMind",
+      "dir": "S:/SwarmMind",
+      "branch": "main",
+      "head_full": "c96fc2dfcf99f389e24f0a4b40ac7ee09e635026",
+      "head_short": "c96fc2d",
+      "origin_synced": true,
+      "working_tree": "unknown",
+      "uncommitted": "unknown"
+    },
+    {
+      "name": "Library",
+      "dir": "S:/self-organizing-library",
+      "branch": "main",
+      "head_full": "14e89d790ef2d5e3f98cbe83d132da29c98afb1c",
+      "head_short": "14e89d7",
+      "origin_synced": true,
+      "working_tree": "unknown",
+      "uncommitted": "unknown"
+    },
+    {
+      "name": "Control-Plane",
+      "dir": "S:/WE4FREE-Control-Plane",
+      "branch": "main",
+      "head_full": "b44b0ac2d5edda85dbe692303005418a6ba7a33c",
+      "head_short": "b44b0ac",
+      "origin_synced": true,
+      "working_tree": "unknown",
+      "uncommitted": "unknown"
+    },
+    {
+      "name": "KuCoin",
+      "dir": "S:/kucoin-lane",
+      "branch": "main",
+      "head_full": "a683616f304bc1fbea9e46307119eed4bbdcbded",
+      "head_short": "a683616",
+      "origin_synced": true,
+      "working_tree": "unknown",
+      "uncommitted": "unknown"
+    }
+  ]
+}

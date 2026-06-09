@@ -1,0 +1,221 @@
+Chapter 1: Intro
+0:00So, I don't know what's going on up here, but I just told Claude Code to spin up five different sub aents, and they all have different personalities.
+0:055 secondsOne is going to be a complete beginner, one will be a software engineer, one will be a business owner, one will be a publisher. And it comes back, and it says, "Okay, I'm kicking off all five
+0:1313 secondsnow, each with a distinct persona and lens. These will run in parallel." You can see that this is now running four agents. The fifth one's about to spin up. And on the bottom, if I click into a
+0:2222 secondsdifferent session, so we've got the main or we've got like the beginner, and I enter this conversation, we can actually see what's going on here. Meaning if I scroll up I can see the actual prompt
+0:3030 secondsthat the main session kicked off to this sub aent. So here we have Linda 58 years old a retired elementary school teacher.
+0:3838 secondsYou are a complete beginner to AI. And then we see the actual task which is to read all the chapters and give a bit of a review. And so all of the other sub
+0:4545 secondsaents probably have a very similar prompt if I go to like the enterprise exec. So same exact prompt except for here you're role playinging as David 52
+0:5353 secondsa COO at a 12,000 person fortune 500 financial services company. So anyways, the point being what we can do is have our main session up here and the main
+1:011 minute, 1 secondsession can delegate to as many different sub agents as we want and all the sub agents can have different chat models, different personas, different skills, different subject matter
+1:081 minute, 8 secondsexpertise. And if you watch my video where I ranked all of my favorite Cloud Code features, sub agents ranked number six. So today what I'm going to do is I'm going to tell you guys exactly how
+1:171 minute, 17 secondsto use them, what they are, when you need to use them, and how you can use them better than 99% of people using Cloud Code. So let's not waste any time and get straight into today's video.
+Chapter 2: What Is a Subagent
+1:241 minute, 24 secondsOkay, so what is a sub aent? You guys just saw a demo. We have a main chat.
+1:281 minute, 28 secondsSo, right here is where I said, "Hey, can you spin up five different sub agents and what it did is it right here kicked off five different ones." And then it comes back with an overall review. Apparently, I need to do some
+1:361 minute, 36 secondswork on this book because I only got about an eight. More info on my book will be coming soon. But anyways, the main session is basically the orchestrator. It says, "Okay, cool. So,
+1:441 minute, 44 secondsI am the one who's actually talking to Nate, but what I can do is I can spin up a bunch of sub agents that can only talk to me, and I can assign them work. Go read these files. Go do this research.
+1:531 minute, 53 secondsGo fix that bug." and then you come back to me with a report of what you did and I'll communicate that back to Nate. So there are a ton of different reasons why these sub agents are useful and why they
+2:012 minutes, 1 secondexist. So let's just start with this first one which is that it keeps your context clean. So let's say I'm in cloud code, right? And I'm just talking, hello, how are you doing? What's going on? Let's build something, right? Like
+2:102 minutes, 10 secondsmaybe we're doing research, maybe we're building an app, whatever it is. You start to fill up your context window, which you guys can see right here with my status line. You can see right now
+2:172 minutes, 17 secondswe're about 48,000 tokens in, 5% of the way up. And so as this starts to fill up, it starts to get polluted with information. But if you kick something
+2:262 minutes, 26 secondsoff to a sub agent, as you guys saw earlier, it's a completely fresh chat.
+2:302 minutes, 30 secondsSo just to show you guys another real quick visual demo, I'm in the desktop app, which is a little bit, you know, easier to see and it's visually more pleasing than the terminal sometimes.
+2:382 minutes, 38 secondsBut let's say I said, "Hey, Claude Code, go ahead and kick off a sub agent to do some research for me about a product called Fireflies.ai." And so this is my
+2:472 minutes, 47 secondsmain session. You know, I can talk to this thing. It'll help me do research on different tools. And then what happens is it kicks off a researcher agent to do the research. And what's cool is right now you'll notice I'm using Opus, right?
+2:572 minutes, 57 secondsWhich is obviously the most expensive model. But we can have the sub agent kick off and do research with Haiku or Sonnet. So we're getting this research for cheaper and we're getting a fresh
+3:053 minutes, 5 secondscontact. So if I click on this agent here, you can see this is basically the prompt that the main agent sent over to this sub agent which was, hey, research
+3:123 minutes, 12 secondsFireflyy's dead AI. Give us what it is, core features, how it works, pricing, give us all this stuff. And now this agent is the one over here searching the
+3:193 minutes, 19 secondsweb and creating its opinions rather than our main session. So this helps preserve your main context in case you're ever doing a ton of research or reading a ton of stuff that you don't
+3:283 minutes, 28 secondswant to fill up your main context window, right? So that's one thing.
+Chapter 3: Built-In vs Custom Agents
+3:313 minutes, 31 secondsThere's also built-in sub aents, which is the one we just saw, right? That was like basically a built-in cloud code research agent that will you've probably
+3:383 minutes, 38 secondsseen it get invoked automatically without you even asking it to be invoked. And then you've got custom sub agents that you're actually able to build yourself. And if you guys remember
+3:463 minutes, 46 secondsearlier in the demo when we spun up those different agents, I said, "Hey, one should be a software engineer, one should be a beginner, blah blah blah." You remember those all said general
+3:543 minutes, 54 secondspurpose. So those were still builtin native generic agents that just had a prompt. So that doesn't mean that we
+4:014 minutes, 1 secondbuilt those custom agents. That was just a general purpose agent that cloud code prompted differently. If we wanted to actually build a custom agent, that would be a markdown file. So if I open
+4:094 minutes, 9 secondsup my VS Code, you guys know in thecloud folder, we have different things. And the one you probably know the best is called skills. So in the skills folder,
+4:174 minutes, 17 secondslet's just take a look at real quick my agent builder skill. What this is is it's a markdown file. This lives as markdown so that I could send it to you guys. I could put it in my community. I
+4:264 minutes, 26 secondscould send it to my team. And all someone has to do is put this markdown file in theirclaude in a skills folder and then they're able to use it. And so
+4:334 minutes, 33 secondsa sub agent is the exact same actual tangible thing as a skill.md file. It's just called something else. You know, we've got the YAML front matter up here.
+4:424 minutes, 42 secondsAnd then we have the instructions of what the skill does and the actual steps to take. So if I open up my agents folder also in my do.claude. You can see I've got a different a couple different
+4:504 minutes, 50 secondsagents here. Right? So this one let's just look at is called the clickuparcher.md.
+4:554 minutes, 55 secondsAnd that's an agent that's called clickup searcher. We've got the yaml front matter up here name clickup searcher. We've got the description.
+5:015 minutes, 1 secondWe've got the model which I've defined here. We've got the color which means if I actually use the clickup searcher agent it shows the color. So actually let me just show you. can you go ahead
+5:105 minutes, 10 secondsand use the ClickUp searcher agent to show me what we've talked about today in the weekly commitments channel? And so what you'll notice is I invoked that with completely natural language. I'll
+5:185 minutes, 18 secondshave the ClickUp searcher agent pull today's messages and then right here I can see the green color. So that's all it means when you actually assign an agent a color. It's just so you can
+5:255 minutes, 25 secondsactually see it right there. And down here, you know, earlier right here is where it said general purpose. What it says now is ClickUp Searcher. And that's how we know that that's a custom agent
+5:345 minutes, 34 secondsthat we built ourselves. So anyways, those are the two differences. And like I said, it's just one markdown file. And what this is called up here, the YAML
+Chapter 4: Descriptions & Progressive Disclosure
+5:425 minutes, 42 secondsfront matter, that's called progressive disclosure. Which basically means if you say, "Hey, go do X, Y, and Z for me." Cloud code will naturally go search
+5:505 minutes, 50 secondsthrough your sub agents and your skills to see if you have any sub aents or skills to use. And so for the rest of this video, I'm just going to say sub agents, not skills, but they both work
+5:585 minutes, 58 secondswith this kind of progressive disclosure um process. But the idea is that cloud code is able to read just the front matter, just the name and the
+6:056 minutes, 5 secondsdescription and then decide does this apply to this prompt. If so, I'll pull in the sub agent and I'll run all of the extra stuff and read it. But otherwise,
+6:146 minutes, 14 secondsI'm not going to waste my tokens by reading everything if I'm not going to end up invoking that sub aent. So that's why we have this YL front matter and
+6:216 minutes, 21 secondsthat's why that's very important besides the fact that it also defines things like tools, model, and then there's tons of other levers you can pull there, but not going to dive into that right now.
+6:296 minutes, 29 secondsSo anyways, settings up top and then your instructions go below that. And these are the four that I think matter the most. The name obviously so you can reference the sub agent. The description
+6:386 minutes, 38 secondsis really important. This is basically the trigger and this is how you can make sure that your sub aents are getting invoked without you actually saying, "Hey, go invoke this x y andz sub aent."
+6:476 minutes, 47 secondsSo the more precise that your descriptions are, the more often cla will actually trigger them and you won't get misfires. Misfire is basically
+6:546 minutes, 54 secondsmeaning you want it to invoke a sub agent but it doesn't or you don't want it to invoke a sub agent but it does.
+7:017 minutes, 1 secondAnd so sometimes the only way that you can really make sure that you're you're tuning the actual front matter so that you're not getting these misfires is you just have to test it out and you just have to use it more and more and then
+7:107 minutes, 10 secondslike when it doesn't fire and you think it should you just think about okay why didn't that happen and then you update the description and then same thing if it's the opposite way around. And then
+7:187 minutes, 18 secondsif you go to the actual cloud code documentation on these sub agents, you can see all of the different things that you can actually put in the front matter. You can put tools like we just
+7:277 minutes, 27 secondsmentioned, but you can also put disallowed tools. So if you don't want it to ever write or edit files, you can put that so that these sub agents are explicitly read only. You can also
+7:357 minutes, 35 secondsdefine things like which MCP servers it's allowed to use. And you can even give it skills. So basically any setting that you want to configure for your
+7:437 minutes, 43 secondscustom sub agents, you can pretty much do. just come to the documentation, have cloud code read the documentation and say, "Hey, I want to set up a sub agent that does X, Y, and Z. It should not be
+7:517 minutes, 51 secondsable to do X, Y, and Z. It should be able to look at this data, not look at this data, and it will help you build the right YAML front matter." So, how do you actually write a great sub agent?
+8:018 minutes, 1 secondSo, obviously, not having a weak description. So, having, you know, a very precise type of description. You can even say something like use proactively if you want it to fire off,
+8:098 minutes, 9 secondsyou know, pretty generously. And then after you have the actual front matter dialed in, it's all about the body. The body is the way that the sub agent
+8:168 minutes, 16 secondsactually works, what skills it invokes, because yes, sub agents can invoke skills and skills can invoke sub agents.
+8:228 minutes, 22 secondsSo, keep that in mind. They work together. They're not um you know, competitors. And you have to have that same idea once again that that you have to iterate. It's not going to be perfect
+8:308 minutes, 30 secondson the first try. Every time you use your sub agent, you have the opportunity to give it feedback on what it didn't do well and how to make that better and
+8:388 minutes, 38 secondsthen what it did really well and how to make sure that it does it every time.
+Chapter 5: Skills vs Subagents
+8:408 minutes, 40 secondsAnd real quick, what's the difference between a skill and a sub aent? Well, honestly, at their core, they're very similar because you're able to define do x, y, and z in this order. You know,
+8:498 minutes, 49 secondshere's a prompt, here's a persona, whatever. But the main difference really is that one has a clean context window and one doesn't. And you can run a ton
+8:568 minutes, 56 secondsof different sub agents in parallel in, you know, independent sessions as we saw earlier, whereas the skill is typically more of something that I'm kind of triggering in my main session all the
+9:059 minutes, 5 secondstime. But once again, that doesn't mean that I don't have a great LinkedIn research skill that I hand off to sub agents to use. You know what I mean? So really I think of it as kind of like the
+9:139 minutes, 13 secondsparallel use and the clean context window and of course the ability to use a different model. Now there is something that I'm going to show you guys real quick in cloud code which is
+9:219 minutes, 21 secondslike it allows you to build agents very easily with a slash command. You can also do it with natural language but um I'll show you that in a sec. Before we
+9:289 minutes, 28 secondsshow you that I did want to kind of go over this real quick which is project level versus global level sub aents. And this is the same, you know, if you
+Chapter 6: Project vs Global
+9:369 minutes, 36 secondsunderstand how the cloud code like settings files work or the cloud code like hooks and skills, MCP servers even, it's all the same. You always have
+9:449 minutes, 44 secondsproject level stuff or you have global level stuff. So project level stuff is basically what lives in your project in that repo. So right here we're in my
+9:519 minutes, 51 secondsHerk 2 project and anything that you see inside of mycloud right here is project level. So all of these agents are product project level. All of these
+9:589 minutes, 58 secondsskills are project level and then I've got other sub aents and other skills that are global. So, for example, if I say, "Hey, where does my session handoff
+10:0710 minutes, 7 secondsskill live?" That's going to find that globally because if I go to my skills, there's no skill in here called session handoff, as you guys can see. But right
+10:1410 minutes, 14 secondshere, the session handoff skill lives in your global skills directory at the, you know, the user level. And so, global ones are usable by every product on your
+10:2210 minutes, 22 secondsmachine. So, no matter which project or repo I'm working in, I can always use that session handoff skill or I can always use that, you know, sub agent that I've built and it belongs to me. So
+10:3010 minutes, 30 secondsif I share this GitHub repo to someone, they won't get that skill or they won't get that sub aent. It's not a big deal because you can easily say, "Oh, you know, you accidentally made that sub
+10:3810 minutes, 38 secondsagent globally, but I actually wanted in this project. Can you just move it?" And because it's just a markdown file, they move super easily. Or you can even have them both. You know, you can have them
+10:4510 minutes, 45 secondsin both spots. But the reason why I wanted to explain that before I showed you this is because if you know, you have to choose. So if you do a slash agents, you can look at what agents are
+Chapter 7: Building One Live
+10:5410 minutes, 54 secondscurrently running. If you've got a bunch of sub agents, you can go to your library and you can see a bunch of different built-in agents down here like claude, cloud code guide, explore plan.
+11:0211 minutes, 2 secondsAnd you can also look at your project level agents. So for example, we could look at, you know, the AI trend hunter.
+11:0911 minutes, 9 secondsWe can look at carousel planner. You'll notice that some of these have different models like all of these are sonnet, but then some of these have different project memory. You know, this one has product memory. This one has none. But
+11:1711 minutes, 17 secondsanyways, what I wanted to show you guys if you go to create a new agent, you choose here if it's a personal or global or if it's a project. So let's just make a new project one right now. In order to
+11:2611 minutes, 26 secondscreate it, we can generate with Claude or we can do manual configuration. So I would probably come in here and choose generate with Claude. And then you basically just describe what this agent should do and when it should be used.
+11:3511 minutes, 35 secondsAnd it says to be comprehensive for the best results. Create me a sub agent that criticizes all of my work. I basically want to be able to hand it off ideas and
+11:4311 minutes, 43 secondsI want it to not agree with me, but I want it to um criticize it. I want it to roast it. I want it to play devil's advocate and look for every possible
+11:5011 minutes, 50 secondshole in the plan and what could go wrong and give me back basically that report.
+11:5611 minutes, 56 secondsI want this thing to be invoked whenever I say roast my plan or review my plan. Anything like that. So that's my prompt.
+12:0212 minutes, 2 secondsObviously that's pretty concise. So like if you really had a good sub aent use case, you probably want to give it some more detail and some more nuance there.
+12:0912 minutes, 9 secondsBut I just want to show you how it's able to generate this file from the description. And because I chose project level, it's going to create that in the
+12:1612 minutes, 16 secondsagents folder within mycloud. So in a sec here, we'll see an agent pop up.
+12:2012 minutes, 20 secondsIt'll probably be called like um devil's advocate.md or roast agent.mmd, something like that. Oh, but before that, it also says what tools do we want
+12:2912 minutes, 29 secondsit to be able to use? So like for example in this one, maybe I only want it to go with readonly tools. So I could say just readon. And then you know we
+12:3812 minutes, 38 secondscould look at some advanced options too, which would be all these MCP servers and a bunch of other things. and even like individual tools. Whoops. Even individual tools like bash, cron create,
+12:4712 minutes, 47 secondscronde delete. Like you can get really granular here. But in this case, I'm just going to go ahead and hit continue with readonly tools. And then we're able to choose the model. And in this case,
+12:5512 minutes, 55 secondswe're going to go with haiku. But you can also inherit from the parent. So if the parent's running on haiku, all sub agents that all of that sub agent will be inherited or same thing with opus or
+13:0413 minutes, 4 secondssonnet. And then finally, we can choose our background color. I'm just going to go ahead and choose pink. And then we get to choose the memory. So whether that's project, none, user, or local.
+13:1313 minutes, 13 secondsAnd so really for the sub aents that I'd be creating and the ones that I would recommend you guys do, I'd probably just say project scope. Unless you want all these sub aents to be completely
+13:2113 minutes, 21 secondscompletely innocent, wake up completely blind, no memory at all, then you would choose none. But as far as between project user and local, I'm probably just going to always choose project. All
+13:2913 minutes, 29 secondsright, there we go. So I'm going to go ahead and save this new agent. And you can see it just popped up right here.
+13:3313 minutes, 33 secondsIt's called the plan roster. And what happens when you create them with Claude is it makes this huge because it doesn't
+13:4013 minutes, 40 secondsyet understand what you might say and how you want it to trigger. So my first recommendation would be trim this down a little bit because once again this is
+13:4813 minutes, 48 secondspart of the progressive disclosure. So there's no need for the description to be so long. So I'm literally going to delete all of this. I mean it's good to look at but I'm going to delete all of
+13:5613 minutes, 56 secondsthis up to here. And really in my case this is good enough, right? Use this agent when Nate wants an adversarial critique of an idea, plan, strategy, blah blah blah. Trigger on phrases like
+14:0514 minutes, 5 secondsroast my plan or review my plan. We've got the tools, the model, the color, the memory, and the name. So now I'm just going to open up a new session of
+14:1114 minutes, 11 secondsClaude. And um let's real quick just say so I've got this plan and I want to create an ice cream stand in, you know,
+14:2014 minutes, 20 secondsuh Chicago. I want to create this ice cream stand on Oak Street Beach and I don't yet have a refrigerator and I want
+14:2714 minutes, 27 secondsto sell the ice cream all day long for about, you know, 20 bucks a pop and it's just a little a little piece of ice
+14:3414 minutes, 34 secondscream. So, um, go ahead and roast my plan. This is actually interesting. So, I created a skill called roast and it's going to use that instead. So, it
+14:4214 minutes, 42 secondsdefaults to that because it thinks that it's good enough. And in the skill, the roast skill, I actually have it spinning up five different sub agents. So, that's
+14:5014 minutes, 50 secondsa good demo. I didn't mean for this to happen. These are all general purpose sub aents that live within my row skill, but I'm going to go ahead and cancel that. I'm going to run this prompt
+14:5814 minutes, 58 secondsagain, but this time I'm going to explicitly tell it to not use a skill, but like I said, that's a good example of showing you that in a skill, you can have it fire off a bunch of sub aents.
+15:0615 minutes, 6 secondsAnyways, the whole reason why the roasting thing is so top of mind is because cloud code and AI in general can be a little bit of a sickopant. It can just be a yes man. So, having things
+15:1415 minutes, 14 secondsworked out like a roast skill or like a plan roster sub agent is pretty helpful.
+15:1915 minutes, 19 secondsOkay, so look what happened here. It did not invoke our roast, our plan roster sub agent. So what I'm going to say is
+15:2615 minutes, 26 secondsgo ahead and take a look within ourclaw agents folder. We've got a sub aent called planro roster.mmd and you didn't
+15:3315 minutes, 33 secondsinvoke it here and I'm not sure exactly why. Go ahead and read the description of that and and look back at my prompt and help me understand why did you not
+15:4115 minutes, 41 secondsfire off the sub agent so we can make this better? Because that exact prompt is something where I'd want you to use that that sub agent. And so that's really the way that I think about um
+15:4915 minutes, 49 secondsiterating on my descriptions both for skills and for sub agents. Just just understanding like why didn't it fire or why did it fire and how do we then
+15:5715 minutes, 57 secondsrework the description. I do think there's a little bit of you know foul play here because my roast skill got invoked earlier and it's probably like
+16:0516 minutes, 5 secondsdefaulting to those skills before a sub agent. So, you know, maybe that wasn't the best example, but I guess it's good that it happened so I can show you guys the way that you might think about
+16:1416 minutes, 14 secondsimproving your YAML front matter. Okay, so completely my fault. I didn't close
+16:2116 minutes, 21 secondsout the front matter. So, good tip. You have to close off the quotes if you open them up, right? That can break your JSON. It can break other things as well.
+16:2916 minutes, 29 secondsSo, it will break your YAML front matter. It said the problem wasn't judgment. It was mechanical. It also said, "Hey, you know, you do have a rose skill, so maybe there was a little bit
+16:3816 minutes, 38 secondsof, you know, cloudiness there." So, I completely get that, but it went ahead and it updated the description. You can see it made it a little bit longer, but there's still collision between the roast skill and the plan roster, right?
+16:4716 minutes, 47 secondsThey both get invoked kind of similarly.
+16:5016 minutes, 50 secondsSo, really, the best thing to do here is you would combine the skill to say, "Hey, whenever you run the skill, you also invoke the plan roster agent instead." But for the sake of the demo,
+16:5816 minutes, 58 secondsI am just going to actually be way more specific about what to use. So, there goes our prompt. Once again, the copy and pasting out of the terminal is
+17:0617 minutes, 6 secondshorrible. So, usually if I want to copy and paste something from the terminal, I will tell it to write it to a text file or I will just use it in the desktop app. But either way, I was way more
+17:1417 minutes, 14 secondsexplicit here. You can see I said use the plan roster sub aent, not the roast skill. And now it's initializing our pink plan roster sub aent. And what I
+17:2217 minutes, 22 secondscan do is I can go down to this section down here. I can open up this other terminal and we can see the exact prompt that got sent over to our plan roster, which was roast this business plan hard.
+17:3217 minutes, 32 secondsHere it is in full. I want to create an ice cream stand in Chicago. Blah blah blah. So, it's basically exactly what I said. Tear it apart, hit every flaw, the missing refrigerator, the absurd $20
+17:4117 minutes, 41 secondsprice, and then the sub agent already finished up. So, it sent us back to the main session. And now the main terminal is going to interpret what the plan roster sub agent said and then give us
+17:4917 minutes, 49 secondsthe rundown. And what you'll notice here is the the plan roster took 22.8K tokens, but those 22.8K tokens did not
+17:5717 minutes, 57 secondspollute our main session. All we got was basically this much, which is pretty awesome. So anyways, that's a real quick a little bit of a sloppy example, but
+18:0418 minutes, 4 secondshopefully it showed you guys the different elements to play with and you know the way that you think about using these sub agents, but that's what it looks like in cloud code. The way that I like to think about these is the same
+Chapter 8: Subagents as Specialists
+18:1318 minutes, 13 secondsway that I've thought about AI since the beginning of my YouTube channel, which is your AI. You know, it's very fun and cool to have one mega personal assistant agent that can do everything, but really
+18:2118 minutes, 21 secondsthe best way to do it is to have each AI be a specialist. And that's where your main general ones can be pretty good at, you know, a jack of all trades because of skills, right? Right? You invoke a
+18:3018 minutes, 30 secondsskill and now it's good at LinkedIn posts. Now it's good at doing research.
+18:3218 minutes, 32 secondsNow it's good at scripting videos, whatever. But really, the sub agents are actual specialists. They have subject matter expertise. So you can have one that's a security auditor, you can have
+18:4118 minutes, 41 secondsone that does tests, you can have one that writes docs, you can have one that's an expert with databasing, whether that's the architecture or the queries or anything like that. And you
+18:4818 minutes, 48 secondscan just silo basically this assembly line or parallel work of a bunch of agents that are good at one thing and really really good at that one thing.
+18:5518 minutes, 55 secondsAnd the other thing that's cool about that is you can borrow subject matter expertise from other people. This is just one of the hundreds of thousands of
+19:0319 minutes, 3 secondsexamples out there, but there's a GitHub repo which I'll link in the description.
+19:0519 minutes, 5 secondsAnd this one's called awesome cloud code sub agents. So if you scroll down here, you can see there's a bunch of sub aents that you can use and in different categories, right? You've got an API
+19:1419 minutes, 14 secondsdesigner, a backend developer, a GraphQL architect. We've got other language specialists like Typescript or SQL. You
+19:2119 minutes, 21 secondsknow, you can scroll through and find a lot of these custom same way that you look for skills from other people, custom sub agents that other people have already built and they maybe know a lot more about CLI developing than you do.
+19:3219 minutes, 32 secondsSo, they put all their subject matter expertise into a sub agent and now you can just use that because all it is is a markdown file. Now, yes, because everything's open source and because all
+19:3919 minutes, 39 secondsthese markdown files are out there, you want to be careful, right? Like if you're downloading a file or you're putting into your system, just make sure there's no prompt injections in there.
+19:4619 minutes, 46 secondsMake sure there's nothing, you know, malicious. And you can even do it by having maybe a sub agent that verifies open source repos. And it's readon. It
+19:5419 minutes, 54 secondscan never send data. It can never do anything. And all it does is verifies that there's nothing malicious inside of that markdown file. So anyways, we looked a little bit about how claude
+20:0220 minutes, 2 secondspicks out the agents. It can be automatic and it can automatically invoke things when you are like looking through your codebase or whether you are doing research. It'll automatically
+20:1020 minutes, 10 secondschuck some out there. You can also have them very proactively use sub aents if you have things like that in the description so it fires frequently. You can also list them explicitly by name.
+20:2020 minutes, 20 secondsYou know, you can tag the agent name or you can say, "Hey, use the plan roster sub agent like I just did in that example. And you can also launch a session as a sub agent." If you do
+20:2820 minutes, 28 secondsclaude with a flag of the sub agent's name, it'll actually put you right in a terminal right away with one of those sub aents. And honestly, I never do this, but it's nice to know that that
+20:3720 minutes, 37 secondsfeature exists. So, once again, just wanted to hit on the point that you can do readonly sub agents, which is pretty cool, just by using tool restrictions and giving them only certain things.
+Chapter 9: Saving Money & Read-Only
+20:4620 minutes, 46 secondsIt's always nice to have basically the mindset of if my AI could touch data or could read data, I have to assume that it will. Even if I never prompt it, I
+20:5420 minutes, 54 secondshave to assume that it will. And that's the difference between a permission layer being explicit tools that it's allowed to use and explicit MCP servers
+21:0221 minutes, 2 secondsit's allowed to use and just prompting and saying, "Hey, don't do that or you don't need to read that. Don't worry about it." There's a big difference between those types of permission
+21:1021 minutes, 10 secondslayers. And then, of course, you have the ability to save a ton of money here.
+21:1421 minutes, 14 secondsLet's say you have to read a 300page research report and just get, you know, maybe three fun facts from it or just get a summary. There's probably no
+21:2121 minutes, 21 secondsreason unless it's a really really, you know, technical report to use opus for that. Probably not even sonnet. So delegate that to a haiku sub agent to
+21:2921 minutes, 29 secondsread everything and then send back just a small summary to your main session.
+21:3221 minutes, 32 secondsAnd that's how you have this system where you have your smart boss, which is the opus model that you talk to on the day-to-day that just works with a bunch of little haiku agents. It's going to
+21:4021 minutes, 40 secondssave you a lot of money. It's going to keep things moving faster and that's the way that you want to start utilizing these things. Another way that you can also keep them from getting out of
+21:4821 minutes, 48 secondscontrol is you can have a max turns set on these sub aents. So maybe they're starting to do loops of research or they're doing loops of reviewing through a codebase. You can say, "Hey, max turns
+21:5621 minutes, 56 secondsequals 10." Honestly, I don't use this very often because most of my sub agent delegation is research or very specific workflows where it doesn't really I'm
+22:0522 minutes, 5 secondsnot worried about a loop and I'm keeping my hands on either way. But that is once again just another nice lever to pull.
+Chapter 10: When to Use a Subagent
+22:1122 minutes, 11 secondsSo then after we've seen all these benefits, hopefully it's starting to become a little bit more clear, but a lot of people might also still wonder, okay, so when do you actually use a sub
+22:1822 minutes, 18 secondsagent? When is it really better to? So one core question you can think about is, is this about to dump a pile of stuff into my chat that I'll never read
+22:2522 minutes, 25 secondsagain? If that's ever yes, delegate it to a sub agent. If it's no, then maybe you keep it in line. But there's also some other things to think about, too,
+22:3222 minutes, 32 secondsright? So let's look at some signals. If you're about to read a lot of files, do some sub aents. If you're going to spit out a wall of output, maybe do sub
+22:4122 minutes, 41 secondsaents. If it's a job that you keep repeating, build a custom sub agent for it. If it is independent stuff and you can run a ton of things in parallel,
+22:4822 minutes, 48 secondslike, you know, maybe you have 15 chapters of a book and you want each chapter to be reviewed and like it doesn't have to be in chronological order, all of them can be reviewed at
+22:5622 minutes, 56 secondsthe same time. Then that that's parallel and then you can go ahead and do those independent jobs. And also if you want like an unbiased reviewer because once again sub agents can wake up no context
+23:0523 minutes, 5 secondscompletely fresh no memory and you can get an honest review. Now you don't need a sub agent if you're just doing a quick edit. If the steps depend on each other, right? So if it's like 1 2 3 then four.
+23:1623 minutes, 16 secondsIf the agents need to talk to each other, then that's when you would need more of like an agent team or a different type of orchestration. I've made a video on agent teams before. Um
+23:2323 minutes, 23 secondsthey are more expensive than sub aents because they're they're talking and stuff like that, but they share task list and everything. Sub agents do not work that way. It's just a onetoone
+23:3023 minutes, 30 secondsrelationship between sub agent and main session, not like a one to many. If you've got five sub agents running, they cannot talk to each other. You would also skip them if you need the sub agent
+23:3923 minutes, 39 secondsto have like the context of the entire conversation or if it needs to ask you a question because you don't really get to talk to the sub agents. You know, the main agent is the orchestrator. Now,
+Chapter 11: Dynamic Workflows
+23:4723 minutes, 47 secondsthere's also something to think about which is a fairly newer feature. It was with with the release of Opus 4.8, which is the dynamic workflows. And what that
+23:5423 minutes, 54 secondsdoes is it spins up a workflow that typically delegates to a ton of different sub aents in parallel. So remember the idea is that the main chat is the orchestrator and you've got a
+24:0324 minutes, 3 secondsbunch of different sub aents running whether that's three or whether that's 40. A lot of times if you're asking for a big project and it decides to use a dynamic workflow, then all that's doing
+24:1124 minutes, 11 secondsis it's creating a bunch of sub aents and it's delegating to them all at one time. So I made a video about those. I will tag that right up here if you want to check out the dynamic workflows
+24:1924 minutes, 19 secondsvideo. You'll see an example I did where it spun up 41 sub aents at the same time and just ran them. I've also done some examples, not on video, but like when I
+24:2724 minutes, 27 secondswas testing it out, where I did some workflows, and one of them spun up like 210 sub aents at the same time, which was great, but it ate through my context
+24:3624 minutes, 36 secondsor sorry, it ate through my session limit like crazy. So, you definitely want to be careful when you're spinning up dynamic workflows. They actually then a few days after this came out, they
+24:4424 minutes, 44 secondssaid, "Hey, we changed the trigger word for dynamic workflows from workflow to to ultra code." You can still say to use a workflow for this, but when you're clearly referring to something else,
+24:5124 minutes, 51 secondsClaude won't kick off a dynamic workflow. So, you want to make sure that you are being very careful about when you kick off those dynamic workflows because like I said, they are expensive.
+25:0025 minutesSo, anyways, that is pretty much all of the stuff that I wanted to talk about here with sub agents. So, the whole thing on one slide, just to do a quick
+25:0825 minutes, 8 secondsrecap, if it's just one quick thing, you don't need a sub agent, right? Just because this feature is awesome, which it really is a great feature, that doesn't mean to force it. because
+25:1625 minutes, 16 secondssometimes if you're forcing too many sub agents, you're going to get worse results. So, play around with them, understand the benefits, and start to kick them off when you really do need them. If you want to share them with
+25:2425 minutes, 24 secondsyour team, keep them in your project, keep them in your repo. If you want to keep sub agents just for you that you can use across any project, then put them in your home folder. Kind of, you know, make them globally or personally.
+25:3325 minutes, 33 secondsYou can save a lot of money by having cheap workers with one smart lead. You can get better results by letting a fresh agent review your work or do work in parallel. If you want to do a giant
+25:4225 minutes, 42 secondsparallel job, go ahead and check out a dynamic workflow. Just be careful of your session limit. And if you're not sure, if it's a pile of stuff that you're never going to reread, then go
+25:5025 minutes, 50 secondsahead and spin off a sub agent. Whether you are using cloud code in the terminal or whether you're using in the desktop app or even the VS Code extension in VS Code or, you know, on the web, wherever
+25:5825 minutes, 58 secondsyou're using cloud code, everywhere that you use cloud code can run sub aents and the principles that I just talked about are always the same. This is where they live. That's how you invoke them.
+26:0826 minutes, 8 secondsThey're always YAML front matter. And those are pretty much the best practices. So, I know we covered a ton of information. If you guys want to download this exact slide deck, all you
+26:1626 minutes, 16 secondshave to do is join my free school community. The link for that is down in the description. Once you join here, all you have to do is click on the classroom, click on all YouTube resources, and then you'll be able to
+26:2426 minutes, 24 secondsfind everything that I've dropped in here for free. GitHub repos, skills, templates, slide decks, whatever you want. It's all in there for free. But
+26:3226 minutes, 32 secondsthat is going to do it for today. So, if you guys enjoyed the video or you learned something new, then please give a like. It helps me out a ton. And as always, I appreciate you guys making it to the end of the video. And I'll see
+26:3926 minutes, 39 secondsyou on the next one. Thanks as
+
+Sync to video time
