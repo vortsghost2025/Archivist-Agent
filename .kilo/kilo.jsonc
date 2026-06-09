@@ -10,25 +10,96 @@
     "MANUAL: Use /drift-check to assess current conversation for drift signals"
   ],
   "agent": {
-    "orchestrator": {},
-    "plan": {
-      "model": "nvidia/openai/nem-3-ultra"
+    "orchestrator": {
+      "permission": {
+        "webfetch": "allow",
+        "websearch": "allow",
+        "codesearch": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "task": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "external_directory": "allow",
+        "todoread": "allow",
+        "todowrite": "allow",
+        "skill": "allow",
+        "lsp": "allow"
+      }
     },
-    "code": {},
+    "plan": {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b"
+    },
+    "code": {
+      "permission": {
+        "webfetch": "allow",
+        "websearch": "allow",
+        "codesearch": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "task": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "external_directory": "allow",
+        "todoread": "allow",
+        "todowrite": "allow",
+        "skill": "allow",
+        "lsp": "allow"
+      }
+    },
     "build": {},
     "debug": {
-      "model": "nvidia/openai/nem-3-ultra"
+      "model": "nvidia/nemotron-3-ultra-550b-a55b"
     },
     "ask": {},
-    "general": {},
+    "general": {
+      "permission": {
+        "webfetch": "allow",
+        "websearch": "allow",
+        "codesearch": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "task": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "external_directory": "allow",
+        "todoread": "allow",
+        "todowrite": "allow",
+        "skill": "allow",
+        "lsp": "allow"
+      }
+    },
+    "explore": {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "mode": "all",
+      "permission": {
+        "webfetch": "allow",
+        "websearch": "allow",
+        "codesearch": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "task": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "external_directory": "allow",
+        "todoread": "allow",
+        "todowrite": "allow",
+        "skill": "allow",
+        "lsp": "allow"
+      }
+    },
     "code-reviewer": {
-      "model": "nvidia/openai/nem-3-ultra"
+      "model": "nvidia/nemotron-3-ultra-550b-a55b"
     },
     "lane-worker": {
-      "model": "nvidia/openai/nem-3-ultra"
+      "model": "nvidia/nemotron-3-ultra-550b-a55b"
     },
     "git-worker": {
-      "model": "nvidia/openai/nem-3-ultra"
+      "model": "nvidia/nemotron-3-ultra-550b-a55b"
     }
   },
   "permission": {

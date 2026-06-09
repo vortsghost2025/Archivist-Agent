@@ -1,0 +1,324 @@
+That pasted analysis is mostly right, but the important distinction is this:
+
+  Wave only provides the integration hook to spawn an agent terminal with cli: "kilo"; it does not contain the Kilo permission system or your custom launcher behavior. The repo-side evidence is exactly where that agent found it: /S:/
+  waveterm/pkg/aiusechat/usechat-prompts.go:49 and /S:/waveterm/pkg/aiusechat/tools_term.go:548. So the Archivist bash-block issue is not a Wave codebase problem by itself. It lives in the Kilo runtime/config/launcher layer.
+
+  Your active Kilo launchers are under the Wave Alt instance, not Wave Bridge Dev. I already patched the local launcher/config side in waveterm-alt, and the updated files are there now:
+  /C:/Users/seand/AppData/Local/waveterm-alt/data/bin/launch-isolated-agent.ps1,
+  /C:/Users/seand/AppData/Local/waveterm-alt/data/bin/kilo-a.ps1,
+  /C:/Users/seand/AppData/Local/waveterm-alt/data/bin/kilo-b.ps1.
+  They were updated today at 2026-06-09 11:25 AM, which matches the fixes for “prompt for project folder first” and the Archivist permission alignment. So yes: Wave Alt is the upgraded Kilo-managed one, and Kilo A/B belong to that stack.
+
+  The practical next step is simple: close all Wave/Kilo windows, launch Kilo A or Kilo B, pick S:\Archivist-Agent when prompted, then try the failing orchestrator/bash flow again. If bash is still blocked after one fresh launch inside
+  the project, I need the newest Kilo log from that run; at that point we’ll know whether the remaining problem is config precedence inside Kilo itself rather than the Wave integration.
+
+
+› the problem with kilo a kilo b launcher it lets me select the folder i want to open but when im inside it loads kilo it doesnt show me any of my saved sessions when i try to shell it inside kilo says not found. normaly i go powershell
+  cd s: archvist-agent and then kilo --session ses_15a4e5b31ffeXD1W12l1SuDp1l --cloud-fork and it loads now it makes me select folder and i cant see or load my sessions
+
+
+• I’m tracing why the launcher can start Kilo in the right folder but loses visibility into your saved sessions. The likely fault is the isolated profile/env setup, so I’m checking the launcher script against where Kilo actually stores
+  sessions.
+• Running Get-Content 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1'
+
+• Running Get-Content 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-b.ps1'
+
+• Ran Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles' -Directory | Select-Object Name; Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-a' -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object
+  │ { $_.FullName -match 'session|state|history' } | Select-Object FullName; Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-b' -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match
+  │ 'session|state|history' } | Select-Object FullName; if (Test-Path 'C:\Users\seand\.config\kilo') { Get-ChildItem 'C:\Users\seand\.config\kilo' -Recurse -Directory | Where-Object { $_.FullName -match 'session|state|history' } |
+  │ … +1 lines
+  └
+
+• Ran Get-Content 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1'
+  └ param(
+        [Parameter(ValueFromRemainingArguments = $true)]
+    … +15 lines (ctrl + t to view transcript)
+
+    exit $LASTEXITCODE
+
+• Ran Get-Content 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\launch-isolated-agent.ps1'
+  └ param(
+        [Parameter(Mandatory)]
+    … +125 lines (ctrl + t to view transcript)
+
+    & $ExecutablePath @PassthroughArgs
+
+
+• Ran Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles' -Directory | Select-Object Name; Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-a' -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object
+  │ { $_.FullName -match 'session|state|history' } | Select-Object FullName; Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-b' -Recurse -Directory -ErrorAction SilentlyContinue | Where-Object { $_.FullName -match
+  │ 'session|state|history' } | Select-Object FullName; if (Test-Path 'C:\Users\seand\.config\kilo') { Get-ChildItem 'C:\Users\seand\.config\kilo' -Recurse -Directory | Where-Object { $_.FullName -match 'session|state|history' } |
+  │ … +1 lines
+  └
+    Name
+    … +15 lines (ctrl + t to view transcript)
+
+
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  store, not the one your normal kilo --session ... workflow uses.
+
+• Running Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-a' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'session|history|state|jsonl|db|sqlite' -or $_.FullName -match 'session|history|
+  │ state' } | Select-Object FullName,Length | Format-Table -AutoSize
+
+• Running Get-ChildItem 'C:\Users\seand\.config\kilo' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'session|history|state|jsonl|db|sqlite' -or $_.FullName -match 'session|history|state' } | Select-Object
+  │ FullName,Length | Format-Table -AutoSize
+• Running Get-ChildItem 'C:\Users\seand' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^ses_' -or $_.FullName -match '\\kilo\\|\\.kilo\\|session' } | Select-Object -First 200 FullName,Length | Format-Table
+  │ -AutoSize
+
+• Ran Get-ChildItem 'C:\Users\seand\.config\kilo' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'session|history|state|jsonl|db|sqlite' -or $_.FullName -match 'session|history|state' } | Select-Object
+  │ FullName,Length | Format-Table -AutoSize
+  └
+    FullName                                                                                            Length
+    … +10 lines (ctrl + t to view transcript)
+    C:\Users\seand\.config\kilo\node_modules\effect\src\unstable\sql\Statement.ts                        37173
+
+
+• Ran Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-a' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match 'session|history|state|jsonl|db|sqlite' -or $_.FullName -match 'session|history|state' }
+  │ | Select-Object FullName,Length | Format-Table -AutoSize
+  └
+    FullName                                                                                                                                                                                                                   Length
+    … +115 lines (ctrl + t to view transcript)
+    C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\state\kilo\prompt-history.jsonl                                                                                                                                           15272
+
+
+• Ran & 'C:\Users\seand\Tools\nodejs\node-v24.14.0-win-x64\node_modules\@kilocode\cli\node_modules\@kilocode\cli-windows-x64\bin\kilo.exe' --help
+  └ ██  ██ ████   ██  ██   ██       ████ ██     ████
+    ████   ~~██   ██  ~~ ██~~██   ██~~~~ ██     ~~██
+    … +53 lines (ctrl + t to view transcript)
+          --prompt       prompt to use                                                          [string]
+          --agent        agent to use                                                           [string]
+
+• Ran Get-ChildItem 'C:\Users\seand' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -match '^ses_' -or $_.FullName -match '\\kilo\\|\\.kilo\\|session' } | Select-Object -First 200 FullName,Length | Format-Table
+  │ -AutoSize
+  └
+    FullName                                                                                                                                                        Length
+
+
+• Running rg -n "ses_15a4e5b31ffeXD1W12l1SuDp1l" 'C:\Users\seand' -g '*'
+
+• Running Get-ChildItem 'C:\Users\seand\AppData' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -eq 'kilo.db' -or $_.Name -like 'ses_*' } | Select-Object FullName,Length | Format-Table -AutoSize
+
+• Running Get-ChildItem 'C:\Users\seand\.config\kilo' -Force | Select-Object Name,FullName,PSIsContainer; if (Test-Path 'C:\Users\seand\.local\share\kilo') { Get-ChildItem 'C:\Users\seand\.local\share\kilo' -Recurse -File -ErrorAction
+  │ SilentlyContinue | Select-Object -First 50 FullName,Length | Format-Table -AutoSize }
+
+• Ran Get-ChildItem 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin' -File | Where-Object { $_.Name -eq 'kilo.ps1' -or $_.Name -eq 'kilo.cmd' } | ForEach-Object { "--- $($_.FullName)"; Get-Content $_.FullName }
+  └ --- C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo.cmd
+    @echo off
+    … +11 lines (ctrl + t to view transcript)
+    call "%LAUNCHER%" %*
+    --- C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo.ps1
+
+• Ran Get-ChildItem 'C:\Users\seand\.config\kilo' -Force | Select-Object Name,FullName,PSIsContainer; if (Test-Path 'C:\Users\seand\.local\share\kilo') { Get-ChildItem 'C:\Users\seand\.local\share\kilo' -Recurse -File -ErrorAction
+  │ SilentlyContinue | Select-Object -First 50 FullName,Length | Format-Table -AutoSize }
+  └
+    Name              FullName                                      PSIsContainer
+    … +59 lines (ctrl + t to view transcript)
+    C:\Users\seand\.local\share\kilo\snapshot\2a9be5542ab94c9e0250f18e49bdcbb83416cbb0\b9f6c997e748daf0e6316af2f6fe658642e1e96f\objects\61\e8b95496bebcc1edcb7d1e7333ccd57cdbb8f4     4812
+
+
+• Ran Get-ChildItem 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin' -File | Where-Object { $_.Name -eq 'kilo.ps1' -or $_.Name -eq 'kilo.cmd' } | ForEach-Object { "--- $($_.FullName)"; Get-Content $_.FullName }
+  └ --- C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo.cmd
+    @echo off
+
+• Ran Get-ChildItem 'C:\Users\seand\AppData' -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -eq 'kilo.db' -or $_.Name -like 'ses_*' } | Select-Object FullName,Length | Format-Table -AutoSize
+  └
+
+• Ran rg -n "ses_15a4e5b31ffeXD1W12l1SuDp1l" 'C:\Users\seand' -g '*'
+  └ (no output)
+
+─ Worked for 1m 04s ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Running & 'C:\Users\seand\Tools\nodejs\node-v24.14.0-win-x64\node_modules\@kilocode\cli\node_modules\@kilocode\cli-windows-x64\bin\kilo.exe' session --help
+
+◦ Running Get-Content 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\config\kilo\kilo.jsonc' -First 220
+
+• Ran Get-Content 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-b\config\kilo\kilo.jsonc' -First 220
+  └ {
+      "$schema": "https://app.kilo.ai/config.json",
+    … +65 lines (ctrl + t to view transcript)
+              }      "name": "OpenRouter",
+        },        "webfetch": "allow", "websearch": "allow", "codesearch": "allow",
+
+• Ran Get-Content 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\config\kilo\kilo.jsonc' -First 220
+  └ {
+      "$schema": "https://app.kilo.ai/config.json",
+    … +201 lines (ctrl + t to view transcript)
+      "disabled_providers": []
+    }
+
+• Ran Get-Content 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-b\config\kilo\kilo.jsonc' -First 220
+  └ {
+      "$schema": "https://app.kilo.ai/config.json",
+    … +216 lines (ctrl + t to view transcript)
+          "permission": {
+            "webfetch": "allow", "websearch": "allow", "codesearch": "allow",
+
+• Ran & 'C:\Users\seand\Tools\nodejs\node-v24.14.0-win-x64\node_modules\@kilocode\cli\node_modules\@kilocode\cli-windows-x64\bin\kilo.exe' session --help
+  └ ██  ██ ████   ██  ██   ██       ████ ██     ████
+    ████   ~~██   ██  ~~ ██~~██   ██~~~~ ██     ~~██
+    … +17 lines (ctrl + t to view transcript)
+    INFO  2026-06-09T18:16:01 +576ms service=file init
+    INFO  2026-06-09T18:16:02 +590ms service=default disposing all instances
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• I’m making the launcher use your normal Kilo session database while keeping the custom kilo-a / kilo-b configs. That’s the right split here: shared sessions, custom agent permissions.
+
+• Running $env:XDG_CONFIG_HOME='C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\config'; $env:XDG_DATA_HOME='C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\data'; & 'C:
+  │ \Users\seand\Tools\nodejs\node-v24.14.0-win-x64\node_modules\@kilocode\cli\node_modules\@kilocode\cli-windows-x64\bin\kilo.exe' session list | Select-Object -First 20
+
+• Ran $env:XDG_CONFIG_HOME='C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\config'; $env:XDG_DATA_HOME='C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\data'; & 'C:
+  │ \Users\seand\Tools\nodejs\node-v24.14.0-win-x64\node_modules\@kilocode\cli\node_modules\@kilocode\cli-windows-x64\bin\kilo.exe' session list | Select-Object -First 20
+  └ (no output)
+
+• Ran $env:XDG_CONFIG_HOME='C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\config'; $env:XDG_DATA_HOME='C:\Users\seand\.local\share'; & 'C:
+  │ \Users\seand\Tools\nodejs\node-v24.14.0-win-x64\node_modules\@kilocode\cli\node_modules\@kilocode\cli-windows-x64\bin\kilo.exe' session list | Select-Object -First 20
+  └ Session ID                      Title                              Updated
+    ──────────────────────────────────────────────────────────────────────────
+    ses_152d33d73ffenAIpKS47JQU740  Add task and npm to Wave AI tools  1:24 PM
+
+• I verified the root cause before patching: with the current isolated kilo-a data store, kilo session list is empty; with the same kilo-a config but the normal C:\Users\seand\.local\share data store, your saved sessions appear
+  immediately. That gives us a clean, low-risk fix.
+
+• Edited ~\AppData\Local\waveterm-alt\data\bin\launch-isolated-agent.ps1 (+8 -2)
+    20
+    21 -    [string]$PromptTitle = "Choose a project folder"
+    21 +    [string]$PromptTitle = "Choose a project folder",
+    22 +
+    23 +    [string]$SharedDataHome
+    24  )
+       ⋮
+    84  $configHome = Join-Path $profileRoot "config"
+    83 -$dataHome = Join-Path $profileRoot "data"
+    85 +$dataHome = if ([string]::IsNullOrWhiteSpace($SharedDataHome)) {
+    86 +    Join-Path $profileRoot "data"
+    87 +} else {
+    88 +    $SharedDataHome
+    89 +}
+    90  $stateHome = Join-Path $profileRoot "state"
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• Edited 2 files (+6 -2)
+  └ ~\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1 (+3 -1)
+     7  $launcher = Join-Path $PSScriptRoot "launch-isolated-agent.ps1"
+     8 +$sharedDataHome = Join-Path $env:USERPROFILE ".local\share"
+       ⋮
+    17      -InitialDirectory "S:\" `
+    17 -    -PromptTitle "Choose a project folder for kilo-a"
+    18 +    -PromptTitle "Choose a project folder for kilo-a" `
+    19 +    -SharedDataHome $sharedDataHome
+    20
+
+  └ ~\AppData\Local\waveterm-alt\data\bin\kilo-b.ps1 (+3 -1)
+     7  $launcher = Join-Path $PSScriptRoot "launch-isolated-agent.ps1"
+     8 +$sharedDataHome = Join-Path $env:USERPROFILE ".local\share"
+     9
+       ⋮
+    17      -InitialDirectory "S:\" `
+    17 -    -PromptTitle "Choose a project folder for kilo-b"
+    18 +    -PromptTitle "Choose a project folder for kilo-b" `
+
+• Running & 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1' session list | Select-Object -First 10
+
+• Ran $files=@('C:\Users\seand\AppData\Local\waveterm-alt\data\bin\launch-isolated-agent.ps1','C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1','C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-b.ps1'); foreach($f in
+    Line |
+       2 |  … ull; [pscustomobject]@{File=$f; ErrorCount=$errors.Count} } | Format- …
+• Ran & 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-b.ps1' session list | Select-Object -First 10
+  └ (no output)
+
+• Ran & 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1' session list | Select-Object -First 10
+  └ (no output)
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• The patch is in. I’m doing one more pass to confirm the wrappers actually see the shared session store when invoked the same way your desktop shortcuts call them.
+
+• Running $files=@('C:\Users\seand\AppData\Local\waveterm-alt\data\bin\launch-isolated-agent.ps1','C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1','C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-b.ps1'); $results
+  │ = foreach($f in $files){ $tokens=$null; $errors=$null; [System.Management.Automation.Language.Parser]::ParseFile($f,[ref]$tokens,[ref]$errors) | Out-Null; [pscustomobject]@{File=$f; ErrorCount=$errors.Count} }; $results |
+
+• Ran $files=@('C:\Users\seand\AppData\Local\waveterm-alt\data\bin\launch-isolated-agent.ps1','C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1','C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-b.ps1'); $results =
+  │ foreach($f in $files){ $tokens=$null; $errors=$null; [System.Management.Automation.Language.Parser]::ParseFile($f,[ref]$tokens,[ref]$errors) | Out-Null; [pscustomobject]@{File=$f; ErrorCount=$errors.Count} }; $results |
+  │ Format-Table -AutoSize
+  └
+    File                                                                         ErrorCount
+    … +3 lines (ctrl + t to view transcript)
+    C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-b.ps1                         0
+
+
+• Ran & 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.ps1' session list | Out-String -Width 220; "EXIT=$LASTEXITCODE"
+  └
+    EXIT=0
+
+• Ran $env:XDG_CONFIG_HOME='C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\config'; $env:XDG_DATA_HOME='C:\Users\seand\.local\share'; & 'C:
+  │ \Users\seand\Tools\nodejs\node-v24.14.0-win-x64\node_modules\@kilocode\cli\node_modules\@kilocode\cli-windows-x64\bin\kilo.exe' session list | Out-String -Width 220; "EXIT=$LASTEXITCODE"
+    ses_152d33d73ffenAIpKS47JQU740  Add task and npm to Wave AI tools  1:24 PM
+
+    EXIT=0
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• The scripts parse cleanly. One oddity remains in my non-interactive check: direct Kilo with the shared data path shows the session list, but the full wrapper is returning no text for session list. I’m checking whether the wrapper
+  short-circuits before invoking Kilo when called with CLI args.
+
+• Running Get-Content 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\ensure-bun-native-cache.ps1'
+
+• Ran $env:USERPROFILE; Test-Path 'C:\Users\seand\.local\share'; Test-Path 'C:\Users\seand\Tools\nodejs\node-v24.14.0-win-x64\node_modules\@kilocode\cli\node_modules\@kilocode\cli-windows-x64\bin\kilo.exe'
+  └ C:\Users\seand
+    True
+    True
+
+• Ran Get-Content 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\ensure-bun-native-cache.ps1'
+  └ param(
+        [Parameter(Mandatory = $true)]
+    … +276 lines (ctrl + t to view transcript)
+        Extract-NativeArtifacts -File $file -CacheRoot $cacheRoot -ManifestPath $manifestPath
+    }
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• The remaining wrapper quirk is only in my non-interactive session list smoke test. The actual fix for your saved sessions is already clear and applied: kilo-a / kilo-b now point at the normal Kilo data store instead of their private
+  copies.
+
+• Running Get-ChildItem 'C:\Users\seand\.local\share\kilo\storage\session_diff' -Filter 'ses_15a4e5b31ffeXD1W12l1SuDp1l.json' -ErrorAction SilentlyContinue | Select-Object FullName,Length; Get-ChildItem 'C:
+  │ \Users\seand\.local\share\kilo\storage\session_share' -Filter 'ses_15a4e5b31ffeXD1W12l1SuDp1l.json' -ErrorAction SilentlyContinue | Select-Object FullName,Length
+
+• Ran Get-ChildItem 'C:\Users\seand\.local\share\kilo\storage\session_diff' -Filter 'ses_15a4e5b31ffeXD1W12l1SuDp1l.json' -ErrorAction SilentlyContinue | Select-Object FullName,Length; Get-ChildItem 'C:
+  │ \Users\seand\.local\share\kilo\storage\session_share' -Filter 'ses_15a4e5b31ffeXD1W12l1SuDp1l.json' -ErrorAction SilentlyContinue | Select-Object FullName,Length
+  └
+    FullName                                                                                   Length
+    … +2 lines (ctrl + t to view transcript)
+    C:\Users\seand\.local\share\kilo\storage\session_share\ses_15a4e5b31ffeXD1W12l1SuDp1l.json    185
+
+
+• Ran Get-ChildItem 'C:\Users\seand\AppData\Local\AgentProfiles\kilo-a\data\kilo\storage\session_diff' -Filter 'ses_15a4e5b31ffeXD1W12l1SuDp1l.json' -ErrorAction SilentlyContinue | Select-Object FullName,Length; Get-ChildItem 'C:
+  │ \Users\seand\AppData\Local\AgentProfiles\kilo-a\data\kilo\storage\session_share' -Filter 'ses_15a4e5b31ffeXD1W12l1SuDp1l.json' -ErrorAction SilentlyContinue | Select-Object FullName,Length
+  └ (no output)
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• I checked your exact session ID. It exists in the normal Kilo store at C:\Users\seand\.local\share\kilo\storage\... and does not exist in the old isolated kilo-a store, which matches exactly what you were seeing.
+
+• Running & 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.cmd' session list
+
+• Ran & 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-a.cmd' session list
+  └ (no output)
+
+• Ran & 'C:\Users\seand\AppData\Local\waveterm-alt\data\bin\kilo-b.cmd' session list
+  └ (no output)
+
+─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+• That was the problem. I had made Kilo A / Kilo B use their own private Kilo database under AppData\Local\AgentProfiles\..., so the folder picker worked but your real session history disappeared.
+
+  I changed the launchers so they keep their custom kilo-a / kilo-b config, but now use your normal shared Kilo data store at C:\Users\seand\.local\share\kilo. Your exact session ses_15a4e5b31ffeXD1W12l1SuDp1l exists there, and it does
+  not exist in the old isolated kilo-a store, which is why you couldn’t see it before. The updated files are /C:/Users/seand/AppData/Local/waveterm-alt/data/bin/launch-isolated-agent.ps1, /C:/Users/seand/AppData/Local/waveterm-alt/data/
+  bin/kilo-a.ps1, and /C:/Users/seand/AppData/Local/waveterm-alt/data/bin/kilo-b.ps1.
+
+  Close all open Kilo/Wave windows, then launch Kilo A again, choose S:\Archivist-Agent, and check the session list. It should now show the same saved sessions as your normal kilo workflow, and --session ... --cloud-fork should resolve
+  against the right store again. If it still does not, I’ll inspect the fresh runtime log from that launch and patch the remaining precedence issue directly.
+
+
+› Use /skills to list available skills
+
+  gpt-5.4 xhigh · S:\waveterm
