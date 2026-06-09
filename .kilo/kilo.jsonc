@@ -12,37 +12,47 @@
   "agent": {
     "orchestrator": {},
     "plan": {
-      "model": "nvidia/openai/gpt-oss-120b"
+      "model": "nvidia/openai/nem-3-ultra"
     },
     "code": {},
     "build": {},
     "debug": {
-      "model": "nvidia/openai/gpt-oss-120b"
+      "model": "nvidia/openai/nem-3-ultra"
     },
     "ask": {},
     "general": {},
     "code-reviewer": {
-      "model": "nvidia/openai/gpt-oss-120b"
+      "model": "nvidia/openai/nem-3-ultra"
+    },
+    "lane-worker": {
+      "model": "nvidia/openai/nem-3-ultra"
+    },
+    "git-worker": {
+      "model": "nvidia/openai/nem-3-ultra"
     }
   },
   "permission": {
-    "external_directory": {
-      "S:/Archivist-Agent": "allow",
-      "S:/.global": "allow",
-      "S:/SwarmMind": "allow"
-    },
+  "external_directory": {
+    "S:/Archivist-Agent": "allow",
+    "S:/.global": "allow",
+    "S:/SwarmMind": "allow",
+    "S:/self-organizing-library": "allow",
+    "S:/WE4FREE-Control-Plane": "allow",
+    "S:/kernel-lane": "allow"
+  },
     "bash": {
-      "git": "allow",
-      "cargo": "allow",
-      "npm": "allow",
-      "node": "allow"
+      "*": "allow"
     },
     "read": {
       "*": "allow"
     },
     "write": {
       "S:/Archivist-Agent": "allow",
-      "S:/.global": "allow"
+      "S:/.global": "allow",
+      "S:/SwarmMind": "allow",
+      "S:/self-organizing-library": "allow",
+      "S:/WE4FREE-Control-Plane": "allow",
+      "S:/kernel-lane": "allow"
     }
   },
   "command": {
