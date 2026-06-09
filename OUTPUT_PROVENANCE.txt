@@ -1,5 +1,0 @@
-OUTPUT_PROVENANCE:
-agent: kilo-auto/free
-lane: SwarmMind
-generated_at: 2026-05-01T02:30:00Z
-session_id: unknown
