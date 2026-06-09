@@ -1,19 +1,19 @@
 {
-  "generated_at": "2026-06-08T23:18:42-04:00",
+  "generated_at": "2026-06-09T20:37:00-04:00",
   "agent": "kilo-archivist",
   "lane": "archivist",
-  "session_id": "lane-sync-check",
-  "note": "Working tree cleanliness could not be determined - bash execution blocked by permission deny rule. Run scripts/_lane_sync_v2.js manually to complete.",
+  "session_id": "orchestration-fix-session",
+  "note": "Full sync check with working tree status. Bash permissions restored. KuCoin lane on remote Ubuntu — HEAD from last known push.",
   "lanes": [
     {
       "name": "Archivist-Agent",
       "dir": "S:/Archivist-Agent",
       "branch": "master",
-      "head_full": "a8624692e6c5769d78c63e17443993d70012fd0a",
-      "head_short": "a862469",
+      "head_full": "5f4e118b8196ff55e5dabbd7f7934bcc8e993b58",
+      "head_short": "5f4e118",
       "origin_synced": true,
-      "working_tree": "unknown",
-      "uncommitted": "unknown"
+      "working_tree": "clean",
+      "uncommitted": 0
     },
     {
       "name": "Kernel",
@@ -22,18 +22,19 @@
       "head_full": "af6d033d76a6cd9ea4ac3a5dc12d6fa926a88570",
       "head_short": "af6d033",
       "origin_synced": true,
-      "working_tree": "unknown",
-      "uncommitted": "unknown"
+      "working_tree": "clean",
+      "uncommitted": 0
     },
     {
       "name": "SwarmMind",
       "dir": "S:/SwarmMind",
       "branch": "main",
-      "head_full": "c96fc2dfcf99f389e24f0a4b40ac7ee09e635026",
-      "head_short": "c96fc2d",
+      "head_full": "85fa4e91f4e22658aef5f6348336a5bdb8488a94",
+      "head_short": "85fa4e9",
       "origin_synced": true,
-      "working_tree": "unknown",
-      "uncommitted": "unknown"
+      "working_tree": "dirty",
+      "uncommitted": 18,
+      "uncommitted_detail": "1 modified (productivity-report-tracker.json), 15 deleted (tmp/e2e-*), 2 untracked (cleanup logs)"
     },
     {
       "name": "Library",
@@ -42,8 +43,9 @@
       "head_full": "14e89d790ef2d5e3f98cbe83d132da29c98afb1c",
       "head_short": "14e89d7",
       "origin_synced": true,
-      "working_tree": "unknown",
-      "uncommitted": "unknown"
+      "working_tree": "dirty",
+      "uncommitted": 2,
+      "uncommitted_detail": "1 modified (lanes/archivist/state/active-owner.json), 1 untracked (_git_recovery_log.txt)"
     },
     {
       "name": "Control-Plane",
@@ -52,18 +54,20 @@
       "head_full": "b44b0ac2d5edda85dbe692303005418a6ba7a33c",
       "head_short": "b44b0ac",
       "origin_synced": true,
-      "working_tree": "unknown",
-      "uncommitted": "unknown"
+      "working_tree": "dirty",
+      "uncommitted": 2,
+      "uncommitted_detail": "2 untracked (kucoin inbox messages from 2026-06-05)"
     },
     {
       "name": "KuCoin",
       "dir": "S:/kucoin-lane",
       "branch": "main",
-      "head_full": "a683616f304bc1fbea9e46307119eed4bbdcbded",
-      "head_short": "a683616",
+      "head_full": "3b4f3e1",
+      "head_short": "3b4f3e1",
       "origin_synced": true,
       "working_tree": "unknown",
-      "uncommitted": "unknown"
+      "uncommitted": "unknown",
+      "note": "Remote lane on headless Ubuntu — HEAD from last push, working tree not checked this session"
     }
   ]
 }
