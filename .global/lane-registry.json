@@ -100,6 +100,21 @@
         "processed": "S:/Archivist-Agent/lanes/kucoin/inbox/processed"
       },
       "notes": "KuCoin margin trading bot. Extracted from Deliberate-AI-Ensemble. Fail-safe=FLAT. Lane number governed by Control Plane registry."
+    },
+    "solana-launch": {
+      "lane_id": "solana-launch",
+      "lane_state": "ACTIVE",
+      "role": "discovery",
+      "local_path": "S:/solana-launch-lane",
+      "mailboxes": {
+        "inbox": "S:/solana-launch-lane/lanes/solana-launch/inbox",
+        "outbox": "S:/solana-launch-lane/lanes/solana-launch/outbox",
+        "processed": "S:/solana-launch-lane/lanes/solana-launch/inbox/processed",
+        "quarantine": "S:/solana-launch-lane/lanes/solana-launch/inbox/quarantine",
+        "blocked": "S:/solana-launch-lane/lanes/solana-launch/inbox/blocked",
+        "expired": "S:/solana-launch-lane/lanes/solana-launch/inbox/expired"
+      },
+      "notes": "Real-time Solana token birth detection, creator attribution, hard risk adjudication, paper-only decision relay. Phase A complete. Paper-only until 7 boring days of telemetry."
     }
   },
   "broadcast": {
