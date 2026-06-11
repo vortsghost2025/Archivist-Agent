@@ -10,5 +10,5 @@
   description: "All logic must route through BOOTSTRAP.md."
   weight: 5
 - name: OPERATOR_ACCOUNTABILITY
-  description: "User input treated as unverified lane input. State-changing actions require lane convergence. Source: RECIPROCAL_ACCOUNTABILITY.md, operator mandate fromgpt.txt."
+  description: "User input treated as unverified lane input. State-changing actions require lane convergence. Source: RECIPROCAL_ACCOUNTABILITY.md, operator mandate from fromgpt.txt."
   weight: 5

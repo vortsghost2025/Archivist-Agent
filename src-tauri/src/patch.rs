@@ -653,15 +653,17 @@ mod tests {
 
     #[test]
     fn test_patch_audit_log_recording() {
+        let proposal_id = format!("patch_audit_test_{}", chrono::Utc::now().timestamp_millis());
         with_isolated_patch_audit(|| {
-            record_patch_audit("patch_1", "S:/test.txt", "proposed", None, false);
-            record_patch_audit("patch_1", "S:/test.txt", "applied", None, true);
+            record_patch_audit(&proposal_id, "S:/test.txt", "proposed", None, false);
+            record_patch_audit(&proposal_id, "S:/test.txt", "applied", None, true);
 
             let log = get_patch_audit_log();
-            assert_eq!(log.len(), 2);
-            assert_eq!(log[0].action, "proposed");
-            assert_eq!(log[1].action, "applied");
-            assert!(log[1].read_only_override);
+            let entries: Vec<_> = log.iter().filter(|e| e.proposal_id == proposal_id).collect();
+            assert_eq!(entries.len(), 2, "Expected 2 entries for {}, got {}", proposal_id, entries.len());
+            assert_eq!(entries[0].action, "proposed");
+            assert_eq!(entries[1].action, "applied");
+            assert!(entries[1].read_only_override);
         });
     }
 

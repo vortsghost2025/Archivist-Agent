@@ -1221,6 +1221,14 @@ mod tests {
     #[test]
     fn test_resolve_passphrase_lane_specific_env() {
         with_temp_dir(|root| {
+            // Ensure no generic passphrase env var interferes
+            std::env::remove_var("LANE_KEY_PASSPHRASE");
+            // Create a .runtime directory with a known passphrase file to prevent
+            // fallthrough to an existing lane-passphrases.json in the project root
+            let runtime_dir = root.join(".runtime");
+            std::fs::create_dir_all(&runtime_dir).ok();
+            let passfile = runtime_dir.join("lane-passphrases.json");
+            std::fs::write(&passfile, r#"{"archivist": {"passphrase": "file-pass"}}"#).ok();
             std::env::set_var("LANE_KEY_PASSPHRASE_ARCHIVIST", "arch-pass");
             let result = resolve_passphrase(root, "archivist");
             std::env::remove_var("LANE_KEY_PASSPHRASE_ARCHIVIST");
