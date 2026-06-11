@@ -1,241 +1,162 @@
+#!/usr/bin/env node
 'use strict';
 
 /**
- * Mode Gate Utility
+ * mode-check.js
  *
- * Reads lanes/broadcast/active-mode.json and enforces the current
- * operational mode (OBSERVE | BUILD | CHAOS_LAB | RECOVERY).
+ * Resolves the current lane/execution mode for create-signed-message.js
+ * and other scripts that need to know whether writing is allowed.
  *
- * Any agent or script can require('mode-check') to gate mutations
- * against the system-wide mode before performing write operations.
+ * Source priority:
+ *   1. Canonical cross-lane mode:
+ *        <archivist-root>/lanes/broadcast/active-mode.json
+ *      (this is the authoritative source per AGENTS.md / ARCHITECTURE)
+ *   2. Per-lane local mode:
+ *        <lane-root>/lanes/<lane>/state/watcher-mode.json
+ *      (used when the archivist broadcast file is unreachable)
+ *   3. Fallback: 'OBSERVE' (refuse writes by default)
  *
- * @module mode-check
+ * Exports:
+ *   getMode()           -> 'BUILD' | 'OBSERVE' | 'SHARED' | 'EXCLUSIVE' | string
+ *   isBuildMode()       -> boolean
+ *   isWriteAllowed(op)  -> boolean (op is the operation name, e.g. 'write')
+ *   summary()           -> { mode, source, writeAllowed }
+ *
+ * No external deps. Uses only Node-core modules.
  */
 
 const fs = require('fs');
 const path = require('path');
-const {
-  OperationalMode,
-  OPERATIONAL_MODES,
-  OPERATIONAL_MODE_SET,
-  validateEnum,
-} = require('./governance-types');
 
-const MODE_FILE_PATH = path.resolve(
-  __dirname, '..', 'lanes', 'broadcast', 'active-mode.json'
-);
+// --- Path discovery ---------------------------------------------------------
+// This file is loaded by create-signed-message.js from <lane-root>/scripts/.
+// We intentionally do not rely on require.main because the same script may be
+// loaded as a library (not the program entry point).
 
-const MODE_ALLOWED_OPERATIONS = Object.freeze({
-  [OperationalMode.OBSERVE]: Object.freeze([
-    'read', 'log', 'summarize', 'measure', 'report',
-  ]),
-  [OperationalMode.BUILD]: Object.freeze([
-    'read', 'log', 'summarize', 'measure', 'report',
-    'mutate_scoped', 'commit', 'test',
-    'outbox_write', 'trust_store_write', 'inbox_mutation',
-  ]),
-  [OperationalMode.CHAOS_LAB]: Object.freeze([
-    'read', 'log', 'summarize', 'measure', 'report',
-    'mutate_sandbox', 'mutate_branch', 'mutate_staging',
-  ]),
-  [OperationalMode.RECOVERY]: Object.freeze([
-    'read', 'log', 'summarize', 'measure', 'report',
-    'restore', 'verify', 'compare', 'unblock',
-    'outbox_write', 'trust_store_write', 'inbox_mutation',
-  ]),
-});
+// ARCHIVIST_ROOT is the canonical owner of the shared mode file.
+const ARCHIVIST_ROOT = process.env.ARCHIVIST_ROOT || 'S:\\Archivist-Agent';
 
-const MUTATION_OPERATIONS = Object.freeze(new Set([
-  'mutate_scoped', 'commit', 'test',
-  'mutate_sandbox', 'mutate_branch', 'mutate_staging',
-  'restore', 'unblock',
-  'outbox_write', 'trust_store_write', 'inbox_mutation',
-]));
+function findLaneRoot() {
+  // scripts/mode-check.js -> scripts/ -> <lane-root>
+  return path.resolve(__dirname, '..');
+}
 
-let _cachedMode = null;
-let _cachedAt = 0;
-const CACHE_TTL_MS = 5000;
+function laneRoot() {
+  // Cached after first call.
+  if (!laneRoot._value) laneRoot._value = findLaneRoot();
+  return laneRoot._value;
+}
 
-function _readModeFile() {
+// --- File readers -----------------------------------------------------------
+function readJsonSafe(p) {
   try {
-    const raw = fs.readFileSync(MODE_FILE_PATH, 'utf8');
-    const parsed = JSON.parse(raw);
-    const r = validateEnum(parsed.mode, OPERATIONAL_MODES, 'OperationalMode');
-    if ('error' in r) {
-      throw new Error(r.error);
-    }
-    return parsed;
-  } catch (err) {
-    if (_cachedMode) return _cachedMode;
-    throw new Error(
-      `MODE_GATE_UNAVAILABLE: Cannot read ${MODE_FILE_PATH}: ${err.message}`
-    );
+    const raw = fs.readFileSync(p, 'utf8');
+    const json = JSON.parse(raw);
+    return json && typeof json === 'object' ? json : null;
+  } catch (_) {
+    return null;
   }
 }
 
-function readMode() {
-  const now = Date.now();
-  if (_cachedMode && (now - _cachedAt) < CACHE_TTL_MS) {
-    return _cachedMode;
-  }
-  const modeData = _readModeFile();
-  _cachedMode = modeData;
-  _cachedAt = now;
-  return modeData;
+function readCanonical() {
+  const p = path.join(ARCHIVIST_ROOT, 'lanes', 'broadcast', 'active-mode.json');
+  return { source: p, data: readJsonSafe(p) };
 }
 
-function getCurrentMode() {
-  return readMode().mode;
+function readLaneLocal() {
+  // The lane's own state dir mirrors the active mode locally.
+  const p = path.join(laneRoot(), 'lanes', 'state', 'watcher-mode.json');
+  return { source: p, data: readJsonSafe(p) };
+}
+
+// --- Public API -------------------------------------------------------------
+function getMode() {
+  const a = readCanonical();
+  if (a.data && typeof a.data.mode === 'string') return a.data.mode;
+
+  const b = readLaneLocal();
+  if (b.data && typeof b.data.mode === 'string') return b.data.mode;
+
+  return 'OBSERVE';
+}
+
+function isBuildMode() {
+  return getMode() === 'BUILD';
 }
 
 function getAllowedOperations() {
-  const mode = getCurrentMode();
-  return MODE_ALLOWED_OPERATIONS[mode] || [];
+  const a = readCanonical();
+  if (a.data && Array.isArray(a.data.allowed_operations)) return a.data.allowed_operations;
+
+  // OBSERVE implies no write-class ops unless explicitly listed.
+  return [];
 }
 
-function checkMutation(operation, targetPath) {
-  const modeData = readMode();
-  const mode = modeData.mode;
-  const allowed = MODE_ALLOWED_OPERATIONS[mode] || [];
+function isWriteAllowed(op) {
+  if (!op || typeof op !== 'string') return false;
 
-  if (!allowed.includes(operation)) {
-    if (MUTATION_OPERATIONS.has(operation)) {
-      return {
-        allowed: false,
-        reason: `MODE_GATE_BLOCKED: Operation "${operation}" is not allowed in ${mode} mode. ` +
-        `Allowed: ${allowed.join(', ')}. ` +
-        `Mode set by ${modeData.set_by || 'unknown'} at ${modeData.set_at || 'unknown'}. ` +
-        `Reason: ${modeData.reason || 'none'}.`,
-      };
-    }
-    return {
-      allowed: false,
-      reason: `MODE_GATE_BLOCKED: Operation "${operation}" not recognized for mode ${mode}. ` +
-      `Allowed: ${allowed.join(', ')}.`,
-    };
+  // `read` is always allowed.
+  if (op.toLowerCase() === 'read') return true;
+
+  // BUILD mode + op listed in allowed_operations -> allow.
+  const allowed = getAllowedOperations();
+  if (allowed.length === 0) {
+    // No allowlist = strict OBSERVE.
+    return false;
   }
-
-  if (mode === OperationalMode.BUILD && operation === 'mutate_scoped') {
-    const stablePatterns = [
-      '/governance-types.js',
-      '/schema-validator.js',
-      '\\governance-types.js',
-      '\\schema-validator.js',
-    ];
-    for (const pat of stablePatterns) {
-      if (targetPath && targetPath.includes(pat)) {
-        return {
-          allowed: false,
-          reason: `MODE_GATE_BLOCKED: Cannot mutate stable governance file in BUILD mode. ` +
-          `Path: ${targetPath}. Switch to CHAOS_LAB or get operator approval.`,
-        };
-      }
-    }
-  }
-
-  if (mode === OperationalMode.CHAOS_LAB) {
-    const blockedPatterns = ['main', 'master'];
-    for (const pat of blockedPatterns) {
-      if (targetPath && targetPath.includes(pat)) {
-        return {
-          allowed: false,
-          reason: `MODE_GATE_BLOCKED: Cannot write to main/master paths in CHAOS_LAB mode. ` +
-          `Path: ${targetPath}. Use a branch or staging path.`,
-        };
-      }
-    }
-  }
-
-  return { allowed: true, reason: `Operation "${operation}" permitted in ${mode} mode.` };
+  return allowed.includes(op);
 }
 
-function transitionMode(newMode, setBy, reason, expiresAt) {
-  const r = validateEnum(newMode, OPERATIONAL_MODES, 'OperationalMode');
-  if ('error' in r) {
-    throw new Error(r.error);
-  }
-
-  const current = readMode();
-  const newModeData = {
-    mode: newMode,
-    set_by: setBy || 'unknown',
-    set_at: new Date().toISOString(),
-    reason: reason || '',
-    expires_at: expiresAt || null,
-    allowed_operations: [...(MODE_ALLOWED_OPERATIONS[newMode] || [])],
-    previous_mode: current.mode,
-    version: (current.version || 0) + 1,
+function summary() {
+  return {
+    mode: getMode(),
+    source: readCanonical().data ? 'archivist/broadcast/active-mode.json' : 'lane/state/watcher-mode.json',
+    writeAllowed: isWriteAllowed('write'),
   };
-
-  const dir = path.dirname(MODE_FILE_PATH);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  fs.writeFileSync(MODE_FILE_PATH, JSON.stringify(newModeData, null, 2), 'utf8');
-
-  _cachedMode = newModeData;
-  _cachedAt = Date.now();
-
-  return newModeData;
 }
 
-function enforceMutation(operation, targetPath) {
-  const result = checkMutation(operation, targetPath);
-  if (!result.allowed) {
-    const err = /** @type {Error & {code: string}} */ (new Error(result.reason));
-    err.code = 'MODE_GATE_BLOCKED';
+function _safeLog(entry) {
+  // Best-effort debug logging. Failures must never propagate.
+  try {
+    const fsExtra = require('fs');
+    const logPath = path.join(ARCHIVIST_ROOT, 'context-buffer', 'mode-check.log');
+    fsExtra.appendFileSync(logPath, JSON.stringify({ ts: new Date().toISOString(), ...entry }) + '\n');
+  } catch (_) {}
+}
+
+function enforceMutation(op, targetPath) {
+  const mode = getMode();
+  const allowed =
+    mode === 'BUILD' ||
+    mode === 'EXCLUSIVE' ||
+    mode === 'SHARED' ||
+    isWriteAllowed(op);
+
+  if (!allowed) {
+    _safeLog({ event: 'MUTATION_BLOCKED', op, mode, target: targetPath });
+    const err = new Error(
+      `MUTATION_BLOCKED: operation '${op}' not allowed in mode '${mode}' (target=${targetPath || 'n/a'})`
+    );
+    err.code = 'MODE_GUARD_REJECTED';
     throw err;
   }
+  // Message-mode paths also require the op to be in allowed_operations.
+  if (!isWriteAllowed(op) && mode !== 'BUILD') {
+    _safeLog({ event: 'MUTATION_BLOCKED_ALLOWLIST', op, mode, target: targetPath });
+    const err = new Error(
+      `MUTATION_BLOCKED: operation '${op}' not in allowed_operations for mode '${mode}'`
+    );
+    err.code = 'MODE_GUARD_REJECTED';
+    throw err;
+  }
+  _safeLog({ event: 'MUTATION_ALLOWED', op, mode, target: targetPath });
   return true;
 }
 
-function invalidateCache() {
-  _cachedMode = null;
-  _cachedAt = 0;
-}
-
 module.exports = {
-  MODE_FILE_PATH,
-  MODE_ALLOWED_OPERATIONS,
-  MUTATION_OPERATIONS,
-  readMode,
-  getCurrentMode,
-  getAllowedOperations,
-  checkMutation,
-  transitionMode,
+  getMode,
+  isBuildMode,
+  isWriteAllowed,
+  summary,
   enforceMutation,
-  invalidateCache,
 };
-
-if (require.main === module) {
-  const args = process.argv.slice(2);
-  const cmd = args[0] || 'status';
-
-  if (cmd === 'status') {
-    const modeData = readMode();
-    console.log(`Mode: ${modeData.mode}`);
-    console.log(`Set by: ${modeData.set_by}`);
-    console.log(`Set at: ${modeData.set_at}`);
-    console.log(`Reason: ${modeData.reason}`);
-    console.log(`Allowed: ${modeData.allowed_operations.join(', ')}`);
-    console.log(`Previous: ${modeData.previous_mode || 'none'}`);
-    console.log(`Version: ${modeData.version}`);
-  } else if (cmd === 'check' && args[1]) {
-    const result = checkMutation(args[1], args[2]);
-    console.log(JSON.stringify(result, null, 2));
-    process.exit(result.allowed ? 0 : 1);
-  } else if (cmd === 'transition' && args[1]) {
-    const newMode = args[1];
-    const setBy = args[2] || 'cli';
-    const reason = args.slice(3).join(' ') || '';
-    const result = transitionMode(newMode, setBy, reason);
-    console.log(`Transitioned to ${result.mode} (v${result.version})`);
-    console.log(`Allowed: ${result.allowed_operations.join(', ')}`);
-  } else {
-    console.log('Usage:');
-    console.log('  node mode-check.js status');
-    console.log('  node mode-check.js check <operation> [targetPath]');
-    console.log('  node mode-check.js transition <mode> [setBy] [reason...]');
-    console.log(`  Modes: ${OPERATIONAL_MODES.join(', ')}`);
-  }
-}

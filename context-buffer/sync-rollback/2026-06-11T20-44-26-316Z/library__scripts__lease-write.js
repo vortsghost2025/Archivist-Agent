@@ -1,0 +1,73 @@
+#!/usr/bin/env node
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+function safeUnlink(filePath, context) {
+  try {
+    fs.unlinkSync(filePath);
+    return 'ok';
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      console.log(`[lease-write] RACE_SKIPPED: ${context || 'file'} already removed by another process`);
+      return 'race_skipped';
+    }
+    throw e;
+  }
+}
+
+const { atomicWriteWithLease } = require('./util/atomic-write-util');
+
+function ensureParentDir(filePath) {
+  const dir = path.dirname(filePath);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
+
+async function writeWithLease(filePath, content, laneId, timeoutMs = 30000) {
+  ensureParentDir(filePath);
+  return atomicWriteWithLease(filePath, content, laneId, timeoutMs);
+}
+
+async function moveFileWithLease(sourcePath, destPath, laneId, timeoutMs = 30000) {
+  if (!fs.existsSync(sourcePath)) {
+    return { moved: false, reason: 'SOURCE_MISSING', sourcePath, destPath };
+  }
+
+  ensureParentDir(destPath);
+
+  if (fs.existsSync(destPath)) {
+    safeUnlink(sourcePath, path.basename(sourcePath));
+    return { moved: false, reason: 'DEST_EXISTS_SOURCE_DROPPED', sourcePath, destPath };
+  }
+
+  const claimPath = sourcePath + '.processing';
+  try {
+    fs.renameSync(sourcePath, claimPath);
+  } catch (e) {
+    if (e.code === 'ENOENT' || e.code === 'EPERM') {
+      return { moved: false, reason: 'CLAIM_FAILED', sourcePath, destPath };
+    }
+    throw e;
+  }
+
+  try {
+    const content = fs.readFileSync(claimPath, 'utf8');
+    await writeWithLease(destPath, content, laneId, timeoutMs);
+    fs.unlinkSync(claimPath);
+    return { moved: true, sourcePath, destPath };
+  } catch (e) {
+    try {
+      fs.renameSync(claimPath, sourcePath);
+    } catch (_) {}
+    throw e;
+  }
+}
+
+module.exports = {
+  writeWithLease,
+  moveFileWithLease,
+};
+

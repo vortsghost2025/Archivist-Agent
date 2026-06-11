@@ -1,44 +1,25 @@
 {
-  "generated_at": "2026-05-18T07:36:15.480Z",
+  "generated_at": "2026-06-12T00:10:43.105Z",
   "window_hours": 24,
-  "cycle_count": 131,
+  "substrate_cycles": 1,
+  "cycle_count": 1,
   "topology_stability_pct": 100,
-  "drift_incidents": 131,
-  "broadcast_proof_pass_rate": null,
+  "drift_incidents": 0,
+  "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 131,
-  "cognition_needed_pct": 100,
+  "cognition_needed_count": 0,
+  "cognition_needed_pct": 0,
   "cognition_handoff_emitted_count": 0,
   "cognition_handoff_emitted_pct": 0,
-  "cognition_handoff_suppressed_count": 131,
-  "cognition_handoff_suppressed_pct": 100,
-  "top_recommendation_types": [
-    {
-      "type": "P1:canonical_drift",
-      "count": 131
-    }
-  ],
-  "last_cycle_summary": "drift: SYNC_REQUIRED; cognition: 1 triggers.",
-  "substrate_status": "Degraded — cognition frequently needed",
-  "recommendation_metrics": {
-    "new_24h": 0,
-    "resolved_24h": 0,
-    "active_unresolved": 1,
-    "total_suppressed": 2,
-    "recommendation_precision": 100,
-    "false_positive_rate": 0,
-    "operator_attention_required": 0,
-    "archivist_action_yield": 100,
-    "top_unresolved": [
-      {
-        "type": "REVIEW_DRIFT",
-        "lanes": [
-          "library"
-        ],
-        "state": "ONGOING_MONITORED",
-        "count": 162
-      }
-    ]
-  },
-  "verdict": "Substrate stable — minor issues monitored, no cognition pressure"
+  "cognition_handoff_suppressed_count": 0,
+  "cognition_handoff_suppressed_pct": 0,
+  "top_recommendation_types": [],
+  "last_cycle_summary": "test",
+  "substrate_status": "Healthy — substrate autonomous and stable",
+  "work_units_attempted": 2,
+  "work_units_completed": 1,
+  "work_units_failed": 0,
+  "work_units_quarantined": 1,
+  "work_units_output_gate_rejected": 1,
+  "verified_artifacts_created": 1
 }

@@ -54,7 +54,9 @@ use terminal::{
     clear_terminal_audit_log, get_terminal_audit_log, kill_terminal, list_terminals, resize_pty,
     spawn_terminal, terminal_input,
 };
-use window_control::set_fullscreen;
+use window_control::{
+    get_window_scale_factor, get_window_scale_info, set_fullscreen, set_window_size,
+};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -71,6 +73,31 @@ pub fn run() {
             );
             let window = app.get_webview_window("main").unwrap();
             window.set_title("Archivist Agent").ok();
+
+            // ── DPI COMPENSATION: Resize window to account for Windows display scaling ──
+            // At 200-300% scaling, we want the window to render at actual pixel size
+            // LogicalSize at scale 2.0: 1920 logical = 3840 physical px (fills large TV)
+            if let Ok(scale) = window.scale_factor() {
+                if scale > 1.0 {
+                    // Target logical size that looks good on large displays
+                    // At 2.0x scale: 1920 logical = 3840 physical (4K TV at 200%)
+                    // At 3.0x scale: 1920 logical = 5760 physical (fills 50" TV at 300%)
+                    let logical_w = 1920u32;
+                    let logical_h = 1080u32;
+                    window
+                        .set_size(tauri::LogicalSize::new(logical_w, logical_h))
+                        .ok();
+                    eprintln!(
+                        "[DPI] Compensated: scale={} → window={}x{} logical ({}x{} physical)",
+                        scale,
+                        logical_w,
+                        logical_h,
+                        (logical_w as f64 * scale) as u32,
+                        (logical_h as f64 * scale) as u32
+                    );
+                }
+            }
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -106,6 +133,9 @@ pub fn run() {
             get_lane_status,
             switch_lane,
             set_fullscreen,
+            set_window_size,
+            get_window_scale_factor,
+            get_window_scale_info,
             create_file,
             delete_path,
             create_directory,

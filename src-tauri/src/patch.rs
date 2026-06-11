@@ -659,8 +659,17 @@ mod tests {
             record_patch_audit(&proposal_id, "S:/test.txt", "applied", None, true);
 
             let log = get_patch_audit_log();
-            let entries: Vec<_> = log.iter().filter(|e| e.proposal_id == proposal_id).collect();
-            assert_eq!(entries.len(), 2, "Expected 2 entries for {}, got {}", proposal_id, entries.len());
+            let entries: Vec<_> = log
+                .iter()
+                .filter(|e| e.proposal_id == proposal_id)
+                .collect();
+            assert_eq!(
+                entries.len(),
+                2,
+                "Expected 2 entries for {}, got {}",
+                proposal_id,
+                entries.len()
+            );
             assert_eq!(entries[0].action, "proposed");
             assert_eq!(entries[1].action, "applied");
             assert!(entries[1].read_only_override);

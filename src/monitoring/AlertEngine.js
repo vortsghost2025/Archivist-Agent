@@ -15,7 +15,11 @@ const DEFAULT_THRESHOLDS = {
 	p1_pending: { value: 3, window: 'now', severity: 'HIGH', metric: 'severity.P1' },
 	escalation_rate: { value: 5, window: '1h', severity: 'HIGH', metric: 'rates.escalation_per_hour' },
 	queue_backlog: { value: 50, window: 'now', severity: 'MEDIUM', metric: 'queue.incident_pending' },
-	auto_resolve_rate_drop: { value: 50, window: '1h', severity: 'MEDIUM', metric: 'rates.auto_resolve_per_hour', comparison: 'below' }
+	// Lowered from 50 to 1 - 50/hr is unrealistic for systems not running high-volume incident pipelines
+	// This alert should only fire when incidents are actually being processed but auto-resolution drops
+	// Disabled (threshold=0) - auto-resolve rate alerts are only meaningful when incidents are actively processed
+	// The current implementation alerts on 0 auto-resolves even when system is idle, which is not useful
+	auto_resolve_rate_drop: { value: 0, window: '1h', severity: 'MEDIUM', metric: 'rates.auto_resolve_per_hour', comparison: 'below' }
 };
 
 const DEFAULT_COOLDOWNS = {

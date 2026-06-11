@@ -12,26 +12,40 @@ const ARCHIVIST_ROOT = path.resolve(SCRIPT_DIR, '..');
 const LANE_REGISTRY_PATH = path.join(ARCHIVIST_ROOT, '.global', 'lane-registry.json');
 const TEST_TIMEOUT_MS = 30000;
 
-const FALLBACK_LANE_ROOTS = {
-  archivist: 'S:/Archivist-Agent',
-  swarmmind: 'S:/SwarmMind',
-  kernel: 'S:/kernel-lane',
-  library: 'S:/self-organizing-library',
-};
+// Load lane roots from environment variables with sensible defaults
+// This avoids hardcoded paths and allows deployment flexibility
+function loadLaneRootsFromEnv() {
+  const isWindows = process.platform === 'win32';
+  const defaultBase = isWindows ? 'S:/' : '/home/we4free/agent/repos';
+  const base = process.env.LANE_ROOT_BASE || defaultBase;
+  
+  return {
+    archivist: path.join(base, process.env.LANE_ARCHIVIST || (isWindows ? 'Archivist-Agent' : 'Archivist-Agent')),
+    swarmmind: path.join(base, process.env.LANE_SWARMMIND || (isWindows ? 'SwarmMind' : 'SwarmMind')),
+    kernel: path.join(base, process.env.LANE_KERNEL || (isWindows ? 'kernel-lane' : 'kernel-lane')),
+    library: path.join(base, process.env.LANE_LIBRARY || (isWindows ? 'self-organizing-library' : 'self-organizing-library')),
+  };
+}
 
-const LINUX_REPO_ROOT = '/home/we4free/agent/repos';
-const LINUX_LANE_ROOTS = {
-  archivist: `${LINUX_REPO_ROOT}/Archivist-Agent`,
-  swarmmind: `${LINUX_REPO_ROOT}/SwarmMind`,
-  kernel: `${LINUX_REPO_ROOT}/kernel-lane`,
-  library: `${LINUX_REPO_ROOT}/self-organizing-library`,
-};
+const FALLBACK_LANE_ROOTS = loadLaneRootsFromEnv();
 
+// No hardcoded Linux paths - they're derived from LANE_ROOT_BASE env var
 function resolveLaneRoot(rawPath, lane) {
-  if (rawPath && fs.existsSync(rawPath)) return rawPath;
-  const linux = LINUX_LANE_ROOTS[lane];
-  if (linux && fs.existsSync(linux)) return linux;
-  return rawPath;
+  if (rawPath && fs.existsSync(rawPath)) {
+    // Path traversal protection: ensure resolved path stays within allowed base
+    const resolved = path.resolve(rawPath);
+    const allowedBases = [
+      path.resolve(process.env.LANE_ROOT_BASE || (process.platform === 'win32' ? 'S:/' : '/home/we4free/agent/repos')),
+    ];
+    const isAllowed = allowedBases.some(base => resolved.startsWith(base));
+    if (!isAllowed) {
+      console.warn(`[SECURITY] Path traversal attempt blocked: ${rawPath} resolves to ${resolved} outside allowed bases`);
+      return null;
+    }
+    return resolved;
+  }
+  // Fallback to env-configured defaults
+  return FALLBACK_LANE_ROOTS[lane] || null;
 }
 
 const C2_SCAN_DIRS = [
@@ -88,7 +102,7 @@ function loadOwnershipMap() {
   return map.ownership;
 }
 
-function checkRatificationGate() {
+function checkRatificationGate(syncedCount = 0) {
   const gate = tryReadJson(RATIFICATION_GATE_PATH);
   if (!gate) {
     console.warn('[C5] Ratification gate file not found — cannot verify deployment authorization');
@@ -465,7 +479,6 @@ function main() {
   }
 
   const ownershipMap = loadOwnershipMap();
-const ratification = checkRatificationGate();
 
   const detectedSharedScripts = detectSharedScripts(laneRoots);
   const detectedSet = new Set(detectedSharedScripts);
@@ -478,7 +491,15 @@ const ratification = checkRatificationGate();
 
 const isOwnedSharedScript = (relPath) => !!ownershipMap[relPath];
 
+// Track final ratification state for report
+let finalRatification = checkRatificationGate(syncedCount);
+
 for (const relativePath of allRelativePaths) {
+  // Re-check ratification gate with current syncedCount for each file
+  // This allows the gate to block based on actual sync activity
+  const ratification = checkRatificationGate(syncedCount);
+  finalRatification = ratification; // Update for final report
+
   const states = getFileStatesAcrossLanes(relativePath, laneRoots);
   const originEntry = ownershipMap[relativePath] || null;
   const canonical = chooseCanonicalState(states, originEntry);
@@ -715,7 +736,7 @@ for (const relativePath of allRelativePaths) {
       failed_targets: syncFailedCount,
     },
 regression_checks: regressionChecks,
-ratification: ratification,
+ratification: finalRatification,
 test_results: testResults,
     lane_health: laneHealth,
     summary: {

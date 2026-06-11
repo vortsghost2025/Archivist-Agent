@@ -1,4 +1,5 @@
-'use strict';
+console.log('[BUILD MARKER] BUILD MARKER 2026-06-12-TAURI-LAYOUT-FIX');
+console.log(document.documentElement.style.getPropertyValue('--build-marker'));
 
 const RECENT_PATHS_KEY = 'archivist.recentPaths.v1';
 const MAX_RECENT_PATHS = 6;
@@ -561,6 +562,19 @@ function switchTab(tabName) {
       document.querySelectorAll('#tab-content > div').forEach(div => div.classList.add('hidden'));
       $('tab-terminal').classList.remove('hidden');
       renderTerminalBlocks();
+      // Ensure terminal input event listeners are attached (idempotent)
+      const terminalInput = $('terminal-input');
+      const terminalRunBtn = $('btn-terminal-run');
+      if (terminalInput && !terminalInput.dataset.listenerAttached) {
+        terminalInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') runTerminalCommand();
+        });
+        terminalInput.dataset.listenerAttached = 'true';
+      }
+      if (terminalRunBtn && !terminalRunBtn.dataset.listenerAttached) {
+        terminalRunBtn.addEventListener('click', runTerminalCommand);
+        terminalRunBtn.dataset.listenerAttached = 'true';
+      }
       return;
   }
 
@@ -580,7 +594,6 @@ function switchTab(tabName) {
   if (tabName === 'tree') renderTreePanel();
   if (tabName === 'overview') renderOverview();
   if (tabName === 'retrieve') renderRetrieve();
-  if (tabName === 'terminal') initTerminalPanel();
   if (tabName === 'governance') renderGovernance();
 }
 
@@ -3145,38 +3158,29 @@ const ZOOM_STEP = 0.1;
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 2.0;
 const ZOOM_DEFAULT = 1.0;
+const BASE_WIDTH = 1920;
+const BASE_HEIGHT = 1080;
 
 function getZoomLevel() {
   const saved = localStorage.getItem('archivist-zoom');
   const parsed = saved ? parseFloat(saved) : ZOOM_DEFAULT;
-  // Guard against NaN from corrupt localStorage — NaN would cascade
-  // through applyZoom and set --text-scale to "NaNpx", making ALL text invisible
   if (!Number.isFinite(parsed)) {
-    localStorage.removeItem('archivist-zoom');  // Clean up corrupt value
+    localStorage.removeItem('archivist-zoom');
     return ZOOM_DEFAULT;
   }
   return parsed;
 }
 
 function applyZoom(level) {
-  // Apply global UI zoom (layout scaling) but keep chat font size stable in fullscreen mode
   if (!Number.isFinite(level)) level = ZOOM_DEFAULT;
   const clamped = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, level));
-  document.documentElement.style.setProperty('--app-zoom', clamped);
-  const isFullscreen = document.body.classList.contains('chat-fullscreen');
-  // Update font scaling only when not in fullscreen (fonts are managed separately)
-  if (!isFullscreen) {
-    document.documentElement.style.setProperty('--text-scale', `${16 * clamped}px`);
-    document.body.style.zoom = String(clamped);
-  } else {
-    // In fullscreen, avoid body zoom to keep fonts unchanged; layout scaling handled via CSS transform
-    document.body.style.zoom = '1';
-  }
+  const targetWidth = Math.round(BASE_WIDTH * clamped);
+  const targetHeight = Math.round(BASE_HEIGHT * clamped);
+  invoke('set_window_size', { width: targetWidth, height: targetHeight }).catch(() => {});
   const display = $('zoom-level');
   if (display) display.textContent = `${Math.round(clamped * 100)}%`;
   localStorage.setItem('archivist-zoom', clamped.toString());
 }
-
 
 function zoomIn() { applyZoom(getZoomLevel() + ZOOM_STEP); }
 function zoomOut() { applyZoom(getZoomLevel() - ZOOM_STEP); }
@@ -3204,52 +3208,8 @@ function applyChatFont(scale) {
 }
 function increaseChatFont() { applyChatFont(getChatFontScale() + CHAT_FONT_STEP); }
 function decreaseChatFont() { applyChatFont(getChatFontScale() - CHAT_FONT_STEP); }
-function toggleChatFullscreen() {
-  document.body.classList.toggle('chat-fullscreen');
-  const isFull = document.body.classList.contains('chat-fullscreen');
-  localStorage.setItem('chat-fullscreen', isFull ? '1' : '0');
-  // Also request Tauri to set the native window fullscreen state
-  invoke('set_fullscreen', { fullscreen: isFull }).catch(() => {});
-}
 
-// TV fullscreen zoom level (1.0 = 100%, 1.5 = 150% bigger)
-const TV_ZOOM_DEFAULT = 1.5;
-const TV_ZOOM_MIN = 1.0;
-const TV_ZOOM_MAX = 2.5;
-const TV_ZOOM_STEP = 0.1;
-
-function getTVZoom() {
-  const saved = localStorage.getItem('tv-fullscreen-zoom');
-  const parsed = saved ? parseFloat(saved) : TV_ZOOM_DEFAULT;
-  return Number.isFinite(parsed) ? parsed : TV_ZOOM_DEFAULT;
-}
-
-function applyTVZoom(level) {
-  const clamped = Math.max(TV_ZOOM_MIN, Math.min(TV_ZOOM_MAX, level));
-  document.body.style.setProperty('--tv-fullscreen-zoom', `${clamped}`);
-  if (document.body.classList.contains('tv-fullscreen')) {
-    document.body.style.zoom = `${clamped}`;
-  }
-}
-
-function tvZoomIn() { applyTVZoom(getTVZoom() + TV_ZOOM_STEP); }
-function tvZoomOut() { applyTVZoom(getTVZoom() - TV_ZOOM_STEP); }
-
-function toggleTVFullscreen() {
-  const isTV = document.body.classList.toggle('tv-fullscreen');
-  localStorage.setItem('tv-fullscreen', isTV ? '1' : '0');
-  // TV mode uses JavaScript zoom on body - scales everything uniformly
-  if (isTV) {
-    // Hide sidebars
-    document.body.classList.add('chat-fullscreen');
-    // Apply zoom (scales entire body including fonts)
-    applyTVZoom(getTVZoom());
-  } else {
-    // Reset zoom and remove fullscreen
-    document.body.style.zoom = '1';
-    document.body.classList.remove('chat-fullscreen');
-  }
-}
+// Note: Fullscreen modes removed - use window resize zoom instead
 
 
 // ─── Panel Resize Handles ─────────────────────────────────────────
@@ -3332,48 +3292,31 @@ function initResizeHandles() {
 }
 
 document.addEventListener('keydown', (e) => {
-   if (e.ctrlKey && (e.key === '=' || e.key === '+')) { 
-     e.preventDefault(); 
-     // If in TV fullscreen, use TV zoom, otherwise use regular zoom
-     if (document.body.classList.contains('tv-fullscreen')) {
-       tvZoomIn();
-     } else {
-       zoomIn();
-     }
-   }
-   if (e.ctrlKey && e.key === '-') { 
-     e.preventDefault(); 
-     if (document.body.classList.contains('tv-fullscreen')) {
-       tvZoomOut();
-     } else {
-       zoomOut();
-     }
-   }
-   if (e.ctrlKey && e.key === '0') { e.preventDefault(); zoomReset(); }
-   if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
-   if (e.ctrlKey && e.key.toLowerCase() === 't') { e.preventDefault(); toggleTVFullscreen(); }
-   if (e.key === 'Escape') {
-     // Exit TV fullscreen on Escape
-     if (document.body.classList.contains('tv-fullscreen')) {
-       document.body.classList.remove('tv-fullscreen', 'chat-fullscreen');
-       document.body.style.zoom = '1';
-       localStorage.setItem('tv-fullscreen', '0');
-       return;
-     }
-     // Escape from tools panel returns to chat
-     const toolsPanel = $('tools-panel');
-     if (toolsPanel && !toolsPanel.classList.contains('hidden')) {
-       closeToolsPanel();
-     }
-     // Escape from lane detail panel returns to chat
-     const lanePanel = $('lane-detail-panel');
-     if (lanePanel && !lanePanel.classList.contains('hidden')) {
-       state.activeLane = null;
-       state.laneDetail = null;
-       renderLaneList();
-       showChatPanel();
-     }
-   }
+if (e.ctrlKey && (e.key === '=' || e.key === '+')) {
+      e.preventDefault();
+      zoomIn();
+    }
+    if (e.ctrlKey && e.key === '-') {
+      e.preventDefault();
+      zoomOut();
+    }
+    if (e.ctrlKey && e.key === '0') { e.preventDefault(); zoomReset(); }
+    if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
+    if (e.key === 'Escape') {
+      // Escape from tools panel returns to chat
+      const toolsPanel = $('tools-panel');
+      if (toolsPanel && !toolsPanel.classList.contains('hidden')) {
+        closeToolsPanel();
+      }
+      // Escape from lane detail panel returns to chat
+      const lanePanel = $('lane-detail-panel');
+      if (lanePanel && !lanePanel.classList.contains('hidden')) {
+        state.activeLane = null;
+        state.laneDetail = null;
+        renderLaneList();
+        showChatPanel();
+      }
+    }
  });
 
 async function runTerminalCommand() {
@@ -3466,16 +3409,166 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('keydown', handleTabKeyboard);
     });
 
-    // Zoom controls
+    // Zoom controls - resize window via Tauri instead of CSS zoom
     let uiScale = 1.0;
     const applyZoom = () => {
-      document.body.style.zoom = String(uiScale);
       const zl = $('zoom-level');
       if (zl) zl.textContent = Math.round(uiScale * 100) + '%';
+      // Resize window via Tauri for actual dimension change
+      const baseWidth = 1920;
+      const baseHeight = 1080;
+      const targetWidth = Math.round(baseWidth * uiScale);
+      const targetHeight = Math.round(baseHeight * uiScale);
+      invoke('set_window_size', { width: targetWidth, height: targetHeight }).catch(() => {});
     };
     $('btn-zoom-out')?.addEventListener('click', () => { uiScale = Math.max(0.5, uiScale - 0.1); applyZoom(); });
     $('btn-zoom-in')?.addEventListener('click', () => { uiScale = Math.min(2.0, uiScale + 0.1); applyZoom(); });
     $('btn-zoom-reset')?.addEventListener('click', () => { uiScale = 1.0; applyZoom(); });
+
+    // Layout density toggle
+  const DENSITY_ORDER = ['dense', 'compact', 'comfortable'];
+  function getLayoutDensity() {
+    return localStorage.getItem('archivist-layout-density') || 'dense';
+  }
+  function setLayoutDensity(density) {
+    // Remove all density classes
+    document.body.classList.remove('layout-comfortable', 'layout-compact', 'layout-dense', 'dense-tv-safe');
+    // Add density class if needed
+    if (density !== 'dense') {
+      document.body.classList.add(`layout-${density}`);
+    }
+    localStorage.setItem('archivist-layout-density', density);
+    const btn = $('btn-layout-density');
+    if (btn) {
+      const labels = {
+        'dense': '⛶ Dense',
+        'compact': '⛶ Compact',
+        'comfortable': '⛶ Comfortable'
+      };
+      btn.textContent = labels[density] || '⛶ Layout';
+      btn.title = 'Layout: ' + density + ' (click to cycle)';
+    }
+  }
+  function cycleLayoutDensity() {
+    const current = getLayoutDensity();
+    const idx = DENSITY_ORDER.indexOf(current);
+    const next = DENSITY_ORDER[(idx + 1) % DENSITY_ORDER.length];
+    setLayoutDensity(next);
+  }
+    // Initialize layout density from localStorage
+    setLayoutDensity(getLayoutDensity());
+    $('btn-layout-density')?.addEventListener('click', cycleLayoutDensity);
+
+    // ── EMERGENCY RESET: Ctrl+Shift+0 resets all UI state (zoom, density, DPI, panels) ──
+    function emergencyResetUI() {
+      // Reset zoom via window resize
+      const zl = $('zoom-level');
+      if (zl) zl.textContent = '100%';
+      uiScale = 1.0;
+      invoke('set_window_size', { width: 1920, height: 1080 }).catch(() => {});
+      localStorage.removeItem('archivist-zoom');
+
+      // Reset density to default (dense = :root default)
+      document.body.classList.remove('layout-comfortable', 'layout-compact', 'dense-tv-safe');
+      document.documentElement.style.setProperty('--app-zoom', '1');
+      localStorage.setItem('archivist-layout-density', 'dense');
+      const btn = $('btn-layout-density');
+      if (btn) btn.textContent = '⛶ Dense';
+      
+      // Reset DPI compensation
+      localStorage.removeItem('archivist-dpi-density');
+      localStorage.removeItem('archivist-webview-zoom');
+      
+      // Reset panel states
+      document.querySelector('main')?.classList.remove('sidebar-collapsed', 'evidence-collapsed');
+      document.body.classList.remove('chat-fullscreen', 'tv-fullscreen');
+      localStorage.removeItem('archivist-sidebar-collapsed');
+      localStorage.removeItem('archivist-evidence-collapsed');
+      localStorage.removeItem('chat-fullscreen');
+      localStorage.removeItem('tv-fullscreen');
+      
+      // Reset chat settings
+      const settingsEl = $('chat-settings');
+      if (settingsEl) {
+        settingsEl.classList.remove('visible');
+      }
+      state.chatSettingsOpen = false;
+      
+      // Reset read audit
+      const readAudit = $('read-audit-panel');
+      if (readAudit) readAudit.classList.add('hidden');
+      state.readAuditOpen = false;
+      
+      log('EMERGENCY RESET: All UI state cleared to defaults', 'warn');
+      renderChat();
+    }
+    
+    // Keyboard shortcut: Ctrl+Shift+0 = emergency reset
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key === '0') {
+        e.preventDefault();
+        emergencyResetUI();
+      }
+      // Ctrl+0 = zoom reset (resize to base dimensions)
+      if (e.ctrlKey && !e.shiftKey && e.key === '0') {
+        e.preventDefault();
+        const zl = $('zoom-level');
+        if (zl) zl.textContent = '100%';
+        uiScale = 1.0;
+        invoke('set_window_size', { width: 1920, height: 1080 }).catch(() => {});
+        localStorage.removeItem('archivist-zoom');
+        log('Zoom reset to 100%', 'info');
+      }
+    });
+
+    // Safe-mode launch: if Shift held or ?safe=1 in URL, ignore persisted UI state
+    const urlParams = new URLSearchParams(window.location.search);
+    const isSafeMode = urlParams.get('safe') === '1' || 
+                       (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    if (isSafeMode) {
+      log('Safe mode: ignoring persisted UI state', 'warn');
+      localStorage.removeItem('archivist-zoom');
+      localStorage.removeItem('archivist-layout-density');
+      localStorage.removeItem('archivist-dpi-density');
+      localStorage.removeItem('archivist-webview-zoom');
+      localStorage.removeItem('archivist-sidebar-collapsed');
+      localStorage.removeItem('archivist-evidence-collapsed');
+      localStorage.removeItem('chat-fullscreen');
+      localStorage.removeItem('tv-fullscreen');
+      document.body.style.zoom = '1';
+      document.body.classList.remove('layout-comfortable', 'layout-compact', 'layout-dense', 'dense-tv-safe');
+      document.documentElement.style.setProperty('--app-zoom', '1');
+      document.body.classList.add('layout-dense');
+    }
+
+    // DPI Compensate button - now switches to Dense Desktop density mode (reflow, not visual zoom)
+    async function compensateDPI() {
+      const isTauri = hasTauriRuntime();
+      if (!isTauri) {
+        log('DPI compensation only works in Tauri', 'warn');
+        return;
+      }
+      try {
+        const info = await invoke('get_window_scale_info');
+        const scaleFactor = info.scale_factor;
+        if (scaleFactor <= 1.0) {
+          log('No DPI scaling detected (scale_factor=1.0)', 'info');
+          return;
+        }
+        // Instead of visual zoom (which breaks layout), switch to TV-safe density
+        // and apply internal DPI compensation for high-DPI Windows scaling.
+        const scale = applyDpiCompensation(scaleFactor);
+        log(`DPI compensated: scale_factor=${scaleFactor}, app_zoom=${scale}`, 'ok');
+      } catch (e) {
+        log(`DPI compensation failed: ${e}`, 'err');
+      }
+    }
+    $('btn-dpi-compensate')?.addEventListener('click', compensateDPI);
+    $('btn-emergency-reset')?.addEventListener('click', emergencyResetUI);
+
+    // Initialize layout density from localStorage
+    setLayoutDensity(getLayoutDensity());
+    $('btn-layout-density')?.addEventListener('click', cycleLayoutDensity);
 
     $('btn-analyze').addEventListener('click', runAnalyzeFolder);
     $('btn-analyze-welcome').addEventListener('click', handleWelcomeAnalyze);
@@ -3539,26 +3632,14 @@ $('btn-chat-toggle-audit').addEventListener('click', toggleReadAudit);
     });
 
 $('btn-zoom-in').addEventListener('click', zoomIn);
-$('btn-zoom-out').addEventListener('click', zoomOut);
-$('btn-zoom-reset').addEventListener('click', zoomReset);
-applyZoom(getZoomLevel());
-applyChatFont(getChatFontScale());
-// Initialize chat config on page load (populates endpoint/model for Fetch Models button)
-loadChatConfig();
-// Initialize chat font and fullscreen state
-applyChatFont(getChatFontScale());
-if (localStorage.getItem('chat-fullscreen') === '1') {
-  document.body.classList.add('chat-fullscreen');
-}
-if (localStorage.getItem('tv-fullscreen') === '1') {
-  document.body.classList.add('tv-fullscreen');
-}
-// Add chat font and fullscreen button listeners
-$('btn-font-increase').addEventListener('click', increaseChatFont);
-$('btn-font-decrease').addEventListener('click', decreaseChatFont);
-$('btn-chat-fullscreen').addEventListener('click', toggleChatFullscreen);
-$('btn-tv-fullscreen').addEventListener('click', toggleTVFullscreen);
-$('btn-tv-fullscreen-exit').addEventListener('click', toggleTVFullscreen);
+    $('btn-zoom-out').addEventListener('click', zoomOut);
+    $('btn-zoom-reset').addEventListener('click', zoomReset);
+    // Add chat font button listeners
+    $('btn-font-increase').addEventListener('click', increaseChatFont);
+    $('btn-font-decrease').addEventListener('click', decreaseChatFont);
+    // Note: fullscreen buttons removed - use zoom instead
+    // Initialize chat config on page load (populates endpoint/model for Fetch Models button)
+    loadChatConfig();
 
 $('folder-path').addEventListener('keydown', event => {
     if (event.key === 'Enter') {
@@ -3634,31 +3715,160 @@ if (state.recentPaths[0]) {
     loadEvidencePanel();
     setupEvidenceSectionToggles();
 
-    // Restore sidebar collapse state
-    const sidebarCollapsed = localStorage.getItem('archivist-sidebar-collapsed') === '1';
-    if (sidebarCollapsed) {
+    // Open the governance section in evidence panel by default
+    const govBody = document.getElementById('ev-governance-body');
+    if (govBody) govBody.classList.add('open');
+
+    // ── STARTUP LAYOUT SANITY: Force clean state, no persisted broken layouts ──
+    // Note: CSS zoom: 0.5 in styles.css handles DPI compensation - don't override it
+    // 1. Clear fullscreen modes that hide header/sidebar
+    document.body.classList.remove('chat-fullscreen', 'tv-fullscreen');
+    // 3. Force scroll to top-left
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    // 4. Ensure root containers use full viewport
+    document.documentElement.style.height = '100vh';
+    document.documentElement.style.width = '100vw';
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+    document.body.style.width = '100vw';
+    document.body.style.overflow = 'hidden';
+
+    // Defer localStorage state restoration until after initial render to prevent broken startup layout
+    requestAnimationFrame(() => {
+      // Restore zoom level (internal app zoom only, NOT body zoom)
+      applyZoom(getZoomLevel());
+      applyChatFont(getChatFontScale());
+
+      // DO NOT restore fullscreen modes on startup - they hide header/sidebar
+      // User must manually enable them if desired
+
+      // Restore sidebar collapse state
+      const sidebarCollapsed = localStorage.getItem('archivist-sidebar-collapsed') === '1';
+      if (sidebarCollapsed) {
         const main = document.querySelector('main');
         if (main) main.classList.add('sidebar-collapsed');
         const btn = $('btn-sidebar-toggle');
         if (btn) btn.textContent = '☰ Sidebar';
-    }
+      }
 
-    // Restore evidence panel collapse state
-    const evidenceCollapsed = localStorage.getItem('archivist-evidence-collapsed') === '1';
-    if (evidenceCollapsed) {
+      // Restore evidence panel collapse state
+      const evidenceCollapsed = localStorage.getItem('archivist-evidence-collapsed') === '1';
+      if (evidenceCollapsed) {
         const main = document.querySelector('main');
         if (main) main.classList.add('evidence-collapsed');
         state.evidencePanelOpen = false;
-    }
+      }
 
-    // Open the governance section in evidence panel by default
-    const govBody = document.getElementById('ev-governance-body');
-    if (govBody) govBody.classList.add('open');
+      // ── LAYOUT SANITY CHECK ──
+      setTimeout(() => {
+        const header = document.querySelector('header');
+        const sidebar = document.getElementById('sidebar');
+        const main = document.querySelector('main');
+        const resetBtn = $('btn-emergency-reset');
+        
+        const issues = [];
+        if (header) {
+          const hRect = header.getBoundingClientRect();
+          if (hRect.height === 0 || hRect.width === 0 || hRect.top < 0 || hRect.bottom > window.innerHeight) {
+            issues.push('header clipped/missing');
+          }
+        } else {
+          issues.push('header not found');
+        }
+        if (sidebar) {
+          const sRect = sidebar.getBoundingClientRect();
+          if (sRect.width === 0 || sRect.left < -10) {
+            issues.push('sidebar clipped/missing');
+          }
+        } else {
+          issues.push('sidebar not found');
+        }
+        if (main) {
+          const mRect = main.getBoundingClientRect();
+          if (mRect.width === 0 || mRect.height === 0) {
+            issues.push('main panel collapsed');
+          }
+        }
+        if (resetBtn) {
+          const rRect = resetBtn.getBoundingClientRect();
+          if (rRect.right > window.innerWidth + 10 || rRect.left < -10) {
+            issues.push('reset button off-screen');
+          }
+        }
+        
+        if (issues.length > 0) {
+          console.error('[LAYOUT-SANITY] FAILED:', issues.join(', '));
+          log(`Layout sanity check failed: ${issues.join(', ')}. Auto-resetting...`, 'err');
+          emergencyResetUI();
+        } else {
+          console.log('[LAYOUT-SANITY] OK: Full shell visible');
+          log('Layout sanity check passed', 'ok');
+        }
+      }, 100);
+    });
 
   setTimeout(() => {
     const inTauri = hasTauriRuntime();
     log(inTauri ? '✓ Running inside Tauri' : '⚠ Running in browser mode with mock read-only data', inTauri ? 'ok' : 'warn');
   }, 100);
+
+  // ── DPI / SCALING DIAGNOSTICS ──
+  async function logScalingDiagnostics() {
+    const dpr = window.devicePixelRatio || 1;
+    const innerW = window.innerWidth;
+    const innerH = window.innerHeight;
+    const outerW = window.outerWidth;
+    const outerH = window.outerHeight;
+    const visualScale = window.visualViewport ? window.visualViewport.scale : 1;
+    const screenW = screen.width;
+    const screenH = screen.height;
+    const availW = screen.availWidth;
+    const availH = screen.availHeight;
+    const appZoom = getZoomLevel();
+    const density = getLayoutDensity();
+    const isTauri = hasTauriRuntime();
+    
+    console.log('[DPI-DIAG] ===== SCALING DIAGNOSTICS =====');
+    console.log(`[DPI-DIAG] devicePixelRatio: ${dpr}`);
+    console.log(`[DPI-DIAG] window.innerWidth: ${innerW}, innerHeight: ${innerH}`);
+    console.log(`[DPI-DIAG] window.outerWidth: ${outerW}, outerHeight: ${outerH}`);
+    console.log(`[DPI-DIAG] visualViewport.scale: ${visualScale}`);
+    console.log(`[DPI-DIAG] screen.width: ${screenW}, screen.height: ${screenH}`);
+    console.log(`[DPI-DIAG] screen.availWidth: ${availW}, screen.availHeight: ${availH}`);
+    console.log(`[DPI-DIAG] app zoom level: ${appZoom}`);
+    console.log(`[DPI-DIAG] layout density: ${density}`);
+    console.log(`[DPI-DIAG] is Tauri: ${isTauri}`);
+    console.log(`[DPI-DIAG] effective CSS pixel ratio: ${dpr * appZoom * visualScale}`);
+    console.log('[DPI-DIAG] =================================');
+    
+    // Also log to app log panel
+    log(`DPI: devicePixelRatio=${dpr}, inner=${innerW}x${innerH}, appZoom=${Math.round(appZoom*100)}%, density=${density}, effective=${(dpr * appZoom * visualScale).toFixed(2)}`, 'info');
+    
+    // Tauri-level scale info
+    if (isTauri) {
+      try {
+        const info = await invoke('get_window_scale_info');
+        console.log('[DPI-DIAG] Tauri scale_factor:', info.scale_factor);
+        console.log('[DPI-DIAG] Tauri webview_zoom:', info.webview_zoom);
+        console.log('[DPI-DIAG] Tauri inner_size:', info.inner_width, 'x', info.inner_height);
+        console.log('[DPI-DIAG] Tauri outer_size:', info.outer_width, 'x', info.outer_height);
+        log(`Tauri: scale=${info.scale_factor}, webviewZoom=${info.webview_zoom}, inner=${Math.round(info.inner_width)}x${Math.round(info.inner_height)}`, 'info');
+        
+        // Auto-compensate: if scale_factor > 1.2 and no manual compensation set, suggest compensation
+        const savedComp = localStorage.getItem('archivist-webview-zoom');
+        if (!savedComp && info.scale_factor > 1.2 && info.webview_zoom === 1.0) {
+          const suggestedZoom = 1.0 / info.scale_factor;
+          log(`High DPI detected (${info.scale_factor}). Suggested WebView zoom: ${suggestedZoom.toFixed(2)}. Click "DPI Compensate" to apply.`, 'warn');
+        }
+      } catch (e) {
+        console.warn('[DPI-DIAG] Failed to get Tauri scale info:', e);
+      }
+    }
+  }
+  
+  setTimeout(logScalingDiagnostics, 200);
 
   // ── DOM DIAGNOSTICS: log key element visibility/size ──
   setTimeout(() => {
@@ -3673,7 +3883,7 @@ if (state.recentPaths[0]) {
     // Check if chat-panel has children
     const chatPanel = document.getElementById('chat-panel');
     if (chatPanel) {
-      console.log(`[DIAG] #chat-panel children: ${chatPanel.children.length}`, Array.from(chatPanel.children).map(c => c.id || c.className).join(', '));
+      console.log(`[DPI-DIAG] #chat-panel children: ${chatPanel.children.length}`, Array.from(chatPanel.children).map(c => c.id || c.className).join(', '));
     }
     // Check main grid
     const main = document.querySelector('main');
@@ -3687,11 +3897,6 @@ if (state.recentPaths[0]) {
   log('UI ready. Analyze a folder to build a working map.', 'info');
 setStatus('Ready', 'idle');
 
-// Panel resize handles
-initResizeHandles();
-
-    $('btn-terminal-run').addEventListener('click', runTerminalCommand);
-    $('terminal-input').addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') runTerminalCommand();
-    });
-});
+ // Panel resize handles
+ initResizeHandles();
+ });

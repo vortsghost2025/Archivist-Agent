@@ -31,52 +31,52 @@
         "lsp": "allow"
       }
     },
-    "plan": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b"
-    },
-    "code": {
-      "permission": {
-        "webfetch": "allow",
-        "websearch": "allow",
-        "codesearch": "allow",
-        "grep": "allow",
-        "glob": "allow",
-        "list": "allow",
-        "task": "allow",
-        "edit": "allow",
-        "bash": "allow",
-        "external_directory": "allow",
-        "todoread": "allow",
-        "todowrite": "allow",
-        "skill": "allow",
-        "lsp": "allow"
-      }
-    },
-    "build": {},
-    "debug": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b"
-    },
-    "ask": {},
-    "general": {
-      "permission": {
-        "webfetch": "allow",
-        "websearch": "allow",
-        "codesearch": "allow",
-        "grep": "allow",
-        "glob": "allow",
-        "list": "allow",
-        "task": "allow",
-        "edit": "allow",
-        "bash": "allow",
-        "external_directory": "allow",
-        "todoread": "allow",
-        "todowrite": "allow",
-        "skill": "allow",
-        "lsp": "allow"
-      }
-    },
-    "explore": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+"plan": {
+       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+     },
+     "code": {
+       "permission": {
+         "webfetch": "allow",
+         "websearch": "allow",
+         "codesearch": "allow",
+         "grep": "allow",
+         "glob": "allow",
+         "list": "allow",
+         "task": "allow",
+         "edit": "allow",
+         "bash": "allow",
+         "external_directory": "allow",
+         "todoread": "allow",
+         "todowrite": "allow",
+         "skill": "allow",
+         "lsp": "allow"
+       }
+     },
+     "build": {},
+     "debug": {
+       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+     },
+     "ask": {},
+     "general": {
+       "permission": {
+         "webfetch": "allow",
+         "websearch": "allow",
+         "codesearch": "allow",
+         "grep": "allow",
+         "glob": "allow",
+         "list": "allow",
+         "task": "allow",
+         "edit": "allow",
+         "bash": "allow",
+         "external_directory": "allow",
+         "todoread": "allow",
+         "todowrite": "allow",
+         "skill": "allow",
+         "lsp": "allow"
+       }
+     },
+     "explore": {
+       "model": "nvidia/nemotron-3-ultra-550b-a55b",
       "mode": "all",
       "permission": {
         "webfetch": "allow",
@@ -95,16 +95,16 @@
         "lsp": "allow"
       }
     },
-    "code-reviewer": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b"
-    },
-    "lane-worker": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b"
-    },
-    "git-worker": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b"
-    }
-  },
+"code-reviewer": {
+       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+     },
+     "lane-worker": {
+       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+     },
+     "git-worker": {
+       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+     }
+   },
   "permission": {
   "external_directory": {
     "S:/Archivist-Agent": "allow",

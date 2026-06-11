@@ -4,23 +4,24 @@
   "version": "0.1.0",
   "identifier": "com.archivist.agent",
   "build": {
-    "beforeDevCommand": "",
+    "beforeDevCommand": "npx serve -p 1420 S:/Archivist-Agent/ui",
     "beforeBuildCommand": "",
-    "frontendDist": "../ui"
+    "frontendDist": "../ui",
+    "devUrl": "http://localhost:1420"
   },
   "app": {
     "withGlobalTauri": true,
     "windows": [
       {
         "title": "Archivist Agent",
-        "width": 1200,
-        "height": 800,
+        "width": 1920,
+        "height": 1080,
         "resizable": true,
         "fullscreen": false,
-        "maximized": true,
-      "minWidth": 800,
-      "minHeight": 600,
-      "devtools": true
+        "maximized": false,
+        "minWidth": 1280,
+        "minHeight": 720,
+        "devtools": true
       }
     ],
     "security": {

@@ -18,15 +18,19 @@
     </div>
 <span class="version">v0.1.0</span>
 <div class="spacer"></div>
-<div class="zoom-controls" role="group" aria-label="Zoom">
-  <button class="btn btn-ghost zoom-btn" id="btn-zoom-out" title="Zoom out (Ctrl+-)">−</button>
-  <span class="zoom-level" id="zoom-level">100%</span>
-  <button class="btn btn-ghost zoom-btn" id="btn-zoom-in" title="Zoom in (Ctrl++)">+</button>
-  <button class="btn btn-ghost zoom-btn" id="btn-zoom-reset" title="Reset zoom (Ctrl+0)">↺</button>
-</div>
+<div class="header-controls">
+  <div class="zoom-controls" role="group" aria-label="Zoom">
+    <button class="btn btn-ghost zoom-btn" id="btn-zoom-out" title="Zoom out (Ctrl+-)">−</button>
+    <span class="zoom-level" id="zoom-level">100%</span>
+    <button class="btn btn-ghost zoom-btn" id="btn-zoom-in" title="Zoom in (Ctrl++)">+</button>
+    <button class="btn btn-ghost zoom-btn" id="btn-zoom-reset" title="Reset zoom (Ctrl+0)">↺</button>
+  </div>
+  <button class="btn btn-ghost" id="btn-layout-density" title="Cycle layout density (Dense → Compact → Comfortable)">⛶ Dense</button>
+  <button class="btn btn-primary" id="btn-emergency-reset" title="EMERGENCY RESET: Ctrl+Shift+0 — Reset ALL UI state">🔄 Reset UI</button>
   <button class="btn btn-ghost" id="btn-diag">Diagnostics</button>
   <button class="btn btn-ghost" id="btn-sidebar-toggle" title="Toggle sidebar (Ctrl+B)">☰ Sidebar</button>
   <button class="btn btn-ghost" id="btn-evidence-toggle-header" title="Toggle evidence panel (Ctrl+E)">📋 Evidence</button>
+</div>
   </header>
 
   <main>
@@ -147,18 +151,15 @@
               <div class="chat-toolbar">
                 <div class="chat-toolbar-left">
                   <button class="btn btn-ghost" id="btn-chat-toggle-settings" title="Open settings">⚙️ Settings</button>
-                  <button class="btn btn-ghost" id="btn-tv-fullscreen" title="TV fullscreen (Ctrl+T)">📺 TV</button>
-                  <button class="btn btn-ghost btn-tv-fullscreen" id="btn-tv-fullscreen-exit" title="Exit TV fullscreen (Esc)">📺✕</button>
                   <button class="btn btn-ghost" id="btn-font-decrease" title="Decrease chat font size (Ctrl+-)">A‑</button>
                   <button class="btn btn-ghost" id="btn-font-increase" title="Increase chat font size (Ctrl+=)">A+</button>
-                  <button class="btn btn-ghost" id="btn-chat-fullscreen" title="Toggle chat fullscreen">🖥️</button>
                   <button class="btn btn-ghost" id="btn-chat-toggle-audit" title="Toggle read audit log">🔍 Audit</button>
                   <span id="chat-model-label" class="chat-model-label">No model configured</span>
                 </div>
                <div class="chat-toolbar-right">
                  <button class="btn btn-ghost" id="btn-chat-clear" title="Clear conversation">🗑️ Clear</button>
                </div>
-             </div>
+              </div>
 
             <div id="read-audit-panel" class="read-audit-panel hidden">
               <div class="read-audit-header">
@@ -183,10 +184,10 @@
               </div>
             </div>
 
-            <div class="chat-input-area">
-              <textarea id="chat-input" class="chat-input" rows="3" placeholder="Type a message…" aria-label="Chat message input"></textarea>
-              <button class="btn btn-primary chat-send-btn" id="btn-chat-send" title="Send message">Send</button>
-            </div>
+             <div class="chat-input-area">
+               <textarea id="chat-input" class="chat-input" rows="1" placeholder="Type a message…" aria-label="Chat message input"></textarea>
+               <button class="btn btn-primary chat-send-btn" id="btn-chat-send" title="Send message">Send</button>
+             </div>
           </div>
         </div>
       </div>
@@ -266,6 +267,11 @@
 <button class="btn btn-sm" id="btn-new-terminal" title="New terminal">+ New</button>
 <button class="btn btn-sm" id="btn-kill-terminal" title="Kill terminal">Kill</button>
 </div>
+</div>
+<div id="terminal-blocks" class="terminal-blocks"></div>
+<div class="terminal-input-area">
+  <input type="text" id="terminal-input" class="terminal-input" placeholder="Type a command… (e.g., kilo status)" aria-label="Terminal command input" autocomplete="off" />
+  <button class="btn btn-primary btn-terminal-run" id="btn-terminal-run" title="Run command (Enter)">Run</button>
 </div>
 <div id="terminal-host" class="terminal-host"></div>
 </div>
@@ -428,12 +434,6 @@
     <span id="footer-mode" class="footer-mode">—</span>
     <span id="footer-info">No scan performed yet</span>
     <span id="footer-lane-status" class="footer-lanes"></span>
-    <span class="zoom-controls">
-      <button class="btn btn-sm" id="btn-zoom-out" title="Zoom out">−</button>
-      <span id="zoom-level">100%</span>
-      <button class="btn btn-sm" id="btn-zoom-in" title="Zoom in">+</button>
-      <button class="btn btn-sm" id="btn-zoom-reset" title="Reset zoom">↺</button>
-    </span>
   </footer>
     </div>
 
