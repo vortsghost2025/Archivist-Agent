@@ -106,6 +106,8 @@
       "lane_state": "ACTIVE",
       "role": "discovery",
       "local_path": "S:/solana-launch-lane",
+      "repo": "https://github.com/vortsghost2025/solana-launch-lane",
+      "branch": "main",
       "mailboxes": {
         "inbox": "S:/solana-launch-lane/lanes/solana-launch/inbox",
         "outbox": "S:/solana-launch-lane/lanes/solana-launch/outbox",
