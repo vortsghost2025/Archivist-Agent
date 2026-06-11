@@ -7,10 +7,8 @@
     }
   },
   "tabOrder": {
-    "local": [
-      "pending:1"
-    ]
+    "local": []
   },
   "worktreeOrder": [],
-  "sessionsCollapsed": true
+  "sessionsCollapsed": false
 }
