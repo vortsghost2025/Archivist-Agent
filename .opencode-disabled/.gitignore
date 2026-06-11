@@ -1,5 +1,0 @@
-# .opencode directory - use global config at ~/.config/opencode/
-# This minimal .opencode directory is for project-specific overrides only
-# The global opencode.json handles filesystem MCP with S:/ and C:/ access
-
-node_modules
