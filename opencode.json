@@ -1,1 +1,69 @@
-{"$schema": "https://opencode.ai/config.json", "permission": {"*": "allow", "bash": {"*": "allow"}, "task": {"*": "allow"}}}
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "*": "allow",
+    "bash": { "*": "allow" },
+    "task": { "*": "allow" }
+  },
+  "agent": {
+    "orchestrator": {
+      "model": "minimaxai/minimax-m3",
+      "options": { "temperature": 0.3, "maxTokens": 16384 },
+      "permission": {}
+    },
+    "explore": {
+      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "options": { "temperature": 0.2, "maxTokens": 8192 },
+      "permission": {}
+    },
+    "general": {
+      "model": "nvidia/nemotron-3-nano-30b-a3b",
+      "options": { "temperature": 0.5, "maxTokens": 4096 },
+      "permission": {}
+    },
+    "lane-worker": {
+      "model": "meta/llama-4-maverick-17b-128e-instruct",
+      "options": { "temperature": 0.2, "maxTokens": 8192 },
+      "permission": {
+        "read": "allow",
+        "bash": "allow",
+        "write": {
+          "S:/Archivist-Agent": "allow",
+          "S:/.global": "allow",
+          "S:/SwarmMind": "allow",
+          "S:/self-organizing-library": "allow",
+          "S:/WE4FREE-Control-Plane": "allow",
+          "S:/kernel-lane": "allow"
+        }
+      }
+    },
+    "git-worker": {
+      "model": "nvidia/nemotron-3-nano-30b-a3b",
+      "options": { "temperature": 0.1, "maxTokens": 4096 },
+      "permission": {
+        "read": "allow",
+        "bash": "allow",
+        "write": {
+          "S:/Archivist-Agent": "allow",
+          "S:/.global": "allow",
+          "S:/SwarmMind": "allow",
+          "S:/self-organizing-library": "allow",
+          "S:/WE4FREE-Control-Plane": "allow",
+          "S:/kernel-lane": "allow"
+        }
+      }
+    },
+    "test-engineer": {
+      "model": "meta/llama-4-maverick-17b-128e-instruct",
+      "options": { "temperature": 0.2, "maxTokens": 8192 },
+      "permission": {
+        "read": "allow",
+        "bash": "allow",
+        "edit": {
+          "\\.(test|spec)\\.(js|ts|jsx|tsx)$": "allow",
+          "*": "deny"
+        }
+      }
+    }
+  }
+}
