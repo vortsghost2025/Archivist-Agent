@@ -1,0 +1,887 @@
+{
+  "availability": {
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5": 200,
+    "nvidia/nemotron-3-super-120b-a12b": 200,
+    "nvidia/nemotron-3-nano-30b-a3b": 200,
+    "meta/llama-4-maverick-17b-128e-instruct": 200,
+    "mistralai/mistral-small-4-119b-2603": 200,
+    "deepseek-ai/deepseek-v4-flash": 200,
+    "z-ai/glm-5.1": 200,
+    "qwen/qwen3.5-397b-a17b": 200
+  },
+  "latency": {
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+      "mean_latency_s": 4.779,
+      "std_latency_s": 5.202,
+      "mean_tokens_per_s": 19.8,
+      "errors": 0
+    },
+    "nvidia/nemotron-3-super-120b-a12b": {
+      "mean_latency_s": 4.971,
+      "std_latency_s": 9.225,
+      "mean_tokens_per_s": 57.5,
+      "errors": 0
+    },
+    "nvidia/nemotron-3-nano-30b-a3b": {
+      "mean_latency_s": 1.958,
+      "std_latency_s": 3.023,
+      "mean_tokens_per_s": 84.7,
+      "errors": 0
+    },
+    "meta/llama-4-maverick-17b-128e-instruct": {
+      "mean_latency_s": 0.358,
+      "std_latency_s": 0.027,
+      "mean_tokens_per_s": 33.7,
+      "errors": 0
+    },
+    "mistralai/mistral-small-4-119b-2603": {
+      "mean_latency_s": 0.127,
+      "std_latency_s": 0.023,
+      "mean_tokens_per_s": 96.7,
+      "errors": 0
+    },
+    "deepseek-ai/deepseek-v4-flash": {
+      "mean_latency_s": 1.147,
+      "std_latency_s": 0.721,
+      "mean_tokens_per_s": 14.3,
+      "errors": 0
+    },
+    "z-ai/glm-5.1": {
+      "mean_latency_s": 3.34,
+      "std_latency_s": 2.108,
+      "mean_tokens_per_s": 5.0,
+      "errors": 0
+    },
+    "qwen/qwen3.5-397b-a17b": {
+      "mean_latency_s": 9.652,
+      "std_latency_s": 13.591,
+      "mean_tokens_per_s": 4.7,
+      "errors": 0
+    }
+  },
+  "rate_limits": {
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+      "concurrency_1": {
+        "200s": 1,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 5,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 7,
+        "429s": 3,
+        "rate_limited": true
+      }
+    },
+    "nvidia/nemotron-3-super-120b-a12b": {
+      "concurrency_1": {
+        "200s": 1,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 5,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 7,
+        "429s": 3,
+        "rate_limited": true
+      }
+    },
+    "nvidia/nemotron-3-nano-30b-a3b": {
+      "concurrency_1": {
+        "200s": 1,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 5,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 10,
+        "429s": 0,
+        "rate_limited": false
+      }
+    },
+    "meta/llama-4-maverick-17b-128e-instruct": {
+      "concurrency_1": {
+        "200s": 1,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 5,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 9,
+        "429s": 1,
+        "rate_limited": true
+      }
+    },
+    "mistralai/mistral-small-4-119b-2603": {
+      "concurrency_1": {
+        "200s": 1,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 5,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 7,
+        "429s": 3,
+        "rate_limited": true
+      }
+    },
+    "deepseek-ai/deepseek-v4-flash": {
+      "concurrency_1": {
+        "200s": 1,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 1,
+        "429s": 4,
+        "rate_limited": true
+      }
+    },
+    "z-ai/glm-5.1": {
+      "concurrency_1": {
+        "200s": 1,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 5,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 5,
+        "429s": 5,
+        "rate_limited": true
+      }
+    },
+    "qwen/qwen3.5-397b-a17b": {
+      "concurrency_1": {
+        "200s": 1,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 3,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 10,
+        "429s": 0,
+        "rate_limited": false
+      }
+    }
+  },
+  "context_window": {
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+      "tokens_1125": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 2.385
+      },
+      "tokens_5625": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 4.114
+      },
+      "tokens_11250": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 5.044
+      },
+      "tokens_22500": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 11.773
+      },
+      "tokens_45000": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 13.555
+      },
+      "max_ok_tokens": 45000
+    },
+    "nvidia/nemotron-3-super-120b-a12b": {
+      "tokens_1125": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.898
+      },
+      "tokens_5625": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.989
+      },
+      "tokens_11250": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 1.07
+      },
+      "tokens_22500": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 3.265
+      },
+      "tokens_45000": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 2.766
+      },
+      "max_ok_tokens": 45000
+    },
+    "nvidia/nemotron-3-nano-30b-a3b": {
+      "tokens_1125": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.477
+      },
+      "tokens_5625": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.67
+      },
+      "tokens_11250": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.876
+      },
+      "tokens_22500": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 1.381
+      },
+      "tokens_45000": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 2.241
+      },
+      "max_ok_tokens": 45000
+    },
+    "meta/llama-4-maverick-17b-128e-instruct": {
+      "tokens_1125": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.723
+      },
+      "tokens_5625": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.942
+      },
+      "tokens_11250": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.885
+      },
+      "tokens_22500": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 1.269
+      },
+      "tokens_45000": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 1.957
+      },
+      "max_ok_tokens": 45000
+    },
+    "mistralai/mistral-small-4-119b-2603": {
+      "tokens_1125": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.235
+      },
+      "tokens_5625": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.264
+      },
+      "tokens_11250": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.378
+      },
+      "tokens_22500": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.427
+      },
+      "tokens_45000": {
+        "ok": false,
+        "status": 429,
+        "latency_s": 0.072
+      },
+      "max_ok_tokens": 22500
+    },
+    "deepseek-ai/deepseek-v4-flash": {
+      "tokens_1125": {
+        "ok": false,
+        "status": 429,
+        "latency_s": 0.031
+      },
+      "max_ok_tokens": 0
+    },
+    "z-ai/glm-5.1": {
+      "tokens_1125": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 13.567
+      },
+      "tokens_5625": {
+        "ok": false,
+        "status": 429,
+        "latency_s": 0.049
+      },
+      "max_ok_tokens": 1125
+    },
+    "qwen/qwen3.5-397b-a17b": {
+      "tokens_1125": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 1.268
+      },
+      "tokens_5625": {
+        "ok": true,
+        "status": 200,
+        "latency_s": 0.884
+      },
+      "tokens_11250": {
+        "ok": false,
+        "status": "EXCEPTION",
+        "latency_s": 1.161
+      },
+      "max_ok_tokens": 5625
+    }
+  },
+  "task_quality": {
+    "orchestration": {
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "latency_s": 32.782,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": ""
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "latency_s": 7.129,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "**Execution Plan (15 steps) \u2013 Refactor Python Monolith \u2192 Microservices, Add CI/CD, Write Integration Tests**\n\n| # | Step (specific action) | Dependencies |\n|---|------------------------|--------------"
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "latency_s": 4.133,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "**Execution Plan \u2013 Refactor a Python Monolith \u2192 Microservices, Add CI/CD, Write Integration Tests**  \n*(All steps are numbered; dependencies are indicated in parentheses.)*  \n\n| # | Step | Description"
+      },
+      "meta/llama-4-maverick-17b-128e-instruct": {
+        "latency_s": 10.049,
+        "tokens_out": 677,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "To refactor a Python monolith into microservices, add CI/CD, and write integration tests, follow this 15-step execution plan. Each step is numbered, and dependencies are clearly marked.\n\n1. **Analyze "
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "latency_s": 4.34,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Here\u2019s a **numbered execution plan** with dependencies clearly marked, broken into **15 steps** to refactor a Python monolith into microservices, add CI/CD, and write integration tests. Each step incl"
+      },
+      "deepseek-ai/deepseek-v4-flash": {
+        "error": 429
+      },
+      "z-ai/glm-5.1": {
+        "error": 429
+      },
+      "qwen/qwen3.5-397b-a17b": {
+        "latency_s": 45.458,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Here is a 15-step execution plan to refactor a Python monolith into microservices, implement CI/CD, and establish integration testing.\n\n**Phase 1: Analysis & Strategic Decomposition**\n\n1.  **Audit Mon"
+      }
+    },
+    "code": {
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "latency_s": 30.4,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting ',' delimiter: line 7 column 4 (char 142)",
+          "raw": "{\n  \"criteria_scores\": {\n    \"Correctness of heap logic\": 1,\n    \"Proper lazy evaluation\": 1,\n    \"Working tests\": 1,\n    \"Clean style\": 1\n  },\n  \"overall\": 1"
+        },
+        "response_preview": ""
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "latency_s": 6.019,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "**Python implementation**\n\n```python\nfrom __future__ import annotations\n\nimport heapq\nfrom typing import Iterable, Iterator, TypeVar, List, Tuple\n\nT = TypeVar(\"T\")  # Items must support ordering (i.e."
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "latency_s": 3.328,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "**`merge_sorted_streams.py`**\n\n```python\nfrom __future__ import annotations\n\nimport heapq\nfrom itertools import islice, tee\nfrom typing import (\n    Iterable,\n    Iterator,\n    TypeVar,\n    List,\n    "
+      },
+      "meta/llama-4-maverick-17b-128e-instruct": {
+        "latency_s": 5.686,
+        "tokens_out": 370,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Here is the code that meets the specifications:\n```\nimport heapq\nfrom typing import Iterable, Iterator, TypeVar\n\nT = TypeVar('T')\n\ndef merge_sorted_streams(*iterables: Iterable[T]) -> Iterator[T]:\n   "
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "latency_s": 3.982,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Here's a Python function `merge_sorted_streams(*iterables)` that lazily merges N sorted iterables into one sorted stream using a min-heap, along with type hints, a docstring, and three pytest test cas"
+      },
+      "deepseek-ai/deepseek-v4-flash": {
+        "error": 429
+      },
+      "z-ai/glm-5.1": {
+        "error": 429
+      },
+      "qwen/qwen3.5-397b-a17b": {
+        "error": "EXCEPTION"
+      }
+    },
+    "git": {
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "latency_s": 29.233,
+        "tokens_out": 800,
+        "score": {
+          "criteria_scores": {
+            "Command accuracy": 1,
+            "safe ordering (stash before rebase)": 1,
+            "conflict advice": 1,
+            "rollback option": 1
+          },
+          "overall": 1,
+          "reasoning": "The model provided no response, so it failed to address any of the criteria related to git commands, safety practices, conflict resolution, or rollback procedures."
+        },
+        "response_preview": ""
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "latency_s": 7.033,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Okay, the user is asking about rebasing two long-lived branches that have diverged by 47 commits, with uncommitted changes present. This is a pretty advanced Git scenario that requires careful handlin"
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "latency_s": 7.122,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Below is a **step\u2011by\u2011step, \u201csafe\u2011rebase\u201d playbook** you can run from a clean terminal.  \nIt assumes:\n\n* You have two long\u2011lived branches that have diverged \u2013 let\u2019s call them **`main`** (the stable rel"
+      },
+      "meta/llama-4-maverick-17b-128e-instruct": {
+        "latency_s": 12.306,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Rebasing a Long-Lived Branch: A Step-by-Step Guide\n=====================================================\n\n### Step 1: Prepare Your Local Repository\n\nBefore starting the rebase process, ensure you have"
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "latency_s": 4.487,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Here's a safe, step-by-step rebase strategy for your situation. This approach minimizes risk while ensuring a clean history.\n\n---\n\n### **Pre-Rebase Checklist**\n1. **Stash or commit your uncommitted ch"
+      },
+      "deepseek-ai/deepseek-v4-flash": {
+        "error": 429
+      },
+      "z-ai/glm-5.1": {
+        "error": 429
+      },
+      "qwen/qwen3.5-397b-a17b": {
+        "latency_s": 38.28,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Rebasing a long-lived branch like `feature/auth` that has diverged by 47 commits from `main` is a high-risk operation. If done incorrectly, you can lose work or create a tangled history that is imposs"
+      }
+    },
+    "testing": {
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "latency_s": 32.105,
+        "tokens_out": 800,
+        "score": {
+          "criteria_scores": {
+            "Coverage breadth": 1,
+            "correct fixture usage": 1,
+            "mocking approach": 1,
+            "edge case identification": 1
+          },
+          "overall": 1,
+          "reasoning": "The response is empty and provides no evidence of addressing any testing criteria."
+        },
+        "response_preview": ""
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "latency_s": 9.827,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Below is a **self\u2011contained pytest test suite** for a function with the signature  \n\n```python\ndef process_payment(amount: float, currency: str, user_id: int) -> dict\n```  \n\nThe suite assumes that `pr"
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "latency_s": 14.362,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Below is a **complete, ready\u2011to\u2011run pytest test suite** for the `process_payment` function you described.  \nIt demonstrates:\n\n* **Happy\u2011path** tests (valid inputs, successful external call)  \n* **Boun"
+      },
+      "meta/llama-4-maverick-17b-128e-instruct": {
+        "latency_s": 12.182,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "**Test Suite for `process_payment` Function**\n=============================================\n\n### Overview\n\nThis test suite covers the `process_payment` function, ensuring it handles various input scen"
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "latency_s": 3.798,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "# Comprehensive Pytest Test Suite for `process_payment` Function\n\nHere's a complete test suite covering all the scenarios you requested, using pytest fixtures and proper test organization:\n\n```python\n"
+      },
+      "deepseek-ai/deepseek-v4-flash": {
+        "error": 429
+      },
+      "z-ai/glm-5.1": {
+        "error": 429
+      },
+      "qwen/qwen3.5-397b-a17b": {
+        "latency_s": 18.599,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "Here is a comprehensive `pytest` test suite designed for the `process_payment` function.\n\nThis suite demonstrates senior-level practices including:\n*   **Fixtures**: For reusable test data and mocked "
+      }
+    },
+    "exploration": {
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "latency_s": 32.266,
+        "tokens_out": 800,
+        "score": {
+          "criteria_scores": {
+            "Logical exploration order": 1,
+            "Quality of questions formed": 1,
+            "Structured reporting": 1
+          },
+          "overall": 1,
+          "reasoning": "The response 'None' provides no content to evaluate against any criteria, resulting in the lowest possible scores."
+        },
+        "response_preview": ""
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "latency_s": 12.317,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "**Exploration Strategy**\n\n| Step | What I read | Why I read it first | What I look for |\n|------|-------------|---------------------|-----------------|\n| 1\ufe0f\u20e3 | **`config.yaml`** | Configuration files "
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "latency_s": 9.95,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "**Exploration Strategy Overview**\n\n| Phase | Goal | Files to Touch | Why |\n|-------|------|----------------|-----|\n| 1\ufe0f\u20e3\u202fOrientation | Get a high\u2011level mental map of the project\u2019s purpose, structure, "
+      },
+      "meta/llama-4-maverick-17b-128e-instruct": {
+        "latency_s": 10.803,
+        "tokens_out": 703,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "To explore this unfamiliar Python repository effectively, I'll follow a structured strategy that begins with understanding the overall structure and key components of the project.\n\n### Initial Steps\n\n"
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "latency_s": 4.44,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "### **Exploration Strategy for the Python Repository**\n\n#### **1. Initial Approach**\nWhen exploring an unfamiliar codebase, I follow a **top-down** approach to understand the high-level structure befo"
+      },
+      "deepseek-ai/deepseek-v4-flash": {
+        "error": 429
+      },
+      "z-ai/glm-5.1": {
+        "error": 429
+      },
+      "qwen/qwen3.5-397b-a17b": {
+        "latency_s": 33.214,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "### Exploration Strategy\n\nMy approach to exploring this unfamiliar Python repository follows a **top-down, dependency-aware strategy**. I aim to understand the system's entry point, configuration, and"
+      }
+    },
+    "general": {
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "latency_s": 29.218,
+        "tokens_out": 800,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": ""
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "latency_s": 3.898,
+        "tokens_out": 464,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "The CAP theorem states that a distributed data store can simultaneously guarantee at most two of the following three properties:\n\n* **Consistency (C)** \u2013 every read receives the most recent write or a"
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "latency_s": 2.508,
+        "tokens_out": 607,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "**CAP Theorem (Brewer, 2000)**  \nIn any *distributed data store* that spans multiple nodes, you can only guarantee **two** of the following three properties simultaneously:\n\n| Property | What it means"
+      },
+      "meta/llama-4-maverick-17b-128e-instruct": {
+        "latency_s": 5.01,
+        "tokens_out": 331,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "The CAP theorem states that in a distributed data storage system, it is impossible to simultaneously guarantee all three of the following:\n\n1. **Consistency** (C): Every read operation will see the mo"
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "latency_s": 1.791,
+        "tokens_out": 334,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "### **CAP Theorem Explained**\nThe **CAP theorem** states that a distributed system can only guarantee **two out of three** properties:\n1. **Consistency (C)**: All nodes see the same data at the same t"
+      },
+      "deepseek-ai/deepseek-v4-flash": {
+        "error": 429
+      },
+      "z-ai/glm-5.1": {
+        "error": 429
+      },
+      "qwen/qwen3.5-397b-a17b": {
+        "latency_s": 5.267,
+        "tokens_out": 309,
+        "score": {
+          "error": "parse_failed: Expecting value: line 1 column 1 (char 0)",
+          "raw": ""
+        },
+        "response_preview": "The CAP theorem states that in a distributed data system, you can only guarantee two of the following three properties simultaneously: **Consistency** (all nodes see the same data at the same time), *"
+      }
+    }
+  },
+  "recommendations": {
+    "orchestrator": {
+      "recommended_model": "meta/llama-4-maverick-17b-128e-instruct",
+      "scores": {
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.301,
+        "nvidia/nemotron-3-super-120b-a12b": 0.297,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.3594,
+        "meta/llama-4-maverick-17b-128e-instruct": 0.3926,
+        "mistralai/mistral-small-4-119b-2603": 0.2974,
+        "deepseek-ai/deepseek-v4-flash": 0.1762,
+        "z-ai/glm-5.1": 0.1358,
+        "qwen/qwen3.5-397b-a17b": 0.025
+      },
+      "primary_task": "orchestration"
+    },
+    "explore": {
+      "recommended_model": "meta/llama-4-maverick-17b-128e-instruct",
+      "scores": {
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.4419,
+        "nvidia/nemotron-3-super-120b-a12b": 0.394,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.5189,
+        "meta/llama-4-maverick-17b-128e-instruct": 0.5852,
+        "mistralai/mistral-small-4-119b-2603": 0.4947,
+        "deepseek-ai/deepseek-v4-flash": 0.3525,
+        "z-ai/glm-5.1": 0.2666,
+        "qwen/qwen3.5-397b-a17b": 0.025
+      },
+      "primary_task": "exploration"
+    },
+    "general": {
+      "recommended_model": "meta/llama-4-maverick-17b-128e-instruct",
+      "scores": {
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.3515,
+        "nvidia/nemotron-3-super-120b-a12b": 0.3455,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.4391,
+        "meta/llama-4-maverick-17b-128e-instruct": 0.4889,
+        "mistralai/mistral-small-4-119b-2603": 0.3961,
+        "deepseek-ai/deepseek-v4-flash": 0.2643,
+        "z-ai/glm-5.1": 0.2012,
+        "qwen/qwen3.5-397b-a17b": 0.025
+      },
+      "primary_task": "general"
+    },
+    "lane-worker": {
+      "recommended_model": "meta/llama-4-maverick-17b-128e-instruct",
+      "scores": {
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.201,
+        "nvidia/nemotron-3-super-120b-a12b": 0.197,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.2594,
+        "meta/llama-4-maverick-17b-128e-instruct": 0.2926,
+        "mistralai/mistral-small-4-119b-2603": 0.2474,
+        "deepseek-ai/deepseek-v4-flash": 0.1762,
+        "z-ai/glm-5.1": 0.1333,
+        "qwen/qwen3.5-397b-a17b": 0.0125
+      },
+      "primary_task": "code"
+    },
+    "git-worker": {
+      "recommended_model": "meta/llama-4-maverick-17b-128e-instruct",
+      "scores": {
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.271,
+        "nvidia/nemotron-3-super-120b-a12b": 0.197,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.2594,
+        "meta/llama-4-maverick-17b-128e-instruct": 0.2926,
+        "mistralai/mistral-small-4-119b-2603": 0.2474,
+        "deepseek-ai/deepseek-v4-flash": 0.1762,
+        "z-ai/glm-5.1": 0.1333,
+        "qwen/qwen3.5-397b-a17b": 0.0125
+      },
+      "primary_task": "git"
+    },
+    "test-engineer": {
+      "recommended_model": "meta/llama-4-maverick-17b-128e-instruct",
+      "scores": {
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.3115,
+        "nvidia/nemotron-3-super-120b-a12b": 0.2455,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.3391,
+        "meta/llama-4-maverick-17b-128e-instruct": 0.3889,
+        "mistralai/mistral-small-4-119b-2603": 0.3461,
+        "deepseek-ai/deepseek-v4-flash": 0.2643,
+        "z-ai/glm-5.1": 0.1987,
+        "qwen/qwen3.5-397b-a17b": 0.0125
+      },
+      "primary_task": "testing"
+    }
+  }
+}

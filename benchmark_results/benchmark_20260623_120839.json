@@ -1,0 +1,475 @@
+{
+  "availability": {
+    "nvidia/nemotron-3-ultra-550b-a55b": 403,
+    "nvidia/nemotron-3-super-120b-a12b": 403,
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5": 403,
+    "deepseek/deepseek-v4-flash": 404,
+    "nvidia/llama-4-maverick-17b-128e-instruct": 404,
+    "mistralai/mistral-small-4-119b-2603": 403,
+    "nvidia/nemotron-3-nano-30b-a3b": 403
+  },
+  "latency": {
+    "nvidia/nemotron-3-ultra-550b-a55b": {
+      "error": "all_failed",
+      "errors": 5
+    },
+    "nvidia/nemotron-3-super-120b-a12b": {
+      "error": "all_failed",
+      "errors": 5
+    },
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+      "error": "all_failed",
+      "errors": 5
+    },
+    "deepseek/deepseek-v4-flash": {
+      "error": "all_failed",
+      "errors": 5
+    },
+    "nvidia/llama-4-maverick-17b-128e-instruct": {
+      "error": "all_failed",
+      "errors": 5
+    },
+    "mistralai/mistral-small-4-119b-2603": {
+      "error": "all_failed",
+      "errors": 5
+    },
+    "nvidia/nemotron-3-nano-30b-a3b": {
+      "error": "all_failed",
+      "errors": 5
+    }
+  },
+  "rate_limits": {
+    "nvidia/nemotron-3-ultra-550b-a55b": {
+      "concurrency_1": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      }
+    },
+    "nvidia/nemotron-3-super-120b-a12b": {
+      "concurrency_1": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      }
+    },
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+      "concurrency_1": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      }
+    },
+    "deepseek/deepseek-v4-flash": {
+      "concurrency_1": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      }
+    },
+    "nvidia/llama-4-maverick-17b-128e-instruct": {
+      "concurrency_1": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      }
+    },
+    "mistralai/mistral-small-4-119b-2603": {
+      "concurrency_1": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      }
+    },
+    "nvidia/nemotron-3-nano-30b-a3b": {
+      "concurrency_1": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_3": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_5": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      },
+      "concurrency_10": {
+        "200s": 0,
+        "429s": 0,
+        "rate_limited": false
+      }
+    }
+  },
+  "context_window": {
+    "nvidia/nemotron-3-ultra-550b-a55b": {
+      "tokens_1125": {
+        "ok": false,
+        "status": 403,
+        "latency_s": 0.057
+      },
+      "max_ok_tokens": 0
+    },
+    "nvidia/nemotron-3-super-120b-a12b": {
+      "tokens_1125": {
+        "ok": false,
+        "status": 403,
+        "latency_s": 0.059
+      },
+      "max_ok_tokens": 0
+    },
+    "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+      "tokens_1125": {
+        "ok": false,
+        "status": 403,
+        "latency_s": 0.051
+      },
+      "max_ok_tokens": 0
+    },
+    "deepseek/deepseek-v4-flash": {
+      "tokens_1125": {
+        "ok": false,
+        "status": 404,
+        "latency_s": 0.03
+      },
+      "max_ok_tokens": 0
+    },
+    "nvidia/llama-4-maverick-17b-128e-instruct": {
+      "tokens_1125": {
+        "ok": false,
+        "status": 404,
+        "latency_s": 0.03
+      },
+      "max_ok_tokens": 0
+    },
+    "mistralai/mistral-small-4-119b-2603": {
+      "tokens_1125": {
+        "ok": false,
+        "status": 403,
+        "latency_s": 0.052
+      },
+      "max_ok_tokens": 0
+    },
+    "nvidia/nemotron-3-nano-30b-a3b": {
+      "tokens_1125": {
+        "ok": false,
+        "status": 403,
+        "latency_s": 0.05
+      },
+      "max_ok_tokens": 0
+    }
+  },
+  "task_quality": {
+    "orchestration": {
+      "nvidia/nemotron-3-ultra-550b-a55b": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "error": 403
+      },
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "error": 403
+      },
+      "deepseek/deepseek-v4-flash": {
+        "error": 404
+      },
+      "nvidia/llama-4-maverick-17b-128e-instruct": {
+        "error": 404
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "error": 403
+      }
+    },
+    "code": {
+      "nvidia/nemotron-3-ultra-550b-a55b": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "error": 403
+      },
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "error": 403
+      },
+      "deepseek/deepseek-v4-flash": {
+        "error": 404
+      },
+      "nvidia/llama-4-maverick-17b-128e-instruct": {
+        "error": 404
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "error": 403
+      }
+    },
+    "git": {
+      "nvidia/nemotron-3-ultra-550b-a55b": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "error": 403
+      },
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "error": 403
+      },
+      "deepseek/deepseek-v4-flash": {
+        "error": 404
+      },
+      "nvidia/llama-4-maverick-17b-128e-instruct": {
+        "error": 404
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "error": 403
+      }
+    },
+    "testing": {
+      "nvidia/nemotron-3-ultra-550b-a55b": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "error": 403
+      },
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "error": 403
+      },
+      "deepseek/deepseek-v4-flash": {
+        "error": 404
+      },
+      "nvidia/llama-4-maverick-17b-128e-instruct": {
+        "error": 404
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "error": 403
+      }
+    },
+    "exploration": {
+      "nvidia/nemotron-3-ultra-550b-a55b": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "error": 403
+      },
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "error": 403
+      },
+      "deepseek/deepseek-v4-flash": {
+        "error": 404
+      },
+      "nvidia/llama-4-maverick-17b-128e-instruct": {
+        "error": 404
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "error": 403
+      }
+    },
+    "general": {
+      "nvidia/nemotron-3-ultra-550b-a55b": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-super-120b-a12b": {
+        "error": 403
+      },
+      "nvidia/llama-3.3-nemotron-super-49b-v1.5": {
+        "error": 403
+      },
+      "deepseek/deepseek-v4-flash": {
+        "error": 404
+      },
+      "nvidia/llama-4-maverick-17b-128e-instruct": {
+        "error": 404
+      },
+      "mistralai/mistral-small-4-119b-2603": {
+        "error": 403
+      },
+      "nvidia/nemotron-3-nano-30b-a3b": {
+        "error": 403
+      }
+    }
+  },
+  "recommendations": {
+    "orchestrator": {
+      "recommended_model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "scores": {
+        "nvidia/nemotron-3-ultra-550b-a55b": 0.0,
+        "nvidia/nemotron-3-super-120b-a12b": 0.0,
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.0,
+        "deepseek/deepseek-v4-flash": 0.0,
+        "nvidia/llama-4-maverick-17b-128e-instruct": 0.0,
+        "mistralai/mistral-small-4-119b-2603": 0.0,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.0
+      },
+      "primary_task": "orchestration"
+    },
+    "explore": {
+      "recommended_model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "scores": {
+        "nvidia/nemotron-3-ultra-550b-a55b": 0.0,
+        "nvidia/nemotron-3-super-120b-a12b": 0.0,
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.0,
+        "deepseek/deepseek-v4-flash": 0.0,
+        "nvidia/llama-4-maverick-17b-128e-instruct": 0.0,
+        "mistralai/mistral-small-4-119b-2603": 0.0,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.0
+      },
+      "primary_task": "exploration"
+    },
+    "general": {
+      "recommended_model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "scores": {
+        "nvidia/nemotron-3-ultra-550b-a55b": 0.0,
+        "nvidia/nemotron-3-super-120b-a12b": 0.0,
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.0,
+        "deepseek/deepseek-v4-flash": 0.0,
+        "nvidia/llama-4-maverick-17b-128e-instruct": 0.0,
+        "mistralai/mistral-small-4-119b-2603": 0.0,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.0
+      },
+      "primary_task": "general"
+    },
+    "lane-worker": {
+      "recommended_model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "scores": {
+        "nvidia/nemotron-3-ultra-550b-a55b": 0.0,
+        "nvidia/nemotron-3-super-120b-a12b": 0.0,
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.0,
+        "deepseek/deepseek-v4-flash": 0.0,
+        "nvidia/llama-4-maverick-17b-128e-instruct": 0.0,
+        "mistralai/mistral-small-4-119b-2603": 0.0,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.0
+      },
+      "primary_task": "code"
+    },
+    "git-worker": {
+      "recommended_model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "scores": {
+        "nvidia/nemotron-3-ultra-550b-a55b": 0.0,
+        "nvidia/nemotron-3-super-120b-a12b": 0.0,
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.0,
+        "deepseek/deepseek-v4-flash": 0.0,
+        "nvidia/llama-4-maverick-17b-128e-instruct": 0.0,
+        "mistralai/mistral-small-4-119b-2603": 0.0,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.0
+      },
+      "primary_task": "git"
+    },
+    "test-engineer": {
+      "recommended_model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "scores": {
+        "nvidia/nemotron-3-ultra-550b-a55b": 0.0,
+        "nvidia/nemotron-3-super-120b-a12b": 0.0,
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5": 0.0,
+        "deepseek/deepseek-v4-flash": 0.0,
+        "nvidia/llama-4-maverick-17b-128e-instruct": 0.0,
+        "mistralai/mistral-small-4-119b-2603": 0.0,
+        "nvidia/nemotron-3-nano-30b-a3b": 0.0
+      },
+      "primary_task": "testing"
+    }
+  }
+}

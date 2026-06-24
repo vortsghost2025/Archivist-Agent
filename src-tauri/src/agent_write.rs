@@ -639,7 +639,7 @@ mod tests {
             assert!(
                 e.detail
                     .as_ref()
-                    .map_or(false, |d| d.contains("[force=true]")),
+                    .is_some_and(|d| d.contains("[force=true]")),
                 "Detail should mention force=true"
             );
         });

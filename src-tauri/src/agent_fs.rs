@@ -858,12 +858,12 @@ mod tests {
         let all_lines: Vec<&str> = content.lines().collect();
 
         // Reading 5 lines from a 10-line file → truncated
-        let end_idx = std::cmp::min(0 + 5, all_lines.len());
+        let end_idx = std::cmp::min(5, all_lines.len());
         assert!(end_idx < all_lines.len()); // truncated = true
 
         // Reading all 10 lines → not truncated
-        let end_idx_full = std::cmp::min(0 + 10, all_lines.len());
-        assert!(!(end_idx_full < all_lines.len())); // truncated = false
+        let end_idx_full = std::cmp::min(10, all_lines.len());
+        assert!(end_idx_full >= all_lines.len()); // truncated = false
     }
 
     #[test]
