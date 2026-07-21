@@ -3,7 +3,7 @@
  * LOCAL LANE DISCOVERY UTILITY
  * ORIGIN: S:/Archivist-Agent/.global/lane-discovery.js
  * LOCALIZED: Archivist (2026-05-02)
- * UPDATED: 2026-05-06 — Platform-aware (Windows S:/ + Ubuntu)
+ * UPDATED: 2026-07-21 — Portable root derivation via __dirname
  * PURPOSE: Local implementation to avoid cross-boundary require() on .global/
  *
  * This is a sovereign copy that reads the lane registry directly
@@ -15,11 +15,41 @@ const path = require('path');
 const os = require('os');
 
 const isWin32 = process.platform === 'win32';
-const UBUNTU_ROOT = path.join(os.homedir(), 'agent', 'repos');
 
-const REGISTRY_PATH = isWin32
-  ? 'S:/Archivist-Agent/.global/lane-registry.json'
-  : path.join(UBUNTU_ROOT, 'Archivist-Agent', '.global', 'lane-registry.json');
+/**
+ * Derive the Archivist repository root from a directory path.
+ * This file lives at <repo>/scripts/util/lane-discovery.js.
+ * Going up two levels from __dirname yields <repo>.
+ * @param {string} baseDir - __dirname or equivalent
+ * @returns {string} Absolute path to the repository root
+ */
+function resolveRootFromDir(baseDir) {
+  return path.resolve(baseDir, '..', '..');
+}
+
+/**
+ * Derive the registry path from a base directory.
+ * @param {string} baseDir - __dirname or equivalent
+ * @returns {string} Absolute path to .global/lane-registry.json
+ */
+function resolveRegistryPath(baseDir) {
+  return path.join(resolveRootFromDir(baseDir), '.global', 'lane-registry.json');
+}
+
+const ARCHIVIST_ROOT = resolveRootFromDir(__dirname);
+const REGISTRY_PATH = resolveRegistryPath(__dirname);
+
+/**
+ * Determine the base path for resolving S:/ paths on non-Windows platforms.
+ * Precedence: LANE_ROOT_BASE env var, then os.homedir()/agent/repos.
+ * @returns {string}
+ */
+function _getUbuntuBase() {
+  if (process.env.LANE_ROOT_BASE) return process.env.LANE_ROOT_BASE;
+  return path.join(os.homedir(), 'agent', 'repos');
+}
+
+const UBUNTU_ROOT = _getUbuntuBase();
 
 function _resolvePath(winPath) {
   if (isWin32) return winPath;
@@ -49,18 +79,62 @@ function _translateRegistry(registry) {
   return registry;
 }
 
+/**
+ * Resolve a sibling lane's local_path.
+ * Precedence:
+ *   1. Explicit override from overrides[laneId]
+ *   2. LANE_ROOT_BASE environment variable (on non-Windows)
+ *   3. Existing canonical platform location — only if it exists on disk
+ *   4. Fail closed (throw)
+ * @param {string} winPath - The S:/ path from the registry
+ * @param {string} laneId - The lane identifier
+ * @param {Object} [overrides] - Optional map of laneId → path
+ * @returns {string} Resolved path
+ * @throws {Error} If the path cannot be resolved and does not exist
+ */
+function _resolveLaneRoot(winPath, laneId, overrides) {
+  // 1. Explicit override
+  if (overrides && overrides[laneId]) {
+    return overrides[laneId];
+  }
+  // 2 & 3. Platform resolution
+  const resolved = _resolvePath(winPath);
+  // Check if the resolved path exists on disk
+  if (fs.existsSync(resolved)) {
+    return resolved;
+  }
+  // On Windows, if S:/ path doesn't exist, check LANE_ROOT_BASE override
+  if (isWin32 && process.env.LANE_ROOT_BASE) {
+    const match = winPath.match(/^S:\/(.+)$/);
+    if (match) {
+      const altPath = path.join(process.env.LANE_ROOT_BASE, match[1]);
+      if (fs.existsSync(altPath)) return altPath;
+    }
+  }
+  // 4. Fail closed
+  throw new Error(`Lane '${laneId}' root '${winPath}' resolved to '${resolved}' which does not exist. Set LANE_ROOT_BASE or provide explicit override.`);
+}
+
 class LaneDiscovery {
-  constructor() {
+  constructor(options) {
+    this._overrides = (options && options.overrides) || {};
+    this._explicitRegistryPath = (options && options.registryPath) || null;
     this.registry = this.loadRegistry();
   }
 
   loadRegistry() {
+    const regPath = this._explicitRegistryPath || REGISTRY_PATH;
     try {
-      const data = fs.readFileSync(REGISTRY_PATH, 'utf8');
+      const data = fs.readFileSync(regPath, 'utf8');
       const raw = JSON.parse(data);
+      // On Windows, paths in registry are already S:/ so no translation needed.
+      // On Linux, translate S:/ paths to UBUNTU_ROOT paths.
       return isWin32 ? raw : _translateRegistry(raw);
     } catch (e) {
-      throw new Error(`Failed to load lane registry from ${REGISTRY_PATH}: ${e.message}. Cannot proceed without registry.`);
+      if (this._explicitRegistryPath) {
+        throw new Error(`Failed to load lane registry from ${regPath}: ${e.message}.`);
+      }
+      throw new Error(`Failed to load lane registry from ${regPath}: ${e.message}. Cannot proceed without registry.`);
     }
   }
 
@@ -195,6 +269,9 @@ if (require.main === module) {
   }
 }
 
+// Module-level singleton for backward compatibility with 16 existing importers.
+// This reads the real registry on import. Tests that need a temporary registry
+// should construct `new LaneDiscovery({ registryPath: tmpPath })` instead.
 const _discovery = new LaneDiscovery();
 
 function getRoots() {
@@ -208,7 +285,7 @@ function getRoots() {
 
 function sToLocal(winPath) {
   if (!isWin32 && winPath) {
-    return winPath.replace(/^S:/, '/home/we4free/agent/repos').replace(/\\/g, '/');
+    return winPath.replace(/^S:/, UBUNTU_ROOT).replace(/\\/g, '/');
   }
   return winPath;
 }
@@ -248,7 +325,9 @@ module.exports = {
   getLane,
   getLaneNames,
   LANES,
-  ROOTS
+  ROOTS,
+  resolveRootFromDir,
+  resolveRegistryPath
 };
 
 /**

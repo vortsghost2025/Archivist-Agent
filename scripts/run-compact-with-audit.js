@@ -21,8 +21,25 @@ const path = require('path');
 const fs = require('fs');
 const { execSync } = require('child_process');
 
-// Path to compact meta file (shared across runs)
-const META_PATH = path.join('S:/Archivist-Agent/.compact-audit', 'meta.json');
+/**
+ * Derive all compact-audit paths from a base directory.
+ * @param {string} baseDir - The scripts/ directory or any directory inside it.
+ * @returns {{repoRoot: string, metaPath: string, archiveScriptPath: string, archiveManifestPath: string}}
+ */
+function resolveCompactPaths(baseDir) {
+  // This file lives in <repo>/scripts/.  __dirname = <repo>/scripts.
+  // If baseDir is the scripts dir, repoRoot is one level up.
+  const repoRoot = path.resolve(baseDir, '..');
+  return {
+    repoRoot,
+    metaPath: path.join(repoRoot, '.compact-audit', 'meta.json'),
+    archiveScriptPath: path.join(repoRoot, 'scripts', 'compact-archive-extra.ps1'),
+    archiveManifestPath: path.join(repoRoot, '.compact-audit', 'extra-archive.json')
+  };
+}
+
+const _paths = resolveCompactPaths(__dirname);
+const META_PATH = _paths.metaPath;
 
 /** Load or create meta object */
 function loadMeta() {
@@ -64,8 +81,8 @@ function maybeRunExtraArchive() {
   const enabled = String(process.env.COMPACT_ARCHIVE || '').toLowerCase() === 'true';
   if (!enabled) return null;
 
-  const scriptPath = 'S:/Archivist-Agent/scripts/compact-archive-extra.ps1';
-  const manifestPath = 'S:/Archivist-Agent/.compact-audit/extra-archive.json';
+  const scriptPath = _paths.archiveScriptPath;
+  const manifestPath = _paths.archiveManifestPath;
   console.log('[compact] COMPACT_ARCHIVE=true -> running extra archive step...');
   execSync(`pwsh -NoProfile -ExecutionPolicy Bypass -File "${scriptPath}"`, { stdio: 'inherit' });
 
@@ -96,7 +113,8 @@ function runRecoveryTests(audit) {
   return result;
 }
 
-(async () => {
+if (require.main === module) {
+  (async () => {
   const meta = loadMeta();
   // Mark start of a new compact run
   meta.compact_status = 'running';
@@ -177,4 +195,7 @@ function runRecoveryTests(audit) {
     markIncomplete(meta, 'exception_during_compact', err);
     process.exit(2);
   }
-})();
+  })();
+}
+
+module.exports = { resolveCompactPaths };
