@@ -30,8 +30,8 @@
         "outbox": "S:/Archivist-Agent/lanes/authority/outbox",
         "processed": "S:/Archivist-Agent/lanes/authority/inbox/processed"
       },
-      "lane_state": "INTEGRATED",
-      "notes": "Authority is a governance role WITHIN Archivist, not a separate operational lane. Functions continue as archivist sub-role. Lane state changed from ARCHIVED to INTEGRATED to reflect current operational reality."
+      "lane_state": "ARCHIVED",
+            "notes": "Authority is a governance role WITHIN Archivist, not a separate operational lane. Archived as standalone lane 2026-05-20 per operator ratification. Authority functions continue as archivist sub-role."
     },
     "kernel": {
       "lane_id": "kernel",

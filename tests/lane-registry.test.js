@@ -93,18 +93,13 @@ function run() {
     `control_plane inbox must use hyphen path: ${cpInbox}`);
   console.log('  [PASS] control_plane path uses hyphen (control-plane)');
 
-  // 7. Authority lane_state must not be ARCHIVED (it's INTEGRATED)
-  assert.notStrictEqual(data.lanes.authority.lane_state, 'ARCHIVED',
-    'Authority lane_state should not be ARCHIVED — it is a governance sub-role within Archivist');
-  console.log('  [PASS] authority lane_state is not ARCHIVED');
-
-  // 8. All lanes must have lane_state
-  for (const [laneId, lane] of Object.entries(data.lanes)) {
-    assert.ok(lane.lane_state, `${laneId}: lane_state must be set`);
-      assert.ok(['ACTIVE', 'INTEGRATED', 'ARCHIVED', 'FROZEN', 'CONCEPTUAL'].includes(lane.lane_state),
-        `${laneId}: lane_state must be one of ACTIVE, INTEGRATED, ARCHIVED, FROZEN, CONCEPTUAL`);
-  }
-  console.log('  [PASS] All lanes have valid lane_state');
+  // 7. All lanes must have lane_state
+    for (const [laneId, lane] of Object.entries(data.lanes)) {
+      assert.ok(lane.lane_state, `${laneId}: lane_state must be set`);
+        assert.ok(['ACTIVE', 'INTEGRATED', 'ARCHIVED', 'FROZEN', 'CONCEPTUAL'].includes(lane.lane_state),
+          `${laneId}: lane_state must be one of ACTIVE, INTEGRATED, ARCHIVED, FROZEN, CONCEPTUAL`);
+    }
+    console.log('  [PASS] All lanes have valid lane_state');
 
     // 9. Kernel inbox path validation - kernel-lane is repo dir, kernel is lane identifier
     // Incorrect assertion would reject valid path: S:/kernel-lane/lanes/kernel/inbox
