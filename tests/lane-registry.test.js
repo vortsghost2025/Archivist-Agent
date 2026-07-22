@@ -101,18 +101,28 @@ function run() {
   // 8. All lanes must have lane_state
   for (const [laneId, lane] of Object.entries(data.lanes)) {
     assert.ok(lane.lane_state, `${laneId}: lane_state must be set`);
-    assert.ok(['ACTIVE', 'INTEGRATED', 'ARCHIVED', 'FROZEN'].includes(lane.lane_state),
-      `${laneId}: lane_state must be one of ACTIVE, INTEGRATED, ARCHIVED, FROZEN`);
+      assert.ok(['ACTIVE', 'INTEGRATED', 'ARCHIVED', 'FROZEN', 'CONCEPTUAL'].includes(lane.lane_state),
+        `${laneId}: lane_state must be one of ACTIVE, INTEGRATED, ARCHIVED, FROZEN, CONCEPTUAL`);
   }
   console.log('  [PASS] All lanes have valid lane_state');
 
-  // 9. Broadcast section validation
+    // 9. Kernel inbox path validation - kernel-lane is repo dir, kernel is lane identifier
+    // Incorrect assertion would reject valid path: S:/kernel-lane/lanes/kernel/inbox
+    // The repo is 'kernel-lane', lane identifier is 'kernel'
+    const kernelInbox = data.lanes.kernel.mailboxes.inbox;
+    assert.ok(!kernelInbox.includes('/lanes/kernel-lane/'),
+      `kernel inbox must NOT use 'lanes/kernel-lane/' as lane identifier: ${kernelInbox}`);
+    assert.ok(kernelInbox.includes('/kernel-lane/lanes/kernel/'),
+      `kernel inbox must use 'kernel-lane' repo and 'kernel' lane identifier: ${kernelInbox}`);
+    console.log('  [PASS] kernel inbox path correctly separates kernel-lane repo from kernel lane');
+
+    // 10. Broadcast section validation
   assert.ok(data.broadcast, 'broadcast section must be present');
   assert.ok(data.broadcast.path, 'broadcast.path must be present');
   assert.ok(data.cross_lane_protocol, 'cross_lane_protocol must be present');
   console.log('  [PASS] broadcast and cross_lane_protocol sections present');
 
-  // 10. agent_instructions validation
+    // 11. agent_instructions validation
   assert.ok(data.agent_instructions, 'agent_instructions must be present');
   assert.ok(Array.isArray(data.agent_instructions.before_creating_any_path),
     'before_creating_any_path must be an array');

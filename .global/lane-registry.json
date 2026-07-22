@@ -44,7 +44,8 @@
         "inbox": "S:/kernel-lane/lanes/kernel/inbox",
         "outbox": "S:/kernel-lane/lanes/kernel/outbox",
         "processed": "S:/kernel-lane/lanes/kernel/inbox/processed"
-      }
+      },
+      "notes": "Kernel lane inbox uses 'kernel/' subdirectory within kernel-lane repo. The sibling 'kernel-lane/' subdirectory is a relay endpoint used by relay-daemon@kernel.service, NOT a separate lane. Registry correctly uses 'kernel/' for canonical lane mailbox."
     },
     "swarmmind": {
       "lane_id": "swarmmind",
@@ -90,7 +91,7 @@
         "outbox": "S:/WE4FREE-Control-Plane/lanes/control-plane/outbox",
         "processed": "S:/WE4FREE-Control-Plane/lanes/control-plane/inbox/processed"
       },
-      "notes": "Control Plane supervisor lane. Manages runtime isolation, launcher, and cross-lane orchestration. Identity established 2026-05-18 per P10 governance decision."
+      "notes": "Control Plane runs from SMB share /home/we4free/smbshare/control-plane. Uses cp-control-plane.service (Type=oneshot, triggered by cp-control-plane.timer every 30 min) with WorkingDirectory=/opt/we4free/control-plane/tools. Different naming from we4free-autonomous-executor@{lane}.service template used by other lanes. Registry correctly uses hyphenated 'control-plane' mailbox paths."
     },
     "kucoin": {
       "lane_id": "kucoin",
@@ -104,7 +105,7 @@
         "outbox": "S:/Archivist-Agent/lanes/kucoin/outbox",
         "processed": "S:/Archivist-Agent/lanes/kucoin/inbox/processed"
       },
-      "notes": "KuCoin margin trading bot. Extracted from Deliberate-AI-Ensemble. Fail-safe=FLAT. Lane number governed by Control Plane registry."
+      "notes": "KuCoin margin trading bot. Mounted at /home/we4free/agent/repos/kucoin-lane/ but has NO systemd units. Active conceptual lane without autonomous executor. Fail-safe=FLAT."
     },
     "solana-launch": {
       "lane_id": "solana-launch",

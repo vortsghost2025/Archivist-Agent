@@ -26,8 +26,8 @@ function resolveRegistryPath() {
     return candidate;
   }
 
-  // Fallback: legacy Kilo path (absolute S: path)
-  return 'S:\\Archivist-Agent\\.global\\lane-registry.json';
+  // No fallback - fail fast if registry not found
+  throw new Error('Lane registry not found at ' + candidate + '. Ensure registry exists at worktree-root/.global/lane-registry.json. Do not use hardcoded S:\\ paths - they are Windows-specific and unreliable.');
 }
 
 const REGISTRY_PATH = resolveRegistryPath();
