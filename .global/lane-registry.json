@@ -105,7 +105,7 @@
         "outbox": "S:/Archivist-Agent/lanes/kucoin/outbox",
         "processed": "S:/Archivist-Agent/lanes/kucoin/inbox/processed"
       },
-      "notes": "KuCoin margin trading bot. Mounted at /home/we4free/agent/repos/kucoin-lane/ but has NO systemd units. Active conceptual lane without autonomous executor. Fail-safe=FLAT."
+      "notes": "KuCoin margin trading bot. Extracted from Deliberate-AI-Ensemble. Fail-safe=FLAT. Lane number governed by Control Plane registry."
     },
     "solana-launch": {
       "lane_id": "solana-launch",
