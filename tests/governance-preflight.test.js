@@ -59,6 +59,33 @@ const registryWithErrors = {
 // Malformed JSON
 const malformedJson = '{ invalid json';
 
+// Fixed timestamp for deterministic fixtures
+const FIXED_TIMESTAMP = '2025-01-15T10:30:00.000Z';
+
+// Create a valid registry with fixed timestamp
+function makeValidRegistry() {
+  return {
+    ...validRegistry,
+    timestamp: FIXED_TIMESTAMP
+  };
+}
+
+// Create registry with warnings and fixed timestamp
+function makeRegistryWithWarnings() {
+  return {
+    ...registryWithWarnings,
+    timestamp: FIXED_TIMESTAMP
+  };
+}
+
+// Create registry with errors and fixed timestamp
+function makeRegistryWithErrors() {
+  return {
+    ...registryWithErrors,
+    timestamp: FIXED_TIMESTAMP
+  };
+}
+
 function runPreflight(args) {
   const scriptPath = path.join(__dirname, '..', 'scripts', 'governance-preflight.js');
   const argArray = Array.isArray(args) ? args : args.split(' ');
@@ -191,12 +218,65 @@ const tests = [
 ];
 
 let passed = 0;
-const total = tests.length;
 
+// Test: Health check mode
+function testHealthCheckReturnsExitCode0() {
+  const { exitCode, output } = runPreflight(['--health']);
+  
+  if (exitCode !== 0) throw new Error(`Expected exit code 0, got ${exitCode}`);
+  if (!output.includes('HEALTH CHECK')) throw new Error('Expected health check header not found');
+}
+
+function testHealthCheckJsonReturnsStructuredOutput() {
+  const { exitCode, output } = runPreflightJson(['--health', '--json']);
+  
+  if (exitCode !== 0) throw new Error(`Expected exit code 0, got ${exitCode}`);
+  if (!output.timestamp) throw new Error('Expected timestamp in output');
+  if (typeof output.local !== 'object') throw new Error('Expected local object in output');
+  if (typeof output.local.registryValid !== 'boolean') throw new Error('Expected local.registryValid boolean');
+  if (!Array.isArray(output.local.missingMailboxes)) throw new Error('Expected local.missingMailboxes array');
+  if (!Array.isArray(output.local.staleLanes)) throw new Error('Expected local.staleLanes array');
+  if (typeof output.local.activeBlocker === 'undefined') throw new Error('Expected local.activeBlocker');
+  if (!output.observations || !Array.isArray(output.observations)) throw new Error('Expected observations array');
+}
+
+function testHealthCheckWithExplicitRegistry() {
+  const fixturePath = writeFixture('health-registry.json', makeValidRegistry());
+  const { exitCode, output } = runPreflight(['--health', '--registry', fixturePath]);
+  
+  if (exitCode !== 0) throw new Error(`Expected exit code 0, got ${exitCode}`);
+  if (!output.includes('HEALTH CHECK')) throw new Error('Expected health check header');
+}
+
+function testHealthCheckWithJsonAndExplicitRegistry() {
+  const fixturePath = writeFixture('health-registry.json', makeValidRegistry());
+  const { exitCode, output } = runPreflightJson(['--health', '--json', '--registry', fixturePath]);
+  
+  if (exitCode !== 0) throw new Error(`Expected exit code 0, got ${exitCode}`);
+  if (typeof output.local.registryValid !== 'boolean') throw new Error('Expected local.registryValid boolean');
+  if (typeof output.headless !== 'object') throw new Error('Expected headless object');
+}
+
+// Run tests
+console.log('Running governance preflight tests...\n');
+
+let total = 0;
 for (const test of tests) {
-  if (runTest(test.name, test.fn)) {
-    passed++;
-  }
+  total++;
+  if (runTest(test.name, test.fn)) passed++;
+}
+
+// Health check tests
+const healthTests = [
+  { name: 'Health check mode returns exit code 0', fn: testHealthCheckReturnsExitCode0 },
+  { name: 'Health check JSON returns structured output', fn: testHealthCheckJsonReturnsStructuredOutput },
+  { name: 'Health check with explicit registry', fn: testHealthCheckWithExplicitRegistry },
+  { name: 'Health check JSON with explicit registry', fn: testHealthCheckWithJsonAndExplicitRegistry }
+];
+
+for (const test of healthTests) {
+  total++;
+  if (runTest(test.name, test.fn)) passed++;
 }
 
 console.log(`\n${passed}/${total} tests passed`);
