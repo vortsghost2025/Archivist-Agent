@@ -346,8 +346,8 @@ if (typeof module !== 'undefined' && module.exports) {
         errors: [...results.errors],
         warnings: [...results.warnings],
         observations: [...results.observations],
-        routing_allowed,
-        blocking_reasons
+              routing_allowed: routingAllowed,
+              blocking_reasons: blockingReasons
       };
     }
   };
