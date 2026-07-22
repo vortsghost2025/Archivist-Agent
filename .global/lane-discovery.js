@@ -7,7 +7,30 @@
 const fs = require('fs');
 const path = require('path');
 
-const REGISTRY_PATH = 'S:/Archivist-Agent/.global/lane-registry.json';
+/**
+ * Worktree-aware registry resolution
+ * Handles paths in: Copilot worktrees, Kilo worktrees, raw checkout, CI/CD
+ *
+ * The registry lives at: worktree-root/.global/lane-registry.json
+ * This script lives at: worktree-root/.global/lane-discovery.js
+ * So we resolve by: dirname(dirname(module.filename)) + /.global/lane-registry.json
+ */
+function resolveRegistryPath() {
+  // module.filename for this module is: ...worktree/.global/lane-discovery.js
+  // dirname of that is: ...worktree/.global
+  // dirname of THAT is: ...worktree (the worktree root)
+  const worktreeRoot = path.dirname(path.dirname(module.filename));
+  const candidate = path.join(worktreeRoot, '.global', 'lane-registry.json');
+
+  if (fs.existsSync(candidate)) {
+    return candidate;
+  }
+
+  // Fallback: legacy Kilo path (absolute S: path)
+  return 'S:\\Archivist-Agent\\.global\\lane-registry.json';
+}
+
+const REGISTRY_PATH = resolveRegistryPath();
 
 class LaneDiscovery {
   constructor() {

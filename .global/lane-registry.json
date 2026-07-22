@@ -1,15 +1,16 @@
 {
   "schema_version": "1.0",
   "registry_id": "lane-registry-001",
-  "timestamp": "2026-04-23T09:00:00Z",
+  "timestamp": "2026-07-21T23:54:36.468Z",
   "description": "Centralized lane discovery registry - All agents MUST reference this file",
   "lanes": {
     "archivist": {
       "lane_id": "archivist",
       "role": "coordinator",
+      "lane_state": "ACTIVE",
       "local_path": "S:/Archivist-Agent",
       "repo": "https://github.com/vortsghost2025/Archivist-Agent",
-      "branch": "multi-agent-coordination-gap",
+      "branch": "master",
       "mailboxes": {
         "inbox": "S:/Archivist-Agent/lanes/archivist/inbox",
         "outbox": "S:/Archivist-Agent/lanes/archivist/outbox",
@@ -23,21 +24,22 @@
       "role": "governance",
       "local_path": "S:/Archivist-Agent",
       "repo": "https://github.com/vortsghost2025/Archivist-Agent",
-      "branch": "multi-agent-coordination-gap",
+      "branch": "master",
       "mailboxes": {
         "inbox": "S:/Archivist-Agent/lanes/authority/inbox",
         "outbox": "S:/Archivist-Agent/lanes/authority/outbox",
         "processed": "S:/Archivist-Agent/lanes/authority/inbox/processed"
       },
-      "lane_state": "ARCHIVED",
-      "notes": "Authority is a governance role WITHIN Archivist, not a separate operational lane. Archived as standalone lane 2026-05-20 per operator ratification. Authority functions continue as archivist sub-role."
+      "lane_state": "INTEGRATED",
+      "notes": "Authority is a governance role WITHIN Archivist, not a separate operational lane. Functions continue as archivist sub-role. Lane state changed from ARCHIVED to INTEGRATED to reflect current operational reality."
     },
     "kernel": {
       "lane_id": "kernel",
       "role": "execution",
+      "lane_state": "ACTIVE",
       "local_path": "S:/kernel-lane",
       "repo": "https://github.com/vortsghost2025/kernel-lane.git",
-      "branch": "multi-agent-coordination-gap",
+      "branch": "main",
       "mailboxes": {
         "inbox": "S:/kernel-lane/lanes/kernel/inbox",
         "outbox": "S:/kernel-lane/lanes/kernel/outbox",
@@ -47,6 +49,7 @@
     "swarmmind": {
       "lane_id": "swarmmind",
       "role": "optimization",
+      "lane_state": "ACTIVE",
       "local_path": "S:/SwarmMind",
       "canonical_name": "SwarmMind",
       "forbidden_variants": [
@@ -54,7 +57,7 @@
         "S:/SwarmMind-Self-Optimizing-Multi-Agent-AI-System"
       ],
       "repo": "https://github.com/vortsghost2025/SwarmMind",
-      "branch": "master",
+      "branch": "main",
       "mailboxes": {
         "inbox": "S:/SwarmMind/lanes/swarmmind/inbox",
         "outbox": "S:/SwarmMind/lanes/swarmmind/outbox",
@@ -65,6 +68,7 @@
     "library": {
       "lane_id": "library",
       "role": "knowledge",
+      "lane_state": "ACTIVE",
       "local_path": "S:/self-organizing-library",
       "repo": "https://github.com/vortsghost2025/self-organizing-library",
       "branch": "main",
@@ -77,20 +81,21 @@
     "control_plane": {
       "lane_id": "control_plane",
       "role": "supervisor",
+      "lane_state": "ACTIVE",
       "local_path": "S:/WE4FREE-Control-Plane",
       "repo": "https://github.com/vortsghost2025/WE4FREE-Control-Plane",
       "branch": "main",
       "mailboxes": {
-        "inbox": "S:/WE4FREE-Control-Plane/lanes/control_plane/inbox",
-        "outbox": "S:/WE4FREE-Control-Plane/lanes/control_plane/outbox",
-        "processed": "S:/WE4FREE-Control-Plane/lanes/control_plane/inbox/processed"
+        "inbox": "S:/WE4FREE-Control-Plane/lanes/control-plane/inbox",
+        "outbox": "S:/WE4FREE-Control-Plane/lanes/control-plane/outbox",
+        "processed": "S:/WE4FREE-Control-Plane/lanes/control-plane/inbox/processed"
       },
       "notes": "Control Plane supervisor lane. Manages runtime isolation, launcher, and cross-lane orchestration. Identity established 2026-05-18 per P10 governance decision."
     },
     "kucoin": {
       "lane_id": "kucoin",
-"lane_state": "ACTIVE",
-  "role": "trading",
+      "lane_state": "ACTIVE",
+      "role": "trading",
       "local_path": "S:/kucoin-lane",
       "repo": "https://github.com/vortsghost2025/kucoin-lane",
       "branch": "main",
