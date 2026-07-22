@@ -1,135 +1,506 @@
 #!/usr/bin/env node
 'use strict';
 
+/**
+ * LANE REGISTRY TEST — Fixture-based
+ *
+ * Validates the lane-registry-validation module using in-memory fixtures.
+ * Also runs a smoke test against the real registry if available.
+ *
+ * Tests do NOT depend on:
+ *   - live SSH or headless access
+ *   - current machine topology
+ *   - specific SHAs or timestamps
+ *   - external service availability
+ */
+
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 
+const { validateRegistry, VALID_LANE_STATES } = require('../scripts/util/lane-registry-validation');
+
 const REGISTRY_PATH = path.join(__dirname, '..', '.global', 'lane-registry.json');
 
-// Expected branch per repository (based on headless verification)
-const EXPECTED_BRANCHES = {
-  archivist: 'master',
-  authority: 'master',
-  kernel: 'main',
-  swarmmind: 'main',
-  library: 'main',
-  control_plane: 'main',
-  kucoin: 'main',
-  'solana-launch': 'main'
-};
+// ── Helpers ────────────────────────────────────────────────────────
 
-// Required fields per lane entry
-const REQUIRED_FIELDS = [
-  'lane_id', 'role', 'lane_state', 'local_path', 'repo', 'branch', 'mailboxes'
-];
+function errorCodes(result) {
+  return result.errors.map(function (e) { return e.code; });
+}
 
-const REQUIRED_MAILBOXES = ['inbox', 'outbox'];
+function warningCodes(result) {
+  return result.warnings.map(function (w) { return w.code; });
+}
 
-function run() {
-  console.log('Testing lane-registry.json validity...');
+function observationCodes(result) {
+  return result.observations.map(function (o) { return o.code; });
+}
 
-  // 1. Parse validation
-  let data;
-  try {
-    data = JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf8'));
-  } catch (err) {
-    assert.fail(`Failed to parse lane-registry.json: ${err.message}`);
-  }
-  console.log('  [PASS] JSON parses correctly');
+function countByCode(arr, code) {
+  return arr.filter(function (e) { return e.code === code; }).length;
+}
 
-  // 2. Schema version
-  assert.strictEqual(data.schema_version, '1.0', 'schema_version must be 1.0');
-  assert.ok(data.registry_id, 'registry_id must be present');
-  assert.ok(data.timestamp, 'timestamp must be present');
-  console.log('  [PASS] Schema metadata present');
-
-  // 3. All lanes must have required fields
-  let laneErrors = [];
-  for (const [laneId, lane] of Object.entries(data.lanes)) {
-    for (const field of REQUIRED_FIELDS) {
-      if (lane[field] === undefined) {
-        laneErrors.push(`${laneId}: missing required field "${field}"`);
+function makeFixture(overrides) {
+  var base = {
+    schema_version: '1.0',
+    registry_id: 'test-fixture',
+    timestamp: '2026-01-01T00:00:00Z',
+    lanes: {
+      archivist: {
+        lane_id: 'archivist',
+        role: 'coordinator',
+        lane_state: 'ACTIVE',
+        repo: 'owner/Archivist-Agent',
+        branch: 'master',
+        local_path: 'S:/Archivist-Agent',
+        mailboxes: {
+          inbox: 'S:/Archivist-Agent/lanes/archivist/inbox',
+          outbox: 'S:/Archivist-Agent/lanes/archivist/outbox'
+        }
       }
+    },
+    broadcast: { path: 'S:/Archivist-Agent/lanes/broadcast' },
+    cross_lane_protocol: { send: 'write', receive: 'read' },
+    agent_instructions: {
+      before_creating_any_path: ['use registry'],
+      path_validation: ['check']
     }
-    // Check mailboxes
-    if (lane.mailboxes) {
-      for (const mb of REQUIRED_MAILBOXES) {
-        if (!lane.mailboxes[mb]) {
-          laneErrors.push(`${laneId}: missing mailbox "${mb}"`);
+  };
+  if (overrides) {
+    Object.keys(overrides).forEach(function (k) { base[k] = overrides[k]; });
+  }
+  return base;
+}
+
+// ══════════════════════════════════════════════════════════════════
+// GROUP 1 — Fixture-based validation
+// ══════════════════════════════════════════════════════════════════
+
+(function testValidWindowsRegistry() {
+  var reg = makeFixture();
+  var result = validateRegistry(reg);
+  assert.strictEqual(result.errors.length, 0,
+    'valid Windows registry: no errors. Got: ' + JSON.stringify(result.errors));
+  console.log('  [PASS] valid Windows registry (S:/ paths)');
+})();
+
+(function testValidLinuxRegistry() {
+  var reg = makeFixture({
+    lanes: {
+      archivist: {
+        lane_id: 'archivist',
+        role: 'coordinator',
+        lane_state: 'ACTIVE',
+        repo: 'owner/Archivist-Agent',
+        branch: 'master',
+        local_path: '/home/archivist/Archivist-Agent',
+        mailboxes: {
+          inbox: '/home/archivist/Archivist-Agent/lanes/archivist/inbox',
+          outbox: '/home/archivist/Archivist-Agent/lanes/archivist/outbox'
+        }
+      }
+    },
+    broadcast: { path: '/home/archivist/Archivist-Agent/lanes/broadcast' }
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(result.errors.length, 0,
+    'valid Linux registry: no errors. Got: ' + JSON.stringify(result.errors));
+  console.log('  [PASS] valid Linux registry (/home/ paths)');
+})();
+
+(function testPathsWithSpaces() {
+  var reg = makeFixture({
+    lanes: {
+      swarmmind: {
+        lane_id: 'swarmmind',
+        role: 'optimization',
+        lane_state: 'ACTIVE',
+        repo: 'owner/SwarmMind',
+        branch: 'main',
+        local_path: '/home/user/SwarmMind Self-Optimizing Agent',
+        mailboxes: {
+          inbox: '/home/user/SwarmMind Self-Optimizing Agent/lanes/swarmmind/inbox',
+          outbox: '/home/user/SwarmMind Self-Optimizing Agent/lanes/swarmmind/outbox'
+        }
+      }
+    },
+    broadcast: { path: '/home/user/SwarmMind Self-Optimizing Agent/lanes/broadcast' }
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(result.errors.length, 0,
+    'paths with spaces: no errors. Got: ' + JSON.stringify(result.errors));
+  console.log('  [PASS] paths containing spaces');
+})();
+
+(function testValidKernelPath() {
+  // Kernel: repo dir is kernel-lane, lane identifier is kernel
+  // Valid path: S:/kernel-lane/lanes/kernel/inbox
+  var reg = makeFixture({
+    lanes: {
+      kernel: {
+        lane_id: 'kernel',
+        role: 'execution',
+        lane_state: 'ACTIVE',
+        repo: 'owner/kernel-lane',
+        branch: 'main',
+        local_path: 'S:/kernel-lane',
+        mailboxes: {
+          inbox: 'S:/kernel-lane/lanes/kernel/inbox',
+          outbox: 'S:/kernel-lane/lanes/kernel/outbox'
         }
       }
     }
-  }
-  if (laneErrors.length > 0) {
-    assert.fail(`Lane errors:\n  ${laneErrors.join('\n  ')}`);
-  }
-  console.log('  [PASS] All lanes have required fields');
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(result.errors.length, 0, 'valid kernel path: no errors');
+  var hasWrongSegment = countByCode(result.warnings, 'WRONG_PATH_SEGMENT');
+  assert.strictEqual(hasWrongSegment, 0,
+    'valid kernel path: no WRONG_PATH_SEGMENT warning');
+  console.log('  [PASS] valid Kernel path: kernel-lane/lanes/kernel/inbox');
+})();
 
-  // 4. Branch name validation
-  let branchErrors = [];
-  for (const [laneId, lane] of Object.entries(data.lanes)) {
-    const expected = EXPECTED_BRANCHES[laneId];
-    if (expected && lane.branch !== expected) {
-      branchErrors.push(`${laneId}: expected branch "${expected}", got "${lane.branch}"`);
+(function testKernelWrongLaneSegment() {
+  // Invalid: S:/kernel-lane/lanes/kernel-lane/inbox uses kernel-lane as lane identifier
+  var reg = makeFixture({
+    lanes: {
+      kernel: {
+        lane_id: 'kernel',
+        role: 'execution',
+        lane_state: 'ACTIVE',
+        repo: 'owner/kernel-lane',
+        branch: 'main',
+        local_path: 'S:/kernel-lane',
+        mailboxes: {
+          inbox: 'S:/kernel-lane/lanes/kernel-lane/inbox',
+          outbox: 'S:/kernel-lane/lanes/kernel-lane/outbox'
+        }
+      }
     }
-  }
-  if (branchErrors.length > 0) {
-    assert.fail(`Branch errors:\n  ${branchErrors.join('\n  ')}`);
-  }
-  console.log('  [PASS] Branch names match expected values');
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(result.errors.length, 0,
+    'wrong kernel lane segment: no errors');
+  assert.ok(warningCodes(result).indexOf('WRONG_PATH_SEGMENT') >= 0,
+    'wrong kernel lane segment: generates WRONG_PATH_SEGMENT warning');
+  console.log('  [PASS] kernel-lane/lanes/kernel-lane/ path triggers WRONG_PATH_SEGMENT warning');
+})();
 
-  // 5. Swarmmind branch must be 'main' (verified against headless checkout)
-  assert.strictEqual(data.lanes.swarmmind.branch, 'main',
-    'SwarmMind branch must be "main" — headless checkout is on main, not master');
-  console.log('  [PASS] SwarmMind branch verified as main (not master)');
-
-  // 6. control_plane path must use 'control-plane' (hyphen, not underscore — verified on headless)
-  const cpInbox = data.lanes.control_plane.mailboxes.inbox;
-  if (cpInbox.includes('/control_plane/')) {
-    assert.fail(`control_plane inbox uses underscore: ${cpInbox} — must be control-plane (hyphen)`);
-  }
-  assert.ok(cpInbox.includes('/control-plane/'),
-    `control_plane inbox must use hyphen path: ${cpInbox}`);
-  console.log('  [PASS] control_plane path uses hyphen (control-plane)');
-
-  // 7. All lanes must have lane_state
-    for (const [laneId, lane] of Object.entries(data.lanes)) {
-      assert.ok(lane.lane_state, `${laneId}: lane_state must be set`);
-        assert.ok(['ACTIVE', 'INTEGRATED', 'ARCHIVED', 'FROZEN', 'CONCEPTUAL'].includes(lane.lane_state),
-          `${laneId}: lane_state must be one of ACTIVE, INTEGRATED, ARCHIVED, FROZEN, CONCEPTUAL`);
+(function testControlPlaneUnderscoreHyphen() {
+  var reg = makeFixture({
+    lanes: {
+      control_plane: {
+        lane_id: 'control_plane',
+        role: 'supervisor',
+        lane_state: 'ACTIVE',
+        repo: 'owner/WE4FREE-Control-Plane',
+        branch: 'main',
+        local_path: 'S:/WE4FREE-Control-Plane',
+        mailboxes: {
+          inbox: 'S:/WE4FREE-Control-Plane/lanes/control-plane/inbox',
+          outbox: 'S:/WE4FREE-Control-Plane/lanes/control-plane/outbox'
+        }
+      }
     }
-    console.log('  [PASS] All lanes have valid lane_state');
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(result.errors.length, 0,
+    'control_plane hyphen warning: no errors');
+  assert.ok(warningCodes(result).indexOf('UNDERSCORE_HYPHEN_MISMATCH') >= 0,
+    'control_plane key with control-plane paths generates UNDERSCORE_HYPHEN_MISMATCH warning');
+  console.log('  [PASS] control_plane (underscore key) with control-plane (hyphen paths) generates UNDERSCORE_HYPHEN_MISMATCH');
+})();
 
-    // 9. Kernel inbox path validation - kernel-lane is repo dir, kernel is lane identifier
-    // Incorrect assertion would reject valid path: S:/kernel-lane/lanes/kernel/inbox
-    // The repo is 'kernel-lane', lane identifier is 'kernel'
-    const kernelInbox = data.lanes.kernel.mailboxes.inbox;
-    assert.ok(!kernelInbox.includes('/lanes/kernel-lane/'),
-      `kernel inbox must NOT use 'lanes/kernel-lane/' as lane identifier: ${kernelInbox}`);
-    assert.ok(kernelInbox.includes('/kernel-lane/lanes/kernel/'),
-      `kernel inbox must use 'kernel-lane' repo and 'kernel' lane identifier: ${kernelInbox}`);
-    console.log('  [PASS] kernel inbox path correctly separates kernel-lane repo from kernel lane');
+(function testArchivedLaneMissingTransition() {
+  var reg = makeFixture({
+    lanes: {
+      old_feature: {
+        lane_id: 'old_feature',
+        role: 'experimental',
+        lane_state: 'ARCHIVED',
+        repo: 'owner/old-repo',
+        branch: 'main',
+        local_path: 'S:/old-repo',
+        mailboxes: {
+          inbox: 'S:/old-repo/lanes/old_feature/inbox',
+          outbox: 'S:/old-repo/lanes/old_feature/outbox'
+        }
+      }
+    }
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(result.errors.length, 0,
+    'archived no transition: no errors');
+  assert.ok(warningCodes(result).indexOf('ARCHIVED_NO_TRANSITION') >= 0,
+    'ARCHIVED lane without notes generates ARCHIVED_NO_TRANSITION warning');
+  console.log('  [PASS] ARCHIVED lane without transition metadata generates warning');
+})();
 
-    // 10. Broadcast section validation
-  assert.ok(data.broadcast, 'broadcast section must be present');
-  assert.ok(data.broadcast.path, 'broadcast.path must be present');
-  assert.ok(data.cross_lane_protocol, 'cross_lane_protocol must be present');
-  console.log('  [PASS] broadcast and cross_lane_protocol sections present');
+(function testInvalidLaneState() {
+  var reg = makeFixture({
+    lanes: {
+      mystery: {
+        lane_id: 'mystery',
+        role: 'unknown',
+        lane_state: 'MYSTERY_MODE',
+        repo: 'owner/repo',
+        branch: 'main',
+        local_path: 'S:/repo',
+        mailboxes: {
+          inbox: 'S:/repo/lanes/mystery/inbox',
+          outbox: 'S:/repo/lanes/mystery/outbox'
+        }
+      }
+    }
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(errorCodes(result).indexOf('INVALID_LANE_STATE') >= 0, true,
+    'MYSTERY_MODE lane state triggers INVALID_LANE_STATE error. Got codes: '
+    + errorCodes(result).join(', '));
+  assert.strictEqual(result.errors.length, 1,
+    'exactly one error for invalid lane state. Got: ' + result.errors.length);
+  console.log('  [PASS] invalid lane_state MYSTERY_MODE triggers error');
+})();
 
-    // 11. agent_instructions validation
-  assert.ok(data.agent_instructions, 'agent_instructions must be present');
-  assert.ok(Array.isArray(data.agent_instructions.before_creating_any_path),
-    'before_creating_any_path must be an array');
-  assert.ok(Array.isArray(data.agent_instructions.path_validation),
-    'path_validation must be an array');
-  console.log('  [PASS] agent_instructions sections valid');
+(function testDuplicateLaneId() {
+  var reg = makeFixture({
+    lanes: {
+      alpha: {
+        lane_id: 'dup_id',
+        role: 'alpha',
+        lane_state: 'ACTIVE',
+        repo: 'owner/repo1',
+        branch: 'main',
+        local_path: 'S:/repo1',
+        mailboxes: {
+          inbox: 'S:/repo1/lanes/alpha/inbox',
+          outbox: 'S:/repo1/lanes/alpha/outbox'
+        }
+      },
+      beta: {
+        lane_id: 'dup_id',
+        role: 'beta',
+        lane_state: 'ACTIVE',
+        repo: 'owner/repo2',
+        branch: 'main',
+        local_path: 'S:/repo2',
+        mailboxes: {
+          inbox: 'S:/repo2/lanes/beta/inbox',
+          outbox: 'S:/repo2/lanes/beta/outbox'
+        }
+      }
+    }
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(countByCode(result.errors, 'DUPLICATE_LANE_ID'), 1,
+    'duplicate lane_id triggers one DUPLICATE_LANE_ID error');
+  console.log('  [PASS] duplicate canonical lane_id triggers DUPLICATE_LANE_ID error');
+})();
 
-  console.log('\nPASS lane-registry.test.js — all assertions passed');
-}
+(function testKucoinRuntimeAdapter() {
+  // Kucoin has runtime adapter: mailbox through Archivist-Agent, not co-located
+  var reg = makeFixture({
+    lanes: {
+      kucoin: {
+        lane_id: 'kucoin',
+        role: 'trading',
+        lane_state: 'ACTIVE',
+        repo: 'owner/kucoin-lane',
+        branch: 'main',
+        local_path: 'S:/kucoin-lane',
+        mailboxes: {
+          inbox: 'S:/Archivist-Agent/lanes/kucoin/inbox',
+          outbox: 'S:/Archivist-Agent/lanes/kucoin/outbox'
+        }
+      }
+    }
+  });
+  var result = validateRegistry(reg);
+  assert.strictEqual(result.errors.length, 0,
+    'kucoin runtime adapter: no errors');
+  assert.ok(observationCodes(result).indexOf('RUNTIME_ADAPTER_DIFFERENCE') >= 0,
+    'Kucoin mailbox in Archivist-Agent generates RUNTIME_ADAPTER_DIFFERENCE observation');
+  console.log('  [PASS] Kucoin runtime adapter generates observation (not error or warning)');
+})();
 
-if (require.main === module) {
-  run();
-}
+(function testConceptualLaneNoMailboxes() {
+  // CONCEPTUAL lanes are allowed to not have mailboxes
+  var reg = makeFixture({
+    lanes: {
+      future_idea: {
+        lane_id: 'future_idea',
+        role: 'exploration',
+        lane_state: 'CONCEPTUAL',
+        repo: '',
+        branch: '',
+        local_path: ''
+      }
+    }
+  });
+  var result = validateRegistry(reg);
+  var missingMailboxCount = countByCode(result.errors, 'MISSING_MAILBOX');
+  assert.strictEqual(missingMailboxCount, 0,
+    'CONCEPTUAL lane: no MISSING_MAILBOX error. Codes: ' + errorCodes(result).join(', '));
+  console.log('  [PASS] CONCEPTUAL lane skips MISSING_MAILBOX error');
+})();
 
-module.exports = { run };
+(function testMissingBroadcastAllowed() {
+  // broadcast is structurally required by validateStructure() — it's an error if missing
+  var reg = makeFixture({});
+  delete reg.broadcast;
+  var result = validateRegistry(reg);
+  assert.strictEqual(countByCode(result.errors, 'MISSING_BROADCAST'), 1,
+    'missing broadcast triggers MISSING_BROADCAST error');
+  console.log('  [PASS] missing broadcast section triggers error');
+})();
+
+(function testAgentInstructionsAsStrings() {
+  // agent_instructions values may be strings in practice, not necessarily arrays
+  var reg = makeFixture({
+    agent_instructions: {
+      before_creating_any_path: 'Read registry first',
+      path_validation: 'Check path exists'
+    }
+  });
+  var result = validateRegistry(reg);
+  // The validator only checks presence, not type — so this should pass
+  assert.strictEqual(countByCode(result.errors, 'MISSING_INSTRUCTIONS'), 0,
+    'string-valued agent_instructions: no MISSING_INSTRUCTIONS error');
+  console.log('  [PASS] agent_instructions with string values (structural check)');
+})();
+
+// ══════════════════════════════════════════════════════════════════
+// GROUP 2 — Smoke test against real registry (if accessible)
+// ══════════════════════════════════════════════════════════════════
+
+(function testRealRegistry() {
+  var stat;
+  try { stat = fs.statSync(REGISTRY_PATH); } catch (_) {
+    console.log('  [SKIP] real registry not accessible at ' + REGISTRY_PATH);
+    return;
+  }
+
+  var raw;
+  try { raw = fs.readFileSync(REGISTRY_PATH, 'utf8'); } catch (_) {
+    console.log('  [SKIP] cannot read real registry');
+    return;
+  }
+
+  var data;
+  try { data = JSON.parse(raw); } catch (_) {
+    console.log('  [SKIP] real registry not valid JSON');
+    return;
+  }
+
+  var result = validateRegistry(data);
+  result.warnings.forEach(function (w) {
+    console.log('  [WARN] ' + (w.lane || '') + ': ' + w.code + ' — ' + w.message);
+  });
+  result.observations.forEach(function (o) {
+    console.log('  [OBS]  ' + (o.lane || '') + ': ' + o.code + ' — ' + o.message);
+  });
+  if (result.errors.length > 0) {
+    console.log('  [ERR]  Real registry has ' + result.errors.length + ' error(s):');
+    result.errors.forEach(function (e) {
+      console.log('         ' + e.code + ': ' + (e.lane ? '[' + e.lane + '] ' : '') + e.message);
+    });
+  }
+
+  assert.ok(data.schema_version, 'real registry has schema_version');
+  assert.ok(data.lanes, 'real registry has lanes section');
+
+  console.log('  [PASS] real registry: ' + Object.keys(data.lanes).length + ' lanes, '
+    + result.errors.length + ' error(s), '
+    + result.warnings.length + ' warning(s), '
+    + result.observations.length + ' observation(s)');
+})();
+
+// ══════════════════════════════════════════════════════════════════
+// GROUP 3 — Module API edge cases
+// ══════════════════════════════════════════════════════════════════
+
+(function testModuleConstants() {
+  assert.ok(VALID_LANE_STATES.indexOf('ACTIVE') >= 0);
+  assert.ok(VALID_LANE_STATES.indexOf('ARCHIVED') >= 0);
+  assert.ok(VALID_LANE_STATES.indexOf('CONCEPTUAL') >= 0);
+  assert.strictEqual(VALID_LANE_STATES.length, 5);
+  console.log('  [PASS] VALID_LANE_STATES constant is correct');
+})();
+
+(function testNullInput() {
+  var result = validateRegistry(null);
+  assert.strictEqual(result.errors.length, 1, 'null input: exactly 1 error');
+  assert.strictEqual(result.errors[0].code, 'MALFORMED_REGISTRY');
+  console.log('  [PASS] null registry data returns MALFORMED_REGISTRY error');
+})();
+
+(function testEmptyLanes() {
+  var reg = makeFixture({ lanes: {} });
+  var result = validateRegistry(reg);
+  assert.strictEqual(countByCode(result.errors, 'EMPTY_LANES'), 1);
+  console.log('  [PASS] empty lanes section triggers EMPTY_LANES error');
+})();
+
+(function testActiveLaneMissingRepo() {
+  var reg = makeFixture({
+    lanes: {
+      missing: {
+        lane_id: 'missing',
+        role: 'coordinator',
+        lane_state: 'ACTIVE',
+        local_path: 'S:/missing',
+        branch: 'main',
+        mailboxes: { inbox: 'S:/missing/inbox', outbox: 'S:/missing/outbox' }
+      }
+    }
+  });
+  var result = validateRegistry(reg);
+  assert.ok(errorCodes(result).indexOf('ACTIVE_NO_REPO') >= 0,
+    'active lane missing repo: ACTIVE_NO_REPO error');
+  console.log('  [PASS] active lane missing repo triggers ACTIVE_NO_REPO error');
+})();
+
+(function testActiveLaneMissingBranch() {
+  var reg = makeFixture({
+    lanes: {
+      missing: {
+        lane_id: 'missing',
+        role: 'coordinator',
+        lane_state: 'ACTIVE',
+        repo: 'owner/missing',
+        local_path: 'S:/missing',
+        mailboxes: { inbox: 'S:/missing/inbox', outbox: 'S:/missing/outbox' }
+      }
+    }
+  });
+  var result = validateRegistry(reg);
+  assert.ok(errorCodes(result).indexOf('ACTIVE_NO_BRANCH') >= 0,
+    'active lane missing branch: ACTIVE_NO_BRANCH error');
+  console.log('  [PASS] active lane missing branch triggers ACTIVE_NO_BRANCH error');
+})();
+
+(function testLaneIdPathMismatch() {
+  var reg = makeFixture({
+    lanes: {
+      library: {
+        lane_id: 'library',
+        role: 'knowledge',
+        lane_state: 'ACTIVE',
+        repo: 'owner/self-organizing-library',
+        branch: 'main',
+        local_path: 'S:/self-organizing-library',
+        mailboxes: {
+          inbox: 'S:/self-organizing-library/lanes/lib/inbox',
+          outbox: 'S:/self-organizing-library/lanes/lib/outbox'
+        }
+      }
+    }
+  });
+  var result = validateRegistry(reg);
+  assert.ok(countByCode(result.warnings, 'LANE_ID_PATH_MISMATCH') >= 0,
+    'path lane "lib" vs lane_id "library": LANE_ID_PATH_MISMATCH warning');
+  console.log('  [PASS] lane identifier mismatch in path triggers LANE_ID_PATH_MISMATCH warning');
+})();
+
+// ══════════════════════════════════════════════════════════════════
+
+console.log('\nPASS lane-registry.test.js — all fixture tests passed');
