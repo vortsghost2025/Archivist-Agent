@@ -141,7 +141,7 @@ function runTest(testName, testFn) {
 }
 
 function testValidRegistryReturnsExitCode0() {
-  const fixturePath = writeFixture('valid-registry.json', validRegistry);
+  const fixturePath = writeFixture('valid-registry.json', makeValidRegistry());
   const { exitCode, output } = runPreflight(['--registry', fixturePath]);
   
   if (exitCode !== 0) throw new Error(`Expected exit code 0, got ${exitCode}`);
@@ -151,7 +151,7 @@ function testValidRegistryReturnsExitCode0() {
 }
 
 function testValidRegistryWithJsonReturnsProperJson() {
-  const fixturePath = writeFixture('valid-registry.json', validRegistry);
+  const fixturePath = writeFixture('valid-registry.json', makeValidRegistry());
   const { exitCode, output } = runPreflightJson(['--json', '--registry', fixturePath]);
   
   if (exitCode !== 0) throw new Error(`Expected exit code 0, got ${exitCode}`);
@@ -164,7 +164,7 @@ function testValidRegistryWithJsonReturnsProperJson() {
 }
 
 function testRegistryWithWarningsReturnsExitCode0() {
-  const fixturePath = writeFixture('warning-registry.json', registryWithWarnings);
+  const fixturePath = writeFixture('warning-registry.json', makeRegistryWithWarnings());
   const { exitCode, output } = runPreflight(['--registry', fixturePath]);
   
   if (exitCode !== 0) throw new Error(`Expected exit code 0, got ${exitCode}`);
@@ -173,7 +173,7 @@ function testRegistryWithWarningsReturnsExitCode0() {
 }
 
 function testRegistryWithErrorsReturnsExitCode1() {
-  const fixturePath = writeFixture('error-registry.json', registryWithErrors);
+  const fixturePath = writeFixture('error-registry.json', makeRegistryWithErrors());
   const { exitCode, output } = runPreflight(['--registry', fixturePath]);
   
   if (exitCode !== 1) throw new Error(`Expected exit code 1, got ${exitCode}`);

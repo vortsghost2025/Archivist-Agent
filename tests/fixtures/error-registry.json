@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "registry_id": "test-registry",
-  "timestamp": "2026-07-22T18:53:42.680Z",
+  "timestamp": "2025-01-15T10:30:00.000Z",
   "lanes": {
     "archivist": {
       "lane_id": "archivist",
