@@ -27,7 +27,31 @@ node scripts/recovery-test-suite.js    # 11 tests, all must pass post-compact
 node scripts/post-compact-audit.js     # status must not be "conflicted"
 node scripts/sync-all-lanes.js         # cross-lane sync (--dry-run supported)
 node scripts/health-check.js           # exits 1 on CRITICAL alerts
+node scripts/governance-preflight.js   # lane registry validation for governance preflight
 ```
+
+Governance Preflight Command (`scripts/governance-preflight.js`):
+- **Purpose**: Validates lane registry for governance compliance before routing work, accepting lane claims, or reporting lane health
+- **Command Syntax**: 
+  - `node scripts/governance-preflight.js [options]`
+  - Options:
+    - `--registry <path>`: Explicit path to lane registry JSON (default: auto-discovered via lane-discovery)
+    - `--json`: Output machine-readable JSON instead of human-readable format
+    - `--help`: Display help information
+- **Exit Codes**:
+  - `0`: Validation passed, routing allowed
+  - `1`: Validation errors found, routing blocked
+  - `2`: Registry file not found or unparseable JSON
+  - `3`: Invalid command-line arguments or internal failure
+- **Output**:
+  - Human-readable: Color-coded validation results with severity levels (ERROR/WARNING/OBSERVATION)
+  - JSON (`--json`): Structured output including `routing_allowed` boolean, `error_count`, `warning_count`, `observation_count`, and detailed validation arrays
+- **Behavior**:
+  - Strictly read-only: performs no file writes, Git operations, service operations, or credential inspection
+  - `routing_allowed` is `true` only when `error_count === 0` (warnings and observations do not block routing)
+  - Validation errors prevent routing; warnings and observations are informational only
+  - Explicit `--registry` path overrides automatic discovery and supports paths containing spaces
+  - Importing the module (`require('./scripts/governance-preflight')`) performs no execution and produces no output
 
 Integration tests live in `tests/` (Jest-style JS, not Rust). Playwright is a devDependency but no config file exists — running `npm test` will likely fail without a `playwright.config`.
 

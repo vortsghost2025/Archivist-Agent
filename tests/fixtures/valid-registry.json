@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "registry_id": "test-registry",
+  "timestamp": "2026-07-22T18:53:42.680Z",
+  "lanes": {
+    "archivist": {
+      "lane_id": "archivist",
+      "role": "archivist",
+      "lane_state": "ACTIVE",
+      "local_path": "S:/Archivist-Agent",
+      "repo": "github.com/vortsghost2025/Archivist-Agent",
+      "branch": "master",
+      "inbox": "lanes/archivist/inbox",
+      "outbox": "lanes/archivist/outbox",
+      "mailboxes": {
+        "inbox": "lanes/archivist/inbox",
+        "outbox": "lanes/archivist/outbox"
+      }
+    }
+  },
+  "broadcast": {},
+  "cross_lane_protocol": {},
+  "agent_instructions": {}
+}

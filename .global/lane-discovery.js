@@ -17,9 +17,8 @@ const path = require('path');
  */
 function resolveRegistryPath() {
    // __dirname for this module is: ...worktree/.global
-  // dirname of that is: ...worktree/.global
-  // dirname of THAT is: ...worktree (the worktree root)
-   const worktreeRoot = path.dirname(path.dirname(__dirname));
+  // dirname of that is: ...worktree (the worktree root)
+   const worktreeRoot = path.dirname(__dirname);
   const candidate = path.join(worktreeRoot, '.global', 'lane-registry.json');
 
   if (fs.existsSync(candidate)) {
