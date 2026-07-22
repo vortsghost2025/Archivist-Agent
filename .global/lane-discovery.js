@@ -13,13 +13,13 @@ const path = require('path');
  *
  * The registry lives at: worktree-root/.global/lane-registry.json
  * This script lives at: worktree-root/.global/lane-discovery.js
- * So we resolve by: dirname(dirname(module.filename)) + /.global/lane-registry.json
+ * So we resolve by: dirname(dirname(__dirname)) + /.global/lane-registry.json
  */
 function resolveRegistryPath() {
-  // module.filename for this module is: ...worktree/.global/lane-discovery.js
+   // __dirname for this module is: ...worktree/.global
   // dirname of that is: ...worktree/.global
   // dirname of THAT is: ...worktree (the worktree root)
-  const worktreeRoot = path.dirname(path.dirname(module.filename));
+   const worktreeRoot = path.dirname(path.dirname(__dirname));
   const candidate = path.join(worktreeRoot, '.global', 'lane-registry.json');
 
   if (fs.existsSync(candidate)) {
