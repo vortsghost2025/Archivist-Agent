@@ -265,16 +265,30 @@ function validateAll() {
  * Checks that schemas are valid JSON and can be loaded.
  * Optionally validates against repository-local fixtures.
  */
-function validateCiContracts() {
-  const results = { validations: [], summary: { total: 0, valid: 0, invalid: 0 } };
+function validateCiContracts(options = {}) {
+  const schemasDir = options.schemasDir || SCHEMAS_DIR;
+  const fixturesDir = options.fixturesDir || path.join(REPO_ROOT, 'tests', 'sendmsg-fixtures');
+  const outputPath = options.outputPath || path.join(REPO_ROOT, '.ci-output', 'schema-contract-results.json');
+  
+  const results = {
+    validations: [],
+    summary: {
+      total: 0,
+      schema_pass: 0,
+      schema_fail: 0,
+      expected_fixture_pass: 0,
+      expected_fixture_reject: 0,
+      unexpected_fixture_fail: 0
+    }
+  };
   
   // Get all schema files
-  const schemaFiles = fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.json'));
+  const schemaFiles = fs.readdirSync(schemasDir).filter(f => f.endsWith('.json'));
   
   // For each schema, validate it can be loaded and is valid JSON Schema
   for (const schemaFile of schemaFiles) {
     const schemaName = schemaFile.replace('.json', '');
-    const schemaPath = path.join(SCHEMAS_DIR, schemaFile);
+    const schemaPath = path.join(schemasDir, schemaFile);
     
     try {
       const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
@@ -288,32 +302,33 @@ function validateCiContracts() {
       const valid = errors.length === 0;
       
       results.validations.push({
-        schema: schemaName,
+        type: 'schema',
+        name: schemaName,
         valid,
         errors
       });
       results.summary.total++;
-      if (valid) results.summary.valid++;
-      else results.summary.invalid++;
+      if (valid) results.summary.schema_pass++;
+      else results.summary.schema_fail++;
       
       log(`${valid ? '[+]' : '[-]'} ${schemaName}: ${valid ? 'PASS' : 'FAIL'}`, valid ? 'success' : 'error');
     } catch (err) {
       results.validations.push({
-        schema: schemaName,
+        type: 'schema',
+        name: schemaName,
         valid: false,
         errors: [err.message]
       });
       results.summary.total++;
-      results.summary.invalid++;
+      results.summary.schema_fail++;
       log(`[-] ${schemaName}: ERROR - ${err.message}`, 'error');
     }
   }
   
   // Validate fixtures if they exist
-  const fixturesDir = path.join(REPO_ROOT, 'tests', 'sendmsg-fixtures');
   if (fs.existsSync(fixturesDir)) {
     log('\nValidating fixtures against inbox-message-v1 schema...', 'info');
-    const inboxSchema = JSON.parse(fs.readFileSync(path.join(SCHEMAS_DIR, 'inbox-message-v1.json'), 'utf8'));
+    const inboxSchema = JSON.parse(fs.readFileSync(path.join(schemasDir, 'inbox-message-v1.json'), 'utf8'));
     const fixtureFiles = fs.readdirSync(fixturesDir).filter(f => f.endsWith('.json'));
     
     for (const fixtureFile of fixtureFiles) {
@@ -322,26 +337,43 @@ function validateCiContracts() {
         const errors = validateSchema(fixture, inboxSchema);
         const valid = errors.length === 0;
         
+        // Determine if this is an expected pass or expected rejection
+        // Fixtures with "missing" or "error" in name are expected to fail
+        const isExpectedReject = fixtureFile.includes('missing') || fixtureFile.includes('error') || fixtureFile.includes('invalid');
+        const outcome = valid ? 'pass' : 'reject';
+        const isExpected = valid ? !isExpectedReject : isExpectedReject;
+        
         results.validations.push({
+          type: 'fixture',
+          name: fixtureFile,
           schema: 'inbox-message-v1',
-          fixture: fixtureFile,
           valid,
+          outcome,
+          expected: isExpected ? outcome : `unexpected_${outcome}`,
           errors
         });
         results.summary.total++;
-        if (valid) results.summary.valid++;
-        else results.summary.invalid++;
         
-        log(`${valid ? '[+]' : '[-]'} fixture/${fixtureFile}: ${valid ? 'PASS' : 'FAIL'}`, valid ? 'success' : 'error');
+        if (isExpected) {
+          if (valid) results.summary.expected_fixture_pass++;
+          else results.summary.expected_fixture_reject++;
+          log(`[+] fixture/${fixtureFile}: ${outcome.toUpperCase()} (expected)`, 'success');
+        } else {
+          results.summary.unexpected_fixture_fail++;
+          log(`[-] fixture/${fixtureFile}: ${outcome.toUpperCase()} (UNEXPECTED)`, 'error');
+        }
       } catch (err) {
         results.validations.push({
+          type: 'fixture',
+          name: fixtureFile,
           schema: 'inbox-message-v1',
-          fixture: fixtureFile,
           valid: false,
+          outcome: 'error',
+          expected: 'unexpected_error',
           errors: [err.message]
         });
         results.summary.total++;
-        results.summary.invalid++;
+        results.summary.unexpected_fixture_fail++;
         log(`[-] fixture/${fixtureFile}: ERROR - ${err.message}`, 'error');
       }
     }
@@ -352,15 +384,17 @@ function validateCiContracts() {
   log('CI CONTRACT VALIDATION SUMMARY', 'test');
   log('='.repeat(60), 'test');
   log(`Total checks: ${results.summary.total}`, 'info');
-  log(`Valid: ${results.summary.valid}`, 'success');
-  log(`Invalid: ${results.summary.invalid}`, results.summary.invalid > 0 ? 'error' : 'info');
+  log(`Schema valid: ${results.summary.schema_pass}`, 'success');
+  log(`Schema invalid: ${results.summary.schema_fail}`, results.summary.schema_fail > 0 ? 'error' : 'info');
+  log(`Expected fixture passes: ${results.summary.expected_fixture_pass}`, 'success');
+  log(`Expected fixture rejections: ${results.summary.expected_fixture_reject}`, 'success');
+  log(`Unexpected fixture failures: ${results.summary.unexpected_fixture_fail}`, results.summary.unexpected_fixture_fail > 0 ? 'error' : 'info');
   
   // Write results to repository-local path
-  const outputDir = path.join(REPO_ROOT, '.ci-output');
+  const outputDir = path.dirname(outputPath);
   if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
-  const resultsPath = path.join(outputDir, 'schema-contract-results.json');
-  fs.writeFileSync(resultsPath, JSON.stringify(results, null, 2));
-  log(`\nResults written to: ${resultsPath}`, 'success');
+  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  log(`\nResults written to: ${outputPath}`, 'success');
   
   return results;
 }
@@ -371,7 +405,8 @@ if (require.main === module) {
   
   if (args.includes('--ci-contracts')) {
     const results = validateCiContracts();
-    process.exit(results.summary.invalid > 0 ? 1 : 0);
+    // Exit nonzero only for unexpected failures
+    process.exit(results.summary.unexpected_fixture_fail > 0 || results.summary.schema_fail > 0 ? 1 : 0);
   } else if (args.includes('--all')) {
     validateAll();
   } else {
