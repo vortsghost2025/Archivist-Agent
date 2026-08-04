@@ -1161,6 +1161,17 @@ _routeRaw(filePath, queueKey, meta) {
           reason: 'PROCESSING_EXCEPTION',
           detail: err.message,
           dry_run: this.dryRun,
+          execution_verified: false,
+          would_verify: false,
+          enforce_ownership: this.enforceOwnership,
+          ownership_enforcement_enabled: this.enforceOwnership,
+          ownership: { present: false },
+          ownership_notes: [],
+          verification_outcome: null,
+          domain_validation: null,
+          domain_gate_executed: false,
+          verification_path: null,
+          schema_remediation: null,
         });
       }
     }

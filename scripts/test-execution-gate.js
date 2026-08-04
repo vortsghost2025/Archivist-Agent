@@ -319,13 +319,22 @@ test('execution_verified=false default when no proof present', function(tmpRoot)
 });
 
 // TEST 9: dry-run reference check must not set execution_verified=true
+// Must use from: 'library' to prove lane discovery is never called
 test('dry-run reference skip reports would_verify=true but execution_verified=false', function(tmpRoot) {
   var resolver = new ArtifactResolver({ allowedRoots: [tmpRoot], dryRun: true });
   var gate = new ExecutionGate({ lane: 'archivist', dryRun: true, resolver: resolver });
 
+  // Wrap _findReferencedMessage to prove it is never called during dry-run
+  var lookupCalled = false;
+  var origFind = gate._findReferencedMessage.bind(gate);
+  gate._findReferencedMessage = function() {
+    lookupCalled = true;
+    throw new Error('LOOKUP_CALLED_DURING_DRY_RUN');
+  };
+
   var msg = {
     id: 'dry-run-ref-check',
-    from: 'archivist',
+    from: 'library',
     to: 'archivist',
     type: 'task',
     priority: 'P1',
@@ -335,12 +344,66 @@ test('dry-run reference skip reports would_verify=true but execution_verified=fa
   };
 
   var result = gate.verify(msg);
+  assert.strictEqual(lookupCalled, false, '_findReferencedMessage must not be called during dry-run');
   assert.strictEqual(result.execution_verified, false, 'dry-run ref skip must not verify execution');
   assert.strictEqual(result.would_verify, true, 'dry-run ref skip should report would_verify=true');
   assert.strictEqual(result.reason, 'DRY_RUN_SKIP_REF_CHECK');
 });
 
-// TEST 10: dry-run path check must not set execution_verified=true
+// TEST 10: dry-run task reference check must not set execution_verified=true
+// Proves resolved_by_task_id lookup is skipped in dry-run mode
+test('dry-run task reference skip reports would_verify=true but execution_verified=false', function(tmpRoot) {
+  var resolver = new ArtifactResolver({ allowedRoots: [tmpRoot], dryRun: true });
+  var gate = new ExecutionGate({ lane: 'archivist', dryRun: true, resolver: resolver });
+
+  // Wrap _findReferencedTask to prove it is never called during dry-run
+  var lookupCalled = false;
+  gate._findReferencedTask = function() {
+    lookupCalled = true;
+    throw new Error('LOOKUP_CALLED_DURING_DRY_RUN');
+  };
+
+  var msg = {
+    id: 'dry-run-task-check',
+    from: 'library',
+    to: 'archivist',
+    type: 'task',
+    priority: 'P1',
+    timestamp: new Date().toISOString(),
+    requires_action: true,
+    resolved_by_task_id: 'missing-task-id',
+  };
+
+  var result = gate.verify(msg);
+  assert.strictEqual(lookupCalled, false, '_findReferencedTask must not be called during dry-run');
+  assert.strictEqual(result.execution_verified, false, 'dry-run task ref skip must not verify execution');
+  assert.strictEqual(result.would_verify, true, 'dry-run task ref skip should report would_verify=true');
+  assert.strictEqual(result.reason, 'DRY_RUN_SKIP_REF_CHECK');
+});
+
+// TEST 11: non-dry-run cross-lane path security remains fail-closed
+// Source lane outside allowed roots must trigger SECURITY error
+test('non-dry-run cross-lane path security is fail-closed', function(tmpRoot) {
+  var resolver = new ArtifactResolver({ allowedRoots: [tmpRoot], dryRun: false });
+  var gate = new ExecutionGate({ lane: 'archivist', dryRun: false, resolver: resolver });
+
+  var msg = {
+    id: 'security-test',
+    from: 'swarmmind',
+    to: 'archivist',
+    type: 'task',
+    priority: 'P1',
+    timestamp: new Date().toISOString(),
+    requires_action: true,
+    completion_message_id: 'some-message-id',
+  };
+
+  assert.throws(function() {
+    gate.verify(msg);
+  }, /outside allowed roots|Invalid lane identifier/i, 'non-dry-run cross-lane must throw security error');
+});
+
+// TEST 12: dry-run fs check must not set execution_verified=true
 test('dry-run fs skip reports would_verify=true but execution_verified=false', function(tmpRoot) {
   var resolver = new ArtifactResolver({ allowedRoots: [tmpRoot], dryRun: true });
   var gate = new ExecutionGate({ lane: 'archivist', dryRun: true, resolver: resolver });
@@ -365,6 +428,49 @@ test('dry-run fs skip reports would_verify=true but execution_verified=false', f
   assert.strictEqual(result.execution_verified, false, 'dry-run fs skip must not verify execution');
   assert.strictEqual(result.would_verify, true, 'dry-run fs skip should report would_verify=true');
   assert.strictEqual(result.reason, 'DRY_RUN_SKIP_FS_CHECK');
+});
+
+// TEST 13: INVALID_JSON route includes normalized metadata defaults
+test('INVALID_JSON route includes normalized metadata defaults', function(tmpRoot) {
+  var inbox = path.join(tmpRoot, 'lanes', 'archivist', 'inbox');
+  mkDir(inbox);
+  ['action-required', 'in-progress', 'processed', 'blocked', 'quarantine'].forEach(function(d) {
+    mkDir(path.join(inbox, d));
+  });
+
+  // Write a message file that will trigger INVALID_JSON
+  var msgPath = path.join(inbox, '2026-01-01_trigger_exception.json');
+  fs.writeFileSync(msgPath, 'NOT VALID JSON', 'utf8');
+
+  var worker = new LaneWorker({
+    repoRoot: tmpRoot,
+    lane: 'archivist',
+    dryRun: false,
+    config: {
+      repoRoot: tmpRoot,
+      lane: 'archivist',
+      queues: {
+        inbox: inbox,
+        actionRequired: path.join(inbox, 'action-required'),
+        inProgress: path.join(inbox, 'in-progress'),
+        processed: path.join(inbox, 'processed'),
+        blocked: path.join(inbox, 'blocked'),
+        quarantine: path.join(inbox, 'quarantine'),
+      },
+    },
+    schemaValidator: function() { return { valid: true, errors: [] }; },
+    signatureValidator: function() { return { valid: true, reason: null, details: null }; },
+  });
+
+  var summary = worker.processOnce();
+  assert.strictEqual(summary.routed.quarantine, 1, 'Must route to quarantine');
+
+  var route = summary.routes[0];
+  assert.strictEqual(route.reason, 'INVALID_JSON');
+  assert.strictEqual(route.execution_verified, false, 'INVALID_JSON must have execution_verified=false');
+  assert.strictEqual(route.would_verify, false, 'INVALID_JSON must have would_verify=false');
+  assert.deepStrictEqual(route.ownership_notes, [], 'INVALID_JSON must have ownership_notes=[]');
+  assert.strictEqual(route.schema_remediation, null, 'INVALID_JSON must have schema_remediation=null');
 });
 
 // SUMMARY
