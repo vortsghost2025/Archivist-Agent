@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "scripts/**/*.js",
+    "scripts/**/*.d.ts",
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src-tauri",
+    "ui",
+    "tests",
+    "lanes",
+    "context-buffer",
+    "scripts/executor-watcher.js"
+  ]
+}
