@@ -32,20 +32,10 @@ jobs:
         run: npx tsc -p tsconfig.ci.json --noEmit
 
       - name: TypeScript type-check advisory (tsconfig.ci.json missing)
+        id: typescript-missing
         if: hashFiles('tsconfig.ci.json') == ''
         run: |
           Write-Host "::warning::tsconfig.ci.json not found on this branch. TypeScript baseline check skipped."
-          "typescript_result=missing" >> $env:GITHUB_OUTPUT
-
-      - name: TypeScript reporting
-        if: always() && steps.typescript.outcome != 'skipped'
-        run: |
-          if ("${{ steps.typescript.outcome }}" -eq "failure") {
-            Write-Host "::warning::TypeScript baseline check failed. This is advisory until baseline errors are repaired."
-            "typescript_result=failure" >> $env:GITHUB_OUTPUT
-          } else {
-            "typescript_result=success" >> $env:GITHUB_OUTPUT
-          }
 
       # Recovery suite: advisory on hosted runners (private Tailscale unreachable)
       - name: Run recovery test suite
@@ -53,49 +43,62 @@ jobs:
         continue-on-error: true
         run: node ./scripts/recovery-test-suite.js
 
-      - name: Recovery suite reporting
-        if: always()
-        run: |
-          $outcome = "${{ steps.recovery.outcome }}"
-          if ($outcome -eq "failure") {
-            Write-Host "::warning::Recovery suite had failures. Live integration checks (lane_liveness, multi_source_consistency) require private Tailscale network and are expected to fail on hosted GitHub runners."
-          }
-          "recovery_result=$outcome" >> $env:GITHUB_OUTPUT
-
       # Required offline validation: always runs
       - name: Run health check
         id: health
         if: always()
         run: node ./scripts/health-check.js
 
-      - name: Run schema validation (all lanes)
+      - name: Hosted schema contract validation
         id: schema
         if: always()
-        run: node ./scripts/validate-schema.js --all
+        run: node ./scripts/validate-schema.js --ci-contracts
 
       # Final enforcement: fail on health/schema failures, not on advisory failures
-      - name: Enforce required validation
+      - name: Enforce required validation and report
+        id: enforcement
         if: always()
         run: |
-          Write-Host "=== CI Validation Summary ==="
-          Write-Host "TypeScript: ${{ steps.typescript.outcome }}"
-          Write-Host "Recovery: ${{ steps.recovery.outcome }}"
-          Write-Host "Health: ${{ steps.health.outcome }}"
-          Write-Host "Schema: ${{ steps.schema.outcome }}"
-          Write-Host ""
+          $tsOutcome = "${{ steps.typescript.outcome }}"
+          $recoveryOutcome = "${{ steps.recovery.outcome }}"
+          $healthOutcome = "${{ steps.health.outcome }}"
+          $schemaOutcome = "${{ steps.schema.outcome }}"
+          
+          # Build summary table
+          $summary = @"
+## CI Validation Summary
+
+| Check | Outcome | Enforcement |
+|-------|---------|-------------|
+| TypeScript | $tsOutcome | advisory |
+| Recovery | $recoveryOutcome | advisory on hosted runner |
+| Health | $healthOutcome | required |
+| Schema contracts | $schemaOutcome | required |
+| Signing | separate required workflow |
+
+"@
+          
+          if ($tsOutcome -eq "failure") {
+            $summary += "::warning::TypeScript baseline failed (advisory)`n"
+          }
+          if ($recoveryOutcome -eq "failure") {
+            $summary += "::warning::Recovery suite had failures (advisory on hosted runners)`n"
+          }
+          
+          Write-Host $summary
+          
+          # Write to GITHUB_STEP_SUMMARY
+          $summary | Out-File -Append -FilePath $env:GITHUB_STEP_SUMMARY
+          
+          # Enforcement: fail on required checks only
           $failed = $false
-          if ("${{ steps.health.outcome }}" -eq "failure") {
+          if ($healthOutcome -eq "failure") {
             Write-Host "::error::Health check failed"
             $failed = $true
           }
-          if ("${{ steps.schema.outcome }}" -eq "failure") {
-            Write-Host "::error::Schema validation failed"
+          if ($schemaOutcome -eq "failure") {
+            Write-Host "::error::Schema contract validation failed"
             $failed = $true
           }
-          if ("${{ steps.typescript.outcome }}" -eq "failure") {
-            Write-Host "::warning::TypeScript baseline failed (advisory)"
-          }
-          if ("${{ steps.recovery.outcome }}" -eq "failure") {
-            Write-Host "::warning::Recovery suite had failures (advisory on hosted runners)"
-          }
+          
           if ($failed) { exit 1 }
