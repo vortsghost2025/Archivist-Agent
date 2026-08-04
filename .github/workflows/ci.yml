@@ -59,10 +59,18 @@ jobs:
         id: enforcement
         if: always()
         run: |
-          $tsOutcome = "${{ steps.typescript.outcome }}"
+          $tsStepOutcome = "${{ steps.typescript.outcome }}"
+          $tsMissingOutcome = "${{ steps.typescript-missing.outcome }}"
           $recoveryOutcome = "${{ steps.recovery.outcome }}"
           $healthOutcome = "${{ steps.health.outcome }}"
           $schemaOutcome = "${{ steps.schema.outcome }}"
+          
+          # Determine TypeScript display: "missing" if config absent, otherwise actual outcome
+          if ($tsMissingOutcome -eq "success") {
+            $tsDisplay = "missing"
+          } else {
+            $tsDisplay = $tsStepOutcome
+          }
           
           # Build summary table line by line
           $lines = @()
@@ -70,18 +78,19 @@ jobs:
           $lines += ""
           $lines += "| Check | Outcome | Enforcement |"
           $lines += "|-------|---------|-------------|"
-          $lines += "| TypeScript | $tsOutcome | advisory |"
+          $lines += "| TypeScript | $tsDisplay | advisory |"
           $lines += "| Recovery | $recoveryOutcome | advisory on hosted runner |"
           $lines += "| Health | $healthOutcome | required |"
           $lines += "| Schema contracts | $schemaOutcome | required |"
-          $lines += "| Signing | separate required workflow |"
+          $lines += "| Signing | separate workflow | required |"
           $lines += ""
           
-          if ($tsOutcome -eq "failure") {
-            $lines += "::warning::TypeScript baseline failed (advisory)"
+          # Emit annotations separately from summary
+          if ($tsDisplay -eq "failure") {
+            Write-Host "::warning::TypeScript baseline failed (advisory)"
           }
           if ($recoveryOutcome -eq "failure") {
-            $lines += "::warning::Recovery suite had failures (advisory on hosted runners)"
+            Write-Host "::warning::Recovery suite had failures (advisory on hosted runners)"
           }
           
           $summary = $lines -join "`n"
