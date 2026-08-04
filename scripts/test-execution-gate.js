@@ -120,6 +120,7 @@ test('lane-worker blocks fake artifact with EXECUTION_NOT_VERIFIED', function(tm
     priority: 'P1',
     timestamp: new Date().toISOString(),
     requires_action: true,
+    confidence: 8,
     subject: 'Fake artifact via worker',
     body: 'Worker should block this',
     evidence: { required: true },
@@ -183,6 +184,7 @@ test('lane-worker stamps execution_verified=true on valid artifact', function(tm
     priority: 'P1',
     timestamp: new Date().toISOString(),
     requires_action: true,
+    confidence: 8,
     subject: 'Real artifact via worker',
     body: 'Worker should accept this',
     evidence: { required: true },
@@ -323,7 +325,7 @@ test('dry-run reference skip reports would_verify=true but execution_verified=fa
 
   var msg = {
     id: 'dry-run-ref-check',
-    from: 'library',
+    from: 'archivist',
     to: 'archivist',
     type: 'task',
     priority: 'P1',
