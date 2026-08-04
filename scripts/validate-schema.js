@@ -263,11 +263,12 @@ function validateAll() {
  * CI Contract Validation Mode
  * Validates schema integrity without requiring live S: paths or Tailscale.
  * Checks that schemas are valid JSON and can be loaded.
- * Optionally validates against repository-local fixtures.
+ * Optionally validates against repository-local fixtures with explicit expectations.
  */
 function validateCiContracts(options = {}) {
   const schemasDir = options.schemasDir || SCHEMAS_DIR;
-  const fixturesDir = options.fixturesDir || path.join(REPO_ROOT, 'tests', 'sendmsg-fixtures');
+  const fixturesDir = options.fixturesDir || null;
+  const fixtureExpectations = options.fixtureExpectations || null;
   const outputPath = options.outputPath || path.join(REPO_ROOT, '.ci-output', 'schema-contract-results.json');
   
   const results = {
@@ -279,7 +280,8 @@ function validateCiContracts(options = {}) {
       expected_fixture_pass: 0,
       expected_fixture_reject: 0,
       unexpected_fixture_fail: 0
-    }
+    },
+    ok: false
   };
   
   // Get all schema files
@@ -325,23 +327,40 @@ function validateCiContracts(options = {}) {
     }
   }
   
-  // Validate fixtures if they exist
-  if (fs.existsSync(fixturesDir)) {
-    log('\nValidating fixtures against inbox-message-v1 schema...', 'info');
+  // Validate fixtures if explicitly provided with expectations
+  if (fixturesDir && fixtureExpectations && fs.existsSync(fixturesDir)) {
+    log('\nValidating fixtures with explicit expectations...', 'info');
     const inboxSchema = JSON.parse(fs.readFileSync(path.join(schemasDir, 'inbox-message-v1.json'), 'utf8'));
     const fixtureFiles = fs.readdirSync(fixturesDir).filter(f => f.endsWith('.json'));
     
     for (const fixtureFile of fixtureFiles) {
+      const expectation = fixtureExpectations[fixtureFile];
+      
+      if (!expectation) {
+        // No expectation defined - unexpected
+        results.validations.push({
+          type: 'fixture',
+          name: fixtureFile,
+          schema: 'inbox-message-v1',
+          valid: false,
+          outcome: 'no_expectation',
+          expected: 'unexpected_no_expectation',
+          errors: ['No expectation defined for this fixture']
+        });
+        results.summary.total++;
+        results.summary.unexpected_fixture_fail++;
+        log(`[-] fixture/${fixtureFile}: NO EXPECTATION (UNEXPECTED)`, 'error');
+        continue;
+      }
+      
       try {
         const fixture = JSON.parse(fs.readFileSync(path.join(fixturesDir, fixtureFile), 'utf8'));
         const errors = validateSchema(fixture, inboxSchema);
         const valid = errors.length === 0;
-        
-        // Determine if this is an expected pass or expected rejection
-        // Fixtures with "missing" or "error" in name are expected to fail
-        const isExpectedReject = fixtureFile.includes('missing') || fixtureFile.includes('error') || fixtureFile.includes('invalid');
         const outcome = valid ? 'pass' : 'reject';
-        const isExpected = valid ? !isExpectedReject : isExpectedReject;
+        
+        // Check if outcome matches expectation
+        const isExpected = (expectation === 'accept' && valid) || (expectation === 'reject' && !valid);
         
         results.validations.push({
           type: 'fixture',
@@ -349,18 +368,19 @@ function validateCiContracts(options = {}) {
           schema: 'inbox-message-v1',
           valid,
           outcome,
+          expectation,
           expected: isExpected ? outcome : `unexpected_${outcome}`,
           errors
         });
         results.summary.total++;
         
         if (isExpected) {
-          if (valid) results.summary.expected_fixture_pass++;
+          if (expectation === 'accept') results.summary.expected_fixture_pass++;
           else results.summary.expected_fixture_reject++;
-          log(`[+] fixture/${fixtureFile}: ${outcome.toUpperCase()} (expected)`, 'success');
+          log(`[+] fixture/${fixtureFile}: ${outcome.toUpperCase()} (expected ${expectation})`, 'success');
         } else {
           results.summary.unexpected_fixture_fail++;
-          log(`[-] fixture/${fixtureFile}: ${outcome.toUpperCase()} (UNEXPECTED)`, 'error');
+          log(`[-] fixture/${fixtureFile}: ${outcome.toUpperCase()} (expected ${expectation}, got ${outcome})`, 'error');
         }
       } catch (err) {
         results.validations.push({
@@ -369,6 +389,7 @@ function validateCiContracts(options = {}) {
           schema: 'inbox-message-v1',
           valid: false,
           outcome: 'error',
+          expectation,
           expected: 'unexpected_error',
           errors: [err.message]
         });
@@ -378,6 +399,9 @@ function validateCiContracts(options = {}) {
       }
     }
   }
+  
+  // Set ok flag
+  results.ok = results.summary.schema_fail === 0 && results.summary.unexpected_fixture_fail === 0;
   
   // Summary
   log('\n' + '='.repeat(60), 'test');
@@ -389,6 +413,7 @@ function validateCiContracts(options = {}) {
   log(`Expected fixture passes: ${results.summary.expected_fixture_pass}`, 'success');
   log(`Expected fixture rejections: ${results.summary.expected_fixture_reject}`, 'success');
   log(`Unexpected fixture failures: ${results.summary.unexpected_fixture_fail}`, results.summary.unexpected_fixture_fail > 0 ? 'error' : 'info');
+  log(`Result: ${results.ok ? 'OK' : 'FAILED'}`, results.ok ? 'success' : 'error');
   
   // Write results to repository-local path
   const outputDir = path.dirname(outputPath);
