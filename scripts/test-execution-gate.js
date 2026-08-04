@@ -326,7 +326,6 @@ test('dry-run reference skip reports would_verify=true but execution_verified=fa
 
   // Wrap _findReferencedMessage to prove it is never called during dry-run
   var lookupCalled = false;
-  var origFind = gate._findReferencedMessage.bind(gate);
   gate._findReferencedMessage = function() {
     lookupCalled = true;
     throw new Error('LOOKUP_CALLED_DURING_DRY_RUN');
@@ -471,6 +470,65 @@ test('INVALID_JSON route includes normalized metadata defaults', function(tmpRoo
   assert.strictEqual(route.would_verify, false, 'INVALID_JSON must have would_verify=false');
   assert.deepStrictEqual(route.ownership_notes, [], 'INVALID_JSON must have ownership_notes=[]');
   assert.strictEqual(route.schema_remediation, null, 'INVALID_JSON must have schema_remediation=null');
+});
+
+// TEST 14: PROCESSING_EXCEPTION route includes normalized metadata defaults
+// Exercises the processOnce() catch block by replacing processFile with a throwing stub
+test('PROCESSING_EXCEPTION route includes normalized metadata defaults', function(tmpRoot) {
+  var inbox = path.join(tmpRoot, 'lanes', 'archivist', 'inbox');
+  mkDir(inbox);
+  ['action-required', 'in-progress', 'processed', 'blocked', 'quarantine'].forEach(function(d) {
+    mkDir(path.join(inbox, d));
+  });
+
+  // Write a valid message file (will be processed by the stubbed processFile)
+  var msgPath = path.join(inbox, '2026-01-01_process_exception.json');
+  fs.writeFileSync(msgPath, JSON.stringify({
+    id: 'process-exception-test',
+    from: 'library',
+    to: 'archivist',
+    type: 'task',
+    priority: 'P1',
+    timestamp: new Date().toISOString(),
+    requires_action: true,
+    subject: 'Test',
+    body: 'Test',
+  }, null, 2), 'utf8');
+
+  var worker = new LaneWorker({
+    repoRoot: tmpRoot,
+    lane: 'archivist',
+    dryRun: false,
+    config: {
+      repoRoot: tmpRoot,
+      lane: 'archivist',
+      queues: {
+        inbox: inbox,
+        actionRequired: path.join(inbox, 'action-required'),
+        inProgress: path.join(inbox, 'in-progress'),
+        processed: path.join(inbox, 'processed'),
+        blocked: path.join(inbox, 'blocked'),
+        quarantine: path.join(inbox, 'quarantine'),
+      },
+    },
+    schemaValidator: function() { return { valid: true, errors: [] }; },
+    signatureValidator: function() { return { valid: true, reason: null, details: null }; },
+  });
+
+  // Replace processFile with a function that throws to trigger the catch block
+  worker.processFile = function() {
+    throw new Error('TEST_PROCESSING_EXCEPTION');
+  };
+
+  var summary = worker.processOnce();
+  assert.strictEqual(summary.routed.quarantine, 1, 'Must route to quarantine');
+
+  var route = summary.routes[0];
+  assert.strictEqual(route.reason, 'PROCESSING_EXCEPTION');
+  assert.strictEqual(route.execution_verified, false, 'PROCESSING_EXCEPTION must have execution_verified=false');
+  assert.strictEqual(route.would_verify, false, 'PROCESSING_EXCEPTION must have would_verify=false');
+  assert.deepStrictEqual(route.ownership_notes, [], 'PROCESSING_EXCEPTION must have ownership_notes=[]');
+  assert.strictEqual(route.schema_remediation, null, 'PROCESSING_EXCEPTION must have schema_remediation=null');
 });
 
 // SUMMARY
