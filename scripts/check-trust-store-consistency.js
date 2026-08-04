@@ -4,13 +4,23 @@
 const fs = require('fs');
 const path = require('path');
 
+const METADATA_CONTAINERS = new Set(['key_lineage', 'archived_keys', 'rotation_policy']);
+
 function loadTrustStore(p) {
   const raw = fs.readFileSync(p, 'utf8');
   const parsed = JSON.parse(raw);
-  const keys = parsed.keys || {};
   const result = {};
-  for (const [laneId, entry] of Object.entries(keys)) {
-    if (entry && entry.key_id) {
+
+  const candidates = [
+    parsed.keys,
+    parsed
+  ];
+
+  for (const source of candidates) {
+    if (!source || typeof source !== 'object') continue;
+    for (const [laneId, entry] of Object.entries(source)) {
+      if (METADATA_CONTAINERS.has(laneId)) continue;
+      if (!entry || typeof entry !== 'object' || !entry.key_id) continue;
       result[laneId] = {
         key_id: entry.key_id,
         algorithm: entry.algorithm || null,
@@ -18,7 +28,15 @@ function loadTrustStore(p) {
       };
     }
   }
+
   return result;
+}
+
+function normalizeState(state) {
+  if (!state) return 'ACTIVE';
+  const s = String(state).toUpperCase();
+  if (s === 'ACTIVE' || s === 'REVOKED' || s === 'DORMANT') return s;
+  return 'ACTIVE';
 }
 
 function compare(stores) {
@@ -32,7 +50,6 @@ function compare(stores) {
 
   for (const lane of allLanes) {
     const entries = stores.map(s => s[lane] || null);
-    const ref = entries[0];
     const laneDiv = { lane, entries: [] };
 
     for (let i = 0; i < entries.length; i++) {
@@ -41,7 +58,7 @@ function compare(stores) {
         store_index: i,
         key_id: e ? e.key_id : null,
         algorithm: e ? e.algorithm : null,
-        state: e ? e.state : null
+        state: e ? normalizeState(e.state) : null
       });
     }
 
@@ -50,11 +67,15 @@ function compare(stores) {
       laneDiv.divergence = 'MISSING_LANE';
       divergences.push(laneDiv);
     } else {
-      const activeEntries = entries.filter(e => e && e.state === 'ACTIVE');
+      const states = new Set(entries.map(e => normalizeState(e ? e.state : null)));
+      const activeEntries = entries.filter(e => e && normalizeState(e.state) === 'ACTIVE');
       const keyIds = new Set(activeEntries.map(e => e.key_id));
       const algs = new Set(activeEntries.map(e => e.algorithm));
 
-      if (activeEntries.length > 1 && keyIds.size > 1) {
+      if (states.size > 1) {
+        laneDiv.divergence = 'STATE_MISMATCH';
+        divergences.push(laneDiv);
+      } else if (activeEntries.length > 1 && keyIds.size > 1) {
         laneDiv.divergence = 'ACTIVE_KEY_ID_MISMATCH';
         divergences.push(laneDiv);
       } else if (activeEntries.length > 1 && algs.size > 1) {

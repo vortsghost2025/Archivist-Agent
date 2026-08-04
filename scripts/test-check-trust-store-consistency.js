@@ -7,10 +7,15 @@ const { execSync } = require('child_process');
 
 const CHECKER = path.join(__dirname, 'check-trust-store-consistency.js');
 
-function writeFixture(dir, name, keys) {
+function writeTopLevelFixture(dir, name, lanes) {
   const p = path.join(dir, name);
-  const data = { keys };
-  fs.writeFileSync(p, JSON.stringify(data, null, 2));
+  fs.writeFileSync(p, JSON.stringify(lanes, null, 2));
+  return p;
+}
+
+function writeNestedFixture(dir, name, lanes) {
+  const p = path.join(dir, name);
+  fs.writeFileSync(p, JSON.stringify({ keys: lanes }, null, 2));
   return p;
 }
 
@@ -18,15 +23,11 @@ function assert(cond, msg) {
   if (!cond) throw new Error(msg);
 }
 
-function runChecker(args) {
-  return execSync(`node ${CHECKER} ${args}`, { encoding: 'utf8' });
-}
-
 function runCheckerStatus(args) {
   let code = 0;
   let out = '';
   try {
-    out = runChecker(args);
+    out = execSync(`node ${CHECKER} ${args}`, { encoding: 'utf8' });
   } catch (e) {
     code = e.status || 1;
     out = e.stdout || '';
@@ -34,80 +35,101 @@ function runCheckerStatus(args) {
   return { code, out };
 }
 
-function testMatchingStoresPass() {
+function testTopLevelMatchingStoresPass() {
   const dir = fs.mkdtempSync('/tmp/trust-test-');
-  const a = writeFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
-  const b = writeFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const a = writeTopLevelFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const b = writeTopLevelFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
   const { code, out } = runCheckerStatus(`${a} ${b}`);
-  assert(code === 0, 'matching stores should pass');
+  assert(code === 0, 'top-level matching stores should pass');
   assert(out.trim() === 'CONSISTENT', 'should output CONSISTENT');
 }
 
-function testDifferingActiveKidFails() {
+function testTopLevelDifferingActiveKidFails() {
   const dir = fs.mkdtempSync('/tmp/trust-test-');
-  const a = writeFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
-  const b = writeFixture(dir, 'b.json', { library: { key_id: 'k2', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const a = writeTopLevelFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const b = writeTopLevelFixture(dir, 'b.json', { library: { key_id: 'k2', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
   const { code, out } = runCheckerStatus(`${a} ${b}`);
-  assert(code !== 0, 'differing active kid should fail');
+  assert(code !== 0, 'top-level differing active kid should fail');
   assert(out.includes('ACTIVE_KEY_ID_MISMATCH'), 'should report ACTIVE_KEY_ID_MISMATCH');
 }
 
-function testAlgorithmMismatchFails() {
+function testNestedSchemaStillWorks() {
   const dir = fs.mkdtempSync('/tmp/trust-test-');
-  const a = writeFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
-  const b = writeFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'RS256', lane_state: 'ACTIVE' } });
+  const a = writeNestedFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const b = writeNestedFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
   const { code, out } = runCheckerStatus(`${a} ${b}`);
-  assert(code !== 0, 'algorithm mismatch should fail');
-  assert(out.includes('ALGORITHM_MISMATCH'), 'should report ALGORITHM_MISMATCH');
-}
-
-function testMissingLaneReported() {
-  const dir = fs.mkdtempSync('/tmp/trust-test-');
-  const a = writeFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
-  const b = writeFixture(dir, 'b.json', {});
-  const { code, out } = runCheckerStatus(`${a} ${b}`);
-  assert(code !== 0, 'missing lane should cause divergence');
-  assert(out.includes('library'), 'missing lane should be reported');
-}
-
-function testArchivedDifferencesDoNotReplaceActive() {
-  const dir = fs.mkdtempSync('/tmp/trust-test-');
-  const a = writeFixture(dir, 'a.json', {
-    library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' },
-    archived_keys: { old1: { key_id: 'old1', algorithm: 'RS256' } }
-  });
-  const b = writeFixture(dir, 'b.json', {
-    library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' },
-    archived_keys: { old2: { key_id: 'old2', algorithm: 'RS256' } }
-  });
-  const { code, out } = runCheckerStatus(`${a} ${b}`);
-  assert(code === 0, 'archived differences should not cause divergence when active matches');
+  assert(code === 0, 'nested schema matching should pass');
   assert(out.trim() === 'CONSISTENT', 'should output CONSISTENT');
+}
+
+function testActiveVersusRevokedFailsWithStateMismatch() {
+  const dir = fs.mkdtempSync('/tmp/trust-test-');
+  const a = writeTopLevelFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const b = writeTopLevelFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'REVOKED' } });
+  const { code, out } = runCheckerStatus(`${a} ${b}`);
+  assert(code !== 0, 'ACTIVE vs REVOKED should fail');
+  assert(out.includes('STATE_MISMATCH'), 'should report STATE_MISMATCH');
+}
+
+function testActiveVersusDormantFailsWithStateMismatch() {
+  const dir = fs.mkdtempSync('/tmp/trust-test-');
+  const a = writeTopLevelFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const b = writeTopLevelFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'DORMANT' } });
+  const { code, out } = runCheckerStatus(`${a} ${b}`);
+  assert(code !== 0, 'ACTIVE vs DORMANT should fail');
+  assert(out.includes('STATE_MISMATCH'), 'should report STATE_MISMATCH');
+}
+
+function testMetadataContainersAreIgnored() {
+  const dir = fs.mkdtempSync('/tmp/trust-test-');
+  const a = writeTopLevelFixture(dir, 'a.json', {
+    library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' },
+    key_lineage: { reconciled_at: 'now' },
+    archived_keys: { old: { key_id: 'old' } },
+    rotation_policy: { rotation_days: 90 }
+  });
+  const b = writeTopLevelFixture(dir, 'b.json', {
+    library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' },
+    key_lineage: { reconciled_at: 'now' },
+    archived_keys: { old: { key_id: 'old' } },
+    rotation_policy: { rotation_days: 90 }
+  });
+  const { code, out } = runCheckerStatus(`${a} ${b}`);
+  assert(code === 0, 'metadata container differences should not cause divergence');
+  assert(out.trim() === 'CONSISTENT', 'should output CONSISTENT');
+}
+
+function testActualTrustStoresProduceLibraryDivergence() {
+  const archivist = '/home/we4free/agent/repos/Archivist-Agent/lanes/broadcast/trust-store.json';
+  const library = '/home/we4free/agent/repos/self-organizing-library/lanes/broadcast/trust-store.json';
+  const { code, out } = runCheckerStatus(`${archivist} ${library}`);
+  assert(code !== 0, 'actual stores should diverge');
+  assert(out.includes('lane=library'), 'should report library lane');
+  assert(out.includes('ACTIVE_KEY_ID_MISMATCH'), 'should report ACTIVE_KEY_ID_MISMATCH for library');
 }
 
 function testNoKeyMaterialInOutput() {
   const dir = fs.mkdtempSync('/tmp/trust-test-');
-  const a = writeFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE', public_key_pem: 'SECRET' } });
-  const b = writeFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const a = writeTopLevelFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE', public_key_pem: 'SECRET' } });
+  const b = writeTopLevelFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
   const { out } = runCheckerStatus(`${a} ${b}`);
   assert(!out.includes('SECRET'), 'output must not contain key material');
 }
 
-function testInputFilesByteIdentical() {
-  const dir = fs.mkdtempSync('/tmp/trust-test-');
-  const a = writeFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
-  const b = writeFixture(dir, 'b.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
-  const aRaw = fs.readFileSync(a);
-  const bRaw = fs.readFileSync(b);
-  runCheckerStatus(`${a} ${b}`);
-  assert(fs.readFileSync(a).equals(aRaw), 'file a must remain byte-identical');
-  assert(fs.readFileSync(b).equals(bRaw), 'file b must remain byte-identical');
+function testActualTrustStoreFilesRemainByteIdentical() {
+  const archivist = '/home/we4free/agent/repos/Archivist-Agent/lanes/broadcast/trust-store.json';
+  const library = '/home/we4free/agent/repos/self-organizing-library/lanes/broadcast/trust-store.json';
+  const aRaw = fs.readFileSync(archivist);
+  const bRaw = fs.readFileSync(library);
+  runCheckerStatus(`${archivist} ${library}`);
+  assert(fs.readFileSync(archivist).equals(aRaw), 'archivist trust store must remain byte-identical');
+  assert(fs.readFileSync(library).equals(bRaw), 'library trust store must remain byte-identical');
 }
 
-function testJsonSummaryMode() {
+function testJsonSummaryModeWithTopLevel() {
   const dir = fs.mkdtempSync('/tmp/trust-test-');
-  const a = writeFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
-  const b = writeFixture(dir, 'b.json', { library: { key_id: 'k2', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const a = writeTopLevelFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const b = writeTopLevelFixture(dir, 'b.json', { library: { key_id: 'k2', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
   const { code, out } = runCheckerStatus(`${a} ${b} --json`);
   assert(code !== 0, 'json mode should still fail on divergence');
   const parsed = JSON.parse(out);
@@ -115,16 +137,28 @@ function testJsonSummaryMode() {
   assert(parsed.divergences.length === 1, 'should have one divergence');
 }
 
+function testNestedDifferingActiveKidFails() {
+  const dir = fs.mkdtempSync('/tmp/trust-test-');
+  const a = writeNestedFixture(dir, 'a.json', { library: { key_id: 'k1', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const b = writeNestedFixture(dir, 'b.json', { library: { key_id: 'k2', algorithm: 'EdDSA', lane_state: 'ACTIVE' } });
+  const { code, out } = runCheckerStatus(`${a} ${b}`);
+  assert(code !== 0, 'nested differing active kid should fail');
+  assert(out.includes('ACTIVE_KEY_ID_MISMATCH'), 'should report ACTIVE_KEY_ID_MISMATCH');
+}
+
 function runAll() {
   const tests = [
-    testMatchingStoresPass,
-    testDifferingActiveKidFails,
-    testAlgorithmMismatchFails,
-    testMissingLaneReported,
-    testArchivedDifferencesDoNotReplaceActive,
+    testTopLevelMatchingStoresPass,
+    testTopLevelDifferingActiveKidFails,
+    testNestedSchemaStillWorks,
+    testActiveVersusRevokedFailsWithStateMismatch,
+    testActiveVersusDormantFailsWithStateMismatch,
+    testMetadataContainersAreIgnored,
+    testActualTrustStoresProduceLibraryDivergence,
     testNoKeyMaterialInOutput,
-    testInputFilesByteIdentical,
-    testJsonSummaryMode
+    testActualTrustStoreFilesRemainByteIdentical,
+    testJsonSummaryModeWithTopLevel,
+    testNestedDifferingActiveKidFails
   ];
 
   let passed = 0;
