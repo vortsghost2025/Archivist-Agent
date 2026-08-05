@@ -362,18 +362,15 @@ function isActionable(msg) {
   );
 }
 
-const NON_ASCII_PATTERN = /[^\x20-\x7E]/;
+const NON_ASCII_PATTERN = /[^\x00-\x7F]/;
 
 function isEnglishOnly(msg) {
   if (!msg || typeof msg !== 'object') return true;
   const textFields = ['subject', 'body', 'type', 'from', 'to'];
   for (const field of textFields) {
-    let val = msg[field];
-    if (typeof val === 'string') {
-      val = normalizeToAscii(val);
-      if (NON_ASCII_PATTERN.test(val)) {
-        return false;
-      }
+    const val = msg[field];
+    if (typeof val === 'string' && NON_ASCII_PATTERN.test(val)) {
+      return false;
     }
   }
   return true;
