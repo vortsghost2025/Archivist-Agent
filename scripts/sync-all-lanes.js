@@ -109,8 +109,8 @@ function checkRatificationGate(syncedCount = 0) {
     return { status: 'unknown', deploy_allowed: false, approved: 0, required: 3 };
   }
   const votes = gate.votes || {};
-  const approved = Object.values(votes).filter((v) => v.vote === 'APPROVE').length;
-  const rejected = Object.values(votes).filter((v) => v.vote === 'REJECT').length;
+  const approved = Object.values(votes).filter((v) => (v.ratification_vote || v.vote) === 'APPROVE').length;
+  const rejected = Object.values(votes).filter((v) => (v.ratification_vote || v.vote) === 'REJECT').length;
   const ratified = approved >= (gate.quorum_required || 3) && rejected <= (gate.max_rejections || 1);
   if (!ratified && !DRY_RUN && syncedCount > 0) {
     console.warn(`[C5] WARNING: ${approved}/${gate.quorum_required || 3} lanes approved — deployment not ratified but sync was executed. Ratification should complete before batch deployment.`);
