@@ -103,7 +103,7 @@
        "model": "kilo/stepfun/step-3.7-flash:free"
      },
      "git-worker": {
-       "model": "ollama-local/qwen2.5-coder:3b-instruct-q4_K_M"
+       "model": "opencode/ling-3.0-flash-free"
      }
    },
   "permission": {
