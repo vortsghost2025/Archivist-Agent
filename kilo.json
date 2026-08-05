@@ -28,7 +28,7 @@
       "steps": 200
     },
     "plan": {
-      "model": "nvidia/z-ai/glm-5.2",
+      "model": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
       "steps": 200
     },
     "code": {
@@ -54,14 +54,14 @@
       "steps": 200
     },
     "debug": {
-      "model": "nvidia/deepseek-ai/deepseek-v4-pro",
+      "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
       "steps": 200
     },
     "ask": {
       "steps": 200
     },
     "general": {
-      "model": "nvidia/z-ai/glm-5.2",
+      "model": "opencode/deepseek-v4-flash-free",
       "permission": {
         "webfetch": "allow",
         "websearch": "allow",
@@ -81,7 +81,7 @@
       "steps": 200
     },
     "explore": {
-      "model": "nvidia-micro/minimaxai/minimax-m3",
+      "model": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
       "mode": "all",
       "permission": {
         "webfetch": "allow",
@@ -102,15 +102,15 @@
       "steps": 200
     },
     "code-reviewer": {
-      "model": "nvidia/deepseek-ai/deepseek-v4-pro",
+      "model": "openrouter/nvidia/nemotron-3-super-120b-a12b:free",
       "steps": 200
     },
     "lane-worker": {
-      "model": "nvidia/z-ai/glm-5.2",
+      "model": "kilo/stepfun/step-3.7-flash:free",
       "steps": 200
     },
     "git-worker": {
-      "model": "nvidia-micro/minimaxai/minimax-m3",
+      "model": "ollama-local/qwen2.5-coder:3b-instruct-q4_K_M",
       "steps": 200
     }
   },
