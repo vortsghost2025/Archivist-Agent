@@ -61,6 +61,7 @@
       "steps": 15
     },
     "general": {
+      "model": "nvidia/nemotron-3-ultra-550b-a55b",
       "permission": {
         "webfetch": "allow",
         "websearch": "allow",
