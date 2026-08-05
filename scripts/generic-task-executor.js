@@ -905,7 +905,16 @@ function executeTask(msg, lane) {
     task_kind: 'ack',
     results: { acknowledged: true, note: 'Task type not recognized. Supported: status, "read file <path>", "run script <name>", "git status/log/diff", "grep <pattern> in <path>", "write file <path>\\n<content>", "list dir <path>", "hash file <path>", "diff <file1> <file2>", "count \\"pattern\\" in <path>", "consistency check", "drift_sweep", "watcher_health_audit", "stale_work_detection" — or use natural language (e.g. "check if trust store is consistent")' },
     summary: `Acknowledged task: ${msg.subject || msg.task_id || 'unknown'}`,
-  }, { source: 'fallback', verb: 'ack', confidence: 0.0 });
+  }, { source: 'fallback', verb: 'ack', confidence: 1.0 });
+}
+
+function normalizeConfidence(raw) {
+  if (raw === null || raw === undefined) return null;
+  if (typeof raw === 'number' && raw >= 0 && raw <= 1) {
+    return Math.max(1, Math.min(10, Math.round(raw * 9 + 1)));
+  }
+  if (Number.isInteger(raw) && raw >= 1 && raw <= 10) return raw;
+  return null;
 }
 
 function createResponse(originalMsg, executionResult, lane) {
@@ -918,6 +927,16 @@ function createResponse(originalMsg, executionResult, lane) {
     target: (originalMsg.subject || 'Task').slice(0, 80),
     generated_at: nowIso(),
   });
+
+  const routingConfidence = executionResult.results && executionResult.results._routing
+    ? executionResult.results._routing.confidence
+    : null;
+  const normalizedConfidence = normalizeConfidence(routingConfidence);
+  const confidence = normalizedConfidence !== null ? normalizedConfidence : 7;
+  const investigation = confidence < 7
+    ? 'Automated acknowledgement fallback; confidence below investigation threshold per CONFIDENCE_REQUIRED'
+    : undefined;
+
   return {
     schema_version: '1.3',
     task_id: `response-${originalMsg.task_id || Date.now()}`,
@@ -931,6 +950,8 @@ function createResponse(originalMsg, executionResult, lane) {
     body: provBody,
     timestamp: nowIso(),
     requires_action: false,
+    confidence: confidence,
+    investigation: investigation,
     payload: { mode: 'inline', compression: 'none' },
     execution: { mode: 'auto', engine: 'pipeline', actor: 'task-executor' },
     lease: { owner: lane, acquired_at: nowIso() },
