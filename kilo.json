@@ -28,7 +28,7 @@
       "steps": 200
     },
     "plan": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "nvidia/z-ai/glm-5.2",
       "steps": 200
     },
     "code": {
@@ -54,14 +54,14 @@
       "steps": 200
     },
     "debug": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "nvidia/deepseek-ai/deepseek-v4-pro",
       "steps": 200
     },
     "ask": {
       "steps": 200
     },
     "general": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "nvidia/z-ai/glm-5.2",
       "permission": {
         "webfetch": "allow",
         "websearch": "allow",
@@ -81,7 +81,7 @@
       "steps": 200
     },
     "explore": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "nvidia-micro/minimaxai/minimax-m3",
       "mode": "all",
       "permission": {
         "webfetch": "allow",
@@ -102,15 +102,15 @@
       "steps": 200
     },
     "code-reviewer": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "nvidia/deepseek-ai/deepseek-v4-pro",
       "steps": 200
     },
     "lane-worker": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "nvidia/z-ai/glm-5.2",
       "steps": 200
     },
     "git-worker": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "nvidia-micro/minimaxai/minimax-m3",
       "steps": 200
     }
   },
