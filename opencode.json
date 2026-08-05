@@ -17,7 +17,7 @@
       "permission": {}
     },
     "general": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
       "options": { "temperature": 0.5, "maxTokens": 4096 },
       "permission": {}
     },

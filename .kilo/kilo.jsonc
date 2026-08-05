@@ -57,7 +57,8 @@
        "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
      },
      "ask": {},
-     "general": {
+      "general": {
+       "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
        "permission": {
          "webfetch": "allow",
          "websearch": "allow",

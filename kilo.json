@@ -61,7 +61,7 @@
       "steps": 200
     },
     "general": {
-      "model": "opencode/deepseek-v4-flash-free",
+      "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
       "permission": {
         "webfetch": "allow",
         "websearch": "allow",
