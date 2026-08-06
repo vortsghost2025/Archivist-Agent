@@ -61,7 +61,7 @@ Agents: READ THIS FILE FIRST to discover available tooling.
 | `rig-sync.timer` | Timer | N/A | DEAD (disabled, unit file needs sudo rm) |
 | `rig-sync.service` | Service | N/A | DEAD (masked, unit file needs sudo rm) |
 
-## Repo Scripts (165+ JS files in Archivist-Agent/scripts/)
+## Repo Scripts (191 tracked JS files in Archivist-Agent/scripts/; 1 gitignored local scratch excluded)
 
 Key scripts agents should know about:
 
@@ -78,6 +78,8 @@ Key scripts agents should know about:
 | `lane-health-monitor.js` | Check health across all lanes | Debugging lane issues |
 | `system-status.js` | Full system status report | Session startup check |
 | `start-core.js` | Start core governance services | Manual lane start |
+| `uds-gate.js` | UDS (user-drift) gate primitives: effective-score ratchet + `classifyUdsScore` threshold mapping + `formatDriftAlert` block | Shared; used by resolve-post-compact-contradictions.js + headless-self-audit |
+| `test-uds-gate.js` | Tests for uds-gate.js (ratchet, classify, drift alert) | CI / regression |
 
 ## Archived Scripts
 

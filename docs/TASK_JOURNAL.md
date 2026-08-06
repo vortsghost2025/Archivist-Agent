@@ -8,7 +8,7 @@ agent: authority-supervisor
 lane: authority
 journal_version: 1
 created_at: 2026-08-06T14:39:00Z
-last_updated: 2026-08-06T17:15:00Z
+last_updated: 2026-08-06T22:00:00Z
 ```
 
 ---
@@ -46,7 +46,7 @@ last_updated: 2026-08-06T17:15:00Z
 | T11 | **Pre-commit hook hygiene** — VERIFIED: `hooks/install.js` current + installs `hooks/pre-commit.js`; `.git/hooks/pre-commit` matches (no drift); `scripts/n.js` gone; `scripts/setup-hooks.js` carries deprecation header + unreferenced. No code change required | [DONE] | low |
 | T12 | **Operator WIP fixes (your workstream)** — S1/S3/S5/C1 verified applied across 5 files; lane-worker repoRoot latent bug fixed; stale test fixtures fixed; core regression green (headless-self-audit 33/33, recovery PROVEN, audit aligned, uds-gate 19/19, lane-worker-we4free 17/17, artifact-resolver 10/10, signed-messages 5/5, sync-all-lanes 72/72) | [DONE] | medium |
 | T13 | **Add test coverage for UDS gate + ledger dedupe** — new scripts/uds-gate.js (ratchet + classifyUdsScore + formatDriftAlert) + test-uds-gate.js (19/19); headless-self-audit exports writeRecommendationLedger + A1c dedupe tests | [DONE] | medium |
-| T14 | **SCRIPT_INDEX.md + 30-day archive pass** — audit new/changed scripts, update SCRIPT_INDEX.md, apply 30-day archive rule for stale scripts | [PENDING] | low |
+| T14 | **SCRIPT_INDEX.md + 30-day archive pass** — count corrected 165→191 (tracked, authoritative; 1 gitignored local scratch excluded); added uds-gate.js + test-uds-gate.js to key-scripts table; 30-day script archive NOT automated: CI loop `stale-file-cleanup` only covers inbox/stale + inbox/expired (7-day), not `scripts/`; no last-used metadata tracked → manual pass made no moves (non-destructive: no usage data to identify stale scripts); recommend adding last-used tracking for future automation | [DONE] | low |
 
 ---
 
