@@ -41,8 +41,8 @@ last_updated: 2026-08-06T17:15:00Z
 | T06 | **Route WIP review findings to owning workstream** — lane message to Archivist with S1/S3/S5/C1 findings, evidence, next-owner; signed + delivered | [DONE] | high |
 | T07 | **Wire Checkpoint 6 real L/R reviewer** — replace `--force-dual-verification` stub with genuine left/right blind verification (consensus gate, avg >= 7) + state restoration | [DONE] | medium |
 | T08 | **U-2/U-3/U-4 follow-ups** — implemented classifyUdsScore (threshold table) + formatDriftAlert (standardized [DRIFT DETECTED] block for UDS > 40) per USER_DRIFT_SCORING.md; 19/19 tests pass | [DONE] | medium |
-| T09 | **Fix Rust test environment** — install javascriptcoregtk-4.1 dev package so `cargo test --manifest-path src-tauri/Cargo.toml` runs (needs sudo) | [PENDING] | low |
-| T10 | **Start continuous-improvement service** — `we4free-continuous-improvement.service` requires sudo (17/18 topology); you run, I verify | [PENDING] | low |
+| T09 | **Fix Rust test environment** — installed javascriptcoregtk-4.1 + libsoup-3.0 + webkit2gtk-4.1 dev pkgs (sudo); `cargo test` now runs: 317 passed / 1 failed (`test_switch_lane_archivist` env-path check, pre-existing, not a regression) | [DONE] | low |
+| T10 | **Start continuous-improvement service** — `we4free-continuous-improvement.service` started via sudo; now active (running) | [DONE] | low |
 | T11 | **Pre-commit hook hygiene** — confirm `hooks/install.js` hooks are current; remove/ignore deprecated `pre-commit.ps1` references | [PENDING] | low |
 | T12 | **Operator WIP fixes (your workstream)** — S1/S3/S5/C1 verified applied across 5 files; lane-worker repoRoot latent bug fixed; stale test fixtures fixed; core regression green (headless-self-audit 33/33, recovery PROVEN, audit aligned, uds-gate 19/19, lane-worker-we4free 17/17, artifact-resolver 10/10, signed-messages 5/5, sync-all-lanes 72/72) | [DONE] | medium |
 | T13 | **Add test coverage for UDS gate + ledger dedupe** — new scripts/uds-gate.js (ratchet + classifyUdsScore + formatDriftAlert) + test-uds-gate.js (19/19); headless-self-audit exports writeRecommendationLedger + A1c dedupe tests | [DONE] | medium |
