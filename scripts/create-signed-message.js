@@ -8,7 +8,6 @@ const os = require('os');
 
 const { deriveKeyId } = require(path.join(__dirname, '..', '.global', 'deriveKeyId.js'));
 const { loadPrivateKey, getAlgorithmParams, sign: algoSign, isPassphraseRequired } = require(path.join(__dirname, '..', '.global', 'algorithm-helpers.js'));
-const { normalizeMessageForSchema } = require(path.join(__dirname, '..', 'src', 'lane', 'SchemaValidator.js'));
 
 const isWin32 = process.platform === 'win32';
 const UBUNTU_ROOT = path.join(os.homedir(), 'agent', 'repos');
@@ -29,7 +28,6 @@ const PASSFILE_CANDIDATES = [
 
 const LANE_IDENTITY_DIRS = {
   archivist: _resolve('S:/Archivist-Agent/.identity'),
-  authority: _resolve('S:/Archivist-Agent/.identity/authority'),
   library: _resolve('S:/self-organizing-library/.identity'),
   swarmmind: _resolve('S:/SwarmMind/.identity'),
   kernel: _resolve('S:/kernel-lane/.identity'),
@@ -113,7 +111,7 @@ function buildCanonicalMessage(options = {}) {
     ...heartbeat,
   };
 
-  return normalizeMessageForSchema({
+  return {
     schema_version,
     task_id: resolvedTaskId,
     idempotency_key: resolvedIdempotency,
@@ -134,7 +132,7 @@ function buildCanonicalMessage(options = {}) {
     evidence_exchange: mergedEvidenceExchange,
     heartbeat: mergedHeartbeat,
     ...extra,
-  });
+  };
 }
 
 function stableStringify(value) {
@@ -182,17 +180,28 @@ function createSignedMessage(msg, laneId) {
   const publicPem = fs.readFileSync(pubPath, 'utf8');
   const privatePem = fs.readFileSync(privPath, 'utf8');
 
+  // Fail fast when the key requires a passphrase but none is available.
+  // Without this guard loadPrivateKey() would attempt a null-passphrase
+  // decrypt and surface an opaque "bad decrypt" error.
+  if (isPassphraseRequired(privatePem) && !passphrase) {
+    throw new Error(
+      `PASSPHRASE_REQUIRED for ${laneId}: key is passphrase-protected but no passphrase found ` +
+      `(set LANE_KEY_PASSPHRASE / LANE_KEY_PASSPHRASE_${laneId.toUpperCase()} or populate .runtime/lane-passphrases.json)`
+    );
+  }
+
   let privateKey;
   try {
-    if (!passphrase && isPassphraseRequired(privatePem)) {
-      throw new Error('passphrase required for encrypted key but none provided');
+    if (passphrase) {
+      privateKey = loadPrivateKey(privatePem, passphrase);
+    } else {
+      privateKey = loadPrivateKey(privatePem, null);
     }
-    privateKey = loadPrivateKey(privatePem, passphrase);
   } catch (e) {
     throw new Error(`PRIVATE_KEY_LOAD_FAILED for ${laneId}: ${e.message}`);
   }
-  const algoParams = getAlgorithmParams(privateKey);
 
+  const algoParams = getAlgorithmParams(privateKey);
   const keyId = deriveKeyId(publicPem);
   const from = msg.from || msg.from_lane || laneId;
   const to = msg.to || msg.to_lane || null;
@@ -241,7 +250,7 @@ async function writeSignedMessage(msg, laneId, outboxPath) {
   if (!fs.existsSync(outboxPath)) {
     fs.mkdirSync(outboxPath, { recursive: true });
   }
-  const filename = `${msg.id || 'msg-' + Date.now()}.json`;
+  const filename = `${signed.id || 'msg-' + Date.now()}.json`;
   const filePath = path.join(outboxPath, filename);
   // Governance invariant: every outbound write must carry explicit lease metadata.
   if (!signed.lease || typeof signed.lease !== 'object') {
@@ -255,8 +264,9 @@ async function writeSignedMessage(msg, laneId, outboxPath) {
     };
   }
   guardWrite(signed, outboxPath, filename);
-  // Atomic write with mandatory lease
-  await atomicWriteWithLease(filePath, signed, laneId, 30000);
+  // Atomic write requires string or Buffer content.
+  const contentStr = JSON.stringify(signed, null, 2);
+  await atomicWriteWithLease(filePath, contentStr, laneId, 30000);
   return { filePath, keyId: signed.key_id, filename };
 }
 

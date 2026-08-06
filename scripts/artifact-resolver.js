@@ -27,19 +27,6 @@ function normalizePath(p) {
   return p.replace(/\\/g, '/').toLowerCase();
 }
 
-function isAbsolutePath(p) {
-  if (!p || typeof p !== 'string') return false;
-  if (path.isAbsolute(p)) return true;
-  if (/^[A-Za-z]:[\/\\]/.test(p)) return true;
-  return false;
-}
-
-function hasDotDot(p) {
-  if (!p || typeof p !== 'string') return false;
-  const parts = p.replace(/\\/g, '/').split('/');
-  return parts.some(part => part === '..');
-}
-
 function isContainedWithin(childResolved, rootNormalized) {
   const childNorm = normalizePath(childResolved);
   return childNorm === rootNormalized || childNorm.startsWith(rootNormalized + '/');
@@ -68,12 +55,33 @@ class ArtifactResolver {
       try {
         const raw = JSON.parse(fs.readFileSync(p, 'utf8'));
         if (Array.isArray(raw.allowed_roots) && raw.allowed_roots.length > 0) {
-          return raw.allowed_roots;
+          return this._resolveRootsFromConfig(raw);
         }
       } catch (_) {}
     }
 
     return [..._getDefaultAllowedRoots()];
+  }
+
+  // allowed_roots.json may store bare names ('Archivist-Agent') or Windows drive
+  // paths ('S:/kernel-lane') while this process runs on a different layout.
+  // Apply the config's base_paths mapping so root containment checks operate on
+  // real absolute paths instead of cwd-relative or Windows-style strings.
+  _resolveRootsFromConfig(raw) {
+    const base = (raw.base_paths && raw.base_paths[process.platform === 'win32' ? 'windows' : 'unix']) || null;
+    if (!base) return raw.allowed_roots;
+    return raw.allowed_roots
+      .map((r) => {
+        if (typeof r !== 'string' || r.length === 0) return null;
+        if (process.platform === 'win32') return r;
+        if (r.startsWith('/')) return r;
+        const winMatch = r.match(/^[A-Za-z]:[\\/]?(.*)$/);
+        if (winMatch) {
+          return winMatch[1] ? path.join(base, winMatch[1]) : base;
+        }
+        return path.join(base, r);
+      })
+      .filter(Boolean);
   }
 
   isWithinAllowedRoots(artifactPath) {
@@ -91,67 +99,68 @@ class ArtifactResolver {
 
   hasPathTraversal(artifactPath) {
     if (!artifactPath || typeof artifactPath !== 'string') return true;
+    // Segment-based traversal check: only a '..' path segment escapes the root.
+    // The previous /\.\./ regex false-positived on legitimate names like
+    // 'report.v2.md' or '..hidden'. Splitting on both separators and testing
+    // exact segments catches ../, ..\, a/../b, and leading ../ escapes.
+    if (artifactPath.split(/[\\/]/).some((seg) => seg === '..')) return true;
     try {
-      const resolved = path.resolve(artifactPath);
-      return !this.isWithinAllowedRoots(resolved);
+      const resolvedSegments = path.resolve(artifactPath).split(/[\\/]/);
+      if (resolvedSegments.some((seg) => seg === '..')) return true;
     } catch (_) {
       return true;
     }
+    return false;
   }
 
   resolveRelativePath(artifactPath) {
-    if (!artifactPath || typeof artifactPath !== 'string') return { path: null, withinRoots: false };
-    if (isAbsolutePath(artifactPath)) return { path: artifactPath, withinRoots: true };
+    if (!artifactPath || typeof artifactPath !== 'string') return null;
+    if (path.isAbsolute(artifactPath)) return artifactPath;
 
     const candidates = [];
     for (const rawRoot of this._rawAllowedRoots) {
       const candidate = path.join(rawRoot, artifactPath);
       const resolved = path.resolve(candidate);
       if (!this.isWithinAllowedRoots(resolved)) continue;
-      if (fs.existsSync(candidate)) return { path: candidate, withinRoots: true };
+      if (fs.existsSync(candidate)) return candidate;
       candidates.push(candidate);
     }
-        return candidates.length > 0
-            ? { path: candidates[0], withinRoots: true }
-            : { path: null, withinRoots: false };
-    }
+    return candidates.length > 0 ? candidates[0] : null;
+  }
 
   resolveExists(artifactPath) {
     if (!artifactPath || typeof artifactPath !== 'string') {
       return { exists: false, reason: 'EMPTY_PATH' };
     }
 
-    if (isAbsolutePath(artifactPath)) {
-      if (!this.isWithinAllowedRoots(artifactPath)) {
-        if (hasDotDot(artifactPath)) {
-          return { exists: false, reason: 'PATH_TRAVERSAL_REJECTED' };
-        }
+    if (this.hasPathTraversal(artifactPath)) {
+      return { exists: false, reason: 'PATH_TRAVERSAL_REJECTED' };
+    }
+
+    let resolvedPath = artifactPath;
+    if (!path.isAbsolute(artifactPath)) {
+      const resolved = this.resolveRelativePath(artifactPath);
+      if (!resolved) {
         return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
       }
-    } else {
-      const relResult = this.resolveRelativePath(artifactPath);
-      if (!relResult.withinRoots) {
-        return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
-      }
-      if (!relResult.path) {
-        return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
-      }
-      artifactPath = relResult.path;
+      resolvedPath = resolved;
+    } else if (!this.isWithinAllowedRoots(artifactPath)) {
+      return { exists: false, reason: 'OUTSIDE_ALLOWED_ROOTS' };
     }
 
     if (this.dryRun) {
-      return { exists: true, reason: 'DRY_RUN_SKIP_FS_CHECK', path: artifactPath };
+      return { exists: true, reason: 'DRY_RUN_SKIP_FS_CHECK', path: resolvedPath };
     }
 
     try {
-      const stat = fs.statSync(artifactPath);
-      return { exists: true, reason: 'FILE_EXISTS', path: artifactPath, isFile: stat.isFile() };
+      const stat = fs.statSync(resolvedPath);
+      return { exists: true, reason: 'FILE_EXISTS', path: resolvedPath, isFile: stat.isFile() };
     } catch (_) {
-      return { exists: false, reason: 'FILE_NOT_FOUND', path: artifactPath };
+      return { exists: false, reason: 'FILE_NOT_FOUND', path: resolvedPath };
     }
-    }
+  }
 
-    classifyProof(msg) {
+  classifyProof(msg) {
     if (!msg || typeof msg !== 'object') return { type: 'NONE', path: null };
 
     if (msg.evidence_exchange && msg.evidence_exchange.artifact_path) {
@@ -198,30 +207,12 @@ class ArtifactResolver {
       };
     }
 
-    // Cross-repo resolution: if message has a 'from' lane, try that lane's repo first
-    var artifactPath = classification.path;
-    if (artifactPath && !path.isAbsolute(artifactPath) && msg.from && _discovery) {
-      var fromLaneRoot = _discovery.getLocalPath(msg.from);
-      if (fromLaneRoot) {
-        var fromCandidate = path.resolve(path.join(fromLaneRoot, artifactPath));
-        if (this.isWithinAllowedRoots(fromCandidate) && fs.existsSync(fromCandidate)) {
-          return {
-            resolved: true,
-            type: classification.type,
-            path: fromCandidate,
-            reason: 'CROSS_REPO_RESOLVED_FROM_LANE',
-            from_lane: msg.from,
-          };
-        }
-      }
-    }
-
-    const fileResult = this.resolveExists(artifactPath);
+    const fileResult = this.resolveExists(classification.path);
     if (!fileResult.exists) {
       return {
         resolved: false,
         type: classification.type,
-        path: artifactPath,
+        path: classification.path,
         reason: fileResult.reason,
       };
     }
@@ -229,7 +220,7 @@ class ArtifactResolver {
     return {
       resolved: true,
       type: classification.type,
-      path: fileResult.path || artifactPath,
+      path: classification.path,
       reason: fileResult.reason,
     };
   }

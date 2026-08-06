@@ -8,7 +8,7 @@ agent: authority-supervisor
 lane: authority
 journal_version: 1
 created_at: 2026-08-06T14:39:00Z
-last_updated: 2026-08-06T14:39:00Z
+last_updated: 2026-08-06T17:15:00Z
 ```
 
 ---
@@ -38,14 +38,14 @@ last_updated: 2026-08-06T14:39:00Z
 
 | ID | Task | Status | Priority |
 |----|------|--------|----------|
-| T06 | **Route WIP review findings to owning workstream** — draft lane message(s) to the Archivist workstream with S1 (artifact-resolver `..` regex + absolute-roots), S3 (create-signed-message passphrase guard), S5 (relay-daemon mkdir-before-sig), C1 (dead import) findings with evidence/next-owner | [PENDING] | high |
-| T07 | **Wire Checkpoint 6 real L/R reviewer** — replace the `--force-dual-verification` stub in resolve-post-compact-contradictions.js with genuine left/right blind verification | [PENDING] | medium |
-| T08 | **U-2/U-3/U-4 follow-ups** — continue the deferred user-drift scoring workstream (I will re-derive exact items from USER_DRIFT_SCORING.md when you ask) | [PENDING] | medium |
+| T06 | **Route WIP review findings to owning workstream** — lane message to Archivist with S1/S3/S5/C1 findings, evidence, next-owner; signed + delivered | [DONE] | high |
+| T07 | **Wire Checkpoint 6 real L/R reviewer** — replace `--force-dual-verification` stub with genuine left/right blind verification (consensus gate, avg >= 7) + state restoration | [DONE] | medium |
+| T08 | **U-2/U-3/U-4 follow-ups** — implemented classifyUdsScore (threshold table) + formatDriftAlert (standardized [DRIFT DETECTED] block for UDS > 40) per USER_DRIFT_SCORING.md; 19/19 tests pass | [DONE] | medium |
 | T09 | **Fix Rust test environment** — install javascriptcoregtk-4.1 dev package so `cargo test --manifest-path src-tauri/Cargo.toml` runs (needs sudo) | [PENDING] | low |
 | T10 | **Start continuous-improvement service** — `we4free-continuous-improvement.service` requires sudo (17/18 topology); you run, I verify | [PENDING] | low |
 | T11 | **Pre-commit hook hygiene** — confirm `hooks/install.js` hooks are current; remove/ignore deprecated `pre-commit.ps1` references | [PENDING] | low |
-| T12 | **Operator WIP fixes (your workstream)** — apply the review fixes to artifact-resolver.js, create-signed-message.js, relay-daemon.js, sovereignty-enforcer.js, SchemaValidator.js once you own them; I can implement on request | [PENDING] | medium |
-| T13 | **Add test coverage for UDS gate + ledger dedupe** — extend test-headless-self-audit.js (or add resolve-script tests) for the ratchet filter and dedupe guard | [PENDING] | medium |
+| T12 | **Operator WIP fixes (your workstream)** — S1/S3/S5/C1 verified applied across 5 files; lane-worker repoRoot latent bug fixed; stale test fixtures fixed; core regression green (headless-self-audit 33/33, recovery PROVEN, audit aligned, uds-gate 19/19, lane-worker-we4free 17/17, artifact-resolver 10/10, signed-messages 5/5, sync-all-lanes 72/72) | [DONE] | medium |
+| T13 | **Add test coverage for UDS gate + ledger dedupe** — new scripts/uds-gate.js (ratchet + classifyUdsScore + formatDriftAlert) + test-uds-gate.js (19/19); headless-self-audit exports writeRecommendationLedger + A1c dedupe tests | [DONE] | medium |
 | T14 | **SCRIPT_INDEX.md + 30-day archive pass** — audit new/changed scripts, update SCRIPT_INDEX.md, apply 30-day archive rule for stale scripts | [PENDING] | low |
 
 ---

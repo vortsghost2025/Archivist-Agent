@@ -46,79 +46,7 @@ function saveJson(filePath, data) {
 // ============================================================================
 // UDS must be evaluated BEFORE any state-changing action (USER_DRIFT_SCORING.md
 // Enforcement Protocol). Fail closed if no measurement exists — never assume 0.
-const CPS_MAX_TAIL_BYTES = 8 * 1024 * 1024;
-const CPS_MAX_SCAN_BYTES = CPS_MAX_TAIL_BYTES * 8;
-
-function findLastUdsMeasurement() {
-  const cpsLogPath = path.join(__dirname, '..', 'context-buffer', 'cps_log.jsonl');
-  if (!fs.existsSync(cpsLogPath)) return null;
-  const stat = fs.statSync(cpsLogPath);
-  if (stat.size === 0) return null;
-
-  // Scan the log backwards in bounded chunks (never read the whole 292MB file).
-  // Memory stays <= 8MB per chunk; scanning stops at the first system measurement
-  // or after CPS_MAX_SCAN_BYTES (64MB) to bound worst-case I/O. The fd is opened
-  // once and reused across chunks.
-  let end = stat.size;
-  let scanned = 0;
-  const fd = fs.openSync(cpsLogPath, 'r');
-  try {
-    while (end > 0 && scanned < CPS_MAX_SCAN_BYTES) {
-      const start = Math.max(0, end - CPS_MAX_TAIL_BYTES);
-      const len = end - start;
-      scanned += len;
-      const buf = Buffer.alloc(len);
-      fs.readSync(fd, buf, 0, len, start);
-      const chunk = buf.toString('utf8');
-      const lines = chunk.split('\n');
-      // The first line of a mid-file chunk is partial (its newline predates `start`),
-      // so skip it unless we are at the true start of the file.
-      const startIdx = start === 0 ? 0 : 1;
-      for (let i = lines.length - 1; i >= startIdx; i--) {
-        const line = lines[i];
-        if (!line) continue;
-        try {
-          const entry = JSON.parse(line);
-          // Only a SYSTEM measurement is a floor. Exclude operator-asserted entries
-          // so a prior --uds-score raise cannot become a permanent ceiling (ratchet):
-          // operator-provided UDS is auditable history, not an enforceable floor unless
-          // an automated system measurement also exists.
-          if (entry && typeof entry.uds_score === 'number' && entry.event !== 'UDS_OPERATOR_PROVIDED') {
-            return { score: entry.uds_score, ts: entry.timestamp || entry.ts || null };
-          }
-        } catch (_) {}
-      }
-      end = start;
-    }
-  } finally {
-    fs.closeSync(fd);
-  }
-  return null;
-}
-
-function lastOperatorUdsEntry() {
-  const cpsLogPath = path.join(__dirname, '..', 'context-buffer', 'cps_log.jsonl');
-  if (!fs.existsSync(cpsLogPath)) return null;
-  const stat = fs.statSync(cpsLogPath);
-  if (stat.size === 0) return null;
-  const readSize = Math.min(stat.size, 64 * 1024);
-  const fd = fs.openSync(cpsLogPath, 'r');
-  try {
-    const buf = Buffer.alloc(readSize);
-    fs.readSync(fd, buf, 0, readSize, stat.size - readSize);
-    const lines = buf.toString('utf8').split('\n');
-    for (let i = lines.length - 1; i >= 0; i--) {
-      if (!lines[i]) continue;
-      try {
-        const entry = JSON.parse(lines[i]);
-        if (entry && entry.event === 'UDS_OPERATOR_PROVIDED') return entry;
-      } catch (_) {}
-    }
-  } finally {
-    fs.closeSync(fd);
-  }
-  return null;
-}
+const { findLastUdsMeasurement, lastOperatorUdsEntry, computeEffectiveUds } = require('./uds-gate');
 
 function checkUdsGate() {
   const cliScore = (() => {
@@ -129,21 +57,7 @@ function checkUdsGate() {
   })();
 
   const systemMeasured = findLastUdsMeasurement();
-  let uds;
-  let basis;
-  if (systemMeasured && cliScore !== null) {
-    uds = Math.max(systemMeasured.score, cliScore);
-    basis = `max(system ${systemMeasured.score}, operator ${cliScore}) — operator may only RAISE above system measurement (no bypass)`;
-  } else if (systemMeasured) {
-    uds = systemMeasured.score;
-    basis = `${systemMeasured.score} [system measurement from cps_log]`;
-  } else if (cliScore !== null) {
-    uds = cliScore;
-    basis = `${cliScore} [operator-asserted — no system UDS measurement exists in cps_log]`;
-  } else {
-    uds = null;
-    basis = null;
-  }
+  const { uds, basis } = computeEffectiveUds(systemMeasured, cliScore);
 
   if (uds === null) {
     console.log('CHECKPOINT 0 (UDS Gate): FAIL — no UDS measurement (system nor operator) in cps_log.jsonl');
@@ -265,20 +179,164 @@ function checkUserLaneGate(operatorConfirmation) {
 }
 
 // ============================================================================
-// CHECKPOINT 6: Dual Verification — blind L/R review (stub for future)
+// CHECKPOINT 6: Dual Verification — blind L/R review (VERIFICATION_LANES.md)
 // ============================================================================
+// Lane L (structural) checks governance artifacts and trust-store invariants.
+// Lane R (operational) checks runtime evidence: log integrity, evidence links,
+// and the post-compact audit's file-integrity result.
+// Both run blind (no shared state) and must agree for consensus
+// (VERIFICATION_LANES.md §5.1): same result, |Δconfidence| ≤ 3, avg ≥ 7.
+function laneLStructuralReview() {
+  const evidence = [];
+  const concerns = [];
+  const checks = [];
+  const t = (cond, okMsg, badMsg) => {
+    if (cond) { evidence.push(okMsg); checks.push(1); }
+    else { concerns.push(badMsg); checks.push(0); }
+  };
+
+  const metaLanes = ['key_lineage', 'archived_keys', 'rotation_policy'];
+  let trustStore = null;
+  try { trustStore = fs.existsSync(TRUST_STORE) ? loadJson(TRUST_STORE) : null; } catch (_) {}
+  const laneIds = trustStore
+    ? Object.keys(trustStore).filter((k) => !metaLanes.includes(k))
+    : [];
+  const completeLanes = laneIds.filter((k) => trustStore[k] && trustStore[k].key_id);
+  t(trustStore && completeLanes.length >= 4,
+    `trust store: ${completeLanes.length}/${laneIds.length} lanes carry key_id`,
+    `trust store missing or incomplete (${completeLanes.length}/${laneIds.length} lanes with key_id)`);
+
+  let pre = null;
+  try { pre = fs.existsSync(PRE_COMPACT) ? loadJson(PRE_COMPACT) : null; } catch (_) {}
+  t(!!pre && Object.keys(pre.trust_store_key_ids || {}).length >= 4,
+    'PRE_COMPACT_SNAPSHOT.json present, parses, and covers ≥ 4 lanes',
+    'PRE_COMPACT_SNAPSHOT.json missing, corrupt, or underpopulated');
+
+  let post = null;
+  try { post = fs.existsSync(POST_COMPACT) ? loadJson(POST_COMPACT) : null; } catch (_) {}
+  t(!!post, 'POST_COMPACT_AUDIT.json present and parses', 'POST_COMPACT_AUDIT.json missing or corrupt');
+
+  t(fs.existsSync(path.join(__dirname, '..', 'BOOTSTRAP.md')),
+    'BOOTSTRAP.md present (single governance entry point)',
+    'BOOTSTRAP.md missing');
+
+  const passed = checks.length > 0 && checks.every((c) => c === 1);
+  const confidence = passed ? 9 : Math.max(1, Math.round((checks.filter((c) => c === 1).length / checks.length) * 9));
+  return { lane: 'L', role: 'structural', result: passed ? 'PASS' : 'FAIL', confidence, evidence, concerns };
+}
+
+function laneROperationalReview() {
+  const evidence = [];
+  const concerns = [];
+  const checks = [];
+  const t = (cond, okMsg, badMsg) => {
+    if (cond) { evidence.push(okMsg); checks.push(1); }
+    else { concerns.push(badMsg); checks.push(0); }
+  };
+
+  // R1: cps_log.jsonl tail is valid JSON-lines (runtime log integrity).
+  const cpsLogPath = path.join(__dirname, '..', 'context-buffer', 'cps_log.jsonl');
+  let logValid = true;
+  let logLines = 0;
+  try {
+    const stat = fs.statSync(cpsLogPath);
+    const readSize = Math.min(stat.size, 4 * 1024 * 1024);
+    if (readSize > 0) {
+      const fd = fs.openSync(cpsLogPath, 'r');
+      const buf = Buffer.alloc(readSize);
+      fs.readSync(fd, buf, 0, readSize, stat.size - readSize);
+      fs.closeSync(fd);
+      const lines = buf.toString('utf8').split('\n');
+      // When the read starts mid-file the first line is partial — skip it, the
+      // same convention findLastUdsMeasurement uses. The LAST line is kept
+      // strict: a partial tail line signals a real integrity problem.
+      const startIdx = stat.size > readSize ? 1 : 0;
+      for (let i = startIdx; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        try { JSON.parse(lines[i]); logLines++; } catch (_) { logValid = false; }
+      }
+    }
+  } catch (_) { logValid = false; }
+  t(logValid && logLines > 0,
+    `cps_log tail: ${logLines} valid JSON entries`,
+    'cps_log.jsonl tail unreadable or contains invalid JSON');
+
+  // R2: recommendation-ledger evidence refs resolve to real files (evidence links).
+  // Only refs that look like filesystem paths are verified (have a path separator
+  // and no command-style whitespace); free-form evidence summaries are skipped.
+  const ledgerPath = path.join(__dirname, '..', 'context-buffer', 'recommendation-ledger.jsonl');
+  let refsOk = true;
+  let refsChecked = 0;
+  try {
+    if (fs.existsSync(ledgerPath)) {
+      for (const line of fs.readFileSync(ledgerPath, 'utf8').split('\n')) {
+        if (!line.trim()) continue;
+        const rec = JSON.parse(line);
+        for (const ref of rec.resolution_evidence_refs || []) {
+          if (typeof ref !== 'string' || ref.startsWith('http')) continue;
+          if (!/[/\\]/.test(ref) || /\s/.test(ref)) continue;
+          refsChecked++;
+          if (!fs.existsSync(path.join(__dirname, '..', ref))) refsOk = false;
+        }
+      }
+    }
+  } catch (_) { refsOk = false; }
+  t(refsOk,
+    `ledger evidence refs resolve (${refsChecked} local path refs checked)`,
+    'recommendation-ledger evidence ref missing or ledger corrupt');
+
+  // R3: post-compact audit reports zero file-integrity violations.
+  let auditOk = true;
+  try {
+    if (fs.existsSync(POST_COMPACT)) {
+      const post = loadJson(POST_COMPACT);
+      const violations = (post.diff && post.diff.file_integrity_violations) || [];
+      auditOk = Array.isArray(violations) && violations.length === 0;
+    } else {
+      auditOk = false;
+    }
+  } catch (_) { auditOk = false; }
+  t(auditOk,
+    'post-compact audit reports 0 file-integrity violations',
+    'post-compact audit flags file-integrity violations (or audit file missing)');
+
+  const passed = checks.length > 0 && checks.every((c) => c === 1);
+  const confidence = passed ? 8 : Math.max(1, Math.round((checks.filter((c) => c === 1).length / checks.length) * 8));
+  return { lane: 'R', role: 'operational', result: passed ? 'PASS' : 'FAIL', confidence, evidence, concerns };
+}
+
 function checkDualVerification() {
-  // In production, this would spawn Lane L and Lane R blind reviewers
-  // and require both to sign off before proceeding.
-  // For now, log a warning and require explicit --force-dual-verification flag.
   const force = process.argv.includes('--force-dual-verification');
-  if (!force) {
-    console.log('CHECKPOINT 6 (Dual Verification): SKIPPED — requires --force-dual-verification flag');
-    console.log('  (In production, Lane L and Lane R blind reviewers would independently verify)');
-    return { passed: false, reason: 'dual verification not performed; use --force-dual-verification to override' };
+  const L = laneLStructuralReview();
+  const R = laneROperationalReview();
+
+  console.log('CHECKPOINT 6 (Dual Verification):');
+  for (const v of [L, R]) {
+    console.log(`  Lane ${v.lane} [${v.role}]: ${v.result} confidence=${v.confidence}`);
+    for (const e of v.evidence) console.log(`    - ${e}`);
+    for (const c of v.concerns) console.log(`    ! ${c}`);
   }
-  console.log('CHECKPOINT 6 (Dual Verification): PASS (forced via flag)');
-  return { passed: true };
+
+  const agree = L.result === R.result;
+  const confDiff = Math.abs(L.confidence - R.confidence);
+  const avgConf = (L.confidence + R.confidence) / 2;
+  const consensus = agree && confDiff <= 3 && avgConf >= 7 && L.result === 'PASS';
+
+  if (force) {
+    console.log(`CHECKPOINT 6 (Dual Verification): consensus=${consensus ? 'AGREE' : 'DISAGREE'} — overridden via --force-dual-verification (PASS)`);
+    return { passed: true, laneL: L, laneR: R, consensus, forced: true };
+  }
+
+  if (consensus) {
+    console.log(`CHECKPOINT 6 (Dual Verification): PASS — L/R consensus (confidence avg ${avgConf})`);
+    return { passed: true, laneL: L, laneR: R, consensus, forced: false };
+  }
+
+  const reason = !agree
+    ? 'L/R disagree — investigation required'
+    : (avgConf < 7 ? 'consensus confidence below 7' : 'L/R both failed — escalation required');
+  console.log(`CHECKPOINT 6 (Dual Verification): FAIL — ${reason}`);
+  return { passed: false, laneL: L, laneR: R, consensus, reason };
 }
 
 console.log('=== RESOLVING POST-COMPACT CONTRADICTIONS ===\n');
@@ -306,7 +364,8 @@ if (!userLaneGate.passed) {
 const dualVerify = checkDualVerification();
 if (!dualVerify.passed) {
   console.error('\n✗ CHECKPOINT 6 FAILED — aborting');
-  console.error('  Run with --force-dual-verification to override (production requires real L/R review)');
+  console.error('  L/R blind review did not reach consensus. Investigate the concerns above,');
+  console.error('  or override with --force-dual-verification (records a forced consensus).');
   process.exit(1);
 }
 
