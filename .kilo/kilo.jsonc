@@ -31,9 +31,9 @@
         "lsp": "allow"
       }
     },
- "plan": {
-        "model": "kilo/kilo-auto/free"
-      },
+"plan": {
+       "model": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free"
+     },
      "code": {
        "permission": {
          "webfetch": "allow",
@@ -54,11 +54,11 @@
      },
      "build": {},
       "debug": {
-        "model": "kilo/kilo-auto/free"
-      },
+       "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+     },
      "ask": {},
-       "general": {
-        "model": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "general": {
+       "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
        "permission": {
          "webfetch": "allow",
          "websearch": "allow",
