@@ -1,103 +1,30 @@
 {
-  "timestamp": "2026-08-06T19:45:17.244Z",
+  "timestamp": "2026-08-06T23:43:17.764Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
     "dry_run": false,
-    "scanned": 9,
+    "scanned": 0,
     "routed": {
       "action_required": 0,
       "in_progress": 0,
       "processed": 0,
       "blocked": 0,
-      "quarantine": 9
+      "quarantine": 0
     },
     "execution_verified_count": 0,
     "execution_failed_count": 0,
     "liveness": {
-      "tasks_completed_last_5min": 1,
-      "alert": false,
-      "alert_reason": null,
-      "checked_at": "2026-08-06T19:45:17.244Z"
+      "tasks_completed_last_5min": 0,
+      "alert": true,
+      "alert_reason": "ZERO_COMPLETIONS_WHILE_SYSTEM_ACTIVE",
+      "checked_at": "2026-08-06T23:43:17.764Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
     "ownership_enforcement_enabled": false,
     "ownership_warnings": 0,
-    "routes": [
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/2026-08-06T15-17-51Z_authority_route-wip-review-findings.json",
-        "filename": "2026-08-06T15-17-51Z_authority_route-wip-review-findings.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1785943659648-8353me.json",
-        "filename": "response-alert-1785943659648-8353me.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1785947273041-web8nb.json",
-        "filename": "response-alert-1785947273041-web8nb.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1785950892417-7gkbn1.json",
-        "filename": "response-alert-1785950892417-7gkbn1.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1785954507493-ziv4fv.json",
-        "filename": "response-alert-1785954507493-ziv4fv.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786026560327-qnljql.json",
-        "filename": "response-alert-1786026560327-qnljql.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786029360498-lq89pw.json",
-        "filename": "response-alert-1786029360498-lq89pw.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786029384622-lieeq9.json",
-        "filename": "response-alert-1786029384622-lieeq9.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786029384647-mhsobj.json",
-        "filename": "response-alert-1786029384647-mhsobj.json",
-        "target_queue": "quarantine",
-        "reason": "PROCESSING_EXCEPTION",
-        "detail": "repoRoot is not defined",
-        "dry_run": false
-      }
-    ],
-    "timestamp": "2026-08-06T19:45:17.244Z"
+    "routes": [],
+    "timestamp": "2026-08-06T23:43:17.764Z"
   }
 }
