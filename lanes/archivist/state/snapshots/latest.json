@@ -1,16 +1,16 @@
 {
-  "timestamp": "2026-06-06T18:15:24.615Z",
+  "timestamp": "2026-08-06T18:00:44.114Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
     "dry_run": false,
-    "scanned": 3,
+    "scanned": 9,
     "routed": {
       "action_required": 0,
       "in_progress": 0,
       "processed": 0,
       "blocked": 0,
-      "quarantine": 3
+      "quarantine": 9
     },
     "execution_verified_count": 0,
     "execution_failed_count": 0,
@@ -18,7 +18,7 @@
       "tasks_completed_last_5min": 0,
       "alert": true,
       "alert_reason": "ZERO_COMPLETIONS_WHILE_SYSTEM_ACTIVE",
-      "checked_at": "2026-06-06T18:15:24.615Z"
+      "checked_at": "2026-08-06T18:00:44.114Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
@@ -26,87 +26,78 @@
     "ownership_warnings": 0,
     "routes": [
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1780769704272-dbarhb.json",
-        "filename": "alert-alert-1780769704272-dbarhb.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/2026-08-06T15-17-51Z_authority_route-wip-review-findings.json",
+        "filename": "2026-08-06T15-17-51Z_authority_route-wip-review-findings.json",
         "target_queue": "quarantine",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/quarantine/alert-alert-1780769704272-dbarhb.json",
-        "reason": "FORMAT_VIOLATION_NON_ASCII",
-        "detail": "Message contains non-ASCII content. Re-request in English per governance constraint.",
-        "schema_valid": true,
-        "signature_valid": true,
-        "english_only": false,
-        "actionable": true,
-        "has_completion_proof": false,
-        "execution_verified": false,
-        "would_verify": false,
-        "enforce_ownership": false,
-        "ownership_enforcement_enabled": false,
-        "ownership": {
-          "present": false
-        },
-        "ownership_notes": [],
-        "verification_outcome": null,
-        "domain_validation": null,
-        "domain_gate_executed": false,
-        "verification_path": null,
-        "schema_remediation": null,
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
         "dry_run": false
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1780769707340-ztuph4.json",
-        "filename": "alert-alert-1780769707340-ztuph4.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1785943659648-8353me.json",
+        "filename": "response-alert-1785943659648-8353me.json",
         "target_queue": "quarantine",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/quarantine/alert-alert-1780769707340-ztuph4.json",
-        "reason": "FORMAT_VIOLATION_NON_ASCII",
-        "detail": "Message contains non-ASCII content. Re-request in English per governance constraint.",
-        "schema_valid": true,
-        "signature_valid": true,
-        "english_only": false,
-        "actionable": true,
-        "has_completion_proof": false,
-        "execution_verified": false,
-        "would_verify": false,
-        "enforce_ownership": false,
-        "ownership_enforcement_enabled": false,
-        "ownership": {
-          "present": false
-        },
-        "ownership_notes": [],
-        "verification_outcome": null,
-        "domain_validation": null,
-        "domain_gate_executed": false,
-        "verification_path": null,
-        "schema_remediation": null,
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
         "dry_run": false
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1780769714971-0p422c.json",
-        "filename": "alert-alert-1780769714971-0p422c.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1785947273041-web8nb.json",
+        "filename": "response-alert-1785947273041-web8nb.json",
         "target_queue": "quarantine",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/quarantine/alert-alert-1780769714971-0p422c.json",
-        "reason": "FORMAT_VIOLATION_NON_ASCII",
-        "detail": "Message contains non-ASCII content. Re-request in English per governance constraint.",
-        "schema_valid": true,
-        "signature_valid": true,
-        "english_only": false,
-        "actionable": true,
-        "has_completion_proof": false,
-        "execution_verified": false,
-        "would_verify": false,
-        "enforce_ownership": false,
-        "ownership_enforcement_enabled": false,
-        "ownership": {
-          "present": false
-        },
-        "ownership_notes": [],
-        "verification_outcome": null,
-        "domain_validation": null,
-        "domain_gate_executed": false,
-        "verification_path": null,
-        "schema_remediation": null,
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1785950892417-7gkbn1.json",
+        "filename": "response-alert-1785950892417-7gkbn1.json",
+        "target_queue": "quarantine",
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1785954507493-ziv4fv.json",
+        "filename": "response-alert-1785954507493-ziv4fv.json",
+        "target_queue": "quarantine",
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786026560327-qnljql.json",
+        "filename": "response-alert-1786026560327-qnljql.json",
+        "target_queue": "quarantine",
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786029360498-lq89pw.json",
+        "filename": "response-alert-1786029360498-lq89pw.json",
+        "target_queue": "quarantine",
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786029384622-lieeq9.json",
+        "filename": "response-alert-1786029384622-lieeq9.json",
+        "target_queue": "quarantine",
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786029384647-mhsobj.json",
+        "filename": "response-alert-1786029384647-mhsobj.json",
+        "target_queue": "quarantine",
+        "reason": "PROCESSING_EXCEPTION",
+        "detail": "repoRoot is not defined",
         "dry_run": false
       }
     ],
-    "timestamp": "2026-06-06T18:15:24.615Z"
+    "timestamp": "2026-08-06T18:00:44.114Z"
   }
 }

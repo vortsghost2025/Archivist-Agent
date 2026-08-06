@@ -1,0 +1,3306 @@
+{
+  "snapshot_id": "2026-08-05T14-49-05-003Z",
+  "created_at": "2026-08-05T14:49:05.004Z",
+  "files": [
+    {
+      "lane": "archivist",
+      "relative": "scripts/activate-identity.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__activate-identity.js",
+      "sha256": "9ca2c517de389089ebb6c54385a56de4626a6812ec8b73d8f036e21aa6ca2340"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/activate-identity.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__activate-identity.js",
+      "sha256": "9ca2c517de389089ebb6c54385a56de4626a6812ec8b73d8f036e21aa6ca2340"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/activate-identity.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__activate-identity.js",
+      "sha256": "9ca2c517de389089ebb6c54385a56de4626a6812ec8b73d8f036e21aa6ca2340"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/activate-identity.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__activate-identity.js",
+      "sha256": "9ca2c517de389089ebb6c54385a56de4626a6812ec8b73d8f036e21aa6ca2340"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/adaptive-cpu-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__adaptive-cpu-alerts.js",
+      "sha256": "9fb29a30c1620b60e047c70f120f2975a7aede5e2a1b1d18b05bc779c26619cf"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/adaptive-cpu-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__adaptive-cpu-alerts.js",
+      "sha256": "9fb29a30c1620b60e047c70f120f2975a7aede5e2a1b1d18b05bc779c26619cf"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/adaptive-cpu-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__adaptive-cpu-alerts.js",
+      "sha256": "9fb29a30c1620b60e047c70f120f2975a7aede5e2a1b1d18b05bc779c26619cf"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/adaptive-cpu-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__adaptive-cpu-alerts.js",
+      "sha256": "9fb29a30c1620b60e047c70f120f2975a7aede5e2a1b1d18b05bc779c26619cf"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/agent-commit.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__agent-commit.ps1",
+      "sha256": "52a5ba774a60baea511438a3939ae738531243d17145f31d83d2baa0e03164eb"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/agent-commit.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__agent-commit.ps1",
+      "sha256": "52a5ba774a60baea511438a3939ae738531243d17145f31d83d2baa0e03164eb"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/agent-commit.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__agent-commit.ps1",
+      "sha256": "52a5ba774a60baea511438a3939ae738531243d17145f31d83d2baa0e03164eb"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/agent-commit.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__agent-commit.ps1",
+      "sha256": "52a5ba774a60baea511438a3939ae738531243d17145f31d83d2baa0e03164eb"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/agent-presence.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__agent-presence.js",
+      "sha256": "874e54ee97eb4c74602cecc6c53555bfba60fca76258bddc4cba17c558a83062"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/agent-presence.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__agent-presence.js",
+      "sha256": "874e54ee97eb4c74602cecc6c53555bfba60fca76258bddc4cba17c558a83062"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/agent-presence.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__agent-presence.js",
+      "sha256": "874e54ee97eb4c74602cecc6c53555bfba60fca76258bddc4cba17c558a83062"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/agent-presence.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__agent-presence.js",
+      "sha256": "874e54ee97eb4c74602cecc6c53555bfba60fca76258bddc4cba17c558a83062"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/analyze-graph-json.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__analyze-graph-json.js",
+      "sha256": "667d88b0157d2c8daab4a53965a3b7b536924e5f0420f3bbb78ae986fb05102e"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/analyze-graph-json.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__analyze-graph-json.js",
+      "sha256": "667d88b0157d2c8daab4a53965a3b7b536924e5f0420f3bbb78ae986fb05102e"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/analyze-graph-json.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__analyze-graph-json.js",
+      "sha256": "667d88b0157d2c8daab4a53965a3b7b536924e5f0420f3bbb78ae986fb05102e"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/analyze-graph-json.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__analyze-graph-json.js",
+      "sha256": "667d88b0157d2c8daab4a53965a3b7b536924e5f0420f3bbb78ae986fb05102e"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/artifact-resolver.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__artifact-resolver.js",
+      "sha256": "4e41aa34b3d81005fa3dc903c9144a1f07a238ee0426486f7bd05f2ea2ecdb50"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/artifact-resolver.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__artifact-resolver.js",
+      "sha256": "dc4ab953eb18c56028675a57839bc6bbf56331da93fc914dda1f52c6283978ec"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/artifact-resolver.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__artifact-resolver.js",
+      "sha256": "0fc36dcd16b2f670cdfff0e3b660726b26fe7c1491303e7cb65ec536a2f28b4d"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/artifact-resolver.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__artifact-resolver.js",
+      "sha256": "56c172fa560a3f7e44e4908a6d3afb7a359af10f8e26e1b0a123c73efdf94d79"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/atomic-write-util.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__atomic-write-util.js",
+      "sha256": "52f08d2ae74d8b3e8d3b651aaa200393ad9f2c61f0497454d6ee6cee2888b3eb"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/atomic-write-util.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__atomic-write-util.js",
+      "sha256": "52f08d2ae74d8b3e8d3b651aaa200393ad9f2c61f0497454d6ee6cee2888b3eb"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/atomic-write-util.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__atomic-write-util.js",
+      "sha256": "52f08d2ae74d8b3e8d3b651aaa200393ad9f2c61f0497454d6ee6cee2888b3eb"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/atomic-write-util.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__atomic-write-util.js",
+      "sha256": "52f08d2ae74d8b3e8d3b651aaa200393ad9f2c61f0497454d6ee6cee2888b3eb"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/automatic-authority-simulation.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__automatic-authority-simulation.js",
+      "sha256": "f263e2e961016e46d0fd17c39ffa91f24a25d4a21d85c0540a99993d318946eb"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/automatic-authority-simulation.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__automatic-authority-simulation.js",
+      "sha256": "f263e2e961016e46d0fd17c39ffa91f24a25d4a21d85c0540a99993d318946eb"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/automatic-authority-simulation.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__automatic-authority-simulation.js",
+      "sha256": "f263e2e961016e46d0fd17c39ffa91f24a25d4a21d85c0540a99993d318946eb"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/automatic-authority-simulation.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__automatic-authority-simulation.js",
+      "sha256": "f263e2e961016e46d0fd17c39ffa91f24a25d4a21d85c0540a99993d318946eb"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/autonomous-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__autonomous-executor.js",
+      "sha256": "e4b5e6c4b191dda4578e402c156dd795a3ff388ad5cfda85b605bdc5356f59ca"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/autonomous-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__autonomous-executor.js",
+      "sha256": "7ea2e18c7105976368a5528bb1825943cb421134bff26fe9dda6ac583d5dd175"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/autonomous-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__autonomous-executor.js",
+      "sha256": "7ea2e18c7105976368a5528bb1825943cb421134bff26fe9dda6ac583d5dd175"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/autonomous-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__autonomous-executor.js",
+      "sha256": "7ea2e18c7105976368a5528bb1825943cb421134bff26fe9dda6ac583d5dd175"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/blocked-remediator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__blocked-remediator.js",
+      "sha256": "9818a92d6ceaca7ffb942bcc57ffffa3c227bba1ad8d64c4220e62d86533ac03"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/blocked-remediator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__blocked-remediator.js",
+      "sha256": "9818a92d6ceaca7ffb942bcc57ffffa3c227bba1ad8d64c4220e62d86533ac03"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/blocked-remediator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__blocked-remediator.js",
+      "sha256": "9818a92d6ceaca7ffb942bcc57ffffa3c227bba1ad8d64c4220e62d86533ac03"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/blocked-remediator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__blocked-remediator.js",
+      "sha256": "9818a92d6ceaca7ffb942bcc57ffffa3c227bba1ad8d64c4220e62d86533ac03"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/build-copilot-package.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__build-copilot-package.js",
+      "sha256": "dafd2e07e49c5a2444bb7e3cbbb7fd28d04567379f7f055a783f4cbc2e60bc81"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/build-copilot-package.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__build-copilot-package.js",
+      "sha256": "dafd2e07e49c5a2444bb7e3cbbb7fd28d04567379f7f055a783f4cbc2e60bc81"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/build-copilot-package.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__build-copilot-package.js",
+      "sha256": "dafd2e07e49c5a2444bb7e3cbbb7fd28d04567379f7f055a783f4cbc2e60bc81"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/build-copilot-package.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__build-copilot-package.js",
+      "sha256": "dafd2e07e49c5a2444bb7e3cbbb7fd28d04567379f7f055a783f4cbc2e60bc81"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/bulk-complete-reopened.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__bulk-complete-reopened.js",
+      "sha256": "9e31ce35fb788bedcc0072c51d66363245d8477bf4c399b53a09042aa74a5cfc"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/bulk-complete-reopened.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__bulk-complete-reopened.js",
+      "sha256": "9e31ce35fb788bedcc0072c51d66363245d8477bf4c399b53a09042aa74a5cfc"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/bulk-complete-reopened.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__bulk-complete-reopened.js",
+      "sha256": "9e31ce35fb788bedcc0072c51d66363245d8477bf4c399b53a09042aa74a5cfc"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/bulk-complete-reopened.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__bulk-complete-reopened.js",
+      "sha256": "9e31ce35fb788bedcc0072c51d66363245d8477bf4c399b53a09042aa74a5cfc"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/ci-execution-truth-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__ci-execution-truth-guard.js",
+      "sha256": "12e561cc88ec8acd6dac5de5e6ec5838be0a54bfbb916824388ccd715769a05c"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/ci-execution-truth-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__ci-execution-truth-guard.js",
+      "sha256": "12e561cc88ec8acd6dac5de5e6ec5838be0a54bfbb916824388ccd715769a05c"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/ci-execution-truth-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__ci-execution-truth-guard.js",
+      "sha256": "12e561cc88ec8acd6dac5de5e6ec5838be0a54bfbb916824388ccd715769a05c"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/ci-execution-truth-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__ci-execution-truth-guard.js",
+      "sha256": "12e561cc88ec8acd6dac5de5e6ec5838be0a54bfbb916824388ccd715769a05c"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/ci-integration-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__ci-integration-check.js",
+      "sha256": "365441320543aec122fc49a37f9e4d729fdc552ec46dfab63d1d8a7c5df4dc0f"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/ci-integration-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__ci-integration-check.js",
+      "sha256": "365441320543aec122fc49a37f9e4d729fdc552ec46dfab63d1d8a7c5df4dc0f"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/ci-integration-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__ci-integration-check.js",
+      "sha256": "365441320543aec122fc49a37f9e4d729fdc552ec46dfab63d1d8a7c5df4dc0f"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/ci-integration-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__ci-integration-check.js",
+      "sha256": "365441320543aec122fc49a37f9e4d729fdc552ec46dfab63d1d8a7c5df4dc0f"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/cicd-sovereignty-gates.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__cicd-sovereignty-gates.js",
+      "sha256": "35de1a20cf29a321373b27de849f0e6d341e35b13e81b5ab21d35da06c2ea4d9"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/cicd-sovereignty-gates.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__cicd-sovereignty-gates.js",
+      "sha256": "35de1a20cf29a321373b27de849f0e6d341e35b13e81b5ab21d35da06c2ea4d9"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/cicd-sovereignty-gates.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__cicd-sovereignty-gates.js",
+      "sha256": "35de1a20cf29a321373b27de849f0e6d341e35b13e81b5ab21d35da06c2ea4d9"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/cicd-sovereignty-gates.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__cicd-sovereignty-gates.js",
+      "sha256": "35de1a20cf29a321373b27de849f0e6d341e35b13e81b5ab21d35da06c2ea4d9"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/claim-commit-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__claim-commit-guard.js",
+      "sha256": "27143b501fa2de2c165da4ebeca9ab6f3db0e0244eb39dda28b01efe9add1e1c"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/claim-commit-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__claim-commit-guard.js",
+      "sha256": "27143b501fa2de2c165da4ebeca9ab6f3db0e0244eb39dda28b01efe9add1e1c"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/claim-commit-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__claim-commit-guard.js",
+      "sha256": "27143b501fa2de2c165da4ebeca9ab6f3db0e0244eb39dda28b01efe9add1e1c"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/claim-commit-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__claim-commit-guard.js",
+      "sha256": "27143b501fa2de2c165da4ebeca9ab6f3db0e0244eb39dda28b01efe9add1e1c"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/code-version-hash.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__code-version-hash.js",
+      "sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/code-version-hash.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__code-version-hash.js",
+      "sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/code-version-hash.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__code-version-hash.js",
+      "sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/code-version-hash.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__code-version-hash.js",
+      "sha256": "95848d95301e95a5fa4aa566a288931bd8feb3875700f6fffe990a6fc1336b12"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/collision-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__collision-check.js",
+      "sha256": "9238115f0e88e13fc2a92cdca71b9e75adcf2dc727edddcbf91a72147911b307"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/collision-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__collision-check.js",
+      "sha256": "9238115f0e88e13fc2a92cdca71b9e75adcf2dc727edddcbf91a72147911b307"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/collision-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__collision-check.js",
+      "sha256": "9238115f0e88e13fc2a92cdca71b9e75adcf2dc727edddcbf91a72147911b307"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/collision-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__collision-check.js",
+      "sha256": "9238115f0e88e13fc2a92cdca71b9e75adcf2dc727edddcbf91a72147911b307"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/compact-restore-bridge.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__compact-restore-bridge.js",
+      "sha256": "1ff5963de5fc19aa761e5b0aaf8f6a86b73dae5ee8c45222ddf09c9262bf77fd"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/compact-restore-bridge.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__compact-restore-bridge.js",
+      "sha256": "1ff5963de5fc19aa761e5b0aaf8f6a86b73dae5ee8c45222ddf09c9262bf77fd"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/compact-restore-bridge.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__compact-restore-bridge.js",
+      "sha256": "1ff5963de5fc19aa761e5b0aaf8f6a86b73dae5ee8c45222ddf09c9262bf77fd"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/compact-restore-bridge.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__compact-restore-bridge.js",
+      "sha256": "1ff5963de5fc19aa761e5b0aaf8f6a86b73dae5ee8c45222ddf09c9262bf77fd"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/compact-restore-test.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__compact-restore-test.js",
+      "sha256": "643802f2a78bb45dd4db24fbfa936b925c9497bde80185d4ef044174d6a6fe14"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/compact-restore-test.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__compact-restore-test.js",
+      "sha256": "643802f2a78bb45dd4db24fbfa936b925c9497bde80185d4ef044174d6a6fe14"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/compact-restore-test.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__compact-restore-test.js",
+      "sha256": "643802f2a78bb45dd4db24fbfa936b925c9497bde80185d4ef044174d6a6fe14"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/compact-restore-test.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__compact-restore-test.js",
+      "sha256": "643802f2a78bb45dd4db24fbfa936b925c9497bde80185d4ef044174d6a6fe14"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/completion-gate-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__completion-gate-audit.js",
+      "sha256": "9c4236b8024d3579220dd04e8e09daaae7301f6fd515276bc674a05b57e1d665"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/completion-gate-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__completion-gate-audit.js",
+      "sha256": "9c4236b8024d3579220dd04e8e09daaae7301f6fd515276bc674a05b57e1d665"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/completion-gate-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__completion-gate-audit.js",
+      "sha256": "9c4236b8024d3579220dd04e8e09daaae7301f6fd515276bc674a05b57e1d665"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/completion-gate-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__completion-gate-audit.js",
+      "sha256": "9c4236b8024d3579220dd04e8e09daaae7301f6fd515276bc674a05b57e1d665"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/completion-gate-remediate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__completion-gate-remediate.js",
+      "sha256": "989804c4b7ee326a3195bf66a0f9763c8ccf0e888c33344cc6f7956a03182ad9"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/completion-gate-remediate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__completion-gate-remediate.js",
+      "sha256": "989804c4b7ee326a3195bf66a0f9763c8ccf0e888c33344cc6f7956a03182ad9"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/completion-gate-remediate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__completion-gate-remediate.js",
+      "sha256": "989804c4b7ee326a3195bf66a0f9763c8ccf0e888c33344cc6f7956a03182ad9"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/completion-gate-remediate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__completion-gate-remediate.js",
+      "sha256": "989804c4b7ee326a3195bf66a0f9763c8ccf0e888c33344cc6f7956a03182ad9"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/completion-gate-triage-remediate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__completion-gate-triage-remediate.js",
+      "sha256": "31e545d779b02095553a366776de48ed67b4151d508e9bfec0b38fd51267c599"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/completion-gate-triage-remediate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__completion-gate-triage-remediate.js",
+      "sha256": "31e545d779b02095553a366776de48ed67b4151d508e9bfec0b38fd51267c599"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/completion-gate-triage-remediate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__completion-gate-triage-remediate.js",
+      "sha256": "31e545d779b02095553a366776de48ed67b4151d508e9bfec0b38fd51267c599"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/completion-gate-triage-remediate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__completion-gate-triage-remediate.js",
+      "sha256": "31e545d779b02095553a366776de48ed67b4151d508e9bfec0b38fd51267c599"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/completion-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__completion-gate.js",
+      "sha256": "44d65e04274588f3fd1de6a9729dcea55a1f063a900751fcd4f92226808c9e17"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/completion-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__completion-gate.js",
+      "sha256": "44d65e04274588f3fd1de6a9729dcea55a1f063a900751fcd4f92226808c9e17"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/completion-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__completion-gate.js",
+      "sha256": "44d65e04274588f3fd1de6a9729dcea55a1f063a900751fcd4f92226808c9e17"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/completion-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__completion-gate.js",
+      "sha256": "44d65e04274588f3fd1de6a9729dcea55a1f063a900751fcd4f92226808c9e17"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/completion-proof-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__completion-proof-audit.js",
+      "sha256": "d8e83320f0f13644bf4e00dc1353b408c1bd26e59a9bdcefee888ac96f49aab3"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/completion-proof-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__completion-proof-audit.js",
+      "sha256": "d8e83320f0f13644bf4e00dc1353b408c1bd26e59a9bdcefee888ac96f49aab3"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/completion-proof-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__completion-proof-audit.js",
+      "sha256": "d8e83320f0f13644bf4e00dc1353b408c1bd26e59a9bdcefee888ac96f49aab3"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/completion-proof-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__completion-proof-audit.js",
+      "sha256": "d8e83320f0f13644bf4e00dc1353b408c1bd26e59a9bdcefee888ac96f49aab3"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__completion-proof.js",
+      "sha256": "b35cd356fcfc2f7f76a1f70ea420b753e861ea7b3156972ceb77e7e6e28eee6d"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__completion-proof.js",
+      "sha256": "b35cd356fcfc2f7f76a1f70ea420b753e861ea7b3156972ceb77e7e6e28eee6d"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__completion-proof.js",
+      "sha256": "b35cd356fcfc2f7f76a1f70ea420b753e861ea7b3156972ceb77e7e6e28eee6d"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__completion-proof.js",
+      "sha256": "b35cd356fcfc2f7f76a1f70ea420b753e861ea7b3156972ceb77e7e6e28eee6d"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/concurrency-policy.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__concurrency-policy.js",
+      "sha256": "e7c94705bc88fbe30ccc6e8830f545a2cbac10da18f6125b9b2b7d52adcdf31c"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/concurrency-policy.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__concurrency-policy.js",
+      "sha256": "e7c94705bc88fbe30ccc6e8830f545a2cbac10da18f6125b9b2b7d52adcdf31c"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/concurrency-policy.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__concurrency-policy.js",
+      "sha256": "e7c94705bc88fbe30ccc6e8830f545a2cbac10da18f6125b9b2b7d52adcdf31c"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/concurrency-policy.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__concurrency-policy.js",
+      "sha256": "e7c94705bc88fbe30ccc6e8830f545a2cbac10da18f6125b9b2b7d52adcdf31c"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/contradiction-adjudicator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__contradiction-adjudicator.js",
+      "sha256": "cb0a5c5b6e15c97f33d4e2648cfc88468bf25bf10ccf416a0ab165a187b616f7"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/contradiction-adjudicator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__contradiction-adjudicator.js",
+      "sha256": "cb0a5c5b6e15c97f33d4e2648cfc88468bf25bf10ccf416a0ab165a187b616f7"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/contradiction-adjudicator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__contradiction-adjudicator.js",
+      "sha256": "cb0a5c5b6e15c97f33d4e2648cfc88468bf25bf10ccf416a0ab165a187b616f7"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/contradiction-adjudicator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__contradiction-adjudicator.js",
+      "sha256": "cb0a5c5b6e15c97f33d4e2648cfc88468bf25bf10ccf416a0ab165a187b616f7"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/convergence-contradiction-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__convergence-contradiction-check.js",
+      "sha256": "95baf281b1da45451c5a5c496ba9bb39270a79b3269206f8114bf4ea141c8c90"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/convergence-contradiction-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__convergence-contradiction-check.js",
+      "sha256": "95baf281b1da45451c5a5c496ba9bb39270a79b3269206f8114bf4ea141c8c90"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/convergence-contradiction-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__convergence-contradiction-check.js",
+      "sha256": "95baf281b1da45451c5a5c496ba9bb39270a79b3269206f8114bf4ea141c8c90"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/convergence-contradiction-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__convergence-contradiction-check.js",
+      "sha256": "95baf281b1da45451c5a5c496ba9bb39270a79b3269206f8114bf4ea141c8c90"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/create-signed-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__create-signed-message.js",
+      "sha256": "168ddafe83d60ea494606cdd1ffb45a6ac4d806247286d2c2505021047d3118e"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/create-signed-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__create-signed-message.js",
+      "sha256": "b6f3d6b090a8896a0339badd8ba5ee9863b9ab2c9bfd957176851ef9d0cda384"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/create-signed-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__create-signed-message.js",
+      "sha256": "24a20eef0fe30eb3272797a38b19c417cbb826a326e0581066db4ccd4cc014bc"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/create-signed-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__create-signed-message.js",
+      "sha256": "a9cddcabd9e2b8e7fb4724257b34d0e5772c08bea6985449e8bb5749646d8210"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/cross-lane-consistency-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__cross-lane-consistency-check.js",
+      "sha256": "f47bb81e51aae1721e74fe82c34676654c188d6e1cad7ddf43f60f643891dca8"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/cross-lane-consistency-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__cross-lane-consistency-check.js",
+      "sha256": "f47bb81e51aae1721e74fe82c34676654c188d6e1cad7ddf43f60f643891dca8"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/cross-lane-consistency-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__cross-lane-consistency-check.js",
+      "sha256": "f47bb81e51aae1721e74fe82c34676654c188d6e1cad7ddf43f60f643891dca8"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/cross-lane-consistency-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__cross-lane-consistency-check.js",
+      "sha256": "f47bb81e51aae1721e74fe82c34676654c188d6e1cad7ddf43f60f643891dca8"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/cross-lane-sync-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__cross-lane-sync-gate.js",
+      "sha256": "73cd72554cad7ff3d46d2869a4b910bfbfb0f31f1e7e30356a9da2dda6915d87"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/cross-lane-sync-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__cross-lane-sync-gate.js",
+      "sha256": "07b7cb20e0aa2d125235f5e7a85f995465e78daf1edea895f2d49b58c146ec85"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/cross-lane-sync-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__cross-lane-sync-gate.js",
+      "sha256": "73cd72554cad7ff3d46d2869a4b910bfbfb0f31f1e7e30356a9da2dda6915d87"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/cross-lane-sync-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__cross-lane-sync-gate.js",
+      "sha256": "645b5796b6675ed6413f58d0a1b666195d0d4b7aa0ab74caec648b19d658c496"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/cross-lane-sync.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__cross-lane-sync.js",
+      "sha256": "59f91b99b5f10743825330b4cce9013433847fa7b45db4fae65cec16bc6e2666"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/cross-lane-sync.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__cross-lane-sync.js",
+      "sha256": "59f91b99b5f10743825330b4cce9013433847fa7b45db4fae65cec16bc6e2666"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/cross-lane-sync.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__cross-lane-sync.js",
+      "sha256": "59f91b99b5f10743825330b4cce9013433847fa7b45db4fae65cec16bc6e2666"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/cross-lane-sync.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__cross-lane-sync.js",
+      "sha256": "59f91b99b5f10743825330b4cce9013433847fa7b45db4fae65cec16bc6e2666"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/daily-productivity-report.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__daily-productivity-report.js",
+      "sha256": "176de2f64df3c442e9cbcacc24081598ec3d5391336e9d6481973ba6aa2b01d1"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/daily-productivity-report.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__daily-productivity-report.js",
+      "sha256": "176de2f64df3c442e9cbcacc24081598ec3d5391336e9d6481973ba6aa2b01d1"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/daily-productivity-report.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__daily-productivity-report.js",
+      "sha256": "176de2f64df3c442e9cbcacc24081598ec3d5391336e9d6481973ba6aa2b01d1"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/daily-productivity-report.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__daily-productivity-report.js",
+      "sha256": "176de2f64df3c442e9cbcacc24081598ec3d5391336e9d6481973ba6aa2b01d1"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/debug-ci.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__debug-ci.js",
+      "sha256": "2cb60f4349c3d5d684406c1f8ffa1fd13ab2886701bf6bb0cf46f65a83ee7530"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/debug-ci.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__debug-ci.js",
+      "sha256": "2cb60f4349c3d5d684406c1f8ffa1fd13ab2886701bf6bb0cf46f65a83ee7530"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/debug-ci.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__debug-ci.js",
+      "sha256": "2cb60f4349c3d5d684406c1f8ffa1fd13ab2886701bf6bb0cf46f65a83ee7530"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/debug-ci.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__debug-ci.js",
+      "sha256": "2cb60f4349c3d5d684406c1f8ffa1fd13ab2886701bf6bb0cf46f65a83ee7530"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/debug-consistency.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__debug-consistency.js",
+      "sha256": "70d9fc3e473322e91f7ffd4b8ff7af9d0640e492792a72fdced441840eac869e"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/debug-consistency.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__debug-consistency.js",
+      "sha256": "70d9fc3e473322e91f7ffd4b8ff7af9d0640e492792a72fdced441840eac869e"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/debug-consistency.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__debug-consistency.js",
+      "sha256": "70d9fc3e473322e91f7ffd4b8ff7af9d0640e492792a72fdced441840eac869e"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/debug-consistency.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__debug-consistency.js",
+      "sha256": "70d9fc3e473322e91f7ffd4b8ff7af9d0640e492792a72fdced441840eac869e"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/dispatch-kernel-tasks.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__dispatch-kernel-tasks.js",
+      "sha256": "6b2a3c0dde57d8368b2fadfc6538fd1a1d159051545f7d14077a7de0ed70b115"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/dispatch-kernel-tasks.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__dispatch-kernel-tasks.js",
+      "sha256": "6b2a3c0dde57d8368b2fadfc6538fd1a1d159051545f7d14077a7de0ed70b115"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/dispatch-kernel-tasks.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__dispatch-kernel-tasks.js",
+      "sha256": "6b2a3c0dde57d8368b2fadfc6538fd1a1d159051545f7d14077a7de0ed70b115"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/dispatch-kernel-tasks.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__dispatch-kernel-tasks.js",
+      "sha256": "6b2a3c0dde57d8368b2fadfc6538fd1a1d159051545f7d14077a7de0ed70b115"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/dispatch-task.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__dispatch-task.js",
+      "sha256": "8aefa418be3cf4c3dd147de6a1692e888d36730cb018b55779c86beef746f887"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/dispatch-task.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__dispatch-task.js",
+      "sha256": "8aefa418be3cf4c3dd147de6a1692e888d36730cb018b55779c86beef746f887"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/dispatch-task.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__dispatch-task.js",
+      "sha256": "8aefa418be3cf4c3dd147de6a1692e888d36730cb018b55779c86beef746f887"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/dispatch-task.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__dispatch-task.js",
+      "sha256": "8aefa418be3cf4c3dd147de6a1692e888d36730cb018b55779c86beef746f887"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/e2e-monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__e2e-monitor.js",
+      "sha256": "69d330dc035687974e77a5aa3eb5e718f3ccec77babe4b287553a0fb080c63ea"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/e2e-monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__e2e-monitor.js",
+      "sha256": "69d330dc035687974e77a5aa3eb5e718f3ccec77babe4b287553a0fb080c63ea"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/e2e-monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__e2e-monitor.js",
+      "sha256": "69d330dc035687974e77a5aa3eb5e718f3ccec77babe4b287553a0fb080c63ea"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/e2e-monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__e2e-monitor.js",
+      "sha256": "69d330dc035687974e77a5aa3eb5e718f3ccec77babe4b287553a0fb080c63ea"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/edit-lease-manager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__edit-lease-manager.js",
+      "sha256": "dbc9427e959aea7f2577de1c8af42bc103acac02fa0b5dba536e796bf08613e9"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/edit-lease-manager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__edit-lease-manager.js",
+      "sha256": "0c0d0d39c8e1766a865ce86fa87b1555176ab8962131992296e2c3733ef5c7e8"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/edit-lease-manager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__edit-lease-manager.js",
+      "sha256": "dbc9427e959aea7f2577de1c8af42bc103acac02fa0b5dba536e796bf08613e9"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/edit-lease-manager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__edit-lease-manager.js",
+      "sha256": "b78259935a292f9e445b4e2e254f0ef080202b7a2298936f95acb969968d0e57"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/enforce-consistency-invariant.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__enforce-consistency-invariant.js",
+      "sha256": "35bc41b0a6d457c251d4cf9e38b3177fa39e5a60114d182f8ef56b1ef13d19af"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/enforce-consistency-invariant.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__enforce-consistency-invariant.js",
+      "sha256": "35bc41b0a6d457c251d4cf9e38b3177fa39e5a60114d182f8ef56b1ef13d19af"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/enforce-consistency-invariant.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__enforce-consistency-invariant.js",
+      "sha256": "35bc41b0a6d457c251d4cf9e38b3177fa39e5a60114d182f8ef56b1ef13d19af"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/enforce-consistency-invariant.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__enforce-consistency-invariant.js",
+      "sha256": "35bc41b0a6d457c251d4cf9e38b3177fa39e5a60114d182f8ef56b1ef13d19af"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/enforce_consistency_invariant.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__enforce_consistency_invariant.js",
+      "sha256": "004346b8aeae250b8ee6e589229e545e58d7751e27860db3e9a7440e050ba25b"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/enforce_consistency_invariant.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__enforce_consistency_invariant.js",
+      "sha256": "004346b8aeae250b8ee6e589229e545e58d7751e27860db3e9a7440e050ba25b"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/enforce_consistency_invariant.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__enforce_consistency_invariant.js",
+      "sha256": "004346b8aeae250b8ee6e589229e545e58d7751e27860db3e9a7440e050ba25b"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/enforce_consistency_invariant.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__enforce_consistency_invariant.js",
+      "sha256": "004346b8aeae250b8ee6e589229e545e58d7751e27860db3e9a7440e050ba25b"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/evidence-exchange-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__evidence-exchange-check.js",
+      "sha256": "7dd8115ea71124504e02b86fa2781cecd85c7200c1c4013669249e702fb17b74"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/evidence-exchange-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__evidence-exchange-check.js",
+      "sha256": "7dd8115ea71124504e02b86fa2781cecd85c7200c1c4013669249e702fb17b74"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/evidence-exchange-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__evidence-exchange-check.js",
+      "sha256": "7dd8115ea71124504e02b86fa2781cecd85c7200c1c4013669249e702fb17b74"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/evidence-exchange-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__evidence-exchange-check.js",
+      "sha256": "7dd8115ea71124504e02b86fa2781cecd85c7200c1c4013669249e702fb17b74"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/execution-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__execution-gate.js",
+      "sha256": "18c5df1f5d8b0e94e8df0c33d733fc042251bf80fcc408b0b8fd4097b60b3796"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/execution-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__execution-gate.js",
+      "sha256": "917a0e53904925154ece71100ca1f1553ba1b1b42d8404f0e319590016a85c3e"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/execution-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__execution-gate.js",
+      "sha256": "18c5df1f5d8b0e94e8df0c33d733fc042251bf80fcc408b0b8fd4097b60b3796"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/execution-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__execution-gate.js",
+      "sha256": "6e7eee7fc0b10e5ab796dffc444421f72b45e4bd2bf5a2d9eaceb7fa08e9d309"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/execution-weight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__execution-weight.js",
+      "sha256": "0e5abc0d18e04fb241ad80b448b8d8a4f0682574a43ca298af0218dcd6808025"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/execution-weight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__execution-weight.js",
+      "sha256": "0e5abc0d18e04fb241ad80b448b8d8a4f0682574a43ca298af0218dcd6808025"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/execution-weight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__execution-weight.js",
+      "sha256": "0e5abc0d18e04fb241ad80b448b8d8a4f0682574a43ca298af0218dcd6808025"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/execution-weight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__execution-weight.js",
+      "sha256": "0e5abc0d18e04fb241ad80b448b8d8a4f0682574a43ca298af0218dcd6808025"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/executor-watcher.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__executor-watcher.js",
+      "sha256": "6a9e5b7d099ba2f0a685333cca277dd312188bcad56d836a631fc3ee2efa36e6"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/executor-watcher.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__executor-watcher.js",
+      "sha256": "6a9e5b7d099ba2f0a685333cca277dd312188bcad56d836a631fc3ee2efa36e6"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/executor-watcher.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__executor-watcher.js",
+      "sha256": "6a9e5b7d099ba2f0a685333cca277dd312188bcad56d836a631fc3ee2efa36e6"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/executor-watcher.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__executor-watcher.js",
+      "sha256": "6a9e5b7d099ba2f0a685333cca277dd312188bcad56d836a631fc3ee2efa36e6"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/fix-processed-completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__fix-processed-completion-proof.js",
+      "sha256": "ffa367ef21c43aec116c2199de816f9818a3b4324e5147fd4695a22bdec31e64"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/fix-processed-completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__fix-processed-completion-proof.js",
+      "sha256": "ffa367ef21c43aec116c2199de816f9818a3b4324e5147fd4695a22bdec31e64"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/fix-processed-completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__fix-processed-completion-proof.js",
+      "sha256": "ffa367ef21c43aec116c2199de816f9818a3b4324e5147fd4695a22bdec31e64"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/fix-processed-completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__fix-processed-completion-proof.js",
+      "sha256": "ffa367ef21c43aec116c2199de816f9818a3b4324e5147fd4695a22bdec31e64"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/full-lane-review-and-dispatch.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__full-lane-review-and-dispatch.js",
+      "sha256": "1e9723f2988b1ce2cc04a297990445f3d750f6eda80f6ec93037799731ff29a2"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/full-lane-review-and-dispatch.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__full-lane-review-and-dispatch.js",
+      "sha256": "1e9723f2988b1ce2cc04a297990445f3d750f6eda80f6ec93037799731ff29a2"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/full-lane-review-and-dispatch.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__full-lane-review-and-dispatch.js",
+      "sha256": "1e9723f2988b1ce2cc04a297990445f3d750f6eda80f6ec93037799731ff29a2"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/full-lane-review-and-dispatch.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__full-lane-review-and-dispatch.js",
+      "sha256": "1e9723f2988b1ce2cc04a297990445f3d750f6eda80f6ec93037799731ff29a2"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/gen-archivist-key.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__gen-archivist-key.js",
+      "sha256": "c2eb93b871474dc2e9392436f6b79ed6df0af57019e1ef17b1b929b58933e7ad"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/gen-archivist-key.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__gen-archivist-key.js",
+      "sha256": "c2eb93b871474dc2e9392436f6b79ed6df0af57019e1ef17b1b929b58933e7ad"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/gen-archivist-key.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__gen-archivist-key.js",
+      "sha256": "c2eb93b871474dc2e9392436f6b79ed6df0af57019e1ef17b1b929b58933e7ad"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/gen-archivist-key.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__gen-archivist-key.js",
+      "sha256": "c2eb93b871474dc2e9392436f6b79ed6df0af57019e1ef17b1b929b58933e7ad"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/generic-task-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__generic-task-executor.js",
+      "sha256": "4d675546774c4d876f6d98aff472eb8088532d27450b5952014d820089a94ceb"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/generic-task-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__generic-task-executor.js",
+      "sha256": "0cffaf09639b159e75c14b20c1384146d677d051d29e5695681ae6e84f032052"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/generic-task-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__generic-task-executor.js",
+      "sha256": "0cffaf09639b159e75c14b20c1384146d677d051d29e5695681ae6e84f032052"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/generic-task-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__generic-task-executor.js",
+      "sha256": "0cffaf09639b159e75c14b20c1384146d677d051d29e5695681ae6e84f032052"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/governance-message-verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__governance-message-verifier.js",
+      "sha256": "56dfb21051979a0c988247efd8cbd965ce2ba85b735cba7bb39ae7367d0cc277"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/governance-message-verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__governance-message-verifier.js",
+      "sha256": "56dfb21051979a0c988247efd8cbd965ce2ba85b735cba7bb39ae7367d0cc277"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/governance-message-verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__governance-message-verifier.js",
+      "sha256": "56dfb21051979a0c988247efd8cbd965ce2ba85b735cba7bb39ae7367d0cc277"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/governance-message-verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__governance-message-verifier.js",
+      "sha256": "56dfb21051979a0c988247efd8cbd965ce2ba85b735cba7bb39ae7367d0cc277"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/headless-self-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__headless-self-audit.js",
+      "sha256": "0ea688dda0e2871243ebe6ef7b67b8e5dfa6e007caa3824e826be395639570dd"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/headless-self-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__headless-self-audit.js",
+      "sha256": "0ea688dda0e2871243ebe6ef7b67b8e5dfa6e007caa3824e826be395639570dd"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/headless-self-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__headless-self-audit.js",
+      "sha256": "0ea688dda0e2871243ebe6ef7b67b8e5dfa6e007caa3824e826be395639570dd"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/headless-self-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__headless-self-audit.js",
+      "sha256": "0ea688dda0e2871243ebe6ef7b67b8e5dfa6e007caa3824e826be395639570dd"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/health-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__health-core.js",
+      "sha256": "38b0073c7de3bddce3e37a135dc3f81e990653bf8c8d3b67092d7a9d290c250c"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/health-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__health-core.js",
+      "sha256": "38b0073c7de3bddce3e37a135dc3f81e990653bf8c8d3b67092d7a9d290c250c"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/health-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__health-core.js",
+      "sha256": "38b0073c7de3bddce3e37a135dc3f81e990653bf8c8d3b67092d7a9d290c250c"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/health-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__health-core.js",
+      "sha256": "38b0073c7de3bddce3e37a135dc3f81e990653bf8c8d3b67092d7a9d290c250c"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/heartbeat.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__heartbeat.js",
+      "sha256": "35bfe2054f8c3a0c1dce097350e48b19f64786400348105c8845951a591e47b4"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/heartbeat.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__heartbeat.js",
+      "sha256": "35bfe2054f8c3a0c1dce097350e48b19f64786400348105c8845951a591e47b4"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/heartbeat.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__heartbeat.js",
+      "sha256": "35bfe2054f8c3a0c1dce097350e48b19f64786400348105c8845951a591e47b4"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/heartbeat.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__heartbeat.js",
+      "sha256": "35bfe2054f8c3a0c1dce097350e48b19f64786400348105c8845951a591e47b4"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/identity-enforcer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__identity-enforcer.js",
+      "sha256": "518068bfde9ec886d6ec9c45ad3713d9ef15501d0da54a74075554c9f1e8dfec"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/identity-enforcer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__identity-enforcer.js",
+      "sha256": "518068bfde9ec886d6ec9c45ad3713d9ef15501d0da54a74075554c9f1e8dfec"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/identity-enforcer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__identity-enforcer.js",
+      "sha256": "518068bfde9ec886d6ec9c45ad3713d9ef15501d0da54a74075554c9f1e8dfec"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/identity-enforcer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__identity-enforcer.js",
+      "sha256": "518068bfde9ec886d6ec9c45ad3713d9ef15501d0da54a74075554c9f1e8dfec"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/identity-self-healing.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__identity-self-healing.js",
+      "sha256": "9563e7317093a1a9a412efb650d782e45444b94a016efff4083c487d574851d3"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/identity-self-healing.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__identity-self-healing.js",
+      "sha256": "9563e7317093a1a9a412efb650d782e45444b94a016efff4083c487d574851d3"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/identity-self-healing.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__identity-self-healing.js",
+      "sha256": "9563e7317093a1a9a412efb650d782e45444b94a016efff4083c487d574851d3"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/identity-self-healing.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__identity-self-healing.js",
+      "sha256": "9563e7317093a1a9a412efb650d782e45444b94a016efff4083c487d574851d3"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/inbox-watcher.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__inbox-watcher.js",
+      "sha256": "135b0d7f6220ebaf4bf4ba62c5d533ac11d106b50e4220f160c8d4625b34d6cc"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/inbox-watcher.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__inbox-watcher.js",
+      "sha256": "135b0d7f6220ebaf4bf4ba62c5d533ac11d106b50e4220f160c8d4625b34d6cc"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/inbox-watcher.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__inbox-watcher.js",
+      "sha256": "135b0d7f6220ebaf4bf4ba62c5d533ac11d106b50e4220f160c8d4625b34d6cc"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/inbox-watcher.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__inbox-watcher.js",
+      "sha256": "135b0d7f6220ebaf4bf4ba62c5d533ac11d106b50e4220f160c8d4625b34d6cc"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/inbox-watcher.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__inbox-watcher.ps1",
+      "sha256": "91977e7caf7f6ae98b26327594cc361eadb91ffe65252e3d3cd0e5454cb540d9"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/inbox-watcher.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__inbox-watcher.ps1",
+      "sha256": "91977e7caf7f6ae98b26327594cc361eadb91ffe65252e3d3cd0e5454cb540d9"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/inbox-watcher.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__inbox-watcher.ps1",
+      "sha256": "91977e7caf7f6ae98b26327594cc361eadb91ffe65252e3d3cd0e5454cb540d9"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/inbox-watcher.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__inbox-watcher.ps1",
+      "sha256": "91977e7caf7f6ae98b26327594cc361eadb91ffe65252e3d3cd0e5454cb540d9"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/lane-health-monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__lane-health-monitor.js",
+      "sha256": "f1b43e1cc0cc0acb4bf7654d785966ba8458f2a45d5dc08e6e6237c8ca834726"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/lane-health-monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__lane-health-monitor.js",
+      "sha256": "f1b43e1cc0cc0acb4bf7654d785966ba8458f2a45d5dc08e6e6237c8ca834726"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/lane-health-monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__lane-health-monitor.js",
+      "sha256": "f1b43e1cc0cc0acb4bf7654d785966ba8458f2a45d5dc08e6e6237c8ca834726"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/lane-health-monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__lane-health-monitor.js",
+      "sha256": "f1b43e1cc0cc0acb4bf7654d785966ba8458f2a45d5dc08e6e6237c8ca834726"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/lane-worker.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__lane-worker.js",
+      "sha256": "484596318e2937491bbe47e91014cd243feaec37e259b388972c3131e47ca556"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/lane-worker.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__lane-worker.js",
+      "sha256": "484596318e2937491bbe47e91014cd243feaec37e259b388972c3131e47ca556"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/lane-worker.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__lane-worker.js",
+      "sha256": "484596318e2937491bbe47e91014cd243feaec37e259b388972c3131e47ca556"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/lane-worker.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__lane-worker.js",
+      "sha256": "484596318e2937491bbe47e91014cd243feaec37e259b388972c3131e47ca556"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/lease-write.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__lease-write.js",
+      "sha256": "721480d76476fd039d2ef7eb5aac339bb90a87cb6d96bb5154c5cdf950025118"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/lease-write.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__lease-write.js",
+      "sha256": "721480d76476fd039d2ef7eb5aac339bb90a87cb6d96bb5154c5cdf950025118"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/lease-write.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__lease-write.js",
+      "sha256": "721480d76476fd039d2ef7eb5aac339bb90a87cb6d96bb5154c5cdf950025118"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/lease-write.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__lease-write.js",
+      "sha256": "721480d76476fd039d2ef7eb5aac339bb90a87cb6d96bb5154c5cdf950025118"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/local-inference.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__local-inference.js",
+      "sha256": "9e8e5caa22d5f3b710d18a62e97ac1f29a9c496012bdb1fd31cadae626775251"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/local-inference.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__local-inference.js",
+      "sha256": "9e8e5caa22d5f3b710d18a62e97ac1f29a9c496012bdb1fd31cadae626775251"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/local-inference.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__local-inference.js",
+      "sha256": "9e8e5caa22d5f3b710d18a62e97ac1f29a9c496012bdb1fd31cadae626775251"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/local-inference.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__local-inference.js",
+      "sha256": "9e8e5caa22d5f3b710d18a62e97ac1f29a9c496012bdb1fd31cadae626775251"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__monitor.js",
+      "sha256": "60ffe88431cd803ca3391e202f2d3f85b8ab76407d957f39894aac14b1d28302"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__monitor.js",
+      "sha256": "60ffe88431cd803ca3391e202f2d3f85b8ab76407d957f39894aac14b1d28302"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__monitor.js",
+      "sha256": "60ffe88431cd803ca3391e202f2d3f85b8ab76407d957f39894aac14b1d28302"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/monitor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__monitor.js",
+      "sha256": "60ffe88431cd803ca3391e202f2d3f85b8ab76407d957f39894aac14b1d28302"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/node-version-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__node-version-guard.js",
+      "sha256": "91b37ce00e6ed0fcde458058308b6a7bcce4b223f36b8b7f945b23d6e177543d"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/node-version-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__node-version-guard.js",
+      "sha256": "91b37ce00e6ed0fcde458058308b6a7bcce4b223f36b8b7f945b23d6e177543d"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/node-version-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__node-version-guard.js",
+      "sha256": "91b37ce00e6ed0fcde458058308b6a7bcce4b223f36b8b7f945b23d6e177543d"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/node-version-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__node-version-guard.js",
+      "sha256": "91b37ce00e6ed0fcde458058308b6a7bcce4b223f36b8b7f945b23d6e177543d"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/nuke-lane-mail.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__nuke-lane-mail.js",
+      "sha256": "81df9cdf6330a82b59bcb8464e9859c3cf623da20cd3edab7ba51447eb931c4b"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/nuke-lane-mail.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__nuke-lane-mail.js",
+      "sha256": "81df9cdf6330a82b59bcb8464e9859c3cf623da20cd3edab7ba51447eb931c4b"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/nuke-lane-mail.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__nuke-lane-mail.js",
+      "sha256": "81df9cdf6330a82b59bcb8464e9859c3cf623da20cd3edab7ba51447eb931c4b"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/nuke-lane-mail.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__nuke-lane-mail.js",
+      "sha256": "81df9cdf6330a82b59bcb8464e9859c3cf623da20cd3edab7ba51447eb931c4b"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/outbox-write-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__outbox-write-guard.js",
+      "sha256": "c20c70b3fb1c12b51efec4f4d65c93f2df37c55b9e3d18a72b3e8055cd099998"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/outbox-write-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__outbox-write-guard.js",
+      "sha256": "c20c70b3fb1c12b51efec4f4d65c93f2df37c55b9e3d18a72b3e8055cd099998"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/outbox-write-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__outbox-write-guard.js",
+      "sha256": "c20c70b3fb1c12b51efec4f4d65c93f2df37c55b9e3d18a72b3e8055cd099998"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/outbox-write-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__outbox-write-guard.js",
+      "sha256": "c20c70b3fb1c12b51efec4f4d65c93f2df37c55b9e3d18a72b3e8055cd099998"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/output-provenance.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__output-provenance.js",
+      "sha256": "192cadb3da9d597fb6551c9ecaf02006c35edc8d013687b6b65397ae2f5cc991"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/output-provenance.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__output-provenance.js",
+      "sha256": "192cadb3da9d597fb6551c9ecaf02006c35edc8d013687b6b65397ae2f5cc991"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/output-provenance.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__output-provenance.js",
+      "sha256": "192cadb3da9d597fb6551c9ecaf02006c35edc8d013687b6b65397ae2f5cc991"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/output-provenance.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__output-provenance.js",
+      "sha256": "192cadb3da9d597fb6551c9ecaf02006c35edc8d013687b6b65397ae2f5cc991"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/patch-schema-execution-enums.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__patch-schema-execution-enums.js",
+      "sha256": "50735004ce50c2e1f33d6d4ed3b59a1240bd87cbe2a22de6e1896944a0426d5b"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/patch-schema-execution-enums.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__patch-schema-execution-enums.js",
+      "sha256": "50735004ce50c2e1f33d6d4ed3b59a1240bd87cbe2a22de6e1896944a0426d5b"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/patch-schema-execution-enums.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__patch-schema-execution-enums.js",
+      "sha256": "50735004ce50c2e1f33d6d4ed3b59a1240bd87cbe2a22de6e1896944a0426d5b"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/patch-schema-execution-enums.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__patch-schema-execution-enums.js",
+      "sha256": "50735004ce50c2e1f33d6d4ed3b59a1240bd87cbe2a22de6e1896944a0426d5b"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/path-normalization-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__path-normalization-guard.js",
+      "sha256": "cea131261d01ba362a6e69ba2bb234efe6962223f89fa50a241ba27d35275dd6"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/path-normalization-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__path-normalization-guard.js",
+      "sha256": "cea131261d01ba362a6e69ba2bb234efe6962223f89fa50a241ba27d35275dd6"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/path-normalization-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__path-normalization-guard.js",
+      "sha256": "cea131261d01ba362a6e69ba2bb234efe6962223f89fa50a241ba27d35275dd6"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/path-normalization-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__path-normalization-guard.js",
+      "sha256": "cea131261d01ba362a6e69ba2bb234efe6962223f89fa50a241ba27d35275dd6"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/post-compact-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__post-compact-audit.js",
+      "sha256": "06252b89e0962a5f00a26f73761ddbeb49f282b83deb1718955dc42e98bc1218"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/post-compact-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__post-compact-audit.js",
+      "sha256": "06252b89e0962a5f00a26f73761ddbeb49f282b83deb1718955dc42e98bc1218"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/post-compact-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__post-compact-audit.js",
+      "sha256": "06252b89e0962a5f00a26f73761ddbeb49f282b83deb1718955dc42e98bc1218"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/post-compact-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__post-compact-audit.js",
+      "sha256": "06252b89e0962a5f00a26f73761ddbeb49f282b83deb1718955dc42e98bc1218"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/pre-handoff-provenance-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__pre-handoff-provenance-check.js",
+      "sha256": "cd4cf64bc33e78906c2cc182f97969eca31dd31a23baf5cc781b697a0da26ec3"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/pre-handoff-provenance-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__pre-handoff-provenance-check.js",
+      "sha256": "cd4cf64bc33e78906c2cc182f97969eca31dd31a23baf5cc781b697a0da26ec3"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/pre-handoff-provenance-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__pre-handoff-provenance-check.js",
+      "sha256": "cd4cf64bc33e78906c2cc182f97969eca31dd31a23baf5cc781b697a0da26ec3"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/pre-handoff-provenance-check.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__pre-handoff-provenance-check.js",
+      "sha256": "cd4cf64bc33e78906c2cc182f97969eca31dd31a23baf5cc781b697a0da26ec3"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/quarantine-reaper.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__quarantine-reaper.js",
+      "sha256": "b88c5b9e72559cd110c638a58880d8994364df5601def00263b9ee7edd0d33c7"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/quarantine-reaper.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__quarantine-reaper.js",
+      "sha256": "b88c5b9e72559cd110c638a58880d8994364df5601def00263b9ee7edd0d33c7"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/quarantine-reaper.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__quarantine-reaper.js",
+      "sha256": "b88c5b9e72559cd110c638a58880d8994364df5601def00263b9ee7edd0d33c7"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/quarantine-reaper.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__quarantine-reaper.js",
+      "sha256": "b88c5b9e72559cd110c638a58880d8994364df5601def00263b9ee7edd0d33c7"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/quarantine-triage.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__quarantine-triage.js",
+      "sha256": "20a17c0044cb850d4b5203541b996ce707c96942e5c7652c16cd72d2a99da96a"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/quarantine-triage.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__quarantine-triage.js",
+      "sha256": "20a17c0044cb850d4b5203541b996ce707c96942e5c7652c16cd72d2a99da96a"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/quarantine-triage.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__quarantine-triage.js",
+      "sha256": "20a17c0044cb850d4b5203541b996ce707c96942e5c7652c16cd72d2a99da96a"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/quarantine-triage.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__quarantine-triage.js",
+      "sha256": "20a17c0044cb850d4b5203541b996ce707c96942e5c7652c16cd72d2a99da96a"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/read-only-verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__read-only-verifier.js",
+      "sha256": "d86c90c66cf8d0b44d37d9c642369f1b5c7dc67f3a43935ba79a6a75dae4814b"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/read-only-verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__read-only-verifier.js",
+      "sha256": "d86c90c66cf8d0b44d37d9c642369f1b5c7dc67f3a43935ba79a6a75dae4814b"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/read-only-verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__read-only-verifier.js",
+      "sha256": "d86c90c66cf8d0b44d37d9c642369f1b5c7dc67f3a43935ba79a6a75dae4814b"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/read-only-verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__read-only-verifier.js",
+      "sha256": "d86c90c66cf8d0b44d37d9c642369f1b5c7dc67f3a43935ba79a6a75dae4814b"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/recover-action-required-from-processed.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__recover-action-required-from-processed.js",
+      "sha256": "5beda2c5569782bc31aa57b09f5af81461d00d78d534a1309e21fdc7ae57f026"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/recover-action-required-from-processed.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__recover-action-required-from-processed.js",
+      "sha256": "5beda2c5569782bc31aa57b09f5af81461d00d78d534a1309e21fdc7ae57f026"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/recover-action-required-from-processed.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__recover-action-required-from-processed.js",
+      "sha256": "5beda2c5569782bc31aa57b09f5af81461d00d78d534a1309e21fdc7ae57f026"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/recover-action-required-from-processed.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__recover-action-required-from-processed.js",
+      "sha256": "5beda2c5569782bc31aa57b09f5af81461d00d78d534a1309e21fdc7ae57f026"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/recovery-preflight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__recovery-preflight.js",
+      "sha256": "ef3b98bb9f7239a8e6fb39d8964334662f55f2f4c4042d3f0634e7f8130005b0"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/recovery-preflight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__recovery-preflight.js",
+      "sha256": "ef3b98bb9f7239a8e6fb39d8964334662f55f2f4c4042d3f0634e7f8130005b0"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/recovery-preflight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__recovery-preflight.js",
+      "sha256": "ef3b98bb9f7239a8e6fb39d8964334662f55f2f4c4042d3f0634e7f8130005b0"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/recovery-preflight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__recovery-preflight.js",
+      "sha256": "ef3b98bb9f7239a8e6fb39d8964334662f55f2f4c4042d3f0634e7f8130005b0"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/recovery-test-suite.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__recovery-test-suite.js",
+      "sha256": "171d9dc18e87dbd0edbed5f86f7c882b9b0a7c73c835287e2209605da961450a"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/recovery-test-suite.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__recovery-test-suite.js",
+      "sha256": "171d9dc18e87dbd0edbed5f86f7c882b9b0a7c73c835287e2209605da961450a"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/recovery-test-suite.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__recovery-test-suite.js",
+      "sha256": "171d9dc18e87dbd0edbed5f86f7c882b9b0a7c73c835287e2209605da961450a"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/recovery-test-suite.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__recovery-test-suite.js",
+      "sha256": "171d9dc18e87dbd0edbed5f86f7c882b9b0a7c73c835287e2209605da961450a"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/register-archivist-key.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__register-archivist-key.js",
+      "sha256": "24ddc251ae9c11d6bcbdcb843a8522760d252e85ae414a87ada5771353ce3397"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/register-archivist-key.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__register-archivist-key.js",
+      "sha256": "24ddc251ae9c11d6bcbdcb843a8522760d252e85ae414a87ada5771353ce3397"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/register-archivist-key.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__register-archivist-key.js",
+      "sha256": "24ddc251ae9c11d6bcbdcb843a8522760d252e85ae414a87ada5771353ce3397"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/register-archivist-key.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__register-archivist-key.js",
+      "sha256": "24ddc251ae9c11d6bcbdcb843a8522760d252e85ae414a87ada5771353ce3397"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/relay-daemon.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__relay-daemon.js",
+      "sha256": "6e7592e4fcfc9ef7833c9e4d72355de71b7103590ab3ed6943e41eba246d1fdc"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/relay-daemon.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__relay-daemon.js",
+      "sha256": "06543ee30de143a47c24fce29a4fe332f8952c3ab7a24836b652273d90683a3e"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/relay-daemon.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__relay-daemon.js",
+      "sha256": "efa30e28c6ecdecdc7d8b792d8e3a3083bd1bd9253761c14b4eb1c49f870b7cd"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/relay-daemon.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__relay-daemon.js",
+      "sha256": "efa30e28c6ecdecdc7d8b792d8e3a3083bd1bd9253761c14b4eb1c49f870b7cd"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/remediate-execution-verified.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__remediate-execution-verified.js",
+      "sha256": "874d955efac8c822a11077ca2b1ac07ef9187e993ba81228d85700197bf979a2"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/remediate-execution-verified.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__remediate-execution-verified.js",
+      "sha256": "874d955efac8c822a11077ca2b1ac07ef9187e993ba81228d85700197bf979a2"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/remediate-execution-verified.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__remediate-execution-verified.js",
+      "sha256": "874d955efac8c822a11077ca2b1ac07ef9187e993ba81228d85700197bf979a2"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/remediate-execution-verified.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__remediate-execution-verified.js",
+      "sha256": "874d955efac8c822a11077ca2b1ac07ef9187e993ba81228d85700197bf979a2"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/replay-events.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__replay-events.js",
+      "sha256": "528ce7a71bcc578f64e6d835e23980dc74b8b9b7aa77736ed865910aa1d2e421"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/replay-events.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__replay-events.js",
+      "sha256": "528ce7a71bcc578f64e6d835e23980dc74b8b9b7aa77736ed865910aa1d2e421"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/replay-events.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__replay-events.js",
+      "sha256": "528ce7a71bcc578f64e6d835e23980dc74b8b9b7aa77736ed865910aa1d2e421"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/replay-events.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__replay-events.js",
+      "sha256": "528ce7a71bcc578f64e6d835e23980dc74b8b9b7aa77736ed865910aa1d2e421"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/run-compact-with-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__run-compact-with-audit.js",
+      "sha256": "dc149c9d5cd3dedfd44420eca6ea045a97ad99dee6e5b8d3973c93a94ce92a6f"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/run-compact-with-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__run-compact-with-audit.js",
+      "sha256": "dc149c9d5cd3dedfd44420eca6ea045a97ad99dee6e5b8d3973c93a94ce92a6f"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/run-compact-with-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__run-compact-with-audit.js",
+      "sha256": "dc149c9d5cd3dedfd44420eca6ea045a97ad99dee6e5b8d3973c93a94ce92a6f"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/run-compact-with-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__run-compact-with-audit.js",
+      "sha256": "dc149c9d5cd3dedfd44420eca6ea045a97ad99dee6e5b8d3973c93a94ce92a6f"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/run-daily-report.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__run-daily-report.ps1",
+      "sha256": "3ee3fd01a8020290f4cdad9dd5d084e89c625c666e9d598342da72693138b714"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/run-daily-report.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__run-daily-report.ps1",
+      "sha256": "3ee3fd01a8020290f4cdad9dd5d084e89c625c666e9d598342da72693138b714"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/run-daily-report.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__run-daily-report.ps1",
+      "sha256": "3ee3fd01a8020290f4cdad9dd5d084e89c625c666e9d598342da72693138b714"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/run-daily-report.ps1",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__run-daily-report.ps1",
+      "sha256": "3ee3fd01a8020290f4cdad9dd5d084e89c625c666e9d598342da72693138b714"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sanitize-emoji.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sanitize-emoji.js",
+      "sha256": "549d989ceebf68ba69699f74f7e99c9fd052e63e4bc5a6b9cb1fb7f2c61df2c6"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/sanitize-emoji.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__sanitize-emoji.js",
+      "sha256": "549d989ceebf68ba69699f74f7e99c9fd052e63e4bc5a6b9cb1fb7f2c61df2c6"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sanitize-emoji.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sanitize-emoji.js",
+      "sha256": "549d989ceebf68ba69699f74f7e99c9fd052e63e4bc5a6b9cb1fb7f2c61df2c6"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/sanitize-emoji.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__sanitize-emoji.js",
+      "sha256": "549d989ceebf68ba69699f74f7e99c9fd052e63e4bc5a6b9cb1fb7f2c61df2c6"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/schema-validator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__schema-validator.js",
+      "sha256": "40bb598ea94f49f5ed3eb39ad331a840665e820a944db4c7d608bec6007edc8c"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/schema-validator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__schema-validator.js",
+      "sha256": "40bb598ea94f49f5ed3eb39ad331a840665e820a944db4c7d608bec6007edc8c"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/schema-validator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__schema-validator.js",
+      "sha256": "40bb598ea94f49f5ed3eb39ad331a840665e820a944db4c7d608bec6007edc8c"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/schema-validator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__schema-validator.js",
+      "sha256": "40bb598ea94f49f5ed3eb39ad331a840665e820a944db4c7d608bec6007edc8c"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/send-reverse-test-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__send-reverse-test-messages.js",
+      "sha256": "fdd239875ab8738dbf3386ac6a3a53e5e345ad2a2a07fe792da0831c1b8237fe"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/send-reverse-test-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__send-reverse-test-messages.js",
+      "sha256": "fdd239875ab8738dbf3386ac6a3a53e5e345ad2a2a07fe792da0831c1b8237fe"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/send-reverse-test-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__send-reverse-test-messages.js",
+      "sha256": "fdd239875ab8738dbf3386ac6a3a53e5e345ad2a2a07fe792da0831c1b8237fe"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/send-reverse-test-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__send-reverse-test-messages.js",
+      "sha256": "fdd239875ab8738dbf3386ac6a3a53e5e345ad2a2a07fe792da0831c1b8237fe"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/send-test-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__send-test-messages.js",
+      "sha256": "7995e3b29406b2972f2fa516761761f7baf32db03296774326743fdfb37545d5"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/send-test-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__send-test-messages.js",
+      "sha256": "7995e3b29406b2972f2fa516761761f7baf32db03296774326743fdfb37545d5"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/send-test-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__send-test-messages.js",
+      "sha256": "7995e3b29406b2972f2fa516761761f7baf32db03296774326743fdfb37545d5"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/send-test-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__send-test-messages.js",
+      "sha256": "7995e3b29406b2972f2fa516761761f7baf32db03296774326743fdfb37545d5"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/setup-hooks.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__setup-hooks.js",
+      "sha256": "8acccc23df050a3d864d2102db17b8e043489b1e5ccd32dfec9dd79c9db99927"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/setup-hooks.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__setup-hooks.js",
+      "sha256": "8acccc23df050a3d864d2102db17b8e043489b1e5ccd32dfec9dd79c9db99927"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/setup-hooks.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__setup-hooks.js",
+      "sha256": "8acccc23df050a3d864d2102db17b8e043489b1e5ccd32dfec9dd79c9db99927"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/setup-hooks.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__setup-hooks.js",
+      "sha256": "8acccc23df050a3d864d2102db17b8e043489b1e5ccd32dfec9dd79c9db99927"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sign-outbox-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sign-outbox-message.js",
+      "sha256": "4853469beea1b84cbe7d28cf603a5eb975b281bdb8dce84f3b836624466e053f"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/sign-outbox-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__sign-outbox-message.js",
+      "sha256": "4853469beea1b84cbe7d28cf603a5eb975b281bdb8dce84f3b836624466e053f"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sign-outbox-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sign-outbox-message.js",
+      "sha256": "4853469beea1b84cbe7d28cf603a5eb975b281bdb8dce84f3b836624466e053f"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/sign-outbox-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__sign-outbox-message.js",
+      "sha256": "4853469beea1b84cbe7d28cf603a5eb975b281bdb8dce84f3b836624466e053f"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sign-snapshot.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sign-snapshot.js",
+      "sha256": "73e36701aa9c4a15ce6a0d919c549185d4001beffb72dec85db7906a55768e9d"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/sign-snapshot.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__sign-snapshot.js",
+      "sha256": "73e36701aa9c4a15ce6a0d919c549185d4001beffb72dec85db7906a55768e9d"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sign-snapshot.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sign-snapshot.js",
+      "sha256": "73e36701aa9c4a15ce6a0d919c549185d4001beffb72dec85db7906a55768e9d"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/sign-snapshot.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__sign-snapshot.js",
+      "sha256": "73e36701aa9c4a15ce6a0d919c549185d4001beffb72dec85db7906a55768e9d"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sign-with-prevalidation.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sign-with-prevalidation.js",
+      "sha256": "deb8e6b58ad872d48f61c8ee4e7f92fce8db5c4f93a8bcfb06507ba80c16a985"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/sign-with-prevalidation.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__sign-with-prevalidation.js",
+      "sha256": "deb8e6b58ad872d48f61c8ee4e7f92fce8db5c4f93a8bcfb06507ba80c16a985"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sign-with-prevalidation.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sign-with-prevalidation.js",
+      "sha256": "deb8e6b58ad872d48f61c8ee4e7f92fce8db5c4f93a8bcfb06507ba80c16a985"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/sign-with-prevalidation.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__sign-with-prevalidation.js",
+      "sha256": "deb8e6b58ad872d48f61c8ee4e7f92fce8db5c4f93a8bcfb06507ba80c16a985"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/smoke-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__smoke-core.js",
+      "sha256": "c5ea1fcdd7813cf310055ee91e48e7dbb20a06112c7808fb7e1d5b9d1e739326"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/smoke-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__smoke-core.js",
+      "sha256": "c5ea1fcdd7813cf310055ee91e48e7dbb20a06112c7808fb7e1d5b9d1e739326"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/smoke-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__smoke-core.js",
+      "sha256": "c5ea1fcdd7813cf310055ee91e48e7dbb20a06112c7808fb7e1d5b9d1e739326"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/smoke-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__smoke-core.js",
+      "sha256": "c5ea1fcdd7813cf310055ee91e48e7dbb20a06112c7808fb7e1d5b9d1e739326"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sovereignty-enforcer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sovereignty-enforcer.js",
+      "sha256": "d87d93202ca4a103c777a17871f9127ac64a50efde92d0b8b1707c3800c0508a"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/sovereignty-enforcer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__sovereignty-enforcer.js",
+      "sha256": "0ba925a6fb67c8cb9093854c46f62d9fa267288e6e0dfac4f9d1d40ac5b5e220"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sovereignty-enforcer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sovereignty-enforcer.js",
+      "sha256": "28fd268fa4d6a66c564ce508512891c44300d66887567fd1752aff47d44330e5"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/sovereignty-enforcer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__sovereignty-enforcer.js",
+      "sha256": "51b72444a30f6891315e5f9c04d886fecd712362f483d7d99376f4ab7a9ba6d6"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/start-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__start-core.js",
+      "sha256": "3ebabdf5540acd182d76faf186fa8d91423746d1270ac647caaabb75def769da"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/start-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__start-core.js",
+      "sha256": "3ebabdf5540acd182d76faf186fa8d91423746d1270ac647caaabb75def769da"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/start-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__start-core.js",
+      "sha256": "3ebabdf5540acd182d76faf186fa8d91423746d1270ac647caaabb75def769da"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/start-core.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__start-core.js",
+      "sha256": "3ebabdf5540acd182d76faf186fa8d91423746d1270ac647caaabb75def769da"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/store-journal.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__store-journal.js",
+      "sha256": "2a554c0d3b7d7a5fe213f6b3c7b9fa7adb3c7f2be74b64f955626cad19408dbe"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/store-journal.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__store-journal.js",
+      "sha256": "2a554c0d3b7d7a5fe213f6b3c7b9fa7adb3c7f2be74b64f955626cad19408dbe"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/store-journal.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__store-journal.js",
+      "sha256": "2a554c0d3b7d7a5fe213f6b3c7b9fa7adb3c7f2be74b64f955626cad19408dbe"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/store-journal.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__store-journal.js",
+      "sha256": "2a554c0d3b7d7a5fe213f6b3c7b9fa7adb3c7f2be74b64f955626cad19408dbe"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sync-all-lanes.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sync-all-lanes.js",
+      "sha256": "d023d22606074aa0f220f06fdcca2fac5bfe78a78f47d6753e8f62b582644174"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sync-all-lanes.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sync-all-lanes.js",
+      "sha256": "af30e5fd67ff6a2dbd441220e76059529205b3a32a0767738156f55fb94f33a9"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sync-canonical-scripts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sync-canonical-scripts.js",
+      "sha256": "9e1d25a68b9687992a95843c41d76383940c5eb63884c304b4e32a2b7235591f"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/sync-canonical-scripts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__sync-canonical-scripts.js",
+      "sha256": "9e1d25a68b9687992a95843c41d76383940c5eb63884c304b4e32a2b7235591f"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sync-canonical-scripts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sync-canonical-scripts.js",
+      "sha256": "9e1d25a68b9687992a95843c41d76383940c5eb63884c304b4e32a2b7235591f"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/sync-canonical-scripts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__sync-canonical-scripts.js",
+      "sha256": "9e1d25a68b9687992a95843c41d76383940c5eb63884c304b4e32a2b7235591f"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sync-gate-verify.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sync-gate-verify.js",
+      "sha256": "920b6d5aa2b2aaa25ffd267e63f34ea09af2d027354c5e0e899e0e93973d28a9"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/sync-gate-verify.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__sync-gate-verify.js",
+      "sha256": "920b6d5aa2b2aaa25ffd267e63f34ea09af2d027354c5e0e899e0e93973d28a9"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sync-gate-verify.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sync-gate-verify.js",
+      "sha256": "920b6d5aa2b2aaa25ffd267e63f34ea09af2d027354c5e0e899e0e93973d28a9"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/sync-gate-verify.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__sync-gate-verify.js",
+      "sha256": "920b6d5aa2b2aaa25ffd267e63f34ea09af2d027354c5e0e899e0e93973d28a9"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/sync-identity-from-trust.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__sync-identity-from-trust.js",
+      "sha256": "5dd4a7ebde7514ab01cdf4a61876851e697e8cb0b989296b0a20b5a6f799b042"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/sync-identity-from-trust.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__sync-identity-from-trust.js",
+      "sha256": "5dd4a7ebde7514ab01cdf4a61876851e697e8cb0b989296b0a20b5a6f799b042"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/sync-identity-from-trust.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__sync-identity-from-trust.js",
+      "sha256": "5dd4a7ebde7514ab01cdf4a61876851e697e8cb0b989296b0a20b5a6f799b042"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/sync-identity-from-trust.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__sync-identity-from-trust.js",
+      "sha256": "5dd4a7ebde7514ab01cdf4a61876851e697e8cb0b989296b0a20b5a6f799b042"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/system-status.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__system-status.js",
+      "sha256": "1de1643b2e467832da66189ae9f8ad5a8db3a2a186db8831fdcb3eb05ac703a6"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/system-status.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__system-status.js",
+      "sha256": "1de1643b2e467832da66189ae9f8ad5a8db3a2a186db8831fdcb3eb05ac703a6"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/system-status.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__system-status.js",
+      "sha256": "1de1643b2e467832da66189ae9f8ad5a8db3a2a186db8831fdcb3eb05ac703a6"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/system-status.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__system-status.js",
+      "sha256": "1de1643b2e467832da66189ae9f8ad5a8db3a2a186db8831fdcb3eb05ac703a6"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/task-chain-engine.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__task-chain-engine.js",
+      "sha256": "e99960b30ba1fd6b6e5218e3394f7d2c49680d809ba8fa94e28acdf6d82893fb"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/task-chain-engine.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__task-chain-engine.js",
+      "sha256": "e99960b30ba1fd6b6e5218e3394f7d2c49680d809ba8fa94e28acdf6d82893fb"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/task-chain-engine.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__task-chain-engine.js",
+      "sha256": "e99960b30ba1fd6b6e5218e3394f7d2c49680d809ba8fa94e28acdf6d82893fb"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/task-chain-engine.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__task-chain-engine.js",
+      "sha256": "e99960b30ba1fd6b6e5218e3394f7d2c49680d809ba8fa94e28acdf6d82893fb"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/task-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__task-executor.js",
+      "sha256": "e597ccd1f51d8078341e2ef3f8038fa72b77cd86cf809f8689d165033c471b4e"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/task-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__task-executor.js",
+      "sha256": "e597ccd1f51d8078341e2ef3f8038fa72b77cd86cf809f8689d165033c471b4e"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/task-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__task-executor.js",
+      "sha256": "e597ccd1f51d8078341e2ef3f8038fa72b77cd86cf809f8689d165033c471b4e"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/task-executor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__task-executor.js",
+      "sha256": "e597ccd1f51d8078341e2ef3f8038fa72b77cd86cf809f8689d165033c471b4e"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-adaptive-cpu-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-adaptive-cpu-alerts.js",
+      "sha256": "5b6995bf221f55efd6ddc122e5fd3469633e5baaccd080b1ca7a6c27a7c5a5e8"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-adaptive-cpu-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-adaptive-cpu-alerts.js",
+      "sha256": "5b6995bf221f55efd6ddc122e5fd3469633e5baaccd080b1ca7a6c27a7c5a5e8"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-adaptive-cpu-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-adaptive-cpu-alerts.js",
+      "sha256": "5b6995bf221f55efd6ddc122e5fd3469633e5baaccd080b1ca7a6c27a7c5a5e8"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-adaptive-cpu-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-adaptive-cpu-alerts.js",
+      "sha256": "5b6995bf221f55efd6ddc122e5fd3469633e5baaccd080b1ca7a6c27a7c5a5e8"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-artifact-resolver.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-artifact-resolver.js",
+      "sha256": "d7563e37e698e59e6d5d899e5793a6c03121f5b489f4bc626398f03deae0f7df"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-artifact-resolver.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-artifact-resolver.js",
+      "sha256": "d7563e37e698e59e6d5d899e5793a6c03121f5b489f4bc626398f03deae0f7df"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-artifact-resolver.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-artifact-resolver.js",
+      "sha256": "d7563e37e698e59e6d5d899e5793a6c03121f5b489f4bc626398f03deae0f7df"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-artifact-resolver.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-artifact-resolver.js",
+      "sha256": "d7563e37e698e59e6d5d899e5793a6c03121f5b489f4bc626398f03deae0f7df"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-ci-signing.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-ci-signing.js",
+      "sha256": "32126dfc1698f89e24fd02619f6f0785a9148043fef76c6c2958377ea1423d94"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-ci-signing.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-ci-signing.js",
+      "sha256": "32126dfc1698f89e24fd02619f6f0785a9148043fef76c6c2958377ea1423d94"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-ci-signing.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-ci-signing.js",
+      "sha256": "32126dfc1698f89e24fd02619f6f0785a9148043fef76c6c2958377ea1423d94"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-ci-signing.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-ci-signing.js",
+      "sha256": "32126dfc1698f89e24fd02619f6f0785a9148043fef76c6c2958377ea1423d94"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-completion-proof.js",
+      "sha256": "4d76aaa1980bbb837bb9b75df71f6730567b19bb63b5009b55eb91d364b223b2"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-completion-proof.js",
+      "sha256": "4d76aaa1980bbb837bb9b75df71f6730567b19bb63b5009b55eb91d364b223b2"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-completion-proof.js",
+      "sha256": "4d76aaa1980bbb837bb9b75df71f6730567b19bb63b5009b55eb91d364b223b2"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-completion-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-completion-proof.js",
+      "sha256": "4d76aaa1980bbb837bb9b75df71f6730567b19bb63b5009b55eb91d364b223b2"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-execution-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-execution-gate.js",
+      "sha256": "362c5851e603198a4447416bd6e113bcf0bd870d98f70379a3346bb31190bef3"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-execution-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-execution-gate.js",
+      "sha256": "362c5851e603198a4447416bd6e113bcf0bd870d98f70379a3346bb31190bef3"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-execution-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-execution-gate.js",
+      "sha256": "362c5851e603198a4447416bd6e113bcf0bd870d98f70379a3346bb31190bef3"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-execution-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-execution-gate.js",
+      "sha256": "362c5851e603198a4447416bd6e113bcf0bd870d98f70379a3346bb31190bef3"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-execution-weight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-execution-weight.js",
+      "sha256": "864ee8c934479061b9be05c7969466b32a4311bba5ec3b1a776b1427d0fcf56e"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-execution-weight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-execution-weight.js",
+      "sha256": "864ee8c934479061b9be05c7969466b32a4311bba5ec3b1a776b1427d0fcf56e"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-execution-weight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-execution-weight.js",
+      "sha256": "864ee8c934479061b9be05c7969466b32a4311bba5ec3b1a776b1427d0fcf56e"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-execution-weight.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-execution-weight.js",
+      "sha256": "864ee8c934479061b9be05c7969466b32a4311bba5ec3b1a776b1427d0fcf56e"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-executor-v3.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-executor-v3.js",
+      "sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-executor-v3.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-executor-v3.js",
+      "sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-executor-v3.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-executor-v3.js",
+      "sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-executor-v3.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-executor-v3.js",
+      "sha256": "d12071aeaf39be9e6845d2c2837fd63dc07ef54f39ff1460056ccd26af0bcd9c"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-headless-self-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-headless-self-audit.js",
+      "sha256": "8e2def50b6ccf98634073ea7762fd87c7cdf1f0ee04c0a9ffcff6b69f2bd80bf"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-headless-self-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-headless-self-audit.js",
+      "sha256": "8e2def50b6ccf98634073ea7762fd87c7cdf1f0ee04c0a9ffcff6b69f2bd80bf"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-headless-self-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-headless-self-audit.js",
+      "sha256": "8e2def50b6ccf98634073ea7762fd87c7cdf1f0ee04c0a9ffcff6b69f2bd80bf"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-headless-self-audit.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-headless-self-audit.js",
+      "sha256": "8e2def50b6ccf98634073ea7762fd87c7cdf1f0ee04c0a9ffcff6b69f2bd80bf"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-lane-worker-adaptive-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-lane-worker-adaptive-alerts.js",
+      "sha256": "85079571bd6f6fc18e261f31a90ec225c89a49ceb23f8ca5db58c2e4ca25496f"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-lane-worker-adaptive-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-lane-worker-adaptive-alerts.js",
+      "sha256": "85079571bd6f6fc18e261f31a90ec225c89a49ceb23f8ca5db58c2e4ca25496f"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-lane-worker-adaptive-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-lane-worker-adaptive-alerts.js",
+      "sha256": "85079571bd6f6fc18e261f31a90ec225c89a49ceb23f8ca5db58c2e4ca25496f"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-lane-worker-adaptive-alerts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-lane-worker-adaptive-alerts.js",
+      "sha256": "85079571bd6f6fc18e261f31a90ec225c89a49ceb23f8ca5db58c2e4ca25496f"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-lane-worker-no-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-lane-worker-no-proof.js",
+      "sha256": "b1a36b2047507efa4035510d1d452a3465d0b4aba30451803a96adcea9d94161"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-lane-worker-no-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-lane-worker-no-proof.js",
+      "sha256": "b1a36b2047507efa4035510d1d452a3465d0b4aba30451803a96adcea9d94161"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-lane-worker-no-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-lane-worker-no-proof.js",
+      "sha256": "b1a36b2047507efa4035510d1d452a3465d0b4aba30451803a96adcea9d94161"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-lane-worker-no-proof.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-lane-worker-no-proof.js",
+      "sha256": "b1a36b2047507efa4035510d1d452a3465d0b4aba30451803a96adcea9d94161"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-lane-worker-we4free.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-lane-worker-we4free.js",
+      "sha256": "9f782880259e37993e208e9a241bd90170ebd7b3282b96f2f856699abe0c3aec"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-lane-worker-we4free.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-lane-worker-we4free.js",
+      "sha256": "9f782880259e37993e208e9a241bd90170ebd7b3282b96f2f856699abe0c3aec"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-lane-worker-we4free.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-lane-worker-we4free.js",
+      "sha256": "9f782880259e37993e208e9a241bd90170ebd7b3282b96f2f856699abe0c3aec"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-lane-worker-we4free.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-lane-worker-we4free.js",
+      "sha256": "9f782880259e37993e208e9a241bd90170ebd7b3282b96f2f856699abe0c3aec"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-phase4-gates.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-phase4-gates.js",
+      "sha256": "06191b51ea31be6d903e124aefa145f51906a73c84c31da318f62fe6084d6141"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-phase4-gates.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-phase4-gates.js",
+      "sha256": "06191b51ea31be6d903e124aefa145f51906a73c84c31da318f62fe6084d6141"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-phase4-gates.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-phase4-gates.js",
+      "sha256": "06191b51ea31be6d903e124aefa145f51906a73c84c31da318f62fe6084d6141"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-phase4-gates.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-phase4-gates.js",
+      "sha256": "06191b51ea31be6d903e124aefa145f51906a73c84c31da318f62fe6084d6141"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-provenance-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-provenance-gate.js",
+      "sha256": "124dfcd90c6da7d9b1e8764e37364fc09e92de6301c153550b0ab038c336ee3f"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-provenance-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-provenance-gate.js",
+      "sha256": "124dfcd90c6da7d9b1e8764e37364fc09e92de6301c153550b0ab038c336ee3f"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-provenance-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-provenance-gate.js",
+      "sha256": "124dfcd90c6da7d9b1e8764e37364fc09e92de6301c153550b0ab038c336ee3f"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-provenance-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-provenance-gate.js",
+      "sha256": "124dfcd90c6da7d9b1e8764e37364fc09e92de6301c153550b0ab038c336ee3f"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-signed-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-signed-message.js",
+      "sha256": "2ea3c185818b73f396a97385a1cd8fc271d551a28fec16b4336833ae7358f596"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-signed-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-signed-message.js",
+      "sha256": "2ea3c185818b73f396a97385a1cd8fc271d551a28fec16b4336833ae7358f596"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-signed-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-signed-message.js",
+      "sha256": "2ea3c185818b73f396a97385a1cd8fc271d551a28fec16b4336833ae7358f596"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-signed-message.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-signed-message.js",
+      "sha256": "2ea3c185818b73f396a97385a1cd8fc271d551a28fec16b4336833ae7358f596"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-signed-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-signed-messages.js",
+      "sha256": "26ba7085cf1933779fa1b5df251534e597c360033ba6b144014d24885201d516"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-signed-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-signed-messages.js",
+      "sha256": "26ba7085cf1933779fa1b5df251534e597c360033ba6b144014d24885201d516"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-signed-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-signed-messages.js",
+      "sha256": "26ba7085cf1933779fa1b5df251534e597c360033ba6b144014d24885201d516"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-signed-messages.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-signed-messages.js",
+      "sha256": "26ba7085cf1933779fa1b5df251534e597c360033ba6b144014d24885201d516"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-sync-all-lanes.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-sync-all-lanes.js",
+      "sha256": "75caf4cf731745a8f2f78e90220ba202b59a38aa274e535793a40ac62c1b8bb0"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-sync-all-lanes.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-sync-all-lanes.js",
+      "sha256": "75caf4cf731745a8f2f78e90220ba202b59a38aa274e535793a40ac62c1b8bb0"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-sync-all-lanes.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-sync-all-lanes.js",
+      "sha256": "75caf4cf731745a8f2f78e90220ba202b59a38aa274e535793a40ac62c1b8bb0"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-sync-all-lanes.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-sync-all-lanes.js",
+      "sha256": "75caf4cf731745a8f2f78e90220ba202b59a38aa274e535793a40ac62c1b8bb0"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/test-verification-domain-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__test-verification-domain-gate.js",
+      "sha256": "9b2a44666c04cac02f816903819552361e170f1d5f375ea2643ba6d6444340b4"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/test-verification-domain-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__test-verification-domain-gate.js",
+      "sha256": "9b2a44666c04cac02f816903819552361e170f1d5f375ea2643ba6d6444340b4"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/test-verification-domain-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__test-verification-domain-gate.js",
+      "sha256": "9b2a44666c04cac02f816903819552361e170f1d5f375ea2643ba6d6444340b4"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/test-verification-domain-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__test-verification-domain-gate.js",
+      "sha256": "9b2a44666c04cac02f816903819552361e170f1d5f375ea2643ba6d6444340b4"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/tmp-sync-scripts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__tmp-sync-scripts.js",
+      "sha256": "7910c49baccd1a08c22d8c750ef4b246eee103b77e6baae095735bae09250785"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/tmp-sync-scripts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__tmp-sync-scripts.js",
+      "sha256": "7910c49baccd1a08c22d8c750ef4b246eee103b77e6baae095735bae09250785"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/tmp-sync-scripts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__tmp-sync-scripts.js",
+      "sha256": "7910c49baccd1a08c22d8c750ef4b246eee103b77e6baae095735bae09250785"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/tmp-sync-scripts.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__tmp-sync-scripts.js",
+      "sha256": "7910c49baccd1a08c22d8c750ef4b246eee103b77e6baae095735bae09250785"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/transfer-log.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__transfer-log.js",
+      "sha256": "18735aa3b1cb302ecc3cd62e16047e957735d64173dbba57ca15269135af4eba"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/transfer-log.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__transfer-log.js",
+      "sha256": "18735aa3b1cb302ecc3cd62e16047e957735d64173dbba57ca15269135af4eba"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/transfer-log.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__transfer-log.js",
+      "sha256": "18735aa3b1cb302ecc3cd62e16047e957735d64173dbba57ca15269135af4eba"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/transfer-log.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__transfer-log.js",
+      "sha256": "18735aa3b1cb302ecc3cd62e16047e957735d64173dbba57ca15269135af4eba"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/trust-store-mutation-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__trust-store-mutation-guard.js",
+      "sha256": "fcb49faeb13845ddb5b485ad63753f6115d5bf145b5017c9f1fcbaa906dc4a05"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/trust-store-mutation-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__trust-store-mutation-guard.js",
+      "sha256": "fcb49faeb13845ddb5b485ad63753f6115d5bf145b5017c9f1fcbaa906dc4a05"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/trust-store-mutation-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__trust-store-mutation-guard.js",
+      "sha256": "fcb49faeb13845ddb5b485ad63753f6115d5bf145b5017c9f1fcbaa906dc4a05"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/trust-store-mutation-guard.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__trust-store-mutation-guard.js",
+      "sha256": "fcb49faeb13845ddb5b485ad63753f6115d5bf145b5017c9f1fcbaa906dc4a05"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/validate-responses.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__validate-responses.js",
+      "sha256": "0f9c65e0b8878ea0b1c20c0916ef4620e12a61c440cbd985c0e51383b90a738b"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/validate-responses.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__validate-responses.js",
+      "sha256": "0f9c65e0b8878ea0b1c20c0916ef4620e12a61c440cbd985c0e51383b90a738b"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/validate-responses.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__validate-responses.js",
+      "sha256": "0f9c65e0b8878ea0b1c20c0916ef4620e12a61c440cbd985c0e51383b90a738b"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/validate-responses.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__validate-responses.js",
+      "sha256": "0f9c65e0b8878ea0b1c20c0916ef4620e12a61c440cbd985c0e51383b90a738b"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/validate-schema.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__validate-schema.js",
+      "sha256": "7672d35cb5510c3545121686b5f8e594cc35abc6fa23ce0e3bf20a59b7b67c85"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/validate-schema.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__validate-schema.js",
+      "sha256": "7672d35cb5510c3545121686b5f8e594cc35abc6fa23ce0e3bf20a59b7b67c85"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/validate-schema.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__validate-schema.js",
+      "sha256": "7672d35cb5510c3545121686b5f8e594cc35abc6fa23ce0e3bf20a59b7b67c85"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/validate-schema.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__validate-schema.js",
+      "sha256": "7672d35cb5510c3545121686b5f8e594cc35abc6fa23ce0e3bf20a59b7b67c85"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/validate-system-anchor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__validate-system-anchor.js",
+      "sha256": "c48da5742c5e4841f1fd7ffa9679c4fcf2c533b52609c0d340dcc4a81200e8e8"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/validate-system-anchor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__validate-system-anchor.js",
+      "sha256": "c48da5742c5e4841f1fd7ffa9679c4fcf2c533b52609c0d340dcc4a81200e8e8"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/validate-system-anchor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__validate-system-anchor.js",
+      "sha256": "c48da5742c5e4841f1fd7ffa9679c4fcf2c533b52609c0d340dcc4a81200e8e8"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/validate-system-anchor.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__validate-system-anchor.js",
+      "sha256": "c48da5742c5e4841f1fd7ffa9679c4fcf2c533b52609c0d340dcc4a81200e8e8"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/verification-domain-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__verification-domain-gate.js",
+      "sha256": "f2b738754880d3a399882b5bddb2ddb22d0b67ac19d7d5c87a12ac55362419d1"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/verification-domain-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__verification-domain-gate.js",
+      "sha256": "f2b738754880d3a399882b5bddb2ddb22d0b67ac19d7d5c87a12ac55362419d1"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/verification-domain-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__verification-domain-gate.js",
+      "sha256": "f2b738754880d3a399882b5bddb2ddb22d0b67ac19d7d5c87a12ac55362419d1"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/verification-domain-gate.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__verification-domain-gate.js",
+      "sha256": "f2b738754880d3a399882b5bddb2ddb22d0b67ac19d7d5c87a12ac55362419d1"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/verify-output-provenance.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__verify-output-provenance.js",
+      "sha256": "837e41e701a8aae28fd2a27cf43509354a1661e80cd6cb191ca168c9adb92f42"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/verify-output-provenance.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__verify-output-provenance.js",
+      "sha256": "837e41e701a8aae28fd2a27cf43509354a1661e80cd6cb191ca168c9adb92f42"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/verify-output-provenance.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__verify-output-provenance.js",
+      "sha256": "837e41e701a8aae28fd2a27cf43509354a1661e80cd6cb191ca168c9adb92f42"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/verify-output-provenance.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__verify-output-provenance.js",
+      "sha256": "837e41e701a8aae28fd2a27cf43509354a1661e80cd6cb191ca168c9adb92f42"
+    },
+    {
+      "lane": "archivist",
+      "relative": "scripts/verify_continuity.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__scripts__verify_continuity.js",
+      "sha256": "34d78ce06a4c12beaa4ab014b95cddc933e5b41df36db27ca71557dcabf428c2"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "scripts/verify_continuity.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__scripts__verify_continuity.js",
+      "sha256": "34d78ce06a4c12beaa4ab014b95cddc933e5b41df36db27ca71557dcabf428c2"
+    },
+    {
+      "lane": "kernel",
+      "relative": "scripts/verify_continuity.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__scripts__verify_continuity.js",
+      "sha256": "34d78ce06a4c12beaa4ab014b95cddc933e5b41df36db27ca71557dcabf428c2"
+    },
+    {
+      "lane": "library",
+      "relative": "scripts/verify_continuity.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__scripts__verify_continuity.js",
+      "sha256": "34d78ce06a4c12beaa4ab014b95cddc933e5b41df36db27ca71557dcabf428c2"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/KeyManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__KeyManager.js",
+      "sha256": "ae624a12c196576c6efd6f378b463c093b69e33b9ada9f4e9da8d5db6dbd4228"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/KeyManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__KeyManager.js",
+      "sha256": "ae624a12c196576c6efd6f378b463c093b69e33b9ada9f4e9da8d5db6dbd4228"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/KeyManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__KeyManager.js",
+      "sha256": "ae624a12c196576c6efd6f378b463c093b69e33b9ada9f4e9da8d5db6dbd4228"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/KeyManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__KeyManager.js",
+      "sha256": "ae624a12c196576c6efd6f378b463c093b69e33b9ada9f4e9da8d5db6dbd4228"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/PhenotypeStore.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__PhenotypeStore.js",
+      "sha256": "dfbd9e5937dd00d0bcd531f5f165e610469a3d16612be39ee88c5e9056b1229f"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/PhenotypeStore.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__PhenotypeStore.js",
+      "sha256": "dfbd9e5937dd00d0bcd531f5f165e610469a3d16612be39ee88c5e9056b1229f"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/PhenotypeStore.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__PhenotypeStore.js",
+      "sha256": "dfbd9e5937dd00d0bcd531f5f165e610469a3d16612be39ee88c5e9056b1229f"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/PhenotypeStore.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__PhenotypeStore.js",
+      "sha256": "dfbd9e5937dd00d0bcd531f5f165e610469a3d16612be39ee88c5e9056b1229f"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/QuarantineManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__QuarantineManager.js",
+      "sha256": "baec87bb7f50d75e57064f0574cc607b9f8defd44150d0480d97374eac8b8137"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/QuarantineManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__QuarantineManager.js",
+      "sha256": "baec87bb7f50d75e57064f0574cc607b9f8defd44150d0480d97374eac8b8137"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/QuarantineManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__QuarantineManager.js",
+      "sha256": "baec87bb7f50d75e57064f0574cc607b9f8defd44150d0480d97374eac8b8137"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/QuarantineManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__QuarantineManager.js",
+      "sha256": "baec87bb7f50d75e57064f0574cc607b9f8defd44150d0480d97374eac8b8137"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/Signer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__Signer.js",
+      "sha256": "46b797596adc983e2a3154ab7b8143aff3bc16974e1879801a459a6901da656d"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/Signer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__Signer.js",
+      "sha256": "46b797596adc983e2a3154ab7b8143aff3bc16974e1879801a459a6901da656d"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/Signer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__Signer.js",
+      "sha256": "46b797596adc983e2a3154ab7b8143aff3bc16974e1879801a459a6901da656d"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/Signer.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__Signer.js",
+      "sha256": "46b797596adc983e2a3154ab7b8143aff3bc16974e1879801a459a6901da656d"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/TrustStoreManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__TrustStoreManager.js",
+      "sha256": "d7e2f25129c0d4fbdeee52451ff1612114cb5d5ea7c78539bdebb8f4c95baf00"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/TrustStoreManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__TrustStoreManager.js",
+      "sha256": "d7e2f25129c0d4fbdeee52451ff1612114cb5d5ea7c78539bdebb8f4c95baf00"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/TrustStoreManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__TrustStoreManager.js",
+      "sha256": "d7e2f25129c0d4fbdeee52451ff1612114cb5d5ea7c78539bdebb8f4c95baf00"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/TrustStoreManager.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__TrustStoreManager.js",
+      "sha256": "d7e2f25129c0d4fbdeee52451ff1612114cb5d5ea7c78539bdebb8f4c95baf00"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/Verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__Verifier.js",
+      "sha256": "e8dc5e168b2f9a3281fbf8905960a8a9c23ac5cb61b53240252f12eddc962b23"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/Verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__Verifier.js",
+      "sha256": "e8dc5e168b2f9a3281fbf8905960a8a9c23ac5cb61b53240252f12eddc962b23"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/Verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__Verifier.js",
+      "sha256": "e8dc5e168b2f9a3281fbf8905960a8a9c23ac5cb61b53240252f12eddc962b23"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/Verifier.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__Verifier.js",
+      "sha256": "e8dc5e168b2f9a3281fbf8905960a8a9c23ac5cb61b53240252f12eddc962b23"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/VerifierWrapper.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__VerifierWrapper.js",
+      "sha256": "42391256bc96cf5a58779d2d26ebbf4cfee6a1af21b5015f17c28c3568269d8c"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/VerifierWrapper.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__VerifierWrapper.js",
+      "sha256": "42391256bc96cf5a58779d2d26ebbf4cfee6a1af21b5015f17c28c3568269d8c"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/VerifierWrapper.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__VerifierWrapper.js",
+      "sha256": "42391256bc96cf5a58779d2d26ebbf4cfee6a1af21b5015f17c28c3568269d8c"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/VerifierWrapper.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__VerifierWrapper.js",
+      "sha256": "42391256bc96cf5a58779d2d26ebbf4cfee6a1af21b5015f17c28c3568269d8c"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/constants.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__constants.js",
+      "sha256": "1b6fdfb7afac78f66a7e0960c2b180a0e35e603dc018f0c56be6665f6b0a7a3d"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/constants.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__constants.js",
+      "sha256": "1b6fdfb7afac78f66a7e0960c2b180a0e35e603dc018f0c56be6665f6b0a7a3d"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/constants.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__constants.js",
+      "sha256": "1b6fdfb7afac78f66a7e0960c2b180a0e35e603dc018f0c56be6665f6b0a7a3d"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/constants.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__constants.js",
+      "sha256": "1b6fdfb7afac78f66a7e0960c2b180a0e35e603dc018f0c56be6665f6b0a7a3d"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/attestation/stableStringify.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__attestation__stableStringify.js",
+      "sha256": "e1c27a279b98d8229a70e4891782e1994709e4da16ee75b5a9c128877b2e9760"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/attestation/stableStringify.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__attestation__stableStringify.js",
+      "sha256": "e1c27a279b98d8229a70e4891782e1994709e4da16ee75b5a9c128877b2e9760"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/attestation/stableStringify.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__attestation__stableStringify.js",
+      "sha256": "e1c27a279b98d8229a70e4891782e1994709e4da16ee75b5a9c128877b2e9760"
+    },
+    {
+      "lane": "library",
+      "relative": "src/attestation/stableStringify.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__attestation__stableStringify.js",
+      "sha256": "e1c27a279b98d8229a70e4891782e1994709e4da16ee75b5a9c128877b2e9760"
+    },
+    {
+      "lane": "archivist",
+      "relative": "src/lane/SchemaValidator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/archivist__src__lane__SchemaValidator.js",
+      "sha256": "7c4a54b161838b32c5a9306690ad2254f96c1b04f1899d62aee2626454f653ae"
+    },
+    {
+      "lane": "swarmmind",
+      "relative": "src/lane/SchemaValidator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/swarmmind__src__lane__SchemaValidator.js",
+      "sha256": "6ac23dd2ecba009dff49db9f8c8f29bd9f5b2117a4f135ecf44ddee7341472e2"
+    },
+    {
+      "lane": "kernel",
+      "relative": "src/lane/SchemaValidator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/kernel__src__lane__SchemaValidator.js",
+      "sha256": "9ae49b37662c71669d7ae6575f4fb117a79313c2d29241b72910c96792a0fbb1"
+    },
+    {
+      "lane": "library",
+      "relative": "src/lane/SchemaValidator.js",
+      "snapshot_path": "/home/we4free/agent/repos/Archivist-Agent/context-buffer/sync-rollback/2026-08-05T14-49-05-003Z/library__src__lane__SchemaValidator.js",
+      "sha256": "63dff366225c38ca06ef095187c7ef553e623e754ab2536921aa68ffb00be9c9"
+    }
+  ]
+}
