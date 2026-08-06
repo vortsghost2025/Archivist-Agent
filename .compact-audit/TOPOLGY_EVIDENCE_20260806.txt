@@ -1,0 +1,39 @@
+# Evidence: services ARE running under we4free- template names
+Captured: 2026-08-06T02:31:56Z
+Source lane: kilo-authority-supervisor
+
+## systemctl list-units --type=service --state=active | grep -E '@(archivist|kernel|library|swarmmind)'
+  we4free-autonomous-executor@archivist.service                                             loaded active running WE4FREE archivist autonomous-executor
+  we4free-autonomous-executor@kernel.service                                                loaded active running WE4FREE kernel autonomous-executor
+  we4free-autonomous-executor@library.service                                               loaded active running WE4FREE library autonomous-executor
+  we4free-autonomous-executor@swarmmind.service                                             loaded active running WE4FREE swarmmind autonomous-executor
+  we4free-heartbeat@archivist.service                                                       loaded active running WE4FREE archivist heartbeat
+  we4free-heartbeat@kernel.service                                                          loaded active running WE4FREE kernel heartbeat
+  we4free-heartbeat@library.service                                                         loaded active running WE4FREE library heartbeat
+  we4free-heartbeat@swarmmind.service                                                       loaded active running WE4FREE swarmmind heartbeat
+  we4free-lane-worker@archivist.lane.service                                                loaded active running WE4FREE archivist.lane lane-worker
+  we4free-lane-worker@kernel.lane.service                                                   loaded active running WE4FREE kernel.lane lane-worker
+  we4free-lane-worker@library.lane.service                                                  loaded active running WE4FREE library.lane lane-worker
+  we4free-lane-worker@swarmmind.lane.service                                                loaded active running WE4FREE swarmmind.lane lane-worker
+  we4free-relay-daemon@archivist.service                                                    loaded active running WE4FREE archivist relay-daemon
+  we4free-relay-daemon@kernel.service                                                       loaded active running WE4FREE kernel relay-daemon
+  we4free-relay-daemon@library.service                                                      loaded active running WE4FREE library relay-daemon
+  we4free-relay-daemon@swarmmind.service                                                    loaded active running WE4FREE swarmmind relay-daemon
+
+## For each lane × expected service (lane-worker, relay-daemon, heartbeat, executor), confirm running:
+  archivist/lane-worker: inactive
+  archivist/relay-daemon: active
+  archivist/heartbeat: active
+  archivist/autonomous-executor: active
+  kernel/lane-worker: inactive
+  kernel/relay-daemon: active
+  kernel/heartbeat: active
+  kernel/autonomous-executor: active
+  library/lane-worker: inactive
+  library/relay-daemon: active
+  library/heartbeat: active
+  library/autonomous-executor: active
+  swarmmind/lane-worker: inactive
+  swarmmind/relay-daemon: active
+  swarmmind/heartbeat: active
+  swarmmind/autonomous-executor: active

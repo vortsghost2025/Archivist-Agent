@@ -200,3 +200,7 @@ tauri-screenshot.png
 # Work claim registry (runtime coordination, advisory only)
 lanes/*/state/work-claim.json
 .work-claim.json
+**/quarantine-archive-*/
+
+!.compact-audit/POST_COMPACT_ADJUDICATIONS_*.json
+.compact-audit/*.tmp.*
