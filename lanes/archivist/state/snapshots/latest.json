@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-06T18:35:29.094Z",
+  "timestamp": "2026-08-06T19:10:24.682Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
@@ -15,10 +15,10 @@
     "execution_verified_count": 0,
     "execution_failed_count": 0,
     "liveness": {
-      "tasks_completed_last_5min": 2,
-      "alert": false,
-      "alert_reason": null,
-      "checked_at": "2026-08-06T18:35:29.094Z"
+      "tasks_completed_last_5min": 0,
+      "alert": true,
+      "alert_reason": "ZERO_COMPLETIONS_WHILE_SYSTEM_ACTIVE",
+      "checked_at": "2026-08-06T19:10:24.682Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
@@ -98,6 +98,6 @@
         "dry_run": false
       }
     ],
-    "timestamp": "2026-08-06T18:35:29.094Z"
+    "timestamp": "2026-08-06T19:10:24.682Z"
   }
 }
