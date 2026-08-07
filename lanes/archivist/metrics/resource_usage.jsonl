@@ -8895,3 +8895,6 @@
 {"timestamp":"2026-08-07T02:35:46.388Z","lane":"archivist","pid":3481,"cpu":{"user":3595294175,"system":1981866271},"memory":{"rss":210087936,"heapTotal":100392960,"heapUsed":73881000}}
 {"timestamp":"2026-08-07T02:36:11.807Z","lane":"archivist","pid":3481,"cpu":{"user":3598833822,"system":1983881132},"memory":{"rss":210087936,"heapTotal":100392960,"heapUsed":73758712}}
 {"timestamp":"2026-08-07T02:36:38.528Z","lane":"archivist","pid":3481,"cpu":{"user":3603249235,"system":1986277857},"memory":{"rss":210063360,"heapTotal":100392960,"heapUsed":73783816}}
+{"timestamp":"2026-08-07T02:37:05.176Z","lane":"archivist","pid":3481,"cpu":{"user":3607529473,"system":1988665932},"memory":{"rss":210059264,"heapTotal":100392960,"heapUsed":73788392}}
+{"timestamp":"2026-08-07T02:37:31.318Z","lane":"archivist","pid":3481,"cpu":{"user":3611533926,"system":1990878172},"memory":{"rss":210083840,"heapTotal":100392960,"heapUsed":73788280}}
+{"timestamp":"2026-08-07T02:37:58.436Z","lane":"archivist","pid":3481,"cpu":{"user":3616275177,"system":1993348936},"memory":{"rss":210063360,"heapTotal":100392960,"heapUsed":73496520}}
