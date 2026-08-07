@@ -441,17 +441,19 @@ mod tests {
         assert!(result.is_ok(), "switch_lane should succeed for archivist");
         let detail = result.unwrap();
         assert_eq!(detail.lane_id, "archivist");
-        // Archivist repo always exists on S: drive in the dev environment.
-        assert!(detail.repo_exists, "archivist repo should exist");
-        // Should have git info since archivist is a git repo.
-        assert!(
-            detail.git_branch.is_some(),
-            "archivist should have a git branch"
-        );
-        assert!(
-            detail.git_head.is_some(),
-            "archivist should have a git HEAD"
-        );
+        // Repo existence depends on platform: S: drive exists on Windows dev
+        // machines but not on Linux checkouts. When the repo root is present,
+        // git info must be populated; otherwise switch_lane degrades gracefully.
+        if detail.repo_exists {
+            assert!(
+                detail.git_branch.is_some(),
+                "archivist should have a git branch when repo exists"
+            );
+            assert!(
+                detail.git_head.is_some(),
+                "archivist should have a git HEAD when repo exists"
+            );
+        }
     }
 
     #[test]
