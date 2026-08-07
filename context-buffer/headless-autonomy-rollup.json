@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-08-07T12:29:37.160Z",
+  "generated_at": "2026-08-07T13:00:41.508Z",
   "window_hours": 24,
-  "substrate_cycles": 31,
-  "cycle_count": 31,
+  "substrate_cycles": 32,
+  "cycle_count": 32,
   "topology_stability_pct": 0,
-  "drift_incidents": 31,
+  "drift_incidents": 32,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 31,
+  "cognition_needed_count": 32,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 3,
-  "cognition_handoff_suppressed_count": 30,
+  "cognition_handoff_suppressed_count": 31,
   "cognition_handoff_suppressed_pct": 97,
   "top_recommendation_types": [
     {
       "type": "P1:service_topology_violation",
-      "count": 31
+      "count": 32
     },
     {
       "type": "P1:convergence_review",
@@ -24,7 +24,7 @@
     },
     {
       "type": "P1:canonical_drift",
-      "count": 15
+      "count": 16
     }
   ],
   "last_cycle_summary": "topology: 0/18 active, 18 missing, 0 crash; drift: SYNC_REQUIRED; cognition: 2 triggers.",
@@ -51,7 +51,7 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 177
+        "count": 178
       },
       {
         "type": "TOPOLOGY_ANOMALY",
@@ -62,10 +62,10 @@
           "swarmmind"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 32
+        "count": 33
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The system is operating in a degraded state with frequent cognition needs and multiple unresolved drift incidents. Despite this, the substrate remains stable with minimal issues being actively monitored."
+  "ai_summary": "The autonomous infrastructure is experiencing frequent drift incidents and requires significant cognitive intervention, leading to a degraded status. Despite the substrate being stable with minimal issues, the operator should prioritize addressing the unresolved drifts to ensure optimal performance."
 }
