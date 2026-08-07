@@ -92,7 +92,7 @@ Draft/WIP commits (`[draft]`, `[wip]`, `[checkpoint]`, `[local-only]`): still pu
 
 GitHub origins:
 - Archivist-Agent + Kernel: `vortsghost2025/Archivist-Agent`
-- SwarmMind: `vortsghost2025/SwarmMind`
+- SwarmMind: `vortsghost2025/SwarmMind-Self-Optimizing-Multi-Agent-AI-System` (repo renamed from `vortsghost2025/SwarmMind`; old name 404s on GitHub)
 - Library: `vortsghost2025/self-organizing-library`
 
 ## Session Lifecycle
