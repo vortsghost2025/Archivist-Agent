@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-08-07T14:02:19.785Z",
+  "timestamp": "2026-08-07T14:29:18.732Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
     "dry_run": false,
-    "scanned": 0,
+    "scanned": 5,
     "routed": {
-      "action_required": 0,
+      "action_required": 5,
       "in_progress": 0,
       "processed": 0,
       "blocked": 0,
@@ -18,13 +18,164 @@
       "tasks_completed_last_5min": 0,
       "alert": true,
       "alert_reason": "ZERO_COMPLETIONS_WHILE_SYSTEM_ACTIVE",
-      "checked_at": "2026-08-07T14:02:19.785Z"
+      "checked_at": "2026-08-07T14:29:18.731Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
     "ownership_enforcement_enabled": false,
-    "ownership_warnings": 0,
-    "routes": [],
-    "timestamp": "2026-08-07T14:02:19.785Z"
+    "ownership_warnings": 5,
+    "routes": [
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786112922401-q8cjxf.json",
+        "filename": "alert-alert-1786112922401-q8cjxf.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786112922401-q8cjxf.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": true,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": null,
+        "domain_validation": null,
+        "domain_gate_executed": false,
+        "verification_path": null,
+        "schema_remediation": null,
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786112922728-d2t0wf.json",
+        "filename": "alert-alert-1786112922728-d2t0wf.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786112922728-d2t0wf.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": true,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": null,
+        "domain_validation": null,
+        "domain_gate_executed": false,
+        "verification_path": null,
+        "schema_remediation": null,
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786112922820-zlsw6r.json",
+        "filename": "alert-alert-1786112922820-zlsw6r.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786112922820-zlsw6r.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": true,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": null,
+        "domain_validation": null,
+        "domain_gate_executed": false,
+        "verification_path": null,
+        "schema_remediation": null,
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786112930364-4qubvf.json",
+        "filename": "alert-alert-1786112930364-4qubvf.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786112930364-4qubvf.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": true,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": null,
+        "domain_validation": null,
+        "domain_gate_executed": false,
+        "verification_path": null,
+        "schema_remediation": null,
+        "dry_run": false
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786112931728-c8f7wd.json",
+        "filename": "alert-alert-1786112931728-c8f7wd.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786112931728-c8f7wd.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": true,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": null,
+        "domain_validation": null,
+        "domain_gate_executed": false,
+        "verification_path": null,
+        "schema_remediation": null,
+        "dry_run": false
+      }
+    ],
+    "timestamp": "2026-08-07T14:29:18.731Z"
   }
 }
