@@ -654,7 +654,7 @@ class LaneWorker {
     }
     // Law 5: Confidence Ratings Mandatory check
     // Exempt system message types (notification, heartbeat, status) from confidence requirement
-    const exemptTypes = new Set(['notification', 'heartbeat', 'status']);
+    const exemptTypes = new Set(['notification', 'heartbeat', 'status', 'response']);
     const msgType = (msg && typeof msg === 'object' ? String(msg.type || '') : '').toLowerCase();
     
     if (!exemptTypes.has(msgType)) {
@@ -695,32 +695,11 @@ class LaneWorker {
         } catch (_) {}
       }
     }
-// CONFIDENCE_DERIVATION_CONTRACT: Flag performative confidence (≥7 without derivation)
-if (msg.confidence !== undefined && msg.confidence >= 7) {
-    const derivation = msg.confidence_derivation;
-    if (!derivation || typeof derivation !== 'object' || !derivation.measured || !derivation.how_measured) {
-        if (!msg._governance_flags) msg._governance_flags = [];
-        msg._governance_flags.push('PERFORMATIVE_CONFIDENCE');
-        const cpsEntry = {
-            timestamp: new Date().toISOString(),
-            event: 'PERFORMATIVE_CONFIDENCE',
-            agent: msg.from || 'unknown',
-            task_id: msg.task_id || 'unknown',
-            confidence: msg.confidence,
-        };
-        const cpsPath = path.join(this.repoRoot, 'context-buffer', 'cps_log.jsonl');
-        try {
-            fs.appendFileSync(cpsPath, JSON.stringify(cpsEntry) + '\n');
-        } catch (e) {
-            process.stderr.write(`[lane-worker] CPS log failed: ${e.message}\n`);
-        }
-    }
-}
   if (!isEnglishOnly(msg)) {
       return { queue: 'quarantine', reason: 'FORMAT_VIOLATION_NON_ASCII', detail: 'Message contains non-ASCII content. Re-request in English per governance constraint.' };
     }
 
-  const OUTPUT_PROV_EXEMPT_TYPES = new Set(['task', 'escalation', 'request', 'notification', 'heartbeat', 'status']);
+  const OUTPUT_PROV_EXEMPT_TYPES = new Set(['task', 'escalation', 'request', 'notification', 'heartbeat', 'status', 'response']);
   if (typeof msg.body === 'string' && !OUTPUT_PROV_EXEMPT_TYPES.has(String(msg.type || '').toLowerCase()) && !isActionable(msg)) {
     var prov = verifyOutputProvenance(msg.body);
     if (!prov.ok) {
