@@ -10957,3 +10957,11 @@
 {"timestamp":"2026-08-07T18:11:23.170Z","lane":"archivist","pid":3207,"cpu":{"user":1508847430,"system":868460325},"memory":{"rss":208441344,"heapTotal":100130816,"heapUsed":73717560}}
 {"timestamp":"2026-08-07T18:11:51.212Z","lane":"archivist","pid":3207,"cpu":{"user":1514115725,"system":871282358},"memory":{"rss":208424960,"heapTotal":100130816,"heapUsed":73297712}}
 {"timestamp":"2026-08-07T18:12:21.337Z","lane":"archivist","pid":3207,"cpu":{"user":1520094196,"system":874279701},"memory":{"rss":219779072,"heapTotal":100130816,"heapUsed":73072752}}
+{"timestamp":"2026-08-07T18:26:01.940Z","lane":"archivist","pid":3207,"cpu":{"user":1662871844,"system":951662834},"memory":{"rss":208494592,"heapTotal":100130816,"heapUsed":73863184}}
+{"timestamp":"2026-08-07T18:26:27.336Z","lane":"archivist","pid":3207,"cpu":{"user":1666436215,"system":953601350},"memory":{"rss":208461824,"heapTotal":100130816,"heapUsed":73742576}}
+{"timestamp":"2026-08-07T18:26:53.379Z","lane":"archivist","pid":3207,"cpu":{"user":1670337563,"system":955857406},"memory":{"rss":208470016,"heapTotal":100130816,"heapUsed":73774408}}
+{"timestamp":"2026-08-07T18:27:19.832Z","lane":"archivist","pid":3207,"cpu":{"user":1674670479,"system":958059547},"memory":{"rss":208461824,"heapTotal":100130816,"heapUsed":73717408}}
+{"timestamp":"2026-08-07T18:27:45.902Z","lane":"archivist","pid":3207,"cpu":{"user":1678672706,"system":960238043},"memory":{"rss":208474112,"heapTotal":100130816,"heapUsed":73717352}}
+{"timestamp":"2026-08-07T18:28:11.310Z","lane":"archivist","pid":3207,"cpu":{"user":1682261854,"system":962173096},"memory":{"rss":208474112,"heapTotal":100130816,"heapUsed":73833816}}
+{"timestamp":"2026-08-07T18:28:37.655Z","lane":"archivist","pid":3207,"cpu":{"user":1686183387,"system":964737823},"memory":{"rss":208457728,"heapTotal":100130816,"heapUsed":73799576}}
+{"timestamp":"2026-08-07T18:29:05.097Z","lane":"archivist","pid":3207,"cpu":{"user":1690998975,"system":967383373},"memory":{"rss":208781312,"heapTotal":100130816,"heapUsed":73621808}}
