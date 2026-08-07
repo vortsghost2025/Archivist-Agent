@@ -1333,6 +1333,59 @@ function executeCompareFilesTask(msg, lane) {
   }
 }
 
+function executeWebResearchTask(msg, lane) {
+  const body = (msg.body || '');
+  const urlMatch = body.match(/(?:web\s+research|research|fetch|http[s]?:\/\/)\s*["']?([^"'\s]+)["']?/i)
+    || body.match(/https?:\/\/[^\s"'<>]+/i);
+  if (!urlMatch) {
+    return { task_kind: 'report', results: { error: 'No URL specified. Use: "web research <url>" or include an https:// URL' }, summary: 'Error: no URL in task body' };
+  }
+  const url = urlMatch[1] || urlMatch[0];
+  if (!url.match(/^https?:\/\//i)) {
+    return { task_kind: 'report', results: { error: `Invalid URL scheme: ${url}. Only http/https allowed.` }, summary: 'Error: invalid URL scheme' };
+  }
+
+  const MAX_BYTES = 50 * 1024;
+  const TIMEOUT_MS = 10000;
+  const ALLOWED_HOSTS = [
+    'github.com', 'raw.githubusercontent.com', 'docs.github.com',
+    'developer.mozilla.org', 'stackoverflow.com', 'stackoverflow.blog',
+    'nodejs.org', 'npmjs.com', 'github.io',
+    'archivist.dev', 'tauri.app', 'rust-lang.org',
+    'vercel.com', 'n8n.io', 'n8n.cloud',
+  ];
+
+  try {
+    const urlObj = new URL(url);
+    const host = urlObj.hostname.replace(/^www\./, '');
+    if (!ALLOWED_HOSTS.some(h => host === h || host.endsWith('.' + h))) {
+      return { task_kind: 'report', results: { error: `Host not allowed: ${host}. Allowed: ${ALLOWED_HOSTS.join(', ')}` }, summary: 'Error: host not allowed' };
+    }
+  } catch (e) {
+    return { task_kind: 'report', results: { error: `Invalid URL: ${url}` }, summary: 'Error: invalid URL' };
+  }
+
+  try {
+    const { execSync } = require('child_process');
+    const tmpFile = path.join(os.tmpdir(), `lane-research-${Date.now()}.html`);
+    const curlCmd = `curl -sS -L --max-time ${Math.ceil(TIMEOUT_MS / 1000)} --max-filesize ${MAX_BYTES} -o "${tmpFile}" "${url}"`;
+    execSync(curlCmd, { timeout: TIMEOUT_MS + 2000, encoding: 'utf8', maxBuffer: MAX_BYTES + 1024 });
+    let data = '';
+    try { data = fs.readFileSync(tmpFile, 'utf8'); } catch (_) {}
+    try { fs.unlinkSync(tmpFile); } catch (_) {}
+    const text = data.slice(0, MAX_BYTES);
+    const lines = text.split('\n').slice(0, 200);
+    const summary = lines.map(l => l.trim()).filter(l => l.length > 0).slice(0, 50).join('\n');
+    return {
+      task_kind: 'report',
+      results: { url, bytes: text.length, lines: lines.length, summary, method: 'curl' },
+      summary: `Web research: ${url} — ${text.length} bytes, ${lines.length} lines`,
+    };
+  } catch (e) {
+    return { task_kind: 'report', results: { url, error: e.message }, summary: `Web research error: ${e.message}` };
+  }
+}
+
 function executeTask(msg, lane) {
   const t0 = Date.now();
   const kind = (msg.task_kind || '').toLowerCase();
@@ -1416,11 +1469,14 @@ function executeTask(msg, lane) {
   if (kind === 'compare_files' || body.match(/\bcompare\s+files?\b/i) || body.match(/\bfiles?\s+\S+\s+(?:to|with|and|vs)\s+\S+/i)) {
     return attachRouting(executeCompareFilesTask(msg, lane), { source: 'explicit', verb: 'compare_files', confidence: 1.0 });
   }
+  if (kind === 'web_research' || body.match(/\bweb\s+research\b/i) || body.match(/\bresearch\s+online\b/i) || body.match(/https?:\/\//i)) {
+    return attachRouting(executeWebResearchTask(msg, lane), { source: 'explicit', verb: 'web_research', confidence: 1.0 });
+  }
 
   if (body.match(/\bdiff\s+/i) && !body.match(/\bcompare\s+files?\b/i)) {
     return attachRouting(executeDiffTask(msg, lane), { source: 'explicit', verb: 'diff', confidence: 1.0 });
   }
-  if (body.match(/(grep|search|find)\s+/i) && !body.match(/\bfind\s+(?:patterns?\s+)/i) && !body.match(/\btrace\s+/i)) {
+  if (body.match(/\b(grep|search|find)\b\s+/i) && !body.match(/\bfind\s+(?:patterns?\s+)/i) && !body.match(/\btrace\s+/i) && !body.match(/\bweb\s+research\b/i) && !body.match(/https?:\/\//i)) {
     return attachRouting(executeGrepTask(msg, lane), { source: 'explicit', verb: 'grep', confidence: 1.0 });
   }
   if (body.match(/list\s+(dir|directory|folder)\s+/i) || body.match(/\bls\s+/i)) {
@@ -1597,12 +1653,13 @@ function executeTask(msg, lane) {
       case 'validate_improvement': return attachRouting(executeValidateImprovementTask(nlpMsg, lane), routing);
       case 'implement_proposal': return attachRouting(executeImplementProposalTask(nlpMsg, lane), routing);
       case 'compare_files': return attachRouting(executeCompareFilesTask(nlpMsg, lane), routing);
+      case 'web_research': return attachRouting(executeWebResearchTask(nlpMsg, lane), routing);
     }
   }
 
   return attachRouting({
     task_kind: 'ack',
-    results: { acknowledged: true, note: 'Task type not recognized. Supported: status, "read file <path>", "run script <name>", "git status/log/diff", "grep <pattern> in <path>", "write file <path>\\n<content>", "list dir <path>", "hash file <path>", "diff <file1> <file2>", "count \\"pattern\\" in <path>", "consistency check", "drift_sweep", "watcher_health_audit", "stale_work_detection", "analyze code <path>", "trace symbol <name> in <path>", "find pattern <regex> in <path>", "dependency map <path>", "compare files <file1> with <file2>", "propose improvement <title>", "create patch <file>: <diff>", "validate improvement <path>", "implement proposal <path>" - or use natural language' },
+    results: { acknowledged: true, note: 'Task type not recognized. Supported: status, "read file <path>", "run script <name>", "git status/log/diff", "grep <pattern> in <path>", "write file <path>\\n<content>", "list dir <path>", "hash file <path>", "diff <file1> <file2>", "count \\"pattern\\" in <path>", "consistency check", "drift_sweep", "watcher_health_audit", "stale_work_detection", "analyze code <path>", "trace symbol <name> in <path>", "find pattern <regex> in <path>", "dependency map <path>", "compare files <file1> with <file2>", "web research <url>", "propose improvement <title>", "create patch <file>: <diff>", "validate improvement <path>", "implement proposal <path>" - or use natural language' },
     summary: `Acknowledged task: ${msg.subject || msg.task_id || 'unknown'}`,
   }, { source: 'fallback', verb: 'ack', confidence: 1.0 });
 }
@@ -1828,4 +1885,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { GenericTaskExecutor, executeTask, createResponse, LANE_REGISTRY, NLP_ROUTES, isPathAllowed, resolveLocalPath, EXECUTOR_VERSION, FEATURE_FLAGS, executeDriftSweepTask, executeWatcherHealthAuditTask, executeStaleWorkDetectionTask, executeAnalyzeCodeTask, executeTraceSymbolTask, executeFindPatternsTask, executeDependencyMapTask, executeProposeImprovementTask, executeCreatePatchTask, executeValidateImprovementTask, executeImplementProposalTask, executeCompareFilesTask };
+module.exports = { GenericTaskExecutor, executeTask, createResponse, LANE_REGISTRY, NLP_ROUTES, isPathAllowed, resolveLocalPath, EXECUTOR_VERSION, FEATURE_FLAGS, executeDriftSweepTask, executeWatcherHealthAuditTask, executeStaleWorkDetectionTask, executeAnalyzeCodeTask, executeTraceSymbolTask, executeFindPatternsTask, executeDependencyMapTask, executeProposeImprovementTask, executeCreatePatchTask, executeValidateImprovementTask, executeImplementProposalTask, executeCompareFilesTask, executeWebResearchTask };
