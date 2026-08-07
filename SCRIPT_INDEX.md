@@ -8,3 +8,4 @@ Agents: READ THIS FILE FIRST to discover available tooling.
 | Script | Path | Purpose | Status |
 |--------|------|---------|--------|
 | `describe-screen.sh` | `scripts/describe-screen.sh` | Capture the desktop and describe it via the remote RTX 5060 ollama (Tailscale `100.95.92.117:11434`, model `qwen3.5:2b`, vision). Args: `[model] [prompt] [existing-file]`. Env: `OLLAMA_HOST`. | ACTIVE (2026-08-07) |
+| `gui-health-check.sh` | `scripts/gui-health-check.sh` | Relaunch the Archivist Tauri app if dead, warn if running without a mapped window, warn if disk < 10G. Runs every 2 min via `archivist-gui-watch.timer` (systemd). Log: `context-buffer/gui-health.log`. | ACTIVE (2026-08-07) |
