@@ -6,10 +6,11 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const { LaneDiscovery } = require('./lane-discovery');
 
 const discovery = new LaneDiscovery();
-const registry = JSON.parse(fs.readFileSync('S:/Archivist-Agent/.global/lane-registry.json', 'utf8'));
+const registry = JSON.parse(fs.readFileSync(process.env.LANE_REGISTRY_PATH || path.join(process.env.LANE_REPOS_ROOT || path.join(os.homedir(), 'agent', 'repos'), 'Archivist-Agent', '.global', 'lane-registry.json'), 'utf8'));
 
 console.log('=== CLEANUP FORBIDDEN PATHS ===\n');
 

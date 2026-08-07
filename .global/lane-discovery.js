@@ -1,13 +1,57 @@
 #!/usr/bin/env node
 /**
- * Lane Discovery Utility
- * All agents MUST use this to find lane paths - NO hardcoding allowed
+ * LOCAL LANE DISCOVERY UTILITY
+ * ORIGIN: S:/Archivist-Agent/.global/lane-discovery.js
+ * LOCALIZED: Archivist (2026-05-02)
+ * UPDATED: 2026-05-06 — Platform-aware (Windows S:/ + Ubuntu)
+ * PURPOSE: Local implementation to avoid cross-boundary require() on .global/
+ *
+ * This is a sovereign copy that reads the lane registry directly
+ * instead of importing from .global/ which is an external boundary.
  */
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
-const REGISTRY_PATH = 'S:/Archivist-Agent/.global/lane-registry.json';
+const isWin32 = process.platform === 'win32';
+const UBUNTU_ROOT = process.env.LANE_REPOS_ROOT
+  ? path.resolve(process.env.LANE_REPOS_ROOT)
+  : path.join(os.homedir(), 'agent', 'repos');
+
+const REGISTRY_PATH = process.env.LANE_REGISTRY_PATH
+  ? path.resolve(process.env.LANE_REGISTRY_PATH)
+  : (isWin32
+    ? 'S:/Archivist-Agent/.global/lane-registry.json'
+    : path.join(UBUNTU_ROOT, 'Archivist-Agent', '.global', 'lane-registry.json'));
+
+function _resolvePath(winPath) {
+  if (isWin32) return winPath;
+  const match = winPath.match(/^S:\/(.+)$/);
+  if (!match) return winPath;
+  return path.join(UBUNTU_ROOT, match[1]);
+}
+
+function _translateRegistry(registry) {
+  for (const lane of Object.values(registry.lanes)) {
+    lane.local_path = _resolvePath(lane.local_path);
+    if (lane.mailboxes) {
+      for (const [key, val] of Object.entries(lane.mailboxes)) {
+        lane.mailboxes[key] = _resolvePath(val);
+      }
+    }
+    if (lane.broadcast_access) {
+      lane.broadcast_access = _resolvePath(lane.broadcast_access);
+    }
+    if (lane.forbidden_variants) {
+      lane.forbidden_variants = lane.forbidden_variants.map(_resolvePath);
+    }
+  }
+  if (registry.broadcast && registry.broadcast.path) {
+    registry.broadcast.path = _resolvePath(registry.broadcast.path);
+  }
+  return registry;
+}
 
 class LaneDiscovery {
   constructor() {
@@ -17,15 +61,13 @@ class LaneDiscovery {
   loadRegistry() {
     try {
       const data = fs.readFileSync(REGISTRY_PATH, 'utf8');
-      return JSON.parse(data);
+      const raw = JSON.parse(data);
+      return isWin32 ? raw : _translateRegistry(raw);
     } catch (e) {
-      throw new Error(`Failed to load lane registry: ${e.message}. Cannot proceed without registry.`);
+      throw new Error(`Failed to load lane registry from ${REGISTRY_PATH}: ${e.message}. Cannot proceed without registry.`);
     }
   }
 
-  /**
-   * Get lane configuration by lane_id
-   */
   getLane(laneId) {
     const lane = this.registry.lanes[laneId.toLowerCase()];
     if (!lane) {
@@ -34,54 +76,34 @@ class LaneDiscovery {
     return lane;
   }
 
-  /**
-   * Get inbox path for a lane
-   */
   getInbox(laneId) {
     const lane = this.getLane(laneId);
     return lane.mailboxes.inbox;
   }
 
-  /**
-   * Get outbox path for a lane
-   */
   getOutbox(laneId) {
     const lane = this.getLane(laneId);
     return lane.mailboxes.outbox;
   }
 
-  /**
-   * Get processed path for a lane
-   */
   getProcessed(laneId) {
     const lane = this.getLane(laneId);
     return lane.mailboxes.processed;
   }
 
-  /**
-   * Get local path for a lane
-   */
   getLocalPath(laneId) {
     const lane = this.getLane(laneId);
     return lane.local_path;
   }
 
-  /**
-   * Get repo URL for a lane
-   */
   getRepo(laneId) {
     const lane = this.getLane(laneId);
     return lane.repo;
   }
 
-  /**
-   * Validate a path against registry
-   * Returns canonical path if valid, throws if invalid
-   */
   validatePath(laneId, testPath) {
     const lane = this.getLane(laneId);
-    
-    // Check if this is a forbidden variant
+
     if (lane.forbidden_variants) {
       for (const variant of lane.forbidden_variants) {
         if (testPath.toLowerCase().includes(variant.toLowerCase())) {
@@ -92,38 +114,31 @@ class LaneDiscovery {
         }
       }
     }
-    
-    // Check if path matches registry
+
     if (!testPath.startsWith(lane.local_path)) {
       throw new Error(
         `PATH MISMATCH: '${testPath}' does not match registered path for ${laneId}. ` +
         `Expected: ${lane.local_path}`
       );
     }
-    
+
     return lane.local_path;
   }
 
-  /**
-   * Send message to another lane
-   */
   sendToLane(fromLane, toLane, message, filename) {
     const inboxPath = this.getInbox(toLane);
     const outboxPath = this.getOutbox(fromLane);
-    
-    // Ensure directories exist
+
     if (!fs.existsSync(inboxPath)) {
       fs.mkdirSync(inboxPath, { recursive: true });
     }
     if (!fs.existsSync(outboxPath)) {
       fs.mkdirSync(outboxPath, { recursive: true });
     }
-    
-    // Write to target inbox
+
     const targetPath = path.join(inboxPath, filename);
     fs.writeFileSync(targetPath, JSON.stringify(message, null, 2));
-    
-    // Log to sender outbox
+
     const receipt = {
       type: 'delivery_receipt',
       to: toLane,
@@ -133,33 +148,26 @@ class LaneDiscovery {
     };
     const receiptPath = path.join(outboxPath, `receipt-${filename}`);
     fs.writeFileSync(receiptPath, JSON.stringify(receipt, null, 2));
-    
+
     console.log(`[LANE-DISCOVERY] Sent to ${toLane}: ${targetPath}`);
     return targetPath;
   }
 
-  /**
-   * List all available lanes
-   */
   listLanes() {
     return Object.keys(this.registry.lanes);
   }
 
-  /**
-   * Get broadcast path
-   */
   getBroadcastPath() {
     return this.registry.broadcast.path;
   }
 }
 
-// CLI usage
 if (require.main === module) {
   const discovery = new LaneDiscovery();
-  
+
   const command = process.argv[2];
   const lane = process.argv[3];
-  
+
   switch (command) {
     case 'inbox':
       console.log(discovery.getInbox(lane));
@@ -191,4 +199,65 @@ if (require.main === module) {
   }
 }
 
-module.exports = { LaneDiscovery };
+const _discovery = new LaneDiscovery();
+
+function getRoots() {
+  const lanes = _discovery.registry.lanes;
+  const roots = {};
+  for (const [id, lane] of Object.entries(lanes)) {
+    roots[id] = lane.local_path;
+  }
+  return roots;
+}
+
+function sToLocal(winPath) {
+  if (!isWin32 && winPath) {
+    return winPath.replace(/^S:/, UBUNTU_ROOT).replace(/\\/g, '/');
+  }
+  return winPath;
+}
+
+function getAllLanes() {
+  return _discovery.registry.lanes;
+}
+
+function getLane(laneId) {
+  return _discovery.getLane(laneId);
+}
+
+function getLaneNames() {
+  return Object.keys(_discovery.registry.lanes);
+}
+
+const LANES_RAW = _discovery.registry.lanes;
+
+const LANES = {};
+for (const [id, lane] of Object.entries(LANES_RAW)) {
+  LANES[id] = {
+    ...lane,
+    root: lane.local_path,
+    inbox: lane.mailboxes ? lane.mailboxes.inbox : undefined,
+    outbox: lane.mailboxes ? lane.mailboxes.outbox : undefined,
+    processed: lane.mailboxes ? lane.mailboxes.processed : undefined
+  };
+}
+
+const ROOTS = getRoots();
+
+module.exports = {
+  LaneDiscovery,
+  getRoots,
+  sToLocal,
+  getAllLanes,
+  getLane,
+  getLaneNames,
+  LANES,
+  ROOTS
+};
+
+/**
+ * ORIGIN NOTE: Adapted from S:/Archivist-Agent/.global/lane-discovery.js
+ * LOCAL COPY FOR ARCHIVIST LANE SOVEREIGNTY
+ * Reads the same registry but avoids cross-boundary require() on .global/
+ * Last sync: 2026-05-02
+ */
