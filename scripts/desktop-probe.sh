@@ -12,6 +12,26 @@ if [ ! -s "$SHOT" ]; then
   exit 1
 fi
 
+if python3 - "$SHOT" <<'PY'
+import sys, zlib, struct
+def avg(path):
+    with open(path, 'rb') as f: data = f.read()
+    pos = 8; idat = b''
+    while pos < len(data):
+        ln = struct.unpack('>I', data[pos:pos+4])[0]
+        if data[pos+4:pos+8] == b'IDAT': idat += data[pos+8:pos+8+ln]
+        pos += 12 + ln
+    raw = zlib.decompress(idat)
+    n = len(raw)
+    if n < 1000: return 0
+    return sum(raw[i] for i in range(0, n, 97)) * 97 // n
+sys.exit(0 if avg(sys.argv[1]) < 8 else 1)
+PY
+then
+  echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] SCREEN_BLANKED (idle or display off - benign)" >> "$LOG"
+  exit 0
+fi
+
 OUT=$(python3 - "$SHOT" "$PROMPT" <<'PY'
 import base64, json, sys, urllib.request
 img = open(sys.argv[1], 'rb').read()
