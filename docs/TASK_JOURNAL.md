@@ -8,7 +8,7 @@ agent: authority-supervisor
 lane: authority
 journal_version: 1
 created_at: 2026-08-06T14:39:00Z
-last_updated: 2026-08-07T00:11:00Z
+last_updated: 2026-08-07T03:30:00Z
 ```
 
 ---
@@ -47,6 +47,23 @@ last_updated: 2026-08-07T00:11:00Z
 | T12 | **Operator WIP fixes (your workstream)** — S1/S3/S5/C1 verified applied across 5 files; lane-worker repoRoot latent bug fixed; stale test fixtures fixed; core regression green (headless-self-audit 33/33, recovery PROVEN, audit aligned, uds-gate 19/19, lane-worker-we4free 17/17, artifact-resolver 10/10, signed-messages 5/5, sync-all-lanes 72/72) | [DONE] | medium |
 | T13 | **Add test coverage for UDS gate + ledger dedupe** — new scripts/uds-gate.js (ratchet + classifyUdsScore + formatDriftAlert) + test-uds-gate.js (19/19); headless-self-audit exports writeRecommendationLedger + A1c dedupe tests | [DONE] | medium |
 | T14 | **SCRIPT_INDEX.md + 30-day archive pass** — count corrected 165→191 (tracked, authoritative; 1 gitignored local scratch excluded); added uds-gate.js + test-uds-gate.js to key-scripts table; 30-day script archive NOT automated: CI loop `stale-file-cleanup` only covers inbox/stale + inbox/expired (7-day), not `scripts/`; no last-used metadata tracked → manual pass made no moves (non-destructive: no usage data to identify stale scripts); recommend adding last-used tracking for future automation | [DONE] | low |
+
+---
+
+## Completed (T23–T32)
+
+| ID | Task | Status | Priority |
+|----|------|--------|----------|
+| T23 | **Start `we4free-continuous-improvement.service`** — was `disabled`+`inactive(dead)` after power reboot; `enable --now` → `active` + `enabled` (durable across reboot). Restarted safely after config revert. | [DONE] | medium |
+| T24 | **Verify secrets not tracked** — confirmed `.env`, `.identity/*.pem` (incl. authority) are gitignored + untracked; `.identity/keys.json` WAS tracked (see T25). | [DONE] | high |
+| T25 | **Contain `keys.json` Ed25519 private-key leak** — `git rm --cached .identity/keys.json` (local file preserved), added explicit `.identity/keys.json` gitignore line. Key remains in git HISTORY → treat as compromised; rotation + history scrub deferred to operator-scheduled window (destructive). | [DONE] | high |
+| T26 | **Fix CI auto-committer sweeping `.kilo/`** — `continuous-improvement-loop.sh` `git add -A` → `git add -A ':!.kilo'` (both commit paths). Prevents transient local subagent-config edits from being auto-swept. | [DONE] | high |
+| T27 | **Fix `lane-watchdog.service` failing** — watchdog hard-failed (exit 1) on stale heartbeats from unstaffed lanes (kernel/swarmmind/library have no heartbeat daemon in single-session context). `watchdog.sh` now records DEGRADED in status file but exits 0; only disk-full remains a hard failure. Service no longer `failed`. | [DONE] | high |
+| T28 | **Fix phantom `Resource Alert: solana-launch`** — `generic-task-executor.js` echoed `originalMsg.from` (e.g. `solana-launch`, an invalid lane) into response `to`, producing quarantined outbox responses. Now validates `to` against `LANE_REGISTRY`; invalid `from` routes ack to `archivist`. | [DONE] | high |
+| T29 | **30-day script-archive automation** — new `scripts/script-archive-30day.js` implements SCRIPT_INDEX Rule #3 last-used tracking (git-log + mtime + log-reference heuristic). Dry-run by default (non-destructive); `--apply` archives candidates to `scripts/_archived-30day/<date>/`. NOTE: no reliable last-used signal exists yet (bulk commits/mtimes dominate), so real archival needs execution instrumentation — deferred. | [DONE] | medium |
+| T30 | **Re-run regression suite** — uds-gate 19/19 PASS; post-compact-audit PASS (handoff hash logged); headless-self-audit 0 regression failures (48 aligned); recovery-test-suite 11/12 (1 fail = `lane_liveness` 1/4 alive — environmental: unstaffed lanes, same root cause as T27, NOT a code regression). | [DONE] | high |
+| T31 | **Fix `sync-all-lanes --dry-run` timeout** — dry-run was executing 8 per-lane test suites (~2.5 min, exceeded 60s timeout). Now skips test execution in `--dry-run`; reports drift only. Verified fast completion. | [DONE] | medium |
+| T32 | **Refresh stale `active-blocker.json`** — `updated_at` was 2026-04-28; refreshed to 2026-08-07 with proper OUTPUT_PROVENANCE; `active: false` retained. | [DONE] | medium |
 
 ---
 
