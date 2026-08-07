@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-08-07T11:58:11.004Z",
+  "generated_at": "2026-08-07T12:29:37.160Z",
   "window_hours": 24,
-  "substrate_cycles": 30,
-  "cycle_count": 30,
+  "substrate_cycles": 31,
+  "cycle_count": 31,
   "topology_stability_pct": 0,
-  "drift_incidents": 30,
+  "drift_incidents": 31,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 30,
+  "cognition_needed_count": 31,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 3,
-  "cognition_handoff_suppressed_count": 29,
+  "cognition_handoff_suppressed_count": 30,
   "cognition_handoff_suppressed_pct": 97,
   "top_recommendation_types": [
     {
       "type": "P1:service_topology_violation",
-      "count": 30
+      "count": 31
     },
     {
       "type": "P1:convergence_review",
@@ -24,7 +24,7 @@
     },
     {
       "type": "P1:canonical_drift",
-      "count": 14
+      "count": 15
     }
   ],
   "last_cycle_summary": "topology: 0/18 active, 18 missing, 0 crash; drift: SYNC_REQUIRED; cognition: 2 triggers.",
@@ -51,7 +51,7 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 176
+        "count": 177
       },
       {
         "type": "TOPOLOGY_ANOMALY",
@@ -62,10 +62,10 @@
           "swarmmind"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 31
+        "count": 32
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The autonomous infrastructure is experiencing frequent cognitive needs and has a high number of unresolved drift incidents, indicating a degraded status. Despite these challenges, the substrate remains stable with minimal pressure on cognition."
+  "ai_summary": "The system is operating in a degraded state with frequent cognition needs and multiple unresolved drift incidents. Despite this, the substrate remains stable with minimal issues being actively monitored."
 }
