@@ -1,26 +1,26 @@
 {
-  "generated_at": "2026-08-07T01:22:31.516Z",
+  "generated_at": "2026-08-07T01:56:23.618Z",
   "window_hours": 24,
-  "substrate_cycles": 10,
-  "cycle_count": 10,
+  "substrate_cycles": 11,
+  "cycle_count": 11,
   "topology_stability_pct": 0,
-  "drift_incidents": 10,
+  "drift_incidents": 11,
   "broadcast_proof_pass_rate": null,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 10,
+  "cognition_needed_count": 11,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 1,
-  "cognition_handoff_emitted_pct": 10,
-  "cognition_handoff_suppressed_count": 9,
-  "cognition_handoff_suppressed_pct": 90,
+  "cognition_handoff_emitted_pct": 9,
+  "cognition_handoff_suppressed_count": 10,
+  "cognition_handoff_suppressed_pct": 91,
   "top_recommendation_types": [
     {
       "type": "P1:convergence_review",
-      "count": 10
+      "count": 11
     },
     {
       "type": "P1:service_topology_violation",
-      "count": 10
+      "count": 11
     }
   ],
   "last_cycle_summary": "topology: 0/18 active, 18 missing, 0 crash; drift: EXPECTED_DRIFT_CANONICAL_CHANGED; cognition: 2 triggers.",
@@ -50,10 +50,10 @@
           "swarmmind"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 9
+        "count": 10
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The autonomous infrastructure is experiencing frequent degradation due to high cognitive needs and drift incidents, with only minimal progress on new recommendations. The substrate remains stable, but close monitoring is required."
+  "ai_summary": "The system is experiencing frequent cognitive needs and drift incidents, indicating a degraded state. Despite these challenges, the substrate remains stable with minimal issues being monitored."
 }
