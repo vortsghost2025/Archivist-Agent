@@ -1,29 +1,29 @@
 {
-  "generated_at": "2026-08-07T13:00:41.508Z",
+  "generated_at": "2026-08-07T13:31:40.375Z",
   "window_hours": 24,
-  "substrate_cycles": 32,
-  "cycle_count": 32,
+  "substrate_cycles": 33,
+  "cycle_count": 33,
   "topology_stability_pct": 0,
-  "drift_incidents": 32,
+  "drift_incidents": 33,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 32,
+  "cognition_needed_count": 33,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 1,
   "cognition_handoff_emitted_pct": 3,
-  "cognition_handoff_suppressed_count": 31,
+  "cognition_handoff_suppressed_count": 32,
   "cognition_handoff_suppressed_pct": 97,
   "top_recommendation_types": [
     {
       "type": "P1:service_topology_violation",
-      "count": 32
-    },
-    {
-      "type": "P1:convergence_review",
-      "count": 16
+      "count": 33
     },
     {
       "type": "P1:canonical_drift",
+      "count": 17
+    },
+    {
+      "type": "P1:convergence_review",
       "count": 16
     }
   ],
@@ -51,7 +51,7 @@
           "library"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 178
+        "count": 179
       },
       {
         "type": "TOPOLOGY_ANOMALY",
@@ -62,10 +62,10 @@
           "swarmmind"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 33
+        "count": 34
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The autonomous infrastructure is experiencing frequent drift incidents and requires significant cognitive intervention, leading to a degraded status. Despite the substrate being stable with minimal issues, the operator should prioritize addressing the unresolved drifts to ensure optimal performance."
+  "ai_summary": "The autonomous infrastructure is experiencing frequent drift incidents and requires significant cognitive intervention, leading to a degraded status. Despite this, the substrate remains stable with minimal issues being monitored."
 }
