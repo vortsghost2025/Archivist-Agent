@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-07T19:15:01.753Z",
+  "generated_at": "2026-08-07T19:47:09.671Z",
   "window_hours": 24,
   "substrate_cycles": 39,
   "cycle_count": 39,
@@ -20,11 +20,11 @@
     },
     {
       "type": "P1:canonical_drift",
-      "count": 26
+      "count": 27
     },
     {
       "type": "P1:convergence_review",
-      "count": 13
+      "count": 12
     }
   ],
   "last_cycle_summary": "topology: 0/18 active, 18 missing, 0 crash; drift: SYNC_REQUIRED; cognition: 2 triggers.",
@@ -39,7 +39,7 @@
     "new_24h": 1,
     "resolved_24h": 2,
     "active_unresolved": 2,
-    "total_suppressed": 6,
+    "total_suppressed": 7,
     "recommendation_precision": 50,
     "false_positive_rate": 50,
     "operator_attention_required": 0,
@@ -52,8 +52,8 @@
           "library",
           "swarmmind"
         ],
-        "state": "NEW",
-        "count": 3
+        "state": "ONGOING_MONITORED",
+        "count": 4
       },
       {
         "type": "TOPOLOGY_ANOMALY",
@@ -64,10 +64,10 @@
           "swarmmind"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 43
+        "count": 44
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The system is operating in a degraded state with frequent cognition needed to maintain performance. Despite this, the substrate remains stable with only minor issues being monitored and no significant pressure on cognition."
+  "ai_summary": "The system is experiencing frequent cognitive needs and drift incidents, indicating potential degradation. However, the substrate remains stable with minor issues being monitored."
 }
