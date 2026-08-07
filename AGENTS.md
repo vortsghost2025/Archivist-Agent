@@ -171,6 +171,14 @@ CPS constraint weights from `constitutional_constraints.yaml`: STRUCTURE_OVER_ID
 - `scripts/pre-commit.ps1` is DEPRECATED; real hooks installed via `hooks/install.js`
 - New scripts on Ubuntu: must add to `SCRIPT_INDEX.md`, system scripts in `/usr/local/bin/`, no v2/v3 suffixes, no copies, 30-day archive rule
 
+## Ubuntu Host Facts (2026-08-07)
+
+- **Disk/RAM:** root LV grown to 233G (~146G free, 136G free in VG for further growth); 12G swap total. Don't add large local models.
+- **Vision (operator directive):** never run large models on this host. `scripts/describe-screen.sh` captures the desktop and describes it via the remote RTX 5060 desktop's ollama over Tailscale (`100.95.92.117:11434`, `qwen3.5:2b`/`4b` are vision-capable). Local ollama runs `nomic-embed-text` embeddings only.
+- **GUI:** GNOME Wayland at `DISPLAY=:0`, auto-login on, no AC sleep (gsettings + `/etc/systemd/logind.conf.d/99-stay-awake-on-ac.conf`). Tauri app autostart is `~/.config/autostart/archivist-agent.desktop` — MUST keep `GDK_BACKEND=x11` or the window won't map under Wayland.
+- **Desktop tools:** `xdotool` (windows/keys/clicks), `gnome-screenshot` (full Wayland capture), `tesseract` (OCR), Playwright/Puppeteer browsers (web automation).
+- **n8n MCP is self-contained** — no n8n server needed.
+
 ## Output Provenance (Non-Negotiable)
 
 Every response, report, audit, handoff, or user-facing output MUST begin with:
