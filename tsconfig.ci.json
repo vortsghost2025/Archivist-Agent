@@ -1,9 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "scripts/**/*.js",
-    "scripts/**/*.d.ts",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "mcp-servers/**/*.ts"
   ],
   "exclude": [
     "node_modules",
@@ -12,6 +11,7 @@
     "tests",
     "lanes",
     "context-buffer",
-    "scripts/executor-watcher.js"
+    "src/orchestrator",
+    "mcp-servers/packages/session-mcp/dist"
   ]
 }

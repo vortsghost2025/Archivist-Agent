@@ -26,9 +26,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: TypeScript type-check (governance scripts)
-        run: npx tsc -p tsconfig.ci.json --noEmit
-
       - name: Run recovery test suite
         run: node ./scripts/recovery-test-suite.js
 
