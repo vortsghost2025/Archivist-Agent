@@ -87,3 +87,4 @@ last_updated: 2026-08-07T03:30:00Z
 | Timestamp (UTC) | Task(s) | Change |
 |-----------------|---------|--------|
 | 2026-08-06T14:39:00Z | all | Journal created with tasks from Archivist session `archivist-ci-baseline-clean-20260804` |
+| 2026-08-07T03:30:00Z | T23–T32 | Added completion section: T23 service enable, T24 secret-untracked verify, T25 keys.json leak containment, T26 CI `.kilo` exclusion, T27 watchdog stale-heartbeat fix, T28 phantom solana-launch ack fix, T29 30-day archive script, T30 regression re-run, T31 sync dry-run timeout fix, T32 blocker refresh |
