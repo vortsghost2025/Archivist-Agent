@@ -10965,3 +10965,16 @@
 {"timestamp":"2026-08-07T18:28:11.310Z","lane":"archivist","pid":3207,"cpu":{"user":1682261854,"system":962173096},"memory":{"rss":208474112,"heapTotal":100130816,"heapUsed":73833816}}
 {"timestamp":"2026-08-07T18:28:37.655Z","lane":"archivist","pid":3207,"cpu":{"user":1686183387,"system":964737823},"memory":{"rss":208457728,"heapTotal":100130816,"heapUsed":73799576}}
 {"timestamp":"2026-08-07T18:29:05.097Z","lane":"archivist","pid":3207,"cpu":{"user":1690998975,"system":967383373},"memory":{"rss":208781312,"heapTotal":100130816,"heapUsed":73621808}}
+{"timestamp":"2026-08-07T18:29:30.785Z","lane":"archivist","pid":3207,"cpu":{"user":1694737548,"system":969457792},"memory":{"rss":208461824,"heapTotal":100130816,"heapUsed":73706088}}
+{"timestamp":"2026-08-07T18:29:57.067Z","lane":"archivist","pid":3207,"cpu":{"user":1698951597,"system":971590268},"memory":{"rss":208478208,"heapTotal":100130816,"heapUsed":73861008}}
+{"timestamp":"2026-08-07T18:30:24.124Z","lane":"archivist","pid":3207,"cpu":{"user":1703559088,"system":974016880},"memory":{"rss":208519168,"heapTotal":100130816,"heapUsed":73794968}}
+{"timestamp":"2026-08-07T18:30:50.184Z","lane":"archivist","pid":3207,"cpu":{"user":1707520947,"system":976198421},"memory":{"rss":208478208,"heapTotal":100130816,"heapUsed":73671776}}
+{"timestamp":"2026-08-07T18:31:15.606Z","lane":"archivist","pid":3207,"cpu":{"user":1711077278,"system":978208455},"memory":{"rss":208490496,"heapTotal":100130816,"heapUsed":73596496}}
+{"timestamp":"2026-08-07T18:31:41.788Z","lane":"archivist","pid":3207,"cpu":{"user":1715117017,"system":980431649},"memory":{"rss":208486400,"heapTotal":100130816,"heapUsed":73671720}}
+{"timestamp":"2026-08-07T18:32:07.667Z","lane":"archivist","pid":3207,"cpu":{"user":1718959080,"system":982570866},"memory":{"rss":208486400,"heapTotal":100130816,"heapUsed":73717560}}
+{"timestamp":"2026-08-07T18:32:34.302Z","lane":"archivist","pid":3207,"cpu":{"user":1723402636,"system":984860032},"memory":{"rss":208486400,"heapTotal":100130816,"heapUsed":73801896}}
+{"timestamp":"2026-08-07T18:32:59.961Z","lane":"archivist","pid":3207,"cpu":{"user":1727252893,"system":986802206},"memory":{"rss":208470016,"heapTotal":100130816,"heapUsed":73856560}}
+{"timestamp":"2026-08-07T18:33:26.306Z","lane":"archivist","pid":3207,"cpu":{"user":1731095614,"system":988961677},"memory":{"rss":208846848,"heapTotal":100392960,"heapUsed":74534608}}
+{"timestamp":"2026-08-07T18:33:53.531Z","lane":"archivist","pid":3207,"cpu":{"user":1735514550,"system":991375406},"memory":{"rss":208650240,"heapTotal":100392960,"heapUsed":74630224}}
+{"timestamp":"2026-08-07T18:34:19.839Z","lane":"archivist","pid":3207,"cpu":{"user":1739534460,"system":993578163},"memory":{"rss":208588800,"heapTotal":100392960,"heapUsed":74182872}}
+{"timestamp":"2026-08-07T18:34:45.783Z","lane":"archivist","pid":3207,"cpu":{"user":1743415009,"system":995727421},"memory":{"rss":208642048,"heapTotal":100392960,"heapUsed":73870720}}
