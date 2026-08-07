@@ -1,0 +1,11 @@
+Patch: test.js
+Proposed by: lane-agent (archivist)
+Date: 2026-08-07T22:48:14.798Z
+Status: draft
+---
+
+--- a/test.js
++++ b/test.js
+@@ -1 +1 @@
+-old
++new

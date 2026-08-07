@@ -1,33 +1,33 @@
 {
-  "generated_at": "2026-08-07T20:49:10.220Z",
+  "generated_at": "2026-08-07T23:52:18.549Z",
   "window_hours": 24,
-  "substrate_cycles": 41,
-  "cycle_count": 41,
+  "substrate_cycles": 49,
+  "cycle_count": 49,
   "topology_stability_pct": 0,
-  "drift_incidents": 41,
+  "drift_incidents": 46,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 41,
+  "cognition_needed_count": 49,
   "cognition_needed_pct": 100,
-  "cognition_handoff_emitted_count": 3,
-  "cognition_handoff_emitted_pct": 7,
-  "cognition_handoff_suppressed_count": 38,
-  "cognition_handoff_suppressed_pct": 93,
+  "cognition_handoff_emitted_count": 4,
+  "cognition_handoff_emitted_pct": 8,
+  "cognition_handoff_suppressed_count": 45,
+  "cognition_handoff_suppressed_pct": 92,
   "top_recommendation_types": [
     {
       "type": "P1:service_topology_violation",
-      "count": 41
+      "count": 49
     },
     {
       "type": "P1:canonical_drift",
-      "count": 27
+      "count": 33
     },
     {
       "type": "P1:convergence_review",
-      "count": 14
+      "count": 13
     }
   ],
-  "last_cycle_summary": "topology: 0/18 active, 18 missing, 0 crash; drift: EXPECTED_DRIFT_CANONICAL_CHANGED; cognition: 2 triggers.",
+  "last_cycle_summary": "topology: 0/18 active, 18 missing, 0 crash; drift: SYNC_REQUIRED; cognition: 2 triggers.",
   "substrate_status": "Degraded — cognition frequently needed",
   "work_units_attempted": 0,
   "work_units_completed": 0,
@@ -37,14 +37,22 @@
   "verified_artifacts_created": 0,
   "recommendation_metrics": {
     "new_24h": 1,
-    "resolved_24h": 3,
-    "active_unresolved": 1,
+    "resolved_24h": 2,
+    "active_unresolved": 2,
     "total_suppressed": 7,
     "recommendation_precision": 50,
     "false_positive_rate": 50,
     "operator_attention_required": 0,
     "archivist_action_yield": 50,
     "top_unresolved": [
+      {
+        "type": "REVIEW_DRIFT",
+        "lanes": [
+          "library"
+        ],
+        "state": "ONGOING_MONITORED",
+        "count": 192
+      },
       {
         "type": "TOPOLOGY_ANOMALY",
         "lanes": [
@@ -54,10 +62,10 @@
           "swarmmind"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 46
+        "count": 55
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The autonomous infrastructure is experiencing frequent degradation due to high cognition needs and drift incidents, with only minimal new recommendations being made. Despite the substrate stability, the operator should prioritize addressing the ongoing cognitive burden and unresolved issues to maintain optimal performance."
+  "ai_summary": "The system is experiencing frequent cognitive needs and drift incidents, indicating a degraded state. Despite this, the substrate remains stable with minor issues being monitored."
 }
