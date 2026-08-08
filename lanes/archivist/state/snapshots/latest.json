@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-07T23:56:15.937Z",
+  "timestamp": "2026-08-08T00:00:24.288Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
@@ -15,10 +15,10 @@
     "execution_verified_count": 0,
     "execution_failed_count": 0,
     "liveness": {
-      "tasks_completed_last_5min": 54,
+      "tasks_completed_last_5min": 43,
       "alert": false,
       "alert_reason": null,
-      "checked_at": "2026-08-07T23:56:15.936Z"
+      "checked_at": "2026-08-08T00:00:24.288Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
@@ -26,10 +26,10 @@
     "ownership_warnings": 1,
     "routes": [
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786146961120-xgdyzu.json",
-        "filename": "alert-alert-1786146961120-xgdyzu.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786147208753-l66gfl.json",
+        "filename": "alert-alert-1786147208753-l66gfl.json",
         "target_queue": "actionRequired",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786146961120-xgdyzu.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786147208753-l66gfl.json",
         "reason": "ACTIONABLE_NO_PROOF",
         "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
@@ -56,6 +56,6 @@
         "dry_run": true
       }
     ],
-    "timestamp": "2026-08-07T23:56:15.937Z"
+    "timestamp": "2026-08-08T00:00:24.288Z"
   }
 }

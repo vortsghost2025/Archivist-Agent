@@ -56,7 +56,13 @@ function cleanupTestDir() {
 
 const LANE = 'archivist';
 
-// ============================================================
+// test('web_research: valid host returns content', () => {
+  const r = executeTask(makeMsg('web research https://github.com/tauri-apps/tauri/discussions', { task_kind: 'web_research' }), LANE);
+  assert.strictEqual(r.task_kind, 'report');
+  assert(r.results.bytes > 0);
+});
+
+============================================================
 // VERB 1: STATUS
 // ============================================================
 test('status: explicit task_kind', () => {

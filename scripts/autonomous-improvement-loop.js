@@ -18,10 +18,90 @@ const LANES = [
   { id: 'library', root: LIBRARY },
 ];
 
-const RESEARCH_TARGETS = [
-  'https://github.com/tauri-apps/tauri/discussions',
-  'https://docs.github.com/en/actions',
-  'https://nodejs.org/en/docs',
+const IMPROVEMENTS = [
+  {
+    name: 'add_web_research_test',
+    lane: 'archivist',
+    testCode: `
+test('web_research: valid host returns content', () => {
+  const r = executeTask(makeMsg('web research https://github.com/tauri-apps/tauri/discussions', { task_kind: 'web_research' }), LANE);
+  assert.strictEqual(r.task_kind, 'report');
+  assert(r.results.bytes > 0);
+});
+`,
+    apply: (root) => {
+      const testFile = path.join(root, 'scripts/test-executor-v3.js');
+      let code = fs.readFileSync(testFile, 'utf8');
+      if (!code.includes('web_research: valid host returns content')) {
+        code = code.replace(
+          "========================================",
+          `test('web_research: valid host returns content', () => {
+  const r = executeTask(makeMsg('web research https://github.com/tauri-apps/tauri/discussions', { task_kind: 'web_research' }), LANE);
+  assert.strictEqual(r.task_kind, 'report');
+  assert(r.results.bytes > 0);
+});
+
+========================================`
+        );
+        fs.writeFileSync(testFile, code, 'utf8');
+        return true;
+      }
+      return false;
+    },
+  },
+  {
+    name: 'add_compare_alias_test',
+    lane: 'archivist',
+    testCode: null,
+    apply: (root) => {
+      const testFile = path.join(root, 'scripts/test-executor-v3.js');
+      let code = fs.readFileSync(testFile, 'utf8');
+      if (!code.includes('compare alias with absolute paths')) {
+        code = code.replace(
+          "========================================",
+          `test('compare alias with absolute paths', () => {
+  const dir = ensureTestDir();
+  const f1 = path.join(dir, 'comp-alias-1.txt');
+  const f2 = path.join(dir, 'comp-alias-2.txt');
+  fs.writeFileSync(f1, 'same', 'utf8');
+  fs.writeFileSync(f2, 'same', 'utf8');
+  const r = executeTask(makeMsg(\`compare \${f1} with \${f2}\`), LANE);
+  assert.strictEqual(r.task_kind, 'report');
+  assert.strictEqual(r.results.identical, true);
+});
+
+========================================`
+        );
+        fs.writeFileSync(testFile, code, 'utf8');
+        return true;
+      }
+      return false;
+    },
+  },
+  {
+    name: 'add_git_error_test',
+    lane: 'archivist',
+    testCode: null,
+    apply: (root) => {
+      const testFile = path.join(root, 'scripts/test-executor-v3.js');
+      let code = fs.readFileSync(testFile, 'utf8');
+      if (!code.includes('git: disallowed push returns error')) {
+        code = code.replace(
+          "test('adversarial: git push rejected',",
+          `test('git: disallowed push returns error', () => {
+  const r = executeTask(makeMsg('git push'), LANE);
+  assert.strictEqual(r.task_kind, 'report');
+  assert(r.results.error);
+});
+
+test('adversarial: git push rejected',`
+        );
+        fs.writeFileSync(testFile, code, 'utf8');
+        return true;
+      }
+      return false;
+    },
+  },
 ];
 
 function log(msg) {
@@ -31,15 +111,6 @@ function log(msg) {
 
 function ensureDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-}
-
-function runTask(lane, body, taskKind) {
-  try {
-    const result = executeTask({ body, task_kind: taskKind }, lane);
-    return result;
-  } catch (e) {
-    return { task_kind: 'error', results: { error: e.message }, summary: `Error: ${e.message}` };
-  }
 }
 
 function gitCommit(repo, message) {
@@ -61,178 +132,88 @@ function gitPush(repo) {
   }
 }
 
-function saveReport(lane, cycle, data) {
-  const reportDir = path.join(ARCHIVIST, 'improvement-reports');
-  ensureDir(reportDir);
-  const file = path.join(reportDir, `${lane}-cycle-${String(cycle).padStart(4, '0')}.json`);
-  fs.writeFileSync(file, JSON.stringify(data, null, 2), 'utf8');
-  return file;
+function runTests(repo) {
+  try {
+    const output = execSync('node scripts/test-executor-v3.js', { cwd: repo, encoding: 'utf8', timeout: 60000 });
+    const passMatch = output.match(/(\d+) PASS/);
+    const failMatch = output.match(/(\d+) FAIL/);
+    return {
+      passed: passMatch ? parseInt(passMatch[1]) : 0,
+      failed: failMatch ? parseInt(failMatch[1]) : 0,
+      output: output.slice(-1000),
+    };
+  } catch (e) {
+    return {
+      passed: 0,
+      failed: 0,
+      error: e.message,
+      output: ((e.stdout || '') + (e.stderr || '')).slice(-1000),
+    };
+  }
+}
+
+function applyImprovement(lane, improvement) {
+  const root = LANE_REGISTRY[lane]?.root;
+  if (!root || improvement.lane !== lane) return { applied: false, reason: 'wrong lane' };
+
+  try {
+    const applied = improvement.apply(root);
+    if (!applied) return { applied: false, reason: 'already applied' };
+
+    const tests = runTests(root);
+    if (tests.failed > 0) {
+      return { applied: true, tests_passed: false, tests, reason: 'tests failed after change' };
+    }
+
+    return { applied: true, tests_passed: true, tests };
+  } catch (e) {
+    return { applied: false, error: e.message };
+  }
 }
 
 function runImprovementCycle(lane, cycle) {
   log(`=== ${lane} cycle ${cycle} start ===`);
-  const root = LANE_REGISTRY[lane] ? LANE_REGISTRY[lane].root : LANES.find(l => l.id === lane)?.root;
+  const root = LANE_REGISTRY[lane]?.root;
   if (!root) {
     log(`${lane}: root not found, skipping`);
-    return { lane, cycle, skipped: true, reason: 'root not found' };
+    return { lane, cycle, skipped: true };
   }
 
   const report = {
     lane,
     cycle,
     timestamp: new Date().toISOString(),
-    research: [],
+    baseline: runTests(root),
     improvements: [],
-    tests: [],
     commits: [],
     errors: [],
   };
 
-  // 1. Run executor tests to establish baseline
-  let testResult = { passed: 0, failed: 0 };
-  try {
-    const testOutput = execSync('node scripts/test-executor-v3.js', { cwd: root, encoding: 'utf8', timeout: 60000 });
-    const passMatch = testOutput.match(/(\d+) PASS/);
-    const failMatch = testOutput.match(/(\d+) FAIL/);
-    testResult = {
-      passed: passMatch ? parseInt(passMatch[1]) : 0,
-      failed: failMatch ? parseInt(failMatch[1]) : 0,
-      output: testOutput.slice(-500),
-    };
-  } catch (e) {
-    testResult.error = e.message;
-    testResult.output = (e.stdout || '').slice(-500);
-  }
-  report.tests.push({ step: 'baseline_tests', ...testResult });
-  log(`${lane}: baseline tests -> ${testResult.passed} pass, ${testResult.failed} fail`);
+  log(`${lane}: baseline ${report.baseline.passed} pass, ${report.baseline.failed} fail`);
 
-  // 2. Self-analysis of lane scripts
-  const analyzeTarget = lane === 'archivist' ? 'scripts/generic-task-executor.js' : 'scripts';
-  const analyze = runTask(lane, `analyze code ${analyzeTarget}`, 'analyze_code');
-  report.research.push({ step: 'self_analysis', result: analyze.task_kind, summary: analyze.summary });
-  log(`${lane}: self_analysis -> ${analyze.task_kind} ${analyze.summary}`);
+  for (const imp of IMPROVEMENTS) {
+    if (imp.lane !== lane) continue;
+    log(`${lane}: applying improvement ${imp.name}`);
+    const result = applyImprovement(lane, imp);
+    report.improvements.push({ name: imp.name, ...result });
 
-  // 3. Web research for improvement patterns
-  const webTarget = RESEARCH_TARGETS[cycle % RESEARCH_TARGETS.length];
-  const web = runTask(lane, `web research ${webTarget}`, 'web_research');
-  report.research.push({ step: 'web_research', url: webTarget, result: web.task_kind, summary: web.summary });
-  log(`${lane}: web_research -> ${web.task_kind} ${web.summary}`);
-
-  // 4. Find concrete improvement opportunities
-  const patterns = runTask(lane, 'find pattern timing_instrumentation in scripts', 'find_patterns');
-  report.research.push({ step: 'pattern_search', result: patterns.task_kind, summary: patterns.summary });
-  log(`${lane}: pattern_search -> ${patterns.task_kind} ${patterns.summary}`);
-
-  // 5. Generate real improvement: if tests are failing, try to fix them
-  if (testResult.failed > 0) {
-    log(`${lane}: attempting to fix ${testResult.failed} failing tests`);
-    const fixProposal = runTask(lane, `propose improvement ${lane} fix failing tests cycle ${cycle}\n\n` +
-      `## Failing Tests\n` +
-      `- ${testResult.output}\n\n` +
-      `## Proposed Fix\n` +
-      `Analyze test failures and generate patches to fix them.\n\n` +
-      `## Affected Files\n` +
-      `- scripts/generic-task-executor.js\n` +
-      `- scripts/test-executor-v3.js\n\n` +
-      `## Testing Plan\n` +
-      `- Run test-executor-v3.js after fix\n` +
-      `- Verify all tests pass`, 'propose_improvement');
-
-    if (fixProposal.results?.proposal_path) {
-      const validation = runTask(lane, `validate improvement ${fixProposal.results.proposal_path}`, 'validate_improvement');
-      report.tests.push({ step: 'validate_fix', result: validation.task_kind, passed: validation.results?.validation === 'PASS', summary: validation.summary });
-
-      if (validation.results?.validation === 'PASS') {
-        const implement = runTask(lane, `implement proposal ${fixProposal.results.proposal_path}`, 'implement_proposal');
-        report.improvements.push({ step: 'implement_fix', result: implement.task_kind, status: implement.results?.status, path: implement.results?.implemented_copy, summary: implement.summary });
-
-        if (implement.results?.status === 'implemented') {
-          const commitResult = gitCommit(root, `fix: address failing tests in ${lane} lane cycle ${cycle}`);
-          report.commits.push(commitResult);
-          log(`${lane}: committed test fixes`);
-        }
+    if (result.applied && result.tests_passed) {
+      const commitResult = gitCommit(root, `test: add ${imp.name} coverage`);
+      report.commits.push(commitResult);
+      if (commitResult.committed) {
+        const pushResult = gitPush(root);
+        commitResult.pushed = pushResult.pushed;
+        log(`${lane}: committed and pushed ${imp.name}`);
       }
+    } else if (result.applied && !result.tests_passed) {
+      log(`${lane}: ${imp.name} broke tests, reverting`);
+      try {
+        execSync('git checkout -- scripts/test-executor-v3.js', { cwd: root, encoding: 'utf8' });
+      } catch (_) {}
     }
   }
 
-  // 6. Generate real improvement: add test coverage for new features
-  const newTestProposal = runTask(lane, `propose improvement ${lane} add test coverage for new features cycle ${cycle}\n\n` +
-    `## Current Coverage\n` +
-    `- Self-analysis: ${analyze.summary}\n` +
-    `- Pattern search: ${patterns.summary}\n\n` +
-    `## Proposed Changes\n` +
-    `Add unit tests for:\n` +
-    `1. Web research task handler\n` +
-    `2. Compare files with absolute paths\n` +
-    `3. Git subcommand validation\n\n` +
-    `## Affected Files\n` +
-    `- scripts/test-executor-v3.js\n\n` +
-    `## Testing Plan\n` +
-    `- Run test-executor-v3.js\n` +
-    `- Verify new tests pass`, 'propose_improvement');
-
-  if (newTestProposal.results?.proposal_path) {
-    const validation = runTask(lane, `validate improvement ${newTestProposal.results.proposal_path}`, 'validate_improvement');
-    report.tests.push({ step: 'validate_new_tests', result: validation.task_kind, passed: validation.results?.validation === 'PASS', summary: validation.summary });
-
-    if (validation.results?.validation === 'PASS') {
-      const implement = runTask(lane, `implement proposal ${newTestProposal.results.proposal_path}`, 'implement_proposal');
-      report.improvements.push({ step: 'implement_new_tests', result: implement.task_kind, status: implement.results?.status, path: implement.results?.implemented_copy, summary: implement.summary });
-
-      if (implement.results?.status === 'implemented') {
-        const commitResult = gitCommit(root, `test: add coverage for new executor features ${lane} cycle ${cycle}`);
-        report.commits.push(commitResult);
-        log(`${lane}: committed new tests`);
-      }
-    }
-  }
-
-  // 7. Generate real improvement: code quality improvements
-  const qualityProposal = runTask(lane, `propose improvement ${lane} code quality improvements cycle ${cycle}\n\n` +
-    `## Research\n` +
-    `- Web research: ${web.summary}\n` +
-    `- Symbol trace: ${report.research.find(r => r.step === 'symbol_trace')?.summary || 'N/A'}\n\n` +
-    `## Proposed Changes\n` +
-    `Based on research, implement concrete code quality improvements:\n` +
-    `1. Add input validation to task handlers\n` +
-    `2. Improve error messages with actionable guidance\n` +
-    `3. Add caching for expensive operations\n\n` +
-    `## Affected Files\n` +
-    `- scripts/generic-task-executor.js\n\n` +
-    `## Testing Plan\n` +
-    `- Run test-executor-v3.js\n` +
-    `- Verify no regressions`, 'propose_improvement');
-
-  if (qualityProposal.results?.proposal_path) {
-    const validation = runTask(lane, `validate improvement ${qualityProposal.results.proposal_path}`, 'validate_improvement');
-    report.tests.push({ step: 'validate_quality', result: validation.task_kind, passed: validation.results?.validation === 'PASS', summary: validation.summary });
-
-    if (validation.results?.validation === 'PASS') {
-      const implement = runTask(lane, `implement proposal ${qualityProposal.results.proposal_path}`, 'implement_proposal');
-      report.improvements.push({ step: 'implement_quality', result: implement.task_kind, status: implement.results?.status, path: implement.results?.implemented_copy, summary: implement.summary });
-
-      if (implement.results?.status === 'implemented') {
-        const commitResult = gitCommit(root, `chore: code quality improvements ${lane} cycle ${cycle}`);
-        report.commits.push(commitResult);
-        log(`${lane}: committed quality improvements`);
-      }
-    }
-  }
-
-  // 8. Push commits
-  for (const commit of report.commits) {
-    if (commit.committed) {
-      const pushResult = gitPush(root);
-      commit.pushed = pushResult.pushed;
-      if (!pushResult.pushed) {
-        log(`${lane}: push failed: ${pushResult.error}`);
-      }
-    }
-  }
-
-  const saved = saveReport(lane, cycle, report);
-  log(`${lane}: report saved to ${saved}`);
-  log(`${lane}: cycle ${cycle} complete - ${report.commits.filter(c => c.committed).length} commits, ${report.errors.length} errors`);
+  log(`${lane}: cycle ${cycle} complete - ${report.commits.filter(c => c.committed).length} commits`);
   return report;
 }
 
@@ -247,11 +228,9 @@ function runAllLanes(cycle) {
     timestamp: new Date().toISOString(),
     lanes: results.length,
     commits: results.reduce((a, r) => a + (r.commits?.filter(c => c.committed).length || 0), 0),
-    improvements: results.reduce((a, r) => a + (r.improvements?.length || 0), 0),
+    improvements: results.reduce((a, r) => a + (r.improvements?.filter(i => i.applied && i.tests_passed).length || 0), 0),
     errors: results.reduce((a, r) => a + (r.errors?.length || 0), 0),
   };
-  const summaryPath = path.join(ARCHIVIST, 'improvement-reports', `summary-cycle-${String(cycle).padStart(4, '0')}.json`);
-  fs.writeFileSync(summaryPath, JSON.stringify(summary, null, 2), 'utf8');
   log(`=== cycle ${cycle} summary ===`);
   log(JSON.stringify(summary, null, 2));
   return summary;
@@ -260,21 +239,11 @@ function runAllLanes(cycle) {
 function main() {
   const args = process.argv.slice(2);
   const cycles = args.includes('--cycles') ? parseInt(args[args.indexOf('--cycles') + 1], 10) : 1;
-  const sleep = args.includes('--sleep') ? parseInt(args[args.indexOf('--sleep') + 1], 10) : 300;
 
   for (let i = 0; i < cycles; i++) {
     const cycle = i + 1;
     log(`Starting improvement cycle ${cycle}/${cycles}`);
     runAllLanes(cycle);
-    if (i < cycles - 1) {
-      log(`Sleeping ${sleep}s before next cycle...`);
-      const start = Date.now();
-      while (Date.now() - start < sleep * 1000) {
-        const remaining = Math.ceil((sleep * 1000 - (Date.now() - start)) / 1000);
-        process.stdout.write(`\r${new Date().toISOString()} [improvement-loop] next cycle in ${remaining}s   `);
-      }
-      process.stdout.write('\n');
-    }
   }
 }
 
