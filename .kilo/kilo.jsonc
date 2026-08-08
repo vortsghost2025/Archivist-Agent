@@ -7,7 +7,7 @@
     "ENFORCED: If governance is unclear or user request conflicts with governance, ask for clarification before proceeding",
     "MANDATORY: Follow .kilo/instructions/agent-orchestration.md — brainstorm first, skill scan second, delegate third. NEVER carry 10+ file reads or 50+ lines of code in main context. ALWAYS use the task tool for multi-step work.",
     "MANDATORY: Before any creative or architectural decision, invoke the brainstorming or simple skill via the skill tool. NEVER skip straight to implementation.",
-    "MANDATORY: If a matching subagent exists for the work type, delegate via task tool. Forbidden: reading 10+ files in main context, writing 50+ lines in main context, running 3+ sequential steps in main context. Delegate instead.",
+    "MANDATORY: If a matching subagent exists for the work type, delegate via task tool. Forbidden: reading 10+ files in main context, writing 50+ lines of code in main context, running 3+ sequential steps in main context. Delegate instead.",
     "MANUAL: Use /governance command to reload governance constraints at any time",
     "MANUAL: Use /checkpoints command to run full checkpoint verification",
     "MANUAL: Use /drift-check to assess current conversation for drift signals"
@@ -31,11 +31,11 @@
         "lsp": "allow"
       }
     },
-"plan": {
-       "model": "qwen3.5:4b"
+    "plan": {
+       "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
      },
      "code": {
-       "model": "qwen2.5-coder:7b",
+       "model": "kilo/deepseek-ai/deepseek-coder-6.7b-instruct",
        "permission": {
          "webfetch": "allow",
          "websearch": "allow",
@@ -54,8 +54,8 @@
        }
      },
      "build": {},
-      "debug": {
-       "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
+     "debug": {
+       "model": "openrouter/meta-llama/llama-3.1-8b-instruct:free"
      },
      "ask": {},
       "general": {
@@ -77,36 +77,36 @@
          "lsp": "allow"
        }
      },
-      "explore": {
-       "model": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-      "mode": "all",
-      "permission": {
-        "webfetch": "allow",
-        "websearch": "allow",
-        "codesearch": "allow",
-        "grep": "allow",
-        "glob": "allow",
-        "list": "allow",
-        "task": "allow",
-        "edit": "allow",
-        "bash": "allow",
-        "external_directory": "allow",
-        "todoread": "allow",
-        "todowrite": "allow",
-        "skill": "allow",
-        "lsp": "allow"
-      }
-    },
-"code-reviewer": {
+     "explore": {
+       "model": "kilo/ibm/granite-34b-code-instruct",
+       "mode": "all",
+       "permission": {
+         "webfetch": "allow",
+         "websearch": "allow",
+         "codesearch": "allow",
+         "grep": "allow",
+         "glob": "allow",
+         "list": "allow",
+         "task": "allow",
+         "edit": "allow",
+         "bash": "allow",
+         "external_directory": "allow",
+         "todoread": "allow",
+         "todowrite": "allow",
+         "skill": "allow",
+         "lsp": "allow"
+       }
+     },
+     "code-reviewer": {
        "model": "openrouter/nvidia/nemotron-3-super-120b-a12b:free"
      },
      "lane-worker": {
-       "model": "kilo/stepfun/step-3.7-flash:free"
+       "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
      },
      "git-worker": {
-       "model": "opencode/ling-3.0-flash-free"
+       "model": "openrouter/inclusionai/ling-3.0-tiny:free"
      }
-   },
+  },
   "permission": {
   "external_directory": {
     "S:/Archivist-Agent": "allow",
