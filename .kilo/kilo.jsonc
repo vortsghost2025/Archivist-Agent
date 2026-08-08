@@ -32,9 +32,10 @@
       }
     },
 "plan": {
-       "model": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free"
+       "model": "qwen3.5:4b"
      },
      "code": {
+       "model": "qwen2.5-coder:7b",
        "permission": {
          "webfetch": "allow",
          "websearch": "allow",
