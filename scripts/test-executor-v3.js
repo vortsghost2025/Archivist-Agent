@@ -62,6 +62,17 @@ const LANE = 'archivist';
   assert(r.results.bytes > 0);
 });
 
+test('compare alias with absolute paths', () => {
+  const dir = ensureTestDir();
+  const f1 = path.join(dir, 'comp-alias-1.txt');
+  const f2 = path.join(dir, 'comp-alias-2.txt');
+  fs.writeFileSync(f1, 'same', 'utf8');
+  fs.writeFileSync(f2, 'same', 'utf8');
+  const r = executeTask(makeMsg(`compare ${f1} with ${f2}`), LANE);
+  assert.strictEqual(r.task_kind, 'report');
+  assert.strictEqual(r.results.identical, true);
+});
+
 ============================================================
 // VERB 1: STATUS
 // ============================================================
