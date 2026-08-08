@@ -1,35 +1,35 @@
 {
-  "timestamp": "2026-08-08T01:02:29.960Z",
+  "timestamp": "2026-08-08T01:10:26.234Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
     "dry_run": true,
-    "scanned": 2,
+    "scanned": 5,
     "routed": {
-      "action_required": 2,
+      "action_required": 4,
       "in_progress": 0,
-      "processed": 0,
+      "processed": 1,
       "blocked": 0,
       "quarantine": 0
     },
     "execution_verified_count": 0,
     "execution_failed_count": 0,
     "liveness": {
-      "tasks_completed_last_5min": 84,
+      "tasks_completed_last_5min": 51,
       "alert": false,
       "alert_reason": null,
-      "checked_at": "2026-08-08T01:02:29.959Z"
+      "checked_at": "2026-08-08T01:10:26.233Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
     "ownership_enforcement_enabled": false,
-    "ownership_warnings": 2,
+    "ownership_warnings": 5,
     "routes": [
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786150933912-728ypl.json",
-        "filename": "alert-alert-1786150933912-728ypl.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786151389482-f0zbxk.json",
+        "filename": "alert-alert-1786151389482-f0zbxk.json",
         "target_queue": "actionRequired",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786150933912-728ypl.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786151389482-f0zbxk.json",
         "reason": "ACTIONABLE_NO_PROOF",
         "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
@@ -56,10 +56,10 @@
         "dry_run": true
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786150942870-3pprrt.json",
-        "filename": "alert-alert-1786150942870-3pprrt.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786151398883-ip64x2.json",
+        "filename": "alert-alert-1786151398883-ip64x2.json",
         "target_queue": "actionRequired",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786150942870-3pprrt.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786151398883-ip64x2.json",
         "reason": "ACTIONABLE_NO_PROOF",
         "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
@@ -84,8 +84,102 @@
         "verification_path": null,
         "schema_remediation": null,
         "dry_run": true
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786151408126-29rosm.json",
+        "filename": "alert-alert-1786151408126-29rosm.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786151408126-29rosm.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": true,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": null,
+        "domain_validation": null,
+        "domain_gate_executed": false,
+        "verification_path": null,
+        "schema_remediation": null,
+        "dry_run": true
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786151417357-ld198i.json",
+        "filename": "alert-alert-1786151417357-ld198i.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786151417357-ld198i.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": true,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": null,
+        "domain_validation": null,
+        "domain_gate_executed": false,
+        "verification_path": null,
+        "schema_remediation": null,
+        "dry_run": true
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786151380978-mxsms9.json",
+        "filename": "response-alert-1786151380978-mxsms9.json",
+        "target_queue": "processed",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786151380978-mxsms9.json",
+        "reason": "TERMINAL_INFORMATIONAL",
+        "detail": null,
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": false,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": "PASS",
+        "domain_validation": null,
+        "domain_gate_executed": true,
+        "verification_path": [
+          "domain_gate",
+          "execution_check",
+          "response_validation"
+        ],
+        "schema_remediation": null,
+        "dry_run": true
       }
     ],
-    "timestamp": "2026-08-08T01:02:29.959Z"
+    "timestamp": "2026-08-08T01:10:26.234Z"
   }
 }
