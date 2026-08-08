@@ -1,35 +1,35 @@
 {
-  "timestamp": "2026-08-08T00:54:08.258Z",
+  "timestamp": "2026-08-08T01:02:29.960Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
     "dry_run": true,
-    "scanned": 3,
+    "scanned": 2,
     "routed": {
       "action_required": 2,
       "in_progress": 0,
-      "processed": 1,
+      "processed": 0,
       "blocked": 0,
       "quarantine": 0
     },
     "execution_verified_count": 0,
     "execution_failed_count": 0,
     "liveness": {
-      "tasks_completed_last_5min": 45,
+      "tasks_completed_last_5min": 84,
       "alert": false,
       "alert_reason": null,
-      "checked_at": "2026-08-08T00:54:08.257Z"
+      "checked_at": "2026-08-08T01:02:29.959Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
     "ownership_enforcement_enabled": false,
-    "ownership_warnings": 3,
+    "ownership_warnings": 2,
     "routes": [
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786150424505-urebsh.json",
-        "filename": "alert-alert-1786150424505-urebsh.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786150933912-728ypl.json",
+        "filename": "alert-alert-1786150933912-728ypl.json",
         "target_queue": "actionRequired",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786150424505-urebsh.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786150933912-728ypl.json",
         "reason": "ACTIONABLE_NO_PROOF",
         "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
@@ -56,10 +56,10 @@
         "dry_run": true
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786150438858-gkjxxw.json",
-        "filename": "alert-alert-1786150438858-gkjxxw.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786150942870-3pprrt.json",
+        "filename": "alert-alert-1786150942870-3pprrt.json",
         "target_queue": "actionRequired",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786150438858-gkjxxw.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786150942870-3pprrt.json",
         "reason": "ACTIONABLE_NO_PROOF",
         "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
@@ -82,44 +82,10 @@
         "domain_validation": null,
         "domain_gate_executed": false,
         "verification_path": null,
-        "schema_remediation": null,
-        "dry_run": true
-      },
-      {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786150409601-ig1gk0.json",
-        "filename": "response-alert-1786150409601-ig1gk0.json",
-        "target_queue": "processed",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786150409601-ig1gk0.json",
-        "reason": "TERMINAL_INFORMATIONAL",
-        "detail": null,
-        "schema_valid": true,
-        "signature_valid": true,
-        "english_only": true,
-        "actionable": false,
-        "has_completion_proof": false,
-        "execution_verified": false,
-        "would_verify": false,
-        "enforce_ownership": false,
-        "ownership_enforcement_enabled": false,
-        "ownership": {
-          "present": false,
-          "malformed": false
-        },
-        "ownership_notes": [
-          "OWNERSHIP_MISSING"
-        ],
-        "verification_outcome": "PASS",
-        "domain_validation": null,
-        "domain_gate_executed": true,
-        "verification_path": [
-          "domain_gate",
-          "execution_check",
-          "response_validation"
-        ],
         "schema_remediation": null,
         "dry_run": true
       }
     ],
-    "timestamp": "2026-08-08T00:54:08.258Z"
+    "timestamp": "2026-08-08T01:02:29.959Z"
   }
 }
