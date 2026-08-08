@@ -56,24 +56,7 @@ function cleanupTestDir() {
 
 const LANE = 'archivist';
 
-// test('web_research: valid host returns content', () => {
-  const r = executeTask(makeMsg('web research https://github.com/tauri-apps/tauri/discussions', { task_kind: 'web_research' }), LANE);
-  assert.strictEqual(r.task_kind, 'report');
-  assert(r.results.bytes > 0);
-});
-
-test('compare alias with absolute paths', () => {
-  const dir = ensureTestDir();
-  const f1 = path.join(dir, 'comp-alias-1.txt');
-  const f2 = path.join(dir, 'comp-alias-2.txt');
-  fs.writeFileSync(f1, 'same', 'utf8');
-  fs.writeFileSync(f2, 'same', 'utf8');
-  const r = executeTask(makeMsg(`compare ${f1} with ${f2}`), LANE);
-  assert.strictEqual(r.task_kind, 'report');
-  assert.strictEqual(r.results.identical, true);
-});
-
-============================================================
+// ============================================================
 // VERB 1: STATUS
 // ============================================================
 test('status: explicit task_kind', () => {
@@ -394,12 +377,6 @@ test('adversarial: path traversal in hash', () => {
   assert(r.results.error);
 });
 
-test('git: disallowed push returns error', () => {
-  const r = executeTask(makeMsg('git push'), LANE);
-  assert.strictEqual(r.task_kind, 'report');
-  assert(r.results.error);
-});
-
 test('adversarial: git push rejected', () => {
   const r = executeTask(makeMsg('git push origin main'), LANE);
   assert.strictEqual(r.task_kind, 'report');
@@ -558,6 +535,12 @@ test('determinism: hash same file twice', () => {
     const r1 = executeTask(makeMsg(`hash file ${f1}`), LANE);
     const r2 = executeTask(makeMsg(`hash file ${f2}`), LANE);
     assert.notStrictEqual(r1.results.sha256, r2.results.sha256);
+  });
+
+  test('web_research: valid host returns content', () => {
+    const r = executeTask(makeMsg('web research https://github.com/tauri-apps/tauri/discussions', { task_kind: 'web_research' }), LANE);
+    assert.strictEqual(r.task_kind, 'report');
+    assert(r.results.bytes > 0);
   });
 
   // ============================================================

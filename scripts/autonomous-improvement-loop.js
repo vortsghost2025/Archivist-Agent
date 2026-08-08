@@ -22,27 +22,18 @@ const IMPROVEMENTS = [
   {
     name: 'add_web_research_test',
     lane: 'archivist',
-    testCode: `
-test('web_research: valid host returns content', () => {
-  const r = executeTask(makeMsg('web research https://github.com/tauri-apps/tauri/discussions', { task_kind: 'web_research' }), LANE);
-  assert.strictEqual(r.task_kind, 'report');
-  assert(r.results.bytes > 0);
-});
-`,
     apply: (root) => {
       const testFile = path.join(root, 'scripts/test-executor-v3.js');
       let code = fs.readFileSync(testFile, 'utf8');
       if (!code.includes('web_research: valid host returns content')) {
-        code = code.replace(
-          "========================================",
-          `test('web_research: valid host returns content', () => {
-  const r = executeTask(makeMsg('web research https://github.com/tauri-apps/tauri/discussions', { task_kind: 'web_research' }), LANE);
-  assert.strictEqual(r.task_kind, 'report');
-  assert(r.results.bytes > 0);
-});
+        const insertion = `  test('web_research: valid host returns content', () => {
+    const r = executeTask(makeMsg('web research https://github.com/tauri-apps/tauri/discussions', { task_kind: 'web_research' }), LANE);
+    assert.strictEqual(r.task_kind, 'report');
+    assert(r.results.bytes > 0);
+  });
 
-========================================`
-        );
+`;
+        code = code.replace('  // ============================================================\n  // SUMMARY\n  // ============================================================', insertion + '  // ============================================================\n  // SUMMARY\n  // ============================================================');
         fs.writeFileSync(testFile, code, 'utf8');
         return true;
       }
@@ -52,26 +43,23 @@ test('web_research: valid host returns content', () => {
   {
     name: 'add_compare_alias_test',
     lane: 'archivist',
-    testCode: null,
     apply: (root) => {
       const testFile = path.join(root, 'scripts/test-executor-v3.js');
       let code = fs.readFileSync(testFile, 'utf8');
       if (!code.includes('compare alias with absolute paths')) {
-        code = code.replace(
-          "========================================",
-          `test('compare alias with absolute paths', () => {
-  const dir = ensureTestDir();
-  const f1 = path.join(dir, 'comp-alias-1.txt');
-  const f2 = path.join(dir, 'comp-alias-2.txt');
-  fs.writeFileSync(f1, 'same', 'utf8');
-  fs.writeFileSync(f2, 'same', 'utf8');
-  const r = executeTask(makeMsg(\`compare \${f1} with \${f2}\`), LANE);
-  assert.strictEqual(r.task_kind, 'report');
-  assert.strictEqual(r.results.identical, true);
-});
+        const insertion = `  test('compare alias with absolute paths', () => {
+    const dir = ensureTestDir();
+    const f1 = path.join(dir, 'comp-alias-1.txt');
+    const f2 = path.join(dir, 'comp-alias-2.txt');
+    fs.writeFileSync(f1, 'same', 'utf8');
+    fs.writeFileSync(f2, 'same', 'utf8');
+    const r = executeTask(makeMsg(\`compare \${f1} with \${f2}\`), LANE);
+    assert.strictEqual(r.task_kind, 'report');
+    assert.strictEqual(r.results.identical, true);
+  });
 
-========================================`
-        );
+`;
+        code = code.replace('  // ============================================================\n  // SUMMARY\n  // ============================================================', insertion + '  // ============================================================\n  // SUMMARY\n  // ============================================================');
         fs.writeFileSync(testFile, code, 'utf8');
         return true;
       }
@@ -81,21 +69,18 @@ test('web_research: valid host returns content', () => {
   {
     name: 'add_git_error_test',
     lane: 'archivist',
-    testCode: null,
     apply: (root) => {
       const testFile = path.join(root, 'scripts/test-executor-v3.js');
       let code = fs.readFileSync(testFile, 'utf8');
       if (!code.includes('git: disallowed push returns error')) {
-        code = code.replace(
-          "test('adversarial: git push rejected',",
-          `test('git: disallowed push returns error', () => {
-  const r = executeTask(makeMsg('git push'), LANE);
-  assert.strictEqual(r.task_kind, 'report');
-  assert(r.results.error);
-});
+        const insertion = `  test('git: disallowed push returns error', () => {
+    const r = executeTask(makeMsg('git push'), LANE);
+    assert.strictEqual(r.task_kind, 'report');
+    assert(r.results.error);
+  });
 
-test('adversarial: git push rejected',`
-        );
+`;
+        code = code.replace('  test(\'adversarial: git push rejected\',', insertion + '  test(\'adversarial: git push rejected\',');
         fs.writeFileSync(testFile, code, 'utf8');
         return true;
       }
