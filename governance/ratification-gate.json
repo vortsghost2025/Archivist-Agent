@@ -2,7 +2,7 @@
  "schema_version": "1.1",
  "description": "Ratification gate for shared-script ownership plan. No batch deployment allowed until 3 of 4 lanes approve. Per amendment C5/A7 of CONSOLIDATED_AMENDMENT_PLAN.md.",
  "created_at": "20260509T043624Z",
- "updated_at": "20260509T151000Z",
+ "updated_at": "20260805T144900Z",
  "quorum_required": 3,
  "total_lanes": 4,
  "max_rejections": 1,
@@ -27,31 +27,31 @@
    "convergence_timestamp": "2026-05-09T04:30:00Z",
    "convergence_source": "governance/CONVERGENCE_VOTE_LIBRARY_20260509.json",
    "convergence_note": "Re-voted from REJECT to AMEND after kernel demonstrated artifacts on convergence branch",
-   "ratification_vote": null,
-   "ratification_timestamp": null,
-   "ratification_source": null
+   "ratification_vote": "APPROVE",
+   "ratification_timestamp": "2026-08-05T14:49:00Z",
+   "ratification_source": "governance/RATIFICATION_VOTE_LIBRARY_20260805.json"
   },
   "swarmmind": {
    "convergence_vote": "AMEND",
    "convergence_timestamp": "2026-05-09T03:30:00Z",
    "convergence_source": "governance/CONVERGENCE_VOTE_SWARMMIND_20260509.json",
-   "ratification_vote": null,
-   "ratification_timestamp": null,
-   "ratification_source": null
+   "ratification_vote": "APPROVE",
+   "ratification_timestamp": "2026-08-05T14:49:00Z",
+   "ratification_source": "governance/RATIFICATION_VOTE_SWARMMIND_20260805.json"
   },
   "kernel": {
    "convergence_vote": "PROPOSER",
    "convergence_timestamp": "2026-05-09T00:43:00Z",
    "convergence_note": "Originator, not a voter in convergence phase. Votes in ratification.",
-   "ratification_vote": null,
-   "ratification_timestamp": null,
-   "ratification_source": null
+   "ratification_vote": "APPROVE",
+   "ratification_timestamp": "2026-08-05T14:49:00Z",
+   "ratification_source": "governance/RATIFICATION_VOTE_KERNEL_20260805.json"
   }
  },
- "ratification_status": "ratification_in_progress",
- "approve_count": 1,
+ "ratification_status": "ratified",
+ "approve_count": 4,
  "approve_required": 3,
- "deploy_allowed": false,
+ "deploy_allowed": true,
  "amendment_status": {
   "total_consolidated": 9,
   "implemented": 9,
@@ -63,7 +63,7 @@
   "completed_batches": [
    {
     "id": "batch_1_freeze",
-    "description": "Mutation freeze policy — autonomous-executor.js shared-script write guard",
+    "description": "Mutation freeze policy \u2014 autonomous-executor.js shared-script write guard",
     "deploying_lane": "archivist",
     "status": "deployed",
     "deployed_at": "2026-05-09T02:00:00Z"
@@ -126,5 +126,10 @@
     "status": "completed"
    }
   ]
+ },
+ "ratification_completed": {
+  "at": "2026-08-05T14:49:00Z",
+  "quorum": "4/4 APPROVE",
+  "by": "Archivist lane under operator governance delegation"
  }
 }

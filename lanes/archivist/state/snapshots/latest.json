@@ -1,40 +1,40 @@
 {
-  "timestamp": "2026-06-06T18:15:24.615Z",
+  "timestamp": "2026-08-08T00:36:45.713Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
-    "dry_run": false,
+    "dry_run": true,
     "scanned": 3,
     "routed": {
-      "action_required": 0,
+      "action_required": 2,
       "in_progress": 0,
-      "processed": 0,
+      "processed": 1,
       "blocked": 0,
-      "quarantine": 3
+      "quarantine": 0
     },
     "execution_verified_count": 0,
     "execution_failed_count": 0,
     "liveness": {
-      "tasks_completed_last_5min": 0,
-      "alert": true,
-      "alert_reason": "ZERO_COMPLETIONS_WHILE_SYSTEM_ACTIVE",
-      "checked_at": "2026-06-06T18:15:24.615Z"
+      "tasks_completed_last_5min": 61,
+      "alert": false,
+      "alert_reason": null,
+      "checked_at": "2026-08-08T00:36:45.713Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
     "ownership_enforcement_enabled": false,
-    "ownership_warnings": 0,
+    "ownership_warnings": 3,
     "routes": [
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1780769704272-dbarhb.json",
-        "filename": "alert-alert-1780769704272-dbarhb.json",
-        "target_queue": "quarantine",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/quarantine/alert-alert-1780769704272-dbarhb.json",
-        "reason": "FORMAT_VIOLATION_NON_ASCII",
-        "detail": "Message contains non-ASCII content. Re-request in English per governance constraint.",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786149383098-atus6l.json",
+        "filename": "alert-alert-1786149383098-atus6l.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786149383098-atus6l.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
         "signature_valid": true,
-        "english_only": false,
+        "english_only": true,
         "actionable": true,
         "has_completion_proof": false,
         "execution_verified": false,
@@ -42,26 +42,29 @@
         "enforce_ownership": false,
         "ownership_enforcement_enabled": false,
         "ownership": {
-          "present": false
+          "present": false,
+          "malformed": false
         },
-        "ownership_notes": [],
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
         "verification_outcome": null,
         "domain_validation": null,
         "domain_gate_executed": false,
         "verification_path": null,
         "schema_remediation": null,
-        "dry_run": false
+        "dry_run": true
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1780769707340-ztuph4.json",
-        "filename": "alert-alert-1780769707340-ztuph4.json",
-        "target_queue": "quarantine",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/quarantine/alert-alert-1780769707340-ztuph4.json",
-        "reason": "FORMAT_VIOLATION_NON_ASCII",
-        "detail": "Message contains non-ASCII content. Re-request in English per governance constraint.",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786149396320-gyeb04.json",
+        "filename": "alert-alert-1786149396320-gyeb04.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786149396320-gyeb04.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
         "signature_valid": true,
-        "english_only": false,
+        "english_only": true,
         "actionable": true,
         "has_completion_proof": false,
         "execution_verified": false,
@@ -69,44 +72,54 @@
         "enforce_ownership": false,
         "ownership_enforcement_enabled": false,
         "ownership": {
-          "present": false
+          "present": false,
+          "malformed": false
         },
-        "ownership_notes": [],
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
         "verification_outcome": null,
         "domain_validation": null,
         "domain_gate_executed": false,
         "verification_path": null,
         "schema_remediation": null,
-        "dry_run": false
+        "dry_run": true
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1780769714971-0p422c.json",
-        "filename": "alert-alert-1780769714971-0p422c.json",
-        "target_queue": "quarantine",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/quarantine/alert-alert-1780769714971-0p422c.json",
-        "reason": "FORMAT_VIOLATION_NON_ASCII",
-        "detail": "Message contains non-ASCII content. Re-request in English per governance constraint.",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786149372116-dpi5tg.json",
+        "filename": "response-alert-1786149372116-dpi5tg.json",
+        "target_queue": "processed",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786149372116-dpi5tg.json",
+        "reason": "TERMINAL_INFORMATIONAL",
+        "detail": null,
         "schema_valid": true,
         "signature_valid": true,
-        "english_only": false,
-        "actionable": true,
+        "english_only": true,
+        "actionable": false,
         "has_completion_proof": false,
         "execution_verified": false,
         "would_verify": false,
         "enforce_ownership": false,
         "ownership_enforcement_enabled": false,
         "ownership": {
-          "present": false
+          "present": false,
+          "malformed": false
         },
-        "ownership_notes": [],
-        "verification_outcome": null,
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": "PASS",
         "domain_validation": null,
-        "domain_gate_executed": false,
-        "verification_path": null,
+        "domain_gate_executed": true,
+        "verification_path": [
+          "domain_gate",
+          "execution_check",
+          "response_validation"
+        ],
         "schema_remediation": null,
-        "dry_run": false
+        "dry_run": true
       }
     ],
-    "timestamp": "2026-06-06T18:15:24.615Z"
+    "timestamp": "2026-08-08T00:36:45.713Z"
   }
 }

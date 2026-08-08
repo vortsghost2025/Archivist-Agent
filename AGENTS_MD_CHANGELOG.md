@@ -472,3 +472,9 @@
 4. **One source per fact** — post-compact protocol, output provenance, and lane paths each appear exactly once
 5. **Commands over prose** — where a command example exists, use it instead of describing what to do
 6. **No coaching** — remove philosophical questions, motivational explanations, and "why this matters" prose
+
+---
+
+**Date:** 2026-08-07
+**Change:** Added "Ubuntu Host Facts (2026-08-07)" section (disk grown to 233G, 12G swap, vision-over-Tailscale with describe-screen.sh, GUI access via xdotool/gnome-screenshot/tesseract, GDK_BACKEND=x11 autostart requirement, self-contained n8n MCP).
+**Why added:** Future agents must know the machine can now read the desktop (capture + remote RTX 5060 vision + OCR), must not run large local models (operator directive: call the desktop via Tailscale), and must keep GDK_BACKEND=x11 for the Tauri app window to map under Wayland.

@@ -1,0 +1,11 @@
+Patch: scripts/generic-task-executor.js
+Proposed by: lane-agent (archivist)
+Date: 2026-08-07T22:59:23.754Z
+Status: draft
+---
+
+--- a/scripts/generic-task-executor.js
++++ b/scripts/generic-task-executor.js
+@@ -1 +1 @@
+-old
++new

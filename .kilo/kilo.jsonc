@@ -32,7 +32,7 @@
       }
     },
 "plan": {
-       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+       "model": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free"
      },
      "code": {
        "permission": {
@@ -53,11 +53,12 @@
        }
      },
      "build": {},
-     "debug": {
-       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+      "debug": {
+       "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free"
      },
      "ask": {},
-     "general": {
+      "general": {
+       "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
        "permission": {
          "webfetch": "allow",
          "websearch": "allow",
@@ -75,8 +76,8 @@
          "lsp": "allow"
        }
      },
-     "explore": {
-       "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "explore": {
+       "model": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
       "mode": "all",
       "permission": {
         "webfetch": "allow",
@@ -96,13 +97,13 @@
       }
     },
 "code-reviewer": {
-       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+       "model": "openrouter/nvidia/nemotron-3-super-120b-a12b:free"
      },
      "lane-worker": {
-       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+       "model": "kilo/stepfun/step-3.7-flash:free"
      },
      "git-worker": {
-       "model": "nvidia/nemotron-3-ultra-550b-a55b"
+       "model": "opencode/ling-3.0-flash-free"
      }
    },
   "permission": {
@@ -150,5 +151,6 @@
       "template": "Run SwarmMind verification on the last execution result. Categorize claims as VERIFIED, MEASURED, or UNTESTED. Report any hardcoded values or fake confidence detected.",
       "description": "Run truth verification on execution results"
     }
-  }
+  },
+  "snapshot": false
 }

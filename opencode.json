@@ -12,17 +12,17 @@
       "permission": {}
     },
     "explore": {
-      "model": "nvidia/nemotron-3-super-120b-a12b",
+      "model": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
       "options": { "temperature": 0.2, "maxTokens": 8192 },
       "permission": {}
     },
     "general": {
-      "model": "nvidia/nemotron-3-nano-30b-a3b",
+      "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
       "options": { "temperature": 0.5, "maxTokens": 4096 },
       "permission": {}
     },
     "lane-worker": {
-      "model": "meta/llama-4-maverick-17b-128e-instruct",
+      "model": "kilo/stepfun/step-3.7-flash:free",
       "options": { "temperature": 0.2, "maxTokens": 8192 },
       "permission": {
         "read": "allow",
@@ -38,7 +38,7 @@
       }
     },
     "git-worker": {
-      "model": "nvidia/nemotron-3-nano-30b-a3b",
+      "model": "opencode/ling-3.0-flash-free",
       "options": { "temperature": 0.1, "maxTokens": 4096 },
       "permission": {
         "read": "allow",
@@ -54,7 +54,7 @@
       }
     },
     "test-engineer": {
-      "model": "meta/llama-4-maverick-17b-128e-instruct",
+      "model": "openrouter/nvidia/nemotron-3-super-120b-a12b:free",
       "options": { "temperature": 0.2, "maxTokens": 8192 },
       "permission": {
         "read": "allow",

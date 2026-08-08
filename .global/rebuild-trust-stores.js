@@ -11,7 +11,7 @@ const path = require('path');
 const crypto = require('crypto');
 
 // Load canonical deriveKeyId function
-const { deriveKeyId } = require('./.global/deriveKeyId.js');
+const { deriveKeyId } = require('./deriveKeyId.js');
 
 const LANES = [
   { name: 'archivist', basePath: 'S:/Archivist-Agent' },

@@ -1,0 +1,52 @@
+{
+  "timestamp": "2026-05-19T11:09:41Z",
+  "path_hygiene": {
+    "status": "PASS",
+    "classification": "PATH_NORMALIZATION_BUG",
+    "evidence": []
+  },
+  "secret_detection": {
+    "status": "FAIL",
+    "classification": "SECRETS_IN_PROCESS_ARGS",
+    "evidence": [
+      "1201220 /home/we4free/.cursor-server/extensions/kilocode.kilo-code-7.2.40-linux-x64/bin/kilo run --pure --model nvidia/z-ai/glm-5.1 --title WE4FREE swarmmind lane auto --dir /home/we4free/agent/repos/SwarmMind -f /home/we4free/agent/logs/lane-agents/swarmmind.prompt.md --variant high --auto Run the attached WE4FREE lane-agent prompt.",
+      "1523783 /home/we4free/.cursor-server/extensions/kilocode.kilo-code-7.2.40-linux-x64/bin/kilo run --pure --model nvidia/z-ai/glm-5.1 --title WE4FREE archivist lane auto --dir /home/we4free/agent/repos/Archivist-Agent -f /home/we4free/agent/logs/lane-agents/archivist.prompt.md --variant high --auto Run the attached WE4FREE lane-agent prompt.",
+      "2533311 /home/we4free/.cursor-server/extensions/kilocode.kilo-code-7.2.40-linux-x64/bin/kilo run --pure --model nvidia/z-ai/glm-5.1 --title WE4FREE library lane auto --dir /home/we4free/agent/repos/self-organizing-library -f /home/we4free/agent/logs/lane-agents/library.prompt.md --variant high --auto Run the attached WE4FREE lane-agent prompt.",
+      "2989608 /home/we4free/.cursor-server/extensions/kilocode.kilo-code-7.2.40-linux-x64/bin/kilo run --pure --model nvidia/z-ai/glm-5.1 --title WE4FREE kernel lane auto --dir /home/we4free/agent/repos/kernel-lane -f /home/we4free/agent/logs/lane-agents/kernel.prompt.md --variant high --auto Run the attached WE4FREE lane-agent prompt."
+    ]
+  },
+  "dirty_repos": {
+    "status": "FAIL",
+    "evidence": [
+      "Archivist-Agent [] dirty_files=2"
+    ]
+  },
+  "failed_services": {
+    "status": "PASS",
+    "evidence": []
+  },
+  "queue_pressure": {
+    "status": "FAIL",
+    "evidence": [
+      "Archivist-Agent live_inbox=238 outbox=20"
+    ]
+  },
+  "stale_heartbeats": {
+    "status": "FAIL",
+    "evidence": [
+      "/home/we4free/agent/repos/SwarmMind/lanes/archivist/inbox/heartbeat-archivist.json",
+      "/home/we4free/agent/repos/Archivist-Agent/lanes/authority/inbox/heartbeat-authority.json",
+      "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/heartbeat-authority.json",
+      "/home/we4free/agent/repos/self-organizing-library/lanes/archivist/inbox/heartbeat-archivist.json",
+      "/home/we4free/agent/repos/self-organizing-library/lanes/library/inbox/heartbeat-opencode-verification-pass-1-start.json}"
+    ]
+  },
+  "severity": "FAIL",
+  "NO_AUTO_FIX": true,
+  "operator_action_required": true,
+  "operator_action_type": "ROTATE_PROVIDER_KEY",
+  "provider": "Morph LLM",
+  "dashboard_url": "https://morphllm.com/dashboard",
+  "agent_may_remediate_after_operator_confirmation": true,
+  "must_not_request_secret_in_chat": true
+}

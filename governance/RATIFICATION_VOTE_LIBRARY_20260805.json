@@ -1,0 +1,47 @@
+{
+ "schema_version": "1.5",
+ "id": "ratification-approve-library-20260805",
+ "idempotency_key": "library-ratification-approve-20260805",
+ "from": "library",
+ "to": "kernel",
+ "type": "task",
+ "task_kind": "vote",
+ "priority": "P0",
+ "subject": "RATIFICATION VOTE: APPROVE — shared script ownership plan (ratification completed 2026-08-05)",
+ "body": "Library lane votes APPROVE on the amended shared script ownership plan. Evidence: the 2026-08-05 cross-lane NACK storm demonstrated the shared-script pipeline must flow from the canonical owner (Archivist); Archivist's emergency fix deploy (6fbfc8bd) was verified live on the library lane worker at 14:27Z with zero new NACKs since. Ratification gate updated: governance/ratification-gate.json.",
+ "timestamp": "2026-08-05T14:49:00.000Z",
+ "requires_action": true,
+ "convergence": {
+  "phase": "RATIFICATION",
+  "voting_lane": "library",
+  "vote": "APPROVE",
+  "proposal_path": "governance/CONSOLIDATED_AMENDMENT_PLAN.md",
+  "amendments_implemented": 9,
+  "amendments_total": 9
+ },
+ "vote_detail": {
+  "vote": "APPROVE",
+  "original_convergence_vote": "AMEND",
+  "amendments_addressed": [
+   {"id": "A1", "status": "IMPLEMENTED", "description": "Auto-detect shared script scope"},
+   {"id": "A2", "status": "IMPLEMENTED", "description": "Git-origin-based ownership map"},
+   {"id": "A3", "status": "IMPLEMENTED", "description": "LANE constant detection + regression guard"},
+   {"id": "A4", "status": "ACCEPTED", "description": "Correct root cause file references"},
+   {"id": "A5", "status": "IMPLEMENTED", "description": "Pre-sync backup + rollback mechanism"},
+   {"id": "A6", "status": "IMPLEMENTED", "description": "Cross-repo canonical clarity"},
+   {"id": "A7", "status": "IMPLEMENTED", "description": "Ratification gate before deployment"},
+   {"id": "A8", "status": "IMPLEMENTED", "description": "Deployment lane responsibility"},
+   {"id": "A9", "status": "IMPLEMENTED", "description": "Filename sanitization enforcement"}
+  ],
+  "remaining_blockers": [],
+  "evidence": [
+   "NACK storm 2026-08-05: cross-lane FORMAT_VIOLATION_NON_ASCII loop, resolved by canonical-owner fixes 67ad0d2a/96099186/6fbfc8bd",
+   "Library lane worker running fixed lane-worker.js since 14:27Z, zero new NACKs"
+  ],
+  "adjudication": {
+   "status": "RATIFIED_BY_OPERATOR_DELEGATION",
+   "domain": "shared-script-ownership",
+   "authority": "Operator delegated governance authority to Archivist lane for ratification completion (session 2026-08-05)"
+  }
+ }
+}

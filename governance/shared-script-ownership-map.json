@@ -1,27 +1,118 @@
 {
   "schema_version": "1.0",
-  "description": "Git-origin-based ownership map for shared scripts. Attribution follows first-appearance in git history. Canonical propagation always flows from Archivist (governance root), regardless of origin lane — this map documents who understands each script best, not who syncs it.",
-  "updated_at": "20260509T040624Z",
+  "description": "Git-origin-based ownership map for shared scripts. Attribution follows first-appearance in git history. Canonical propagation always flows from Archivist (governance root), regardless of origin lane \u2014 this map documents who understands each script best, not who syncs it.",
+  "updated_at": "20260807T171200Z",
   "amendment_ref": "C1 in SHARED_SCRIPT_OWNERSHIP_PLAN_AMENDMENT.md",
-  "propagation_rule": "Archivist is the canonical propagation source for ALL shared scripts. Origin_lane indicates which lane authored the script and has deepest invariant knowledge — NOT which lane's copy is used during sync.",
+  "propagation_rule": "Archivist is the canonical propagation source for ALL shared scripts. Origin_lane indicates which lane authored the script and has deepest invariant knowledge \u2014 NOT which lane's copy is used during sync.",
   "ownership": {
-    "scripts/lane-worker.js": { "origin_lane": "kernel", "first_commit_repo": "kernel-lane", "first_commit_date": "2026-04-24", "evidence": "c53d8ea in kernel-lane, Apr 24" },
-    "scripts/task-executor.js": { "origin_lane": "swarmmind", "first_commit_repo": "SwarmMind", "first_commit_date": "2026-04-25", "evidence": "8e94429 in SwarmMind, Apr 25" },
-    "scripts/execution-gate.js": { "origin_lane": "kernel", "first_commit_repo": "kernel-lane", "first_commit_date": "2026-04-20", "evidence": "c18e99f in kernel-lane, Apr 20" },
-    "scripts/artifact-resolver.js": { "origin_lane": "kernel", "first_commit_repo": "kernel-lane", "first_commit_date": "2026-04-24", "evidence": "5c1b7c5 in kernel-lane, Apr 24" },
-    "scripts/relay-daemon.js": { "origin_lane": "kernel", "first_commit_repo": "kernel-lane", "first_commit_date": "2026-04-25", "evidence": "dc84c31 in kernel-lane, Apr 25" },
-    "scripts/create-signed-message.js": { "origin_lane": "kernel", "first_commit_repo": "kernel-lane", "first_commit_date": "2026-04-21", "evidence": "6494f42 in kernel-lane, Apr 21" },
-    "scripts/sovereignty-enforcer.js": { "origin_lane": "kernel", "first_commit_repo": "kernel-lane", "first_commit_date": "2026-05-02", "evidence": "4c8df09 in kernel-lane, May 2" },
-    "src/lane/SchemaValidator.js": { "origin_lane": "swarmmind", "first_commit_repo": "SwarmMind", "first_commit_date": "2026-04-24", "evidence": "4855368 in SwarmMind, Apr 24" },
-    "scripts/output-provenance.js": { "origin_lane": "library", "first_commit_repo": "self-organizing-library", "first_commit_date": "2026-05-04", "evidence": "c86c930 in self-organizing-library, May 4 (Archivist same day)" },
-    "scripts/store-journal.js": { "origin_lane": "library", "first_commit_repo": "self-organizing-library", "first_commit_date": "2026-05-07", "evidence": "5cb85d0 in self-organizing-library, May 7" },
-    "scripts/generic-task-executor.js": { "origin_lane": "archivist", "first_commit_repo": "Archivist-Agent", "first_commit_date": "2026-05-08", "evidence": "Archivist-originated" },
-    "scripts/autonomous-executor.js": { "origin_lane": "archivist", "first_commit_repo": "Archivist-Agent", "first_commit_date": "2026-05-08", "evidence": "Simultaneous deploy all 4 lanes within 5s; Archivist assigned as governance root owner" },
-    "scripts/blocked-remediator.js": { "origin_lane": "archivist", "first_commit_repo": "Archivist-Agent", "first_commit_date": "2026-05-08", "evidence": "Archivist-originated" },
-    "scripts/sync-all-lanes.js": { "origin_lane": "archivist", "first_commit_repo": "Archivist-Agent", "first_commit_date": "2026-05-08", "evidence": "Only exists in Archivist-Agent as canonical; copies in other lanes are sync targets only" },
-    "scripts/edit-lease-manager.js": { "origin_lane": "archivist", "first_commit_repo": "Archivist-Agent", "first_commit_date": "2026-05-09", "evidence": "Archivist-originated for governance freeze enforcement" },
-    "scripts/cross-lane-sync-gate.js": { "origin_lane": "archivist", "first_commit_repo": "Archivist-Agent", "first_commit_date": "2026-05-08", "evidence": "Archivist-originated" },
-    "schemas/inbox-message-v1.json": { "origin_lane": "kernel", "first_commit_repo": "kernel-lane", "first_commit_date": "2026-04-21", "evidence": "fa9fec6 in kernel-lane, Apr 21" }
+    "scripts/lane-worker.js": {
+      "origin_lane": "kernel",
+      "first_commit_repo": "kernel-lane",
+      "first_commit_date": "2026-04-24",
+      "evidence": "c53d8ea in kernel-lane, Apr 24"
+    },
+    "scripts/task-executor.js": {
+      "origin_lane": "swarmmind",
+      "first_commit_repo": "SwarmMind",
+      "first_commit_date": "2026-04-25",
+      "evidence": "8e94429 in SwarmMind, Apr 25"
+    },
+    "scripts/execution-gate.js": {
+      "origin_lane": "kernel",
+      "first_commit_repo": "kernel-lane",
+      "first_commit_date": "2026-04-20",
+      "evidence": "c18e99f in kernel-lane, Apr 20"
+    },
+    "scripts/artifact-resolver.js": {
+      "origin_lane": "kernel",
+      "first_commit_repo": "kernel-lane",
+      "first_commit_date": "2026-04-24",
+      "evidence": "5c1b7c5 in kernel-lane, Apr 24"
+    },
+    "scripts/relay-daemon.js": {
+      "origin_lane": "kernel",
+      "first_commit_repo": "kernel-lane",
+      "first_commit_date": "2026-04-25",
+      "evidence": "dc84c31 in kernel-lane, Apr 25"
+    },
+    "scripts/create-signed-message.js": {
+      "origin_lane": "kernel",
+      "first_commit_repo": "kernel-lane",
+      "first_commit_date": "2026-04-21",
+      "evidence": "6494f42 in kernel-lane, Apr 21"
+    },
+    "scripts/sovereignty-enforcer.js": {
+      "origin_lane": "kernel",
+      "first_commit_repo": "kernel-lane",
+      "first_commit_date": "2026-05-02",
+      "evidence": "4c8df09 in kernel-lane, May 2"
+    },
+    "src/lane/SchemaValidator.js": {
+      "origin_lane": "swarmmind",
+      "first_commit_repo": "SwarmMind",
+      "first_commit_date": "2026-04-24",
+      "evidence": "4855368 in SwarmMind, Apr 24"
+    },
+    "scripts/output-provenance.js": {
+      "origin_lane": "library",
+      "first_commit_repo": "self-organizing-library",
+      "first_commit_date": "2026-05-04",
+      "evidence": "c86c930 in self-organizing-library, May 4 (Archivist same day)"
+    },
+    "scripts/store-journal.js": {
+      "origin_lane": "library",
+      "first_commit_repo": "self-organizing-library",
+      "first_commit_date": "2026-05-07",
+      "evidence": "5cb85d0 in self-organizing-library, May 7"
+    },
+    "scripts/generic-task-executor.js": {
+      "origin_lane": "archivist",
+      "first_commit_repo": "Archivist-Agent",
+      "first_commit_date": "2026-05-08",
+      "evidence": "Archivist-originated"
+    },
+    "scripts/autonomous-executor.js": {
+      "origin_lane": "archivist",
+      "first_commit_repo": "Archivist-Agent",
+      "first_commit_date": "2026-05-08",
+      "evidence": "Simultaneous deploy all 4 lanes within 5s; Archivist assigned as governance root owner"
+    },
+    "scripts/blocked-remediator.js": {
+      "origin_lane": "archivist",
+      "first_commit_repo": "Archivist-Agent",
+      "first_commit_date": "2026-05-08",
+      "evidence": "Archivist-originated"
+    },
+    "scripts/sync-all-lanes.js": {
+      "origin_lane": "archivist",
+      "first_commit_repo": "Archivist-Agent",
+      "first_commit_date": "2026-05-08",
+      "evidence": "Only exists in Archivist-Agent as canonical; copies in other lanes are sync targets only"
+    },
+    "scripts/edit-lease-manager.js": {
+      "origin_lane": "archivist",
+      "first_commit_repo": "Archivist-Agent",
+      "first_commit_date": "2026-05-09",
+      "evidence": "Archivist-originated for governance freeze enforcement"
+    },
+    "scripts/cross-lane-sync-gate.js": {
+      "origin_lane": "archivist",
+      "first_commit_repo": "Archivist-Agent",
+      "first_commit_date": "2026-05-08",
+      "evidence": "Archivist-originated"
+    },
+    "schemas/inbox-message-v1.json": {
+      "origin_lane": "kernel",
+      "first_commit_repo": "kernel-lane",
+      "first_commit_date": "2026-04-21",
+      "evidence": "fa9fec6 in kernel-lane, Apr 21"
+    },
+    "scripts/mode-check.js": {
+      "origin_lane": "archivist",
+      "first_commit_repo": "Archivist-Agent",
+      "first_commit_date": "2026-08-07",
+      "evidence": "Copied to kernel-lane, SwarmMind, self-organizing-library 2026-08-07 to fix MODULE_NOT_FOUND heartbeat crashes (outbox-write-guard.js depends on it)"
+    }
   },
   "summary": {
     "total_mapped": 17,

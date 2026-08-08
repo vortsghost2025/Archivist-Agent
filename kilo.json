@@ -25,11 +25,11 @@
         "skill": "allow",
         "lsp": "allow"
       },
-      "steps": 50
+      "steps": 200
     },
-"plan": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b",
-      "steps": 30
+    "plan": {
+      "model": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+      "steps": 200
     },
     "code": {
       "permission": {
@@ -48,19 +48,20 @@
         "skill": "allow",
         "lsp": "allow"
       },
-      "steps": 40
+      "steps": 200
     },
     "build": {
-      "steps": 35
+      "steps": 200
     },
     "debug": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b",
-      "steps": 40
+      "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+      "steps": 200
     },
     "ask": {
-      "steps": 15
+      "steps": 200
     },
     "general": {
+      "model": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
       "permission": {
         "webfetch": "allow",
         "websearch": "allow",
@@ -77,10 +78,10 @@
         "skill": "allow",
         "lsp": "allow"
       },
-      "steps": 40
+      "steps": 200
     },
     "explore": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "model": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
       "mode": "all",
       "permission": {
         "webfetch": "allow",
@@ -98,54 +99,19 @@
         "skill": "allow",
         "lsp": "allow"
       },
-      "steps": 30
+      "steps": 200
     },
     "code-reviewer": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b",
-      "steps": 25
+      "model": "openrouter/nvidia/nemotron-3-super-120b-a12b:free",
+      "steps": 200
     },
     "lane-worker": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b",
-      "steps": 25
+      "model": "kilo/stepfun/step-3.7-flash:free",
+      "steps": 200
     },
     "git-worker": {
-      "model": "nvidia/nemotron-3-ultra-550b-a55b",
-      "steps": 20
-    }
-  },
-  "provider": {
-    "nvidia": {
-      "models": {
-        "glm-5.1": {
-          "name": "GLM-5.1",
-          "tool_call": true,
-          "limit": {
-            "context": 128000,
-            "output": 16384
-          }
-        },
-        "nvidia/nemotron-3-ultra-550b-a55b": {
-          "name": "Nemotron-3-Ultra-550B",
-          "tool_call": true,
-          "limit": {
-            "context": 1000000,
-            "output": 16384
-          }
-        },
-        "minimaxai/minimax-m3": {
-          "name": "Minimax M3 (Vision)",
-          "tool_call": true,
-          "attachment": true,
-          "modalities": {
-            "input": ["text", "image", "video"],
-            "output": ["text"]
-          },
-          "limit": {
-            "context": 1000000,
-            "output": 8192
-          }
-        }
-      }
+      "model": "opencode/ling-3.0-flash-free",
+      "steps": 200
     }
   },
   "permission": {

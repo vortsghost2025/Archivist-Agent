@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-05-20T16:25:11Z",
+  "path_hygiene": {
+    "status": "PASS",
+    "classification": "PATH_NORMALIZATION_BUG",
+    "evidence": []
+  },
+  "secret_detection": {
+    "status": "PASS",
+    "classification": "SECRETS_IN_PROCESS_ARGS",
+    "evidence": []
+  },
+  "dirty_repos": {
+    "status": "FAIL",
+    "evidence": [
+      "Archivist-Agent [master] dirty_files=1"
+    ]
+  },
+  "failed_services": {
+    "status": "PASS",
+    "evidence": []
+  },
+  "queue_pressure": {
+    "status": "FAIL",
+    "evidence": [
+      "Archivist-Agent live_inbox=238 outbox=20"
+    ]
+  },
+  "stale_heartbeats": {
+    "status": "FAIL",
+    "evidence": [
+      "/home/we4free/agent/repos/SwarmMind/lanes/archivist/inbox/heartbeat-archivist.json",
+      "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/archive/pre-crash-2026-05-19/heartbeat-authority.json",
+      "/home/we4free/agent/repos/self-organizing-library/lanes/archivist/inbox/heartbeat-archivist.json",
+      "/home/we4free/agent/repos/self-organizing-library/lanes/library/inbox/heartbeat-opencode-verification-pass-1-start.json}"
+    ]
+  },
+  "severity": "FAIL",
+  "NO_AUTO_FIX": true
+}
