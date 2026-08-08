@@ -1,22 +1,22 @@
 {
-  "generated_at": "2026-08-08T00:37:22.318Z",
+  "generated_at": "2026-08-08T00:52:28.079Z",
   "window_hours": 24,
-  "substrate_cycles": 51,
-  "cycle_count": 51,
+  "substrate_cycles": 52,
+  "cycle_count": 52,
   "topology_stability_pct": 0,
   "drift_incidents": 45,
   "broadcast_proof_pass_rate": 100,
   "dependency_validation_pass_rate": 100,
-  "cognition_needed_count": 51,
+  "cognition_needed_count": 52,
   "cognition_needed_pct": 100,
   "cognition_handoff_emitted_count": 4,
   "cognition_handoff_emitted_pct": 8,
-  "cognition_handoff_suppressed_count": 47,
+  "cognition_handoff_suppressed_count": 48,
   "cognition_handoff_suppressed_pct": 92,
   "top_recommendation_types": [
     {
       "type": "P1:service_topology_violation",
-      "count": 51
+      "count": 52
     },
     {
       "type": "P1:canonical_drift",
@@ -54,10 +54,10 @@
           "swarmmind"
         ],
         "state": "ONGOING_MONITORED",
-        "count": 58
+        "count": 59
       }
     ]
   },
   "verdict": "Substrate stable — minor issues monitored, no cognition pressure",
-  "ai_summary": "The system is experiencing frequent cognitive needs and drift incidents, indicating a degraded state. Despite this, the substrate remains stable with minimal issues requiring monitoring."
+  "ai_summary": "The autonomous infrastructure is experiencing frequent cognitive needs and occasional drift incidents, indicating a degraded state. Despite these challenges, the substrate remains stable with minimal issues requiring operator intervention."
 }
