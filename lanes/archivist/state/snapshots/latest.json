@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-08-08T00:20:26.566Z",
+  "timestamp": "2026-08-08T00:28:02.500Z",
   "lastRun": {
     "lane": "archivist",
     "repo_root": "/home/we4free/agent/repos/Archivist-Agent",
     "dry_run": true,
-    "scanned": 5,
+    "scanned": 6,
     "routed": {
-      "action_required": 2,
+      "action_required": 3,
       "in_progress": 0,
       "processed": 3,
       "blocked": 0,
@@ -15,21 +15,21 @@
     "execution_verified_count": 0,
     "execution_failed_count": 0,
     "liveness": {
-      "tasks_completed_last_5min": 95,
+      "tasks_completed_last_5min": 87,
       "alert": false,
       "alert_reason": null,
-      "checked_at": "2026-08-08T00:20:26.566Z"
+      "checked_at": "2026-08-08T00:28:02.499Z"
     },
     "manual_cadence": false,
     "enforce_ownership": false,
     "ownership_enforcement_enabled": false,
-    "ownership_warnings": 5,
+    "ownership_warnings": 6,
     "routes": [
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786148408636-2plm94.json",
-        "filename": "alert-alert-1786148408636-2plm94.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786148857917-1t8qzb.json",
+        "filename": "alert-alert-1786148857917-1t8qzb.json",
         "target_queue": "actionRequired",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786148408636-2plm94.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786148857917-1t8qzb.json",
         "reason": "ACTIONABLE_NO_PROOF",
         "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
@@ -56,10 +56,10 @@
         "dry_run": true
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786148419084-5tiorg.json",
-        "filename": "alert-alert-1786148419084-5tiorg.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786148864608-uzxorb.json",
+        "filename": "alert-alert-1786148864608-uzxorb.json",
         "target_queue": "actionRequired",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786148419084-5tiorg.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786148864608-uzxorb.json",
         "reason": "ACTIONABLE_NO_PROOF",
         "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
         "schema_valid": true,
@@ -86,10 +86,40 @@
         "dry_run": true
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786148386818-nl5cez.json",
-        "filename": "response-alert-1786148386818-nl5cez.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/alert-alert-1786148871959-kei8ww.json",
+        "filename": "alert-alert-1786148871959-kei8ww.json",
+        "target_queue": "actionRequired",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/action-required/alert-alert-1786148871959-kei8ww.json",
+        "reason": "ACTIONABLE_NO_PROOF",
+        "detail": "Actionable message (type=notification, priority=P0) requires evidence_exchange or legacy artifact. Bare terminal_decision is not proof.",
+        "schema_valid": true,
+        "signature_valid": true,
+        "english_only": true,
+        "actionable": true,
+        "has_completion_proof": false,
+        "execution_verified": false,
+        "would_verify": false,
+        "enforce_ownership": false,
+        "ownership_enforcement_enabled": false,
+        "ownership": {
+          "present": false,
+          "malformed": false
+        },
+        "ownership_notes": [
+          "OWNERSHIP_MISSING"
+        ],
+        "verification_outcome": null,
+        "domain_validation": null,
+        "domain_gate_executed": false,
+        "verification_path": null,
+        "schema_remediation": null,
+        "dry_run": true
+      },
+      {
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786148833382-br7g6r.json",
+        "filename": "response-alert-1786148833382-br7g6r.json",
         "target_queue": "processed",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786148386818-nl5cez.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786148833382-br7g6r.json",
         "reason": "TERMINAL_INFORMATIONAL",
         "detail": null,
         "schema_valid": true,
@@ -120,10 +150,10 @@
         "dry_run": true
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786148392673-2ny6u7.json",
-        "filename": "response-alert-1786148392673-2ny6u7.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786148841875-nkrukr.json",
+        "filename": "response-alert-1786148841875-nkrukr.json",
         "target_queue": "processed",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786148392673-2ny6u7.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786148841875-nkrukr.json",
         "reason": "TERMINAL_INFORMATIONAL",
         "detail": null,
         "schema_valid": true,
@@ -154,10 +184,10 @@
         "dry_run": true
       },
       {
-        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786148399081-usqibr.json",
-        "filename": "response-alert-1786148399081-usqibr.json",
+        "source": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/response-alert-1786148849200-t6soqu.json",
+        "filename": "response-alert-1786148849200-t6soqu.json",
         "target_queue": "processed",
-        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786148399081-usqibr.json",
+        "target_path": "/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox/processed/response-alert-1786148849200-t6soqu.json",
         "reason": "TERMINAL_INFORMATIONAL",
         "detail": null,
         "schema_valid": true,
@@ -188,6 +218,6 @@
         "dry_run": true
       }
     ],
-    "timestamp": "2026-08-08T00:20:26.566Z"
+    "timestamp": "2026-08-08T00:28:02.500Z"
   }
 }
