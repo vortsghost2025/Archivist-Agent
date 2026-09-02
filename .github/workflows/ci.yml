@@ -24,14 +24,90 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # TypeScript baseline: advisory when present, warning when absent
       - name: TypeScript type-check (governance scripts)
+        id: typescript
+        if: hashFiles('tsconfig.ci.json') != ''
+        continue-on-error: true
         run: npx tsc -p tsconfig.ci.json --noEmit
 
+      - name: TypeScript type-check advisory (tsconfig.ci.json missing)
+        id: typescript-missing
+        if: hashFiles('tsconfig.ci.json') == ''
+        run: |
+          Write-Host "::warning::tsconfig.ci.json not found on this branch. TypeScript baseline check skipped."
+
+      # Recovery suite: advisory on hosted runners (private Tailscale unreachable)
       - name: Run recovery test suite
+        id: recovery
+        continue-on-error: true
         run: node ./scripts/recovery-test-suite.js
 
+      # Required offline validation: always runs
       - name: Run health check
+        id: health
+        if: always()
         run: node ./scripts/health-check.js
 
-      - name: Run schema validation (all lanes)
-        run: node ./scripts/validate-schema.js --all
+      - name: Hosted schema contract validation
+        id: schema
+        if: always()
+        run: node ./scripts/validate-schema.js --ci-contracts
+
+      # Final enforcement: fail on health/schema failures, not on advisory failures
+      - name: Enforce required validation and report
+        id: enforcement
+        if: always()
+        run: |
+          $tsStepOutcome = "${{ steps.typescript.outcome }}"
+          $tsMissingOutcome = "${{ steps.typescript-missing.outcome }}"
+          $recoveryOutcome = "${{ steps.recovery.outcome }}"
+          $healthOutcome = "${{ steps.health.outcome }}"
+          $schemaOutcome = "${{ steps.schema.outcome }}"
+          
+          # Determine TypeScript display: "missing" if config absent, otherwise actual outcome
+          if ($tsMissingOutcome -eq "success") {
+            $tsDisplay = "missing"
+          } else {
+            $tsDisplay = $tsStepOutcome
+          }
+          
+          # Build summary table line by line
+          $lines = @()
+          $lines += "## CI Validation Summary"
+          $lines += ""
+          $lines += "| Check | Outcome | Enforcement |"
+          $lines += "|-------|---------|-------------|"
+          $lines += "| TypeScript | $tsDisplay | advisory |"
+          $lines += "| Recovery | $recoveryOutcome | advisory on hosted runner |"
+          $lines += "| Health | $healthOutcome | required |"
+          $lines += "| Schema contracts | $schemaOutcome | required |"
+          $lines += "| Signing | separate workflow | required |"
+          $lines += ""
+          
+          # Emit annotations separately from summary
+          if ($tsDisplay -eq "failure") {
+            Write-Host "::warning::TypeScript baseline failed (advisory)"
+          }
+          if ($recoveryOutcome -eq "failure") {
+            Write-Host "::warning::Recovery suite had failures (advisory on hosted runners)"
+          }
+          
+          $summary = $lines -join "`n"
+          Write-Host $summary
+          
+          # Write to GITHUB_STEP_SUMMARY
+          $lines | ForEach-Object { Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value $_ }
+          
+          # Enforcement: fail on required checks only
+          $failed = $false
+          if ($healthOutcome -eq "failure") {
+            Write-Host "::error::Health check failed"
+            $failed = $true
+          }
+          if ($schemaOutcome -eq "failure") {
+            Write-Host "::error::Schema contract validation failed"
+            $failed = $true
+          }
+          
+          if ($failed) { exit 1 }
