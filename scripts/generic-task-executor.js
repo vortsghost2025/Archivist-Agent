@@ -21,10 +21,11 @@ diff_size_limit: true,
 
 const _discovery = new LaneDiscovery();
 const LANE_REGISTRY = {
-archivist: { root: _discovery.getLocalPath('archivist'), inbox_target: _discovery.getInbox('archivist') },
-kernel: { root: _discovery.getLocalPath('kernel'), inbox_target: _discovery.getInbox('archivist') },
-library: { root: _discovery.getLocalPath('library'), inbox_target: _discovery.getInbox('archivist') },
-swarmmind: { root: _discovery.getLocalPath('swarmmind'), inbox_target: _discovery.getInbox('archivist') },
+archivist: { root: '/home/we4free/agent/repos/Archivist-Agent', inbox_target: '/home/we4free/agent/repos/Archivist-Agent/lanes/archivist/inbox' },
+kernel: { root: '/home/we4free/agent/repos/kernel-lane', inbox_target: '/home/we4free/agent/repos/kernel-lane/lanes/kernel/inbox' },
+library: { root: '/home/we4free/agent/repos/self-organizing-library', inbox_target: '/home/we4free/agent/repos/self-organizing-library/lanes/library/inbox' },
+swarmmind: { root: '/home/we4free/agent/repos/SwarmMind', inbox_target: '/home/we4free/agent/repos/SwarmMind/lanes/swarmmind/inbox' },
+'solana-launch': { root: '/home/we4free/agent/repos/solana-launch-lane', inbox_target: '/home/we4free/agent/repos/solana-launch-lane/lanes/solana-launch/inbox' },
 };
 
 const TRUTH_CRITICAL_PATH_MARKERS = [
@@ -905,7 +906,7 @@ function executeTask(msg, lane) {
     task_kind: 'ack',
     results: { acknowledged: true, note: 'Task type not recognized. Supported: status, "read file <path>", "run script <name>", "git status/log/diff", "grep <pattern> in <path>", "write file <path>\\n<content>", "list dir <path>", "hash file <path>", "diff <file1> <file2>", "count \\"pattern\\" in <path>", "consistency check", "drift_sweep", "watcher_health_audit", "stale_work_detection" — or use natural language (e.g. "check if trust store is consistent")' },
     summary: `Acknowledged task: ${msg.subject || msg.task_id || 'unknown'}`,
-  }, { source: 'fallback', verb: 'ack', confidence: 0.0 });
+  }, { source: 'fallback', verb: 'ack', confidence: 1.0 });
 }
 
 function createResponse(originalMsg, executionResult, lane) {
@@ -918,6 +919,32 @@ function createResponse(originalMsg, executionResult, lane) {
     target: (originalMsg.subject || 'Task').slice(0, 80),
     generated_at: nowIso(),
   });
+
+  // Convert normalized confidence (0.0-1.0) to integer scale (1-10)
+  // Routing confidences use 0.0-1.0 scale; message confidence requires integer 1-10
+  function normalizeConfidence(raw) {
+    if (raw === null || raw === undefined) return null;
+    // Normalized 0.0-1.0 scale (including 1.0) -> map to 1-10
+    if (typeof raw === 'number' && raw >= 0 && raw <= 1) {
+      return Math.max(1, Math.min(10, Math.round(raw * 9 + 1)));
+    }
+    // Already on integer 1-10 scale
+    if (Number.isInteger(raw) && raw >= 1 && raw <= 10) return raw;
+    return null;
+  }
+
+  const routingConfidence = executionResult.results && executionResult.results._routing
+    ? executionResult.results._routing.confidence
+    : null;
+  const normalizedConfidence = normalizeConfidence(routingConfidence);
+  // Default to 7 for automated acknowledgements (>=7 avoids LOW_CONFIDENCE_NO_INVESTIGATION)
+  const confidence = normalizedConfidence !== null ? normalizedConfidence : 7;
+
+  // When confidence < 7, receiver requires investigation field
+  const investigation = confidence < 7
+    ? 'Automated acknowledgement fallback; confidence below investigation threshold per CONFIDENCE_REQUIRED'
+    : undefined;
+
   return {
     schema_version: '1.3',
     task_id: `response-${originalMsg.task_id || Date.now()}`,
@@ -931,6 +958,8 @@ function createResponse(originalMsg, executionResult, lane) {
     body: provBody,
     timestamp: nowIso(),
     requires_action: false,
+    confidence: confidence,
+    investigation: investigation,
     payload: { mode: 'inline', compression: 'none' },
     execution: { mode: 'auto', engine: 'pipeline', actor: 'task-executor' },
     lease: { owner: lane, acquired_at: nowIso() },
