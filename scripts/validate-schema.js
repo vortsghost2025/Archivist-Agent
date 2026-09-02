@@ -259,11 +259,180 @@ function validateAll() {
   return results;
 }
 
+/**
+ * CI Contract Validation Mode
+ * Validates schema integrity without requiring live S: paths or Tailscale.
+ * Checks that schemas are valid JSON and can be loaded.
+ * Optionally validates against repository-local fixtures with explicit expectations.
+ */
+function validateCiContracts(options = {}) {
+  const schemasDir = options.schemasDir || SCHEMAS_DIR;
+  const fixturesDir = options.fixturesDir || null;
+  const fixtureExpectations = options.fixtureExpectations || null;
+  const outputPath = options.outputPath || path.join(REPO_ROOT, '.ci-output', 'schema-contract-results.json');
+  
+  const results = {
+    validations: [],
+    summary: {
+      total: 0,
+      schema_pass: 0,
+      schema_fail: 0,
+      expected_fixture_pass: 0,
+      expected_fixture_reject: 0,
+      unexpected_fixture_fail: 0
+    },
+    ok: false
+  };
+  
+  // Get all schema files
+  const schemaFiles = fs.readdirSync(schemasDir).filter(f => f.endsWith('.json'));
+  
+  // For each schema, validate it can be loaded and is valid JSON Schema
+  for (const schemaFile of schemaFiles) {
+    const schemaName = schemaFile.replace('.json', '');
+    const schemaPath = path.join(schemasDir, schemaFile);
+    
+    try {
+      const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
+      
+      // Basic JSON Schema validation
+      const errors = [];
+      if (!schema.type && !schema.properties && !schema.anyOf && !schema.oneOf && !schema.allOf) {
+        errors.push('Schema has no type or composition keywords');
+      }
+      
+      const valid = errors.length === 0;
+      
+      results.validations.push({
+        type: 'schema',
+        name: schemaName,
+        valid,
+        errors
+      });
+      results.summary.total++;
+      if (valid) results.summary.schema_pass++;
+      else results.summary.schema_fail++;
+      
+      log(`${valid ? '[+]' : '[-]'} ${schemaName}: ${valid ? 'PASS' : 'FAIL'}`, valid ? 'success' : 'error');
+    } catch (err) {
+      results.validations.push({
+        type: 'schema',
+        name: schemaName,
+        valid: false,
+        errors: [err.message]
+      });
+      results.summary.total++;
+      results.summary.schema_fail++;
+      log(`[-] ${schemaName}: ERROR - ${err.message}`, 'error');
+    }
+  }
+  
+  // Validate fixtures if explicitly provided with expectations
+  if (fixturesDir && fixtureExpectations && fs.existsSync(fixturesDir)) {
+    log('\nValidating fixtures with explicit expectations...', 'info');
+    const inboxSchema = JSON.parse(fs.readFileSync(path.join(schemasDir, 'inbox-message-v1.json'), 'utf8'));
+    const fixtureFiles = fs.readdirSync(fixturesDir).filter(f => f.endsWith('.json'));
+    
+    for (const fixtureFile of fixtureFiles) {
+      const expectation = fixtureExpectations[fixtureFile];
+      
+      if (!expectation) {
+        // No expectation defined - unexpected
+        results.validations.push({
+          type: 'fixture',
+          name: fixtureFile,
+          schema: 'inbox-message-v1',
+          valid: false,
+          outcome: 'no_expectation',
+          expected: 'unexpected_no_expectation',
+          errors: ['No expectation defined for this fixture']
+        });
+        results.summary.total++;
+        results.summary.unexpected_fixture_fail++;
+        log(`[-] fixture/${fixtureFile}: NO EXPECTATION (UNEXPECTED)`, 'error');
+        continue;
+      }
+      
+      try {
+        const fixture = JSON.parse(fs.readFileSync(path.join(fixturesDir, fixtureFile), 'utf8'));
+        const errors = validateSchema(fixture, inboxSchema);
+        const valid = errors.length === 0;
+        const outcome = valid ? 'pass' : 'reject';
+        
+        // Check if outcome matches expectation
+        const isExpected = (expectation === 'accept' && valid) || (expectation === 'reject' && !valid);
+        
+        results.validations.push({
+          type: 'fixture',
+          name: fixtureFile,
+          schema: 'inbox-message-v1',
+          valid,
+          outcome,
+          expectation,
+          expected: isExpected ? outcome : `unexpected_${outcome}`,
+          errors
+        });
+        results.summary.total++;
+        
+        if (isExpected) {
+          if (expectation === 'accept') results.summary.expected_fixture_pass++;
+          else results.summary.expected_fixture_reject++;
+          log(`[+] fixture/${fixtureFile}: ${outcome.toUpperCase()} (expected ${expectation})`, 'success');
+        } else {
+          results.summary.unexpected_fixture_fail++;
+          log(`[-] fixture/${fixtureFile}: ${outcome.toUpperCase()} (expected ${expectation}, got ${outcome})`, 'error');
+        }
+      } catch (err) {
+        results.validations.push({
+          type: 'fixture',
+          name: fixtureFile,
+          schema: 'inbox-message-v1',
+          valid: false,
+          outcome: 'error',
+          expectation,
+          expected: 'unexpected_error',
+          errors: [err.message]
+        });
+        results.summary.total++;
+        results.summary.unexpected_fixture_fail++;
+        log(`[-] fixture/${fixtureFile}: ERROR - ${err.message}`, 'error');
+      }
+    }
+  }
+  
+  // Set ok flag
+  results.ok = results.summary.schema_fail === 0 && results.summary.unexpected_fixture_fail === 0;
+  
+  // Summary
+  log('\n' + '='.repeat(60), 'test');
+  log('CI CONTRACT VALIDATION SUMMARY', 'test');
+  log('='.repeat(60), 'test');
+  log(`Total checks: ${results.summary.total}`, 'info');
+  log(`Schema valid: ${results.summary.schema_pass}`, 'success');
+  log(`Schema invalid: ${results.summary.schema_fail}`, results.summary.schema_fail > 0 ? 'error' : 'info');
+  log(`Expected fixture passes: ${results.summary.expected_fixture_pass}`, 'success');
+  log(`Expected fixture rejections: ${results.summary.expected_fixture_reject}`, 'success');
+  log(`Unexpected fixture failures: ${results.summary.unexpected_fixture_fail}`, results.summary.unexpected_fixture_fail > 0 ? 'error' : 'info');
+  log(`Result: ${results.ok ? 'OK' : 'FAILED'}`, results.ok ? 'success' : 'error');
+  
+  // Write results to repository-local path
+  const outputDir = path.dirname(outputPath);
+  if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
+  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
+  log(`\nResults written to: ${outputPath}`, 'success');
+  
+  return results;
+}
+
 // CLI execution
 if (require.main === module) {
   const args = process.argv.slice(2);
   
-  if (args.includes('--all')) {
+  if (args.includes('--ci-contracts')) {
+    const results = validateCiContracts();
+    // Exit nonzero only for unexpected failures
+    process.exit(results.summary.unexpected_fixture_fail > 0 || results.summary.schema_fail > 0 ? 1 : 0);
+  } else if (args.includes('--all')) {
     validateAll();
   } else {
     const fileArg = args.find(a => a.startsWith('--file='));
@@ -289,4 +458,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { validateSchema, validateFile, validateAll };
+module.exports = { validateSchema, validateFile, validateAll, validateCiContracts };
