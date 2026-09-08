@@ -33,7 +33,10 @@ const ENUM_CONSTRAINTS = {
   // v1.3 adds support for schema_version 1.3
   schema_version: ['1.0', '1.1', '1.2', '1.3'],
   // Updated canonical target name for kernel lane
-  to: ['archivist', 'library', 'swarmmind', 'kernel', 'authority'],
+  // Kept in sync with schemas/inbox-message-v1.json "to" enum (v1.6 added
+  // control-plane; governance-types.js LaneId mirrors this list minus 'all'
+  // plus 'authority'/'functions.git' legacy targets).
+  to: ['archivist', 'library', 'swarmmind', 'kernel', 'authority', 'control-plane'],
   type: ['task', 'response', 'heartbeat', 'escalation', 'handoff', 'ack', 'alert', 'notification', 'status'],
   // NFM-019 fix: extend task_kind to cover task lifecycle + alert + notification + heartbeat
   // Governance process: proposal, review, amendment, ratification
