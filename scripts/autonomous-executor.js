@@ -56,21 +56,31 @@ function countJson(dir) {
   return fs.readdirSync(dir).filter(f => f.endsWith('.json') && !f.toLowerCase().startsWith('heartbeat')).length;
 }
 
-function runNode(cwd, script, args) {
+function runNode(cwd, script, args, timeoutMs) {
   const nodeBin = process.execPath || 'node';
+  const effectiveTimeout = timeoutMs || 30000;
   const res = spawnSync(nodeBin, [script, ...args], {
     cwd,
     encoding: 'utf8',
-    timeout: 30000,
+    timeout: effectiveTimeout,
     maxBuffer: 200000,
     env: { ...process.env, LANE_SESSION_ID: `auto-${process.pid}` },
   });
+  const timedOut = res.killed || res.signal === 'SIGTERM';
+  const errorCode = res.error ? res.error.code : null;
+  const errorMessage = res.error ? res.error.message : null;
+  const isTimeout = timedOut || errorCode === 'ETIMEDOUT' || (res.stderr || '').includes('ETIMEDOUT');
   return {
     ok: res.status === 0,
     exitCode: res.status,
+    signal: res.signal,
+    errorCode,
+    errorMessage,
+    timedOut,
+    isTimeout,
     stdout: (res.stdout || '').trim(),
     stderr: (res.stderr || '').trim(),
-    timedOut: res.killed || res.signal === 'SIGTERM',
+    cwd,
   };
 }
 
@@ -86,7 +96,20 @@ function journalAppend(lane, event, data) {
   if (data) args.push('--data', JSON.stringify(data));
   const res = runNode(repoRoot, args[0], args.slice(1));
   if (!res.ok) {
-    process.stderr.write(`[autonomous-executor] journal append failed: ${res.stderr}\n`);
+    const errorDetail = {
+      lane,
+      event,
+      exit_code: res.exitCode,
+      signal: res.signal,
+      error_code: res.errorCode,
+      error_message: res.errorMessage,
+      timed_out: res.timedOut,
+      stdout: res.stdout,
+      stderr: res.stderr,
+      cwd: res.cwd,
+      timestamp: nowIso(),
+    };
+    process.stderr.write(`[autonomous-executor] journal append failed: ${JSON.stringify(errorDetail)}\n`);
   }
   return res.ok;
 }
@@ -97,11 +120,25 @@ function journalPreflight(lane, filePaths) {
     'preflight', '--lane', lane, '--paths', filePaths.join(','),
   ]);
   if (!res.ok) {
+    const errorDetail = {
+      lane,
+      file_paths: filePaths,
+      exit_code: res.exitCode,
+      signal: res.signal,
+      error_code: res.errorCode,
+      error_message: res.errorMessage,
+      timed_out: res.timedOut,
+      stdout: res.stdout,
+      stderr: res.stderr,
+      cwd: res.cwd,
+      timestamp: nowIso(),
+    };
+    process.stderr.write(`[autonomous-executor] journal preflight failed: ${JSON.stringify(errorDetail)}\n`);
     try {
       const parsed = JSON.parse(res.stdout);
       if (parsed.verdict === 'BLOCK') return { clear: false, reason: 'JOURNAL_BLOCK', details: parsed };
     } catch (_) {}
-    return { clear: false, reason: 'PREFLIGHT_FAILED', details: res.stderr };
+    return { clear: false, reason: 'PREFLIGHT_FAILED', details: errorDetail };
   }
   return { clear: true };
 }
@@ -111,12 +148,63 @@ function runGenericExecutor(lane, dryRun) {
   const args = ['scripts/generic-task-executor.js', lane];
   if (!dryRun) args.push('--apply');
   const res = runNode(repoRoot, args[0], args.slice(1));
+  if (!res.ok) {
+    const errorDetail = {
+      lane,
+      exit_code: res.exitCode,
+      signal: res.signal,
+      error_code: res.errorCode,
+      error_message: res.errorMessage,
+      timed_out: res.timedOut,
+      stdout: res.stdout,
+      stderr: res.stderr,
+      cwd: res.cwd,
+      timestamp: nowIso(),
+    };
+    process.stderr.write(`[autonomous-executor] generic executor failed: ${JSON.stringify(errorDetail)}\n`);
+  }
   return {
     ok: res.ok,
     output: res.stdout,
     error: res.stderr,
     timedOut: res.timedOut,
+    exitCode: res.exitCode,
+    signal: res.signal,
+    errorCode: res.errorCode,
+    errorMessage: res.errorMessage,
   };
+}
+
+function handleRenameFailure(e, lane, filename, phase, scanTimestamp, sourcePath, destPath, cycleId) {
+  const renameTimestamp = nowIso();
+  const sourceExists = fs.existsSync(sourcePath);
+  const destExists = fs.existsSync(destPath);
+  const isEnoent = e.code === 'ENOENT';
+
+  const diag = {
+    lane,
+    filename,
+    phase,
+    scan_timestamp: scanTimestamp,
+    rename_timestamp: renameTimestamp,
+    source_path: sourcePath,
+    destination_path: destPath,
+    source_exists_at_failure: sourceExists,
+    destination_exists_at_failure: destExists,
+    error_code: e.code,
+    error_message: e.message,
+    process_pid: process.pid,
+    executor_version: AUTONOMOUS_VERSION,
+    cycle_id: cycleId,
+  };
+
+  process.stderr.write(`[autonomous-executor] RENAME_DIAG: ${JSON.stringify(diag)}\n`);
+
+  if (isEnoent) {
+    return { status: 'SOURCE_ALREADY_MOVED', reason: `Source missing during ${phase}: ${e.message}`, enoent_diagnostic: diag };
+  }
+
+  return { status: 'ERROR', reason: `Move failed during ${phase}: ${e.message}`, error_code: e.code };
 }
 
 function verifyTaskOutput(msg, lane) {
@@ -183,10 +271,30 @@ function runBlockedRemediator(lane, dryRun) {
   const args = ['scripts/blocked-remediator.js', `--lane=${lane}`];
   if (!dryRun) args.push('--apply');
   const res = runNode(repoRoot, args[0], args.slice(1));
+  if (!res.ok) {
+    const errorDetail = {
+      lane,
+      exit_code: res.exitCode,
+      signal: res.signal,
+      error_code: res.errorCode,
+      error_message: res.errorMessage,
+      timed_out: res.timedOut,
+      stdout: res.stdout,
+      stderr: res.stderr,
+      cwd: res.cwd,
+      timestamp: nowIso(),
+    };
+    process.stderr.write(`[autonomous-executor] blocked remediator failed: ${JSON.stringify(errorDetail)}\n`);
+  }
   return {
     ok: res.ok,
     output: res.stdout,
     error: res.stderr,
+    timedOut: res.timedOut,
+    exitCode: res.exitCode,
+    signal: res.signal,
+    errorCode: res.errorCode,
+    errorMessage: res.errorMessage,
   };
 }
 
@@ -200,6 +308,7 @@ function scanActionRequired(lane) {
   ensureDir(ipDir);
   ensureDir(procDir);
 
+  const scanTimestamp = nowIso();
   const files = fs.readdirSync(arDir)
     .filter(f => f.endsWith('.json') && !f.toLowerCase().startsWith('heartbeat'))
     .map(f => {
@@ -217,10 +326,10 @@ function scanActionRequired(lane) {
       };
     });
 
-  return { arDir, ipDir, procDir, files };
+  return { arDir, ipDir, procDir, files, scanTimestamp };
 }
 
-function executeTaskWithJournal(lane, fileInfo) {
+function executeTaskWithJournal(lane, fileInfo, cycleId, scanTimestamp) {
   const repoRoot = resolveRepoRoot(lane);
   const arDir = path.join(repoRoot, 'lanes', lane, 'inbox', 'action-required');
   const ipDir = path.join(repoRoot, 'lanes', lane, 'inbox', 'in-progress');
@@ -230,7 +339,10 @@ function executeTaskWithJournal(lane, fileInfo) {
     const quarantineDir = path.join(repoRoot, 'lanes', lane, 'inbox', 'quarantine');
     ensureDir(quarantineDir);
     const qPath = path.join(quarantineDir, fileInfo.filename);
-    try { fs.renameSync(fileInfo.fullPath, qPath); } catch (_) {}
+    try { fs.renameSync(fileInfo.fullPath, qPath); } catch (e) {
+      const result = handleRenameFailure(e, lane, fileInfo.filename, 'action-required-to-quarantine', scanTimestamp, fileInfo.fullPath, qPath, cycleId);
+      if (result.status === 'SOURCE_ALREADY_MOVED') return result;
+    }
     return { status: 'QUARANTINED', reason: fileInfo.readError };
   }
 
@@ -251,7 +363,7 @@ function executeTaskWithJournal(lane, fileInfo) {
 
   const inProgressPath = path.join(ipDir, fileInfo.filename);
   try { fs.renameSync(fileInfo.fullPath, inProgressPath); }
-  catch (e) { return { status: 'ERROR', reason: `Move to in-progress failed: ${e.message}` }; }
+  catch (e) { return handleRenameFailure(e, lane, fileInfo.filename, 'action-required-to-in-progress', scanTimestamp, fileInfo.fullPath, inProgressPath, cycleId); }
 
   if (msg.task_kind === 'write' || (msg.body && /write\s+(file|to)/i.test(msg.body))) {
     const targetMatch = (msg.body || '').match(/write\s+file\s+["']?([^"'\s]+)["']?/i)
@@ -261,14 +373,20 @@ function executeTaskWithJournal(lane, fileInfo) {
       try {
         const { isSharedScript, isSchemaFile } = require(path.join(repoRoot, 'scripts', 'edit-lease-manager.js'));
         if (isSharedScript(targetFile) && lane !== 'archivist') {
-          try { fs.renameSync(inProgressPath, fileInfo.fullPath); } catch (_) {}
+          try { fs.renameSync(inProgressPath, fileInfo.fullPath); } catch (e) {
+            const result = handleRenameFailure(e, lane, fileInfo.filename, 'in-progress-to-action-required-shared-script', scanTimestamp, inProgressPath, fileInfo.fullPath, cycleId);
+            if (result.status === 'SOURCE_ALREADY_MOVED') return result;
+          }
           return {
             status: 'BLOCKED',
             reason: `SHARED_SCRIPT_GUARD: Autonomous executor cannot modify shared canonical script "${targetFile}". Propose changes via convergence protocol to archivist.`,
           };
         }
         if (isSchemaFile(targetFile) && lane !== 'archivist') {
-          try { fs.renameSync(inProgressPath, fileInfo.fullPath); } catch (_) {}
+          try { fs.renameSync(inProgressPath, fileInfo.fullPath); } catch (e) {
+            const result = handleRenameFailure(e, lane, fileInfo.filename, 'in-progress-to-action-required-schema', scanTimestamp, inProgressPath, fileInfo.fullPath, cycleId);
+            if (result.status === 'SOURCE_ALREADY_MOVED') return result;
+          }
           return {
             status: 'BLOCKED',
             reason: `SCHEMA_RATIFICATION_GUARD: Autonomous executor cannot modify schema/governance file "${targetFile}". Changes require convergence protocol ratification.`,
@@ -288,8 +406,11 @@ function executeTaskWithJournal(lane, fileInfo) {
     ensureDir(quarantineDir);
     const qPath = path.join(quarantineDir, fileInfo.filename);
     try {
-      if (fs.existsSync(inProgressPath)) fs.renameSync(inProgressPath, qPath);
-    } catch (_) {}
+      fs.renameSync(inProgressPath, qPath);
+    } catch (e) {
+      const result = handleRenameFailure(e, lane, fileInfo.filename, 'in-progress-to-quarantine', scanTimestamp, inProgressPath, qPath, cycleId);
+      if (result.status === 'SOURCE_ALREADY_MOVED') return result;
+    }
 
     journalAppend(lane, 'output_gate_rejection', {
       target: fileInfo.filename,
@@ -307,19 +428,18 @@ function executeTaskWithJournal(lane, fileInfo) {
   }
 
   let processedPath;
+  let dest;
   try {
     processedPath = path.join(procDir, fileInfo.filename);
-    let dest = processedPath;
+    dest = processedPath;
     let counter = 0;
     while (fs.existsSync(dest) && counter < 100) {
       counter++;
       dest = path.join(procDir, fileInfo.filename.replace('.json', `-${counter}.json`));
     }
-    if (fs.existsSync(inProgressPath)) {
-      fs.renameSync(inProgressPath, dest);
-    }
+    fs.renameSync(inProgressPath, dest);
   } catch (e) {
-    return { status: 'ERROR', reason: `Move to processed failed: ${e.message}`, execResult };
+    return handleRenameFailure(e, lane, fileInfo.filename, 'in-progress-to-processed', scanTimestamp, inProgressPath, dest, cycleId);
   }
 
   journalAppend(lane, 'work_completed', {
@@ -331,7 +451,7 @@ function executeTaskWithJournal(lane, fileInfo) {
   return { status: 'EXECUTED', execResult };
 }
 
-function handleStaleTasks(lane, staleFiles) {
+function handleStaleTasks(lane, staleFiles, cycleId, scanTimestamp) {
   const repoRoot = resolveRepoRoot(lane);
   const procDir = path.join(repoRoot, 'lanes', lane, 'inbox', 'processed');
   ensureDir(procDir);
@@ -346,7 +466,15 @@ function handleStaleTasks(lane, staleFiles) {
       dest = path.join(procDir, fileInfo.filename.replace('.json', `-${counter}.json`));
     }
     try { fs.renameSync(fileInfo.fullPath, dest); }
-    catch (e) { results.push({ file: fileInfo.filename, error: e.message }); continue; }
+    catch (e) {
+      const result = handleRenameFailure(e, lane, fileInfo.filename, 'stale-action-required-to-processed', scanTimestamp, fileInfo.fullPath, dest, cycleId);
+      if (result.status === 'SOURCE_ALREADY_MOVED') {
+        results.push({ file: fileInfo.filename, status: 'SOURCE_ALREADY_MOVED', enoent_diagnostic: result.enoent_diagnostic });
+        continue;
+      }
+      results.push({ file: fileInfo.filename, error: e.message });
+      continue;
+    }
 
     journalAppend(lane, 'quarantine_event', {
       target: fileInfo.filename,
@@ -381,7 +509,9 @@ class AutonomousExecutor {
 
   async runCycle() {
     this.stats.cycleCount++;
+    const cycleId = `cycle-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
     const scan = scanActionRequired(this.lane);
+    const scanTimestamp = scan.scanTimestamp;
 
     if (scan.files.length === 0) return;
 
@@ -389,7 +519,7 @@ class AutonomousExecutor {
     const active = scan.files.filter(f => !f.isStale);
 
     if (stale.length > 0) {
-      const expiryResults = this.dryRun ? stale.map(f => ({ file: f.filename, status: 'WOULD_EXPIRE' })) : handleStaleTasks(this.lane, stale);
+      const expiryResults = this.dryRun ? stale.map(f => ({ file: f.filename, status: 'WOULD_EXPIRE' })) : handleStaleTasks(this.lane, stale, cycleId, scanTimestamp);
       this.stats.tasksExpired += stale.length;
       for (const r of expiryResults) {
         process.stdout.write(`[autonomous-executor] EXPIRED: ${r.file} (stale > ${Math.round(STALE_AR_MS / 3600000)}h)\n`);
@@ -402,7 +532,7 @@ class AutonomousExecutor {
         continue;
       }
 
-      const result = executeTaskWithJournal(this.lane, fileInfo);
+      const result = executeTaskWithJournal(this.lane, fileInfo, cycleId, scanTimestamp);
 
       if (result.status === 'EXECUTED') {
         this.stats.tasksExecuted++;
@@ -620,4 +750,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { AutonomousExecutor, AUTONOMOUS_VERSION, verifyTaskOutput };
+module.exports = { AutonomousExecutor, AUTONOMOUS_VERSION, verifyTaskOutput, handleRenameFailure, runNode };
