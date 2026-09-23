@@ -111,13 +111,12 @@ class ExecutionGate {
     if (classification.type === 'LEGACY_MESSAGE_ID') {
       const msgId = msg.completion_message_id;
       if (!msgId) return { verified: false, wouldVerify: false, reason: 'completion_message_id is empty' };
-
+      if (this.dryRun) {
+        return { verified: false, wouldVerify: true, reason: 'DRY_RUN_SKIP_REF_CHECK' };
+      }
       const found = this._findReferencedMessage(msgId, msg);
       if (found) {
         return { verified: true, wouldVerify: true, reason: 'Referenced message exists on disk' };
-      }
-      if (this.dryRun) {
-        return { verified: false, wouldVerify: true, reason: 'DRY_RUN_SKIP_REF_CHECK' };
       }
       return { verified: false, wouldVerify: false, reason: `Referenced message not found: ${msgId}` };
     }
@@ -125,13 +124,12 @@ class ExecutionGate {
     if (classification.type === 'LEGACY_TASK_ID') {
       const taskId = msg.resolved_by_task_id;
       if (!taskId) return { verified: false, wouldVerify: false, reason: 'resolved_by_task_id is empty' };
-
+      if (this.dryRun) {
+        return { verified: false, wouldVerify: true, reason: 'DRY_RUN_SKIP_REF_CHECK' };
+      }
       const found = this._findReferencedTask(taskId, msg);
       if (found) {
         return { verified: true, wouldVerify: true, reason: 'Referenced task exists on disk' };
-      }
-      if (this.dryRun) {
-        return { verified: false, wouldVerify: true, reason: 'DRY_RUN_SKIP_REF_CHECK' };
       }
       return { verified: false, wouldVerify: false, reason: `Referenced task not found: ${taskId}` };
     }

@@ -711,7 +711,7 @@ if (msg.confidence !== undefined && msg.confidence >= 7) {
             task_id: msg.task_id || 'unknown',
             confidence: msg.confidence,
         };
-        const cpsPath = path.join(repoRoot, 'context-buffer', 'cps_log.jsonl');
+        const cpsPath = path.join(this.repoRoot, 'context-buffer', 'cps_log.jsonl');
         try {
             fs.appendFileSync(cpsPath, JSON.stringify(cpsEntry) + '\n');
         } catch (e) {
@@ -991,7 +991,13 @@ processFile(filePath) {
       target_path: nrPath, reason: 'FOREIGN_INSTANCE_ACTIONABLE',
       detail: `Non-owner session ${SESSION_ID.slice(0,12)}: actionable message from different instance deferred`,
       schema_valid: false, signature_valid: false, actionable: true,
-      has_completion_proof: false, dry_run: this.dryRun,
+      has_completion_proof: false, execution_verified: false,
+      would_verify: false, enforce_ownership: this.enforceOwnership,
+      ownership_enforcement_enabled: this.enforceOwnership,
+      ownership: { present: false }, ownership_notes: [],
+      verification_outcome: null, domain_validation: null,
+      domain_gate_executed: false, verification_path: null,
+      schema_remediation: null, dry_run: this.dryRun,
     };
   }
 
@@ -1015,7 +1021,13 @@ processFile(filePath) {
         target_path: sfPath, reason: 'STALE_FOREIGN_INSTANCE',
         detail: `Message from foreign session ${msg._lane_worker.session_identity.session_id.slice(0,12)}, cross-instance not allowed`,
         schema_valid: false, signature_valid: false, actionable: true,
-        has_completion_proof: false, dry_run: this.dryRun,
+        has_completion_proof: false, execution_verified: false,
+        would_verify: false, enforce_ownership: this.enforceOwnership,
+        ownership_enforcement_enabled: this.enforceOwnership,
+        ownership: { present: false }, ownership_notes: [],
+        verification_outcome: null, domain_validation: null,
+        domain_gate_executed: false, verification_path: null,
+        schema_remediation: null, dry_run: this.dryRun,
       };
     }
   }
@@ -1101,6 +1113,17 @@ _routeRaw(filePath, queueKey, meta) {
     signature_valid: false,
     actionable: false,
     has_completion_proof: false,
+    execution_verified: false,
+    would_verify: false,
+    enforce_ownership: this.enforceOwnership,
+    ownership_enforcement_enabled: this.enforceOwnership,
+    ownership: { present: false },
+    ownership_notes: [],
+    verification_outcome: null,
+    domain_validation: null,
+    domain_gate_executed: false,
+    verification_path: null,
+    schema_remediation: null,
     dry_run: this.dryRun,
   };
 
@@ -1138,6 +1161,17 @@ _routeRaw(filePath, queueKey, meta) {
           reason: 'PROCESSING_EXCEPTION',
           detail: err.message,
           dry_run: this.dryRun,
+          execution_verified: false,
+          would_verify: false,
+          enforce_ownership: this.enforceOwnership,
+          ownership_enforcement_enabled: this.enforceOwnership,
+          ownership: { present: false },
+          ownership_notes: [],
+          verification_outcome: null,
+          domain_validation: null,
+          domain_gate_executed: false,
+          verification_path: null,
+          schema_remediation: null,
         });
       }
     }
