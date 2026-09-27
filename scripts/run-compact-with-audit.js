@@ -19,7 +19,31 @@
 const { PostCompactAudit } = require('./post-compact-audit');
 const path = require('path');
 const fs = require('fs');
-const { execSync } = require('child_process');
+const { execSync, spawnSync } = require('child_process');
+
+// Scheduled tasks may be launched hidden, but a synchronous child that
+// inherits stdio can still materialize a visible PowerShell console. Keep
+// automation detached from the interactive desktop as well.
+function runHiddenPowerShell(scriptPath) {
+  const pwsh = process.env.PROGRAMFILES
+    ? path.join(process.env.PROGRAMFILES, 'PowerShell', '7', 'pwsh.exe')
+    : 'pwsh.exe';
+  const result = spawnSync(pwsh, [
+    '-NoLogo',
+    '-NoProfile',
+    '-NonInteractive',
+    '-WindowStyle',
+    'Hidden',
+    '-ExecutionPolicy',
+    'Bypass',
+    '-File',
+    scriptPath,
+  ], { stdio: 'ignore', windowsHide: true });
+  if (result.error) throw result.error;
+  if (result.status !== 0) {
+    throw new Error(`Hidden PowerShell exited with code ${result.status}`);
+  }
+}
 
 // Path to compact meta file (shared across runs)
 const META_PATH = path.join('S:/Archivist-Agent/.compact-audit', 'meta.json');
@@ -49,7 +73,7 @@ async function performCompact() {
   const compactCommand = process.env.COMPACT_COMMAND;
   if (compactCommand && compactCommand.trim()) {
     console.log(`[compact] Running COMPACT_COMMAND: ${compactCommand}`);
-    execSync(compactCommand, { stdio: 'inherit' });
+    execSync(compactCommand, { stdio: 'ignore', windowsHide: true });
     console.log('[compact] COMPACT_COMMAND completed.');
     return;
   }
@@ -67,7 +91,7 @@ function maybeRunExtraArchive() {
   const scriptPath = 'S:/Archivist-Agent/scripts/compact-archive-extra.ps1';
   const manifestPath = 'S:/Archivist-Agent/.compact-audit/extra-archive.json';
   console.log('[compact] COMPACT_ARCHIVE=true -> running extra archive step...');
-  execSync(`pwsh -NoProfile -ExecutionPolicy Bypass -File "${scriptPath}"`, { stdio: 'inherit' });
+  runHiddenPowerShell(scriptPath);
 
   if (fs.existsSync(manifestPath)) {
     try {

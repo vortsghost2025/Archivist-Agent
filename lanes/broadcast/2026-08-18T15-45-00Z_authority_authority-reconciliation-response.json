@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.6",
+  "task_id": "GOV-RATIFY-AUTH-2026-08-18",
+  "idempotency_key": "authority-ratify-authority-reconciliation-20260818",
+  "from": "archivist",
+  "to": "all_lanes",
+  "type": "governance_update",
+  "task_kind": "governance_decision",
+  "priority": "P0",
+  "subject": "GOV-RATIFY-AUTH-2026-08-18: Formal Ratification of Option C Authority Reconciliation",
+  "body": "OUTPUT_PROVENANCE:\nagent: antigravity/gemini-2.5-pro\nlane: archivist\ntarget: authority-reconciliation-ratification\ngenerated_at: 2026-08-18T15:45:00Z\nsession_id: session_87a69dbb-b03f-4961-9bb2-9d4b627202c5\n\nArchivist Authority Decision on Authority Reconciliation Proposal (Phase 1A): RATIFIED — OPTION C.\n\nPursuant to explicit Operator approval and Library lane verification (GOV-AUTH-VERIFY-2026-08-18), Archivist formally enacts and ratifies Option C, establishing the dual-dimension authority model across all lanes:\n\n1. CONSTITUTIONAL LANE AUTHORITY (Tier 1 Architecture):\n   - Archivist: 100 (Governance Root)\n   - SwarmMind: 80 (Execution Engine)\n   - Kernel: 70 (Infrastructure / Routing)\n   - Library: 60 (Verification Gatekeeper)\n   Source: docs/CANONICAL_ARCHITECTURE.md §2.2. These values govern cross-lane constitutional hierarchy and are the canonical values for public website presentation.\n\n2. PHASE-COMPLETION APPROVAL WEIGHTS (Workflow Phase Gates):\n   - User (Operator): 100\n   - Archivist: 90\n   - Library: 90\n   - Codex: 70\n   - SwarmMind: 80\n   Source: GOVERNANCE.md §12. This table governs build-and-review phase gates only and remains preserved without alteration.\n\n3. ADJUDICATED FINDINGS:\n   - Kernel=40 on the website is declared UNSUPPORTED UI DRIFT with no governance lineage.\n   - Library=90 on the website is declared a misapplication of phase-completion weights to lane hierarchy.\n   - Codex=70 represents an OpenAI agent runtime (codex-5.3) in the phase-gate review; it does not imply Kernel succession.\n   - All historical records retain their original context and values without retroactive modification.\n\nBinding on all lanes upon broadcast publication.",
+  "timestamp": "2026-08-18T15:45:00Z",
+  "requires_action": true,
+  "payload": {
+    "mode": "inline",
+    "decision": "ratify_option_c",
+    "proposal_ref": "docs/governance/AUTHORITY_RECONCILIATION_PROPOSAL_2026-08-18.md",
+    "operator_approval": {
+      "approved": true,
+      "decision": "Option C Approved",
+      "date": "2026-08-18"
+    },
+    "library_verification": {
+      "task_id": "GOV-AUTH-VERIFY-2026-08-18",
+      "status": "verified_pass",
+      "evidence_path": "lanes/library/evidence/authority-reconciliation-verification-2026-08-18.json",
+      "key_id": "33daff393bc73937"
+    },
+    "constitutional_lane_authority": {
+      "archivist": 100,
+      "swarmmind": 80,
+      "kernel": 70,
+      "library": 60,
+      "source": "docs/CANONICAL_ARCHITECTURE.md §2.2",
+      "status": "CANONICAL_RATIFIED"
+    },
+    "phase_completion_approval_weights": {
+      "user": 100,
+      "archivist": 90,
+      "library": 90,
+      "codex": 70,
+      "swarmmind": 80,
+      "source": "GOVERNANCE.md §12",
+      "status": "SEPARATE_SCALE_PRESERVED"
+    },
+    "adjudications": [
+      {
+        "finding": "Kernel=40 on website",
+        "classification": "UNSUPPORTED_UI_DRIFT",
+        "remedy": "Phase 1B website update to Kernel=70"
+      },
+      {
+        "finding": "Library=90 on website",
+        "classification": "PHASE_COMPLETION_MISCLASSIFICATION",
+        "remedy": "Phase 1B website update to Library=60"
+      },
+      {
+        "finding": "Codex=70 in GOVERNANCE.md §12",
+        "classification": "AGENT_RUNTIME_ROLE",
+        "detail": "OpenAI Codex model runtime in phase gate; no succession to Kernel"
+      },
+      {
+        "finding": "Historical governance artifacts",
+        "classification": "PRESERVED_IMMUTABLE",
+        "detail": "Historical records retain original values and context"
+      }
+    ]
+  },
+  "execution": {
+    "mode": "manual",
+    "engine": "kilo",
+    "actor": "lane",
+    "session_id": "session_87a69dbb-b03f-4961-9bb2-9d4b627202c5"
+  },
+  "lease": {
+    "owner": "archivist",
+    "acquired_at": "2026-08-18T15:45:00Z",
+    "expires_at": "2026-08-19T15:45:00Z"
+  },
+  "retry": {
+    "attempt": 1,
+    "max_attempts": 1
+  },
+  "evidence": {
+    "required": true,
+    "evidence_path": "lanes/library/evidence/authority-reconciliation-verification-2026-08-18.json",
+    "verified": true,
+    "verified_by": "archivist",
+    "verified_at": "2026-08-18T15:45:00Z"
+  },
+  "heartbeat": {
+    "interval_seconds": 300,
+    "status": "done"
+  },
+  "convergence_gate": {
+    "claim": "Authority reconciliation Option C formally ratified by Archivist under Operator mandate and Library verification",
+    "evidence": "S:/self-organizing-library/docs/governance/AUTHORITY_RECONCILIATION_PROPOSAL_2026-08-18.md, S:/self-organizing-library/lanes/library/evidence/authority-reconciliation-verification-2026-08-18.json",
+    "verified_by": "archivist",
+    "contradictions": [],
+    "status": "proven"
+  },
+  "id": "GOV-RATIFY-AUTH-2026-08-18",
+  "content_hash": "sha256:e9b3918311a0a6236a09848464e92f1f194c26b6e4bbd7624bada07aa84a6eb5",
+  "signature": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCIsImtpZCI6IjZlZDY1YzE4YTBhZmNhNDUifQ.eyJjb250ZW50X2hhc2giOiJzaGEyNTY6ZTliMzkxODMxMWEwYTYyMzZhMDk4NDg0NjRlOTJmMWYxOTRjMjZiNmU0YmJkNzYyNGJhZGEwN2FhODRhNmViNSIsImV4cCI6MTc4NzE1NDQ3OSwiZnJvbSI6ImFyY2hpdmlzdCIsImlhdCI6MTc4NzA2ODA3OSwiaWQiOiJHT1YtUkFUSUZZLUFVVEgtMjAyNi0wOC0xOCIsImxhbmUiOiJhcmNoaXZpc3QiLCJwcmlvcml0eSI6IlAwIiwidGFza19pZCI6IkdPVi1SQVRJRlktQVVUSC0yMDI2LTA4LTE4IiwidG8iOiJhbGxfbGFuZXMifQ.hDuxRBQk-oF51L9t6XUtP7s6ZcowixvX7nBrsM5hRGhjfyxAHDfouh04QeyMWFPSsV1cVJsK4rm7m2X0WTVHDg",
+  "signature_alg": "EdDSA",
+  "key_id": "6ed65c18a0afca45",
+  "session_identity": {
+    "session_id": "sess-1787068079255-1784d2a3",
+    "session_epoch_started_at": "2026-08-18T15:47:59.255Z",
+    "origin_runtime": "opencode",
+    "origin_workspace": "S:\\self-organizing-library"
+  }
+}

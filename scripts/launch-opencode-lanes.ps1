@@ -43,14 +43,18 @@ function Start-Lane([string]$laneName, [string]$lanePath, [string]$resolvedCmd, 
   $opencodeArgs += $lanePath
   $quotedArgs = ($opencodeArgs | ForEach-Object { "'$_'" }) -join ' '
   $command = "Set-Location -LiteralPath '$lanePath'; & '$resolvedCmd' $quotedArgs"
-  $args = @('-NoExit', '-Command', $command)
+  $pwsh = Join-Path ${env:ProgramFiles} 'PowerShell\7\pwsh.exe'
+  if (-not (Test-Path -LiteralPath $pwsh)) {
+    $pwsh = (Get-Command 'pwsh.exe' -ErrorAction Stop).Source
+  }
+  $args = @('-NoLogo', '-NoProfile', '-NonInteractive', '-WindowStyle', 'Hidden', '-Command', $command)
 
   if ($DryRunMode) {
-    Write-Host "DRYRUN [$laneName] powershell.exe $($args -join ' ')" -ForegroundColor Gray
+    Write-Host "DRYRUN [$laneName] $pwsh $($args -join ' ')" -ForegroundColor Gray
     return
   }
 
-  Start-Process -FilePath 'powershell.exe' -ArgumentList $args -WindowStyle Normal | Out-Null
+  Start-Process -FilePath $pwsh -ArgumentList $args -WindowStyle Hidden | Out-Null
   Write-Host "LAUNCHED [$laneName] $lanePath" -ForegroundColor Green
 }
 
