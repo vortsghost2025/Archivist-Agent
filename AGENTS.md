@@ -13,6 +13,9 @@ It has:
 - Common mistakes
 - Git Bash vs Windows paths
 
+Then read:
+- `S:/Archivist-Agent/docs/ops/LANE_MESSAGE_INDEX.md` (schema/signing/send/log no-guesswork index)
+
 ---
 
 ### CANONICAL LANE REGISTRY (NEW - READ FIRST)

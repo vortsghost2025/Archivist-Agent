@@ -2,6 +2,9 @@
 
 **STOP. Read this first. DO NOT GUESS PATHS.**
 
+For schema + signing + send/log contract, also read:
+`S:/Archivist-Agent/docs/ops/LANE_MESSAGE_INDEX.md`
+
 ---
 
 ## 🎯 Your Mission

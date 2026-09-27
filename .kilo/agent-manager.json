@@ -24,13 +24,18 @@
     "ses_22f037d20ffektGEC6SeKJ6YOH": {
       "worktreeId": "wt-1777327699734-1",
       "createdAt": "2026-04-27T22:08:25.053Z"
+    },
+    "ses_22c18f0a0ffertVGnCLDzHWs6S": {
+      "worktreeId": null,
+      "createdAt": "2026-04-28T11:43:48.715Z"
     }
   },
   "tabOrder": {
     "local": [
       "ses_231492e9cffeO9fMvvs4eG1UO2",
       "ses_230748dadffeKffkwkQdaht39C",
-      "ses_22f927996ffeQ6wrlbfp3dU1fL"
+      "ses_22f927996ffeQ6wrlbfp3dU1fL",
+      "ses_22c18f0a0ffertVGnCLDzHWs6S"
     ]
   },
   "worktreeOrder": [
