@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "gate_id": "verification-domain-gate",
+  "applies_to": "archivist-swarmmind-loop",
+  "checks": {
+    "temporal": {
+      "description": "Evidence must be produced after dispatch",
+      "on_fail": "INVALID_DOMAIN"
+    },
+    "semantic": {
+      "description": "Schema + behavior metadata must be compatible with verification",
+      "on_fail": "INVALID_DOMAIN"
+    },
+    "observability": {
+      "description": "Verifier lane must resolve evidence within allowed roots",
+      "on_fail": "INVALID_DOMAIN"
+    }
+  },
+  "evaluation_order": [
+    "temporal",
+    "semantic",
+    "observability"
+  ],
+  "outcomes": {
+    "all_valid": "PROCEED_TO_VERIFICATION",
+    "any_invalid": "INVALID_DOMAIN"
+  }
+}

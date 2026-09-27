@@ -4,11 +4,21 @@
     "ses_231492e9cffeO9fMvvs4eG1UO2": {
       "worktreeId": null,
       "createdAt": "2026-04-27T11:33:01.159Z"
+    },
+    "ses_230748dadffeKffkwkQdaht39C": {
+      "worktreeId": null,
+      "createdAt": "2026-04-27T15:25:15.818Z"
+    },
+    "ses_22f927996ffeQ6wrlbfp3dU1fL": {
+      "worktreeId": null,
+      "createdAt": "2026-04-27T19:32:12.171Z"
     }
   },
   "tabOrder": {
     "local": [
-      "ses_231492e9cffeO9fMvvs4eG1UO2"
+      "ses_231492e9cffeO9fMvvs4eG1UO2",
+      "ses_230748dadffeKffkwkQdaht39C",
+      "ses_22f927996ffeQ6wrlbfp3dU1fL"
     ]
   }
 }

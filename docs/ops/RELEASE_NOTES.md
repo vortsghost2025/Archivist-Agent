@@ -33,3 +33,11 @@ See: `docs/ops/EXECUTOR_V3_CONTRACT.md` for contract-level details.
 - Added runnable proof test and wired it into CI governance checks:
   - `scripts/test-dual-agent-operating-contract.js`
 - Enforcement remains staged; global blocking is not enabled by default.
+
+### Verification Hardening: Code Hash + Concurrency Attack
+
+- Added truth-critical write lease file support at `.locks/truth-critical.lock.json` for executor-side writes to verification-critical scripts.
+- Added `code_version_hash` stamping in executor response governance metadata.
+- Added semantic domain-gate check for code-version drift (`message code_version_hash` vs local verifier hash).
+- Added adversarial concurrency proof test and wired it into CI:
+  - `scripts/test-concurrency-attack-domain-gate.js`

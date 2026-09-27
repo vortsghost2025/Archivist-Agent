@@ -81,3 +81,9 @@ jobs:
 
       - name: Dual-Agent Overlap Guardrail Proof
         run: node scripts/test-dual-agent-operating-contract.js
+
+      - name: Verification Domain Gate Integration
+        run: node scripts/test-verification-domain-integration.js
+
+      - name: Concurrency Attack Domain Gate Proof
+        run: node scripts/test-concurrency-attack-domain-gate.js
