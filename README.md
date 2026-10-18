@@ -2,6 +2,8 @@
 
 Governance root and orchestration lane for the multi-lane constitutional system.
 
+☕ Support this work on [Ko-fi](https://ko-fi.com/meshcast)
+
 ## Current Lane Topology (Canonical)
 
 The system is no longer "3 lanes". The canonical registry is:
